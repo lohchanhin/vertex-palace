@@ -1,6 +1,6 @@
 import path from "node:path";
 import { mkdir, writeFile } from "node:fs/promises";
-import type { PalaceNode, PalaceRoom } from "@context-palace/shared";
+import type { PalaceNode, PalaceRoom } from "@vertex-palace/shared";
 import { hashText } from "../scanner/file-hash";
 import { stableJson } from "../utils/stable-json";
 import { palacePath } from "../utils/path-utils";

@@ -26,7 +26,7 @@ importers:
 
   packages/cli:
     dependencies:
-      '@context-palace/core':
+      '@vertex-palace/core':
         specifier: workspace:*
         version: link:../core
       commander:
@@ -51,7 +51,7 @@ importers:
 
   packages/core:
     dependencies:
-      '@context-palace/shared':
+      '@vertex-palace/shared':
         specifier: workspace:*
         version: link:../shared
       fast-glob:
@@ -85,7 +85,7 @@ importers:
 
   packages/mcp:
     dependencies:
-      '@context-palace/core':
+      '@vertex-palace/core':
         specifier: workspace:*
         version: link:../core
     devDependencies:

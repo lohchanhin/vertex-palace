@@ -1,11 +1,11 @@
 {
-  "name": "@context-palace/mcp",
+  "name": "@vertex-palace/mcp",
   "version": "0.1.0",
-  "description": "Context Palace MCP stdio server.",
+  "description": "Vertex Palace MCP stdio server.",
   "license": "MIT",
   "type": "module",
   "bin": {
-    "context-palace-mcp": "./dist/server.js"
+    "vertex-palace-mcp": "./dist/server.js"
   },
   "main": "./dist/server.js",
   "types": "./dist/server.d.ts",
@@ -15,7 +15,7 @@
     "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\""
   },
   "dependencies": {
-    "@context-palace/core": "workspace:*"
+    "@vertex-palace/core": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^20.19.9",

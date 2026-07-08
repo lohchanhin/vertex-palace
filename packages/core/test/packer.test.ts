@@ -9,7 +9,7 @@ describe("packContext", () => {
       await indexPalace(root);
       const pack = await packContext(root, "fix login refresh token bug", { budget: 12000 });
 
-      expect(pack.markdown).toContain("# Context Palace Pack");
+      expect(pack.markdown).toContain("# Vertex Palace Pack");
       expect(pack.markdown).toContain("## Palace Route");
       expect(pack.markdown).toMatch(/src\/.*:\d+/);
       expect(pack.estimatedTokens).toBeLessThan(12000);

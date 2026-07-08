@@ -1,4 +1,4 @@
-import type { LoadLevel, OpenOutput } from "@context-palace/shared";
+import type { LoadLevel, OpenOutput } from "@vertex-palace/shared";
 import { readIndex } from "../storage/read-palace";
 import { assertPalace } from "../utils/errors";
 import { estimateTokens } from "./token-estimator";

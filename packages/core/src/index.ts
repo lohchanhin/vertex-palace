@@ -1,6 +1,6 @@
 import { resolveRoot } from "./utils/path-utils";
 
-export * from "@context-palace/shared";
+export * from "@vertex-palace/shared";
 export * from "./config/defaults";
 export * from "./config/palace-config";
 export * from "./scanner/scan-repo";
@@ -73,12 +73,12 @@ export async function palacePack(input: {
   return packContext(resolveRoot(input.root), input.task, input);
 }
 
-export async function palaceOpen(input: { root?: string; nodeId?: string; palacePath?: string; loadLevel?: import("@context-palace/shared").LoadLevel }) {
+export async function palaceOpen(input: { root?: string; nodeId?: string; palacePath?: string; loadLevel?: import("@vertex-palace/shared").LoadLevel }) {
   const { openPalaceNode } = await import("./packer/open");
   return openPalaceNode(resolveRoot(input.root), input);
 }
 
-export async function palaceWriteMemory(input: import("@context-palace/shared").MemoryInput) {
+export async function palaceWriteMemory(input: import("@vertex-palace/shared").MemoryInput) {
   const { writeMemory } = await import("./memory/write-memory");
   return writeMemory({ ...input, root: resolveRoot(input.root) });
 }

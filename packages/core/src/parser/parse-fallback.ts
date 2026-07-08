@@ -1,4 +1,4 @@
-import type { ParsedFile, ParsedSymbol } from "@context-palace/shared";
+import type { ParsedFile, ParsedSymbol } from "@vertex-palace/shared";
 
 export function parseFallback(sourcePath: string, language: string, content: string): ParsedFile {
   const lines = content.split(/\r?\n/);

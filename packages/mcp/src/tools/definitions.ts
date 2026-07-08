@@ -12,7 +12,7 @@ const rootProperty = {
 export const toolDefinitions: ToolDefinition[] = [
   {
     name: "palace_status",
-    description: "Check whether a repository has a Context Palace and whether the index is stale.",
+    description: "Check whether a repository has a Vertex Palace and whether the index is stale.",
     inputSchema: {
       type: "object",
       properties: { root: rootProperty }
@@ -36,7 +36,7 @@ export const toolDefinitions: ToolDefinition[] = [
   },
   {
     name: "palace_route",
-    description: "Plan a minimal Context Palace route for a coding task.",
+    description: "Plan a minimal Vertex Palace route for a coding task.",
     inputSchema: {
       type: "object",
       required: ["task"],

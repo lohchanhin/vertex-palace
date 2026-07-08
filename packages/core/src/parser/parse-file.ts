@@ -1,6 +1,6 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
-import type { ParsedFile } from "@context-palace/shared";
+import type { ParsedFile } from "@vertex-palace/shared";
 import { parseFallback } from "./parse-fallback";
 import { parseJson } from "./parse-json";
 import { parseMarkdown } from "./parse-markdown";

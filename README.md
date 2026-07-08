@@ -1,12 +1,14 @@
-# Context Palace
+# Vertex Palace
 
-Spatial context routing for Codex.
+Memory-palace context routing for Codex.
 
-Context Palace turns a repository into a local palace of floors, rooms, cabinets, and drawers. Before a coding task, Codex can ask for a route and receive a compact context pack instead of scanning the whole repository.
+Vertex Palace turns a repository into a local palace of floors, rooms, cabinets, and drawers. Before a coding task, Codex can ask for a route and receive a compact context pack instead of scanning the whole repository.
+
+![AI Agent task comparison](./plugins/vertex-palace/assets/vertex-palace-ai-agent-comparison.png)
 
 ## 简体中文说明
 
-Context Palace 是一个面向 Codex 编程任务的本地上下文路由工具。它会把代码仓库整理成“楼层、房间、柜子、抽屉”的空间结构，让 Codex 在开始修 bug、加功能或理解模块前，先找到最相关的文件与代码片段，而不是每次都从整个仓库重新扫描。
+Vertex Palace 是一个面向 Codex 编程任务的本地上下文路由工具。它会把代码仓库整理成“楼层、房间、柜子、抽屉”的空间结构，让 Codex 在开始修 bug、加功能或理解模块前，先找到最相关的文件与代码片段，而不是每次都从整个仓库重新扫描。
 
 它适合大型项目、多客户项目和长期维护型项目：你可以先用 `palace index` 建立本地索引，再用 `palace route` 找到任务路径，用 `palace pack` 生成精简上下文包，并在任务结束后写入成功路径、失败路径和决策记忆。所有数据默认保存在本机 `.palace/` 目录中，不上传源码，也不依赖远程向量数据库。
 
@@ -30,12 +32,12 @@ Open Codex:
 /plugins
 ```
 
-Install Context Palace.
+Install Vertex Palace.
 
 ## First Use
 
 ```text
-Use Context Palace to index this repository.
+Use Vertex Palace to index this repository.
 ```
 
 This creates:
@@ -52,7 +54,7 @@ This creates:
 ## Normal Use
 
 ```text
-Use Context Palace before fixing this bug: fix login refresh token bug
+Use Vertex Palace before fixing this bug: fix login refresh token bug
 ```
 
 Codex should route first, pack only the useful drawers, inspect those files, and write memory after the task.
@@ -92,7 +94,7 @@ palace memory write \
 
 ## Privacy
 
-Context Palace runs locally by default. It does not upload source code, call external APIs, use embeddings, or create a remote index.
+Vertex Palace runs locally by default. It does not upload source code, call external APIs, use embeddings, or create a remote index.
 
 ## MVP Scope
 

@@ -1,4 +1,4 @@
-import type { PalaceFloor, TaskType } from "@context-palace/shared";
+import type { PalaceFloor, TaskType } from "@vertex-palace/shared";
 import type { TaskAnalysis } from "./analyze-task";
 
 export function floorTemplate(taskType: TaskType): PalaceFloor[] {

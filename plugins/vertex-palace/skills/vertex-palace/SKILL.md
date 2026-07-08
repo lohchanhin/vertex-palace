@@ -1,9 +1,9 @@
 ---
-name: context-palace
-description: Use before coding, debugging, refactoring, testing, reviewing, or exploring a repository to route Codex through the repository's Context Palace and retrieve only the needed files, rooms, drawers, and symbols.
+name: vertex-palace
+description: Use before coding, debugging, refactoring, testing, reviewing, or exploring a repository to route Codex through the repository's Vertex Palace and retrieve only the needed files, rooms, drawers, and symbols.
 ---
 
-# Context Palace Skill
+# Vertex Palace Skill
 
 Use this skill before starting repository work.
 

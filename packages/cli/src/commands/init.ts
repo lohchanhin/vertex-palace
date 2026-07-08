@@ -1,5 +1,5 @@
 import type { Command } from "commander";
-import { palaceInit } from "@context-palace/core";
+import { palaceInit } from "@vertex-palace/core";
 import { printJson } from "./format";
 
 export function registerInit(program: Command): void {

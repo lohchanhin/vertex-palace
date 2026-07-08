@@ -1,7 +1,7 @@
 {
-  "name": "@context-palace/core",
+  "name": "@vertex-palace/core",
   "version": "0.1.0",
-  "description": "Core Context Palace scanner, indexer, router, packer, and memory engine.",
+  "description": "Core Vertex Palace scanner, indexer, router, packer, and memory engine.",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.js",
@@ -18,7 +18,7 @@
     "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\""
   },
   "dependencies": {
-    "@context-palace/shared": "workspace:*",
+    "@vertex-palace/shared": "workspace:*",
     "fast-glob": "^3.3.3",
     "ignore": "^5.3.2",
     "picocolors": "^1.1.1",

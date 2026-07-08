@@ -1,4 +1,4 @@
-import type { LoadLevel } from "@context-palace/shared";
+import type { LoadLevel } from "@vertex-palace/shared";
 
 export const LOAD_LEVEL_ORDER: LoadLevel[] = [
   "full_file",

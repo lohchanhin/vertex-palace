@@ -1,15 +1,15 @@
 {
-  "name": "context-palace-marketplace",
+  "name": "vertex-palace-marketplace",
   "interface": {
-    "displayName": "Context Palace"
+    "displayName": "Vertex Palace"
   },
   "plugins": [
     {
-      "name": "context-palace",
+      "name": "vertex-palace",
       "source": {
         "source": "git-subdir",
         "url": "https://github.com/lohchanhin/codex-palace.git",
-        "path": "./plugins/context-palace",
+        "path": "./plugins/vertex-palace",
         "ref": "v0.1.0"
       },
       "policy": {

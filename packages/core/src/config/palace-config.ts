@@ -1,6 +1,6 @@
 import path from "node:path";
 import { readFile } from "node:fs/promises";
-import type { PalaceConfig } from "@context-palace/shared";
+import type { PalaceConfig } from "@vertex-palace/shared";
 import { createDefaultConfig } from "./defaults";
 
 export function configPath(root: string): string {

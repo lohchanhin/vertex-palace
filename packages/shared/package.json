@@ -1,7 +1,7 @@
 {
-  "name": "@context-palace/shared",
+  "name": "@vertex-palace/shared",
   "version": "0.1.0",
-  "description": "Shared schemas and types for Context Palace.",
+  "description": "Shared schemas and types for Vertex Palace.",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.js",

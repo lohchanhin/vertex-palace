@@ -1,5 +1,5 @@
 import path from "node:path";
-import type { DoctorOutput } from "@context-palace/shared";
+import type { DoctorOutput } from "@vertex-palace/shared";
 import { configPath } from "../config/palace-config";
 import { exists, readIndex } from "./read-palace";
 
@@ -32,5 +32,5 @@ export async function doctorPalace(root: string): Promise<DoctorOutput> {
     issues.push({ severity: "error", message: "Sensitive .env path appeared in nodes.", fix: "Remove the node and re-run palace index." });
   }
 
-  return { ok: !issues.some((issue) => issue.severity === "error"), issues: issues.length ? issues : [{ severity: "info", message: "Context Palace looks healthy." }] };
+  return { ok: !issues.some((issue) => issue.severity === "error"), issues: issues.length ? issues : [{ severity: "info", message: "Vertex Palace looks healthy." }] };
 }

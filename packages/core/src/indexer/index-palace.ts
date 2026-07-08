@@ -1,5 +1,5 @@
 import path from "node:path";
-import type { IndexPalaceOutput, PalaceIndex } from "@context-palace/shared";
+import type { IndexPalaceOutput, PalaceIndex } from "@vertex-palace/shared";
 import { scanRepo } from "../scanner/scan-repo";
 import { parseFile } from "../parser/parse-file";
 import { buildDirectoryMap } from "./build-directory-map";

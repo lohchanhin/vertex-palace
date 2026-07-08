@@ -1,5 +1,5 @@
 import { Project, SyntaxKind, type Node } from "ts-morph";
-import type { ParsedFile, ParsedSymbol } from "@context-palace/shared";
+import type { ParsedFile, ParsedSymbol } from "@vertex-palace/shared";
 
 export function parseTsJs(sourcePath: string, content: string, language: string): ParsedFile {
   const project = new Project({ useInMemoryFileSystem: true, compilerOptions: { allowJs: true, jsx: 4 } });

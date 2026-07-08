@@ -1,13 +1,13 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import type { Command } from "commander";
-import { palaceRoute } from "@context-palace/core";
+import { palaceRoute } from "@vertex-palace/core";
 import { printLines } from "./format";
 
 export function registerRoute(program: Command): void {
   program
     .command("route")
-    .description("Plan a Context Palace route for a task")
+    .description("Plan a Vertex Palace route for a task")
     .argument("<task...>", "Task to route")
     .option("-r, --root <path>", "Repository root")
     .option("-b, --budget <tokens>", "Input token budget", parseInt)

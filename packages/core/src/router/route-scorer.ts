@@ -1,4 +1,4 @@
-import type { PalaceEdge, PalaceNode, TaskType } from "@context-palace/shared";
+import type { PalaceEdge, PalaceNode, TaskType } from "@vertex-palace/shared";
 import type { TaskAnalysis } from "./analyze-task";
 import { floorTemplate } from "./locate-entry";
 

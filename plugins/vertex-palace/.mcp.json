@@ -1,10 +1,10 @@
 {
   "mcpServers": {
-    "context-palace": {
+    "vertex-palace": {
       "command": "npx",
       "args": [
         "-y",
-        "@context-palace/mcp@0.1.0",
+        "@vertex-palace/mcp@0.1.0",
         "--stdio"
       ]
     }

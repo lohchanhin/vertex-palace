@@ -1,8 +1,8 @@
 {
-  "name": "context-palace",
+  "name": "vertex-palace",
   "version": "0.1.0",
   "private": true,
-  "description": "Spatial context routing for Codex coding tasks.",
+  "description": "Memory-palace context routing for Codex coding tasks.",
   "license": "MIT",
   "type": "module",
   "scripts": {

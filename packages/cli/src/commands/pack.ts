@@ -1,7 +1,7 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import type { Command } from "commander";
-import { palacePack } from "@context-palace/core";
+import { palacePack } from "@vertex-palace/core";
 
 export function registerPack(program: Command): void {
   program

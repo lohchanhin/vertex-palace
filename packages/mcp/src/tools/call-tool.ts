@@ -9,7 +9,7 @@ import {
   palaceWriteMemory,
   type LoadLevel,
   type MemoryInput
-} from "@context-palace/core";
+} from "@vertex-palace/core";
 
 type ToolArgs = Record<string, unknown>;
 

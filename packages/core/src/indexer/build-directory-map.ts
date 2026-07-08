@@ -1,4 +1,4 @@
-import type { DirectoryTreeNode } from "@context-palace/shared";
+import type { DirectoryTreeNode } from "@vertex-palace/shared";
 
 export function buildDirectoryMap(paths: string[]): DirectoryTreeNode {
   const root: DirectoryTreeNode = { name: ".", path: ".", type: "directory", children: [] };

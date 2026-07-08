@@ -11,7 +11,7 @@ import { registerStatus } from "./commands/status";
 
 const program = new Command();
 
-program.name("palace").description("Spatial context routing for Codex").version("0.1.0");
+program.name("palace").description("Vertex Palace context routing for Codex").version("0.1.0");
 
 registerInit(program);
 registerStatus(program);

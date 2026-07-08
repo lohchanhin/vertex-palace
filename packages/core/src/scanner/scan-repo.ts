@@ -1,7 +1,7 @@
 import { stat } from "node:fs/promises";
 import path from "node:path";
 import fg from "fast-glob";
-import type { ScanRepoInput, ScanRepoOutput } from "@context-palace/shared";
+import type { ScanRepoInput, ScanRepoOutput } from "@vertex-palace/shared";
 import { hashFile } from "./file-hash";
 import { createIgnoreMatcher } from "./ignore-rules";
 import { normalizeRelativePath, resolveRoot } from "../utils/path-utils";

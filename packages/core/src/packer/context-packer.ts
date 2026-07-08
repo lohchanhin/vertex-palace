@@ -1,4 +1,4 @@
-import type { PackOutput, PalaceNode, PalaceRoute } from "@context-palace/shared";
+import type { PackOutput, PalaceNode, PalaceRoute } from "@vertex-palace/shared";
 import { DEFAULT_BUDGET } from "../config/defaults";
 import { readIndex } from "../storage/read-palace";
 import { routePalace } from "../router/route-planner";
@@ -79,7 +79,7 @@ function renderMarkdown(
   options: { includeExcluded: boolean }
 ): string {
   const lines: string[] = [
-    "# Context Palace Pack",
+    "# Vertex Palace Pack",
     "",
     "## Task",
     task,

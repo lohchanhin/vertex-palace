@@ -1,4 +1,4 @@
-import type { PalaceNodeKind } from "@context-palace/shared";
+import type { PalaceNodeKind } from "@vertex-palace/shared";
 
 export const NODE_KINDS: PalaceNodeKind[] = [
   "directory",

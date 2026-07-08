@@ -1,4 +1,4 @@
-import type { PalaceFloor } from "@context-palace/shared";
+import type { PalaceFloor } from "@vertex-palace/shared";
 import { palacePath, slugify } from "../utils/path-utils";
 
 export function makePalaceAddress(input: {

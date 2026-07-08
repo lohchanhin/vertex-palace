@@ -1,9 +1,9 @@
 import type { Command } from "commander";
-import { palaceWriteMemory } from "@context-palace/core";
+import { palaceWriteMemory } from "@vertex-palace/core";
 import { printJson } from "./format";
 
 export function registerMemory(program: Command): void {
-  const memory = program.command("memory").description("Read and write Context Palace memory");
+  const memory = program.command("memory").description("Read and write Vertex Palace memory");
   memory
     .command("write")
     .description("Write route memory")

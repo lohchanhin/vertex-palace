@@ -1,6 +1,6 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
-import type { MemoryInput } from "@context-palace/shared";
+import type { MemoryInput } from "@vertex-palace/shared";
 import { hashText } from "../scanner/file-hash";
 
 export async function writeMemory(input: MemoryInput & { root: string }): Promise<{ ok: boolean; memoryPath: string }> {

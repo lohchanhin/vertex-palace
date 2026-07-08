@@ -1,5 +1,5 @@
 import path from "node:path";
-import type { PalaceStatus } from "@context-palace/shared";
+import type { PalaceStatus } from "@vertex-palace/shared";
 import { configPath } from "../config/palace-config";
 import { scanRepo } from "../scanner/scan-repo";
 import { exists, readIndex, readJson } from "./read-palace";

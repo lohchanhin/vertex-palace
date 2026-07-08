@@ -1,4 +1,4 @@
-import type { ParsedFile, ParsedHeading } from "@context-palace/shared";
+import type { ParsedFile, ParsedHeading } from "@vertex-palace/shared";
 
 export function parseMarkdown(sourcePath: string, content: string): ParsedFile {
   const headings: ParsedHeading[] = [];

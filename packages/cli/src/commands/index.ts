@@ -1,5 +1,5 @@
 import type { Command } from "commander";
-import { palaceIndex } from "@context-palace/core";
+import { palaceIndex } from "@vertex-palace/core";
 import { printJson } from "./format";
 
 export function registerIndex(program: Command): void {

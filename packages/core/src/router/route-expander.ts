@@ -1,4 +1,4 @@
-import type { PalaceEdge, PalaceNode } from "@context-palace/shared";
+import type { PalaceEdge, PalaceNode } from "@vertex-palace/shared";
 import type { ScoredNode } from "./route-scorer";
 
 export function expandRoute(scored: ScoredNode[], edges: PalaceEdge[], nodes: PalaceNode[], limit = 12): ScoredNode[] {

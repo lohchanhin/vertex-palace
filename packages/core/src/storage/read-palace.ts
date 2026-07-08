@@ -1,6 +1,6 @@
 import { access, readFile } from "node:fs/promises";
 import path from "node:path";
-import type { PalaceEdge, PalaceIndex, PalaceNode, PalaceRoom, PalaceRoute } from "@context-palace/shared";
+import type { PalaceEdge, PalaceIndex, PalaceNode, PalaceRoom, PalaceRoute } from "@vertex-palace/shared";
 
 export async function exists(filePath: string): Promise<boolean> {
   try {

@@ -1,5 +1,5 @@
 import path from "node:path";
-import type { PalaceFloor, PalaceNode, ParsedFile, ScanRepoOutput } from "@context-palace/shared";
+import type { PalaceFloor, PalaceNode, ParsedFile, ScanRepoOutput } from "@vertex-palace/shared";
 import { hashText } from "../scanner/file-hash";
 import { makePalaceAddress } from "../palace/palace-address";
 import { KNOWN_ROOMS, KNOWN_WINGS } from "../palace/room-types";

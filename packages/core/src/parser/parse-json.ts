@@ -1,4 +1,4 @@
-import type { ParsedFile } from "@context-palace/shared";
+import type { ParsedFile } from "@vertex-palace/shared";
 
 export function parseJson(sourcePath: string, content: string): ParsedFile {
   try {

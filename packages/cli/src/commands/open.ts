@@ -1,5 +1,5 @@
 import type { Command } from "commander";
-import { palaceOpen } from "@context-palace/core";
+import { palaceOpen } from "@vertex-palace/core";
 
 export function registerOpen(program: Command): void {
   program

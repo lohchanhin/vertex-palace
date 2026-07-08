@@ -1,8 +1,8 @@
 # AGENTS.md
 
-## Context Palace
+## Vertex Palace
 
-This repository uses Context Palace for spatial context routing.
+This repository uses Vertex Palace for memory-palace context routing.
 
 Before implementing coding tasks:
 

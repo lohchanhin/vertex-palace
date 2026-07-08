@@ -1,5 +1,5 @@
 import path from "node:path";
-import type { PalaceEdge, PalaceNode, ParsedFile } from "@context-palace/shared";
+import type { PalaceEdge, PalaceNode, ParsedFile } from "@vertex-palace/shared";
 import { hashText } from "../scanner/file-hash";
 import { normalizeRelativePath } from "../utils/path-utils";
 

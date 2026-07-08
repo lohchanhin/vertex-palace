@@ -1,5 +1,5 @@
 import path from "node:path";
-import type { LoadLevel, PalaceRoute } from "@context-palace/shared";
+import type { LoadLevel, PalaceRoute } from "@vertex-palace/shared";
 import { DEFAULT_BUDGET } from "../config/defaults";
 import { readIndex } from "../storage/read-palace";
 import { appendRoute } from "../storage/write-palace";

@@ -1,4 +1,4 @@
-import type { PalaceConfig, PalaceFloor } from "@context-palace/shared";
+import type { PalaceConfig, PalaceFloor } from "@vertex-palace/shared";
 
 export const PALACE_SCHEMA_VERSION = 1;
 

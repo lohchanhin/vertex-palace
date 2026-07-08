@@ -1,4 +1,4 @@
-import type { TaskType } from "@context-palace/shared";
+import type { TaskType } from "@vertex-palace/shared";
 
 export function classifyTask(task: string): TaskType {
   const lower = task.toLowerCase();

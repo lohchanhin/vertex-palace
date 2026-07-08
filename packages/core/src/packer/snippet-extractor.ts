@@ -1,6 +1,6 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
-import type { LoadLevel, PalaceNode } from "@context-palace/shared";
+import type { LoadLevel, PalaceNode } from "@vertex-palace/shared";
 
 export async function extractNodeContent(root: string, node: PalaceNode, loadLevel: LoadLevel): Promise<string> {
   if (loadLevel === "defer") return "";

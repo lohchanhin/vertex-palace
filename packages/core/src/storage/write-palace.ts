@@ -1,6 +1,6 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
-import type { PalaceIndex, PalaceRoute } from "@context-palace/shared";
+import type { PalaceIndex, PalaceRoute } from "@vertex-palace/shared";
 import { stableJson } from "../utils/stable-json";
 
 export async function writeJson(root: string, relativePath: string, value: unknown): Promise<string> {
