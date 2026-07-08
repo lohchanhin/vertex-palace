@@ -257,14 +257,16 @@ palace memory write \
 
 Vertex Palace runs locally by default. It does not upload source code, call external APIs, use embeddings, or create a remote index.
 
-## MVP Scope
+## Current Capabilities / 目前能力
 
-- Core data model
-- Scanner with ignore rules
+- Local memory-palace data model
+- Repository scanner with ignore rules
 - TypeScript, JavaScript, Markdown, JSON, and fallback parsers
-- Indexes for nodes, edges, rooms, symbols, directory tree, and hashes
-- Route planner with task classification and reasons
+- Indexes for nodes, edges, rooms, symbols, directory tree, hashes, and routes
+- Route planner with task classification, confidence, reasons, and excluded areas
+- Latest route files: `latest-route.json`, `latest-route.md`, and `optimized-route.txt`
 - Markdown and JSON context packer
+- Task memory ledger: `latest-task.md`, `task-log.md`, and `index.json`
 - CLI
 - MCP stdio server
 - Codex plugin folder, skill, hooks, and marketplace metadata
