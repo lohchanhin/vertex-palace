@@ -6,16 +6,28 @@ import { estimateTokens } from "./token-estimator";
 import { extractNodeContent, languageFence } from "./snippet-extractor";
 import type { PackFormat } from "./output-format";
 
-export async function packContext(root: string, task: string, options: { budget?: number; format?: PackFormat; routeId?: string } = {}): Promise<PackOutput> {
+export type PackContextOptions = {
+  budget?: number;
+  format?: PackFormat;
+  routeId?: string;
+  routeLimit?: number;
+  maxDrawers?: number;
+  includeExcluded?: boolean;
+};
+
+export async function packContext(root: string, task: string, options: PackContextOptions = {}): Promise<PackOutput> {
   const index = await readIndex(root);
-  const route = options.routeId ? index.routes.find((candidate) => candidate.id === options.routeId) ?? (await routePalace(root, task, options.budget)) : await routePalace(root, task, options.budget);
+  const routeOptions = { budget: options.budget, routeLimit: options.routeLimit };
+  const route = options.routeId ? index.routes.find((candidate) => candidate.id === options.routeId) ?? (await routePalace(root, task, routeOptions)) : await routePalace(root, task, routeOptions);
   const refreshedIndex = await readIndex(root);
   const byId = new Map(refreshedIndex.nodes.map((node) => [node.id, node]));
   const maxTokens = options.budget ?? DEFAULT_BUDGET.maxInputTokens;
+  const maxDrawers = options.maxDrawers ?? route.route.length;
   const drawers: Array<{ node: PalaceNode; content: string; tokens: number; reason: string }> = [];
-  let used = estimateTokens(routeSummary(route));
+  let used = estimateTokens(routeSummary(route, options.includeExcluded !== false));
 
   for (const step of route.route) {
+    if (drawers.length >= maxDrawers) break;
     const node = byId.get(step.nodeId);
     if (!node) continue;
     const content = await extractNodeContent(root, node, step.loadLevel);
@@ -44,15 +56,28 @@ export async function packContext(root: string, task: string, options: { budget?
     task,
     routeId: route.id,
     estimatedTokens: used,
-    markdown: renderMarkdown(task, route, drawers)
+    markdown: renderMarkdown(task, route, drawers, { includeExcluded: options.includeExcluded !== false })
   };
 }
 
-function routeSummary(route: PalaceRoute): string {
-  return [route.task, route.taskType, route.entry.floor, route.entry.wing, route.entry.room, ...route.route.map((step) => `${step.sourcePath} ${step.reason}`)].join("\n");
+function routeSummary(route: PalaceRoute, includeExcluded: boolean): string {
+  return [
+    route.task,
+    route.taskType,
+    route.entry.floor,
+    route.entry.wing,
+    route.entry.room,
+    ...route.route.map((step) => `${step.sourcePath} ${step.reason}`),
+    ...(includeExcluded ? route.excluded.map((item) => `${item.sourcePath} ${item.reason}`) : [])
+  ].join("\n");
 }
 
-function renderMarkdown(task: string, route: PalaceRoute, drawers: Array<{ node: PalaceNode; content: string; tokens: number; reason: string }>): string {
+function renderMarkdown(
+  task: string,
+  route: PalaceRoute,
+  drawers: Array<{ node: PalaceNode; content: string; tokens: number; reason: string }>,
+  options: { includeExcluded: boolean }
+): string {
   const lines: string[] = [
     "# Context Palace Pack",
     "",
@@ -71,11 +96,18 @@ function renderMarkdown(task: string, route: PalaceRoute, drawers: Array<{ node:
     "## Read First",
     ...route.route.map((step, index) => `${index + 1}. ${step.sourcePath}\n   Reason: ${step.reason}\n   Load: ${step.loadLevel}`),
     "",
-    "## Excluded Areas",
-    ...(route.excluded.length ? route.excluded.map((item) => `- ${item.sourcePath}: ${item.reason}`) : ["- None"]),
-    "",
     "## Relevant Drawers"
   ];
+
+  if (options.includeExcluded) {
+    lines.splice(
+      lines.indexOf("## Relevant Drawers"),
+      0,
+      "## Excluded Areas",
+      ...(route.excluded.length ? route.excluded.map((item) => `- ${item.sourcePath}: ${item.reason}`) : ["- None"]),
+      ""
+    );
+  }
 
   for (const drawer of drawers) {
     const location = drawer.node.startLine ? `${drawer.node.sourcePath}:${drawer.node.startLine}${drawer.node.endLine ? `-${drawer.node.endLine}` : ""}` : drawer.node.sourcePath;

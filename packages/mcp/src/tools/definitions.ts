@@ -43,7 +43,8 @@ export const toolDefinitions: ToolDefinition[] = [
       properties: {
         root: rootProperty,
         task: { type: "string" },
-        budget: { type: "number" }
+        budget: { type: "number" },
+        routeLimit: { type: "number", description: "Maximum route steps to return." }
       }
     }
   },
@@ -58,7 +59,10 @@ export const toolDefinitions: ToolDefinition[] = [
         task: { type: "string" },
         budget: { type: "number" },
         format: { type: "string", enum: ["markdown", "json"] },
-        routeId: { type: "string" }
+        routeId: { type: "string" },
+        routeLimit: { type: "number", description: "Maximum route steps to plan when no routeId is provided." },
+        maxDrawers: { type: "number", description: "Maximum source drawers to include in the pack." },
+        includeExcluded: { type: "boolean", description: "Include excluded areas in Markdown output." }
       }
     }
   },
@@ -83,6 +87,7 @@ export const toolDefinitions: ToolDefinition[] = [
       required: ["task", "outcome"],
       properties: {
         root: rootProperty,
+        client: { type: "string", description: "Client or tenant label for multi-client memory isolation." },
         task: { type: "string" },
         routeId: { type: "string" },
         outcome: { type: "string", enum: ["success", "failed", "partial"] },
@@ -100,6 +105,7 @@ export const toolDefinitions: ToolDefinition[] = [
         },
         decisions: { type: "array", items: { type: "string" } },
         failedAttempts: { type: "array", items: { type: "string" } },
+        tags: { type: "array", items: { type: "string" } },
         notes: { type: "string" }
       }
     }

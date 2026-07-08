@@ -45,21 +45,32 @@ export function scoreNodes(nodes: PalaceNode[], edges: PalaceEdge[], analysis: T
         reasons.push(`room matches task hint "${node.room}"`);
       }
 
+      const relationBoost = edgeBoosts.get(node.id) ?? 0;
+      const hasLocalRelevance = score > 0;
       const floorIndex = floors.indexOf(node.floor);
-      if (floorIndex >= 0 && (score > 0 || node.kind === "test")) {
+      if (floorIndex >= 0 && hasLocalRelevance) {
         score += Math.max(8, 24 - floorIndex * 6);
         reasons.push(`floor ${node.floor} is part of ${taskType} route template`);
       }
 
-      if (taskType === "bugfix" && node.kind === "test") {
+      if (taskType === "bugfix" && node.kind === "test" && hasLocalRelevance) {
         score += 12;
         reasons.push("verification node is useful for a bugfix");
       }
 
-      const relationBoost = edgeBoosts.get(node.id) ?? 0;
-      if (relationBoost) {
-        score += relationBoost;
+      if (relationBoost && hasLocalRelevance) {
+        score += Math.min(30, relationBoost);
         reasons.push("near related import or test edge");
+      }
+
+      const lineSpan = node.startLine && node.endLine ? node.endLine - node.startLine + 1 : undefined;
+      if (lineSpan !== undefined && lineSpan <= 2 && ["type", "interface", "symbol"].includes(node.kind)) {
+        score -= 60;
+        reasons.push("penalized as trivial declaration");
+      }
+      if (node.kind === "test" && taskType !== "test") {
+        score -= 20;
+        reasons.push("test is secondary for this task type");
       }
 
       score -= Math.min(15, node.tokenCost / 200);

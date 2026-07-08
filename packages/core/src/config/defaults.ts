@@ -50,13 +50,13 @@ export const DEFAULT_IGNORE = [
 ];
 
 export const DEFAULT_BUDGET = {
-  maxInputTokens: 24000,
+  maxInputTokens: 12000,
   reservedOutputTokens: 4000,
   routeSummaryTokens: 2000,
   roomSummaryTokens: 4000,
-  codeSnippetTokens: 14000,
+  codeSnippetTokens: 8000,
   memoryTokens: 2000,
-  bufferTokens: 2000
+  bufferTokens: 1000
 };
 
 export function createDefaultConfig(projectName: string, now = new Date().toISOString()): PalaceConfig {

@@ -22,14 +22,22 @@ export async function callTool(name: string, args: ToolArgs): Promise<unknown> {
     case "palace_index":
       return palaceIndex({ root: asString(args.root) });
     case "palace_route":
-      return palaceRoute({ root: asString(args.root), task: requiredString(args.task, "task"), budget: asNumber(args.budget) });
+      return palaceRoute({
+        root: asString(args.root),
+        task: requiredString(args.task, "task"),
+        budget: asNumber(args.budget),
+        routeLimit: asNumber(args.routeLimit)
+      });
     case "palace_pack":
       return palacePack({
         root: asString(args.root),
         task: requiredString(args.task, "task"),
         budget: asNumber(args.budget),
         format: args.format === "json" ? "json" : "markdown",
-        routeId: asString(args.routeId)
+        routeId: asString(args.routeId),
+        routeLimit: asNumber(args.routeLimit),
+        maxDrawers: asNumber(args.maxDrawers),
+        includeExcluded: typeof args.includeExcluded === "boolean" ? args.includeExcluded : undefined
       });
     case "palace_open":
       return palaceOpen({
@@ -41,6 +49,7 @@ export async function callTool(name: string, args: ToolArgs): Promise<unknown> {
     case "palace_write_memory":
       return palaceWriteMemory({
         root: asString(args.root),
+        client: asString(args.client),
         task: requiredString(args.task, "task"),
         routeId: asString(args.routeId),
         outcome: requiredString(args.outcome, "outcome") as MemoryInput["outcome"],
@@ -48,6 +57,7 @@ export async function callTool(name: string, args: ToolArgs): Promise<unknown> {
         testsRun: Array.isArray(args.testsRun) ? (args.testsRun as MemoryInput["testsRun"]) : undefined,
         decisions: asStringArray(args.decisions),
         failedAttempts: asStringArray(args.failedAttempts),
+        tags: asStringArray(args.tags),
         notes: asString(args.notes)
       });
     case "palace_doctor":

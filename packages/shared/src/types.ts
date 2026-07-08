@@ -283,6 +283,7 @@ export type OpenOutput = {
 
 export type MemoryInput = {
   root?: string;
+  client?: string;
   task: string;
   routeId?: string;
   outcome: "success" | "failed" | "partial";
@@ -294,6 +295,7 @@ export type MemoryInput = {
   }[];
   decisions?: string[];
   failedAttempts?: string[];
+  tags?: string[];
   notes?: string;
 };
 

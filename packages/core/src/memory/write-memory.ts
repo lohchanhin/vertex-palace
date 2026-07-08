@@ -8,7 +8,9 @@ export async function writeMemory(input: MemoryInput & { root: string }): Promis
   const safeTask = redactSecrets(input.task);
   const slug = `${now.replace(/[:.]/g, "-")}-${hashText(safeTask).slice(0, 8)}.md`;
   const folder = input.outcome === "success" ? "successful-routes" : input.outcome === "failed" ? "failed-routes" : "task-summaries";
-  const memoryDir = path.join(input.root, ".palace", "07-memory", folder);
+  const memoryDir = input.client
+    ? path.join(input.root, ".palace", "07-memory", "clients", safeSegment(input.client), folder)
+    : path.join(input.root, ".palace", "07-memory", folder);
   await mkdir(memoryDir, { recursive: true });
   const memoryPath = path.join(memoryDir, slug);
   await writeFile(memoryPath, renderMemory({ ...input, task: safeTask }, now), "utf8");
@@ -29,9 +31,11 @@ function renderMemory(input: MemoryInput & { root: string }, now: string): strin
   const lines = [
     `# ${input.outcome} route memory`,
     "",
+    `Client: ${input.client ? redactSecrets(input.client) : "default"}`,
     `Task: ${redactSecrets(input.task)}`,
     `Route: ${input.routeId ?? "unknown"}`,
     `Created: ${now}`,
+    `Tags: ${input.tags?.length ? input.tags.map(redactSecrets).join(", ") : "none"}`,
     "",
     "## Changed Files",
     ...(input.changedFiles?.length ? input.changedFiles.map((file) => `- ${file}`) : ["- None recorded"]),
@@ -50,4 +54,12 @@ function renderMemory(input: MemoryInput & { root: string }, now: string): strin
     ""
   ];
   return lines.join("\n");
+}
+
+function safeSegment(value: string): string {
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9._-]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 80) || "default";
 }

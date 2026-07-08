@@ -15,4 +15,20 @@ describe("packContext", () => {
       expect(pack.estimatedTokens).toBeLessThan(12000);
     });
   });
+
+  it("can produce compact packs with a drawer cap", async () => {
+    await withFixture("ts-api", async (root) => {
+      await indexPalace(root);
+      const pack = await packContext(root, "fix login refresh token bug", {
+        budget: 6000,
+        includeExcluded: false,
+        maxDrawers: 1,
+        routeLimit: 4
+      });
+
+      expect(pack.markdown).not.toContain("## Excluded Areas");
+      expect((pack.markdown?.match(/### Drawer:/g) ?? []).length).toBe(1);
+      expect(pack.estimatedTokens).toBeLessThan(6000);
+    });
+  });
 });

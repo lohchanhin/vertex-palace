@@ -54,12 +54,21 @@ export async function palaceIndex(input: { root?: string } = {}) {
   return indexPalace(resolveRoot(input.root));
 }
 
-export async function palaceRoute(input: { root?: string; task: string; budget?: number }) {
+export async function palaceRoute(input: { root?: string; task: string; budget?: number; routeLimit?: number }) {
   const { routePalace } = await import("./router/route-planner");
-  return routePalace(resolveRoot(input.root), input.task, input.budget);
+  return routePalace(resolveRoot(input.root), input.task, { budget: input.budget, routeLimit: input.routeLimit });
 }
 
-export async function palacePack(input: { root?: string; task: string; budget?: number; format?: "markdown" | "json"; routeId?: string }) {
+export async function palacePack(input: {
+  root?: string;
+  task: string;
+  budget?: number;
+  format?: "markdown" | "json";
+  routeId?: string;
+  routeLimit?: number;
+  maxDrawers?: number;
+  includeExcluded?: boolean;
+}) {
   const { packContext } = await import("./packer/context-packer");
   return packContext(resolveRoot(input.root), input.task, input);
 }

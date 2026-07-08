@@ -1,3 +1,4 @@
+import { readFile } from "node:fs/promises";
 import { describe, expect, it } from "vitest";
 import { redactSecrets, writeMemory } from "../src/memory/write-memory";
 import { initPalace } from "../src/storage/init-palace";
@@ -16,6 +17,25 @@ describe("memory", () => {
       });
       expect(result.ok).toBe(true);
       expect(result.memoryPath).toContain("successful-routes");
+    });
+  });
+
+  it("isolates multi-client memory when a client label is provided", async () => {
+    await withFixture("ts-api", async (root) => {
+      await initPalace(root);
+      const result = await writeMemory({
+        root,
+        client: "iMishang",
+        task: "fix checkout",
+        outcome: "partial",
+        tags: ["checkout", "client-specific"],
+        notes: "Kept tenant settings configurable."
+      });
+      const content = await readFile(result.memoryPath, "utf8");
+
+      expect(result.memoryPath.replace(/\\/g, "/")).toContain("clients/imishang/task-summaries");
+      expect(content).toContain("Client: iMishang");
+      expect(content).toContain("Tags: checkout, client-specific");
     });
   });
 });

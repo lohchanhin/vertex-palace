@@ -11,6 +11,7 @@ export const TaskInputSchema = RootInputSchema.extend({
 });
 
 export const MemoryInputSchema = RootInputSchema.extend({
+  client: z.string().optional(),
   task: z.string().min(1),
   routeId: z.string().optional(),
   outcome: z.enum(["success", "failed", "partial"]),
@@ -26,6 +27,7 @@ export const MemoryInputSchema = RootInputSchema.extend({
     .optional(),
   decisions: z.array(z.string()).optional(),
   failedAttempts: z.array(z.string()).optional(),
+  tags: z.array(z.string()).optional(),
   notes: z.string().optional()
 });
 

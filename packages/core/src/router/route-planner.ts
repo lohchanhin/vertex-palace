@@ -10,12 +10,19 @@ import { locateEntry } from "./locate-entry";
 import { scoreNodes } from "./route-scorer";
 import { expandRoute } from "./route-expander";
 
-export async function routePalace(root: string, task: string, budget = DEFAULT_BUDGET.maxInputTokens): Promise<PalaceRoute> {
+export type RoutePalaceOptions = {
+  budget?: number;
+  routeLimit?: number;
+};
+
+export async function routePalace(root: string, task: string, options: number | RoutePalaceOptions = DEFAULT_BUDGET.maxInputTokens): Promise<PalaceRoute> {
+  const normalized = normalizeOptions(options);
+  const budget = normalized.budget;
   const index = await readIndex(root);
   const analysis = analyzeTask(task);
   const taskType = classifyTask(task);
   const scored = scoreNodes(index.nodes, index.edges, analysis, taskType);
-  const expanded = expandRoute(scored, index.edges, index.nodes, 14);
+  const expanded = expandRoute(scored, index.edges, index.nodes, normalized.routeLimit);
   const now = new Date().toISOString();
 
   const routeSteps = expanded.map((item, index) => {
@@ -50,6 +57,21 @@ export async function routePalace(root: string, task: string, budget = DEFAULT_B
 
   await appendRoute(root, index.routes, route);
   return route;
+}
+
+function normalizeOptions(options: number | RoutePalaceOptions): Required<RoutePalaceOptions> {
+  const budget = typeof options === "number" ? options : options.budget ?? DEFAULT_BUDGET.maxInputTokens;
+  const routeLimit = typeof options === "number" ? defaultRouteLimitForBudget(budget) : options.routeLimit ?? defaultRouteLimitForBudget(budget);
+  return {
+    budget,
+    routeLimit: Math.max(4, Math.min(24, routeLimit))
+  };
+}
+
+function defaultRouteLimitForBudget(budget: number): number {
+  if (budget <= 6000) return 6;
+  if (budget <= 12000) return 8;
+  return 10;
 }
 
 function chooseLoadLevel(kind: string, index: number, score: number): LoadLevel {

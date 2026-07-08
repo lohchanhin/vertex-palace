@@ -7,7 +7,36 @@ export type TaskAnalysis = {
   roomHints: string[];
 };
 
-const STOP_WORDS = new Set(["the", "a", "an", "to", "for", "and", "or", "of", "in", "on", "this", "that", "with", "before", "after"]);
+const STOP_WORDS = new Set([
+  "the",
+  "a",
+  "an",
+  "to",
+  "for",
+  "and",
+  "or",
+  "of",
+  "in",
+  "on",
+  "this",
+  "that",
+  "with",
+  "before",
+  "after",
+  "fix",
+  "bug",
+  "issue",
+  "problem",
+  "error",
+  "errors",
+  "required",
+  "requires",
+  "rule",
+  "rules",
+  "should",
+  "need",
+  "needs"
+]);
 const WING_HINTS = new Set(["auth", "billing", "payment", "admin", "user", "users", "profile", "checkout", "token", "session"]);
 const ROOM_HINTS = new Set(["login", "logout", "token", "refresh", "password", "session", "profile", "checkout", "general"]);
 
