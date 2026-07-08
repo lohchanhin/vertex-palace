@@ -6,6 +6,20 @@ Vertex Palace turns a repository into a local palace of floors, rooms, cabinets,
 
 ![AI Agent task comparison](./plugins/vertex-palace/assets/vertex-palace-ai-agent-comparison.png)
 
+## English Overview
+
+Vertex Palace is a local context-routing tool for Codex coding tasks. It organizes a repository into a memory-palace structure of floors, rooms, cabinets, and drawers, so Codex can find the most relevant files and code snippets before fixing bugs, adding features, or understanding modules.
+
+It is designed for large repositories, multi-client projects, and long-lived codebases. You can run `palace index` to build a local index, use `palace route` to find the task path, generate a compact context pack with `palace pack`, and write task memory after the work is done. By default, everything stays inside the local `.palace/` directory: no source upload, no external API calls, and no remote vector database.
+
+## Design Philosophy
+
+- Spatial understanding: turn a repository from a flat file list into a navigable palace that Codex can explore by feature area, dependency, and task intent.
+- Route before reading: plan the most relevant path first, then generate a bounded context pack instead of spending tokens on unrelated files.
+- Explainable selection: every route includes reasons for choosing a floor, room, drawer, or file, so developers can judge whether Codex is looking in the right place.
+- Local-first privacy: indexes, route packs, and task memory are generated locally by default.
+- Project memory over time: successful routes, failed routes, client labels, and decisions can be reused by future tasks.
+
 ## 简体中文说明
 
 Vertex Palace 是一个面向 Codex 编程任务的本地上下文路由工具。它会把代码仓库整理成“楼层、房间、柜子、抽屉”的空间结构，让 Codex 在开始修 bug、加功能或理解模块前，先找到最相关的文件与代码片段，而不是每次都从整个仓库重新扫描。
