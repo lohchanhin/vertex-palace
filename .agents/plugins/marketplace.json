@@ -1,0 +1,22 @@
+{
+  "name": "context-palace-marketplace",
+  "interface": {
+    "displayName": "Context Palace"
+  },
+  "plugins": [
+    {
+      "name": "context-palace",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/lohchanhin/codex-palace.git",
+        "path": "./plugins/context-palace",
+        "ref": "v0.1.0"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

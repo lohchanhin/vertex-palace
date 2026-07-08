@@ -1,0 +1,22 @@
+{
+  "name": "context-palace",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Spatial context routing for Codex coding tasks.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "build": "pnpm -r build",
+    "test": "pnpm -r test",
+    "lint": "pnpm -r exec tsc --noEmit -p tsconfig.json --pretty false",
+    "clean": "pnpm -r clean"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.9",
+    "tsup": "^8.5.0",
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.3",
+    "vitest": "^2.1.9"
+  },
+  "packageManager": "pnpm@11.7.0"
+}

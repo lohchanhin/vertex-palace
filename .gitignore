@@ -1,0 +1,10 @@
+node_modules/
+dist/
+coverage/
+.palace/
+work/
+outputs/
+*.log
+*.tsbuildinfo
+.env
+.env.*

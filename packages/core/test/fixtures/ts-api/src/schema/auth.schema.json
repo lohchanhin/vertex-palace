@@ -1,0 +1,10 @@
+{
+  "LoginRequest": {
+    "email": "string",
+    "password": "string"
+  },
+  "LoginResponse": {
+    "accessToken": "string",
+    "refreshToken": "string"
+  }
+}

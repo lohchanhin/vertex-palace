@@ -1,0 +1,26 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node ${PLUGIN_ROOT}/hooks/session-start.js",
+            "statusMessage": "Checking Context Palace status"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node ${PLUGIN_ROOT}/hooks/stop.js",
+            "statusMessage": "Updating Context Palace memory"
+          }
+        ]
+      }
+    ]
+  }
+}

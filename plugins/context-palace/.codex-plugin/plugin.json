@@ -1,0 +1,37 @@
+{
+  "name": "context-palace",
+  "version": "0.1.0",
+  "description": "Spatial context routing for Codex coding tasks.",
+  "author": {
+    "name": "Context Palace Contributors",
+    "url": "https://github.com/lohchanhin/codex-palace"
+  },
+  "homepage": "https://github.com/lohchanhin/codex-palace",
+  "repository": "https://github.com/lohchanhin/codex-palace",
+  "license": "MIT",
+  "keywords": [
+    "codex",
+    "mcp",
+    "coding-agent",
+    "context",
+    "repo-map",
+    "spatial-context"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "Context Palace",
+    "shortDescription": "Route Codex through a structured project knowledge palace.",
+    "longDescription": "Context Palace builds a spatial index for repositories and lets Codex retrieve only the needed floors, rooms, drawers, files, and symbols before coding.",
+    "developerName": "Context Palace Contributors",
+    "category": "Productivity",
+    "capabilities": ["Read", "Write"],
+    "defaultPrompt": [
+      "Use Context Palace to index this repository.",
+      "Use Context Palace before implementing this task.",
+      "Use Context Palace to find a minimal route."
+    ],
+    "composerIcon": "./assets/icon.png",
+    "logo": "./assets/logo.png"
+  }
+}
