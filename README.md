@@ -12,6 +12,8 @@ Vertex Palace is a local context-routing tool for Codex coding tasks. It organiz
 
 It is designed for large repositories, multi-client projects, and long-lived codebases. You can run `palace index` to build a local index, use `palace route` to find the task path, generate a compact context pack with `palace pack`, and write task memory after the work is done. By default, everything stays inside the local `.palace/` directory: no source upload, no external API calls, and no remote vector database.
 
+Each route refreshes `.palace/routes/latest-route.json`, `.palace/routes/latest-route.md`, and `.palace/routes/optimized-route.txt`, so the most recent task route does not get stuck on an older task. Each memory write also updates `.palace/memory/latest-task.md`, `.palace/memory/task-log.md`, and `.palace/memory/index.json` while keeping the floor-based archive under `.palace/07-memory/`.
+
 ## Design Philosophy
 
 - Spatial understanding: turn a repository from a flat file list into a navigable palace that Codex can explore by feature area, dependency, and task intent.
@@ -25,6 +27,8 @@ It is designed for large repositories, multi-client projects, and long-lived cod
 Vertex Palace 是一个面向 Codex 编程任务的本地上下文路由工具。它会把代码仓库整理成“楼层、房间、柜子、抽屉”的空间结构，让 Codex 在开始修 bug、加功能或理解模块前，先找到最相关的文件与代码片段，而不是每次都从整个仓库重新扫描。
 
 它适合大型项目、多客户项目和长期维护型项目：你可以先用 `palace index` 建立本地索引，再用 `palace route` 找到任务路径，用 `palace pack` 生成精简上下文包，并在任务结束后写入成功路径、失败路径和决策记忆。所有数据默认保存在本机 `.palace/` 目录中，不上传源码，也不依赖远程向量数据库。
+
+每次路由都会刷新 `.palace/routes/latest-route.json`、`.palace/routes/latest-route.md` 和 `.palace/routes/optimized-route.txt`，避免“最近任务路线”停留在旧任务。每次写入记忆也会更新 `.palace/memory/latest-task.md`、`.palace/memory/task-log.md` 和 `.palace/memory/index.json`，同时保留 `.palace/07-memory/` 的楼层归档。
 
 ## 设计理念
 
@@ -101,6 +105,7 @@ palace memory write \
   --task "fix checkout shipping bug" \
   --outcome success \
   --changed-file frontend/app/checkout/page.tsx \
+  --test "pnpm test|passed|checkout tests passed" \
   --tag checkout \
   --tag tenant-config \
   --notes "Kept shipping rules configurable."

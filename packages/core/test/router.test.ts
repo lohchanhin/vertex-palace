@@ -1,4 +1,4 @@
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { indexPalace } from "../src/indexer/index-palace";
@@ -18,6 +18,12 @@ describe("routePalace", () => {
       expect(route.route.every((step) => step.loadLevel)).toBe(true);
       expect(route.excluded.some((item) => /payment|admin/.test(item.sourcePath))).toBe(true);
       expect(route.budget.estimatedTokens).toBeLessThanOrEqual(route.budget.maxInputTokens);
+
+      const optimizedRoute = await readFile(path.join(root, ".palace", "routes", "optimized-route.txt"), "utf8");
+      const latestRoute = JSON.parse(await readFile(path.join(root, ".palace", "routes", "latest-route.json"), "utf8")) as { id: string; task: string };
+      expect(optimizedRoute).toContain("fix login refresh token bug");
+      expect(latestRoute.id).toBe(route.id);
+      expect(latestRoute.task).toBe("fix login refresh token bug");
     });
   });
 

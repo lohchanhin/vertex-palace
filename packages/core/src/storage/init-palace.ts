@@ -55,6 +55,11 @@ async function writeFloorReadmes(root: string): Promise<void> {
   await writeFile(path.join(root, ".palace", "00-entrance", "commands.md"), "# Commands\n\n- palace init\n- palace index\n- palace route \"fix login bug\"\n", "utf8");
   await writeFile(path.join(root, ".palace", "00-entrance", "rules.md"), "# Rules\n\nVertex Palace stores indexes, summaries, routes, and memory only.\n", "utf8");
   await writeFile(path.join(root, ".palace", "00-entrance", "directory-map.md"), "# Directory Map\n\nRun `palace index` to generate the directory tree.\n", "utf8");
+  await writeFile(
+    path.join(root, ".palace", "memory", "README.md"),
+    "# Memory Ledger\n\nTask memory written by `palace memory write` appears here as `latest-task.md`, `task-log.md`, and `index.json`. Floor-based archives are also kept under `07-memory/`.\n",
+    "utf8"
+  );
   await writeFile(path.join(root, ".palace", "06-runtime", "recent-errors.md"), "# Recent Errors\n\nNo runtime errors recorded.\n", "utf8");
   await writeFile(path.join(root, ".palace", "06-runtime", "failed-test-output.md"), "# Failed Test Output\n\nNo failed test output recorded.\n", "utf8");
 }

@@ -1,4 +1,5 @@
 import { readFile } from "node:fs/promises";
+import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { redactSecrets, writeMemory } from "../src/memory/write-memory";
 import { initPalace } from "../src/storage/init-palace";
@@ -17,6 +18,14 @@ describe("memory", () => {
       });
       expect(result.ok).toBe(true);
       expect(result.memoryPath).toContain("successful-routes");
+      expect(result.ledgerMemoryPath.replace(/\\/g, "/")).toContain(".palace/memory/successful-routes");
+
+      const latest = await readFile(path.join(root, ".palace", "memory", "latest-task.md"), "utf8");
+      const log = await readFile(path.join(root, ".palace", "memory", "task-log.md"), "utf8");
+      const index = JSON.parse(await readFile(path.join(root, ".palace", "memory", "index.json"), "utf8")) as { entries: Array<{ task: string }> };
+      expect(latest).toContain("Task: fix token");
+      expect(log).toContain("fix token");
+      expect(index.entries[0]?.task).toBe("fix token");
     });
   });
 
@@ -34,8 +43,14 @@ describe("memory", () => {
       const content = await readFile(result.memoryPath, "utf8");
 
       expect(result.memoryPath.replace(/\\/g, "/")).toContain("clients/imishang/task-summaries");
+      expect(result.ledgerMemoryPath.replace(/\\/g, "/")).toContain("memory/clients/imishang/task-summaries");
       expect(content).toContain("Client: iMishang");
       expect(content).toContain("Tags: checkout, client-specific");
+
+      const clientLatest = await readFile(path.join(root, ".palace", "memory", "clients", "imishang", "latest-task.md"), "utf8");
+      const globalLatest = await readFile(path.join(root, ".palace", "memory", "latest-task.md"), "utf8");
+      expect(clientLatest).toContain("Task: fix checkout");
+      expect(globalLatest).toContain("Client: iMishang");
     });
   });
 });

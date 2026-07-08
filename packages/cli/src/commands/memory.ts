@@ -15,6 +15,7 @@ export function registerMemory(program: Command): void {
     .option("--changed-file <path...>", "Changed files")
     .option("--decision <text...>", "Decision notes")
     .option("--failed-attempt <text...>", "Failed attempt notes")
+    .option("--test <entry...>", "Test run as command|passed|summary, command|failed|summary, or command|skipped|summary")
     .option("--tag <tag...>", "Memory tags")
     .option("--notes <text>", "Additional notes")
     .action(async (options) => {
@@ -26,6 +27,7 @@ export function registerMemory(program: Command): void {
           routeId: options.routeId,
           outcome: options.outcome,
           changedFiles: options.changedFile,
+          testsRun: parseTestRuns(options.test),
           decisions: options.decision,
           failedAttempts: options.failedAttempt,
           tags: options.tag,
@@ -33,4 +35,17 @@ export function registerMemory(program: Command): void {
         })
       );
     });
+}
+
+function parseTestRuns(entries?: string[]): Array<{ command: string; status: "passed" | "failed" | "skipped"; summary?: string }> | undefined {
+  if (!entries?.length) return undefined;
+  return entries.map((entry) => {
+    const [command = entry, rawStatus = "passed", ...summaryParts] = entry.split("|");
+    const status = rawStatus === "failed" || rawStatus === "skipped" ? rawStatus : "passed";
+    return {
+      command: command.trim(),
+      status,
+      summary: summaryParts.join("|").trim() || undefined
+    };
+  });
 }
