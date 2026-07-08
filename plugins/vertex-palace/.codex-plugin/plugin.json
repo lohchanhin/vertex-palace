@@ -4,10 +4,10 @@
   "description": "Memory-palace context routing for Codex coding tasks.",
   "author": {
     "name": "Vertex Palace Contributors",
-    "url": "https://github.com/lohchanhin/codex-palace"
+    "url": "https://github.com/lohchanhin/vertex-palace"
   },
-  "homepage": "https://github.com/lohchanhin/codex-palace",
-  "repository": "https://github.com/lohchanhin/codex-palace",
+  "homepage": "https://github.com/lohchanhin/vertex-palace",
+  "repository": "https://github.com/lohchanhin/vertex-palace",
   "license": "MIT",
   "keywords": [
     "codex",

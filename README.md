@@ -4,7 +4,7 @@ Memory-palace context routing for Codex.
 
 Vertex Palace turns a repository into a local palace of floors, rooms, cabinets, and drawers. Before a coding task, Codex can ask for a route and receive a compact context pack instead of scanning the whole repository.
 
-![AI Agent task comparison](./plugins/vertex-palace/assets/vertex-palace-ai-agent-comparison.png)
+![AI Agent task comparison](https://raw.githubusercontent.com/lohchanhin/vertex-palace/main/plugins/vertex-palace/assets/vertex-palace-ai-agent-comparison.png)
 
 ## English Overview
 
@@ -29,7 +29,7 @@ Each route refreshes `.palace/routes/latest-route.json`, `.palace/routes/latest-
 If you just want the agent to handle it, give your AI coding agent this prompt:
 
 ```text
-Open and read https://github.com/lohchanhin/codex-palace, install Vertex Palace, then use it in this repository.
+Open and read https://github.com/lohchanhin/vertex-palace, install Vertex Palace, then use it in this repository.
 
 Before working, check Vertex Palace status, initialize and index the repository if needed, route my task, generate a minimal context pack, inspect the routed files first, and write task memory after finishing.
 ```
@@ -45,7 +45,7 @@ status -> init/index if needed -> route -> pack -> inspect routed files -> imple
 1. Install the plugin:
 
 ```bash
-codex plugin marketplace add lohchanhin/codex-palace --ref v0.1.0
+codex plugin marketplace add lohchanhin/vertex-palace --ref v0.1.0
 ```
 
 2. Open Codex and install Vertex Palace from `/plugins`.
@@ -116,7 +116,7 @@ Vertex Palace 是一个面向 Codex 编程任务的本地上下文路由工具�
 把这段话丢给你的 AI coding agent：
 
 ```text
-请打开并阅读 https://github.com/lohchanhin/codex-palace，安装 Vertex Palace，然后在当前项目使用它。
+请打开并阅读 https://github.com/lohchanhin/vertex-palace，安装 Vertex Palace，然后在当前项目使用它。
 
 开始任务前，请先检查 Vertex Palace 状态；如果还没初始化或索引过，就先 init/index；然后根据我的任务 route，生成最小 context pack，优先阅读路线推荐文件，完成后把改动文件、测试结果、决策和踩坑写入 memory。
 ```
@@ -132,7 +132,7 @@ status -> 需要时 init/index -> route -> pack -> 先读路线文件 -> 执行�
 1. 安装插件：
 
 ```bash
-codex plugin marketplace add lohchanhin/codex-palace --ref v0.1.0
+codex plugin marketplace add lohchanhin/vertex-palace --ref v0.1.0
 ```
 
 2. 打开 Codex，输入 `/plugins`，安装 Vertex Palace。
@@ -183,7 +183,7 @@ cat .palace/memory/task-log.md
 ## Install
 
 ```bash
-codex plugin marketplace add lohchanhin/codex-palace --ref v0.1.0
+codex plugin marketplace add lohchanhin/vertex-palace --ref v0.1.0
 ```
 
 Open Codex:
