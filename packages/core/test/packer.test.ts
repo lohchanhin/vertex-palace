@@ -1,4 +1,6 @@
 import { describe, expect, it } from "vitest";
+import { mkdir, writeFile } from "node:fs/promises";
+import path from "node:path";
 import { indexPalace } from "../src/indexer/index-palace";
 import { packContext } from "../src/packer/context-packer";
 import { withFixture } from "./test-utils";
@@ -29,6 +31,44 @@ describe("packContext", () => {
       expect(pack.markdown).not.toContain("## Excluded Areas");
       expect((pack.markdown?.match(/### Drawer:/g) ?? []).length).toBe(1);
       expect(pack.estimatedTokens).toBeLessThan(6000);
+    });
+  });
+
+  it("omits binary asset bytes from packs", async () => {
+    await withFixture("ts-api", async (root) => {
+      await mkdir(path.join(root, "assets"), { recursive: true });
+      await writeFile(path.join(root, "assets", "agent.png"), "PNG_BYTES_SHOULD_NOT_APPEAR", "utf8");
+      await indexPalace(root);
+
+      const pack = await packContext(root, "agent png asset", {
+        budget: 6000,
+        includeExcluded: false,
+        maxDrawers: 2,
+        routeLimit: 4
+      });
+
+      expect(pack.markdown).toContain("assets/agent.png");
+      expect(pack.markdown).toContain("[Binary/media file omitted from context pack]");
+      expect(pack.markdown).toContain("SHA-256:");
+      expect(pack.markdown).not.toContain("PNG_BYTES_SHOULD_NOT_APPEAR");
+    });
+  });
+
+  it("keeps binary assets out of non-asset packs", async () => {
+    await withFixture("ts-api", async (root) => {
+      await mkdir(path.join(root, "assets"), { recursive: true });
+      await writeFile(path.join(root, "assets", "agent.png"), "PNG_BYTES_SHOULD_NOT_APPEAR", "utf8");
+      await indexPalace(root);
+
+      const pack = await packContext(root, "explain agent tool routing", {
+        budget: 6000,
+        includeExcluded: false,
+        maxDrawers: 4,
+        routeLimit: 8
+      });
+
+      expect(pack.markdown).not.toContain("assets/agent.png");
+      expect(pack.markdown).not.toContain("PNG_BYTES_SHOULD_NOT_APPEAR");
     });
   });
 });

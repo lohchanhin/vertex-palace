@@ -19,7 +19,7 @@ export async function indexPalace(root: string): Promise<IndexPalaceOutput> {
   const parsedFiles: ParsedFileWithHash[] = [];
 
   for (const file of scan.files) {
-    const parsed = await parseFile(root, file.path, file.language);
+    const parsed = await parseFile(root, file.path, file.language, file.size);
     parsedFiles.push({ ...parsed, hash: file.hash, size: file.size });
   }
 

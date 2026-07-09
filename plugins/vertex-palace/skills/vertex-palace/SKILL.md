@@ -7,6 +7,8 @@ description: Use before coding, debugging, refactoring, testing, reviewing, or e
 
 Use this skill before starting repository work.
 
+Aliases users may use for this skill: `记忆宫殿工具`, `记忆宫殿`, `memory palace`, `palace tool`, and `Context Palace`.
+
 ## Workflow
 
 1. Call `palace_status`.
@@ -22,8 +24,10 @@ Use this skill before starting repository work.
 ## Rules
 
 - Do not perform broad repository scans before checking the palace route.
+- Do not treat `记忆宫殿工具` or `memory palace` as unknown; map them to Vertex Palace and the `palace_*` tools.
 - Do not read unrelated folders unless the route or evidence requires it.
 - Prefer symbol-level snippets over full files.
 - Prefer room summaries before opening full drawers.
 - Keep the task route visible in the reasoning summary.
 - If `palace_route` confidence is low, inspect the directory map and call `palace_route` again with refined keywords.
+- If the MCP tools are not available in the current Codex thread, use the `palace` CLI when it is installed. If neither is available, say Vertex Palace is not loaded in this environment.

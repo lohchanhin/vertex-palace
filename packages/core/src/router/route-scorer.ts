@@ -1,6 +1,7 @@
 import type { PalaceEdge, PalaceNode, TaskType } from "@vertex-palace/shared";
 import type { TaskAnalysis } from "./analyze-task";
 import { floorTemplate } from "./locate-entry";
+import { isBinaryLikePath } from "../utils/binary-files";
 
 export type ScoredNode = {
   node: PalaceNode;
@@ -72,6 +73,10 @@ export function scoreNodes(nodes: PalaceNode[], edges: PalaceEdge[], analysis: T
         score -= 20;
         reasons.push("test is secondary for this task type");
       }
+      if (isBinaryLikePath(node.sourcePath, node.language) && !wantsMediaAsset(analysis)) {
+        score -= 120;
+        reasons.push("binary/media asset is secondary for non-asset task");
+      }
 
       score -= Math.min(15, node.tokenCost / 200);
       if (/(payment|billing|admin)/.test(haystack) && !analysis.keywords.some((keyword) => haystack.includes(keyword))) {
@@ -83,6 +88,11 @@ export function scoreNodes(nodes: PalaceNode[], edges: PalaceEdge[], analysis: T
     })
     .filter((item) => item.score > 10)
     .sort((a, b) => b.score - a.score || a.node.sourcePath.localeCompare(b.node.sourcePath));
+}
+
+function wantsMediaAsset(analysis: TaskAnalysis): boolean {
+  const mediaKeywords = new Set(["asset", "assets", "image", "images", "img", "logo", "icon", "png", "jpg", "jpeg", "gif", "webp", "screenshot", "picture", "photo"]);
+  return analysis.keywords.some((keyword) => mediaKeywords.has(keyword));
 }
 
 function tokenize(value: string): Set<string> {

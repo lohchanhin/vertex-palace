@@ -38,6 +38,7 @@ export * from "./storage/schema-version";
 export * from "./utils/errors";
 export * from "./utils/path-utils";
 export * from "./utils/stable-json";
+export * from "./utils/binary-files";
 
 export async function palaceInit(input: { root?: string } = {}) {
   const { initPalace } = await import("./storage/init-palace");
