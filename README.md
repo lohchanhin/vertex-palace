@@ -4,7 +4,6 @@ Memory-palace context routing for Codex.
 
 Vertex Palace turns a repository into a local palace of floors, rooms, cabinets, and drawers. Before a coding task, Codex can ask for a route and receive a compact context pack instead of scanning the whole repository.
 
-![AI Agent task comparison](https://raw.githubusercontent.com/lohchanhin/vertex-palace/main/plugins/vertex-palace/assets/vertex-palace-ai-agent-comparison.png)
 
 Name note: `记忆宫殿工具`, `记忆宫殿`, `memory palace`, `palace tool`, and the old name `Context Palace` all refer to Vertex Palace. The registered MCP tool names are `palace_status`, `palace_init`, `palace_index`, `palace_route`, `palace_pack`, and `palace_write_memory`; the CLI command is `palace`.
 
