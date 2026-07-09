@@ -53,4 +53,27 @@ describe("memory", () => {
       expect(globalLatest).toContain("Client: iMishang");
     });
   });
+
+  it("writes repeated mistakes to the entrance pitfall board", async () => {
+    await withFixture("ts-api", async (root) => {
+      await initPalace(root);
+      const result = await writeMemory({
+        root,
+        task: "fix checkout",
+        outcome: "partial",
+        failedAttempts: ["Tried editing generated files before checking source templates."],
+        pitfalls: ["Do not trust stale route files before checking latest-route.md."],
+        tags: ["checkout", "routing"]
+      });
+
+      expect(result.pitfallsWritten).toBe(2);
+      const board = await readFile(path.join(root, ".palace", "00-entrance", "pitfall-board.md"), "utf8");
+      const index = JSON.parse(await readFile(path.join(root, ".palace", "memory", "pitfall-board.json"), "utf8")) as { entries: Array<{ text: string }> };
+
+      expect(board).toContain("# Pitfall Board");
+      expect(board).toContain("Do not trust stale route files");
+      expect(board).toContain("Tried editing generated files");
+      expect(index.entries).toHaveLength(2);
+    });
+  });
 });

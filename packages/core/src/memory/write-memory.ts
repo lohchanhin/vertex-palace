@@ -1,8 +1,12 @@
 import { appendFile, mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import type { MemoryInput } from "@vertex-palace/shared";
+import { updatePitfallBoardFromMemory } from "./pitfall-board";
+import { redactSecrets } from "./redact";
 import { hashText } from "../scanner/file-hash";
 import { writeJson } from "../storage/write-palace";
+
+export { redactSecrets } from "./redact";
 
 type MemoryLedger = {
   entries: MemoryLedgerEntry[];
@@ -28,6 +32,9 @@ export async function writeMemory(input: MemoryInput & { root: string }): Promis
   latestPath: string;
   logPath: string;
   indexPath: string;
+  pitfallBoardPath?: string;
+  pitfallIndexPath?: string;
+  pitfallsWritten: number;
 }> {
   const now = new Date().toISOString();
   const safeTask = redactSecrets(input.task);
@@ -58,6 +65,7 @@ export async function writeMemory(input: MemoryInput & { root: string }): Promis
   });
   await appendFile(logPath, renderLogEntry(entry), "utf8");
   await updateLedgerIndex(input.root, indexPath, entry);
+  const pitfallUpdate = await updatePitfallBoardFromMemory(input.root, safeInput, { now, ledgerMemoryPath });
 
   if (clientSegment) {
     const globalRoot = path.join(input.root, ".palace", "memory");
@@ -70,17 +78,17 @@ export async function writeMemory(input: MemoryInput & { root: string }): Promis
     await updateLedgerIndex(input.root, globalIndexPath, entry);
   }
 
-  return { ok: true, memoryPath, ledgerMemoryPath, latestPath, logPath, indexPath };
-}
-
-export function redactSecrets(text: string): string {
-  return text
-    .replace(/sk-[A-Za-z0-9_-]{16,}/g, "[REDACTED_OPENAI_KEY]")
-    .replace(/AKIA[0-9A-Z]{16}/g, "[REDACTED_AWS_KEY]")
-    .replace(/-----BEGIN [A-Z ]*PRIVATE KEY-----[\s\S]*?-----END [A-Z ]*PRIVATE KEY-----/g, "[REDACTED_PRIVATE_KEY]")
-    .replace(/Authorization:\s*Bearer\s+[A-Za-z0-9._~+/-]+=*/gi, "Authorization: Bearer [REDACTED]")
-    .replace(/password\s*=\s*[^&\s]+/gi, "password=[REDACTED]")
-    .replace(/token\s*=\s*[^&\s]+/gi, "token=[REDACTED]");
+  return {
+    ok: true,
+    memoryPath,
+    ledgerMemoryPath,
+    latestPath,
+    logPath,
+    indexPath,
+    pitfallBoardPath: pitfallUpdate.boardPath,
+    pitfallIndexPath: pitfallUpdate.indexPath,
+    pitfallsWritten: pitfallUpdate.written
+  };
 }
 
 function renderMemory(input: MemoryInput & { root: string }, now: string): string {
@@ -104,6 +112,9 @@ function renderMemory(input: MemoryInput & { root: string }, now: string): strin
     "",
     "## Failed Attempts",
     ...(input.failedAttempts?.length ? input.failedAttempts.map((attempt) => `- ${redactSecrets(attempt)}`) : ["- None recorded"]),
+    "",
+    "## Pitfalls To Avoid",
+    ...(input.pitfalls?.length ? input.pitfalls.map((pitfall) => `- ${redactSecrets(pitfall)}`) : ["- None recorded"]),
     "",
     "## Notes",
     redactSecrets(input.notes ?? "None recorded"),

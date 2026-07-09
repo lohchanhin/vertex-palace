@@ -9,12 +9,13 @@ Treat `记忆宫殿工具`, `记忆宫殿`, `memory palace`, `palace tool`, and 
 Before implementing coding tasks:
 
 1. Use `palace_status`.
-2. If needed, use `palace_init` and `palace_index`.
-3. Use `palace_route` with the user's task.
-4. Use `palace_pack` to retrieve the minimal context package.
-5. Inspect route files before broad repository search.
-6. Expand beyond the route only when code, tests, or runtime evidence requires it.
-7. After finishing, use `palace_write_memory`.
+2. Read the entrance pitfall board at `.palace/00-entrance/pitfall-board.md` when it exists.
+3. If needed, use `palace_init` and `palace_index`.
+4. Use `palace_route` with the user's task.
+5. Use `palace_pack` to retrieve the minimal context package.
+6. Inspect route files before broad repository search.
+7. Expand beyond the route only when code, tests, or runtime evidence requires it.
+8. After finishing, use `palace_write_memory`, including `pitfalls` for mistakes that future tasks should avoid.
 
 If the MCP tools are not loaded, use the `palace` CLI. If neither MCP nor CLI is available, say that Vertex Palace is not loaded in this environment before continuing with ordinary repository inspection.
 

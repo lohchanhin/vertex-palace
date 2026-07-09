@@ -27,6 +27,7 @@ export const MemoryInputSchema = RootInputSchema.extend({
     .optional(),
   decisions: z.array(z.string()).optional(),
   failedAttempts: z.array(z.string()).optional(),
+  pitfalls: z.array(z.string()).optional(),
   tags: z.array(z.string()).optional(),
   notes: z.string().optional()
 });

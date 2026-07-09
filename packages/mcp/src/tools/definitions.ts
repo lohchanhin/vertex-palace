@@ -105,6 +105,7 @@ export const toolDefinitions: ToolDefinition[] = [
         },
         decisions: { type: "array", items: { type: "string" } },
         failedAttempts: { type: "array", items: { type: "string" } },
+        pitfalls: { type: "array", items: { type: "string" }, description: "Mistakes to show on .palace/00-entrance/pitfall-board.md before future tasks." },
         tags: { type: "array", items: { type: "string" } },
         notes: { type: "string" }
       }

@@ -29,6 +29,8 @@ export * from "./packer/snippet-extractor";
 export * from "./packer/output-format";
 export * from "./packer/open";
 export * from "./memory/write-memory";
+export * from "./memory/pitfall-board";
+export * from "./memory/redact";
 export * from "./storage/init-palace";
 export * from "./storage/status";
 export * from "./storage/read-palace";

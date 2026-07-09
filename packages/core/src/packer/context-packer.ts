@@ -1,5 +1,6 @@
 import type { PackOutput, PalaceNode, PalaceRoute } from "@vertex-palace/shared";
 import { DEFAULT_BUDGET } from "../config/defaults";
+import { readPitfallBoardForPack } from "../memory/pitfall-board";
 import { readIndex } from "../storage/read-palace";
 import { routePalace } from "../router/route-planner";
 import { estimateTokens } from "./token-estimator";
@@ -24,7 +25,8 @@ export async function packContext(root: string, task: string, options: PackConte
   const maxTokens = options.budget ?? DEFAULT_BUDGET.maxInputTokens;
   const maxDrawers = options.maxDrawers ?? route.route.length;
   const drawers: Array<{ node: PalaceNode; content: string; tokens: number; reason: string }> = [];
-  let used = estimateTokens(routeSummary(route, options.includeExcluded !== false));
+  const pitfallBoard = await readPitfallBoardForPack(root);
+  let used = estimateTokens(routeSummary(route, options.includeExcluded !== false)) + estimateTokens(pitfallBoard ?? "");
 
   for (const step of route.route) {
     if (drawers.length >= maxDrawers) break;
@@ -40,6 +42,7 @@ export async function packContext(root: string, task: string, options: PackConte
   const json = {
     task,
     route,
+    pitfallBoard,
     drawers: drawers.map((drawer) => ({
       node: drawer.node,
       content: drawer.content,
@@ -56,7 +59,7 @@ export async function packContext(root: string, task: string, options: PackConte
     task,
     routeId: route.id,
     estimatedTokens: used,
-    markdown: renderMarkdown(task, route, drawers, { includeExcluded: options.includeExcluded !== false })
+    markdown: renderMarkdown(task, route, drawers, { includeExcluded: options.includeExcluded !== false, pitfallBoard })
   };
 }
 
@@ -76,7 +79,7 @@ function renderMarkdown(
   task: string,
   route: PalaceRoute,
   drawers: Array<{ node: PalaceNode; content: string; tokens: number; reason: string }>,
-  options: { includeExcluded: boolean }
+  options: { includeExcluded: boolean; pitfallBoard?: string }
 ): string {
   const lines: string[] = [
     "# Vertex Palace Pack",
@@ -92,12 +95,19 @@ function renderMarkdown(
     `- Floor: ${route.entry.floor}`,
     `- Wing: ${route.entry.wing ?? "unknown"}`,
     `- Room: ${route.entry.room ?? "general"}`,
-    "",
+    ""
+  ];
+
+  if (options.pitfallBoard) {
+    lines.push("## Entrance Pitfall Board", "", stripMarkdownTitle(options.pitfallBoard), "");
+  }
+
+  lines.push(
     "## Read First",
     ...route.route.map((step, index) => `${index + 1}. ${step.sourcePath}\n   Reason: ${step.reason}\n   Load: ${step.loadLevel}`),
     "",
     "## Relevant Drawers"
-  ];
+  );
 
   if (options.includeExcluded) {
     lines.splice(
@@ -125,4 +135,8 @@ function renderMarkdown(
 
   lines.push("", "## Verification", "", "Run the targeted tests for the route before broadening scope.", "");
   return lines.join("\n");
+}
+
+function stripMarkdownTitle(content: string): string {
+  return content.replace(/^# .+\r?\n+/, "").trim();
 }

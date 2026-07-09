@@ -45,6 +45,7 @@ function renderRouteMarkdown(route: PalaceRoute): string {
     `Confidence: ${route.confidence}`,
     `Created: ${route.createdAt}`,
     `Entry: ${route.entry.floor}/${route.entry.wing ?? "unknown"}/${route.entry.room ?? "general"}`,
+    `Entrance pitfall board: .palace/00-entrance/pitfall-board.md`,
     "",
     "## Read First",
     ...route.route.map((step, index) => `${index + 1}. ${step.sourcePath}\n   Reason: ${step.reason}\n   Load: ${step.loadLevel}`),
@@ -62,6 +63,7 @@ function renderOptimizedRoute(route: PalaceRoute): string {
     `Task type: ${route.taskType}`,
     `Confidence: ${route.confidence}`,
     `Entry: ${route.entry.floor}/${route.entry.wing ?? "unknown"}/${route.entry.room ?? "general"}`,
+    `Entrance pitfall board: .palace/00-entrance/pitfall-board.md`,
     "",
     ...route.route.map((step, index) => `${index + 1}. ${step.sourcePath} [${step.loadLevel}] - ${step.reason}`),
     ""

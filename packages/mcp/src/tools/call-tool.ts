@@ -57,6 +57,7 @@ export async function callTool(name: string, args: ToolArgs): Promise<unknown> {
         testsRun: Array.isArray(args.testsRun) ? (args.testsRun as MemoryInput["testsRun"]) : undefined,
         decisions: asStringArray(args.decisions),
         failedAttempts: asStringArray(args.failedAttempts),
+        pitfalls: asStringArray(args.pitfalls),
         tags: asStringArray(args.tags),
         notes: asString(args.notes)
       });

@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { indexPalace } from "../src/indexer/index-palace";
+import { writeMemory } from "../src/memory/write-memory";
 import { packContext } from "../src/packer/context-packer";
 import { withFixture } from "./test-utils";
 
@@ -69,6 +70,28 @@ describe("packContext", () => {
 
       expect(pack.markdown).not.toContain("assets/agent.png");
       expect(pack.markdown).not.toContain("PNG_BYTES_SHOULD_NOT_APPEAR");
+    });
+  });
+
+  it("includes entrance pitfalls before route drawers", async () => {
+    await withFixture("ts-api", async (root) => {
+      await indexPalace(root);
+      await writeMemory({
+        root,
+        task: "fix token",
+        outcome: "partial",
+        pitfalls: ["Check the pitfall board before trusting an old optimized route."]
+      });
+
+      const pack = await packContext(root, "fix login refresh token bug", {
+        budget: 12000,
+        includeExcluded: false,
+        routeLimit: 6
+      });
+
+      expect(pack.markdown).toContain("## Entrance Pitfall Board");
+      expect(pack.markdown).toContain("Check the pitfall board");
+      expect((pack.markdown ?? "").indexOf("## Entrance Pitfall Board")).toBeLessThan((pack.markdown ?? "").indexOf("## Read First"));
     });
   });
 });

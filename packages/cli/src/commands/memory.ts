@@ -15,6 +15,7 @@ export function registerMemory(program: Command): void {
     .option("--changed-file <path...>", "Changed files")
     .option("--decision <text...>", "Decision notes")
     .option("--failed-attempt <text...>", "Failed attempt notes")
+    .option("--pitfall <text...>", "Mistakes to place on the entrance pitfall board")
     .option("--test <entry...>", "Test run as command|passed|summary, command|failed|summary, or command|skipped|summary")
     .option("--tag <tag...>", "Memory tags")
     .option("--notes <text>", "Additional notes")
@@ -30,6 +31,7 @@ export function registerMemory(program: Command): void {
           testsRun: parseTestRuns(options.test),
           decisions: options.decision,
           failedAttempts: options.failedAttempt,
+          pitfalls: options.pitfall,
           tags: options.tag,
           notes: options.notes
         })

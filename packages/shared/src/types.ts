@@ -295,6 +295,7 @@ export type MemoryInput = {
   }[];
   decisions?: string[];
   failedAttempts?: string[];
+  pitfalls?: string[];
   tags?: string[];
   notes?: string;
 };
