@@ -46,6 +46,12 @@ export function scoreNodes(nodes: PalaceNode[], edges: PalaceEdge[], analysis: T
         reasons.push(`room matches task hint "${node.room}"`);
       }
 
+      const layerBoost = layerHintBoost(node, analysis);
+      if (layerBoost > 0) {
+        score += layerBoost;
+        reasons.push("matches frontend/backend layer hint");
+      }
+
       const relationBoost = edgeBoosts.get(node.id) ?? 0;
       const hasLocalRelevance = score > 0;
       const floorIndex = floors.indexOf(node.floor);
@@ -73,6 +79,10 @@ export function scoreNodes(nodes: PalaceNode[], edges: PalaceEdge[], analysis: T
         score -= 20;
         reasons.push("test is secondary for this task type");
       }
+      if (isFixtureLikePath(node.sourcePath) && taskType !== "test" && !analysis.keywords.includes("fixture")) {
+        score -= 120;
+        reasons.push("fixture is secondary for non-test tasks");
+      }
       if (isBinaryLikePath(node.sourcePath, node.language) && !wantsMediaAsset(analysis)) {
         score -= 120;
         reasons.push("binary/media asset is secondary for non-asset task");
@@ -93,6 +103,24 @@ export function scoreNodes(nodes: PalaceNode[], edges: PalaceEdge[], analysis: T
 function wantsMediaAsset(analysis: TaskAnalysis): boolean {
   const mediaKeywords = new Set(["asset", "assets", "image", "images", "img", "logo", "icon", "png", "jpg", "jpeg", "gif", "webp", "screenshot", "picture", "photo"]);
   return analysis.keywords.some((keyword) => mediaKeywords.has(keyword));
+}
+
+function isFixtureLikePath(sourcePath: string): boolean {
+  return /(^|\/)(fixtures?|__fixtures__)(\/|$)/i.test(sourcePath);
+}
+
+function layerHintBoost(node: PalaceNode, analysis: TaskAnalysis): number {
+  const path = node.sourcePath.toLowerCase();
+  const keywords = new Set(analysis.keywords);
+  let boost = 0;
+  if (hasAny(keywords, ["frontend", "page", "component", "ui"]) && /(^|\/)(frontend|client|web|app|pages|components)(\/|$)/.test(path)) boost += 22;
+  if (hasAny(keywords, ["backend", "server", "service", "api", "controller"]) && /(^|\/)(backend|server|api|controllers|routes|services)(\/|$)/.test(path)) boost += 22;
+  if (hasAny(keywords, ["database", "schema", "model"]) && /(schema|model|models|prisma|database|db|migration)/.test(path)) boost += 18;
+  return boost;
+}
+
+function hasAny(values: Set<string>, candidates: string[]): boolean {
+  return candidates.some((candidate) => values.has(candidate));
 }
 
 function tokenize(value: string): Set<string> {

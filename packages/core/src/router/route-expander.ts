@@ -6,7 +6,7 @@ export function expandRoute(scored: ScoredNode[], edges: PalaceEdge[], nodes: Pa
   const adjacency = buildAdjacency(edges);
   const selected = new Map<string, ScoredNode>();
 
-  for (const item of scored.slice(0, Math.max(4, limit))) {
+  for (const item of diverseSeed(scored, Math.max(4, limit))) {
     selected.set(item.node.id, item);
   }
 
@@ -27,6 +27,36 @@ export function expandRoute(scored: ScoredNode[], edges: PalaceEdge[], nodes: Pa
   }
 
   return [...selected.values()].sort((a, b) => b.score - a.score || a.node.sourcePath.localeCompare(b.node.sourcePath)).slice(0, limit);
+}
+
+function diverseSeed(scored: ScoredNode[], limit: number): ScoredNode[] {
+  const result: ScoredNode[] = [];
+  const bySource = new Map<string, number>();
+  const byTop = new Map<string, number>();
+
+  for (const item of scored) {
+    const sourceCount = bySource.get(item.node.sourcePath) ?? 0;
+    const top = topSegment(item.node.sourcePath);
+    const topCount = byTop.get(top) ?? 0;
+    if (sourceCount >= 2 || topCount >= Math.max(3, Math.ceil(limit / 2))) continue;
+    result.push(item);
+    bySource.set(item.node.sourcePath, sourceCount + 1);
+    byTop.set(top, topCount + 1);
+    if (result.length >= limit) return result;
+  }
+
+  for (const item of scored) {
+    if (result.some((selected) => selected.node.id === item.node.id)) continue;
+    result.push(item);
+    if (result.length >= limit) break;
+  }
+
+  return result;
+}
+
+function topSegment(sourcePath: string): string {
+  const parts = sourcePath.split("/");
+  return parts[0] === "src" && parts[1] ? `${parts[0]}/${parts[1]}` : parts[0] ?? sourcePath;
 }
 
 function buildAdjacency(edges: PalaceEdge[]): Map<string, PalaceEdge[]> {

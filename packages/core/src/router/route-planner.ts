@@ -70,8 +70,8 @@ function normalizeOptions(options: number | RoutePalaceOptions): Required<RouteP
 
 function defaultRouteLimitForBudget(budget: number): number {
   if (budget <= 6000) return 6;
-  if (budget <= 12000) return 8;
-  return 10;
+  if (budget <= 12000) return 10;
+  return 12;
 }
 
 function chooseLoadLevel(kind: string, index: number, score: number): LoadLevel {

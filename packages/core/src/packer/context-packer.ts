@@ -23,7 +23,7 @@ export async function packContext(root: string, task: string, options: PackConte
   const refreshedIndex = await readIndex(root);
   const byId = new Map(refreshedIndex.nodes.map((node) => [node.id, node]));
   const maxTokens = options.budget ?? DEFAULT_BUDGET.maxInputTokens;
-  const maxDrawers = options.maxDrawers ?? route.route.length;
+  const maxDrawers = options.maxDrawers ?? defaultMaxDrawers(maxTokens);
   const drawers: Array<{ node: PalaceNode; content: string; tokens: number; reason: string }> = [];
   const pitfallBoard = await readPitfallBoardForPack(root);
   let used = estimateTokens(routeSummary(route, options.includeExcluded !== false)) + estimateTokens(pitfallBoard ?? "");
@@ -73,6 +73,12 @@ function routeSummary(route: PalaceRoute, includeExcluded: boolean): string {
     ...route.route.map((step) => `${step.sourcePath} ${step.reason}`),
     ...(includeExcluded ? route.excluded.map((item) => `${item.sourcePath} ${item.reason}`) : [])
   ].join("\n");
+}
+
+function defaultMaxDrawers(budget: number): number {
+  if (budget <= 6000) return 4;
+  if (budget <= 12000) return 6;
+  return 8;
 }
 
 function renderMarkdown(

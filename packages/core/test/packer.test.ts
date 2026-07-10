@@ -35,6 +35,20 @@ describe("packContext", () => {
     });
   });
 
+  it("caps default drawers for small packs", async () => {
+    await withFixture("ts-api", async (root) => {
+      await indexPalace(root);
+      const pack = await packContext(root, "fix login refresh token bug", {
+        budget: 6000,
+        includeExcluded: false,
+        routeLimit: 12
+      });
+
+      expect((pack.markdown?.match(/### Drawer:/g) ?? []).length).toBeLessThanOrEqual(4);
+      expect(pack.estimatedTokens).toBeLessThan(6000);
+    });
+  });
+
   it("omits binary asset bytes from packs", async () => {
     await withFixture("ts-api", async (root) => {
       await mkdir(path.join(root, "assets"), { recursive: true });
