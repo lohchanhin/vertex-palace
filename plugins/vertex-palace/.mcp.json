@@ -1,12 +1,14 @@
 {
-  "vertex-palace": {
-    "command": "npx",
-    "args": [
-      "-y",
-      "-p",
-      "github:lohchanhin/vertex-palace#v0.1.1",
-      "vertex-palace-mcp",
-      "--stdio"
-    ]
+  "mcpServers": {
+    "vertex-palace": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "-p",
+        "github:lohchanhin/vertex-palace#v0.1.2",
+        "vertex-palace-mcp",
+        "--stdio"
+      ]
+    }
   }
 }
