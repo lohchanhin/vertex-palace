@@ -50,8 +50,10 @@ Before following a route, the agent should read `.palace/00-entrance/pitfall-boa
 1. Install the plugin:
 
 ```bash
-codex plugin marketplace add lohchanhin/vertex-palace --ref v0.1.0
+codex plugin marketplace add lohchanhin/vertex-palace --ref v0.1.1
 ```
+
+Use `v0.1.1` or newer. `v0.1.0` should be avoided because its MCP config pointed at an unpublished npm package.
 
 2. Open Codex and install Vertex Palace from `/plugins`.
 
@@ -150,8 +152,10 @@ status -> 需要时 init/index -> route -> pack -> 先读路线文件 -> 执行�
 1. 安装插件：
 
 ```bash
-codex plugin marketplace add lohchanhin/vertex-palace --ref v0.1.0
+codex plugin marketplace add lohchanhin/vertex-palace --ref v0.1.1
 ```
+
+请使用 `v0.1.1` 或更新版本。不要再使用 `v0.1.0`，那个版本的 MCP 配置指向尚未发布的 npm 包。
 
 2. 打开 Codex，输入 `/plugins`，安装 Vertex Palace。
 
@@ -208,8 +212,10 @@ cat .palace/memory/task-log.md
 ## Install
 
 ```bash
-codex plugin marketplace add lohchanhin/vertex-palace --ref v0.1.0
+codex plugin marketplace add lohchanhin/vertex-palace --ref v0.1.1
 ```
+
+Use `v0.1.1` or newer; `v0.1.0` is obsolete because the bundled MCP server could not start from a fresh install.
 
 Open Codex:
 

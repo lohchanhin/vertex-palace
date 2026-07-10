@@ -32,6 +32,7 @@ export const DEFAULT_IGNORE = [
   ".cache/**",
   ".palace",
   ".palace/**",
+  "plugins/**/mcp/*.cjs",
   "package-lock.json",
   "pnpm-lock.yaml",
   "yarn.lock",
