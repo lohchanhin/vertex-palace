@@ -38,6 +38,7 @@ export type TaskType =
   | "refactor"
   | "test"
   | "explain"
+  | "evaluation"
   | "review"
   | "unknown";
 

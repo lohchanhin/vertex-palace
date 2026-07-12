@@ -1,13 +1,15 @@
 import path from "node:path";
 import type { LoadLevel, PalaceRoute } from "@vertex-palace/shared";
 import { DEFAULT_BUDGET } from "../config/defaults";
+import { indexPalace } from "../indexer/index-palace";
 import { readIndex } from "../storage/read-palace";
+import { getPalaceStatus } from "../storage/status";
 import { appendRoute } from "../storage/write-palace";
 import { hashText } from "../scanner/file-hash";
 import { analyzeTask } from "./analyze-task";
 import { classifyTask } from "./classify-task";
 import { locateEntry } from "./locate-entry";
-import { scoreNodes } from "./route-scorer";
+import { scoreNodes, type ScoredNode } from "./route-scorer";
 import { expandRoute } from "./route-expander";
 
 export type RoutePalaceOptions = {
@@ -18,11 +20,13 @@ export type RoutePalaceOptions = {
 export async function routePalace(root: string, task: string, options: number | RoutePalaceOptions = DEFAULT_BUDGET.maxInputTokens): Promise<PalaceRoute> {
   const normalized = normalizeOptions(options);
   const budget = normalized.budget;
+  await ensureFreshIndex(root);
   const index = await readIndex(root);
   const analysis = analyzeTask(task);
   const taskType = classifyTask(task);
   const scored = scoreNodes(index.nodes, index.edges, analysis, taskType);
-  const expanded = expandRoute(scored, index.edges, index.nodes, normalized.routeLimit);
+  const routeLimit = taskType === "evaluation" ? Math.min(normalized.routeLimit, 6) : normalized.routeLimit;
+  const expanded = expandRoute(scored, index.edges, index.nodes, routeLimit);
   const now = new Date().toISOString();
 
   const routeSteps = expanded.map((item, index) => {
@@ -51,12 +55,19 @@ export async function routePalace(root: string, task: string, options: number | 
       estimatedTokens,
       reservedOutputTokens: DEFAULT_BUDGET.reservedOutputTokens
     },
-    confidence: confidence(scored.length, expanded.length, estimatedTokens, budget),
+    confidence: confidence(expanded, analysis, estimatedTokens, budget),
     createdAt: now
   };
 
   await appendRoute(root, index.routes, route);
   return route;
+}
+
+async function ensureFreshIndex(root: string): Promise<void> {
+  const status = await getPalaceStatus(root);
+  if (!status.initialized || !status.indexed || status.stale) {
+    await indexPalace(root);
+  }
 }
 
 function normalizeOptions(options: number | RoutePalaceOptions): Required<RoutePalaceOptions> {
@@ -124,10 +135,31 @@ function buildExcluded(nodes: Awaited<ReturnType<typeof readIndex>>["nodes"], se
     }));
 }
 
-function confidence(scoredCount: number, selectedCount: number, estimatedTokens: number, budget: number): number {
-  if (!selectedCount) return 0.1;
-  const coverage = Math.min(0.65, selectedCount / 12);
-  const candidateStrength = Math.min(0.25, scoredCount / 80);
-  const budgetFit = estimatedTokens <= budget ? 0.1 : 0;
-  return Number((coverage + candidateStrength + budgetFit).toFixed(2));
+function confidence(selected: ScoredNode[], analysis: ReturnType<typeof analyzeTask>, estimatedTokens: number, budget: number): number {
+  if (!selected.length) return 0.1;
+  const top = selected.slice(0, 12);
+  const keywords = analysis.keywords.filter((keyword) => !["task", "fresh"].includes(keyword));
+  const covered = keywords.filter((keyword) => top.some((item) => nodeHaystack(item).includes(keyword))).length;
+  const keywordCoverage = keywords.length ? covered / keywords.length : 0.45;
+  const averageScore = top.reduce((sum, item) => sum + item.score, 0) / top.length;
+  const scoreStrength = Math.min(1, averageScore / 140);
+  const focus = dominantTopSegmentShare(top);
+  const budgetFit = estimatedTokens <= budget ? 1 : 0;
+  const value = 0.08 + keywordCoverage * 0.34 + scoreStrength * 0.28 + focus * 0.2 + budgetFit * 0.1;
+  return Number(Math.max(0.1, Math.min(0.98, value)).toFixed(2));
+}
+
+function nodeHaystack(item: ScoredNode): string {
+  return [item.node.sourcePath, item.node.title, item.node.summary, item.node.wing, item.node.room, ...item.node.tags].filter(Boolean).join(" ").toLowerCase();
+}
+
+function dominantTopSegmentShare(items: ScoredNode[]): number {
+  const counts = new Map<string, number>();
+  for (const item of items) {
+    const [first, second] = item.node.sourcePath.split("/");
+    const top = first === "packages" && second ? `${first}/${second}` : first || item.node.sourcePath;
+    counts.set(top, (counts.get(top) ?? 0) + 1);
+  }
+  const max = Math.max(...counts.values());
+  return max / items.length;
 }

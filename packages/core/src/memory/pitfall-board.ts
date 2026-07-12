@@ -21,6 +21,12 @@ type PitfallBoardIndex = {
   entries: PitfallBoardEntry[];
 };
 
+type PitfallBoardPackOptions = {
+  task?: string;
+  taskType?: string;
+  limit?: number;
+};
+
 export function pitfallBoardPath(root: string): string {
   return path.join(root, ".palace", "00-entrance", "pitfall-board.md");
 }
@@ -74,13 +80,20 @@ export async function updatePitfallBoardFromMemory(
   return { boardPath, indexPath, written: nextEntries.length };
 }
 
-export async function readPitfallBoardForPack(root: string): Promise<string | undefined> {
+export async function readPitfallBoardForPack(root: string, options: PitfallBoardPackOptions = {}): Promise<string | undefined> {
   try {
-    const content = await readFile(pitfallBoardPath(root), "utf8");
-    if (!content.trim() || content.includes("- No pitfalls recorded yet.")) return undefined;
-    return content.trim().slice(0, 4000);
+    const index = await readPitfallIndex(pitfallIndexPath(root));
+    const entries = selectPitfallsForPack(index.entries, options);
+    if (!entries.length) return undefined;
+    return renderPitfallBoard(entries).trim().slice(0, 4000);
   } catch {
-    return undefined;
+    try {
+      const content = await readFile(pitfallBoardPath(root), "utf8");
+      if (!content.trim() || content.includes("- No pitfalls recorded yet.")) return undefined;
+      return content.trim().slice(0, 1600);
+    } catch {
+      return undefined;
+    }
   }
 }
 
@@ -109,6 +122,37 @@ function renderEntry(entry: PitfallBoardEntry): string[] {
     `  Scope: ${entry.client ?? "default"} | Outcome: ${entry.outcome} | Source: ${entry.source}`,
     `  Memory: ${entry.memoryPath}`
   ];
+}
+
+function selectPitfallsForPack(entries: PitfallBoardEntry[], options: PitfallBoardPackOptions): PitfallBoardEntry[] {
+  const limit = options.limit ?? (options.taskType === "evaluation" ? 4 : 6);
+  const taskTokens = tokenizeForPitfall(options.task ?? "");
+  const scored = entries
+    .map((entry, index) => ({ entry, index, score: pitfallRelevance(entry, taskTokens, options.taskType) }))
+    .sort((a, b) => b.score - a.score || a.index - b.index);
+  const maxScore = scored[0]?.score ?? 0;
+  const relevant = scored.filter((item) => item.score > 0 && item.score === maxScore).map((item) => item.entry);
+  return (relevant.length ? relevant : entries).slice(0, limit);
+}
+
+function pitfallRelevance(entry: PitfallBoardEntry, taskTokens: Set<string>, taskType?: string): number {
+  const haystack = tokenizeForPitfall([entry.text, entry.task, entry.client, ...entry.tags].filter(Boolean).join(" "));
+  let score = 0;
+  for (const token of taskTokens) {
+    if (haystack.has(token)) score += token.startsWith("client") ? 4 : 1;
+  }
+  if (taskType && haystack.has(taskType)) score += 2;
+  return score;
+}
+
+function tokenizeForPitfall(value: string): Set<string> {
+  return new Set(
+    value
+      .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
+      .toLowerCase()
+      .split(/[^a-z0-9]+/)
+      .filter((token) => token.length > 2 && !["the", "and", "for", "with", "task", "route", "fix", "bug", "fresh", "test"].includes(token))
+  );
 }
 
 async function readPitfallIndex(indexPath: string): Promise<PitfallBoardIndex> {

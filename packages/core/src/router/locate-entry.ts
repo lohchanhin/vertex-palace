@@ -13,6 +13,8 @@ export function floorTemplate(taskType: TaskType): PalaceFloor[] {
       return ["05-verification", "03-implementation"];
     case "explain":
       return ["00-entrance", "03-implementation", "01-business"];
+    case "evaluation":
+      return ["07-memory", "00-entrance", "03-implementation", "05-verification"];
     case "review":
       return ["03-implementation", "05-verification", "07-memory"];
     default:

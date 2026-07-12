@@ -39,15 +39,16 @@ export function registerMemory(program: Command): void {
     });
 }
 
-function parseTestRuns(entries?: string[]): Array<{ command: string; status: "passed" | "failed" | "skipped"; summary?: string }> | undefined {
+export function parseTestRuns(entries?: string[]): Array<{ command: string; status: "passed" | "failed" | "skipped"; summary?: string }> | undefined {
   if (!entries?.length) return undefined;
   return entries.map((entry) => {
-    const [command = entry, rawStatus = "passed", ...summaryParts] = entry.split("|");
-    const status = rawStatus === "failed" || rawStatus === "skipped" ? rawStatus : "passed";
+    const match = /^(.*)\|(passed|failed|skipped)(?:\|(.*))?$/.exec(entry);
+    const command = match?.[1] ?? entry;
+    const status = (match?.[2] ?? "passed") as "passed" | "failed" | "skipped";
     return {
       command: command.trim(),
       status,
-      summary: summaryParts.join("|").trim() || undefined
+      summary: match?.[3]?.trim() || undefined
     };
   });
 }

@@ -20,6 +20,7 @@ export function scoreNodes(nodes: PalaceNode[], edges: PalaceEdge[], analysis: T
       let score = 0;
       const haystack = [node.sourcePath, node.title, node.summary, node.wing, node.room, ...node.tags].filter(Boolean).join(" ").toLowerCase();
       const tokens = tokenize(haystack);
+      const entityHit = entityHintBoost(node, analysis);
 
       for (const keyword of analysis.keywords) {
         if (!keyword) continue;
@@ -37,6 +38,11 @@ export function scoreNodes(nodes: PalaceNode[], edges: PalaceEdge[], analysis: T
         }
       }
 
+      if (entityHit > 0) {
+        score += entityHit;
+        reasons.push("matches tenant or project entity");
+      }
+
       if (node.wing && analysis.wingHints.includes(node.wing)) {
         score += 25;
         reasons.push(`wing matches task hint "${node.wing}"`);
@@ -50,6 +56,16 @@ export function scoreNodes(nodes: PalaceNode[], edges: PalaceEdge[], analysis: T
       if (layerBoost > 0) {
         score += layerBoost;
         reasons.push("matches frontend/backend layer hint");
+      }
+
+      const evaluationBoost = evaluationHintBoost(node, taskType, entityHit > 0);
+      if (evaluationBoost !== 0) {
+        score += evaluationBoost;
+        reasons.push(evaluationBoost > 0 ? "matches evaluation/meta task context" : "application source is secondary for evaluation");
+      }
+      if (taskType === "evaluation" && !isEvaluationRouteAnchor(node, taskType, analysis, entityHit > 0)) {
+        score -= 260;
+        reasons.push("not anchored to evaluation or memory context");
       }
 
       const relationBoost = edgeBoosts.get(node.id) ?? 0;
@@ -109,6 +125,49 @@ function isFixtureLikePath(sourcePath: string): boolean {
   return /(^|\/)(fixtures?|__fixtures__)(\/|$)/i.test(sourcePath);
 }
 
+function entityHintBoost(node: PalaceNode, analysis: TaskAnalysis): number {
+  if (!analysis.entities.length) return 0;
+  const compactPath = compact(node.sourcePath);
+  const compactTitle = compact(node.title);
+  const compactSummary = compact(node.summary);
+  let boost = 0;
+  for (const entity of analysis.entities) {
+    const compactEntity = compact(entity);
+    if (!compactEntity) continue;
+    if (compactPath.includes(compactEntity)) boost += 50;
+    else if (compactTitle.includes(compactEntity)) boost += 35;
+    else if (compactSummary.includes(compactEntity)) boost += 20;
+  }
+  return Math.min(90, boost);
+}
+
+function evaluationHintBoost(node: PalaceNode, taskType: TaskType, hasEntityHit: boolean): number {
+  if (taskType !== "evaluation") return 0;
+  const path = node.sourcePath.toLowerCase();
+  if (isEvaluationMetaPath(path)) return 32;
+  if (!hasEntityHit && /(^|\/)(backend|frontend|app|pages|components|controllers|services)(\/|$)/.test(path)) return -240;
+  if (node.kind === "doc" || node.kind === "test") return 10;
+  return 0;
+}
+
+function isEvaluationRouteAnchor(node: PalaceNode, taskType: TaskType, analysis: TaskAnalysis, hasEntityHit: boolean): boolean {
+  if (taskType !== "evaluation") return true;
+  const path = node.sourcePath.toLowerCase();
+  if (isEvaluationMetaPath(path)) return true;
+  if (hasEntityHit && /(^|\/)(memory|pitfalls?|routes?|tasks?|decisions?|notes?)(\/|$)|latest|changed|history|client|tenant/.test(path)) return true;
+  if ((node.kind === "doc" || node.kind === "test") && hasEvaluationKeywordPath(path, analysis)) return true;
+  return false;
+}
+
+function isEvaluationMetaPath(path: string): boolean {
+  return /(^|\/)(memory|router|packer|storage|scanner|indexer)(\/|$)|pitfall|latest-route|task-log|route-planner|route-scorer|context-packer|write-memory|analyze-task|classify-task/.test(path);
+}
+
+function hasEvaluationKeywordPath(path: string, analysis: TaskAnalysis): boolean {
+  if (/(route|router|memory|packer|context|pitfall|confidence|index|stale|classif|evaluation|retrospective)/.test(path)) return true;
+  return analysis.keywords.some((keyword) => keyword.length > 3 && path.includes(keyword));
+}
+
 function layerHintBoost(node: PalaceNode, analysis: TaskAnalysis): number {
   const path = node.sourcePath.toLowerCase();
   const keywords = new Set(analysis.keywords);
@@ -117,6 +176,10 @@ function layerHintBoost(node: PalaceNode, analysis: TaskAnalysis): number {
   if (hasAny(keywords, ["backend", "server", "service", "api", "controller"]) && /(^|\/)(backend|server|api|controllers|routes|services)(\/|$)/.test(path)) boost += 22;
   if (hasAny(keywords, ["database", "schema", "model"]) && /(schema|model|models|prisma|database|db|migration)/.test(path)) boost += 18;
   return boost;
+}
+
+function compact(value: string): string {
+  return value.toLowerCase().replace(/[^a-z0-9]+/g, "");
 }
 
 function hasAny(values: Set<string>, candidates: string[]): boolean {

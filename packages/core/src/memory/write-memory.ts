@@ -38,6 +38,7 @@ export async function writeMemory(input: MemoryInput & { root: string }): Promis
 }> {
   const now = new Date().toISOString();
   const safeTask = redactSecrets(input.task);
+  const routeId = input.routeId ?? (await latestRouteId(input.root));
   const slug = `${now.replace(/[:.]/g, "-")}-${hashText(safeTask).slice(0, 8)}.md`;
   const folder = folderForOutcome(input.outcome);
   const clientSegment = input.client ? safeSegment(input.client) : undefined;
@@ -48,7 +49,7 @@ export async function writeMemory(input: MemoryInput & { root: string }): Promis
   const ledgerMemoryDir = path.join(ledgerRoot, folder);
   await Promise.all([mkdir(floorMemoryDir, { recursive: true }), mkdir(ledgerMemoryDir, { recursive: true })]);
 
-  const safeInput = { ...input, task: safeTask };
+  const safeInput = { ...input, task: safeTask, routeId };
   const rendered = renderMemory(safeInput, now);
   const memoryPath = path.join(floorMemoryDir, slug);
   const ledgerMemoryPath = path.join(ledgerMemoryDir, slug);
@@ -158,6 +159,15 @@ async function readLedger(indexPath: string): Promise<MemoryLedger> {
     return { entries: Array.isArray(parsed.entries) ? parsed.entries : [] };
   } catch {
     return { entries: [] };
+  }
+}
+
+async function latestRouteId(root: string): Promise<string | undefined> {
+  try {
+    const latest = JSON.parse(await readFile(path.join(root, ".palace", "routes", "latest-route.json"), "utf8")) as { id?: unknown };
+    return typeof latest.id === "string" ? latest.id : undefined;
+  } catch {
+    return undefined;
   }
 }
 

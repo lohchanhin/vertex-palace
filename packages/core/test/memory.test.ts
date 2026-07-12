@@ -1,7 +1,9 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
+import { indexPalace } from "../src/indexer/index-palace";
 import { redactSecrets, writeMemory } from "../src/memory/write-memory";
+import { routePalace } from "../src/router/route-planner";
 import { initPalace } from "../src/storage/init-palace";
 import { withFixture } from "./test-utils";
 
@@ -74,6 +76,27 @@ describe("memory", () => {
       expect(board).toContain("Do not trust stale route files");
       expect(board).toContain("Tried editing generated files");
       expect(index.entries).toHaveLength(2);
+    });
+  });
+
+  it("binds memory to the latest route when routeId is omitted", async () => {
+    await withFixture("ts-api", async (root) => {
+      await indexPalace(root);
+      const route = await routePalace(root, "fix login refresh token bug");
+      const result = await writeMemory({
+        root,
+        task: "fix login refresh token bug",
+        outcome: "success",
+        changedFiles: ["src/services/token.service.ts"]
+      });
+
+      const latest = await readFile(result.latestPath, "utf8");
+      const log = await readFile(result.logPath, "utf8");
+      const index = JSON.parse(await readFile(result.indexPath, "utf8")) as { entries: Array<{ routeId?: string }> };
+
+      expect(latest).toContain(`Route: ${route.id}`);
+      expect(log).toContain(`Route: ${route.id}`);
+      expect(index.entries[0]?.routeId).toBe(route.id);
     });
   });
 });

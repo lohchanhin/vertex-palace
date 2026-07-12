@@ -3,6 +3,7 @@ import { slugify } from "../utils/path-utils";
 export type TaskAnalysis = {
   raw: string;
   keywords: string[];
+  entities: string[];
   wingHints: string[];
   roomHints: string[];
 };
@@ -40,6 +41,7 @@ const STOP_WORDS = new Set([
   "needs",
   "codex",
   "feedback",
+  "overall",
   "improve",
   "large",
   "palace",
@@ -47,6 +49,8 @@ const STOP_WORDS = new Set([
   "tool",
   "tools",
   "unknown",
+  "assessment",
+  "evaluation",
   "vertex"
 ]);
 const WING_HINTS = new Set([
@@ -87,6 +91,7 @@ const PHRASE_KEYWORDS: Array<[RegExp, string[]]> = [
   [/依赖|依賴|导入|導入|引用|import|dependency|dependencies/i, ["import", "dependency", "edge"]],
   [/unknown|未识别|未識別|任务判断|任務判斷|任务分类|任務分類|任务类型|任務類型|classify|classification|task type/i, ["classify", "analyze", "task"]],
   [/索引|新鲜度|新鮮度|过期|過期|刷新|stale|fresh|freshness|index/i, ["index", "stale", "fresh"]],
+  [/evaluation|evaluate|assessment|retrospective|postmortem|score|rating|grade|feedback|lessons|回顾|回顧|复盘|復盤|评估|評估|评价|評價|评分|評分|打分|总结|總結|结论|結論/i, ["evaluation", "retrospective", "memory"]],
   [/商品|产品|產品|product/i, ["product"]],
   [/规格|規格|款式|variant|option/i, ["variant"]],
   [/图片|圖片|图像|圖像|照片|image|photo|picture/i, ["image"]],
@@ -102,14 +107,16 @@ const PHRASE_KEYWORDS: Array<[RegExp, string[]]> = [
 ];
 
 export function analyzeTask(task: string): TaskAnalysis {
+  const entities = entityKeywords(task);
   const keywords = [
     ...new Set(
-      [...englishKeywords(task), ...phraseKeywords(task)].filter((token) => token.length > 1 && !STOP_WORDS.has(token))
+      [...englishKeywords(task), ...phraseKeywords(task), ...entities].filter((token) => token.length > 1 && !STOP_WORDS.has(token))
     )
   ];
   return {
     raw: task,
     keywords,
+    entities,
     wingHints: keywords.filter((keyword) => WING_HINTS.has(keyword)),
     roomHints: keywords.filter((keyword) => ROOM_HINTS.has(keyword))
   };
@@ -126,4 +133,17 @@ function englishKeywords(task: string): string[] {
 
 function phraseKeywords(task: string): string[] {
   return PHRASE_KEYWORDS.flatMap(([pattern, keywords]) => (pattern.test(task) ? keywords : []));
+}
+
+function entityKeywords(task: string): string[] {
+  const candidates = task.match(/[A-Za-z0-9]+(?:[-_][A-Za-z0-9]+)+|[A-Z][a-z0-9]+(?:[A-Z][a-z0-9]+)+/g) ?? [];
+  return [
+    ...new Set(
+      candidates.flatMap((candidate) => {
+        const slug = slugify(candidate);
+        const compact = candidate.toLowerCase().replace(/[^a-z0-9]+/g, "");
+        return [slug, compact].filter((value) => value.length > 2);
+      })
+    )
+  ];
 }

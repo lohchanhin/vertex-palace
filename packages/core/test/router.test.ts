@@ -8,6 +8,96 @@ import { routePalace } from "../src/router/route-planner";
 import { withFixture } from "./test-utils";
 
 describe("routePalace", () => {
+  it("classifies retrospective evaluation tasks and preserves tenant entities", () => {
+    const task = "overall evaluation retrospective score for client6-blogunlock BlogUnlock route confidence";
+    const analysis = analyzeTask(task);
+
+    expect(classifyTask(task)).toBe("evaluation");
+    expect(analysis.keywords).toEqual(expect.arrayContaining(["retrospective", "memory", "client6-blogunlock", "client6blogunlock", "blogunlock"]));
+    expect(analysis.entities).toEqual(expect.arrayContaining(["client6-blogunlock", "client6blogunlock", "blogunlock"]));
+  });
+
+  it("routes evaluation feedback to Palace internals instead of nested application source", async () => {
+    await withFixture("ts-api", async (root) => {
+      await mkdir(path.join(root, "packages", "core", "src", "router"), { recursive: true });
+      await mkdir(path.join(root, "packages", "core", "src", "memory"), { recursive: true });
+      await mkdir(path.join(root, "vve-dashboard-language", "backend", "src", "services"), { recursive: true });
+      await mkdir(path.join(root, "vve-dashboard-language", "scripts"), { recursive: true });
+      await mkdir(path.join(root, "vve-dashboard-language", "shared"), { recursive: true });
+      await writeFile(
+        path.join(root, "packages", "core", "src", "router", "route-planner.ts"),
+        `export function routeConfidenceForEvaluation() {
+  return "confidence route evaluation retrospective";
+}
+`,
+        "utf8"
+      );
+      await writeFile(
+        path.join(root, "packages", "core", "src", "memory", "write-memory.ts"),
+        `export function bindLatestRouteMemory() {
+  return "memory route binding retrospective";
+}
+`,
+        "utf8"
+      );
+      await writeFile(
+        path.join(root, "vve-dashboard-language", "backend", "src", "services", "tenant-binding.service.ts"),
+        `export function tenantBinding() {
+  return "tenant route binding service";
+}
+`,
+        "utf8"
+      );
+      await writeFile(
+        path.join(root, "vve-dashboard-language", "scripts", "lint-admin-route-gates.mjs"),
+        `export function lintAdminRouteGates() {
+  return "route confidence gates";
+}
+`,
+        "utf8"
+      );
+      await writeFile(
+        path.join(root, "vve-dashboard-language", "shared", "html-sanitizer.ts"),
+        `export function sanitizeContextHtml() {
+  return "context pack sanitizer";
+}
+`,
+        "utf8"
+      );
+      await indexPalace(root);
+
+      const route = await routePalace(root, "overall evaluation retrospective score route confidence tenant binding", { routeLimit: 8 });
+      const joined = route.route.map((step) => step.sourcePath).join("\n");
+
+      expect(route.taskType).toBe("evaluation");
+      expect(route.confidence).toBeLessThan(1);
+      expect(joined).toContain("packages/core/src/router/route-planner.ts");
+      expect(joined).toContain("packages/core/src/memory/write-memory.ts");
+      expect(joined).not.toContain("vve-dashboard-language/backend/src/services/tenant-binding.service.ts");
+      expect(joined).not.toContain("vve-dashboard-language/scripts/lint-admin-route-gates.mjs");
+      expect(joined).not.toContain("vve-dashboard-language/shared/html-sanitizer.ts");
+    });
+  });
+
+  it("refreshes a stale index before planning a route", async () => {
+    await withFixture("ts-api", async (root) => {
+      await indexPalace(root);
+      await writeFile(
+        path.join(root, "src", "services", "report.service.ts"),
+        `export function buildReportService() {
+  return "fresh report service";
+}
+`,
+        "utf8"
+      );
+
+      const route = await routePalace(root, "implement fresh report service", { routeLimit: 8 });
+      const joined = route.route.map((step) => step.sourcePath).join("\n");
+
+      expect(joined).toContain("src/services/report.service.ts");
+    });
+  });
+
   it("understands Chinese optimization tasks and full-stack hints", () => {
     const task = "提升 商品规格 图片上传 前端 后端 接口 路由";
     const analysis = analyzeTask(task);

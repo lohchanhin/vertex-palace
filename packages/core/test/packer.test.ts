@@ -108,4 +108,33 @@ describe("packContext", () => {
       expect((pack.markdown ?? "").indexOf("## Entrance Pitfall Board")).toBeLessThan((pack.markdown ?? "").indexOf("## Read First"));
     });
   });
+
+  it("filters pitfall board entries toward the packed task", async () => {
+    await withFixture("ts-api", async (root) => {
+      await indexPalace(root);
+      await writeMemory({
+        root,
+        task: "fix plugin mcp install",
+        outcome: "partial",
+        pitfalls: ["Never publish plugin MCP config without a fresh npx test."],
+        tags: ["plugin", "mcp"]
+      });
+      await writeMemory({
+        root,
+        task: "fix checkout shipping quote",
+        outcome: "partial",
+        pitfalls: ["Check checkout country before changing shipping quote logic."],
+        tags: ["checkout", "shipping"]
+      });
+
+      const pack = await packContext(root, "fix checkout shipping bug", {
+        budget: 12000,
+        includeExcluded: false,
+        routeLimit: 6
+      });
+
+      expect(pack.markdown).toContain("Check checkout country");
+      expect(pack.markdown).not.toContain("plugin MCP config");
+    });
+  });
 });

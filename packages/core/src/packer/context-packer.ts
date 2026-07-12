@@ -23,9 +23,9 @@ export async function packContext(root: string, task: string, options: PackConte
   const refreshedIndex = await readIndex(root);
   const byId = new Map(refreshedIndex.nodes.map((node) => [node.id, node]));
   const maxTokens = options.budget ?? DEFAULT_BUDGET.maxInputTokens;
-  const maxDrawers = options.maxDrawers ?? defaultMaxDrawers(maxTokens);
+  const maxDrawers = options.maxDrawers ?? defaultMaxDrawers(maxTokens, route.taskType);
   const drawers: Array<{ node: PalaceNode; content: string; tokens: number; reason: string }> = [];
-  const pitfallBoard = await readPitfallBoardForPack(root);
+  const pitfallBoard = await readPitfallBoardForPack(root, { task, taskType: route.taskType });
   let used = estimateTokens(routeSummary(route, options.includeExcluded !== false)) + estimateTokens(pitfallBoard ?? "");
 
   for (const step of route.route) {
@@ -75,7 +75,8 @@ function routeSummary(route: PalaceRoute, includeExcluded: boolean): string {
   ].join("\n");
 }
 
-function defaultMaxDrawers(budget: number): number {
+function defaultMaxDrawers(budget: number, taskType?: PalaceRoute["taskType"]): number {
+  if (taskType === "evaluation") return budget <= 6000 ? 2 : 3;
   if (budget <= 6000) return 4;
   if (budget <= 12000) return 6;
   return 8;
