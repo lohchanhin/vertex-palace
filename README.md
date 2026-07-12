@@ -50,14 +50,27 @@ Before following a route, the agent should read `.palace/00-entrance/pitfall-boa
 1. Install the plugin:
 
 ```bash
-codex plugin marketplace add lohchanhin/vertex-palace --ref v0.1.2
+codex plugin marketplace add lohchanhin/vertex-palace --ref v0.1.3
 ```
 
-Use `v0.1.2` or newer. Avoid `v0.1.0` and `v0.1.1`; those early tags had broken MCP install metadata.
+Use `v0.1.3` or newer. Avoid `v0.1.0` and `v0.1.1`; those early tags had broken MCP install metadata.
 
-2. Open Codex and install Vertex Palace from `/plugins`.
+2. Or install the CLI directly from npm:
 
-3. Initialize and index a repository:
+```bash
+npm install -g vertex-palace
+palace status
+```
+
+For one-off use without a global install:
+
+```bash
+npx vertex-palace status
+```
+
+3. Open Codex and install Vertex Palace from `/plugins`.
+
+4. Initialize and index a repository:
 
 ```bash
 palace init
@@ -65,21 +78,21 @@ palace index
 palace status
 ```
 
-4. Before each task, create a route and context pack:
+5. Before each task, create a route and context pack:
 
 ```bash
 palace route "fix login refresh token bug" --limit 8 --compact
 palace pack "fix login refresh token bug" --budget 6000 --route-limit 8 --max-drawers 4 --compact --out .palace/last-pack.md
 ```
 
-5. Read the latest task route:
+6. Read the latest task route:
 
 ```bash
 cat .palace/routes/optimized-route.txt
 cat .palace/routes/latest-route.md
 ```
 
-6. After the task, write memory:
+7. After the task, write memory:
 
 ```bash
 palace memory write \
@@ -94,7 +107,7 @@ palace memory write \
   --notes "Route was accurate; auth controller and token service were the key files."
 ```
 
-7. Check the readable memory ledger:
+8. Check the readable memory ledger:
 
 ```bash
 cat .palace/memory/latest-task.md
@@ -152,10 +165,10 @@ status -> 需要时 init/index -> route -> pack -> 先读路线文件 -> 执行�
 1. 安装插件：
 
 ```bash
-codex plugin marketplace add lohchanhin/vertex-palace --ref v0.1.2
+codex plugin marketplace add lohchanhin/vertex-palace --ref v0.1.3
 ```
 
-请使用 `v0.1.2` 或更新版本。不要再使用 `v0.1.0` 和 `v0.1.1`，这两个早期标签的 MCP 安装元数据有问题。
+请使用 `v0.1.3` 或更新版本。不要再使用 `v0.1.0` 和 `v0.1.1`，这两个早期标签的 MCP 安装元数据有问题。
 
 2. 打开 Codex，输入 `/plugins`，安装 Vertex Palace。
 
@@ -211,11 +224,32 @@ cat .palace/memory/task-log.md
 
 ## Install
 
+Install the CLI from npm:
+
 ```bash
-codex plugin marketplace add lohchanhin/vertex-palace --ref v0.1.2
+npm install -g vertex-palace
+palace status
 ```
 
-Use `v0.1.2` or newer; `v0.1.0` and `v0.1.1` are obsolete because their MCP install metadata was broken.
+Run it without a global install:
+
+```bash
+npx vertex-palace status
+```
+
+Install the Codex plugin:
+
+```bash
+codex plugin marketplace add lohchanhin/vertex-palace --ref v0.1.3
+```
+
+Use `v0.1.3` or newer; `v0.1.0` and `v0.1.1` are obsolete because their MCP install metadata was broken.
+
+The plugin launches its MCP server through npm:
+
+```bash
+npx -y -p vertex-palace@0.1.3 vertex-palace-mcp --stdio
+```
 
 Open Codex:
 

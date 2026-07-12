@@ -5,7 +5,7 @@
       "args": [
         "-y",
         "-p",
-        "github:lohchanhin/vertex-palace#v0.1.2",
+        "vertex-palace@0.1.3",
         "vertex-palace-mcp",
         "--stdio"
       ]
