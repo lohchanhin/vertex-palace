@@ -61,7 +61,7 @@ export async function updatePitfallBoardFromMemory(
     const text = redactSecrets(candidate.text.trim());
     const client = input.client ? redactSecrets(input.client) : undefined;
     return {
-      id: `pitfall_${hashText([client ?? "default", text].join("\0")).slice(0, 16)}`,
+      id: `pitfall_${hashText([client ?? "default", normalizePitfallText(text)].join("\0")).slice(0, 16)}`,
       text,
       task: redactSecrets(input.task),
       outcome: input.outcome,
@@ -130,8 +130,7 @@ function selectPitfallsForPack(entries: PitfallBoardEntry[], options: PitfallBoa
   const scored = entries
     .map((entry, index) => ({ entry, index, score: pitfallRelevance(entry, taskTokens, options.taskType) }))
     .sort((a, b) => b.score - a.score || a.index - b.index);
-  const maxScore = scored[0]?.score ?? 0;
-  const relevant = scored.filter((item) => item.score > 0 && item.score === maxScore).map((item) => item.entry);
+  const relevant = scored.filter((item) => item.score > 0).map((item) => item.entry);
   return (relevant.length ? relevant : entries).slice(0, limit);
 }
 
@@ -153,6 +152,14 @@ function tokenizeForPitfall(value: string): Set<string> {
       .split(/[^a-z0-9]+/)
       .filter((token) => token.length > 2 && !["the", "and", "for", "with", "task", "route", "fix", "bug", "fresh", "test"].includes(token))
   );
+}
+
+function normalizePitfallText(value: string): string {
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9\u3400-\u9fff]+/g, " ")
+    .trim()
+    .replace(/\s+/g, " ");
 }
 
 async function readPitfallIndex(indexPath: string): Promise<PitfallBoardIndex> {

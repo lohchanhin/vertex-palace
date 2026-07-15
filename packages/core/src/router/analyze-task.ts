@@ -43,6 +43,25 @@ const STOP_WORDS = new Set([
   "feedback",
   "overall",
   "improve",
+  "optimize",
+  "optimise",
+  "optimization",
+  "optimisation",
+  "quality",
+  "performance",
+  "reliability",
+  "relevance",
+  "from",
+  "like",
+  "prevent",
+  "unrelated",
+  "copies",
+  "nested",
+  "current",
+  "exact",
+  "core",
+  "repository",
+  "repositories",
   "large",
   "palace",
   "project",
@@ -81,6 +100,9 @@ const WING_HINTS = new Set([
 const ROOM_HINTS = new Set(["api", "checkout", "footer", "general", "image", "login", "logout", "password", "policy", "product", "profile", "refresh", "session", "settings", "token", "upload", "user", "users", "variant"]);
 
 const PHRASE_KEYWORDS: Array<[RegExp, string[]]> = [
+  [/scanner|scanning|scan repo|ignore rules?|exclude|worktree|nested repo/i, ["scanner", "ignore"]],
+  [/context pack|packing|packer|pack output/i, ["pack", "packer"]],
+  [/pitfall|dedup|deduplicate|memory ledger/i, ["memory", "pitfall"]],
   [/前后端|前後端|全栈|全棧|全端|full[-\s]?stack/i, ["frontend", "backend"]],
   [/前端|頁面|页面|界面|畫面|画面|组件|組件|表单|表單|按钮|按鈕|footer|ui/i, ["frontend", "page", "component"]],
   [/后端|後端|服务端|服務端|服务器|伺服器|service|server/i, ["backend", "server", "service"]],
@@ -107,10 +129,11 @@ const PHRASE_KEYWORDS: Array<[RegExp, string[]]> = [
 ];
 
 export function analyzeTask(task: string): TaskAnalysis {
+  const lexicalTask = task.replace(/\bproduct\s+intent\b/gi, "intent");
   const entities = entityKeywords(task);
   const keywords = [
     ...new Set(
-      [...englishKeywords(task), ...phraseKeywords(task), ...entities].filter((token) => token.length > 1 && !STOP_WORDS.has(token))
+      [...englishKeywords(lexicalTask), ...phraseKeywords(lexicalTask), ...entities].filter((token) => token.length > 1 && !STOP_WORDS.has(token))
     )
   ];
   return {

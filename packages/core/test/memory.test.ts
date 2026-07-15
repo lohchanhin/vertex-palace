@@ -5,6 +5,7 @@ import { indexPalace } from "../src/indexer/index-palace";
 import { redactSecrets, writeMemory } from "../src/memory/write-memory";
 import { routePalace } from "../src/router/route-planner";
 import { initPalace } from "../src/storage/init-palace";
+import { readPitfallBoardForPack } from "../src/memory/pitfall-board";
 import { withFixture } from "./test-utils";
 
 describe("memory", () => {
@@ -76,6 +77,33 @@ describe("memory", () => {
       expect(board).toContain("Do not trust stale route files");
       expect(board).toContain("Tried editing generated files");
       expect(index.entries).toHaveLength(2);
+    });
+  });
+
+  it("deduplicates normalized pitfalls and packs multiple relevant entries", async () => {
+    await withFixture("ts-api", async (root) => {
+      await initPalace(root);
+      await writeMemory({
+        root,
+        task: "improve scanner routing",
+        outcome: "partial",
+        pitfalls: ["Do not index nested worktrees."],
+        tags: ["scanner", "routing"]
+      });
+      await writeMemory({
+        root,
+        task: "improve scanner routing",
+        outcome: "partial",
+        pitfalls: ["do not index nested worktrees!", "Route scanner tasks away from copied repositories."],
+        tags: ["scanner", "routing"]
+      });
+
+      const index = JSON.parse(await readFile(path.join(root, ".palace", "memory", "pitfall-board.json"), "utf8")) as { entries: Array<{ text: string }> };
+      const packed = await readPitfallBoardForPack(root, { task: "scanner routing copied worktrees", limit: 6 });
+
+      expect(index.entries).toHaveLength(2);
+      expect(packed).toContain("do not index nested worktrees!");
+      expect(packed).toContain("Route scanner tasks away from copied repositories.");
     });
   });
 

@@ -1,11 +1,15 @@
 import path from "node:path";
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, rm, writeFile } from "node:fs/promises";
 import type { PalaceNode, PalaceRoom } from "@vertex-palace/shared";
 import { hashText } from "../scanner/file-hash";
 import { stableJson } from "../utils/stable-json";
 import { palacePath } from "../utils/path-utils";
 
 export async function buildRooms(nodes: PalaceNode[], root: string, now: string): Promise<PalaceRoom[]> {
+  const roomsRoot = path.join(root, ".palace", "rooms");
+  await rm(roomsRoot, { recursive: true, force: true });
+  await mkdir(roomsRoot, { recursive: true });
+
   const groups = new Map<string, PalaceNode[]>();
   for (const node of nodes) {
     if (!node.wing || !node.room) continue;

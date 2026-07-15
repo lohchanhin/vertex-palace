@@ -5,9 +5,11 @@ export function expandRoute(scored: ScoredNode[], edges: PalaceEdge[], nodes: Pa
   const byId = new Map(nodes.map((node) => [node.id, node]));
   const adjacency = buildAdjacency(edges);
   const selected = new Map<string, ScoredNode>();
+  const selectedSources = new Set<string>();
 
   for (const item of diverseSeed(scored, Math.max(4, limit))) {
     selected.set(item.node.id, item);
+    selectedSources.add(item.node.sourcePath);
   }
 
   for (const item of scored.slice(0, 6)) {
@@ -15,12 +17,13 @@ export function expandRoute(scored: ScoredNode[], edges: PalaceEdge[], nodes: Pa
       const neighborId = edge.from === item.node.id ? edge.to : edge.from;
       if (selected.has(neighborId)) continue;
       const node = byId.get(neighborId);
-      if (!node || node.kind === "directory") continue;
+      if (!node || node.kind === "directory" || selectedSources.has(node.sourcePath)) continue;
       selected.set(neighborId, {
         node,
         score: item.score * edge.weight * 0.5,
         reasons: [`expanded through ${edge.type} relation from ${item.node.sourcePath}`]
       });
+      selectedSources.add(node.sourcePath);
       if (selected.size >= limit) break;
     }
     if (selected.size >= limit) break;
@@ -33,12 +36,13 @@ function diverseSeed(scored: ScoredNode[], limit: number): ScoredNode[] {
   const result: ScoredNode[] = [];
   const bySource = new Map<string, number>();
   const byTop = new Map<string, number>();
+  const groupLimit = limit <= 8 ? 1 : Math.max(2, Math.ceil(limit / 5));
 
   for (const item of scored) {
     const sourceCount = bySource.get(item.node.sourcePath) ?? 0;
     const top = topSegment(item.node.sourcePath);
     const topCount = byTop.get(top) ?? 0;
-    if (sourceCount >= 2 || topCount >= Math.max(3, Math.ceil(limit / 2))) continue;
+    if (sourceCount >= 1 || topCount >= groupLimit) continue;
     result.push(item);
     bySource.set(item.node.sourcePath, sourceCount + 1);
     byTop.set(top, topCount + 1);
@@ -46,7 +50,7 @@ function diverseSeed(scored: ScoredNode[], limit: number): ScoredNode[] {
   }
 
   for (const item of scored) {
-    if (result.some((selected) => selected.node.id === item.node.id)) continue;
+    if (result.some((selected) => selected.node.id === item.node.id || selected.node.sourcePath === item.node.sourcePath)) continue;
     result.push(item);
     if (result.length >= limit) break;
   }
@@ -56,7 +60,14 @@ function diverseSeed(scored: ScoredNode[], limit: number): ScoredNode[] {
 
 function topSegment(sourcePath: string): string {
   const parts = sourcePath.split("/");
-  return parts[0] === "src" && parts[1] ? `${parts[0]}/${parts[1]}` : parts[0] ?? sourcePath;
+  if (parts[0] === "packages" && parts[1] && parts[2] === "src" && parts[3]) {
+    return parts.slice(0, 4).join("/");
+  }
+  if (["frontend", "backend"].includes(parts[0] ?? "") && parts[1] === "src" && parts[2]) {
+    return parts.slice(0, 3).join("/");
+  }
+  if (parts[0] === "src" && parts[1]) return `${parts[0]}/${parts[1]}`;
+  return parts.slice(0, Math.min(2, parts.length)).join("/") || sourcePath;
 }
 
 function buildAdjacency(edges: PalaceEdge[]): Map<string, PalaceEdge[]> {

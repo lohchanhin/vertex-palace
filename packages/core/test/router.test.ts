@@ -116,6 +116,40 @@ describe("routePalace", () => {
     expect(analysis.keywords).not.toContain("unknown");
   });
 
+  it("removes generic optimization prose while preserving Palace subsystem intent", () => {
+    const analysis = analyzeTask(
+      "Optimize Vertex Palace core scanner and router: exclude nested worktrees and unrelated copies, improve index freshness, context pack quality, memory deduplication, pitfall relevance, and CLI reliability"
+    );
+
+    expect(analysis.keywords).toEqual(expect.arrayContaining(["scanner", "ignore", "router", "index", "stale", "pack", "packer", "memory", "pitfall", "cli"]));
+    expect(analysis.keywords).not.toEqual(expect.arrayContaining(["optimize", "quality", "relevance", "reliability", "unrelated", "copies", "core", "repository", "product"]));
+  });
+
+  it("keeps routed context diverse and avoids duplicate file and symbol entries", async () => {
+    await withFixture("ts-api", async (root) => {
+      const files = [
+        ["packages/core/src/scanner/scan-repo.ts", "export function scanRepo() { return 'scanner ignore worktree'; }"],
+        ["packages/core/src/packer/context-packer.ts", "export function packContext() { return 'context pack'; }"],
+        ["packages/core/src/router/route-planner.ts", "export function routePalace() { return 'route index freshness'; }"],
+        ["packages/core/src/memory/pitfall-board.ts", "export function pitfallBoard() { return 'memory pitfall deduplication'; }"],
+        ["packages/cli/src/index.ts", "export function palaceCli() { return 'cli reliability'; }"]
+      ] as const;
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const route = await routePalace(root, "Fix scanner worktree ignores, context pack routing, memory pitfall deduplication, index freshness, and CLI reliability", { routeLimit: 8 });
+      const sourcePaths = route.route.map((step) => step.sourcePath.split(":")[0]);
+
+      expect(sourcePaths).toContain("packages/core/src/scanner/scan-repo.ts");
+      expect(sourcePaths).toContain("packages/core/src/packer/context-packer.ts");
+      expect(new Set(sourcePaths).size).toBe(sourcePaths.length);
+    });
+  });
+
   it("does not let fixture services outrank router code for feedback tasks", async () => {
     await withFixture("ts-api", async (root) => {
       await mkdir(path.join(root, "packages", "core", "src", "router"), { recursive: true });

@@ -112,7 +112,11 @@ export function scoreNodes(nodes: PalaceNode[], edges: PalaceEdge[], analysis: T
 
       return { node, score, reasons: [...new Set(reasons)].slice(0, 4) };
     })
-    .filter((item) => item.score > 10)
+    .filter(
+      (item) =>
+        item.score > 10 &&
+        (taskType === "test" || analysis.keywords.includes("fixture") || !isFixtureLikePath(item.node.sourcePath))
+    )
     .sort((a, b) => b.score - a.score || a.node.sourcePath.localeCompare(b.node.sourcePath));
 }
 

@@ -42,9 +42,14 @@ export async function readPalaceConfig(root: string): Promise<PalaceConfig> {
   const projectName = readYamlScalar(text, "project_name") ?? path.basename(root);
   const createdAt = readYamlScalar(text, "created_at") ?? new Date().toISOString();
   const updatedAt = readYamlScalar(text, "updated_at") ?? createdAt;
+  const defaults = createDefaultConfig(projectName, createdAt);
   return {
-    ...createDefaultConfig(projectName, createdAt),
-    updated_at: updatedAt
+    ...defaults,
+    updated_at: updatedAt,
+    source_root: readYamlScalar(text, "source_root") ?? defaults.source_root,
+    palace_root: readYamlScalar(text, "palace_root") ?? defaults.palace_root,
+    ignore: readYamlList(text, "ignore") ?? defaults.ignore,
+    floors: (readYamlList(text, "floors") as PalaceConfig["floors"] | undefined) ?? defaults.floors
   };
 }
 
@@ -57,4 +62,24 @@ function readYamlScalar(text: string, key: string): string | undefined {
   } catch {
     return raw || undefined;
   }
+}
+
+function readYamlList(text: string, key: string): string[] | undefined {
+  const lines = text.split(/\r?\n/);
+  const start = lines.findIndex((line) => line.trim() === `${key}:`);
+  if (start < 0) return undefined;
+
+  const values: string[] = [];
+  for (const line of lines.slice(start + 1)) {
+    if (!/^\s+/.test(line)) break;
+    const match = line.match(/^\s*-\s+(.+)\s*$/);
+    if (!match) continue;
+    const raw = match[1];
+    try {
+      values.push(JSON.parse(raw));
+    } catch {
+      values.push(raw);
+    }
+  }
+  return values.length ? values : undefined;
 }
