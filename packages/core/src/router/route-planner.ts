@@ -9,7 +9,13 @@ import { hashText } from "../scanner/file-hash";
 import { analyzeTask } from "./analyze-task";
 import { classifyTask } from "./classify-task";
 import { locateEntry } from "./locate-entry";
-import { scoreNodes, type ScoredNode } from "./route-scorer";
+import {
+  matchesEvaluationSurface,
+  requestedEvaluationSurfaces,
+  scoreNodes,
+  type EvaluationSurface,
+  type ScoredNode
+} from "./route-scorer";
 import { expandRoute } from "./route-expander";
 
 export type RoutePalaceOptions = {
@@ -25,8 +31,16 @@ export async function routePalace(root: string, task: string, options: number | 
   const analysis = analyzeTask(task);
   const taskType = classifyTask(task);
   const scored = scoreNodes(index.nodes, index.edges, analysis, taskType);
-  const routeLimit = taskType === "evaluation" ? Math.min(normalized.routeLimit, 6) : normalized.routeLimit;
-  const expanded = expandRoute(scored, index.edges, index.nodes, routeLimit);
+  const requestedSurfaces = requestedEvaluationSurfaces(analysis);
+  const routeLimit =
+    taskType === "evaluation"
+      ? Math.max(normalized.routeLimit, Math.min(10, requestedSurfaces.length + 1))
+      : normalized.routeLimit;
+  const initialRoute = expandRoute(scored, index.edges, index.nodes, routeLimit);
+  const expanded =
+    taskType === "evaluation"
+      ? ensureRequestedSurfaceCoverage(initialRoute, scored, requestedSurfaces, routeLimit)
+      : initialRoute;
   const now = new Date().toISOString();
 
   const routeSteps = expanded.map((item, index) => {
@@ -145,8 +159,56 @@ function confidence(selected: ScoredNode[], analysis: ReturnType<typeof analyzeT
   const scoreStrength = Math.min(1, averageScore / 140);
   const focus = dominantTopSegmentShare(top);
   const budgetFit = estimatedTokens <= budget ? 1 : 0;
-  const value = 0.08 + keywordCoverage * 0.34 + scoreStrength * 0.28 + focus * 0.2 + budgetFit * 0.1;
+  const surfacePenalty = requestedSurfacePenalty(top, analysis);
+  const value = (0.08 + keywordCoverage * 0.34 + scoreStrength * 0.28 + focus * 0.2 + budgetFit * 0.1) * surfacePenalty;
   return Number(Math.max(0.1, Math.min(0.98, value)).toFixed(2));
+}
+
+function requestedSurfacePenalty(items: ScoredNode[], analysis: ReturnType<typeof analyzeTask>): number {
+  const requested = requestedEvaluationSurfaces(analysis);
+  if (!requested.length) return 1;
+  const covered = requested.filter((surface) => items.some((item) => matchesEvaluationSurface(item.node, surface))).length;
+  return 0.65 + (covered / requested.length) * 0.35;
+}
+
+function ensureRequestedSurfaceCoverage(
+  selected: ScoredNode[],
+  scored: ScoredNode[],
+  requested: EvaluationSurface[],
+  limit: number
+): ScoredNode[] {
+  if (!requested.length) return selected;
+
+  const result = [...selected];
+  const protectedIds = new Set<string>();
+  if (selected[0]) protectedIds.add(selected[0].node.id);
+
+  for (const surface of requested) {
+    let representative = result.find((item) => matchesEvaluationSurface(item.node, surface));
+    if (!representative) {
+      representative = scored.find(
+        (item) =>
+          matchesEvaluationSurface(item.node, surface) &&
+          !result.some((selectedItem) => selectedItem.node.sourcePath === item.node.sourcePath)
+      );
+      if (representative) result.push(representative);
+    }
+    if (representative) protectedIds.add(representative.node.id);
+  }
+
+  result.sort((a, b) => b.score - a.score || a.node.sourcePath.localeCompare(b.node.sourcePath));
+  while (result.length > limit) {
+    let removableIndex = -1;
+    for (let index = result.length - 1; index >= 0; index -= 1) {
+      if (!protectedIds.has(result[index].node.id)) {
+        removableIndex = index;
+        break;
+      }
+    }
+    if (removableIndex < 0) break;
+    result.splice(removableIndex, 1);
+  }
+  return result;
 }
 
 function nodeHaystack(item: ScoredNode): string {

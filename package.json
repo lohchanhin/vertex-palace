@@ -1,6 +1,6 @@
 {
   "name": "vertex-palace",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Memory-palace context routing for Codex coding tasks.",
   "license": "MIT",
   "type": "module",
@@ -14,6 +14,8 @@
     "dist/",
     "plugins/vertex-palace/mcp/server.cjs",
     "README.md",
+    "BUILD_WEEK.md",
+    "CHANGELOG.md",
     "LICENSE"
   ],
   "repository": {
@@ -44,6 +46,7 @@
     "build:plugin-mcp": "tsup --config tsup.plugin-mcp.config.ts && node scripts/trim-generated.cjs",
     "build:package-cli": "tsup --config tsup.package-cli.config.ts && node scripts/trim-generated.cjs",
     "test": "pnpm -r test",
+    "test:mcp-smoke": "node scripts/smoke-mcp.cjs",
     "lint": "pnpm -r exec tsc --noEmit -p tsconfig.json --pretty false",
     "clean": "pnpm -r clean"
   },

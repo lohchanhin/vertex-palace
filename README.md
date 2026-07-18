@@ -4,8 +4,10 @@ Memory-palace context routing for Codex.
 
 Vertex Palace turns a repository into a local palace of floors, rooms, cabinets, and drawers. Before a coding task, Codex can ask for a route and receive a compact context pack instead of scanning the whole repository.
 
+OpenAI Build Week work is documented separately in [BUILD_WEEK.md](./BUILD_WEEK.md), including the pre-existing baseline, submission-period additions, Codex/GPT-5.6 collaboration, and judge verification steps.
 
-Name note: `记忆宫殿工具`, `记忆宫殿`, `memory palace`, `palace tool`, and the old name `Context Palace` all refer to Vertex Palace. The registered MCP tool names are `palace_status`, `palace_init`, `palace_index`, `palace_route`, `palace_pack`, and `palace_write_memory`; the CLI command is `palace`.
+
+Name note: `记忆宫殿工具`, `记忆宫殿`, `memory palace`, `palace tool`, and the old name `Context Palace` all refer to Vertex Palace. The registered MCP tool names are `palace_status`, `palace_init`, `palace_index`, `palace_route`, `palace_pack`, `palace_evaluate`, and `palace_write_memory`; the CLI command is `palace`.
 
 ## English Overview
 
@@ -34,13 +36,13 @@ If you just want the agent to handle it, give your AI coding agent this prompt:
 ```text
 Open and read https://github.com/lohchanhin/vertex-palace, install Vertex Palace, then use it in this repository.
 
-Before working, check Vertex Palace status, initialize and index the repository if needed, route my task, generate a minimal context pack, inspect the routed files first, and write task memory after finishing.
+Before working, check Vertex Palace status, initialize and index the repository if needed, route my task, generate a minimal context pack, inspect the routed files first, evaluate the route against the files actually changed, and write task memory after finishing.
 ```
 
 The agent should read the repository instructions, install the plugin or use the CLI, then follow this workflow:
 
 ```text
-status -> init/index if needed -> route -> pack -> inspect routed files -> implement -> test -> memory write
+status -> init/index if needed -> route -> pack -> inspect routed files -> implement -> test -> evaluate -> memory write
 ```
 
 Before following a route, the agent should read `.palace/00-entrance/pitfall-board.md` when it exists.
@@ -50,10 +52,10 @@ Before following a route, the agent should read `.palace/00-entrance/pitfall-boa
 1. Install the plugin:
 
 ```bash
-codex plugin marketplace add lohchanhin/vertex-palace --ref v0.1.4
+codex plugin marketplace add lohchanhin/vertex-palace --ref v0.1.5
 ```
 
-Use `v0.1.4` or newer. Avoid `v0.1.0` and `v0.1.1`; those early tags had broken MCP install metadata.
+Use `v0.1.5` or newer. Avoid `v0.1.0` and `v0.1.1`; those early tags had broken MCP install metadata.
 
 2. Or install the CLI directly from npm:
 
@@ -155,7 +157,7 @@ Vertex Palace 是一个面向 Codex 编程任务的本地上下文路由工具�
 它应该照这个流程做：
 
 ```text
-status -> 需要时 init/index -> route -> pack -> 先读路线文件 -> 执行任务 -> 测试 -> 写入 memory
+status -> 需要时 init/index -> route -> pack -> 先读路线文件 -> 执行任务 -> 测试 -> evaluate -> 写入 memory
 ```
 
 执行 route 前，agent 应该先读 `.palace/00-entrance/pitfall-board.md`，避免重复踩坑。
@@ -165,10 +167,10 @@ status -> 需要时 init/index -> route -> pack -> 先读路线文件 -> 执行�
 1. 安装插件：
 
 ```bash
-codex plugin marketplace add lohchanhin/vertex-palace --ref v0.1.4
+codex plugin marketplace add lohchanhin/vertex-palace --ref v0.1.5
 ```
 
-请使用 `v0.1.4` 或更新版本。不要再使用 `v0.1.0` 和 `v0.1.1`，这两个早期标签的 MCP 安装元数据有问题。
+请使用 `v0.1.5` 或更新版本。不要再使用 `v0.1.0` 和 `v0.1.1`，这两个早期标签的 MCP 安装元数据有问题。
 
 2. 打开 Codex，输入 `/plugins`，安装 Vertex Palace。
 
@@ -240,15 +242,15 @@ npx vertex-palace status
 Install the Codex plugin:
 
 ```bash
-codex plugin marketplace add lohchanhin/vertex-palace --ref v0.1.4
+codex plugin marketplace add lohchanhin/vertex-palace --ref v0.1.5
 ```
 
-Use `v0.1.4` or newer; `v0.1.0` and `v0.1.1` are obsolete because their MCP install metadata was broken.
+Use `v0.1.5` or newer; `v0.1.0` and `v0.1.1` are obsolete because their MCP install metadata was broken.
 
 The plugin launches its MCP server through npm:
 
 ```bash
-npx -y -p vertex-palace@0.1.4 vertex-palace-mcp-stdio --stdio
+npx -y -p vertex-palace@0.1.5 vertex-palace-mcp-stdio --stdio
 ```
 
 Open Codex:
@@ -292,8 +294,31 @@ palace status
 palace index
 palace route "fix login refresh token bug"
 palace pack "fix login refresh token bug" --budget 12000
+palace evaluate "fix login refresh token bug" \
+  --changed-file src/auth/token.service.ts \
+  --changed-file tests/auth.test.ts
 palace doctor
 ```
+
+### Route Evaluation
+
+Vertex Palace 0.1.5 adds `palace evaluate` (alias: `palace eval`). It measures whether the route was actually useful instead of trusting route confidence alone:
+
+- estimated tokens for all indexed repository text versus the generated context pack
+- token reduction and repository-to-pack ratio
+- changed-file coverage and route focus
+- confidence calibration, including explicit overconfidence warnings
+- persisted Markdown and JSON reports under `.palace/evaluations/`
+
+Run it after a task and provide the files that were really changed:
+
+```bash
+palace evaluate "fix checkout shipping bug" \
+  --changed-file frontend/app/checkout/page.tsx \
+  --changed-file backend/src/shipping/quote.service.ts
+```
+
+Without `--changed-file`, the command still measures context efficiency but marks route quality and confidence calibration as `unverified`.
 
 ### Token-Saving Workflow
 
@@ -322,6 +347,13 @@ palace memory write \
 
 Vertex Palace runs locally by default. It does not upload source code, call external APIs, use embeddings, or create a remote index.
 
+## Supported Platforms
+
+- Node.js 20 or newer
+- Windows, macOS, and Linux are covered by the repository CI matrix
+- Windows is additionally verified through local CLI, npm package, and MCP stdio smoke tests
+- Codex plugin users should start a new task or restart Codex after installing or updating the plugin so its skill and MCP tools reload
+
 ## Current Capabilities / 目前能力
 
 - Local memory-palace data model
@@ -331,6 +363,7 @@ Vertex Palace runs locally by default. It does not upload source code, call exte
 - Route planner with task classification, confidence, reasons, and excluded areas
 - Latest route files: `latest-route.json`, `latest-route.md`, and `optimized-route.txt`
 - Markdown and JSON context packer
+- Route evaluation reports with Token reduction, changed-file coverage, route focus, and confidence calibration
 - Task memory ledger: `latest-task.md`, `task-log.md`, and `index.json`
 - Entrance pitfall board: `.palace/00-entrance/pitfall-board.md`
 - CLI

@@ -15,7 +15,8 @@ Before implementing coding tasks:
 5. Use `palace_pack` to retrieve the minimal context package.
 6. Inspect route files before broad repository search.
 7. Expand beyond the route only when code, tests, or runtime evidence requires it.
-8. After finishing, use `palace_write_memory`, including `pitfalls` for mistakes that future tasks should avoid.
+8. After testing, use `palace_evaluate` or `palace evaluate` with the files actually changed. Treat missing coverage or overconfidence as evidence to review the route, not as a replacement for tests.
+9. After finishing, use `palace_write_memory`, including `pitfalls` for mistakes that future tasks should avoid.
 
 If the MCP tools are not loaded, use the `palace` CLI. If neither MCP nor CLI is available, say that Vertex Palace is not loaded in this environment before continuing with ordinary repository inspection.
 

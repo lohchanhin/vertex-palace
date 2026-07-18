@@ -10,6 +10,15 @@ export const TaskInputSchema = RootInputSchema.extend({
   format: z.enum(["markdown", "json"]).optional()
 });
 
+export const EvaluationInputSchema = RootInputSchema.extend({
+  task: z.string().min(1),
+  routeId: z.string().optional(),
+  changedFiles: z.array(z.string()).optional(),
+  budget: z.number().int().positive().optional(),
+  routeLimit: z.number().int().positive().optional(),
+  maxDrawers: z.number().int().positive().optional()
+});
+
 export const MemoryInputSchema = RootInputSchema.extend({
   client: z.string().optional(),
   task: z.string().min(1),

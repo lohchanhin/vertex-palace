@@ -28,6 +28,7 @@ export * from "./packer/context-packer";
 export * from "./packer/snippet-extractor";
 export * from "./packer/output-format";
 export * from "./packer/open";
+export * from "./evaluation/evaluate-route";
 export * from "./memory/write-memory";
 export * from "./memory/pitfall-board";
 export * from "./memory/redact";
@@ -74,6 +75,11 @@ export async function palacePack(input: {
 }) {
   const { packContext } = await import("./packer/context-packer");
   return packContext(resolveRoot(input.root), input.task, input);
+}
+
+export async function palaceEvaluate(input: import("@vertex-palace/shared").PalaceEvaluationInput) {
+  const { evaluateRoute } = await import("./evaluation/evaluate-route");
+  return evaluateRoute(resolveRoot(input.root), input.task, input);
 }
 
 export async function palaceOpen(input: { root?: string; nodeId?: string; palacePath?: string; loadLevel?: import("@vertex-palace/shared").LoadLevel }) {

@@ -20,7 +20,8 @@ Aliases users may use for this skill: `记忆宫殿工具`, `记忆宫殿`, `mem
 7. Call `palace_pack` to get the minimal context package. The pack includes the entrance pitfall board before route drawers when pitfalls exist.
 8. Inspect files suggested by the palace route first.
 9. Expand beyond the route only when evidence from code, tests, or runtime output requires it.
-10. After finishing, call `palace_write_memory` with changed files, tests run, decisions, failed attempts, and explicit pitfalls. This updates `.palace/07-memory/`, `.palace/memory/`, and `.palace/00-entrance/pitfall-board.md`.
+10. After implementation and tests, call `palace_evaluate` with the task and files actually changed. Review Token reduction, changed-file coverage, route focus, missed files, and confidence calibration. If MCP is unavailable, use `palace evaluate "<task>" --changed-file <path>`.
+11. After finishing, call `palace_write_memory` with changed files, tests run, decisions, failed attempts, and explicit pitfalls. This updates `.palace/07-memory/`, `.palace/memory/`, and `.palace/00-entrance/pitfall-board.md`.
 
 ## Rules
 
@@ -30,6 +31,7 @@ Aliases users may use for this skill: `记忆宫殿工具`, `记忆宫殿`, `mem
 - Do not read unrelated folders unless the route or evidence requires it.
 - Prefer symbol-level snippets over full files.
 - Prefer room summaries before opening full drawers.
+- Do not treat route confidence as proof of relevance. Use `palace_evaluate` after the task when actual changed files are known.
 - Keep the task route visible in the reasoning summary.
 - If `palace_route` confidence is low, inspect the directory map and call `palace_route` again with refined keywords.
 - If the MCP tools are not available in the current Codex thread, use the `palace` CLI when it is installed. If neither is available, say Vertex Palace is not loaded in this environment.

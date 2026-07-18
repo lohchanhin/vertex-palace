@@ -67,6 +67,27 @@ export const toolDefinitions: ToolDefinition[] = [
     }
   },
   {
+    name: "palace_evaluate",
+    description: "Measure context-token reduction, changed-file coverage, route focus, and confidence calibration.",
+    inputSchema: {
+      type: "object",
+      required: ["task"],
+      properties: {
+        root: rootProperty,
+        task: { type: "string" },
+        routeId: { type: "string", description: "Existing route ID to evaluate. Omit to plan a fresh route." },
+        changedFiles: {
+          type: "array",
+          items: { type: "string" },
+          description: "Files actually changed while completing the task. Enables route-quality and confidence measurement."
+        },
+        budget: { type: "number" },
+        routeLimit: { type: "number", description: "Maximum route steps when planning a fresh route." },
+        maxDrawers: { type: "number", description: "Maximum drawers in the measured context pack." }
+      }
+    }
+  },
+  {
     name: "palace_open",
     description: "Open a node, room drawer, or palace path at the requested load level.",
     inputSchema: {

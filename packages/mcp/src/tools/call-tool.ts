@@ -1,5 +1,6 @@
 import {
   palaceDoctor,
+  palaceEvaluate,
   palaceIndex,
   palaceInit,
   palaceOpen,
@@ -38,6 +39,16 @@ export async function callTool(name: string, args: ToolArgs): Promise<unknown> {
         routeLimit: asNumber(args.routeLimit),
         maxDrawers: asNumber(args.maxDrawers),
         includeExcluded: typeof args.includeExcluded === "boolean" ? args.includeExcluded : undefined
+      });
+    case "palace_evaluate":
+      return palaceEvaluate({
+        root: asString(args.root),
+        task: requiredString(args.task, "task"),
+        routeId: asString(args.routeId),
+        changedFiles: asStringArray(args.changedFiles),
+        budget: asNumber(args.budget),
+        routeLimit: asNumber(args.routeLimit),
+        maxDrawers: asNumber(args.maxDrawers)
       });
     case "palace_open":
       return palaceOpen({

@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { Command } from "commander";
 import { registerDoctor } from "./commands/doctor";
+import { registerEvaluate } from "./commands/evaluate";
 import { registerIndex } from "./commands/index";
 import { registerInit } from "./commands/init";
 import { registerMemory } from "./commands/memory";
@@ -11,13 +12,14 @@ import { registerStatus } from "./commands/status";
 
 const program = new Command();
 
-program.name("palace").description("Vertex Palace context routing for Codex").version("0.1.4");
+program.name("palace").description("Vertex Palace context routing for Codex").version("0.1.5");
 
 registerInit(program);
 registerStatus(program);
 registerIndex(program);
 registerRoute(program);
 registerPack(program);
+registerEvaluate(program);
 registerOpen(program);
 registerDoctor(program);
 registerMemory(program);

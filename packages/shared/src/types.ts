@@ -276,6 +276,62 @@ export type PackOutput = {
   json?: unknown;
 };
 
+export type PalaceEvaluationInput = {
+  root?: string;
+  task: string;
+  routeId?: string;
+  changedFiles?: string[];
+  budget?: number;
+  routeLimit?: number;
+  maxDrawers?: number;
+};
+
+export type PalaceEvaluation = {
+  id: string;
+  task: string;
+  taskType: TaskType;
+  routeId: string;
+  createdAt: string;
+  route: {
+    confidence: number;
+    files: string[];
+    fileCount: number;
+  };
+  context: {
+    repositoryTextFiles: number;
+    skippedBinaryFiles: number;
+    repositoryTokens: number;
+    packTokens: number;
+    savedTokens: number;
+    tokenReductionPercent: number;
+    repositoryToPackRatio: number;
+  };
+  coverage: {
+    status: "measured" | "unverified";
+    changedFiles: string[];
+    matchedFiles: string[];
+    missedFiles: string[];
+    routeOnlyFiles: string[];
+    changedFileCoverage?: number;
+    routeFocus?: number;
+  };
+  calibration: {
+    status: "unverified" | "well-calibrated" | "overconfident" | "underconfident";
+    predictedConfidence: number;
+    observedCoverage?: number;
+    error?: number;
+  };
+  assessment: "strong" | "needs-review" | "unverified";
+  warnings: string[];
+  artifacts: {
+    markdownPath: string;
+    jsonPath: string;
+    latestMarkdownPath: string;
+    latestJsonPath: string;
+  };
+  markdown: string;
+};
+
 export type OpenOutput = {
   node: PalaceNode;
   content: string;

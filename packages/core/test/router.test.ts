@@ -84,17 +84,21 @@ describe("routePalace", () => {
       await indexPalace(root);
       await writeFile(
         path.join(root, "src", "services", "report.service.ts"),
-        `export function buildReportService() {
-  return "fresh report service";
+        `import { formatResult } from "../utils/formatter";
+export function buildReportService() {
+  return formatResult("fresh report service");
 }
 `,
         "utf8"
       );
+      await mkdir(path.join(root, "src", "utils"), { recursive: true });
+      await writeFile(path.join(root, "src", "utils", "formatter.ts"), `export const formatResult = (value: string) => value;\n`, "utf8");
 
       const route = await routePalace(root, "implement fresh report service", { routeLimit: 8 });
       const joined = route.route.map((step) => step.sourcePath).join("\n");
 
       expect(joined).toContain("src/services/report.service.ts");
+      expect(joined).toContain("src/utils/formatter.ts");
     });
   });
 
@@ -123,6 +127,59 @@ describe("routePalace", () => {
 
     expect(analysis.keywords).toEqual(expect.arrayContaining(["scanner", "ignore", "router", "index", "stale", "pack", "packer", "memory", "pitfall", "cli"]));
     expect(analysis.keywords).not.toEqual(expect.arrayContaining(["optimize", "quality", "relevance", "reliability", "unrelated", "copies", "core", "repository", "product"]));
+  });
+
+  it("does not treat Build Week or plain evaluation as unrelated subsystem hints", () => {
+    const analysis = analyzeTask("Build Week route evaluation through shared CLI MCP tests documentation and CI");
+
+    expect(analysis.keywords).not.toEqual(expect.arrayContaining(["build", "frontend", "page", "component", "memory", "retrospective"]));
+    expect(analysis.entities).toEqual(expect.arrayContaining(["build-week", "buildweek"]));
+  });
+
+  it("routes measurable evaluation work toward the evaluation subsystem", async () => {
+    await withFixture("ts-api", async (root) => {
+      const files = [
+        [
+          "packages/core/src/evaluation/evaluate-route.ts",
+          `export function evaluateRouteCoverage() {
+  return "evaluation report changed-file coverage confidence calibration token reduction";
+}
+`
+        ],
+        ["packages/cli/src/commands/evaluate.ts", `export const evaluateCommand = "CLI evaluation command";\n`],
+        ["packages/mcp/src/tools/definitions.ts", `export const palaceEvaluateTool = "MCP evaluation tool";\n`],
+        ["packages/shared/src/types.ts", `export type EvaluationReport = { coverage: number };\n`],
+        ["packages/core/test/evaluation.test.ts", `describe("evaluation", () => it("measures coverage", () => true));\n`],
+        ["packages/core/src/indexer/build-nodes.ts", `export const buildNodes = "generic index builder";\n`],
+        ["packages/cli/src/commands/memory.ts", `export const memoryCommand = "unrelated memory command";\n`],
+        [".github/workflows/ci.yml", `name: evaluation CI workflow\n`],
+        ["BUILD_WEEK.md", `# Build Week evaluation documentation\n`]
+      ] as const;
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const route = await routePalace(
+        root,
+        "build evaluation report for changed-file coverage and confidence calibration through shared types, CLI, MCP, regression tests, documentation, and CI workflow",
+        { routeLimit: 4 }
+      );
+
+      const joined = route.route.map((step) => step.sourcePath).join("\n");
+
+      expect(joined).toContain("packages/core/src/evaluation/evaluate-route.ts");
+      expect(joined).toContain("packages/cli/src/commands/evaluate.ts");
+      expect(joined).toContain("packages/mcp/src/tools/definitions.ts");
+      expect(joined).toContain("packages/shared/src/types.ts");
+      expect(joined).toContain("packages/core/test/evaluation.test.ts");
+      expect(joined).toContain("BUILD_WEEK.md");
+      expect(joined).toContain(".github/workflows/ci.yml");
+      expect(joined).not.toContain("packages/core/src/indexer/build-nodes.ts");
+      expect(joined).not.toContain("packages/cli/src/commands/memory.ts");
+    });
   });
 
   it("keeps routed context diverse and avoids duplicate file and symbol entries", async () => {

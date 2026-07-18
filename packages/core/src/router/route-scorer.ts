@@ -9,9 +9,12 @@ export type ScoredNode = {
   reasons: string[];
 };
 
+export type EvaluationSurface = "cli" | "mcp" | "shared" | "test" | "docs" | "ci";
+
 export function scoreNodes(nodes: PalaceNode[], edges: PalaceEdge[], analysis: TaskAnalysis, taskType: TaskType): ScoredNode[] {
   const floors = floorTemplate(taskType);
   const edgeBoosts = relationBoosts(edges);
+  const requestedSurfaces = requestedEvaluationSurfaces(analysis);
 
   return nodes
     .filter((node) => node.kind !== "directory")
@@ -58,12 +61,17 @@ export function scoreNodes(nodes: PalaceNode[], edges: PalaceEdge[], analysis: T
         reasons.push("matches frontend/backend layer hint");
       }
 
-      const evaluationBoost = evaluationHintBoost(node, taskType, entityHit > 0);
+      const evaluationBoost = evaluationHintBoost(node, taskType, analysis, entityHit > 0);
       if (evaluationBoost !== 0) {
         score += evaluationBoost;
         reasons.push(evaluationBoost > 0 ? "matches evaluation/meta task context" : "application source is secondary for evaluation");
       }
-      if (taskType === "evaluation" && !isEvaluationRouteAnchor(node, taskType, analysis, entityHit > 0)) {
+      const surfaceHits = requestedSurfaces.filter((surface) => matchesEvaluationSurface(node, surface));
+      if (surfaceHits.length) {
+        score += 45;
+        reasons.push(`matches requested ${surfaceHits.join("/")} surface`);
+      }
+      if (taskType === "evaluation" && !isEvaluationRouteAnchor(node, taskType, analysis, entityHit > 0, surfaceHits.length > 0)) {
         score -= 260;
         reasons.push("not anchored to evaluation or memory context");
       }
@@ -145,26 +153,71 @@ function entityHintBoost(node: PalaceNode, analysis: TaskAnalysis): number {
   return Math.min(90, boost);
 }
 
-function evaluationHintBoost(node: PalaceNode, taskType: TaskType, hasEntityHit: boolean): number {
+function evaluationHintBoost(node: PalaceNode, taskType: TaskType, analysis: TaskAnalysis, hasEntityHit: boolean): number {
   if (taskType !== "evaluation") return 0;
   const path = node.sourcePath.toLowerCase();
-  if (isEvaluationMetaPath(path)) return 32;
+  if (isEvaluationMetaPath(path, analysis)) return 32;
   if (!hasEntityHit && /(^|\/)(backend|frontend|app|pages|components|controllers|services)(\/|$)/.test(path)) return -240;
   if (node.kind === "doc" || node.kind === "test") return 10;
   return 0;
 }
 
-function isEvaluationRouteAnchor(node: PalaceNode, taskType: TaskType, analysis: TaskAnalysis, hasEntityHit: boolean): boolean {
+function isEvaluationRouteAnchor(
+  node: PalaceNode,
+  taskType: TaskType,
+  analysis: TaskAnalysis,
+  hasEntityHit: boolean,
+  hasSurfaceHit: boolean
+): boolean {
   if (taskType !== "evaluation") return true;
   const path = node.sourcePath.toLowerCase();
-  if (isEvaluationMetaPath(path)) return true;
+  if (isEvaluationMetaPath(path, analysis)) return true;
+  if (hasSurfaceHit) return true;
   if (hasEntityHit && /(^|\/)(memory|pitfalls?|routes?|tasks?|decisions?|notes?)(\/|$)|latest|changed|history|client|tenant/.test(path)) return true;
   if ((node.kind === "doc" || node.kind === "test") && hasEvaluationKeywordPath(path, analysis)) return true;
   return false;
 }
 
-function isEvaluationMetaPath(path: string): boolean {
-  return /(^|\/)(memory|router|packer|storage|scanner|indexer)(\/|$)|pitfall|latest-route|task-log|route-planner|route-scorer|context-packer|write-memory|analyze-task|classify-task/.test(path);
+function isEvaluationMetaPath(path: string, analysis: TaskAnalysis): boolean {
+  if (/(^|\/)(evaluation)(\/|$)|evaluate|confidence-calibration|changed-file-coverage/.test(path)) return true;
+
+  const keywords = new Set(analysis.keywords);
+  if (hasAny(keywords, ["route", "router", "confidence", "score", "scorer", "classify", "analyze"]) && /(router|route-planner|route-scorer|route-expander|locate-entry|analyze-task|classify-task)/.test(path)) return true;
+  if (hasAny(keywords, ["pack", "packer", "context", "token"]) && /(packer|context-packer|token-estimator|snippet-extractor|output-format)/.test(path)) return true;
+  if (hasAny(keywords, ["memory", "retrospective", "pitfall"]) && /(memory|pitfall|latest-route|task-log|write-memory)/.test(path)) return true;
+  if (hasAny(keywords, ["scanner", "scan", "ignore"]) && /(scanner|scan-repo|ignore-rules)/.test(path)) return true;
+  if (hasAny(keywords, ["index", "indexer", "stale", "fresh"]) && /(indexer|index-palace|incremental-index|storage|status)/.test(path)) return true;
+  return false;
+}
+
+export function requestedEvaluationSurfaces(analysis: TaskAnalysis): EvaluationSurface[] {
+  const keywords = new Set(analysis.keywords);
+  const requested: EvaluationSurface[] = [];
+  if (hasAny(keywords, ["cli", "command", "commands"])) requested.push("cli");
+  if (keywords.has("mcp")) requested.push("mcp");
+  if (hasAny(keywords, ["shared", "schema", "schemas", "type", "types", "contract", "contracts"])) requested.push("shared");
+  if (hasAny(keywords, ["test", "tests", "verification", "regression"])) requested.push("test");
+  if (hasAny(keywords, ["doc", "docs", "documentation", "readme"])) requested.push("docs");
+  if (hasAny(keywords, ["ci", "workflow", "workflows", "actions"])) requested.push("ci");
+  return requested;
+}
+
+export function matchesEvaluationSurface(node: PalaceNode, surface: EvaluationSurface): boolean {
+  const sourcePath = node.sourcePath.toLowerCase();
+  switch (surface) {
+    case "cli":
+      return /(^|\/)packages\/cli(\/|$)|(^|\/)cli(\/|$)/.test(sourcePath);
+    case "mcp":
+      return /(^|\/)packages\/mcp(\/|$)|(^|\/)mcp(\/|$)/.test(sourcePath);
+    case "shared":
+      return /(^|\/)packages\/shared(\/|$)|(^|\/)shared(\/|$)|(^|\/)(types?|schemas?|contracts?)\.[^.]+$/.test(sourcePath);
+    case "test":
+      return node.kind === "test" || /(^|\/)(test|tests|spec|__tests__)(\/|$)|\.(test|spec)\.[^.]+$/.test(sourcePath);
+    case "docs":
+      return node.kind === "doc" || /(^|\/)(docs?|readme)(\/|\.|$)|build_week\.md$/.test(sourcePath);
+    case "ci":
+      return /(^|\/)\.github\/workflows(\/|$)|(^|\/)(ci|workflows?)(\/|$)/.test(sourcePath);
+  }
 }
 
 function hasEvaluationKeywordPath(path: string, analysis: TaskAnalysis): boolean {
