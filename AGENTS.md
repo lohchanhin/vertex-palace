@@ -4,20 +4,16 @@
 
 This repository uses Vertex Palace for memory-palace context routing.
 
-Treat `记忆宫殿工具`, `记忆宫殿`, `memory palace`, `palace tool`, and `Context Palace` as aliases for Vertex Palace. The MCP tools are named `palace_status`, `palace_init`, `palace_index`, `palace_route`, `palace_pack`, and `palace_write_memory`; the CLI command is `palace`.
+Treat `记忆宫殿工具`, `记忆宫殿`, `memory palace`, `palace tool`, and `Context Palace` as aliases for Vertex Palace. Prefer the one-call MCP tool `palace_context`; the CLI equivalent is `palace context`.
 
 Before implementing coding tasks:
 
-1. Use `palace_status`.
-2. Read the entrance pitfall board at `.palace/00-entrance/pitfall-board.md` when it exists.
-3. If needed, use `palace_init` and `palace_index`.
-4. Use `palace_route` with the user's task.
-5. Use `palace_pack` to retrieve the minimal context package.
-6. Inspect route files before broad repository search.
-7. Expand beyond the route only when code, tests, or runtime evidence requires it.
-8. After testing, use `palace_evaluate` or `palace evaluate` with the files actually changed. Treat missing coverage or overconfidence as evidence to review the route, not as a replacement for tests.
-9. After finishing, use `palace_write_memory`, including `pitfalls` for mistakes that future tasks should avoid.
+1. Use `palace_context` with the user's exact task. It handles initialization, stale indexing, routing, compact packing, and the relevant entrance pitfall board in one call.
+2. Inspect routed files before broad repository search.
+3. Expand beyond the route only when code, tests, or runtime evidence requires it.
+4. After testing, use `palace_evaluate` or `palace evaluate` with the files actually changed. Treat missing coverage or overconfidence as evidence to review the route, not as a replacement for tests.
+5. After finishing, use `palace_write_memory`, including `pitfalls` for mistakes that future tasks should avoid.
 
-If the MCP tools are not loaded, use the `palace` CLI. If neither MCP nor CLI is available, say that Vertex Palace is not loaded in this environment before continuing with ordinary repository inspection.
+If `palace_context` is not loaded, use `palace context "<task>"`. Use status, init, index, route, and pack separately only for diagnosis or explicit manual control. If neither MCP nor CLI is available, say that Vertex Palace is not loaded in this environment before continuing with ordinary repository inspection.
 
 Do not paste large project maps or full source files into prompts unless the route requires it.

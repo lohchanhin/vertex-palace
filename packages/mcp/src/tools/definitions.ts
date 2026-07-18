@@ -35,6 +35,22 @@ export const toolDefinitions: ToolDefinition[] = [
     }
   },
   {
+    name: "palace_context",
+    description: "Prepare compact task context in one call, automatically initializing, refreshing the index, routing, and packing as needed.",
+    inputSchema: {
+      type: "object",
+      required: ["task"],
+      properties: {
+        root: rootProperty,
+        task: { type: "string" },
+        budget: { type: "number" },
+        format: { type: "string", enum: ["markdown", "json"] },
+        routeLimit: { type: "number", description: "Maximum route steps to plan." },
+        maxDrawers: { type: "number", description: "Maximum source drawers to include." }
+      }
+    }
+  },
+  {
     name: "palace_route",
     description: "Plan a minimal Vertex Palace route for a coding task.",
     inputSchema: {

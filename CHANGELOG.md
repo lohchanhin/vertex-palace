@@ -2,6 +2,25 @@
 
 ## Unreleased
 
+## 0.1.6 - 2026-07-19
+
+### Added
+
+- `palace context` / `palace task` as the single task-entry command that initializes, refreshes, routes, and packs context when needed.
+- `palace_context` MCP tool with route and drawer limits for compact agent context.
+- End-to-end tests for one-call context setup on a previously uninitialized repository.
+
+### Changed
+
+- Codex plugin, hook, generated guidance, and README now prefer one context call instead of separate status, init, index, route, and pack calls.
+- Context packs produced through the task entry point omit excluded-area narration by default.
+- MCP smoke coverage now requires the new one-call tool.
+
+### Fixed
+
+- Reduced repeated agent tool calls and retry opportunities exposed by the A/B benchmark.
+- Prevented routine task startup from spending context on redundant Palace lifecycle output.
+
 ## 0.1.5 - 2026-07-18
 
 ### Added

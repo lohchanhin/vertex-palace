@@ -73,7 +73,7 @@ function verify() {
     fail(new Error(`MCP version mismatch: expected ${version}, received ${initialized?.result?.serverInfo?.version ?? "none"}.`));
     return;
   }
-  if (!names.includes("palace_status") || !names.includes("palace_evaluate")) {
+  if (!names.includes("palace_context") || !names.includes("palace_status") || !names.includes("palace_evaluate")) {
     fail(new Error(`MCP tools/list is missing required tools: ${names.join(", ") || "none"}.`));
     return;
   }

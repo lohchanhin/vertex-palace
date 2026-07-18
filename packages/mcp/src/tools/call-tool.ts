@@ -1,4 +1,5 @@
 import {
+  palaceContext,
   palaceDoctor,
   palaceEvaluate,
   palaceIndex,
@@ -22,6 +23,15 @@ export async function callTool(name: string, args: ToolArgs): Promise<unknown> {
       return palaceInit({ root: asString(args.root) });
     case "palace_index":
       return palaceIndex({ root: asString(args.root) });
+    case "palace_context":
+      return palaceContext({
+        root: asString(args.root),
+        task: requiredString(args.task, "task"),
+        budget: asNumber(args.budget),
+        format: args.format === "json" ? "json" : "markdown",
+        routeLimit: asNumber(args.routeLimit),
+        maxDrawers: asNumber(args.maxDrawers)
+      });
     case "palace_route":
       return palaceRoute({
         root: asString(args.root),

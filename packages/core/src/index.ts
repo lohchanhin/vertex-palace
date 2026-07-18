@@ -77,6 +77,17 @@ export async function palacePack(input: {
   return packContext(resolveRoot(input.root), input.task, input);
 }
 
+export async function palaceContext(input: import("@vertex-palace/shared").PalaceContextInput) {
+  const { packContext } = await import("./packer/context-packer");
+  return packContext(resolveRoot(input.root), input.task, {
+    budget: input.budget,
+    format: input.format,
+    routeLimit: input.routeLimit,
+    maxDrawers: input.maxDrawers,
+    includeExcluded: false
+  });
+}
+
 export async function palaceEvaluate(input: import("@vertex-palace/shared").PalaceEvaluationInput) {
   const { evaluateRoute } = await import("./evaluation/evaluate-route");
   return evaluateRoute(resolveRoot(input.root), input.task, input);

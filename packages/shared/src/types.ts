@@ -276,6 +276,15 @@ export type PackOutput = {
   json?: unknown;
 };
 
+export type PalaceContextInput = {
+  root?: string;
+  task: string;
+  budget?: number;
+  format?: "markdown" | "json";
+  routeLimit?: number;
+  maxDrawers?: number;
+};
+
 export type PalaceEvaluationInput = {
   root?: string;
   task: string;

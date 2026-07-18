@@ -10,6 +10,11 @@ export const TaskInputSchema = RootInputSchema.extend({
   format: z.enum(["markdown", "json"]).optional()
 });
 
+export const ContextInputSchema = TaskInputSchema.extend({
+  routeLimit: z.number().int().positive().optional(),
+  maxDrawers: z.number().int().positive().optional()
+});
+
 export const EvaluationInputSchema = RootInputSchema.extend({
   task: z.string().min(1),
   routeId: z.string().optional(),

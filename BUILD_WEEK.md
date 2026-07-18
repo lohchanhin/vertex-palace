@@ -54,7 +54,7 @@ The Devpost submission will include the `/feedback` Session ID from the primary 
 Install the public competition release, then run it in the repository you want to evaluate:
 
 ```bash
-npm install -g vertex-palace@0.1.5
+npm install -g vertex-palace@0.1.6
 palace --version
 palace index
 palace evaluate "improve route confidence calibration" --changed-file packages/core/src/evaluation/evaluate-route.ts
