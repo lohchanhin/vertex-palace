@@ -382,9 +382,12 @@ function linePath(sourcePath: string, startLine?: number, endLine?: number): str
 
 function buildExcluded(nodes: Awaited<ReturnType<typeof readIndex>>["nodes"], selectedIds: string[], analysis: ReturnType<typeof analyzeTask>): PalaceRoute["excluded"] {
   const selected = new Set(selectedIds);
+  const selectedSourcePaths = new Set(
+    nodes.filter((node) => selected.has(node.id)).map((node) => node.sourcePath)
+  );
   const byTop = new Map<string, number>();
   for (const node of nodes) {
-    if (selected.has(node.id)) continue;
+    if (selected.has(node.id) || selectedSourcePaths.has(node.sourcePath)) continue;
     const parts = node.sourcePath.split("/");
     const top = parts[0] === "src" && parts[1] ? `${parts[0]}/${parts[1]}` : parts[0] ?? node.sourcePath;
     const haystack = [node.sourcePath, node.wing, node.room, node.title].join(" ").toLowerCase();

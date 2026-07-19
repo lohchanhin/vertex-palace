@@ -239,6 +239,7 @@ export const $ZodDiscriminatedUnion = core.$constructor("$ZodDiscriminatedUnion"
       expect(filesOnly).not.toContain("test.js");
       expect(filesOnly).not.toContain("benchmark.js");
       expect(filesOnly).not.toContain("scripts/benchmarker.js");
+      expect(route.excluded.filter((item) => filesOnly.includes(item.sourcePath))).toEqual([]);
     });
   });
 
