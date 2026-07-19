@@ -7,6 +7,7 @@ const path = require("node:path");
 
 const projectRoot = path.resolve(__dirname, "..");
 const packageJson = require(path.join(projectRoot, "package.json"));
+const outputPath = outputArgument(process.argv.slice(2));
 const task = "Fix currency formatting so negative zero is rendered as $0.00. Keep the public API stable.";
 
 main().catch((error) => {
@@ -20,9 +21,16 @@ async function main() {
   const installRoot = path.join(temporaryRoot, "install");
   const fixtureRoot = path.join(temporaryRoot, "fixture");
   const memoryScopeRoot = path.join(temporaryRoot, "memory-scope-fixture");
+  const memoryDensityRoot = path.join(temporaryRoot, "memory-density-fixture");
 
   try {
-    await Promise.all([mkdir(packRoot), mkdir(installRoot), mkdir(fixtureRoot), mkdir(memoryScopeRoot)]);
+    await Promise.all([
+      mkdir(packRoot),
+      mkdir(installRoot),
+      mkdir(fixtureRoot),
+      mkdir(memoryScopeRoot),
+      mkdir(memoryDensityRoot)
+    ]);
     const packResult = runNpm(
       ["pack", "--json", "--ignore-scripts", "--pack-destination", packRoot],
       { cwd: projectRoot }
@@ -167,8 +175,49 @@ async function main() {
     assert.equal(scope.payload.contextBytes, Buffer.byteLength(scopeRaw, "utf8"));
     assert.ok(scope.payload.contextEstimatedTokens <= scope.selection.maxContextTokens);
 
+    await createMemoryDensityFixture(memoryDensityRoot);
+    runNode([cliPath, "init"], { cwd: memoryDensityRoot });
+    runNode([cliPath, "index"], { cwd: memoryDensityRoot });
+    await writeDenseMemoryBoard(memoryDensityRoot);
+    const densityTask = "Use historical project decisions to fix guarded memory telemetry context ceiling across the payload packer and all regression validation surfaces";
+    const densityArguments = [
+      cliPath,
+      "context",
+      densityTask,
+      "--mode",
+      "guarded-memory-palace",
+      "--budget",
+      "5000",
+      "--route-limit",
+      "10",
+      "--max-drawers",
+      "5"
+    ];
+    const densityRaw = runNode([...densityArguments, "--format", "json"], { cwd: memoryDensityRoot }).stdout;
+    const density = JSON.parse(densityRaw);
+    assert.equal(density.mode, "guarded-memory-palace");
+    assert.equal(density.memoryTelemetry.memoryCandidates, 50);
+    assert.equal(density.memoryTelemetry.memoryIncluded, 3);
+    assert.equal(density.memoryTelemetry.candidateIds.length, 50);
+    assert.equal(density.memoryTelemetry.memoryExcluded.length, 47);
+    assert.ok(density.memoryTelemetry.memoryExcluded.every((item) => item.reason === "selection_limit_reached"));
+    assert.equal(density.payload.contextBytes, Buffer.byteLength(densityRaw, "utf8"));
+    assert.ok(density.payload.contextEstimatedTokens <= density.selection.maxContextTokens);
+
+    const densityMarkdownRaw = runNode(
+      [...densityArguments, "--format", "markdown"],
+      { cwd: memoryDensityRoot }
+    ).stdout;
+    const densityMarkdown = parseMarkdownPayloadMetrics(densityMarkdownRaw);
+    assert.equal(densityMarkdown.contextBytes, Buffer.byteLength(densityMarkdownRaw, "utf8"));
+    assert.ok(densityMarkdown.contextEstimatedTokens <= densityMarkdown.maxContextTokens);
+
     const mcp = runNode([path.join(projectRoot, "scripts", "smoke-mcp.cjs"), mcpPath], { cwd: fixtureRoot });
     const report = {
+      schemaVersion: 1,
+      generatedAt: new Date().toISOString(),
+      claimBoundary: "Product packaging and context-contract validation only; not an Agent performance benchmark.",
+      sourceCommit: run("git", ["rev-parse", "HEAD"], { cwd: projectRoot }).stdout.trim(),
       package: `${metadata.name}@${metadata.version}`,
       files: metadata.files.length,
       shasum,
@@ -198,9 +247,27 @@ async function main() {
         estimatedTokens: scope.payload.contextEstimatedTokens,
         maxContextTokens: scope.selection.maxContextTokens
       },
+      denseMemoryCeiling: {
+        candidates: density.memoryTelemetry.memoryCandidates,
+        included: density.memoryTelemetry.memoryIncluded,
+        excluded: density.memoryTelemetry.memoryExcluded.length,
+        json: {
+          contextBytes: density.payload.contextBytes,
+          estimatedTokens: density.payload.contextEstimatedTokens,
+          maxContextTokens: density.selection.maxContextTokens,
+          loadedDrawers: density.context.length,
+          deferredReferences: density.deferredReferences.length
+        },
+        markdown: densityMarkdown
+      },
       installedMcp: mcp.stdout.trim()
     };
-    process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);
+    const serialized = `${JSON.stringify(report, null, 2)}\n`;
+    if (outputPath) {
+      await mkdir(path.dirname(outputPath), { recursive: true });
+      await writeFile(outputPath, serialized, "utf8");
+    }
+    process.stdout.write(serialized);
   } finally {
     if (process.env.KEEP_RELEASE_CANDIDATE_TEMP === "1") {
       process.stderr.write(`Kept release-candidate fixture at ${temporaryRoot}\n`);
@@ -208,6 +275,41 @@ async function main() {
       await rm(temporaryRoot, { recursive: true, force: true });
     }
   }
+}
+
+async function createMemoryDensityFixture(root) {
+  const payloadRoot = path.join(root, "src", "payload");
+  await mkdir(payloadRoot, { recursive: true });
+  await Promise.all([
+    writeFile(
+      path.join(root, "package.json"),
+      `${JSON.stringify({ name: "memory-density-fixture", private: true, type: "module" }, null, 2)}\n`,
+      "utf8"
+    ),
+    ...Array.from({ length: 10 }, (_, index) => writeFile(
+      path.join(payloadRoot, `context-${index}.ts`),
+      `export function fitMemoryTelemetry${index}() {\n${`  const payloadBudget${index} = "guarded memory telemetry context ceiling route evidence ${index}";\n`.repeat(45)}  return payloadBudget${index};\n}\n`,
+      "utf8"
+    ))
+  ]);
+}
+
+async function writeDenseMemoryBoard(root) {
+  const entries = Array.from({ length: 50 }, (_, index) => ({
+    id: `memory-${String(index).padStart(2, "0")}`,
+    text: `Guarded memory telemetry context ceiling warning ${index}.`,
+    task: "Guarded memory telemetry context ceiling",
+    outcome: "partial",
+    source: "pitfall",
+    tags: ["guarded", "memory", "telemetry", "context", "ceiling"],
+    memoryPath: `.palace/memory/memory-${index}.md`,
+    createdAt: "2026-07-18T00:00:00.000Z"
+  }));
+  await writeFile(
+    path.join(root, ".palace", "memory", "pitfall-board.json"),
+    `${JSON.stringify({ entries }, null, 2)}\n`,
+    "utf8"
+  );
 }
 
 async function createMemoryScopeFixture(root) {
@@ -258,6 +360,27 @@ function parsePackMetadata(stdout) {
   const entries = JSON.parse(stdout.slice(start, end + 1));
   assert.equal(entries.length, 1);
   return entries[0];
+}
+
+function parseMarkdownPayloadMetrics(markdown) {
+  const payload = markdown.match(/Calls: \d+ \| Bytes: (\d+) \| Estimated tokens: (\d+)/);
+  const ceiling = markdown.match(/Estimated context cost: \d+ \/ (\d+) token ceiling/);
+  assert.ok(payload, "Markdown output is missing measured payload metrics.");
+  assert.ok(ceiling, "Markdown output is missing its selected context ceiling.");
+  return {
+    contextBytes: Number(payload[1]),
+    contextEstimatedTokens: Number(payload[2]),
+    maxContextTokens: Number(ceiling[1])
+  };
+}
+
+function outputArgument(args) {
+  const index = args.indexOf("--out");
+  if (index < 0) return undefined;
+  assert.ok(args[index + 1], "--out requires a repository-relative path.");
+  const target = path.resolve(projectRoot, args[index + 1]);
+  assert.ok(target.startsWith(`${projectRoot}${path.sep}`), "--out must stay inside the repository.");
+  return target;
 }
 
 function runNpm(args, options) {
