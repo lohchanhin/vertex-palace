@@ -6,6 +6,15 @@ export function classifyTask(task: string): TaskType {
   if (/(回顾|回顧|复盘|復盤|评估|評估|评价|評價|评分|評分|打分|总结|總結|结论|結論|整体评价|整體評價)/.test(lower)) return "evaluation";
   const releaseIntent = /\b(release|publish|publishing|published|npm\s+publish|npm\s+registry|package\s+release|version\s+bump|bump(?:ing)?\s+(?:the\s+)?version|dist[- ]?tag|git\s+tag|release\s+candidate)\b/.test(lower)
     || /(发布|發佈|发行|發行|版本发布|版本發佈|版本标签|版本標籤|套件发布|套件發佈|npm\s*发布|npm\s*發佈)/.test(lower);
+  const evidenceMaintenance = /\b(sync|synchronize|update|refresh|pin|record|preserve|align)\b/.test(lower)
+    || /(同步|更新|刷新|固定|锁定|鎖定|记录|記錄|保留|对齐|對齊)/.test(lower);
+  const evidenceSubject = /\b(evidence|benchmark|protocol|research|results?|precision|recall|confidence)\b/.test(lower)
+    || /(证据|證據|基准|基準|协议|協議|研究|结果|結果|精度|召回|置信度|可信度)/.test(lower);
+  const evidenceArtifact = /\b(commit|sha|source|plan|manifest|docs?|documentation|readme|frozen|freeze)\b/.test(lower)
+    || /(提交|源码|源碼|计划|計划|計畫|清单|清單|文档|文檔|说明|說明|冻结|凍結)/.test(lower);
+  const repairIntent = /\b(fix|debug|repair|correct|resolve)\b/.test(lower)
+    || /(修复|修正|修補|修补|纠正|糾正|解决|解決)/.test(lower);
+  if (!releaseIntent && !repairIntent && evidenceMaintenance && evidenceSubject && evidenceArtifact) return "evaluation";
   const releaseFailure = releaseIntent
     && (/\b(fix|debug|investigate|resolve)\b/.test(lower) || /(修复|修正|修補|修补|调查|調查|解决|解決)/.test(lower))
     && (/\b(error|failed|failing|failure|broken|unauthorized|e401|otp|2fa)\b/.test(lower) || /(?:错误|錯誤|失败|失敗|未授权|未授權)/.test(lower));

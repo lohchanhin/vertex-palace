@@ -6,6 +6,7 @@ import { indexPalace } from "../src/indexer/index-palace";
 import { analyzeTask } from "../src/router/analyze-task";
 import { classifyTask } from "../src/router/classify-task";
 import { routePalace } from "../src/router/route-planner";
+import { requestedRouteSurfaces } from "../src/router/route-scorer";
 import { withFixture } from "./test-utils";
 
 const RELEASE_TASK = "Release Vertex Palace 0.2.2 after fixing Adaptive Full Palace memory delivery, verify npm registry, Git tag, and public plugin MCP installation";
@@ -190,6 +191,90 @@ export const $ZodDiscriminatedUnion = core.$constructor("$ZodDiscriminatedUnion"
       );
 
       expect(route.confidence).toBeLessThanOrEqual(0.35);
+    });
+  });
+
+  it("routes bilingual evidence synchronization across its plan, generator, test, and documentation surfaces", async () => {
+    await withFixture("ts-api", async (root) => {
+      const changedFiles = [
+        "src/commands/study.mjs",
+        "test/study.test.mjs",
+        "results/control-first-v3/plan.json",
+        "docs/research/CONTROL_FIRST_V3_PREFLIGHT.md",
+        "docs/research/PROTOCOL_V3.md",
+        "docs/zh-CN/PROTOCOL_V3.md",
+        "README.md",
+        "docs/zh-CN/README.md"
+      ];
+      const sources = new Map<string, string>([
+        ["src/commands/study.mjs", "export function buildControlFirstPlan() { return { frozen: false, sourceCommit: 'candidate' }; }\n"],
+        ["test/study.test.mjs", "test('control-first source commit and frozen plan', () => true);\n"],
+        ["results/control-first-v3/plan.json", JSON.stringify({ frozen: false, sourceCommit: "candidate", trials: 16 })],
+        ["docs/research/CONTROL_FIRST_V3_PREFLIGHT.md", "# Control-First v3 Preflight\n\nProduct evidence commit and context ceiling gate.\n"],
+        ["docs/research/PROTOCOL_V3.md", "# Protocol v3\n\nThe plan remains frozen false with zero outcomes.\n"],
+        ["docs/zh-CN/PROTOCOL_V3.md", "# v3 协议\n\n计划保持 frozen false，公开结果为零。\n"],
+        ["README.md", "# Benchmark\n\nControl-first product evidence and protocol summary.\n"],
+        ["docs/zh-CN/README.md", "# 简体中文说明\n\nControl-first 产品证据与协议摘要。\n"],
+        ["docs/research/PROTOCOL_V2.md", "# Protocol v2\n\nSuperseded control-first protocol.\n"],
+        ["docs/research/PROTOCOL_V2_2.md", "# Protocol v2.2\n\nSuperseded memory protocol.\n"],
+        ["docs/research/evidence/guarded-stale-memory-v2.2-trial01.json", JSON.stringify({ trial: 1, status: "historic" })],
+        ["docs/research/evidence/guarded-stale-memory-v2.2-trial02.json", JSON.stringify({ trial: 2, status: "historic" })],
+        ["results/adaptive-pilot-v2.2/README.md", "# Historic adaptive pilot\n\nSuperseded result notes.\n"],
+        ["analysis/paired-analysis.mjs", "export function reportedTokenPrecisionAnalysis() { return 'paired benchmark precision'; }\n"],
+        ["analysis/power-analysis.mjs", "export function benchmarkPower() { return 'analysis only'; }\n"]
+      ]);
+      for (const [relativePath, source] of sources) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const task = "同步 Vertex Palace v0.3 最终源码与证据提交，更新严格真实仓库精度和高密度记忆预算验证，并保留 control-first 冻结边界与简体中文说明";
+      const analysis = analyzeTask(task);
+      const evaluation = await evaluateRoute(root, task, {
+        changedFiles,
+        budget: 5000,
+        routeLimit: 6,
+        maxDrawers: 4
+      });
+
+      expect(classifyTask(task)).toBe("evaluation");
+      expect(classifyTask("修正多表面证据同步路由并排除旧协议")).toBe("bugfix");
+      expect(analysis.keywords).toEqual(expect.arrayContaining([
+        "implementation",
+        "evidence",
+        "precision",
+        "memory",
+        "context",
+        "token",
+        "protocol",
+        "plan",
+        "config",
+        "docs",
+        "readme",
+        "bilingual"
+      ]));
+      expect(requestedRouteSurfaces(analysis)).toEqual(expect.arrayContaining([
+        "implementation",
+        "test",
+        "config",
+        "docs"
+      ]));
+      expect(evaluation.route.files).toEqual(expect.arrayContaining(changedFiles));
+      expect(evaluation.route.files).not.toEqual(expect.arrayContaining([
+        "analysis/paired-analysis.mjs",
+        "analysis/power-analysis.mjs",
+        "docs/research/PROTOCOL_V2.md",
+        "docs/research/PROTOCOL_V2_2.md",
+        "docs/research/evidence/guarded-stale-memory-v2.2-trial01.json",
+        "docs/research/evidence/guarded-stale-memory-v2.2-trial02.json",
+        "results/adaptive-pilot-v2.2/README.md"
+      ]));
+      expect(evaluation.route.fileCount).toBeLessThanOrEqual(10);
+      expect(evaluation.coverage.changedFileCoverage).toBe(1);
+      expect(evaluation.coverage.routeFocus).toBeGreaterThanOrEqual(0.8);
+      expect(evaluation.route.confidence).toBeLessThanOrEqual(0.35);
     });
   });
 

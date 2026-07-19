@@ -16,6 +16,7 @@ export type RouteSurface =
   | "mcp"
   | "shared"
   | "test"
+  | "config"
   | "docs"
   | "ci"
   | "package"
@@ -273,12 +274,16 @@ export function requestedRouteSurfaces(analysis: TaskAnalysis): RouteSurface[] {
   if (hasAny(keywords, ["shared", "schema", "schemas", "type", "types", "contract", "contracts"])) requested.push("shared");
   if (hasAny(keywords, ["bypass", "boundaries", "boundary", "transport", "telemetry", "payload"]) && !requested.includes("shared")) requested.push("shared");
   if (hasAny(keywords, ["test", "tests", "validate", "validation", "verification", "regression"])) requested.push("test");
+  if (hasAny(keywords, ["config", "plan", "protocol", "frozen"])) requested.push("config");
   if (hasAny(keywords, ["doc", "docs", "documentation", "readme"])) requested.push("docs");
   if (hasAny(keywords, ["ci", "workflow", "workflows", "actions"])) requested.push("ci");
   if (hasAny(keywords, ["release", "publish", "package", "manifest", "version", "npm", "registry", "tag", "distribute", "distribution"])) requested.push("package");
   if (hasAny(keywords, ["plugin", "marketplace"])) requested.push("plugin");
   const evaluationIntent = hasAny(keywords, ["evaluation", "evaluate", "retrospective"]);
-  if (!evaluationIntent && hasAny(keywords, ["adaptive", "bypass", "mode", "selector", "context", "packer", "route", "router", "score", "scorer", "precision", "recall", "confidence"])) requested.push("implementation");
+  if (
+    hasAny(keywords, ["implementation", "source"])
+    || (!evaluationIntent && hasAny(keywords, ["adaptive", "bypass", "mode", "selector", "context", "packer", "route", "router", "score", "scorer", "precision", "recall", "confidence"]))
+  ) requested.push("implementation");
   if (hasAny(keywords, ["release", "changelog"]) && !requested.includes("docs")) requested.push("docs");
   if (keywords.has("release") && requested.includes("plugin")) {
     if (!requested.includes("mcp")) requested.push("mcp");
@@ -301,6 +306,9 @@ export function matchesRouteSurface(node: PalaceNode, surface: RouteSurface): bo
       return node.kind === "test"
         || /(^|\/)(test|tests|spec|__tests__)(\/|$)|\.(test|spec)\.[^.]+$/.test(sourcePath)
         || /(^|\/)scripts\/[^/]*(?:verify|smoke|benchmark)[^/]*$/.test(sourcePath);
+    case "config":
+      return node.kind === "config"
+        || /(^|\/)(?:results\/[^/]+\/)?(?:plan|manifest|protocol|config)[^/]*\.(?:json|ya?ml|toml)$/.test(sourcePath);
     case "docs":
       return node.kind === "doc" || /(^|\/)(docs?|readme)(\/|\.|$)|build_week\.md$/.test(sourcePath);
     case "ci":
@@ -310,7 +318,9 @@ export function matchesRouteSurface(node: PalaceNode, surface: RouteSurface): bo
     case "plugin":
       return /(^|\/)\.agents\/plugins\/marketplace\.json$|(^|\/)plugins\/[^/]+\//.test(sourcePath);
     case "implementation":
-      return /(^|\/)packages\/core\/src\//.test(sourcePath) && node.kind !== "test";
+      return /(^|\/)src\//.test(sourcePath)
+        && node.kind !== "test"
+        && !["config", "doc", "runtime-log"].includes(node.kind);
   }
 }
 

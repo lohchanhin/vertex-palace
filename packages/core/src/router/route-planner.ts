@@ -34,7 +34,7 @@ export async function routePalace(root: string, task: string, options: number | 
   const requestedSurfaces = requestedRouteSurfaces(analysis);
   const routeLimit =
     taskType === "evaluation"
-      ? Math.max(normalized.routeLimit, Math.min(10, requestedSurfaces.length + 1))
+      ? evaluationRouteLimit(normalized.routeLimit, requestedSurfaces, analysis)
       : normalized.routeLimit;
   const implementationAnchor = taskType === "bugfix"
     ? scored.find((item) => isImplementationCandidate(item.node))
@@ -56,7 +56,7 @@ export async function routePalace(root: string, task: string, options: number | 
   });
   const expanded =
     taskType === "evaluation"
-      ? ensureRequestedSurfaceCoverage(initialRoute, scored, requestedSurfaces, routeLimit)
+      ? ensureRequestedSurfaceCoverage(initialRoute, scored, requestedSurfaces, analysis, routeLimit)
       : taskType === "release"
         ? ensureReleaseSurfaceCoverage(scored, requestedSurfaces, analysis, routeLimit)
         : initialRoute;
@@ -218,27 +218,38 @@ function ensureRequestedSurfaceCoverage(
   selected: ScoredNode[],
   scored: ScoredNode[],
   requested: RouteSurface[],
+  analysis: ReturnType<typeof analyzeTask>,
   limit: number
 ): ScoredNode[] {
   if (!requested.length) return selected;
 
-  const result = [...selected];
+  const result: ScoredNode[] = [];
   const protectedIds = new Set<string>();
-  if (selected[0]) protectedIds.add(selected[0].node.id);
-
-  for (const surface of requested) {
-    let representative = result.find((item) => matchesRouteSurface(item.node, surface));
-    if (!representative) {
-      representative = scored.find(
-        (item) =>
-          matchesRouteSurface(item.node, surface) &&
-          !result.some((selectedItem) => selectedItem.node.sourcePath === item.node.sourcePath)
-      );
-      if (representative) result.push(representative);
-    }
-    if (representative) protectedIds.add(representative.node.id);
+  if (!requested.includes("implementation") && selected[0]) {
+    result.push(selected[0]);
+    protectedIds.add(selected[0].node.id);
   }
 
+  for (const surface of requested) {
+    const quota = evaluationSurfaceQuota(surface, analysis);
+    const representatives = selectEvaluationSurfaceRepresentatives(
+      scored.filter(
+        (item) =>
+          matchesRouteSurface(item.node, surface)
+          && !protectedIds.has(item.node.id)
+          && !result.some((selectedItem) => selectedItem.node.sourcePath === item.node.sourcePath)
+      ),
+      surface,
+      analysis,
+      quota
+    );
+    for (const representative of representatives) {
+      if (!result.some((item) => item.node.id === representative.node.id)) result.push(representative);
+      protectedIds.add(representative.node.id);
+    }
+  }
+
+  if (!result.length) return selected.slice(0, limit);
   result.sort((a, b) => b.score - a.score || a.node.sourcePath.localeCompare(b.node.sourcePath));
   while (result.length > limit) {
     let removableIndex = -1;
@@ -252,6 +263,144 @@ function ensureRequestedSurfaceCoverage(
     result.splice(removableIndex, 1);
   }
   return result;
+}
+
+function evaluationRouteLimit(
+  baseLimit: number,
+  requested: RouteSurface[],
+  analysis: ReturnType<typeof analyzeTask>
+): number {
+  const required = requested.reduce(
+    (sum, surface) => sum + evaluationSurfaceQuota(surface, analysis),
+    0
+  );
+  return Math.max(baseLimit, Math.min(12, required));
+}
+
+function evaluationSurfaceQuota(surface: RouteSurface, analysis: ReturnType<typeof analyzeTask>): number {
+  if (surface !== "docs") return 1;
+  const keywords = new Set(analysis.keywords);
+  let quota = 1;
+  if (keywords.has("evidence")) quota += 1;
+  if (keywords.has("protocol")) quota += 1;
+  if (keywords.has("readme")) quota += 1;
+  if (hasAnyKeyword(keywords, ["bilingual", "localization"])) quota += 1;
+  return Math.min(5, quota);
+}
+
+function selectEvaluationSurfaceRepresentatives(
+  candidates: ScoredNode[],
+  surface: RouteSurface,
+  analysis: ReturnType<typeof analyzeTask>,
+  quota: number
+): ScoredNode[] {
+  const ranked = [...candidates]
+    .sort((a, b) => compareEvaluationSurfaceCandidates(a, b, surface, analysis))
+    .filter((item, index, items) => items.findIndex((candidate) => candidate.node.sourcePath === item.node.sourcePath) === index);
+  if (surface !== "docs" || quota <= 1) return ranked.slice(0, quota);
+
+  const keywords = new Set(analysis.keywords);
+  const selected: ScoredNode[] = [];
+  const selectedPaths = new Set<string>();
+  const appendFirst = (predicate: (sourcePath: string) => boolean): void => {
+    const representative = ranked.find(
+      (item) => !selectedPaths.has(item.node.sourcePath) && predicate(item.node.sourcePath.toLowerCase())
+    );
+    if (!representative) return;
+    selected.push(representative);
+    selectedPaths.add(representative.node.sourcePath);
+  };
+  const localized = (sourcePath: string): boolean => /(^|\/)(?:zh-cn|zh-hans|zh_cn)(\/|$)/.test(sourcePath);
+  const narrative = (sourcePath: string): boolean => /\.(?:md|mdx|rst|txt)$/.test(sourcePath);
+
+  if (keywords.has("evidence")) {
+    appendFirst((sourcePath) => !localized(sourcePath) && narrative(sourcePath) && isNarrativeEvidencePath(sourcePath));
+  }
+  if (keywords.has("protocol")) {
+    appendFirst((sourcePath) => !localized(sourcePath) && /protocol/.test(sourcePath));
+  }
+  if (keywords.has("readme")) {
+    appendFirst((sourcePath) => !localized(sourcePath) && /(^|\/)readme\.md$/.test(sourcePath));
+  }
+  if (hasAnyKeyword(keywords, ["bilingual", "localization"])) {
+    if (keywords.has("protocol")) appendFirst((sourcePath) => localized(sourcePath) && /protocol/.test(sourcePath));
+    if (keywords.has("readme")) appendFirst((sourcePath) => localized(sourcePath) && /(^|\/)readme\.md$/.test(sourcePath));
+    appendFirst(localized);
+  }
+  for (const item of ranked) {
+    if (selected.length >= quota) break;
+    if (selectedPaths.has(item.node.sourcePath)) continue;
+    selected.push(item);
+    selectedPaths.add(item.node.sourcePath);
+  }
+  return selected.slice(0, quota);
+}
+
+function compareEvaluationSurfaceCandidates(
+  a: ScoredNode,
+  b: ScoredNode,
+  surface: RouteSurface,
+  analysis: ReturnType<typeof analyzeTask>
+): number {
+  return evaluationSurfacePriority(b, surface, analysis) - evaluationSurfacePriority(a, surface, analysis)
+    || evaluationSurfaceVersionPriority(b.node.sourcePath) - evaluationSurfaceVersionPriority(a.node.sourcePath)
+    || b.score - a.score
+    || a.node.sourcePath.localeCompare(b.node.sourcePath);
+}
+
+function evaluationSurfaceVersionPriority(sourcePath: string): number {
+  const versions = [...sourcePath.toLowerCase().matchAll(/(?:^|[^a-z0-9])v(\d+)(?:[._-](\d+))?/g)];
+  return versions.reduce((highest, match) => {
+    const major = Number(match[1] ?? 0);
+    const minor = Number(match[2] ?? 0);
+    return Math.max(highest, major * 1000 + minor);
+  }, 0);
+}
+
+function evaluationSurfacePriority(
+  item: ScoredNode,
+  surface: RouteSurface,
+  analysis: ReturnType<typeof analyzeTask>
+): number {
+  const sourcePath = item.node.sourcePath.toLowerCase();
+  const keywords = new Set(analysis.keywords);
+  if (surface === "implementation") {
+    if (hasAnyKeyword(keywords, ["plan", "protocol", "frozen"]) && /(^|\/)src\/commands?\/study\./.test(sourcePath)) return 600;
+    return 100;
+  }
+  if (surface === "test") {
+    if (hasAnyKeyword(keywords, ["plan", "protocol", "frozen"]) && /(^|\/)(?:test|tests)\/study\.test\./.test(sourcePath)) return 600;
+    return 100;
+  }
+  if (surface === "config") {
+    if (keywords.has("plan") && /(^|\/)results\/[^/]+\/plan\.json$/.test(sourcePath)) return 600;
+    if (keywords.has("plan") && /(^|\/)plan\.json$/.test(sourcePath)) return 550;
+    if (keywords.has("manifest") && /(^|\/)manifest\.json$/.test(sourcePath)) return 500;
+    return 100;
+  }
+  if (surface !== "docs") return 100;
+
+  let priority = 100;
+  if (keywords.has("evidence") && isNarrativeEvidencePath(sourcePath)) priority += 500;
+  if (keywords.has("protocol") && /protocol/.test(sourcePath)) priority += 450;
+  if (keywords.has("readme") && /(^|\/)readme\.md$/.test(sourcePath)) priority += 400;
+  if (keywords.has("readme") && sourcePath === "readme.md") priority += 200;
+  if (hasAnyKeyword(keywords, ["bilingual", "localization"]) && /(^|\/)(?:zh-cn|zh-hans|zh_cn)(\/|$)/.test(sourcePath)) priority += 125;
+  const compactSourcePath = compactRouteValue(sourcePath);
+  if (analysis.entities.some((entity) => {
+    const compactEntity = compactRouteValue(entity);
+    return compactEntity.length > 0 && compactSourcePath.includes(compactEntity);
+  })) priority += 75;
+  return priority;
+}
+
+function isNarrativeEvidencePath(sourcePath: string): boolean {
+  const fileName = sourcePath.split("/").at(-1) ?? sourcePath;
+  return /\.(?:md|mdx|rst|txt)$/.test(fileName) && /(?:preflight|evidence|research)/.test(fileName);
+}
+
+function compactRouteValue(value: string): string {
+  return value.toLowerCase().replace(/[^a-z0-9]+/g, "");
 }
 
 function ensureReleaseSurfaceCoverage(
