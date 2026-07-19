@@ -42,7 +42,7 @@ and the Pitfall Board are metadata attached to places and routes; they are not
 additional spatial axes. For example, `checkout / implementation /
 shippingQuote()` identifies one bounded context entry point.
 
-## Eleven-Slide Arc
+## Twelve-Slide Arc
 
 1. Introduce Vertex Palace and the Developer Tools submission.
 2. Ground the project in the creator's experience of hour-long tasks, excessive
@@ -64,12 +64,16 @@ shippingQuote()` identifies one bounded context entry point.
    intervals. Show that only the +4.5 tool-call overhead cleared zero, retain
    the supported -898.5-byte Adaptive-versus-Full payload result as a separate
    Palace-owned metric, and state the unsupported universal claims.
-9. Present the independent product evidence: 55 automated tests, build and
+9. Compare Adaptive with Codex alone across small-local, cross-stack,
+   useful-memory, and stale-memory task profiles. Treat them as complexity and
+   risk profiles rather than calibrated difficulty levels, and identify which
+   scenario-level intervals stayed above zero.
+10. Present the independent product evidence: 55 automated tests, build and
     TypeScript lint, ten-tool MCP smoke, five successful CI jobs, and clean
     public-distribution verification.
-10. Show the learning loop from the 0.2.1 memory omission to the 0.2.2
+11. Show the learning loop from the 0.2.1 memory omission to the 0.2.2
     regression contract and the 0.2.3 cross-ecosystem release-routing matrix.
-11. Give judges the public npm installation and GitHub test path.
+12. Give judges the public npm installation and GitHub test path.
 
 ## Recording Guidance
 
@@ -102,6 +106,12 @@ used.
   repository-context treatment changes.
 - Adaptive versus Control paired intervals: tool calls [+2.5, +6.5], reported
   tokens [-1,518.5, +39,219], and wall time [-1.433s, +31.043s].
+- Scenario-level Adaptive-versus-Control paired medians for reported tokens /
+  wall time / tool calls: small local +17,078.5 / +6.012s / +3.5;
+  cross-stack +51,917 / +20.228s / +5.5; useful memory +35,850.5 / +16.361s /
+  +4.5; stale memory +10,801 / +9.594s / +6.5. The small-local Token interval
+  and the cross-stack wall-time and tool-call intervals stayed above zero; the
+  remaining displayed scenario intervals crossed zero.
 - Current 0.2.3 mode selection can bypass packed source for a one-file task in
   a small repository, use route-lite for bounded work, and reserve Full or
   Guarded mode for broader contracts or memory risk. This is a product response
@@ -135,7 +145,7 @@ models and machines; long-lived multi-session value also remains unproven.
 
 ## Quality Checks
 
-- All eleven exported slides were rendered from the final PPTX and inspected at
+- All twelve exported slides were rendered from the final PPTX and inspected at
   full size.
 - The PowerPoint overflow test passed with no out-of-slide content.
 - No unresolved placeholders or layout-warning text remains.
