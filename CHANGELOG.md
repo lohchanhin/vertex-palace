@@ -26,6 +26,8 @@
 - A route entry matching that inferred client becomes the sole Primary while the former static Primary is demoted to Support with an explicit reason.
 - Lexical routing now normalizes common code-task morphology, avoids substring intent matches such as `grade` inside `upgrades`, indexes bounded implementation search terms, and reserves route capacity for test-to-implementation relationships.
 - Test symbols remain verification context rather than receiving implementation-tier boosts, and symbol-level test names can link focused tests to the methods they exercise.
+- Focused bugfix routes now use an implementation anchor, evidence-strength thresholds, destination lexical relevance, verification-first relations, and explicit version coherence instead of filling every available route slot.
+- Multi-surface tasks recognize routing quality, validation, MCP, and distribution intent, cannot use focused expansion, and receive a conservative confidence cap based on task breadth.
 
 ### Fixed
 
@@ -33,6 +35,7 @@
 - Prevented inferred client context from simultaneously labeling a shared fallback as Primary in the rendered execution boundaries.
 - Prevented issue-style tasks from returning only tests while excluding the implementation in real TypeScript and Python repositories.
 - Prevented explicit requests to update regression tests from collapsing into a one-file bypass payload.
+- Prevented focused routes from expanding through every symbol in a large source file, following weak imports, or mixing explicit version families when same-version evidence exists.
 
 ### Verification
 
@@ -41,7 +44,8 @@
 - A non-study memory-dependent smoke retrieved 2/2 Aurora candidates, excluded 0, emitted `unique_historical_alias_match`, promoted `clients/aurora/article-tokens.mjs` to the only Primary, and demoted the shared token to Support.
 - An ambiguous two-client regression keeps both memories excluded as `scope_mismatch`; alias inference does not break tenant isolation when evidence ties.
 - These product-contract tests do not yet prove parity with Control tool calls, reported tokens, or wall time; that requires the fresh Control-first benchmark planned for 0.3.1.
-- The pinned Zod and Requests gate retrieves both known target files in two deterministic repetitions per repository while reporting all extra route files; it is a product gate, not an Agent-performance claim.
+- The pinned Zod and Requests gate now requires both target recall and strict target precision to equal 1.000. Both repositories produced exact two-file routes with no unexpected boundary files in two deterministic repetitions; this remains a product gate, not an Agent-performance claim.
+- A broad self-evaluation improved from 1/6 to 4/6 changed-file coverage and capped confidence at 0.35, but still missed the regression test and generated MCP bundle. Cross-surface coverage remains a follow-up target.
 
 ## 0.2.4 - 2026-07-19
 

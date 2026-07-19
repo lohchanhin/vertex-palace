@@ -17,9 +17,12 @@ Control.
 - Require identical execution boundaries across both runs.
 - Require the known implementation in Primary and the focused test in Primary
   or Support.
+- Require both target recall and strict target precision to equal 1.000. Any
+  unexpected boundary file fails the release gate.
 - Fail if the context exceeds its budget or tracked files in the cloned project
   change.
-- Report extra routed files instead of hiding them.
+- Preserve route files and timing in machine-readable evidence for audit, while
+  keeping timing outside the performance claim.
 
 The pinned repositories are:
 
@@ -31,15 +34,15 @@ The pinned repositories are:
 ## Recorded result
 
 The checked evidence was generated from product commit
-`c835860d0d63f4c3ddd83b01c5cbb182b216bc9e`. Its cross-platform
-[GitHub Actions run](https://github.com/lohchanhin/vertex-palace/actions/runs/29696299788)
+`b854434564efca8a9f01b48b04c8e961a99bef94`. Its cross-platform
+[GitHub Actions run](https://github.com/lohchanhin/vertex-palace/actions/runs/29697398778)
 passed, and the packed candidate had SHA-1
-`20a351363316ff5227ffe5cc5bfc75a281c7ad74`.
+`70d07436888e4f17cf41e012c5c96cb10e0f7b07`.
 
 | Repository | Indexed files | Mode | Route confidence | Pack tokens | Target recall | Strict target precision | Extra files | Deterministic |
 | --- | ---: | --- | ---: | ---: | ---: | ---: | ---: | --- |
-| Zod | 581 | `full-palace` | 0.85 | 2,700 | 1.000 | 0.333 | 4 | Yes, 2/2 |
-| Requests | 123 | `full-palace` | 0.77 | 2,597 | 1.000 | 0.333 | 4 | Yes, 2/2 |
+| Zod | 581 | `full-palace` | 0.87 | 1,886 | 1.000 | 1.000 | 0 | Yes, 2/2 |
+| Requests | 123 | `full-palace` | 0.72 | 1,567 | 1.000 | 1.000 | 0 | Yes, 2/2 |
 
 Both cloned worktrees remained clean. Trial elapsed time is retained in the
 [machine-readable evidence](./evidence/real-repository-validation-0.3.0.json)
@@ -71,30 +74,46 @@ while excluding `src/requests`. Investigation found five concrete causes:
 5. Python fallback symbols had unqualified method names and fixed eight-line
    ranges.
 
-The corrected candidate adds lexical normalization, bounded searchable symbol
+The first correction added lexical normalization, bounded searchable symbol
 terms, symbol-level test relations, runtime-extension import resolution,
 structured Python class/method ranges, relationship capacity, and a
-`verificationChangeRisk` signal that prevents bypass when a task explicitly
-requests test changes.
+`verificationChangeRisk` signal. It restored 1.000 recall, but each route still
+contained four extra files, leaving strict precision at 0.333.
+
+The second investigation found that route capacity was still treated like a
+quota, symbol anchors inherited broad file-level relations, relation scores did
+not sufficiently account for the destination's own lexical relevance, weak
+imports competed with focused test evidence, and explicit v3/v4 paths were
+treated as desirable diversity. The latest correction uses an implementation
+symbol anchor, evidence-strength thresholds, destination relevance,
+verification-first relations, and explicit version coherence. The route limit
+is now a ceiling for focused routes rather than a target count.
 
 ## Honest interpretation
 
-Both known targets are now retrieved on both repositories and repeated
-boundaries are deterministic. The route still includes extra context, so target
-precision is reported alongside 100% target recall. This gate proves packaging,
-cross-language indexing, and target retrieval for these two fixed cases only.
-It does not establish a general performance advantage.
+Both known targets are retrieved on both repositories, repeated boundaries are
+deterministic, and no unexpected route file remains in these two cases. The
+strict gate reports precision alongside recall and fails if either falls below
+1.000. It proves packaging, cross-language indexing, and exact target retrieval
+for these two pinned tasks only. It does not establish a general routing or
+Agent-performance advantage.
 
 ## Internal route self-evaluation
 
-The same candidate was evaluated against its own broad implementation task.
-The task changed 25 files across parsers, indexing, routing, tests,
-distribution, and documentation. A 10-file route matched only 5 changed files:
-20% changed-file coverage, 50% route focus, predicted confidence 0.71, and an
-overconfidence error of 0.51. This is not part of the two-repository gate, but
-it is retained as a negative result. The next research target is lower route
-noise, task-width-aware capacity, and confidence calibrated to intent and
-changed-file coverage.
+The earlier candidate was evaluated against a broad 25-file implementation
+task and matched only 5 changed files: 20% changed-file coverage, 50% route
+focus, predicted confidence 0.71, and an overconfidence error of 0.51. That
+negative result remains part of the research history.
+
+The focused-routing revision was then evaluated against its actual six changed
+files. Before breadth vocabulary was corrected, it matched 1/6 files at
+confidence 0.42. After recognizing routing quality, validation, MCP, and
+distribution as separate task surfaces, a 10-file route matched 4/6 files:
+67% changed-file coverage, 40% route focus, predicted confidence 0.35, and an
+underconfidence error of 0.32. It still missed the regression test and generated
+MCP bundle. This is not part of the two-repository gate; it identifies
+cross-surface allocation and generated-artifact awareness as the next routing
+research targets.
 
 ---
 
@@ -114,21 +133,22 @@ changed-file coverage.
 - 每个仓库使用同一任务重复两次，context 上限为 6,000 tokens。
 - 两次运行的执行边界必须完全一致。
 - 已知实现必须位于 Primary；对应测试必须位于 Primary 或 Support。
+- 目标召回率与严格目标精度都必须等于 1.000；只要出现额外边界文件就判定失败。
 - 超出预算或修改真实仓库的 tracked 文件时立即失败。
-- 额外命中的文件会如实记录，不会为了好看而隐藏。
+- 路由文件与时间会保留在机器可读证据中供审计，但时间不属于本次性能结论。
 
 ## 实测结果
 
-本次证据由产品提交 `c835860d0d63f4c3ddd83b01c5cbb182b216bc9e`
+本次证据由产品提交 `b854434564efca8a9f01b48b04c8e961a99bef94`
 生成；对应的跨平台
-[GitHub Actions](https://github.com/lohchanhin/vertex-palace/actions/runs/29696299788)
+[GitHub Actions](https://github.com/lohchanhin/vertex-palace/actions/runs/29697398778)
 已通过，候选 npm tarball 的 SHA-1 为
-`20a351363316ff5227ffe5cc5bfc75a281c7ad74`。
+`70d07436888e4f17cf41e012c5c96cb10e0f7b07`。
 
 | 仓库 | 索引文件 | 模式 | 路由置信度 | Pack tokens | 目标召回率 | 严格目标精度 | 额外文件 | 边界稳定性 |
 | --- | ---: | --- | ---: | ---: | ---: | ---: | ---: | --- |
-| Zod | 581 | `full-palace` | 0.85 | 2,700 | 1.000 | 0.333 | 4 | 是，2/2 |
-| Requests | 123 | `full-palace` | 0.77 | 2,597 | 1.000 | 0.333 | 4 | 是，2/2 |
+| Zod | 581 | `full-palace` | 0.87 | 1,886 | 1.000 | 1.000 | 0 | 是，2/2 |
+| Requests | 123 | `full-palace` | 0.72 | 1,567 | 1.000 | 1.000 | 0 | 是，2/2 |
 
 两个克隆仓库的 tracked worktree 都保持干净。每次执行时间保留在
 [机器可读证据](./evidence/real-repository-validation-0.3.0.json)中供诊断，
@@ -141,14 +161,22 @@ changed-file coverage.
 文件名关联、种子占满路线、Python 方法范围固定只有 8 行，以及明确要求修改测试
 时仍可能错误进入 bypass。
 
-修正版加入词形归一化、实现体检索词、符号级测试关系、Python 类与方法范围、关系
-扩展预留容量，以及 `verificationChangeRisk`。最终两个仓库的已知目标召回率均为
-100%，但仍存在额外上下文，因此报告同时保留 target precision。这个结果只证明
-这两个固定案例的打包、跨语言索引和目标检索通过，不能扩大解释成普遍性能优势。
+第一阶段修正加入词形归一化、实现体检索词、符号级测试关系、Python 类与方法范围、
+关系扩展预留容量，以及 `verificationChangeRisk`。它把目标召回率恢复到 1.000，
+但每个仓库仍多出 4 个文件，严格目标精度只有 0.333。
+
+第二阶段发现 route limit 仍被当成必须填满的名额、符号锚点继承了整个大文件的关系、
+关系分数没有充分考虑目标文件自身的词义相关度、弱 import 与聚焦测试竞争，以及 v3/v4
+被错误当成有益多样性。最新修正改用实现符号锚点、证据强度门槛、目标相关度、测试关系
+优先和明确版本一致性。最终两个固定仓库都只返回实现与对应测试，召回率与严格精度均为
+1.000。这个结果仍只能证明这两个固定案例，不能扩大解释成普遍性能优势。
 
 ## 内部路由自评
 
-同一候选版也针对自身这次宽范围研发任务做了评估。实际修改横跨解析、索引、路由、测试、
-发行与文档，共 25 个文件；10 文件路线只命中其中 5 个，改动覆盖率 20%、路线聚焦度 50%、
-预测置信度 0.71，过度自信误差 0.51。这不属于上述两个真实仓库门槛，但作为负面结果保留。
-下一阶段重点是降低路线噪声、按任务宽度动态分配容量，并让置信度同时反映任务意图与实际覆盖率。
+早期候选版针对 25 文件宽范围研发任务，只命中 5 个文件：改动覆盖率 20%、路线聚焦度
+50%、预测置信度 0.71，过度自信误差 0.51。这个负面结果继续保留。
+
+本次精准路由修正又用实际 6 个改动文件做自评。补齐宽任务语义前只命中 1/6，置信度
+0.42；识别 routing quality、validation、MCP 与 distribution 等独立表面后，10 文件路线
+命中 4/6，覆盖率 67%、聚焦度 40%、置信度降为 0.35，转为保守但仍漏掉回归测试与生成后的
+MCP bundle。下一阶段重点因此是跨表面配额与生成物识别，同时不能为了提高覆盖率重新塞入无关文件。

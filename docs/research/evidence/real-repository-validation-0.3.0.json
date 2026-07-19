@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-19T17:12:20.006Z",
+  "generatedAt": "2026-07-19T17:46:10.736Z",
   "claimBoundary": "Product routing and packaging validation only; not an Agent performance benchmark.",
   "candidate": {
     "package": "vertex-palace@0.3.0",
     "files": 7,
-    "shasum": "20a351363316ff5227ffe5cc5bfc75a281c7ad74",
-    "integrity": "sha512-+4emR62zt2p8YY1tGjcFM5+9gpMK7cUr6d/TX8TsYbACX3lYKesUkhQByy0REmYzqBto/Isjt7DCxDWGL+1Ayg==",
+    "shasum": "70d07436888e4f17cf41e012c5c96cb10e0f7b07",
+    "integrity": "sha512-L2fF0nwz9FgWAk2gHC8tltpqr4LU4yTXel8w+kaR119Hv2FTjDxmvhvGHFYEAkejjZ25hBe1Enke4ldjhJWpfw==",
     "cleanInstallVersion": "0.3.0"
   },
   "environment": {
@@ -19,6 +19,8 @@
   "protocol": {
     "budget": 6000,
     "trialsPerRepository": 2,
+    "minimumTargetRecall": 1,
+    "minimumTargetPrecision": 1,
     "cleanPinnedClonePerRepository": true,
     "trackedWorktreeMutationAllowed": false
   },
@@ -35,36 +37,26 @@
       },
       "routeQuality": {
         "targetRecall": 1,
-        "targetPrecision": 0.333,
-        "unexpectedBoundaryFiles": [
-          "packages/zod/src/v3/types.ts",
-          "packages/zod/src/v4/classic/tests/standard-schema.test.ts",
-          "packages/zod/src/v4/classic/tests/string-formats.test.ts",
-          "packages/tsc/generate.ts"
-        ]
+        "targetPrecision": 1,
+        "unexpectedBoundaryFiles": []
       },
       "deterministicBoundaries": true,
       "trackedWorktreeClean": true,
       "trials": [
         {
           "trial": 1,
-          "elapsedMs": 5261,
+          "elapsedMs": 5675,
           "mode": "full-palace",
           "taskType": "bugfix",
-          "routeConfidence": 0.85,
+          "routeConfidence": 0.87,
           "boundaries": {
             "primary": [
-              "packages/zod/src/v4/core/schemas.ts:2360-2441",
-              "packages/zod/src/v3/types.ts:3120-3160"
+              "packages/zod/src/v4/core/schemas.ts:2360-2441"
             ],
             "support": [
-              "packages/zod/src/v4/classic/tests/discriminated-unions.test.ts",
-              "packages/zod/src/v4/classic/tests/standard-schema.test.ts",
-              "packages/zod/src/v4/classic/tests/string-formats.test.ts"
+              "packages/zod/src/v4/classic/tests/discriminated-unions.test.ts"
             ],
-            "deferred": [
-              "packages/tsc/generate.ts:49-182"
-            ],
+            "deferred": [],
             "excluded": [
               {
                 "reason": "No strong keyword, room, or route relation match.",
@@ -100,9 +92,7 @@
               }
             ],
             "requiredEvidence": [
-              "packages/zod/src/v4/classic/tests/discriminated-unions.test.ts",
-              "packages/zod/src/v4/classic/tests/standard-schema.test.ts",
-              "packages/zod/src/v4/classic/tests/string-formats.test.ts"
+              "packages/zod/src/v4/classic/tests/discriminated-unions.test.ts"
             ],
             "doNot": [
               "Do not inventory or broadly scan the repository.",
@@ -123,12 +113,12 @@
             "mode": "full-palace",
             "calls": 1,
             "contextCalls": 1,
-            "contextBytes": 10798,
-            "contextEstimatedTokens": 2700,
-            "routeStepCount": 6,
-            "primaryCount": 2,
-            "supportCount": 3,
-            "deferredCount": 1,
+            "contextBytes": 7544,
+            "contextEstimatedTokens": 1886,
+            "routeStepCount": 2,
+            "primaryCount": 1,
+            "supportCount": 1,
+            "deferredCount": 0,
             "memoryItemCount": 0,
             "memoryCandidateCount": 0,
             "memoryExcludedCount": 0,
@@ -137,32 +127,23 @@
           },
           "routeFiles": [
             "packages/zod/src/v4/core/schemas.ts",
-            "packages/zod/src/v3/types.ts",
-            "packages/zod/src/v4/classic/tests/discriminated-unions.test.ts",
-            "packages/zod/src/v4/classic/tests/standard-schema.test.ts",
-            "packages/zod/src/v4/classic/tests/string-formats.test.ts",
-            "packages/tsc/generate.ts"
+            "packages/zod/src/v4/classic/tests/discriminated-unions.test.ts"
           ]
         },
         {
           "trial": 2,
-          "elapsedMs": 1304,
+          "elapsedMs": 1307,
           "mode": "full-palace",
           "taskType": "bugfix",
-          "routeConfidence": 0.85,
+          "routeConfidence": 0.87,
           "boundaries": {
             "primary": [
-              "packages/zod/src/v4/core/schemas.ts:2360-2441",
-              "packages/zod/src/v3/types.ts:3120-3160"
+              "packages/zod/src/v4/core/schemas.ts:2360-2441"
             ],
             "support": [
-              "packages/zod/src/v4/classic/tests/discriminated-unions.test.ts",
-              "packages/zod/src/v4/classic/tests/standard-schema.test.ts",
-              "packages/zod/src/v4/classic/tests/string-formats.test.ts"
+              "packages/zod/src/v4/classic/tests/discriminated-unions.test.ts"
             ],
-            "deferred": [
-              "packages/tsc/generate.ts:49-182"
-            ],
+            "deferred": [],
             "excluded": [
               {
                 "reason": "No strong keyword, room, or route relation match.",
@@ -198,9 +179,7 @@
               }
             ],
             "requiredEvidence": [
-              "packages/zod/src/v4/classic/tests/discriminated-unions.test.ts",
-              "packages/zod/src/v4/classic/tests/standard-schema.test.ts",
-              "packages/zod/src/v4/classic/tests/string-formats.test.ts"
+              "packages/zod/src/v4/classic/tests/discriminated-unions.test.ts"
             ],
             "doNot": [
               "Do not inventory or broadly scan the repository.",
@@ -221,12 +200,12 @@
             "mode": "full-palace",
             "calls": 1,
             "contextCalls": 1,
-            "contextBytes": 10798,
-            "contextEstimatedTokens": 2700,
-            "routeStepCount": 6,
-            "primaryCount": 2,
-            "supportCount": 3,
-            "deferredCount": 1,
+            "contextBytes": 7544,
+            "contextEstimatedTokens": 1886,
+            "routeStepCount": 2,
+            "primaryCount": 1,
+            "supportCount": 1,
+            "deferredCount": 0,
             "memoryItemCount": 0,
             "memoryCandidateCount": 0,
             "memoryExcludedCount": 0,
@@ -235,11 +214,7 @@
           },
           "routeFiles": [
             "packages/zod/src/v4/core/schemas.ts",
-            "packages/zod/src/v3/types.ts",
-            "packages/zod/src/v4/classic/tests/discriminated-unions.test.ts",
-            "packages/zod/src/v4/classic/tests/standard-schema.test.ts",
-            "packages/zod/src/v4/classic/tests/string-formats.test.ts",
-            "packages/tsc/generate.ts"
+            "packages/zod/src/v4/classic/tests/discriminated-unions.test.ts"
           ]
         }
       ]
@@ -256,33 +231,24 @@
       },
       "routeQuality": {
         "targetRecall": 1,
-        "targetPrecision": 0.333,
-        "unexpectedBoundaryFiles": [
-          "tests/test_utils.py",
-          "src/requests/_types.py",
-          "src/requests/adapters.py",
-          "src/requests/compat.py"
-        ]
+        "targetPrecision": 1,
+        "unexpectedBoundaryFiles": []
       },
       "deterministicBoundaries": true,
       "trackedWorktreeClean": true,
       "trials": [
         {
           "trial": 1,
-          "elapsedMs": 1080,
+          "elapsedMs": 1106,
           "mode": "full-palace",
           "taskType": "bugfix",
-          "routeConfidence": 0.77,
+          "routeConfidence": 0.72,
           "boundaries": {
             "primary": [
               "src/requests/sessions.py:154-184"
             ],
             "support": [
-              "tests/test_requests.py:1984-1986",
-              "tests/test_utils.py:156-181",
-              "src/requests/_types.py",
-              "src/requests/adapters.py",
-              "src/requests/compat.py"
+              "tests/test_requests.py:1984-1986"
             ],
             "deferred": [],
             "excluded": [
@@ -320,10 +286,7 @@
               }
             ],
             "requiredEvidence": [
-              "tests/test_requests.py:1984-1986",
-              "tests/test_utils.py:156-181",
-              "src/requests/_types.py",
-              "src/requests/adapters.py"
+              "tests/test_requests.py:1984-1986"
             ],
             "doNot": [
               "Do not inventory or broadly scan the repository.",
@@ -344,11 +307,11 @@
             "mode": "full-palace",
             "calls": 1,
             "contextCalls": 1,
-            "contextBytes": 10385,
-            "contextEstimatedTokens": 2597,
-            "routeStepCount": 6,
+            "contextBytes": 6268,
+            "contextEstimatedTokens": 1567,
+            "routeStepCount": 2,
             "primaryCount": 1,
-            "supportCount": 5,
+            "supportCount": 1,
             "deferredCount": 0,
             "memoryItemCount": 0,
             "memoryCandidateCount": 0,
@@ -358,29 +321,21 @@
           },
           "routeFiles": [
             "src/requests/sessions.py",
-            "tests/test_requests.py",
-            "tests/test_utils.py",
-            "src/requests/_types.py",
-            "src/requests/adapters.py",
-            "src/requests/compat.py"
+            "tests/test_requests.py"
           ]
         },
         {
           "trial": 2,
-          "elapsedMs": 696,
+          "elapsedMs": 622,
           "mode": "full-palace",
           "taskType": "bugfix",
-          "routeConfidence": 0.77,
+          "routeConfidence": 0.72,
           "boundaries": {
             "primary": [
               "src/requests/sessions.py:154-184"
             ],
             "support": [
-              "tests/test_requests.py:1984-1986",
-              "tests/test_utils.py:156-181",
-              "src/requests/_types.py",
-              "src/requests/adapters.py",
-              "src/requests/compat.py"
+              "tests/test_requests.py:1984-1986"
             ],
             "deferred": [],
             "excluded": [
@@ -418,10 +373,7 @@
               }
             ],
             "requiredEvidence": [
-              "tests/test_requests.py:1984-1986",
-              "tests/test_utils.py:156-181",
-              "src/requests/_types.py",
-              "src/requests/adapters.py"
+              "tests/test_requests.py:1984-1986"
             ],
             "doNot": [
               "Do not inventory or broadly scan the repository.",
@@ -442,11 +394,11 @@
             "mode": "full-palace",
             "calls": 1,
             "contextCalls": 1,
-            "contextBytes": 10385,
-            "contextEstimatedTokens": 2597,
-            "routeStepCount": 6,
+            "contextBytes": 6268,
+            "contextEstimatedTokens": 1567,
+            "routeStepCount": 2,
             "primaryCount": 1,
-            "supportCount": 5,
+            "supportCount": 1,
             "deferredCount": 0,
             "memoryItemCount": 0,
             "memoryCandidateCount": 0,
@@ -456,11 +408,7 @@
           },
           "routeFiles": [
             "src/requests/sessions.py",
-            "tests/test_requests.py",
-            "tests/test_utils.py",
-            "src/requests/_types.py",
-            "src/requests/adapters.py",
-            "src/requests/compat.py"
+            "tests/test_requests.py"
           ]
         }
       ]
