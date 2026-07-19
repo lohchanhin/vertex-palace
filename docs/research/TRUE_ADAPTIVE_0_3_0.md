@@ -118,18 +118,19 @@ scenario.
 | Gate | Result |
 | --- | --- |
 | TypeScript lint | passed |
-| Core tests | 61/61 passed |
+| Core tests | 85/85 passed |
 | CLI tests | 2/2 passed |
 | MCP tests | 2/2 passed |
 | Monorepo build | passed |
 | Generated CLI | reports 0.3.0 |
 | Version consistency | root, four workspaces, plugin, marketplace ref, and MCP pin all match 0.3.0 |
 | Repository MCP smoke | 10 tools, version 0.3.0, passed |
-| npm pack | 7 files, package id `vertex-palace@0.3.0`, SHA-1 `84cb74abb9023183378f90242440d6c43fd98e47` |
+| npm pack | 7 files, package id `vertex-palace@0.3.0`, SHA-1 `4f4f7843cbfebaec0a9f3aade31fac24d96d1133` |
 | Clean tarball install | CLI version 0.3.0, passed |
+| Clean Git isolation | `palace context --auto` left `git status` empty; one `/.palace/` entry in local `.git/info/exclude` |
 | Clean large-index bypass | 240 distractors, 4/4 bypass, intended target, exactly 3 fields and 200 bytes each |
 | Clean relevant-memory check | switched to `full-palace`, 1 memory item included |
-| Clean boundary check | all 8 boundary fields present, 914 estimated tokens within the 6,000-token ceiling |
+| Clean boundary check | all 8 boundary fields present, 987 estimated tokens within the 6,000-token ceiling |
 | Clean installed MCP | 10 tools, version 0.3.0, bypass response was 189 bytes, passed |
 | Reproducible command | `pnpm test:release-candidate`, passed |
 

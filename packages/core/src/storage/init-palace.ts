@@ -1,4 +1,4 @@
-import { mkdir, writeFile } from "node:fs/promises";
+import { appendFile, mkdir, readFile, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { createDefaultConfig, PALACE_FLOORS } from "../config/defaults";
 import { configPath, writeConfigYaml } from "../config/palace-config";
@@ -6,9 +6,17 @@ import { ensurePitfallBoard } from "../memory/pitfall-board";
 import { exists } from "./read-palace";
 import { writeJson } from "./write-palace";
 
-export async function initPalace(root: string): Promise<{ root: string; palaceRoot: string; created: boolean; configPath: string }> {
+export async function initPalace(root: string): Promise<{
+  root: string;
+  palaceRoot: string;
+  created: boolean;
+  configPath: string;
+  gitExcludePath: string | null;
+  gitExcludeUpdated: boolean;
+}> {
   const palaceRoot = path.join(root, ".palace");
   const alreadyInitialized = await exists(configPath(root));
+  const gitExclude = await ensureGitExclude(root);
   await mkdir(palaceRoot, { recursive: true });
 
   for (const floor of PALACE_FLOORS) {
@@ -36,7 +44,71 @@ export async function initPalace(root: string): Promise<{ root: string; palaceRo
   }
   await ensurePitfallBoard(root);
 
-  return { root, palaceRoot, created: !alreadyInitialized, configPath: configPath(root) };
+  return {
+    root,
+    palaceRoot,
+    created: !alreadyInitialized,
+    configPath: configPath(root),
+    gitExcludePath: gitExclude.path,
+    gitExcludeUpdated: gitExclude.updated
+  };
+}
+
+async function ensureGitExclude(root: string): Promise<{ path: string | null; updated: boolean }> {
+  const gitDirectory = await resolveGitDirectory(root);
+  if (!gitDirectory) return { path: null, updated: false };
+
+  const excludePath = path.join(gitDirectory, "info", "exclude");
+  let source = "";
+  try {
+    source = await readFile(excludePath, "utf8");
+  } catch (error) {
+    if (!isMissing(error)) throw error;
+  }
+
+  const equivalentEntries = new Set([".palace", ".palace/", "/.palace", "/.palace/"]);
+  if (source.split(/\r?\n/).some((line) => equivalentEntries.has(line.trim()))) {
+    return { path: excludePath, updated: false };
+  }
+
+  const newline = source.includes("\r\n") ? "\r\n" : "\n";
+  const separator = source.length > 0 && !source.endsWith("\n") ? newline : "";
+  await mkdir(path.dirname(excludePath), { recursive: true });
+  await appendFile(excludePath, `${separator}/.palace/${newline}`, "utf8");
+  return { path: excludePath, updated: true };
+}
+
+async function resolveGitDirectory(root: string): Promise<string | null> {
+  const dotGit = path.join(root, ".git");
+  let metadata;
+  try {
+    metadata = await stat(dotGit);
+  } catch (error) {
+    if (isMissing(error)) return null;
+    throw error;
+  }
+
+  let gitDirectory = dotGit;
+  if (metadata.isFile()) {
+    const pointer = await readFile(dotGit, "utf8");
+    const match = /^gitdir:\s*(.+)\s*$/im.exec(pointer);
+    if (!match) return null;
+    gitDirectory = path.resolve(root, match[1]);
+  } else if (!metadata.isDirectory()) {
+    return null;
+  }
+
+  try {
+    const commonDirectory = (await readFile(path.join(gitDirectory, "commondir"), "utf8")).trim();
+    if (commonDirectory) return path.resolve(gitDirectory, commonDirectory);
+  } catch (error) {
+    if (!isMissing(error)) throw error;
+  }
+  return gitDirectory;
+}
+
+function isMissing(error: unknown): error is NodeJS.ErrnoException {
+  return error instanceof Error && "code" in error && error.code === "ENOENT";
 }
 
 async function writeFloorReadmes(root: string): Promise<void> {

@@ -69,6 +69,7 @@ async function main() {
     assert.equal(version, packageJson.version);
 
     await createLargeFixture(fixtureRoot);
+    initializeGitFixture(fixtureRoot);
     const bypassTrials = [];
     for (let trial = 1; trial <= 4; trial += 1) {
       const raw = runNode(
@@ -87,6 +88,22 @@ async function main() {
         bytes: Buffer.byteLength(raw, "utf8")
       });
     }
+    const excludePath = path.join(fixtureRoot, ".git", "info", "exclude");
+    const excludeSource = await readFile(excludePath, "utf8");
+    const excludeEntries = excludeSource.match(/^\/\.palace\/$/gm) ?? [];
+    const fixtureGitStatus = run(
+      "git",
+      ["status", "--short", "--untracked-files=all"],
+      { cwd: fixtureRoot }
+    ).stdout.trim();
+    const ignoreSource = run(
+      "git",
+      ["check-ignore", "--verbose", ".palace/palace.yml"],
+      { cwd: fixtureRoot }
+    ).stdout.trim();
+    assert.equal(excludeEntries.length, 1);
+    assert.equal(fixtureGitStatus, "");
+    assert.match(ignoreSource, /info\/exclude:\d+:\/\.palace\//);
 
     runNode([
       cliPath,
@@ -222,6 +239,11 @@ async function main() {
       files: metadata.files.length,
       shasum,
       cleanInstallVersion: version,
+      gitIsolation: {
+        statusCleanAfterContext: fixtureGitStatus === "",
+        localExcludeEntries: excludeEntries.length,
+        ignoreSource: ignoreSource.replace(/^.*?\.git\//, ".git/")
+      },
       distractorFiles: 240,
       bypassTrials,
       relevantMemory: {
@@ -351,6 +373,24 @@ async function createLargeFixture(root) {
   ]);
   const noiseFiles = await readdir(noiseRoot);
   assert.equal(noiseFiles.length, 240);
+}
+
+function initializeGitFixture(root) {
+  run("git", ["init", "--initial-branch=main"], { cwd: root });
+  run("git", ["add", "--all"], { cwd: root });
+  run(
+    "git",
+    [
+      "-c",
+      "user.name=Vertex Palace Release Candidate",
+      "-c",
+      "user.email=release-candidate@example.invalid",
+      "commit",
+      "-m",
+      "fixture baseline"
+    ],
+    { cwd: root }
+  );
 }
 
 function parsePackMetadata(stdout) {
