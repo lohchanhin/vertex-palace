@@ -1,11 +1,36 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
+import { evaluateRoute } from "../src/evaluation/evaluate-route";
 import { indexPalace } from "../src/indexer/index-palace";
 import { analyzeTask } from "../src/router/analyze-task";
 import { classifyTask } from "../src/router/classify-task";
 import { routePalace } from "../src/router/route-planner";
 import { withFixture } from "./test-utils";
+
+const RELEASE_TASK = "Release Vertex Palace 0.2.2 after fixing Adaptive Full Palace memory delivery, verify npm registry, Git tag, and public plugin MCP installation";
+
+const RELEASE_CHANGED_FILES = [
+  ".agents/plugins/marketplace.json",
+  "BUILD_WEEK.md",
+  "CHANGELOG.md",
+  "README.md",
+  "docs/research/ADAPTIVE_MEMORY_FIX_0_2_2.md",
+  "package.json",
+  "packages/cli/package.json",
+  "packages/cli/src/index.ts",
+  "packages/core/package.json",
+  "packages/core/src/packer/context-packer.ts",
+  "packages/core/src/router/mode-selector.ts",
+  "packages/core/test/context.test.ts",
+  "packages/core/test/mode-selector.test.ts",
+  "packages/mcp/package.json",
+  "packages/mcp/src/server.ts",
+  "packages/shared/package.json",
+  "plugins/vertex-palace/.codex-plugin/plugin.json",
+  "plugins/vertex-palace/.mcp.json",
+  "plugins/vertex-palace/mcp/server.cjs"
+] as const;
 
 describe("routePalace", () => {
   it("classifies retrospective evaluation tasks and preserves tenant entities", () => {
@@ -15,6 +40,83 @@ describe("routePalace", () => {
     expect(classifyTask(task)).toBe("evaluation");
     expect(analysis.keywords).toEqual(expect.arrayContaining(["retrospective", "memory", "client6-blogunlock", "client6blogunlock", "blogunlock"]));
     expect(analysis.entities).toEqual(expect.arrayContaining(["client6-blogunlock", "client6blogunlock", "blogunlock"]));
+  });
+
+  it("distinguishes release work from publish failures and application deployment", () => {
+    const analysis = analyzeTask(RELEASE_TASK);
+
+    expect(classifyTask(RELEASE_TASK)).toBe("release");
+    expect(classifyTask("发布 Vertex Palace 新版本到 npm 并建立 Git tag")).toBe("release");
+    expect(classifyTask("Fix npm publish authentication failure E401")).toBe("bugfix");
+    expect(classifyTask("修复 npm 发布失败 E401")).toBe("bugfix");
+    expect(classifyTask("Deploy the application to production")).toBe("unknown");
+    expect(analysis.keywords).toEqual(expect.arrayContaining([
+      "release",
+      "package",
+      "manifest",
+      "npm",
+      "registry",
+      "tag",
+      "plugin",
+      "mcp",
+      "adaptive",
+      "mode",
+      "selector",
+      "context",
+      "packer",
+      "test"
+    ]));
+  });
+
+  it("covers implementation, regression, package, plugin, and release records for a release task", async () => {
+    await withFixture("ts-api", async (root) => {
+      const sources = new Map<string, string>([
+        [".agents/plugins/marketplace.json", JSON.stringify({ plugins: [{ source: { ref: "v0.2.2" } }] })],
+        ["BUILD_WEEK.md", "# Vertex Palace Build Week\n\nRelease verification and public installation.\n"],
+        ["CHANGELOG.md", "# Changelog\n\n## 0.2.2\n\nAdaptive Full Palace memory delivery.\n"],
+        ["README.md", "# Vertex Palace\n\nInstall the npm package and Codex plugin.\n"],
+        ["docs/research/ADAPTIVE_MEMORY_FIX_0_2_2.md", "# Adaptive Full-Palace Memory Fidelity Fix\n\n## Release Verification\n"],
+        ["package.json", JSON.stringify({ name: "vertex-palace", version: "0.2.2" })],
+        ["packages/cli/package.json", JSON.stringify({ name: "@vertex-palace/cli", version: "0.2.2" })],
+        ["packages/cli/src/index.ts", "export const cliVersion = '0.2.2 release';\n"],
+        ["packages/core/package.json", JSON.stringify({ name: "@vertex-palace/core", version: "0.2.2" })],
+        ["packages/core/src/packer/context-packer.ts", "export function packAdaptiveFullPalaceMemory() { return 'adaptive full palace context packer scoped memory delivery'; }\n"],
+        ["packages/core/src/router/mode-selector.ts", "export function selectAdaptiveFullPalaceMode() { return 'adaptive mode selector full palace memory'; }\n"],
+        ["packages/core/test/context.test.ts", "describe('adaptive context packer memory regression', () => it('delivers memory', () => true));\n"],
+        ["packages/core/test/mode-selector.test.ts", "describe('adaptive mode selector release regression', () => it('selects full palace', () => true));\n"],
+        ["packages/mcp/package.json", JSON.stringify({ name: "@vertex-palace/mcp", version: "0.2.2" })],
+        ["packages/mcp/src/server.ts", "export const mcpServerVersion = '0.2.2 public plugin release';\n"],
+        ["packages/shared/package.json", JSON.stringify({ name: "@vertex-palace/shared", version: "0.2.2" })],
+        ["plugins/vertex-palace/.codex-plugin/plugin.json", JSON.stringify({ name: "vertex-palace", version: "0.2.2" })],
+        ["plugins/vertex-palace/.mcp.json", JSON.stringify({ mcpServers: { "vertex-palace": { args: ["vertex-palace@0.2.2"] } } })],
+        ["plugins/vertex-palace/mcp/server.cjs", "const version = '0.2.2';\n"]
+      ]);
+      for (const [relativePath, source] of sources) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const evaluation = await evaluateRoute(root, RELEASE_TASK, {
+        changedFiles: [...RELEASE_CHANGED_FILES],
+        budget: 12000,
+        routeLimit: 12,
+        maxDrawers: 4
+      });
+      const routed = evaluation.route.files;
+
+      expect(evaluation.taskType).toBe("release");
+      expect(routed).toContain("packages/core/src/packer/context-packer.ts");
+      expect(routed).toContain("packages/core/src/router/mode-selector.ts");
+      expect(routed.some((file) => /^packages\/core\/test\/(?:context|mode-selector)\.test\.ts$/.test(file))).toBe(true);
+      expect(routed).toContain("package.json");
+      expect(routed).toContain("plugins/vertex-palace/.mcp.json");
+      expect(routed.some((file) => file === "CHANGELOG.md" || file === "docs/research/ADAPTIVE_MEMORY_FIX_0_2_2.md")).toBe(true);
+      expect(evaluation.coverage.changedFileCoverage).toBeGreaterThanOrEqual(0.5);
+      expect(evaluation.coverage.routeFocus).toBeGreaterThanOrEqual(0.6);
+      expect(evaluation.calibration.status).not.toBe("overconfident");
+    });
   });
 
   it("routes evaluation feedback to Palace internals instead of nested application source", async () => {

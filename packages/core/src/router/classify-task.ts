@@ -4,6 +4,13 @@ export function classifyTask(task: string): TaskType {
   const lower = task.toLowerCase();
   if (/\b(evaluate|evaluation|assessment|retrospective|postmortem|score|rating|grade|feedback|lessons|tooling memory)\b/.test(lower)) return "evaluation";
   if (/(回顾|回顧|复盘|復盤|评估|評估|评价|評價|评分|評分|打分|总结|總結|结论|結論|整体评价|整體評價)/.test(lower)) return "evaluation";
+  const releaseIntent = /\b(release|publish|publishing|published|npm\s+publish|npm\s+registry|package\s+release|version\s+bump|bump(?:ing)?\s+(?:the\s+)?version|dist[- ]?tag|git\s+tag|release\s+candidate)\b/.test(lower)
+    || /(发布|發佈|发行|發行|版本发布|版本發佈|版本标签|版本標籤|套件发布|套件發佈|npm\s*发布|npm\s*發佈)/.test(lower);
+  const releaseFailure = releaseIntent
+    && (/\b(fix|debug|investigate|resolve)\b/.test(lower) || /(修复|修正|修補|修补|调查|調查|解决|解決)/.test(lower))
+    && (/\b(error|failed|failing|failure|broken|unauthorized|e401|otp|2fa)\b/.test(lower) || /(?:错误|錯誤|失败|失敗|未授权|未授權)/.test(lower));
+  if (releaseFailure) return "bugfix";
+  if (releaseIntent) return "release";
   if (/(修复|修正|修補|修补|错误|錯誤|失敗|失败|异常|異常|崩溃|崩潰|破图|破圖|問題|问题|bug)/.test(lower)) return "bugfix";
   if (/(新增|增加|建立|创建|創建|实现|實作|支援|支持|功能|追加|加入)/.test(lower)) return "feature";
   if (/(重构|重構|整理|清理|简化|簡化|改名|优化|優化|提升|改善|改进|改進|减少|減少|降低|控制)/.test(lower)) return "refactor";

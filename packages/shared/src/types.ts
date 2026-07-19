@@ -83,6 +83,7 @@ export type TaskType =
   | "test"
   | "explain"
   | "evaluation"
+  | "release"
   | "review"
   | "unknown";
 

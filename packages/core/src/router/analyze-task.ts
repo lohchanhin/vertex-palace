@@ -105,6 +105,10 @@ const WING_HINTS = new Set([
 const ROOM_HINTS = new Set(["api", "checkout", "footer", "general", "image", "login", "logout", "password", "policy", "product", "profile", "refresh", "session", "settings", "token", "upload", "user", "users", "variant"]);
 
 const PHRASE_KEYWORDS: Array<[RegExp, string[]]> = [
+  [/release|publish(?:ing|ed)?|npm\s+(?:publish|registry)|package\s+release|version\s+bump|dist[-\s]?tag|git\s+tag|发布|發佈|发行|發行/i, ["release", "publish", "package", "manifest", "version", "npm", "registry", "tag", "changelog"]],
+  [/plugin|marketplace|插件/i, ["plugin", "marketplace"]],
+  [/adaptive|full[-\s]?palace|route[-\s]?lite|guarded[-\s]?memory[-\s]?palace/i, ["adaptive", "mode", "selector", "context", "packer"]],
+  [/verify|verification|regression|test suite|验证|驗證|回归|回歸/i, ["test", "verification", "regression"]],
   [/benchmark|evaluate route|evaluation report|changed[-\s]?file coverage|confidence calibration|token reduction|context savings?/i, ["evaluation", "evaluate", "route", "confidence", "pack", "token"]],
   [/scanner|scanning|scan repo|ignore rules?|exclude|worktree|nested repo/i, ["scanner", "ignore"]],
   [/context pack|packing|packer|pack output/i, ["pack", "packer"]],

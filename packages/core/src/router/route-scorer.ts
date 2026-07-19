@@ -9,12 +9,21 @@ export type ScoredNode = {
   reasons: string[];
 };
 
-export type EvaluationSurface = "cli" | "mcp" | "shared" | "test" | "docs" | "ci";
+export type RouteSurface =
+  | "cli"
+  | "mcp"
+  | "shared"
+  | "test"
+  | "docs"
+  | "ci"
+  | "package"
+  | "plugin"
+  | "implementation";
 
 export function scoreNodes(nodes: PalaceNode[], edges: PalaceEdge[], analysis: TaskAnalysis, taskType: TaskType): ScoredNode[] {
   const floors = floorTemplate(taskType);
   const edgeBoosts = relationBoosts(edges);
-  const requestedSurfaces = requestedEvaluationSurfaces(analysis);
+  const requestedSurfaces = requestedRouteSurfaces(analysis);
 
   return nodes
     .filter((node) => node.kind !== "directory")
@@ -66,7 +75,12 @@ export function scoreNodes(nodes: PalaceNode[], edges: PalaceEdge[], analysis: T
         score += evaluationBoost;
         reasons.push(evaluationBoost > 0 ? "matches evaluation/meta task context" : "application source is secondary for evaluation");
       }
-      const surfaceHits = requestedSurfaces.filter((surface) => matchesEvaluationSurface(node, surface));
+      const releaseBoost = releaseHintBoost(node, taskType, analysis);
+      if (releaseBoost > 0) {
+        score += releaseBoost;
+        reasons.push("matches release or distribution surface");
+      }
+      const surfaceHits = requestedSurfaces.filter((surface) => matchesRouteSurface(node, surface));
       if (surfaceHits.length) {
         score += 45;
         reasons.push(`matches requested ${surfaceHits.join("/")} surface`);
@@ -99,7 +113,10 @@ export function scoreNodes(nodes: PalaceNode[], edges: PalaceEdge[], analysis: T
         score -= 60;
         reasons.push("penalized as trivial declaration");
       }
-      if (node.kind === "test" && taskType !== "test") {
+      if (node.kind === "test" && taskType === "release") {
+        score += 18;
+        reasons.push("release regression coverage is required");
+      } else if (node.kind === "test" && taskType !== "test") {
         score -= 20;
         reasons.push("test is secondary for this task type");
       }
@@ -162,6 +179,30 @@ function evaluationHintBoost(node: PalaceNode, taskType: TaskType, analysis: Tas
   return 0;
 }
 
+function releaseHintBoost(node: PalaceNode, taskType: TaskType, analysis: TaskAnalysis): number {
+  if (taskType !== "release") return 0;
+  const sourcePath = node.sourcePath.toLowerCase();
+  if (sourcePath === "package.json") return 130;
+  if (/^\.agents\/plugins\/marketplace\.json$/.test(sourcePath)) return 120;
+  if (/^plugins\/[^/]+\/(?:\.mcp\.json|\.codex-plugin\/plugin\.json)$/.test(sourcePath)) return 115;
+  if (/^packages\/(?:cli|mcp)\/src\/(?:index|server)\.[cm]?[jt]s$/.test(sourcePath)) return 90;
+  if (/^packages\/[^/]+\/package\.json$/.test(sourcePath)) return 72;
+  if (/(^|\/)(changelog|readme|build_week)\.md$|^docs\/research\//.test(sourcePath)) return 62;
+
+  const keywords = new Set(analysis.keywords);
+  if (
+    /^packages\/core\/src\//.test(sourcePath)
+    && hasAny(keywords, ["adaptive", "mode", "selector", "context", "packer", "memory"])
+    && /(adaptive|mode-selector|context-packer|memory)/.test(sourcePath)
+  ) return 58;
+  if (
+    /^packages\/core\/(?:test|tests)\//.test(sourcePath)
+    && hasAny(keywords, ["adaptive", "mode", "selector", "context", "packer", "test", "verification", "regression"])
+    && /(mode-selector|context|packer|adaptive)/.test(sourcePath)
+  ) return 48;
+  return 0;
+}
+
 function isEvaluationRouteAnchor(
   node: PalaceNode,
   taskType: TaskType,
@@ -190,19 +231,23 @@ function isEvaluationMetaPath(path: string, analysis: TaskAnalysis): boolean {
   return false;
 }
 
-export function requestedEvaluationSurfaces(analysis: TaskAnalysis): EvaluationSurface[] {
+export function requestedRouteSurfaces(analysis: TaskAnalysis): RouteSurface[] {
   const keywords = new Set(analysis.keywords);
-  const requested: EvaluationSurface[] = [];
+  const requested: RouteSurface[] = [];
   if (hasAny(keywords, ["cli", "command", "commands"])) requested.push("cli");
   if (keywords.has("mcp")) requested.push("mcp");
   if (hasAny(keywords, ["shared", "schema", "schemas", "type", "types", "contract", "contracts"])) requested.push("shared");
   if (hasAny(keywords, ["test", "tests", "verification", "regression"])) requested.push("test");
   if (hasAny(keywords, ["doc", "docs", "documentation", "readme"])) requested.push("docs");
   if (hasAny(keywords, ["ci", "workflow", "workflows", "actions"])) requested.push("ci");
+  if (hasAny(keywords, ["release", "publish", "package", "manifest", "version", "npm", "registry", "tag"])) requested.push("package");
+  if (hasAny(keywords, ["plugin", "marketplace"])) requested.push("plugin");
+  if (hasAny(keywords, ["adaptive", "mode", "selector", "context", "packer"])) requested.push("implementation");
+  if (hasAny(keywords, ["release", "changelog"]) && !requested.includes("docs")) requested.push("docs");
   return requested;
 }
 
-export function matchesEvaluationSurface(node: PalaceNode, surface: EvaluationSurface): boolean {
+export function matchesRouteSurface(node: PalaceNode, surface: RouteSurface): boolean {
   const sourcePath = node.sourcePath.toLowerCase();
   switch (surface) {
     case "cli":
@@ -217,6 +262,12 @@ export function matchesEvaluationSurface(node: PalaceNode, surface: EvaluationSu
       return node.kind === "doc" || /(^|\/)(docs?|readme)(\/|\.|$)|build_week\.md$/.test(sourcePath);
     case "ci":
       return /(^|\/)\.github\/workflows(\/|$)|(^|\/)(ci|workflows?)(\/|$)/.test(sourcePath);
+    case "package":
+      return sourcePath === "package.json" || /(^|\/)packages\/[^/]+\/package\.json$/.test(sourcePath);
+    case "plugin":
+      return /(^|\/)\.agents\/plugins\/marketplace\.json$|(^|\/)plugins\/[^/]+\//.test(sourcePath);
+    case "implementation":
+      return /(^|\/)packages\/core\/src\//.test(sourcePath) && node.kind !== "test";
   }
 }
 

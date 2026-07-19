@@ -10,10 +10,10 @@ import { analyzeTask } from "./analyze-task";
 import { classifyTask } from "./classify-task";
 import { locateEntry } from "./locate-entry";
 import {
-  matchesEvaluationSurface,
-  requestedEvaluationSurfaces,
+  matchesRouteSurface,
+  requestedRouteSurfaces,
   scoreNodes,
-  type EvaluationSurface,
+  type RouteSurface,
   type ScoredNode
 } from "./route-scorer";
 import { expandRoute } from "./route-expander";
@@ -31,16 +31,20 @@ export async function routePalace(root: string, task: string, options: number | 
   const analysis = analyzeTask(task);
   const taskType = classifyTask(task);
   const scored = scoreNodes(index.nodes, index.edges, analysis, taskType);
-  const requestedSurfaces = requestedEvaluationSurfaces(analysis);
+  const requestedSurfaces = requestedRouteSurfaces(analysis);
   const routeLimit =
     taskType === "evaluation"
       ? Math.max(normalized.routeLimit, Math.min(10, requestedSurfaces.length + 1))
-      : normalized.routeLimit;
+      : taskType === "release"
+        ? Math.max(normalized.routeLimit, Math.min(12, requestedSurfaces.length + 5))
+        : normalized.routeLimit;
   const initialRoute = expandRoute(scored, index.edges, index.nodes, routeLimit);
   const expanded =
     taskType === "evaluation"
       ? ensureRequestedSurfaceCoverage(initialRoute, scored, requestedSurfaces, routeLimit)
-      : initialRoute;
+      : taskType === "release"
+        ? ensureReleaseSurfaceCoverage(initialRoute, scored, requestedSurfaces, routeLimit)
+        : initialRoute;
   const now = new Date().toISOString();
 
   const routeSteps = expanded.map((item, index) => {
@@ -73,7 +77,7 @@ export async function routePalace(root: string, task: string, options: number | 
       estimatedTokens,
       reservedOutputTokens: DEFAULT_BUDGET.reservedOutputTokens
     },
-    confidence: confidence(expanded, analysis, estimatedTokens, budget),
+    confidence: confidence(expanded, analysis, estimatedTokens, budget, taskType),
     createdAt: now
   };
 
@@ -116,7 +120,8 @@ function chooseRouteTier(item: ScoredNode, index: number, taskType: TaskType): E
   const expandedByRelation = item.reasons.some((reason) => reason.startsWith("expanded through"));
   const taskMakesSupportPrimary =
     (taskType === "test" && item.node.kind === "test") ||
-    (taskType === "explain" && item.node.kind === "doc");
+    (taskType === "explain" && item.node.kind === "doc") ||
+    (taskType === "release" && ["config", "doc"].includes(item.node.kind));
 
   if (index < 2 && (!supportKind || taskMakesSupportPrimary)) return "primary";
   if (index < 5 || supportKind || expandedByRelation) return "support";
@@ -165,7 +170,7 @@ function buildExcluded(nodes: Awaited<ReturnType<typeof readIndex>>["nodes"], se
     }));
 }
 
-function confidence(selected: ScoredNode[], analysis: ReturnType<typeof analyzeTask>, estimatedTokens: number, budget: number): number {
+function confidence(selected: ScoredNode[], analysis: ReturnType<typeof analyzeTask>, estimatedTokens: number, budget: number, taskType: TaskType): number {
   if (!selected.length) return 0.1;
   const top = selected.slice(0, 12);
   const keywords = analysis.keywords.filter((keyword) => !["task", "fresh"].includes(keyword));
@@ -177,20 +182,21 @@ function confidence(selected: ScoredNode[], analysis: ReturnType<typeof analyzeT
   const budgetFit = estimatedTokens <= budget ? 1 : 0;
   const surfacePenalty = requestedSurfacePenalty(top, analysis);
   const value = (0.08 + keywordCoverage * 0.34 + scoreStrength * 0.28 + focus * 0.2 + budgetFit * 0.1) * surfacePenalty;
-  return Number(Math.max(0.1, Math.min(0.98, value)).toFixed(2));
+  const taskCap = taskType === "release" ? 0.65 : 0.98;
+  return Number(Math.max(0.1, Math.min(taskCap, value)).toFixed(2));
 }
 
 function requestedSurfacePenalty(items: ScoredNode[], analysis: ReturnType<typeof analyzeTask>): number {
-  const requested = requestedEvaluationSurfaces(analysis);
+  const requested = requestedRouteSurfaces(analysis);
   if (!requested.length) return 1;
-  const covered = requested.filter((surface) => items.some((item) => matchesEvaluationSurface(item.node, surface))).length;
+  const covered = requested.filter((surface) => items.some((item) => matchesRouteSurface(item.node, surface))).length;
   return 0.65 + (covered / requested.length) * 0.35;
 }
 
 function ensureRequestedSurfaceCoverage(
   selected: ScoredNode[],
   scored: ScoredNode[],
-  requested: EvaluationSurface[],
+  requested: RouteSurface[],
   limit: number
 ): ScoredNode[] {
   if (!requested.length) return selected;
@@ -200,11 +206,11 @@ function ensureRequestedSurfaceCoverage(
   if (selected[0]) protectedIds.add(selected[0].node.id);
 
   for (const surface of requested) {
-    let representative = result.find((item) => matchesEvaluationSurface(item.node, surface));
+    let representative = result.find((item) => matchesRouteSurface(item.node, surface));
     if (!representative) {
       representative = scored.find(
         (item) =>
-          matchesEvaluationSurface(item.node, surface) &&
+          matchesRouteSurface(item.node, surface) &&
           !result.some((selectedItem) => selectedItem.node.sourcePath === item.node.sourcePath)
       );
       if (representative) result.push(representative);
@@ -225,6 +231,46 @@ function ensureRequestedSurfaceCoverage(
     result.splice(removableIndex, 1);
   }
   return result;
+}
+
+function ensureReleaseSurfaceCoverage(
+  selected: ScoredNode[],
+  scored: ScoredNode[],
+  requested: RouteSurface[],
+  limit: number
+): ScoredNode[] {
+  const quotas: Array<[RouteSurface, number]> = [
+    ["implementation", 2],
+    ["test", 1],
+    ["package", 5],
+    ["plugin", 3],
+    ["docs", 1]
+  ];
+  const result: ScoredNode[] = [];
+  const sourcePaths = new Set<string>();
+  const append = (item: ScoredNode): boolean => {
+    if (result.length >= limit || sourcePaths.has(item.node.sourcePath)) return false;
+    result.push(item);
+    sourcePaths.add(item.node.sourcePath);
+    return true;
+  };
+
+  for (const [surface, quota] of quotas) {
+    if (!requested.includes(surface)) continue;
+    let added = 0;
+    for (const item of scored) {
+      if (!matchesRouteSurface(item.node, surface)) continue;
+      if (append(item)) added += 1;
+      if (added >= quota || result.length >= limit) break;
+    }
+  }
+
+  for (const item of [...selected, ...scored]) {
+    if (result.length >= limit) break;
+    append(item);
+  }
+
+  return result.sort((a, b) => b.score - a.score || a.node.sourcePath.localeCompare(b.node.sourcePath));
 }
 
 function nodeHaystack(item: ScoredNode): string {
