@@ -39,7 +39,7 @@ and the Pitfall Board are metadata attached to places and routes; they are not
 additional spatial axes. For example, `checkout / implementation /
 shippingQuote()` identifies one bounded context entry point.
 
-## Eight-Slide Arc
+## Twelve-Slide Arc
 
 1. Introduce Vertex Palace and the Developer Tools submission.
 2. Ground the project in the creator's experience of hour-long tasks, excessive
@@ -50,11 +50,20 @@ shippingQuote()` identifies one bounded context entry point.
 4. Demonstrate a real `palace context --auto` result.
 5. Show how `palace evaluate` measures context reduction, changed-file
    coverage, route focus, and confidence calibration.
-6. Present the preregistered 64-arm exploratory benchmark without overstating
-   its findings.
-7. Connect benchmark failures to the 0.2.2 memory-fidelity fix and the 0.2.3
-   release-routing work completed with Codex and GPT-5.6.
-8. Give judges the public npm installation and GitHub test path.
+6. Show the frozen four-arm A/B design: Control, Route-only, Full Palace, and
+   Adaptive, with 16 paired trials and 64 total arms.
+7. Compare Adaptive with no-Palace Control using paired medians and 95%
+   bootstrap intervals for tool calls, reported tokens, and wall time.
+8. Compare Adaptive with always-on Full Palace using the same visual language
+   for Palace-owned bytes, reported tokens, and wall time.
+9. Separate correctness from efficiency with the validity, public-test, hidden
+   oracle, declared-scope, and forbidden-file gates.
+10. Present the independent product evidence: 55 automated tests, build and
+    TypeScript lint, ten-tool MCP smoke, five successful CI jobs, and clean
+    public-distribution verification.
+11. Show the learning loop from the 0.2.1 memory omission to the 0.2.2
+    regression contract and the 0.2.3 cross-ecosystem release-routing matrix.
+12. Give judges the public npm installation and GitHub test path.
 
 ## Recording Guidance
 
@@ -72,9 +81,22 @@ used.
   tokens, 89.8% reduction, 100% declared changed-file coverage, and 30% route
   focus.
 - Adaptive v2.2 exploratory study: 16 trials and 64/64 valid, successful,
-  correctly scoped arms.
+  correctly scoped arms; public tests and hidden oracle both passed 64/64.
 - Adaptive versus Full median: -16,522.5 reported tokens and -6.553 seconds.
-- Adaptive versus Control median: +30,147 reported tokens and +10.919 seconds.
+- Adaptive versus Full Palace-owned payload: -898.5 bytes with a paired
+  interval of [-1,972, -550.5].
+- Adaptive versus Control median: +30,147 reported tokens, +10.919 seconds,
+  and +4.5 tool calls; only the tool-call interval stayed entirely above zero.
+- Adaptive versus Control paired intervals: tool calls [+2.5, +6.5], reported
+  tokens [-1,518.5, +39,219], and wall time [-1.433s, +31.043s].
+- Adaptive versus Full paired intervals: reported tokens [-38,931, +24,588]
+  and wall time [-13.525s, +0.336s]; both cross zero.
+- Product gates: 51 Core tests, 2 CLI tests, 2 MCP tests, build, TypeScript
+  lint, and the 10-tool MCP smoke passed.
+- GitHub Actions run `29687844288` passed all five jobs across Windows, macOS,
+  Linux, Node 20, Node 24, and the npm package dry-run.
+- Clean tarball and public-registry installs, CLI, MCP initialization,
+  annotated tag, registry hash, marketplace ref, and plugin MCP pin passed.
 
 Context-pack reduction is intentionally kept separate from total Codex
 session-token usage. The benchmark ran Vertex Palace 0.2.1 and does not prove
@@ -85,11 +107,13 @@ universal efficiency gains for later releases.
 - [`BUILD_WEEK.md`](../../BUILD_WEEK.md)
 - [`docs/research/ADAPTIVE_MEMORY_FIX_0_2_2.md`](../research/ADAPTIVE_MEMORY_FIX_0_2_2.md)
 - [`docs/research/RELEASE_ROUTING_MATRIX_RESULT_0_2_3.md`](../research/RELEASE_ROUTING_MATRIX_RESULT_0_2_3.md)
+- [`docs/research/RELEASE_0_2_3_VERIFICATION.md`](../research/RELEASE_0_2_3_VERIFICATION.md)
 - [Public benchmark final report](https://github.com/lohchanhin/benchmarks-ab-demo/blob/main/docs/research/ADAPTIVE_V2_2_FINAL.md)
+- [Verified five-job GitHub Actions run](https://github.com/lohchanhin/vertex-palace/actions/runs/29687844288)
 
 ## Quality Checks
 
-- All eight exported slides were rendered from the final PPTX and inspected at
+- All twelve exported slides were rendered from the final PPTX and inspected at
   full size.
 - The PowerPoint overflow test passed with no out-of-slide content.
 - No unresolved placeholders or layout-warning text remains.
