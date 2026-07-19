@@ -8,9 +8,9 @@ const path = require("node:path");
 const projectRoot = path.resolve(__dirname, "..");
 const packageJson = require(path.join(projectRoot, "package.json"));
 const outputPath = outputArgument(process.argv.slice(2));
-const packageSourceCommit = "8328ea29d55260e34e2e6170bd420e4c659af39e";
-const expectedPackageShasum = "4f4f7843cbfebaec0a9f3aade31fac24d96d1133";
-const expectedPackageIntegrity = "sha512-wfxQUxLKk1kQxQm8X1eGKbRaXX/yxIla8KO6PAxj83Fx+7ofwQSzla6tTVvLIlBOxchGy0OmopFdS684GDz9RA==";
+const packageSourceCommit = "acec14ef9cbb0a404f2418768774695759137c2b";
+const expectedPackageShasum = "b3af366d0b5e9f2bd5545e7f05f2ad9ac33065f7";
+const expectedPackageIntegrity = "sha512-eoLk0UB9FkzFQ9Sh8n34yKTW+mHm9jCan+LL5wwxahGemCJtHiqSVLYvDAt2q7rxEDghgVI/wlVYjS/ZK92efA==";
 const budget = 6_000;
 const trials = 2;
 
@@ -154,6 +154,13 @@ async function main() {
     const test = install.status === 0
       ? runNpmAllowFailure(["test"], { cwd: repositoryRoot, timeout: 180_000 })
       : { status: null, stdout: "", stderr: "test skipped because dependency installation failed", durationMs: 0 };
+    const diagnostics = test.status !== 0 && install.status === 0
+      ? {
+          reason: "The preregistered npm test command failed; run its behavior and type-test stages separately without changing the gate result.",
+          behavior: runNpmAllowFailure(["exec", "--", "ava"], { cwd: repositoryRoot, timeout: 180_000 }),
+          types: runNpmAllowFailure(["exec", "--", "tsd"], { cwd: repositoryRoot, timeout: 180_000 })
+        }
+      : null;
     const targetTrackedStatus = run("git", ["status", "--short", "--untracked-files=no"], { cwd: repositoryRoot }).stdout.trim();
     if (install.status !== 0) failures.push("ground-truth dependency installation failed");
     if (test.status !== 0) failures.push("ground-truth repository tests failed");
@@ -200,6 +207,29 @@ async function main() {
         unexpectedRouteFiles,
         trials: routeTrials
       },
+      gates: {
+        candidatePackage: "passed",
+        repositorySelectionAndArchitecture: trackedFiles.length <= selection.maximumTrackedFiles
+          && architecture.license === "MIT"
+          && architecture.typeExport === repository.architectureContract.typeExport
+          && architecture.runtimeExport === repository.architectureContract.runtimeExport
+          && architecture.typeTestsUseTsd
+          && sameValues(actualChangedFiles, repository.expectedChangedFiles)
+          ? "passed"
+          : "failed",
+        routing: deterministicBoundaries
+          && requiredRecall === 1
+          && acceptedPrecision === 1
+          && !validRouteTrials.some((trial) => trial.payload.contextEstimatedTokens > budget)
+          ? "passed"
+          : "failed",
+        groundTruthTestCommand: install.status === 0 && test.status === 0 && targetTrackedStatus === ""
+          ? "passed"
+          : "failed",
+        focusedBehaviorAndTypeDiagnostics: diagnostics
+          ? diagnostics.behavior.status === 0 && diagnostics.types.status === 0 ? "passed" : "failed"
+          : "not-needed"
+      },
       groundTruthTests: {
         commit: repository.groundTruthCommit,
         dependencyResolutionPinnedByRepository: false,
@@ -211,6 +241,22 @@ async function main() {
         testStatus: test.status,
         testDurationMs: test.durationMs,
         testOutputSha256: digestOutput(test),
+        testOutputSummary: summarizeOutput(test, temporaryRoot),
+        diagnostics: diagnostics
+          ? {
+              reason: diagnostics.reason,
+              behaviorCommand: "npm exec -- ava",
+              behaviorStatus: diagnostics.behavior.status,
+              behaviorDurationMs: diagnostics.behavior.durationMs,
+              behaviorOutputSha256: digestOutput(diagnostics.behavior),
+              behaviorOutputSummary: summarizeOutput(diagnostics.behavior, temporaryRoot),
+              typeCommand: "npm exec -- tsd",
+              typeStatus: diagnostics.types.status,
+              typeDurationMs: diagnostics.types.durationMs,
+              typeOutputSha256: digestOutput(diagnostics.types),
+              typeOutputSummary: summarizeOutput(diagnostics.types, temporaryRoot)
+            }
+          : null,
         trackedWorktreeClean: targetTrackedStatus === ""
       }
     };
@@ -283,6 +329,17 @@ function digestOutput(result) {
   return createHash("sha256")
     .update(`${result.stdout}\n${result.stderr}\n${result.error?.message ?? ""}`)
     .digest("hex");
+}
+
+function summarizeOutput(result, temporaryRoot) {
+  const combined = `${result.stdout}\n${result.stderr}\n${result.error?.message ?? ""}`
+    .replaceAll(temporaryRoot, "<temporary-validation-root>")
+    .split(/\r?\n/)
+    .map((line) => line.trimEnd())
+    .filter((line) => line.trim().length > 0)
+    .slice(0, 40)
+    .join("\n");
+  return combined.slice(0, 4_000);
 }
 
 function parseRouteTrial(trial, result) {

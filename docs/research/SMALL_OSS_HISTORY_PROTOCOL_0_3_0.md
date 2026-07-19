@@ -54,11 +54,27 @@ The protocol commit must exist before running:
 
 ```bash
 pnpm build
-node scripts/verify-small-oss-history.cjs --out docs/research/evidence/small-oss-history-validation-0.3.0.json
+node scripts/verify-small-oss-history.cjs --out docs/research/evidence/small-oss-history-validation-0.3.0-after-type-route-fix.json
 ```
 
 The output records a failure before returning non-zero, so an unfavorable case
 cannot disappear by replacing the repository.
+
+## Locked Iteration Record
+
+The first run is preserved in
+`docs/research/evidence/small-oss-history-validation-0.3.0.json` at commit
+`872f7da7ef47785f518d0c097063882a496a3623`. It achieved complete recall but
+routed four files outside the accepted boundary (`acceptedPrecision: 0.333`).
+The preregistered `npm test` command also failed in `xo` after resolving current
+unpinned dependencies.
+
+Commit `acec14ef9cbb0a404f2418768774695759137c2b` implements a general
+type-declaration intent rule and benchmark-path penalty. The repository, task,
+parent, ground-truth commit, required files, accepted boundary, route budget,
+and pass thresholds remain unchanged for the post-fix run. The harness still
+requires the complete upstream `npm test`; separate `ava` and `tsd` runs are
+diagnostics only and cannot turn a failed upstream command into a pass.
 
 ---
 
@@ -102,3 +118,15 @@ Control 更省 Token、更快或更正确。
 路由 parent 后，harness 会 checkout 真实 target、禁止 lifecycle scripts 安装依赖，
 再执行上游 `npm test`。由于仓库没有提交 lockfile，依赖解析未固定这一限制会明确写进
 证据。失败会先写入 JSON 再返回非零，不允许用更漂亮的仓库替换。
+
+## 锁定迭代记录
+
+第一次结果保留在 `docs/research/evidence/small-oss-history-validation-0.3.0.json`，
+对应 commit `872f7da7ef47785f518d0c097063882a496a3623`。它完整命中两个真实改动文件，
+但多带入四个边界外文件，`acceptedPrecision` 只有 `0.333`；预注册的 `npm test` 也因为
+无 lockfile 环境解析到当前依赖，在 `xo` 阶段失败。
+
+commit `acec14ef9cbb0a404f2418768774695759137c2b` 加入通用的 type-declaration intent
+与 benchmark 路径惩罚。修复后复测仍使用完全相同的仓库、任务、parent、ground-truth commit、
+必需文件、可接受边界、预算与通过阈值。完整 `npm test` 仍是正式闸门；单独执行 `ava`、`tsd`
+只用于诊断，不能把失败改写成通过。
