@@ -85,6 +85,7 @@ async function main() {
       schemaVersion: 1,
       generatedAt: new Date().toISOString(),
       claimBoundary: "Product routing and packaging validation only; not an Agent performance benchmark.",
+      sourceCommit: run("git", ["rev-parse", "HEAD"], { cwd: projectRoot }).stdout.trim(),
       candidate: {
         package: `${metadata.name}@${metadata.version}`,
         files: metadata.files.length,
