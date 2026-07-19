@@ -54,15 +54,16 @@ shippingQuote()` identifies one bounded context entry point.
 5. Show how `palace evaluate` measures context reduction, changed-file
    coverage, route focus, and confidence calibration.
 6. Show the frozen four-arm A/B design: Codex alone (the no-Palace Control),
-   Route-only, Full Palace, and Adaptive, with 16 paired trials and 64 total
-   arms. The Codex model, task, fixture, prompt, and tests remain fixed.
-7. Compare Adaptive Palace directly with Codex alone. Label every metric as an
-   `Adaptive - Codex alone` paired difference, use the result to reject an
-   always-on Palace for these synthetic tasks, and connect it to the current
-   bypass, route-lite, Full, and Guarded policy without presenting that policy
-   as post-fix performance proof.
-8. Separate correctness from efficiency with the validity, public-test, hidden
-   oracle, declared-scope, and forbidden-file gates.
+   Route-only, Full Palace, and Adaptive, across four scenarios, four
+   repetitions, and 64 total arms. The Codex model, task, fixture, prompt, and
+   tests remain fixed.
+7. Plot the actual four-arm medians for reported tokens, wall time, and tool
+   calls. Keep the bars descriptive and pair them with the 64/64 validity,
+   correctness, public-test, hidden-oracle, and scope results.
+8. Plot the paired `Adaptive - Codex alone` estimates and 95% bootstrap
+   intervals. Show that only the +4.5 tool-call overhead cleared zero, retain
+   the supported -898.5-byte Adaptive-versus-Full payload result as a separate
+   Palace-owned metric, and state the unsupported universal claims.
 9. Present the independent product evidence: 55 automated tests, build and
     TypeScript lint, ten-tool MCP smoke, five successful CI jobs, and clean
     public-distribution verification.
@@ -87,6 +88,10 @@ used.
   focus.
 - Adaptive v2.2 exploratory study: 16 trials and 64/64 valid, successful,
   correctly scoped arms; public tests and hidden oracle both passed 64/64.
+- Four-arm overall medians for Codex alone, Route-only, Full Palace, and
+  Adaptive respectively: reported tokens 126,703 / 142,070 / 144,664 /
+  147,119; wall time 63.1195s / 67.996s / 80.712s / 72.026s; tool calls
+  5 / 12.5 / 11.5 / 9.5.
 - Adaptive versus Full median: -16,522.5 reported tokens and -6.553 seconds.
 - Adaptive versus Full Palace-owned payload: -898.5 bytes with a paired
   interval of [-1,972, -550.5].
@@ -124,12 +129,13 @@ models and machines; long-lived multi-session value also remains unproven.
 - [`docs/research/RELEASE_ROUTING_MATRIX_RESULT_0_2_3.md`](../research/RELEASE_ROUTING_MATRIX_RESULT_0_2_3.md)
 - [`docs/research/RELEASE_0_2_3_VERIFICATION.md`](../research/RELEASE_0_2_3_VERIFICATION.md)
 - [`packages/core/src/router/mode-selector.ts`](../../packages/core/src/router/mode-selector.ts)
-- [Public benchmark final report](https://github.com/lohchanhin/benchmarks-ab-demo/blob/main/docs/research/ADAPTIVE_V2_2_FINAL.md)
+- [Public benchmark final report](https://github.com/lohchanhin/benchmarks-demo/blob/main/docs/research/ADAPTIVE_V2_2_FINAL.md)
+- [Machine-readable benchmark analysis](https://github.com/lohchanhin/benchmarks-demo/blob/main/results/adaptive-pilot-v2.2/analysis.json)
 - [Verified five-job GitHub Actions run](https://github.com/lohchanhin/vertex-palace/actions/runs/29687844288)
 
 ## Quality Checks
 
-- All twelve exported slides were rendered from the final PPTX and inspected at
+- All eleven exported slides were rendered from the final PPTX and inspected at
   full size.
 - The PowerPoint overflow test passed with no out-of-slide content.
 - No unresolved placeholders or layout-warning text remains.
