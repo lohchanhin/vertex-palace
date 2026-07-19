@@ -35,15 +35,13 @@ export async function routePalace(root: string, task: string, options: number | 
   const routeLimit =
     taskType === "evaluation"
       ? Math.max(normalized.routeLimit, Math.min(10, requestedSurfaces.length + 1))
-      : taskType === "release"
-        ? Math.max(normalized.routeLimit, Math.min(12, requestedSurfaces.length + 5))
-        : normalized.routeLimit;
+      : normalized.routeLimit;
   const initialRoute = expandRoute(scored, index.edges, index.nodes, routeLimit);
   const expanded =
     taskType === "evaluation"
       ? ensureRequestedSurfaceCoverage(initialRoute, scored, requestedSurfaces, routeLimit)
       : taskType === "release"
-        ? ensureReleaseSurfaceCoverage(initialRoute, scored, requestedSurfaces, routeLimit)
+        ? ensureReleaseSurfaceCoverage(scored, requestedSurfaces, analysis, routeLimit)
         : initialRoute;
   const now = new Date().toISOString();
 
@@ -234,9 +232,9 @@ function ensureRequestedSurfaceCoverage(
 }
 
 function ensureReleaseSurfaceCoverage(
-  selected: ScoredNode[],
   scored: ScoredNode[],
   requested: RouteSurface[],
+  analysis: ReturnType<typeof analyzeTask>,
   limit: number
 ): ScoredNode[] {
   const quotas: Array<[RouteSurface, number]> = [
@@ -244,7 +242,11 @@ function ensureReleaseSurfaceCoverage(
     ["test", 1],
     ["package", 5],
     ["plugin", 3],
-    ["docs", 1]
+    ["docs", 1],
+    ["mcp", 1],
+    ["cli", 1],
+    ["shared", 1],
+    ["ci", 1]
   ];
   const result: ScoredNode[] = [];
   const sourcePaths = new Set<string>();
@@ -260,17 +262,32 @@ function ensureReleaseSurfaceCoverage(
     let added = 0;
     for (const item of scored) {
       if (!matchesRouteSurface(item.node, surface)) continue;
+      if (!isReleaseSurfaceCandidate(item, surface, analysis)) continue;
       if (append(item)) added += 1;
       if (added >= quota || result.length >= limit) break;
     }
   }
 
-  for (const item of [...selected, ...scored]) {
-    if (result.length >= limit) break;
-    append(item);
-  }
-
   return result.sort((a, b) => b.score - a.score || a.node.sourcePath.localeCompare(b.node.sourcePath));
+}
+
+function isReleaseSurfaceCandidate(
+  item: ScoredNode,
+  surface: RouteSurface,
+  analysis: ReturnType<typeof analyzeTask>
+): boolean {
+  const sourcePath = item.node.sourcePath.toLowerCase();
+  if (surface === "test") {
+    return /(release|publish|version|plugin|marketplace|mcp|mode-selector|context|packer|adaptive)/.test(sourcePath);
+  }
+  if (surface !== "package") return true;
+
+  const keywords = new Set(analysis.keywords);
+  if (keywords.has("python") || keywords.has("pypi")) return /(^|\/)(pyproject\.toml|setup\.(?:py|cfg))$/.test(sourcePath);
+  if (keywords.has("rust") || keywords.has("cargo") || keywords.has("crate")) return /(^|\/)cargo\.toml$/.test(sourcePath);
+  if (keywords.has("java") || keywords.has("maven") || keywords.has("gradle")) return /(^|\/)(pom\.xml|build\.gradle(?:\.kts)?)$/.test(sourcePath);
+  if (keywords.has("dotnet") || keywords.has("nuget")) return /\.csproj$/.test(sourcePath);
+  return true;
 }
 
 function nodeHaystack(item: ScoredNode): string {

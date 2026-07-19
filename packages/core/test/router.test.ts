@@ -106,6 +106,18 @@ describe("routePalace", () => {
       });
       const routed = evaluation.route.files;
 
+      if (process.env.RELEASE_ROUTING_REPORT === "1") {
+        process.stdout.write(`${JSON.stringify({
+          name: "R1-vertex-palace-replication",
+          taskType: evaluation.taskType,
+          routeFiles: evaluation.route.files,
+          changedFileCoverage: evaluation.coverage.changedFileCoverage,
+          routeFocus: evaluation.coverage.routeFocus,
+          confidence: evaluation.route.confidence,
+          calibration: evaluation.calibration
+        })}\n`);
+      }
+
       expect(evaluation.taskType).toBe("release");
       expect(routed).toContain("packages/core/src/packer/context-packer.ts");
       expect(routed).toContain("packages/core/src/router/mode-selector.ts");

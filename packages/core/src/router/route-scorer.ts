@@ -182,11 +182,11 @@ function evaluationHintBoost(node: PalaceNode, taskType: TaskType, analysis: Tas
 function releaseHintBoost(node: PalaceNode, taskType: TaskType, analysis: TaskAnalysis): number {
   if (taskType !== "release") return 0;
   const sourcePath = node.sourcePath.toLowerCase();
-  if (sourcePath === "package.json") return 130;
+  if (isPackageManifestPath(sourcePath) && !sourcePath.includes("/")) return 130;
   if (/^\.agents\/plugins\/marketplace\.json$/.test(sourcePath)) return 120;
   if (/^plugins\/[^/]+\/(?:\.mcp\.json|\.codex-plugin\/plugin\.json)$/.test(sourcePath)) return 115;
   if (/^packages\/(?:cli|mcp)\/src\/(?:index|server)\.[cm]?[jt]s$/.test(sourcePath)) return 90;
-  if (/^packages\/[^/]+\/package\.json$/.test(sourcePath)) return 72;
+  if (isPackageManifestPath(sourcePath)) return 72;
   if (/(^|\/)(changelog|readme|build_week)\.md$|^docs\/research\//.test(sourcePath)) return 62;
 
   const keywords = new Set(analysis.keywords);
@@ -263,12 +263,16 @@ export function matchesRouteSurface(node: PalaceNode, surface: RouteSurface): bo
     case "ci":
       return /(^|\/)\.github\/workflows(\/|$)|(^|\/)(ci|workflows?)(\/|$)/.test(sourcePath);
     case "package":
-      return sourcePath === "package.json" || /(^|\/)packages\/[^/]+\/package\.json$/.test(sourcePath);
+      return isPackageManifestPath(sourcePath);
     case "plugin":
       return /(^|\/)\.agents\/plugins\/marketplace\.json$|(^|\/)plugins\/[^/]+\//.test(sourcePath);
     case "implementation":
       return /(^|\/)packages\/core\/src\//.test(sourcePath) && node.kind !== "test";
   }
+}
+
+function isPackageManifestPath(sourcePath: string): boolean {
+  return /(^|\/)(?:package\.json|pyproject\.toml|setup\.(?:py|cfg)|cargo\.toml|go\.mod|pom\.xml|build\.gradle(?:\.kts)?|composer\.json|gemfile|[^/]+\.csproj)$/.test(sourcePath);
 }
 
 function hasEvaluationKeywordPath(path: string, analysis: TaskAnalysis): boolean {

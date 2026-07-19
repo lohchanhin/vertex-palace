@@ -10,6 +10,9 @@ export function classifyTask(task: string): TaskType {
     && (/\b(fix|debug|investigate|resolve)\b/.test(lower) || /(修复|修正|修補|修补|调查|調查|解决|解決)/.test(lower))
     && (/\b(error|failed|failing|failure|broken|unauthorized|e401|otp|2fa)\b/.test(lower) || /(?:错误|錯誤|失败|失敗|未授权|未授權)/.test(lower));
   if (releaseFailure) return "bugfix";
+  if (releaseIntent && (/^\s*(explain|describe|summarize|how|why|what)\b|\bhow\s+to\b/.test(lower) || /^\s*(解释|解釋|说明|說明|如何|为什么|為什麼)/.test(lower))) return "explain";
+  if (releaseIntent && (/^\s*(review|audit|inspect|check)\b/.test(lower) || /^\s*(审核|審核|审查|審查|检查|檢查)/.test(lower))) return "review";
+  if (releaseIntent && (/^\s*(test|verify|validate)\b/.test(lower) || /^\s*(测试|測試|验证|驗證)/.test(lower))) return "test";
   if (releaseIntent) return "release";
   if (/(修复|修正|修補|修补|错误|錯誤|失敗|失败|异常|異常|崩溃|崩潰|破图|破圖|問題|问题|bug)/.test(lower)) return "bugfix";
   if (/(新增|增加|建立|创建|創建|实现|實作|支援|支持|功能|追加|加入)/.test(lower)) return "feature";
