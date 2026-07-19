@@ -1,6 +1,6 @@
 {
   "name": "@vertex-palace/shared",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Shared schemas and types for Vertex Palace.",
   "license": "MIT",
   "type": "module",

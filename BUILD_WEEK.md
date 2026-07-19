@@ -30,6 +30,22 @@ Version 0.1.5 adds `palace evaluate` and the `palace_evaluate` MCP tool. The eva
 
 This feature addresses a concrete limitation found during large-project use: a plausible-looking route and a high confidence value do not prove that the route included the files that ultimately mattered.
 
+### Cross-ecosystem release routing
+
+Version 0.2.3 adds a dedicated release task type after the tool misclassified
+its own 0.2.2 publication task as `unknown`. The frozen real-repository baseline
+found only 3/19 changed files with 0.25 route focus and 0.52 overconfidence
+error. The corrected route reached 12/19 coverage, 1.00 focus, and 0.02
+calibration error.
+
+A protocol committed before matrix execution then tested JavaScript monorepo,
+Codex plugin, Python/PyPI, and Chinese release scenarios plus publication
+failure, explanation, review, test-only, and deployment controls. The final
+matrix passed without lowering thresholds, and all scored routes reached 1.00
+focus. Rejected intermediate results remain in the repository research record.
+This study measures routing quality and does not claim lower total agent tokens
+or faster wall-clock time.
+
 ## Codex And GPT-5.6 Collaboration
 
 The submission-period work was developed with Codex using GPT-5.6. Codex was used to:
@@ -54,7 +70,7 @@ The Devpost submission will include the `/feedback` Session ID from the primary 
 Install the public competition release, then run it in the repository you want to evaluate:
 
 ```bash
-npm install -g vertex-palace@0.2.2
+npm install -g vertex-palace@0.2.3
 palace --version
 palace context "improve route confidence calibration" --auto --format json
 palace evaluate "improve route confidence calibration" --changed-file packages/core/src/evaluation/evaluate-route.ts

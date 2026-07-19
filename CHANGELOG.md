@@ -2,6 +2,35 @@
 
 ## Unreleased
 
+## 0.2.3 - 2026-07-19
+
+### Added
+
+- A dedicated `release` task type with English and Chinese publication intent recognition.
+- Cross-ecosystem package-manifest routing for npm, PyPI, Cargo, Go, Maven/Gradle, Composer, Ruby, and .NET projects.
+- Reproducible release-routing matrix fixtures for JavaScript monorepos, Codex plugins, Python/PyPI, Chinese release tasks, and negative intent controls.
+- Opt-in structured test reporters for the frozen real-repository release task and the cross-ecosystem matrix.
+
+### Changed
+
+- Release routes reserve capacity for implementation, regression tests, package manifests, plugin metadata, release records, MCP, CLI, shared contracts, and CI surfaces.
+- Explicit route limits are treated as maxima instead of targets; unused capacity no longer pulls unrelated files into a release route.
+- Package-manifest selection is ecosystem-aware, and release test slots require release-related path evidence.
+- Release-route confidence remains conservatively capped and is evaluated against observed changed-file coverage.
+
+### Fixed
+
+- Prevented actual npm, Git tag, and plugin publication work from falling through to `unknown`.
+- Prevented explanation, review, test-only, and publication-failure tasks from being misclassified as releases.
+- Recognized `pyproject.toml` and other non-JavaScript package manifests as release surfaces.
+- Preserved the caller's explicit route limit for plugin distribution tasks.
+
+### Research
+
+- The frozen Vertex Palace release task improved from 3/19 changed-file coverage and 0.25 route focus to 12/19 coverage and 1.00 focus, with calibration error reduced from 0.52 to 0.02.
+- The preregistered cross-ecosystem matrix passed without lowering thresholds; all scored final routes reached 1.00 focus.
+- These routing results do not claim lower total agent tokens or faster wall-clock time.
+
 ## 0.2.2 - 2026-07-19
 
 ### Fixed
