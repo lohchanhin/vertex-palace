@@ -23,6 +23,7 @@ export * from "./router/locate-entry";
 export * from "./router/route-planner";
 export * from "./router/route-scorer";
 export * from "./router/route-expander";
+export * from "./router/mode-selector";
 export * from "./packer/token-estimator";
 export * from "./packer/context-packer";
 export * from "./packer/snippet-extractor";
@@ -78,13 +79,40 @@ export async function palacePack(input: {
 }
 
 export async function palaceContext(input: import("@vertex-palace/shared").PalaceContextInput) {
+  const root = resolveRoot(input.root);
   const { packContext } = await import("./packer/context-packer");
-  return packContext(resolveRoot(input.root), input.task, {
+  if (!input.auto && !input.mode) {
+    return packContext(root, input.task, {
+      budget: input.budget,
+      format: input.format,
+      routeLimit: input.routeLimit,
+      maxDrawers: input.maxDrawers,
+      includeExcluded: false
+    });
+  }
+
+  const [{ routePalace }, { readIndex }, { selectPalaceMode }] = await Promise.all([
+    import("./router/route-planner"),
+    import("./storage/read-palace"),
+    import("./router/mode-selector")
+  ]);
+  const route = await routePalace(root, input.task, {
+    budget: input.budget,
+    routeLimit: input.routeLimit
+  });
+  const index = await readIndex(root);
+  const modeSelection = selectPalaceMode(index, route, input.task, {
+    budget: input.budget,
+    override: input.mode
+  });
+  return packContext(root, input.task, {
     budget: input.budget,
     format: input.format,
+    routeId: route.id,
     routeLimit: input.routeLimit,
     maxDrawers: input.maxDrawers,
-    includeExcluded: false
+    includeExcluded: false,
+    modeSelection
   });
 }
 

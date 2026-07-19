@@ -12,7 +12,9 @@ export const TaskInputSchema = RootInputSchema.extend({
 
 export const ContextInputSchema = TaskInputSchema.extend({
   routeLimit: z.number().int().positive().optional(),
-  maxDrawers: z.number().int().positive().optional()
+  maxDrawers: z.number().int().positive().optional(),
+  auto: z.boolean().optional(),
+  mode: z.enum(["bypass", "route-lite", "full-palace", "guarded-memory-palace"]).optional()
 });
 
 export const EvaluationInputSchema = RootInputSchema.extend({

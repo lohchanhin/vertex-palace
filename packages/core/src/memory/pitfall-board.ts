@@ -2,6 +2,7 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import type { MemoryInput } from "@vertex-palace/shared";
 import { hashText } from "../scanner/file-hash";
+import { estimateTokens } from "../packer/token-estimator";
 import { writeJson } from "../storage/write-palace";
 import { redactSecrets } from "./redact";
 
@@ -25,6 +26,32 @@ type PitfallBoardPackOptions = {
   task?: string;
   taskType?: string;
   limit?: number;
+};
+
+export type GuardedMemoryItem = {
+  id: string;
+  text: string;
+  scope: string;
+  ageDays: number;
+  confidence: number;
+  risk: "low" | "medium" | "high";
+  source: PitfallBoardEntry["source"];
+  memoryPath: string;
+  contradictionCheck: string;
+};
+
+export type GuardedMemoryResult = {
+  items: GuardedMemoryItem[];
+  estimatedTokens: number;
+};
+
+export type GuardedMemoryOptions = {
+  task: string;
+  taskType?: string;
+  limit?: number;
+  maxTokens?: number;
+  maxAgeDays?: number;
+  now?: Date;
 };
 
 export function pitfallBoardPath(root: string): string {
@@ -97,6 +124,52 @@ export async function readPitfallBoardForPack(root: string, options: PitfallBoar
   }
 }
 
+export async function readGuardedMemory(
+  root: string,
+  options: GuardedMemoryOptions
+): Promise<GuardedMemoryResult> {
+  const limit = Math.max(0, Math.min(3, options.limit ?? 3));
+  const maxTokens = Math.max(100, Math.min(600, options.maxTokens ?? 600));
+  const maxAgeDays = Math.max(1, options.maxAgeDays ?? 90);
+  const now = options.now ?? new Date();
+  const index = await readPitfallIndex(pitfallIndexPath(root));
+  const taskTokens = tokenizeForPitfall(options.task);
+  const candidates = index.entries
+    .map((entry, index) => {
+      const ageDays = ageInDays(entry.createdAt, now);
+      return {
+        entry,
+        index,
+        ageDays,
+        score: pitfallRelevance(entry, taskTokens, options.taskType)
+      };
+    })
+    .filter((candidate) => candidate.score > 0 && candidate.ageDays <= maxAgeDays)
+    .sort((a, b) => b.score - a.score || a.ageDays - b.ageDays || a.index - b.index);
+
+  const items: GuardedMemoryItem[] = [];
+  let estimatedTokens = 0;
+  for (const candidate of candidates) {
+    if (items.length >= limit) break;
+    const item = toGuardedMemoryItem(candidate.entry, candidate.score, candidate.ageDays, options.task);
+    const itemTokens = estimateTokens(renderGuardedMemoryItem(item));
+    if (estimatedTokens + itemTokens > maxTokens) continue;
+    items.push(item);
+    estimatedTokens += itemTokens;
+  }
+
+  return { items, estimatedTokens };
+}
+
+export function renderGuardedMemoryItem(item: GuardedMemoryItem): string {
+  return [
+    `- ${item.text}`,
+    `  Scope: ${item.scope} | Age: ${item.ageDays}d | Confidence: ${item.confidence} | Risk: ${item.risk}`,
+    `  Check: ${item.contradictionCheck}`,
+    `  Evidence: ${item.memoryPath}`
+  ].join("\n");
+}
+
 async function writeBoard(root: string, entries: PitfallBoardEntry[]): Promise<void> {
   await writeFile(pitfallBoardPath(root), renderPitfallBoard(entries), "utf8");
 }
@@ -145,13 +218,52 @@ function pitfallRelevance(entry: PitfallBoardEntry, taskTokens: Set<string>, tas
 }
 
 function tokenizeForPitfall(value: string): Set<string> {
-  return new Set(
-    value
+  const ascii = value
       .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
       .toLowerCase()
       .split(/[^a-z0-9]+/)
-      .filter((token) => token.length > 2 && !["the", "and", "for", "with", "task", "route", "fix", "bug", "fresh", "test"].includes(token))
-  );
+      .filter((token) => token.length > 2 && !["the", "and", "for", "with", "task", "route", "fix", "bug", "fresh", "test"].includes(token));
+  const cjkChunks = value.match(/[\u3400-\u9fff]+/g) ?? [];
+  const cjk = cjkChunks.flatMap((chunk) => {
+    const tokens = [chunk];
+    for (let size = 2; size <= Math.min(4, chunk.length); size += 1) {
+      for (let index = 0; index <= chunk.length - size; index += 1) tokens.push(chunk.slice(index, index + size));
+    }
+    return tokens;
+  });
+  return new Set([...ascii, ...cjk]);
+}
+
+function toGuardedMemoryItem(
+  entry: PitfallBoardEntry,
+  relevance: number,
+  ageDays: number,
+  task: string
+): GuardedMemoryItem {
+  const clientMatch = Boolean(entry.client && task.toLowerCase().includes(entry.client.toLowerCase()));
+  const risk = entry.outcome === "failed" || entry.source === "failed-attempt"
+    ? "high"
+    : clientMatch || relevance >= 4
+      ? "medium"
+      : "low";
+  const confidence = Math.max(0.35, Math.min(0.92, 0.4 + relevance * 0.08 - ageDays / 500));
+  return {
+    id: entry.id,
+    text: entry.text,
+    scope: entry.client ?? "project",
+    ageDays,
+    confidence: Number(confidence.toFixed(2)),
+    risk,
+    source: entry.source,
+    memoryPath: entry.memoryPath,
+    contradictionCheck: "Verify against current code and tests before applying."
+  };
+}
+
+function ageInDays(createdAt: string, now: Date): number {
+  const created = new Date(createdAt).getTime();
+  if (!Number.isFinite(created)) return Number.MAX_SAFE_INTEGER;
+  return Math.max(0, Math.floor((now.getTime() - created) / 86_400_000));
 }
 
 function normalizePitfallText(value: string): string {

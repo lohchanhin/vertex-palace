@@ -32,6 +32,50 @@ export type LoadLevel =
   | "full_file"
   | "defer";
 
+export type PalaceMode =
+  | "bypass"
+  | "route-lite"
+  | "full-palace"
+  | "guarded-memory-palace";
+
+export type RouteTier = "primary" | "support" | "deferred" | "excluded";
+
+export type MemoryLevel = "none" | "hint" | "scoped-summary" | "guarded-evidence";
+
+export type PalaceRiskSignals = {
+  crossStack: boolean;
+  memoryRelevant: boolean;
+  staleMemoryRisk: boolean;
+  tenantIsolationRisk: boolean;
+  publicContractRisk: boolean;
+  testOnly: boolean;
+};
+
+export type PalaceModeSelection = {
+  mode: PalaceMode;
+  confidence: number;
+  reasons: string[];
+  disabledSections: string[];
+  maxContextTokens: number;
+  memoryLevel: MemoryLevel;
+  riskSignals: PalaceRiskSignals;
+};
+
+export type PalacePayloadMetrics = {
+  mode: PalaceMode;
+  calls: number;
+  contextCalls: number;
+  contextBytes: number;
+  contextEstimatedTokens: number;
+  routeStepCount: number;
+  primaryCount: number;
+  supportCount: number;
+  deferredCount: number;
+  memoryItemCount: number;
+  memoryEstimatedTokens: number;
+  guardrailCount: number;
+};
+
 export type TaskType =
   | "bugfix"
   | "feature"
@@ -136,6 +180,9 @@ export type PalaceRouteStep = {
   loadLevel: LoadLevel;
   estimatedTokens: number;
   priority: number;
+  tier?: Exclude<RouteTier, "excluded">;
+  confidence?: number;
+  evidence?: string[];
 };
 
 export type PalaceRoute = {
@@ -272,6 +319,9 @@ export type PackOutput = {
   task: string;
   routeId: string;
   estimatedTokens: number;
+  mode?: PalaceMode;
+  modeSelection?: PalaceModeSelection;
+  payload?: PalacePayloadMetrics;
   markdown?: string;
   json?: unknown;
 };
@@ -283,6 +333,8 @@ export type PalaceContextInput = {
   format?: "markdown" | "json";
   routeLimit?: number;
   maxDrawers?: number;
+  auto?: boolean;
+  mode?: PalaceMode;
 };
 
 export type PalaceEvaluationInput = {

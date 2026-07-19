@@ -11,7 +11,12 @@ describe("toolDefinitions", () => {
       properties: {
         task: { type: "string" },
         routeLimit: { type: "number" },
-        maxDrawers: { type: "number" }
+        maxDrawers: { type: "number" },
+        auto: { type: "boolean" },
+        mode: {
+          type: "string",
+          enum: ["bypass", "route-lite", "full-palace", "guarded-memory-palace"]
+        }
       }
     });
   });

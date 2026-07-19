@@ -1,7 +1,7 @@
 {
   "name": "vertex-palace",
-  "version": "0.1.6",
-  "description": "Memory-palace context routing for Codex coding tasks.",
+  "version": "0.2.0",
+  "description": "Adaptive memory-palace context routing for Codex coding tasks.",
   "author": {
     "name": "Vertex Palace Contributors",
     "url": "https://github.com/lohchanhin/vertex-palace"
@@ -21,14 +21,14 @@
   "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "Vertex Palace",
-    "shortDescription": "Route Codex through a structured project knowledge palace.",
-    "longDescription": "Vertex Palace builds a spatial index for repositories and lets Codex retrieve only the needed floors, rooms, drawers, files, and symbols before coding.",
+    "shortDescription": "Select the smallest safe project context for Codex.",
+    "longDescription": "Vertex Palace builds a local spatial index, selects an adaptive context mode, and gives Codex measured Primary, Support, Deferred, and guarded-memory context before coding.",
     "developerName": "Vertex Palace Contributors",
     "category": "Productivity",
     "capabilities": ["Read", "Write"],
     "defaultPrompt": [
       "Use Vertex Palace to index this repository.",
-      "Use Vertex Palace before implementing this task.",
+      "Use Adaptive Vertex Palace before implementing this task.",
       "Use Vertex Palace to find a minimal route."
     ],
     "composerIcon": "./assets/icon.png",

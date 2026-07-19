@@ -1,11 +1,24 @@
-import type { PackOutput, PalaceNode, PalaceRoute } from "@vertex-palace/shared";
+import type {
+  LoadLevel,
+  PackOutput,
+  PalaceModeSelection,
+  PalaceNode,
+  PalacePayloadMetrics,
+  PalaceRoute,
+  PalaceRouteStep
+} from "@vertex-palace/shared";
 import { DEFAULT_BUDGET } from "../config/defaults";
-import { readPitfallBoardForPack } from "../memory/pitfall-board";
-import { readIndex } from "../storage/read-palace";
+import {
+  readGuardedMemory,
+  readPitfallBoardForPack,
+  renderGuardedMemoryItem,
+  type GuardedMemoryResult
+} from "../memory/pitfall-board";
 import { routePalace } from "../router/route-planner";
-import { estimateTokens } from "./token-estimator";
-import { extractNodeContent, languageFence } from "./snippet-extractor";
+import { readIndex } from "../storage/read-palace";
 import type { PackFormat } from "./output-format";
+import { extractNodeContent, languageFence } from "./snippet-extractor";
+import { estimateTokens } from "./token-estimator";
 
 export type PackContextOptions = {
   budget?: number;
@@ -14,17 +27,39 @@ export type PackContextOptions = {
   routeLimit?: number;
   maxDrawers?: number;
   includeExcluded?: boolean;
+  modeSelection?: PalaceModeSelection;
+};
+
+type PackedDrawer = {
+  node: PalaceNode;
+  content: string;
+  tokens: number;
+  reason: string;
+  step: PalaceRouteStep;
+};
+
+type TieredRoute = {
+  primary: PalaceRouteStep[];
+  support: PalaceRouteStep[];
+  deferred: PalaceRouteStep[];
 };
 
 export async function packContext(root: string, task: string, options: PackContextOptions = {}): Promise<PackOutput> {
   const index = await readIndex(root);
   const routeOptions = { budget: options.budget, routeLimit: options.routeLimit };
-  const route = options.routeId ? index.routes.find((candidate) => candidate.id === options.routeId) ?? (await routePalace(root, task, routeOptions)) : await routePalace(root, task, routeOptions);
+  const route = options.routeId
+    ? index.routes.find((candidate) => candidate.id === options.routeId) ?? (await routePalace(root, task, routeOptions))
+    : await routePalace(root, task, routeOptions);
   const refreshedIndex = await readIndex(root);
+
+  if (options.modeSelection) {
+    return packAdaptiveContext(root, task, route, refreshedIndex.nodes, options);
+  }
+
   const byId = new Map(refreshedIndex.nodes.map((node) => [node.id, node]));
   const maxTokens = options.budget ?? DEFAULT_BUDGET.maxInputTokens;
   const maxDrawers = options.maxDrawers ?? defaultMaxDrawers(maxTokens, route.taskType);
-  const drawers: Array<{ node: PalaceNode; content: string; tokens: number; reason: string }> = [];
+  const drawers: PackedDrawer[] = [];
   const pitfallBoard = await readPitfallBoardForPack(root, { task, taskType: route.taskType });
   let used = estimateTokens(routeSummary(route, options.includeExcluded !== false)) + estimateTokens(pitfallBoard ?? "");
 
@@ -36,7 +71,7 @@ export async function packContext(root: string, task: string, options: PackConte
     const tokens = estimateTokens(content) + estimateTokens(step.reason);
     if (used + tokens > maxTokens - DEFAULT_BUDGET.bufferTokens && drawers.length > 0) continue;
     used += tokens;
-    drawers.push({ node, content, tokens, reason: step.reason });
+    drawers.push({ node, content, tokens, reason: step.reason, step });
   }
 
   const json = {
@@ -59,8 +94,486 @@ export async function packContext(root: string, task: string, options: PackConte
     task,
     routeId: route.id,
     estimatedTokens: used,
-    markdown: renderMarkdown(task, route, drawers, { includeExcluded: options.includeExcluded !== false, pitfallBoard })
+    markdown: renderMarkdown(task, route, drawers, {
+      includeExcluded: options.includeExcluded !== false,
+      pitfallBoard
+    })
   };
+}
+
+async function packAdaptiveContext(
+  root: string,
+  task: string,
+  route: PalaceRoute,
+  nodes: PalaceNode[],
+  options: PackContextOptions
+): Promise<PackOutput> {
+  const selection = options.modeSelection as PalaceModeSelection;
+  const tiered = tierRoute(route);
+  const memory = selection.mode === "guarded-memory-palace"
+    ? await readGuardedMemory(root, {
+        task,
+        taskType: route.taskType,
+        limit: selection.riskSignals.staleMemoryRisk ? 2 : 3,
+        maxTokens: selection.riskSignals.staleMemoryRisk ? 500 : 600,
+        maxAgeDays: selection.riskSignals.staleMemoryRisk ? 60 : 90
+      })
+    : emptyGuardedMemory();
+  const guardrails = adaptiveGuardrails(selection, memory);
+  const desiredSteps = adaptiveLoadSteps(selection, tiered);
+  const byId = new Map(nodes.map((node) => [node.id, node]));
+  const maxDrawers = options.maxDrawers ?? adaptiveMaxDrawers(selection.mode);
+  const drawers: PackedDrawer[] = [];
+  const buffer = Math.min(400, Math.max(100, Math.floor(selection.maxContextTokens * 0.12)));
+  let used = estimateTokens(adaptiveRouteSummary(task, route, tiered, selection, guardrails, memory));
+
+  for (const step of desiredSteps) {
+    if (drawers.length >= maxDrawers) break;
+    const node = byId.get(step.nodeId);
+    if (!node) continue;
+    const loadLevel = adaptiveLoadLevel(step.loadLevel, selection.mode, node);
+    let content = await extractNodeContent(root, node, loadLevel);
+    let tokens = estimateTokens(content) + estimateTokens(step.reason);
+    if (used + tokens > selection.maxContextTokens - buffer) {
+      content = node.summary;
+      tokens = estimateTokens(content) + estimateTokens(step.reason);
+    }
+    if (used + tokens > selection.maxContextTokens - buffer) continue;
+    used += tokens;
+    drawers.push({ node, content, tokens, reason: step.reason, step: { ...step, loadLevel } });
+  }
+
+  const loadedIds = new Set(drawers.map((drawer) => drawer.step.nodeId));
+  const deferredReferences = route.route.filter((step) => !loadedIds.has(step.nodeId));
+  const baseMetrics = metricSkeleton(selection, tiered, memory, guardrails);
+
+  if (options.format === "json") {
+    let payload = baseMetrics;
+    let json = adaptiveJson(task, route, selection, tiered, drawers, deferredReferences, guardrails, memory, payload);
+    for (let attempt = 0; attempt < 4; attempt += 1) {
+      const serialized = serializeJsonOutput(json);
+      payload = withMeasuredPayload(baseMetrics, serialized);
+      json = adaptiveJson(task, route, selection, tiered, drawers, deferredReferences, guardrails, memory, payload);
+    }
+    const serialized = serializeJsonOutput(json);
+    payload = withMeasuredPayload(baseMetrics, serialized);
+    json = adaptiveJson(task, route, selection, tiered, drawers, deferredReferences, guardrails, memory, payload);
+    return {
+      task,
+      routeId: route.id,
+      mode: selection.mode,
+      modeSelection: selection,
+      payload,
+      estimatedTokens: payload.contextEstimatedTokens,
+      json
+    };
+  }
+
+  let payload = baseMetrics;
+  let markdown = renderAdaptiveMarkdown(
+    task,
+    route,
+    selection,
+    tiered,
+    drawers,
+    deferredReferences,
+    guardrails,
+    memory,
+    payload
+  );
+  for (let attempt = 0; attempt < 4; attempt += 1) {
+    payload = withMeasuredPayload(baseMetrics, markdown);
+    markdown = renderAdaptiveMarkdown(
+      task,
+      route,
+      selection,
+      tiered,
+      drawers,
+      deferredReferences,
+      guardrails,
+      memory,
+      payload
+    );
+  }
+  payload = withMeasuredPayload(baseMetrics, markdown);
+  markdown = renderAdaptiveMarkdown(
+    task,
+    route,
+    selection,
+    tiered,
+    drawers,
+    deferredReferences,
+    guardrails,
+    memory,
+    payload
+  );
+
+  return {
+    task,
+    routeId: route.id,
+    mode: selection.mode,
+    modeSelection: selection,
+    payload,
+    estimatedTokens: payload.contextEstimatedTokens,
+    markdown
+  };
+}
+
+export function serializePackOutput(output: PackOutput): string {
+  return output.markdown ?? serializeJsonOutput(output.json);
+}
+
+function serializeJsonOutput(value: unknown): string {
+  return `${JSON.stringify(value, null, 2)}\n`;
+}
+
+function adaptiveJson(
+  task: string,
+  route: PalaceRoute,
+  selection: PalaceModeSelection,
+  tiered: TieredRoute,
+  drawers: PackedDrawer[],
+  deferredReferences: PalaceRouteStep[],
+  guardrails: string[],
+  memory: GuardedMemoryResult,
+  payload: PalacePayloadMetrics
+): unknown {
+  if (selection.mode === "bypass") {
+    return {
+      task,
+      mode: selection.mode,
+      selection: compactSelection(selection),
+      route: {
+        id: route.id,
+        taskType: route.taskType,
+        confidence: route.confidence,
+        directTarget: tiered.primary[0]?.sourcePath ?? null
+      },
+      context: [],
+      recommendedExecution: recommendedExecution(selection.mode),
+      payload
+    };
+  }
+  return {
+    task,
+    mode: selection.mode,
+    selection: compactSelection(selection),
+    route: {
+      id: route.id,
+      taskType: route.taskType,
+      confidence: route.confidence,
+      entry: route.entry,
+      primary: tiered.primary.map(compactRouteStep)
+    },
+    context: drawers.map((drawer) => ({
+      sourcePath: drawer.node.sourcePath,
+      palacePath: drawer.node.palacePath,
+      title: drawer.node.title,
+      tier: drawer.step.tier ?? inferredTier(drawer.step.priority),
+      loadLevel: drawer.step.loadLevel,
+      reason: drawer.reason,
+      estimatedTokens: drawer.tokens,
+      content: drawer.content
+    })),
+    deferredReferences: deferredReferences.map(compactDeferredStep),
+    guardrails,
+    memory: memory.items,
+    recommendedExecution: recommendedExecution(selection.mode),
+    payload
+  };
+}
+
+function renderAdaptiveMarkdown(
+  task: string,
+  route: PalaceRoute,
+  selection: PalaceModeSelection,
+  tiered: TieredRoute,
+  drawers: PackedDrawer[],
+  deferredReferences: PalaceRouteStep[],
+  guardrails: string[],
+  memory: GuardedMemoryResult,
+  payload: PalacePayloadMetrics
+): string {
+  if (selection.mode === "bypass") {
+    return renderBypassMarkdown(task, route, selection, tiered, payload);
+  }
+  const lines = [
+    "# Vertex Palace Adaptive Context",
+    "",
+    `Mode: ${selection.mode}`,
+    `Mode confidence: ${selection.confidence}`,
+    `Route confidence: ${route.confidence}`,
+    `Why: ${selection.reasons.join(" ")}`,
+    "",
+    "## Task",
+    "",
+    task,
+    "",
+    "## Payload",
+    "",
+    `Calls: ${payload.contextCalls} | Bytes: ${payload.contextBytes} | Estimated tokens: ${payload.contextEstimatedTokens}`,
+    `Route: ${payload.routeStepCount} (${payload.primaryCount} primary, ${payload.supportCount} support, ${payload.deferredCount} deferred)`,
+    `Memory: ${payload.memoryItemCount} items / ~${payload.memoryEstimatedTokens} tokens | Guardrails: ${payload.guardrailCount}`,
+    "",
+    "## Primary Route",
+    "",
+    ...(tiered.primary.length ? tiered.primary.map(renderRouteReference) : ["- No primary route selected."]),
+    ""
+  ];
+
+  if (guardrails.length) {
+    lines.push("## Guardrails", "", ...guardrails.map((guardrail) => `- ${guardrail}`), "");
+  }
+
+  if (selection.mode === "guarded-memory-palace") {
+    lines.push(
+      "## Guarded Memory",
+      "",
+      ...(memory.items.length
+        ? memory.items.flatMap((item) => renderGuardedMemoryItem(item).split("\n"))
+        : ["- No relevant, current memory evidence met the scope and age checks."]),
+      ""
+    );
+  }
+
+  if (drawers.length) {
+    lines.push("## Routed Context", "");
+    for (const drawer of drawers) {
+      const location = drawer.node.startLine
+        ? `${drawer.node.sourcePath}:${drawer.node.startLine}${drawer.node.endLine ? `-${drawer.node.endLine}` : ""}`
+        : drawer.node.sourcePath;
+      lines.push(
+        `### ${drawer.step.tier ?? inferredTier(drawer.step.priority)}: ${location}`,
+        "",
+        `Reason: ${drawer.reason}`,
+        "",
+        `\`\`\`${languageFence(drawer.node)}`,
+        drawer.content.trimEnd(),
+        "```",
+        ""
+      );
+    }
+  } else {
+    lines.push(
+      "## Routed Context",
+      "",
+      "No source content packed. Inspect the named target directly and expand only when evidence requires it.",
+      ""
+    );
+  }
+
+  lines.push(
+    "## Deferred Context",
+    "",
+    ...(deferredReferences.length
+      ? deferredReferences.map(renderRouteReference)
+      : ["- None. All selected route steps are already represented above."]),
+    "",
+    "## Recommended Execution",
+    "",
+    ...recommendedExecution(selection.mode).map((step, index) => `${index + 1}. ${step}`),
+    ""
+  );
+  return lines.join("\n");
+}
+
+function renderBypassMarkdown(
+  task: string,
+  route: PalaceRoute,
+  selection: PalaceModeSelection,
+  tiered: TieredRoute,
+  payload: PalacePayloadMetrics
+): string {
+  return [
+    "# Vertex Palace Adaptive Context",
+    "",
+    "Mode: bypass",
+    `Mode confidence: ${selection.confidence}`,
+    `Why: ${selection.reasons.join(" ")}`,
+    "",
+    "## Task",
+    "",
+    task,
+    "",
+    "## Payload",
+    "",
+    `Calls: ${payload.contextCalls} | Bytes: ${payload.contextBytes} | Estimated tokens: ${payload.contextEstimatedTokens}`,
+    `Route: ${payload.routeStepCount} (${payload.primaryCount} primary, ${payload.supportCount} support, ${payload.deferredCount} deferred)`,
+    "Memory: 0 items / ~0 tokens | Guardrails: 0",
+    "",
+    "## Direct Target",
+    "",
+    tiered.primary[0]?.sourcePath ?? `Route ${route.id}`,
+    "",
+    "No source content packed. Inspect the target directly and expand only when code or test evidence requires it.",
+    ""
+  ].join("\n");
+}
+
+function tierRoute(route: PalaceRoute): TieredRoute {
+  const tiered: TieredRoute = { primary: [], support: [], deferred: [] };
+  for (const step of route.route) tiered[step.tier ?? inferredTier(step.priority)].push(step);
+  if (!tiered.primary.length && route.route[0]) {
+    tiered.primary.push(route.route[0]);
+    tiered.support = tiered.support.filter((step) => step.nodeId !== route.route[0].nodeId);
+    tiered.deferred = tiered.deferred.filter((step) => step.nodeId !== route.route[0].nodeId);
+  }
+  return tiered;
+}
+
+function adaptiveLoadSteps(selection: PalaceModeSelection, tiered: TieredRoute): PalaceRouteStep[] {
+  if (selection.mode === "bypass") return [];
+  if (selection.mode === "route-lite") return tiered.primary;
+  return [...tiered.primary, ...tiered.support];
+}
+
+function adaptiveLoadLevel(
+  loadLevel: LoadLevel,
+  mode: PalaceModeSelection["mode"],
+  node: PalaceNode
+): LoadLevel {
+  if (!node.startLine) return "summary";
+  if (mode === "route-lite" && loadLevel === "full_file") return "snippet";
+  return loadLevel;
+}
+
+function adaptiveMaxDrawers(mode: PalaceModeSelection["mode"]): number {
+  if (mode === "bypass") return 0;
+  if (mode === "route-lite") return 2;
+  if (mode === "guarded-memory-palace") return 4;
+  return 5;
+}
+
+function adaptiveGuardrails(selection: PalaceModeSelection, memory: GuardedMemoryResult): string[] {
+  const guardrails: string[] = [];
+  if (memory.items.length) guardrails.push("Current code and tests outrank remembered decisions and pitfalls.");
+  if (selection.riskSignals.tenantIsolationRisk) guardrails.push("Confirm tenant or client scope before changing shared behavior.");
+  if (selection.riskSignals.staleMemoryRisk) guardrails.push("Treat stale or legacy evidence as a warning, not an instruction.");
+  if (selection.riskSignals.crossStack) guardrails.push("Verify the contract at every routed layer boundary.");
+  if (selection.riskSignals.publicContractRisk) guardrails.push("Check callers and compatibility before changing the public contract.");
+  return guardrails;
+}
+
+function recommendedExecution(mode: PalaceModeSelection["mode"]): string[] {
+  if (mode === "bypass") {
+    return [
+      "Open the explicitly named file and inspect the smallest relevant symbol.",
+      "Run targeted verification; expand scope only when code or test evidence points elsewhere."
+    ];
+  }
+  if (mode === "route-lite") {
+    return [
+      "Read the primary routed context before opening additional files.",
+      "Use deferred references only when the primary code or targeted tests expose a dependency."
+    ];
+  }
+  if (mode === "guarded-memory-palace") {
+    return [
+      "Validate each memory item against current code before relying on it.",
+      "Inspect primary context, then supporting context, and run scope-specific tests."
+    ];
+  }
+  return [
+    "Inspect primary context first, then supporting context in route order.",
+    "Run targeted tests before broadening into deferred references."
+  ];
+}
+
+function metricSkeleton(
+  selection: PalaceModeSelection,
+  tiered: TieredRoute,
+  memory: GuardedMemoryResult,
+  guardrails: string[]
+): PalacePayloadMetrics {
+  return {
+    mode: selection.mode,
+    calls: 1,
+    contextCalls: 1,
+    contextBytes: 0,
+    contextEstimatedTokens: 0,
+    routeStepCount: tiered.primary.length + tiered.support.length + tiered.deferred.length,
+    primaryCount: tiered.primary.length,
+    supportCount: tiered.support.length,
+    deferredCount: tiered.deferred.length,
+    memoryItemCount: memory.items.length,
+    memoryEstimatedTokens: memory.estimatedTokens,
+    guardrailCount: guardrails.length
+  };
+}
+
+function withMeasuredPayload(base: PalacePayloadMetrics, payload: string): PalacePayloadMetrics {
+  return {
+    ...base,
+    contextBytes: Buffer.byteLength(payload, "utf8"),
+    contextEstimatedTokens: estimateTokens(payload)
+  };
+}
+
+function compactRouteStep(step: PalaceRouteStep): unknown {
+  return {
+    sourcePath: step.sourcePath,
+    palacePath: step.palacePath,
+    tier: step.tier ?? inferredTier(step.priority),
+    loadLevel: step.loadLevel,
+    confidence: step.confidence,
+    reason: step.reason
+  };
+}
+
+function compactDeferredStep(step: PalaceRouteStep): unknown {
+  return {
+    sourcePath: step.sourcePath,
+    tier: step.tier ?? inferredTier(step.priority),
+    reason: step.reason
+  };
+}
+
+function compactSelection(selection: PalaceModeSelection): unknown {
+  return {
+    confidence: selection.confidence,
+    reasons: selection.reasons,
+    maxContextTokens: selection.maxContextTokens,
+    memoryLevel: selection.memoryLevel,
+    risks: Object.entries(selection.riskSignals)
+      .filter(([, enabled]) => enabled)
+      .map(([risk]) => risk)
+  };
+}
+
+function renderRouteReference(step: PalaceRouteStep): string {
+  const tier = step.tier ?? inferredTier(step.priority);
+  return `- ${step.sourcePath} (${tier}, ${step.loadLevel}): ${step.reason}`;
+}
+
+function inferredTier(priority: number): "primary" | "support" | "deferred" {
+  if (priority <= 2) return "primary";
+  if (priority <= 5) return "support";
+  return "deferred";
+}
+
+function emptyGuardedMemory(): GuardedMemoryResult {
+  return { items: [], estimatedTokens: 0 };
+}
+
+function adaptiveRouteSummary(
+  task: string,
+  route: PalaceRoute,
+  tiered: TieredRoute,
+  selection: PalaceModeSelection,
+  guardrails: string[],
+  memory: GuardedMemoryResult
+): string {
+  return [
+    task,
+    route.taskType,
+    selection.mode,
+    ...selection.reasons,
+    ...tiered.primary.map((step) => `${step.sourcePath} ${step.reason}`),
+    ...tiered.support.map((step) => step.sourcePath),
+    ...tiered.deferred.map((step) => step.sourcePath),
+    ...guardrails,
+    ...memory.items.map(renderGuardedMemoryItem)
+  ].join("\n");
 }
 
 function routeSummary(route: PalaceRoute, includeExcluded: boolean): string {
@@ -85,7 +598,7 @@ function defaultMaxDrawers(budget: number, taskType?: PalaceRoute["taskType"]): 
 function renderMarkdown(
   task: string,
   route: PalaceRoute,
-  drawers: Array<{ node: PalaceNode; content: string; tokens: number; reason: string }>,
+  drawers: PackedDrawer[],
   options: { includeExcluded: boolean; pitfallBoard?: string }
 ): string {
   const lines: string[] = [
@@ -127,7 +640,9 @@ function renderMarkdown(
   }
 
   for (const drawer of drawers) {
-    const location = drawer.node.startLine ? `${drawer.node.sourcePath}:${drawer.node.startLine}${drawer.node.endLine ? `-${drawer.node.endLine}` : ""}` : drawer.node.sourcePath;
+    const location = drawer.node.startLine
+      ? `${drawer.node.sourcePath}:${drawer.node.startLine}${drawer.node.endLine ? `-${drawer.node.endLine}` : ""}`
+      : drawer.node.sourcePath;
     lines.push(
       "",
       `### Drawer: ${drawer.node.cabinet ?? drawer.node.title}${drawer.node.drawer ? ` / ${drawer.node.drawer}` : ""}`,

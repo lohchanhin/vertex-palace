@@ -2,6 +2,28 @@
 
 ## Unreleased
 
+## 0.2.0 - 2026-07-19
+
+### Added
+
+- Adaptive `palace context --auto` mode selection across `bypass`, `route-lite`, `full-palace`, and `guarded-memory-palace`.
+- Primary, Support, and Deferred route tiers with per-step confidence and evidence.
+- Measured payload metrics for actual context bytes, estimated tokens, route tiers, memory items, and guardrails.
+- One canonical context serializer shared by Core, CLI, and MCP, so payload metrics describe the final delivered Markdown or formatted JSON body without a duplicate MCP wrapper.
+- Guarded memory retrieval with relevance, scope, age, confidence, risk, contradiction checks, and a 600-token ceiling.
+- CLI `--mode` override and equivalent `auto` / `mode` inputs on the `palace_context` MCP tool for repeatable evaluation.
+
+### Changed
+
+- Adaptive route-lite packs load file summaries instead of accidentally expanding file-level snippets into full files.
+- Memory is disabled in Adaptive modes unless task risk explicitly selects guarded memory.
+- Documentation and plugin guidance now describe efficiency as a measured outcome, not a guaranteed consequence of fewer routed paths.
+
+### Fixed
+
+- Prevented file nodes without line ranges from injecting entire source files into Adaptive route-lite contexts.
+- Prevented unrelated recent pitfall entries from being used as fallback memory in guarded packs.
+
 ## 0.1.6 - 2026-07-19
 
 ### Added

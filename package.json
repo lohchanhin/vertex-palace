@@ -1,7 +1,7 @@
 {
   "name": "vertex-palace",
-  "version": "0.1.6",
-  "description": "Memory-palace context routing for Codex coding tasks.",
+  "version": "0.2.0",
+  "description": "Adaptive memory-palace context routing for Codex coding tasks.",
   "license": "MIT",
   "type": "module",
   "bin": {

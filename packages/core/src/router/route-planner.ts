@@ -1,5 +1,5 @@
 import path from "node:path";
-import type { LoadLevel, PalaceRoute } from "@vertex-palace/shared";
+import type { LoadLevel, PalaceRoute, RouteTier, TaskType } from "@vertex-palace/shared";
 import { DEFAULT_BUDGET } from "../config/defaults";
 import { indexPalace } from "../indexer/index-palace";
 import { readIndex } from "../storage/read-palace";
@@ -45,6 +45,7 @@ export async function routePalace(root: string, task: string, options: number | 
 
   const routeSteps = expanded.map((item, index) => {
     const loadLevel = chooseLoadLevel(item.node.kind, index, item.score);
+    const tier = chooseRouteTier(item, index, taskType);
     return {
       nodeId: item.node.id,
       palacePath: item.node.palacePath,
@@ -52,7 +53,10 @@ export async function routePalace(root: string, task: string, options: number | 
       reason: item.reasons[0] ?? `Matched ${analysis.keywords.join(", ") || "task"} against palace index.`,
       loadLevel,
       estimatedTokens: estimatedTokensForLevel(item.node.tokenCost, loadLevel),
-      priority: index + 1
+      priority: index + 1,
+      tier,
+      confidence: Number(Math.max(0.1, Math.min(0.99, item.score / 160)).toFixed(2)),
+      evidence: item.reasons.slice(0, 3)
     };
   });
 
@@ -105,6 +109,18 @@ function chooseLoadLevel(kind: string, index: number, score: number): LoadLevel 
   if (kind === "test") return "snippet";
   if (kind === "doc" || kind === "config") return "summary";
   return index < 3 ? "snippet" : "summary";
+}
+
+function chooseRouteTier(item: ScoredNode, index: number, taskType: TaskType): Exclude<RouteTier, "excluded"> {
+  const supportKind = ["test", "config", "doc"].includes(item.node.kind);
+  const expandedByRelation = item.reasons.some((reason) => reason.startsWith("expanded through"));
+  const taskMakesSupportPrimary =
+    (taskType === "test" && item.node.kind === "test") ||
+    (taskType === "explain" && item.node.kind === "doc");
+
+  if (index < 2 && (!supportKind || taskMakesSupportPrimary)) return "primary";
+  if (index < 5 || supportKind || expandedByRelation) return "support";
+  return "deferred";
 }
 
 function estimatedTokensForLevel(base: number, loadLevel: LoadLevel): number {

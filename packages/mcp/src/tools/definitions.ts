@@ -36,7 +36,7 @@ export const toolDefinitions: ToolDefinition[] = [
   },
   {
     name: "palace_context",
-    description: "Prepare compact task context in one call, automatically initializing, refreshing the index, routing, and packing as needed.",
+    description: "Prepare task context in one call, with optional adaptive mode selection and measured payload metrics.",
     inputSchema: {
       type: "object",
       required: ["task"],
@@ -46,7 +46,13 @@ export const toolDefinitions: ToolDefinition[] = [
         budget: { type: "number" },
         format: { type: "string", enum: ["markdown", "json"] },
         routeLimit: { type: "number", description: "Maximum route steps to plan." },
-        maxDrawers: { type: "number", description: "Maximum source drawers to include." }
+        maxDrawers: { type: "number", description: "Maximum source drawers to include." },
+        auto: { type: "boolean", description: "Select the smallest safe context mode automatically." },
+        mode: {
+          type: "string",
+          enum: ["bypass", "route-lite", "full-palace", "guarded-memory-palace"],
+          description: "Force an adaptive mode for repeatable tests."
+        }
       }
     }
   },

@@ -4,6 +4,8 @@ coverage/
 .palace/
 work/
 outputs/
+.tmp-package-test-*/
+*.tgz
 *.log
 *.tsbuildinfo
 .env

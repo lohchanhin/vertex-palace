@@ -7,10 +7,12 @@ import {
   palaceOpen,
   palacePack,
   palaceRoute,
+  serializePackOutput,
   palaceStatus,
   palaceWriteMemory,
   type LoadLevel,
-  type MemoryInput
+  type MemoryInput,
+  type PalaceMode
 } from "@vertex-palace/core";
 
 type ToolArgs = Record<string, unknown>;
@@ -23,15 +25,19 @@ export async function callTool(name: string, args: ToolArgs): Promise<unknown> {
       return palaceInit({ root: asString(args.root) });
     case "palace_index":
       return palaceIndex({ root: asString(args.root) });
-    case "palace_context":
-      return palaceContext({
+    case "palace_context": {
+      const output = await palaceContext({
         root: asString(args.root),
         task: requiredString(args.task, "task"),
         budget: asNumber(args.budget),
         format: args.format === "json" ? "json" : "markdown",
         routeLimit: asNumber(args.routeLimit),
-        maxDrawers: asNumber(args.maxDrawers)
+        maxDrawers: asNumber(args.maxDrawers),
+        auto: typeof args.auto === "boolean" ? args.auto : undefined,
+        mode: asPalaceMode(args.mode)
       });
+      return serializePackOutput(output);
+    }
     case "palace_route":
       return palaceRoute({
         root: asString(args.root),
@@ -104,4 +110,10 @@ function asNumber(value: unknown): number | undefined {
 
 function asStringArray(value: unknown): string[] | undefined {
   return Array.isArray(value) ? value.filter((item): item is string => typeof item === "string") : undefined;
+}
+
+function asPalaceMode(value: unknown): PalaceMode | undefined {
+  return typeof value === "string" && ["bypass", "route-lite", "full-palace", "guarded-memory-palace"].includes(value)
+    ? value as PalaceMode
+    : undefined;
 }

@@ -1,7 +1,7 @@
 {
   "name": "@vertex-palace/core",
-  "version": "0.1.6",
-  "description": "Core Vertex Palace scanner, indexer, router, packer, and memory engine.",
+  "version": "0.2.0",
+  "description": "Core Vertex Palace adaptive scanner, router, packer, and guarded-memory engine.",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.js",

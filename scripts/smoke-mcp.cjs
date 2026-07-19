@@ -10,7 +10,7 @@ const responses = new Map();
 let buffer = Buffer.alloc(0);
 let finished = false;
 
-const timeout = setTimeout(() => fail(new Error("Timed out waiting for MCP initialize and tools/list responses.")), 15000);
+const timeout = setTimeout(() => fail(new Error("Timed out waiting for MCP initialize, tools/list, and palace_context responses.")), 30000);
 
 child.stderr.on("data", (chunk) => process.stderr.write(chunk));
 child.on("error", fail);
@@ -22,7 +22,7 @@ child.stdout.on("data", (chunk) => {
   for (const message of readMessages()) {
     responses.set(message.id, message);
   }
-  if (responses.has(1) && responses.has(2)) verify();
+  if (responses.has(1) && responses.has(2) && responses.has(3)) verify();
 });
 
 child.stdin.write(frame({
@@ -36,6 +36,19 @@ child.stdin.write(frame({
   }
 }));
 child.stdin.write(frame({ jsonrpc: "2.0", id: 2, method: "tools/list", params: {} }));
+child.stdin.write(frame({
+  jsonrpc: "2.0",
+  id: 3,
+  method: "tools/call",
+  params: {
+    name: "palace_context",
+    arguments: {
+      task: "Fix formatting in package.json",
+      auto: true,
+      format: "json"
+    }
+  }
+}));
 
 function frame(message) {
   const body = JSON.stringify(message);
@@ -67,6 +80,7 @@ function verify() {
   if (finished) return;
   const initialized = responses.get(1);
   const tools = responses.get(2);
+  const contextResponse = responses.get(3);
   const names = tools?.result?.tools?.map((tool) => tool.name) ?? [];
 
   if (initialized?.result?.serverInfo?.version !== version) {
@@ -78,9 +92,26 @@ function verify() {
     return;
   }
 
+  const contextText = contextResponse?.result?.content?.[0]?.text;
+  let context;
+  try {
+    context = JSON.parse(contextText);
+  } catch {
+    fail(new Error("palace_context did not return a directly parseable JSON context body."));
+    return;
+  }
+  if (context.payload?.contextBytes !== Buffer.byteLength(contextText, "utf8")) {
+    fail(new Error(`palace_context byte metric mismatch: reported ${context.payload?.contextBytes ?? "none"}, delivered ${Buffer.byteLength(contextText, "utf8")}.`));
+    return;
+  }
+  if (context.payload?.contextEstimatedTokens > context.selection?.maxContextTokens) {
+    fail(new Error(`palace_context exceeded its selected budget: ${context.payload.contextEstimatedTokens} > ${context.selection.maxContextTokens}.`));
+    return;
+  }
+
   finished = true;
   clearTimeout(timeout);
-  process.stdout.write(`MCP smoke test passed for Vertex Palace ${version} (${names.length} tools).\n`);
+  process.stdout.write(`MCP smoke test passed for Vertex Palace ${version} (${names.length} tools, ${context.mode} context, ${context.payload.contextEstimatedTokens} estimated tokens).\n`);
   child.stdin.end();
   child.kill();
 }
