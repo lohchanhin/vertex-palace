@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-19T18:30:19.317Z",
+  "generatedAt": "2026-07-19T18:56:06.339Z",
   "claimBoundary": "Product routing and packaging validation only; not an Agent performance benchmark.",
-  "sourceCommit": "5cae580a67c3b8d3b6885abb900a69cd285ecbc0",
+  "sourceCommit": "ef010c196f3a9ba659e705a363fade8686403b1b",
   "candidate": {
     "package": "vertex-palace@0.3.0",
     "files": 7,
-    "shasum": "d3b6888db80896a2837fe7e5222305749c2dd846",
-    "integrity": "sha512-x9KLJGApVtGC1hLYyRGxUT+imnKWV5/4xrJg2Gh6vd1Q59lRr7CDHJTVxIQwGNNAaF/PC8AjPr6eSnsURfJlwA==",
+    "shasum": "f8de1e69907293e62cad458bc48b85bdd160e9a4",
+    "integrity": "sha512-wfGz/dMsUDp0xC5ckNvsJhMq8xOxt5/WXrzs3UiVGp91OvN/2Pl9tSo7974ogQmwSxd2WJloPO+8byeXHsRXYw==",
     "cleanInstallVersion": "0.3.0"
   },
   "environment": {
@@ -46,7 +46,7 @@
       "trials": [
         {
           "trial": 1,
-          "elapsedMs": 5651,
+          "elapsedMs": 5944,
           "mode": "full-palace",
           "taskType": "bugfix",
           "routeConfidence": 0.87,
@@ -133,7 +133,7 @@
         },
         {
           "trial": 2,
-          "elapsedMs": 1360,
+          "elapsedMs": 1551,
           "mode": "full-palace",
           "taskType": "bugfix",
           "routeConfidence": 0.87,
@@ -240,7 +240,7 @@
       "trials": [
         {
           "trial": 1,
-          "elapsedMs": 1186,
+          "elapsedMs": 1223,
           "mode": "full-palace",
           "taskType": "bugfix",
           "routeConfidence": 0.72,
@@ -327,7 +327,7 @@
         },
         {
           "trial": 2,
-          "elapsedMs": 621,
+          "elapsedMs": 658,
           "mode": "full-palace",
           "taskType": "bugfix",
           "routeConfidence": 0.72,

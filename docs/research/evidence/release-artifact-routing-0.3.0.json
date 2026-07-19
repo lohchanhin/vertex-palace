@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-07-19T18:56:06.339Z",
+  "claimBoundary": "Product routing evaluation only; not an Agent token, time, tool-call, or correctness benchmark.",
+  "productSource": "ef010c196f3a9ba659e705a363fade8686403b1b",
+  "benchmarkSource": "a0f21d6674b5928c13c4d78af03c3c3f22155d4b",
+  "classificationMatrix": [
+    {
+      "task": "Update the release-candidate machine evidence and README",
+      "taskType": "evaluation"
+    },
+    {
+      "task": "更新 Vertex Palace 发布候选与真实仓库机器证据说明",
+      "taskType": "evaluation"
+    },
+    {
+      "task": "Fix release-candidate evidence classification",
+      "taskType": "bugfix"
+    },
+    {
+      "task": "Publish the verified Vertex Palace package to npm",
+      "taskType": "release"
+    }
+  ],
+  "benchmarkFollowUp": {
+    "task": "同步 Vertex Palace 产品源码、研究证据与 CI 到 control-first v3 计划、英文协议、简体中文协议和 README；保留 frozen false 与零 Agent outcomes",
+    "changedFiles": [
+      "src/commands/study.mjs",
+      "test/study.test.mjs",
+      "results/control-first-v3/plan.json",
+      "docs/research/CONTROL_FIRST_V3_PREFLIGHT.md",
+      "docs/research/PROTOCOL_V3.md",
+      "docs/zh-CN/PROTOCOL_V3.md",
+      "README.md",
+      "docs/zh-CN/README.md"
+    ],
+    "routeFiles": [
+      "results/control-first-v3/plan.json",
+      "src/commands/study.mjs",
+      "docs/research/CONTROL_FIRST_V3_PREFLIGHT.md",
+      "docs/research/PROTOCOL_V3.md",
+      "README.md",
+      "docs/zh-CN/PROTOCOL_V3.md",
+      ".github/workflows/ci.yml",
+      "docs/zh-CN/README.md",
+      "test/study.test.mjs"
+    ],
+    "changedFileCoverage": 1,
+    "routeFocus": 0.89,
+    "confidence": 0.35
+  },
+  "productSelfEvaluation": {
+    "task": "Fix release-candidate evidence classification and preserve a focused regression test when release verification scripts compete for a bounded bugfix route",
+    "routeId": "route_3e21d8dab421869b",
+    "changedFiles": [
+      "packages/core/src/router/publication-intent.ts",
+      "packages/core/src/router/classify-task.ts",
+      "packages/core/src/router/analyze-task.ts",
+      "packages/core/src/router/route-scorer.ts",
+      "packages/core/src/router/route-planner.ts",
+      "packages/core/test/router.test.ts",
+      "packages/core/test/release-routing.test.ts",
+      "plugins/vertex-palace/mcp/server.cjs"
+    ],
+    "matchedFiles": [
+      "packages/core/src/router/analyze-task.ts",
+      "packages/core/src/router/route-scorer.ts",
+      "packages/core/src/router/route-planner.ts",
+      "packages/core/test/router.test.ts",
+      "packages/core/test/release-routing.test.ts"
+    ],
+    "missedFiles": [
+      "packages/core/src/router/publication-intent.ts",
+      "packages/core/src/router/classify-task.ts",
+      "plugins/vertex-palace/mcp/server.cjs"
+    ],
+    "routeFileCount": 10,
+    "changedFileCoverage": 0.63,
+    "routeFocus": 0.5,
+    "confidence": 0.65,
+    "assessment": "needs-review"
+  },
+  "verification": {
+    "targetedTests": 27,
+    "workspaceTests": 78,
+    "lint": "passed",
+    "releaseCandidate": "passed",
+    "mcpTools": 10,
+    "crossPlatformCi": {
+      "runId": 29699542507,
+      "url": "https://github.com/lohchanhin/vertex-palace/actions/runs/29699542507",
+      "status": "success",
+      "jobs": [
+        "windows-latest / Node 20",
+        "macos-latest / Node 20",
+        "ubuntu-latest / Node 20",
+        "ubuntu-latest / Node 24",
+        "npm package dry run"
+      ]
+    },
+    "zod": {
+      "repetitions": 2,
+      "targetRecall": 1,
+      "strictTargetPrecision": 1
+    },
+    "requests": {
+      "repetitions": 2,
+      "targetRecall": 1,
+      "strictTargetPrecision": 1
+    }
+  },
+  "openWork": [
+    "Sibling-module association for coordinated router changes",
+    "Source-to-generated-artifact provenance for MCP and CLI bundles",
+    "Frozen order-balanced Control-first Agent trials before token or time claims"
+  ]
+}

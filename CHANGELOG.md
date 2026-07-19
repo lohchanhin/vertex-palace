@@ -32,6 +32,8 @@
 - Multi-surface tasks recognize routing quality, validation, MCP, and distribution intent, cannot use focused expansion, and receive a conservative confidence cap based on task breadth.
 - Evidence-maintenance tasks now recognize English and Chinese source, precision, protocol, plan, documentation, README, localization, and memory-budget intent, then allocate implementation, test, config, and role-diverse documentation surfaces explicitly.
 - Evaluation documentation selection prefers narrative evidence, the current protocol, the project README, and localized counterparts instead of filling the route with old protocols, raw trial JSON, or nested historical READMEs.
+- Publication intent now distinguishes an instruction to publish from maintenance of release-candidate evidence, release notes, release checklists, and release reports.
+- Evidence/source/config synchronization reserves a verification surface, while bounded bugfix routes that explicitly request regression work require a direct test or spec file instead of treating release smoke scripts as the companion.
 
 ### Fixed
 
@@ -43,6 +45,8 @@
 - Prevented dense memory-selection telemetry and execution boundaries from pushing delivered Markdown or JSON beyond the advertised `maxContextTokens` ceiling.
 - Prevented explicit repair work from being misclassified as evidence evaluation merely because the task also mentions synchronization or research artifacts.
 - Prevented empty normalized non-ASCII entities from matching every source path.
+- Prevented documentation updates containing `release-candidate` from being routed as npm publication work.
+- Prevented high-scoring release verification scripts from displacing the requested regression test in a small bugfix route.
 
 ### Verification
 
@@ -53,6 +57,7 @@
 - These product-contract tests do not yet prove parity with Control tool calls, reported tokens, or wall time; that requires the fresh Control-first benchmark planned for 0.3.1.
 - The pinned Zod and Requests gate now requires both target recall and strict target precision to equal 1.000. Both repositories produced exact two-file routes with no unexpected boundary files in two deterministic repetitions; this remains a product gate, not an Agent-performance claim.
 - A fixed eight-file evidence-maintenance oracle in `benchmarks-demo` improved from 3/8 coverage and 0.30 focus to 8/8 and 1.00 focus, while route confidence stayed conservatively capped at 0.35. The product's own six-file implementation self-evaluation still reached only 3/6 coverage and 0.30 focus, so multi-module bugfix companions and generated-artifact linkage remain open work.
+- A follow-up real benchmark synchronization selected all 8/8 changed files plus the explicitly requested CI workflow: coverage 1.00, focus 0.89, and confidence 0.35. A separate eight-file product self-evaluation reached only 5/8 coverage and 0.50 focus, missing the publication-intent helper, classifier sibling, and generated MCP bundle; sibling and provenance routing therefore remain open.
 - In a clean install with 50 relevant memory candidates, JSON delivered 4,050 / 5,000 estimated tokens and Markdown delivered 4,473 / 5,000. Reported bytes matched the serialized outputs, and all 47 excluded candidates retained `selection_limit_reached` reasons.
 
 ## 0.2.4 - 2026-07-19
