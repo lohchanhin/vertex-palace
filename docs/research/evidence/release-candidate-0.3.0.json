@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-19T18:55:41.987Z",
+  "generatedAt": "2026-07-19T19:53:31.120Z",
   "claimBoundary": "Product packaging and context-contract validation only; not an Agent performance benchmark.",
-  "sourceCommit": "ef010c196f3a9ba659e705a363fade8686403b1b",
+  "sourceCommit": "2d167f81d688160649a8768c863b4e5fe188d1a6",
   "package": "vertex-palace@0.3.0",
   "files": 7,
-  "shasum": "f8de1e69907293e62cad458bc48b85bdd160e9a4",
+  "shasum": "80633512200b2cc022b9e457309f834852824a07",
   "cleanInstallVersion": "0.3.0",
   "distractorFiles": 240,
   "bypassTrials": [

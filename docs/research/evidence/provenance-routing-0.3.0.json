@@ -1,0 +1,207 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-07-19T19:53:56.4842909Z",
+  "claimBoundary": "Routing, packaging, memory telemetry, and context-contract evidence only; not an end-to-end Agent performance benchmark.",
+  "product": {
+    "repository": "https://github.com/lohchanhin/vertex-palace",
+    "baselineCommit": "e10d16dc509100430701a427e22be6280fc6d72c",
+    "provenanceCommit": "cf9022bf5e104fed5fa8187b35e73caaf7ea78d9",
+    "chineseIntentCommit": "13fa2653d8fbca950b27bcad13338bcb6655ac3b",
+    "finalSourceCommit": "2d167f81d688160649a8768c863b4e5fe188d1a6",
+    "candidateVersion": "0.3.0",
+    "npmLatestObserved": "0.2.3",
+    "npmPublished": false,
+    "gitReleaseTagged": false
+  },
+  "benchmark": {
+    "repository": "https://github.com/lohchanhin/benchmarks-demo",
+    "commit": "2e4d3ac6e2a689fa617ba1e52cb9d672f95d4c09",
+    "controlFirstV3Frozen": false,
+    "agentOutcomes": 0
+  },
+  "fixedTasks": {
+    "productSelfEvaluation": "Implement structured package and tsup provenance indexing, workspace dependency and generated artifact graph expansion, route surface and classifier precision, and evaluation regression tests across parser, indexer, router, shared types, evaluator, and the generated MCP bundle",
+    "benchmarkEvaluation": "Pin Vertex Palace ef010c1 and evidence e10d16d in the control-first v3 study generator, focused test, frozen plan, bilingual protocol and README; preserve the previous 7/8 evaluation inside the updated 8/8 machine-readable evaluation evidence while keeping frozen false and zero Agent outcomes"
+  },
+  "finalEvaluations": {
+    "productDefaultRouteLimit": {
+      "evaluationId": "evaluation_dc51170d08460861",
+      "routeId": "route_392cf67867c18e24",
+      "taskType": "feature",
+      "routeLimit": 10,
+      "changedFiles": 17,
+      "matchedFiles": 9,
+      "routeFiles": 10,
+      "changedFileCoverage": 0.53,
+      "routeFocus": 0.9,
+      "confidence": 0.35,
+      "calibration": "underconfident",
+      "repositoryTextFiles": 153,
+      "skippedBinaryFiles": 11,
+      "skippedGeneratedFiles": 2,
+      "repositoryTokens": 153217,
+      "packTokens": 5505,
+      "missedFiles": [
+        "packages/core/src/parser/parse-json.ts",
+        "packages/core/src/parser/parse-ts-js.ts",
+        "packages/core/src/indexer/build-nodes.ts",
+        "packages/core/src/router/classify-task.ts",
+        "packages/core/src/router/analyze-task.ts",
+        "packages/core/test/evaluation.test.ts",
+        "packages/core/test/indexer.test.ts",
+        "packages/core/test/route-expander.test.ts"
+      ],
+      "routeOnlyFiles": [
+        "packages/shared/src/index.ts"
+      ]
+    },
+    "productExpandedRouteLimit": {
+      "evaluationId": "evaluation_c8653871e26dde5a",
+      "routeId": "route_c35fffdf80960f4f",
+      "taskType": "feature",
+      "routeLimit": 18,
+      "changedFiles": 17,
+      "matchedFiles": 13,
+      "routeFiles": 18,
+      "changedFileCoverage": 0.76,
+      "routeFocus": 0.72,
+      "confidence": 0.35,
+      "calibration": "underconfident",
+      "repositoryTextFiles": 153,
+      "skippedBinaryFiles": 11,
+      "skippedGeneratedFiles": 2,
+      "repositoryTokens": 153217,
+      "packTokens": 5815,
+      "missedFiles": [
+        "packages/core/src/parser/parse-json.ts",
+        "packages/core/src/parser/parse-ts-js.ts",
+        "packages/core/src/router/analyze-task.ts",
+        "packages/core/test/indexer.test.ts"
+      ],
+      "routeOnlyFiles": [
+        "packages/core/src/index.ts",
+        "packages/mcp/src/tools/call-tool.ts",
+        "packages/shared/src/index.ts",
+        "packages/core/src/packer/context-packer.ts",
+        "packages/mcp/src/server.ts"
+      ]
+    },
+    "benchmarkNineFileOracle": {
+      "evaluationId": "evaluation_1ea44b8bcedd71b7",
+      "routeId": "route_5c60947adf5f403a",
+      "taskType": "evaluation",
+      "changedFiles": 9,
+      "matchedFiles": 9,
+      "routeFiles": 9,
+      "changedFileCoverage": 1,
+      "routeFocus": 1,
+      "confidence": 0.35,
+      "calibration": "underconfident",
+      "repositoryTextFiles": 491,
+      "repositoryTokens": 1023371,
+      "packTokens": 2657,
+      "missedFiles": [],
+      "routeOnlyFiles": []
+    },
+    "documentationCloseout": {
+      "evaluationId": "evaluation_e3ead315962d54f4",
+      "routeId": "route_63702321c81ba1c5",
+      "taskType": "evaluation",
+      "changedFiles": 5,
+      "matchedFiles": 3,
+      "routeFiles": 6,
+      "changedFileCoverage": 0.6,
+      "routeFocus": 0.5,
+      "confidence": 0.65,
+      "calibration": "well-calibrated",
+      "repositoryTextFiles": 155,
+      "repositoryTokens": 157241,
+      "packTokens": 4910,
+      "missedFiles": [
+        "docs/research/evidence/provenance-routing-0.3.0.json",
+        "docs/research/evidence/release-candidate-0.3.0.json"
+      ],
+      "routeOnlyFiles": [
+        "docs/research/evidence/multi-surface-evidence-routing-0.3.0.json",
+        "docs/research/MULTI_SURFACE_EVIDENCE_ROUTING_0_3_0.md",
+        "README.md"
+      ]
+    }
+  },
+  "developmentProgression": [
+    {
+      "stage": "initial_provenance_tests",
+      "result": "failed",
+      "passingTests": 73,
+      "failures": [
+        "workspace import edge missing",
+        "machine evidence surface missing"
+      ]
+    },
+    {
+      "stage": "generated_output_visibility",
+      "result": "failed",
+      "finding": "The declared plugin bundle was correctly ignored by the scanner and therefore absent from the graph.",
+      "resolution": "Add lightweight virtual generated-artifact nodes instead of weakening ignore rules."
+    },
+    {
+      "stage": "generated_bundle_token_accounting",
+      "result": "failed_then_fixed",
+      "finding": "Reading the generated 9 MB bundle inflated the repository estimate from about 150000 to about 5000000 tokens.",
+      "resolution": "Keep generated artifacts routable but skip their bundled source in repository-token estimates."
+    },
+    {
+      "stage": "early_product_self_evaluation",
+      "result": "needs_review",
+      "progression": [
+        "6/11 matched; coverage 0.55; focus 0.50",
+        "9/13 matched; coverage 0.69; focus 0.64",
+        "3/16 matched after evaluation-subsystem misclassification; coverage 0.19; focus 0.75"
+      ]
+    },
+    {
+      "stage": "chinese_research_task",
+      "result": "failed_then_fixed",
+      "finding": "A task requesting an English and Simplified Chinese research report excluded docs and did not recognize Chinese test-result wording.",
+      "resolution": "Recognize research report, test, and explicit machine-evidence maintenance language while preserving implementation/artifact disambiguation."
+    },
+    {
+      "stage": "real_zod_after_provenance",
+      "result": "failed_then_fixed",
+      "finding": "A four-match semantic cap made the legacy v3 discriminated-union implementation narrowly outrank the correct v4 codec implementation.",
+      "resolution": "Downweight generic semantic words, reward coherent discriminative bug symptoms, and add a competing v3 implementation fixture."
+    },
+    {
+      "stage": "full_suite_after_zod_fix",
+      "result": "failed_then_fixed",
+      "failures": [
+        "evaluation changed-file coverage fell from 1.00 to 0.50",
+        "a two-implementation focused task falsely selected bypass"
+      ],
+      "resolution": "Lower the focused secondary-seed threshold from 0.84 to 0.75 while retaining version-path isolation."
+    }
+  ],
+  "verification": {
+    "build": "passed",
+    "lint": "passed",
+    "workspaceTests": "86/86 passed (82 core, 2 MCP, 2 CLI)",
+    "mcpSmoke": "passed with 10 tools",
+    "cleanInstall": "vertex-palace@0.3.0, 7 package files",
+    "bypass": "4/4 trials selected src/format-currency.mjs with 200-byte payloads",
+    "relevantMemory": "1/1 included",
+    "denseMemory": "3/50 included and 47/50 excluded with reasons inside a 5000-token ceiling",
+    "realRepositories": {
+      "zod": "2/2 deterministic trials; target recall 1.00; target precision 1.00",
+      "requests": "2/2 deterministic trials; target recall 1.00; target precision 1.00"
+    }
+  },
+  "remainingGates": [
+    "Improve broad multi-module self-evaluation without simply increasing route capacity.",
+    "Allocate evidence capacity by explicit named role when one task refreshes several machine-evidence artifacts.",
+    "Calibrate confidence against route capacity and observed coverage.",
+    "Pin the final product source in Control-first v3 while keeping frozen false and zero Agent outcomes.",
+    "Run sequential randomized Control, Adaptive, and Full Palace Agent trials.",
+    "Demonstrate a discordant memory-dependent correctness or scope outcome.",
+    "Publish npm 0.3.0 only after research gates and user-present 2FA verification."
+  ]
+}

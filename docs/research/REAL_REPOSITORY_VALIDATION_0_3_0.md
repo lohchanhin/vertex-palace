@@ -33,17 +33,14 @@ The pinned repositories are:
 
 ## Recorded result
 
-The checked evidence was regenerated at repository commit
-`5cae580a67c3b8d3b6885abb900a69cd285ecbc0`; the context-ceiling product fix is
-commit `143155ae697cb031b43cb31b73562c557026f5c4`. Its cross-platform
-[GitHub Actions run](https://github.com/lohchanhin/vertex-palace/actions/runs/29698755147)
-passed, and the packed candidate had SHA-1
-`d3b6888db80896a2837fe7e5222305749c2dd846`.
+The checked evidence was regenerated from final product source
+`2d167f81d688160649a8768c863b4e5fe188d1a6`. The clean packed candidate had
+SHA-1 `80633512200b2cc022b9e457309f834852824a07`.
 
 | Repository | Indexed files | Mode | Route confidence | Pack tokens | Target recall | Strict target precision | Extra files | Deterministic |
 | --- | ---: | --- | ---: | ---: | ---: | ---: | ---: | --- |
 | Zod | 581 | `full-palace` | 0.87 | 1,886 | 1.000 | 1.000 | 0 | Yes, 2/2 |
-| Requests | 123 | `full-palace` | 0.72 | 1,567 | 1.000 | 1.000 | 0 | Yes, 2/2 |
+| Requests | 123 | `full-palace` | 0.72 | 1,574 | 1.000 | 1.000 | 0 | Yes, 2/2 |
 
 Both cloned worktrees remained clean. Trial elapsed time is retained in the
 [machine-readable evidence](./evidence/real-repository-validation-0.3.0.json)
@@ -140,17 +137,14 @@ research targets.
 
 ## 实测结果
 
-本次证据在仓库提交 `5cae580a67c3b8d3b6885abb900a69cd285ecbc0` 重新生成；
-context ceiling 产品修复位于 `143155ae697cb031b43cb31b73562c557026f5c4`。
-对应的跨平台
-[GitHub Actions](https://github.com/lohchanhin/vertex-palace/actions/runs/29698755147)
-已通过，候选 npm tarball 的 SHA-1 为
-`d3b6888db80896a2837fe7e5222305749c2dd846`。
+本次证据由最终产品源码 `2d167f81d688160649a8768c863b4e5fe188d1a6`
+重新生成；干净安装候选 npm tarball 的 SHA-1 为
+`80633512200b2cc022b9e457309f834852824a07`。
 
 | 仓库 | 索引文件 | 模式 | 路由置信度 | Pack tokens | 目标召回率 | 严格目标精度 | 额外文件 | 边界稳定性 |
 | --- | ---: | --- | ---: | ---: | ---: | ---: | ---: | --- |
 | Zod | 581 | `full-palace` | 0.87 | 1,886 | 1.000 | 1.000 | 0 | 是，2/2 |
-| Requests | 123 | `full-palace` | 0.72 | 1,567 | 1.000 | 1.000 | 0 | 是，2/2 |
+| Requests | 123 | `full-palace` | 0.72 | 1,574 | 1.000 | 1.000 | 0 | 是，2/2 |
 
 两个克隆仓库的 tracked worktree 都保持干净。每次执行时间保留在
 [机器可读证据](./evidence/real-repository-validation-0.3.0.json)中供诊断，

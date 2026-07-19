@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-19T18:56:06.339Z",
+  "generatedAt": "2026-07-19T19:53:51.936Z",
   "claimBoundary": "Product routing and packaging validation only; not an Agent performance benchmark.",
-  "sourceCommit": "ef010c196f3a9ba659e705a363fade8686403b1b",
+  "sourceCommit": "2d167f81d688160649a8768c863b4e5fe188d1a6",
   "candidate": {
     "package": "vertex-palace@0.3.0",
     "files": 7,
-    "shasum": "f8de1e69907293e62cad458bc48b85bdd160e9a4",
-    "integrity": "sha512-wfGz/dMsUDp0xC5ckNvsJhMq8xOxt5/WXrzs3UiVGp91OvN/2Pl9tSo7974ogQmwSxd2WJloPO+8byeXHsRXYw==",
+    "shasum": "80633512200b2cc022b9e457309f834852824a07",
+    "integrity": "sha512-BIlJ+U5+yZrHM8+ANyXBCySdh7ngKXeVDgzX4JijWmKlZChQfoJDbP0/aIO69jApyeTOVM1yLITffoc2IlLLPA==",
     "cleanInstallVersion": "0.3.0"
   },
   "environment": {
@@ -46,7 +46,7 @@
       "trials": [
         {
           "trial": 1,
-          "elapsedMs": 5944,
+          "elapsedMs": 5932,
           "mode": "full-palace",
           "taskType": "bugfix",
           "routeConfidence": 0.87,
@@ -133,7 +133,7 @@
         },
         {
           "trial": 2,
-          "elapsedMs": 1551,
+          "elapsedMs": 1185,
           "mode": "full-palace",
           "taskType": "bugfix",
           "routeConfidence": 0.87,
@@ -240,7 +240,7 @@
       "trials": [
         {
           "trial": 1,
-          "elapsedMs": 1223,
+          "elapsedMs": 1026,
           "mode": "full-palace",
           "taskType": "bugfix",
           "routeConfidence": 0.72,
@@ -308,8 +308,8 @@
             "mode": "full-palace",
             "calls": 1,
             "contextCalls": 1,
-            "contextBytes": 6268,
-            "contextEstimatedTokens": 1567,
+            "contextBytes": 6296,
+            "contextEstimatedTokens": 1574,
             "routeStepCount": 2,
             "primaryCount": 1,
             "supportCount": 1,
@@ -327,7 +327,7 @@
         },
         {
           "trial": 2,
-          "elapsedMs": 658,
+          "elapsedMs": 527,
           "mode": "full-palace",
           "taskType": "bugfix",
           "routeConfidence": 0.72,
@@ -395,8 +395,8 @@
             "mode": "full-palace",
             "calls": 1,
             "contextCalls": 1,
-            "contextBytes": 6268,
-            "contextEstimatedTokens": 1567,
+            "contextBytes": 6296,
+            "contextEstimatedTokens": 1574,
             "routeStepCount": 2,
             "primaryCount": 1,
             "supportCount": 1,
