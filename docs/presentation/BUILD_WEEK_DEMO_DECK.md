@@ -20,18 +20,33 @@ decisions. The deck presents this as the personal reason for building the tool,
 not as a universal benchmark result.
 
 The initial design insight was spatial: turn a flat, two-dimensional repository
-tree into a three-dimensional building. Domains became floors, features became
-rooms, and files and symbols became cabinets and drawers. The connection to the
-human memory-palace technique came next: tasks could follow routes through that
-building, while relevant prior mistakes could wait at the entrance.
+tree into a three-dimensional building. Architectural layers became floors,
+functional domains or modules became rooms, and files and symbols occupied
+progressively deeper storage levels. The connection to the human memory-palace
+technique came next: tasks could follow routes through that building, while
+relevant prior mistakes could wait at the entrance.
+
+## Spatial Coordinate Model
+
+| Axis | Stable meaning | Examples |
+| --- | --- | --- |
+| X | Functional domain or module | Auth, Checkout, Blog |
+| Y | Architectural layer or floor | Interface, Implementation, Data, Verification, Runtime |
+| Z | Inspection depth | Room overview, file cabinet, symbol drawer, code snippet |
+
+A task route is a path between these addresses. Memory, evidence, confidence,
+and the Pitfall Board are metadata attached to places and routes; they are not
+additional spatial axes. For example, `checkout / implementation /
+shippingQuote()` identifies one bounded context entry point.
 
 ## Eight-Slide Arc
 
 1. Introduce Vertex Palace and the Developer Tools submission.
 2. Ground the project in the creator's experience of hour-long tasks, excessive
    token use, repeated reading, and forgotten decisions in growing repositories.
-3. Show how a two-dimensional repository became a three-dimensional building,
-   then gained memory-palace routes and an entrance Pitfall Board.
+3. Define the building's coordinate system: X for functional domain, Y for
+   architectural floor, and Z for inspection depth, with routes and memory
+   layered on top.
 4. Demonstrate a real `palace context --auto` result.
 5. Show how `palace evaluate` measures context reduction, changed-file
    coverage, route focus, and confidence calibration.
