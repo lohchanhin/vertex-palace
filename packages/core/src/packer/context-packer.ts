@@ -110,7 +110,7 @@ async function packAdaptiveContext(
 ): Promise<PackOutput> {
   const selection = options.modeSelection as PalaceModeSelection;
   const tiered = tierRoute(route);
-  const memory = selection.mode === "guarded-memory-palace"
+  const memory = selection.memoryLevel !== "none"
     ? await readGuardedMemory(root, {
         task,
         taskType: route.taskType,
@@ -325,9 +325,9 @@ function renderAdaptiveMarkdown(
     lines.push("## Guardrails", "", ...guardrails.map((guardrail) => `- ${guardrail}`), "");
   }
 
-  if (selection.mode === "guarded-memory-palace") {
+  if (selection.mode === "guarded-memory-palace" || memory.items.length) {
     lines.push(
-      "## Guarded Memory",
+      selection.mode === "guarded-memory-palace" ? "## Guarded Memory" : "## Relevant Memory",
       "",
       ...(memory.items.length
         ? memory.items.flatMap((item) => renderGuardedMemoryItem(item).split("\n"))

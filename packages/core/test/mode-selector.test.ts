@@ -40,4 +40,13 @@ describe("selectPalaceMode", () => {
     expect(selection.mode).toBe("full-palace");
     expect(selection.riskSignals.publicContractRisk).toBe(true);
   });
+
+  it("keeps scoped memory enabled when a large repository selects full-palace", () => {
+    const task = "Fix the Aurora article hero contrast regression while preserving the appearance of every other tenant.";
+    const selection = selectPalaceMode(smallIndex(120), focusedRoute(), task);
+
+    expect(selection.mode).toBe("full-palace");
+    expect(selection.memoryLevel).toBe("scoped-summary");
+    expect(selection.disabledSections).not.toContain("memory");
+  });
 });

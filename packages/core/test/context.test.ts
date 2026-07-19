@@ -112,6 +112,58 @@ describe("palaceContext", () => {
     });
   });
 
+  it("delivers relevant seeded memory when auto selects full-palace", async () => {
+    await withFixture("ts-api", async (root) => {
+      const noiseRoot = path.join(root, "noise");
+      await mkdir(noiseRoot, { recursive: true });
+      await Promise.all(
+        Array.from({ length: 105 }, (_, index) => writeFile(
+          path.join(noiseRoot, `module-${String(index).padStart(3, "0")}.ts`),
+          `export const value${index} = ${index};\n`,
+          "utf8"
+        ))
+      );
+      await indexPalace(root);
+      await writeMemory({
+        root,
+        client: "aurora",
+        task: "Aurora article hero contrast tenant renderer",
+        outcome: "partial",
+        pitfalls: [
+          "Never change the shared theme for an Aurora-only article contrast issue.",
+          "The renderer previously ignored an explicit Aurora tenant text-color override."
+        ],
+        tags: ["aurora", "article", "contrast", "tenant", "renderer"]
+      });
+
+      const task = "Fix the Aurora article hero contrast regression while preserving the appearance of every other tenant. The renderer must honor an explicit tenant text-color override, the Aurora hero must meet WCAG AA contrast, and the complete test suite must pass. Do not weaken or rewrite the tests.";
+      const output = await palaceContext({
+        root,
+        task,
+        budget: 6000,
+        auto: true
+      });
+
+      expect(output.mode).toBe("full-palace");
+      expect(output.modeSelection?.memoryLevel).toBe("scoped-summary");
+      expect(output.payload?.memoryItemCount).toBe(2);
+      expect(output.payload?.guardrailCount).toBeGreaterThanOrEqual(1);
+      expect(output.markdown).toContain("## Relevant Memory");
+      expect(output.markdown).toContain("Never change the shared theme");
+      expect(output.markdown).toContain("renderer previously ignored");
+      expect(output.markdown).toContain("Current code and tests outrank remembered decisions");
+      expect(output.payload?.contextEstimatedTokens).toBeLessThanOrEqual(output.modeSelection?.maxContextTokens ?? 0);
+
+      const jsonOutput = await palaceContext({ root, task, budget: 6000, auto: true, format: "json" });
+      const json = jsonOutput.json as { memory: unknown[]; guardrails: string[] };
+
+      expect(jsonOutput.mode).toBe("full-palace");
+      expect(json.memory).toHaveLength(2);
+      expect(json.guardrails).toContain("Current code and tests outrank remembered decisions and pitfalls.");
+      expect(jsonOutput.payload?.contextBytes).toBe(Buffer.byteLength(serializePackOutput(jsonOutput), "utf8"));
+    });
+  });
+
   it("uses only relevant, scoped memory for tenant-sensitive tasks", async () => {
     await withFixture("ts-api", async (root) => {
       await indexPalace(root);

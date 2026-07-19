@@ -238,9 +238,15 @@ function buildSelection(
   const disabledSections = {
     bypass: ["source-content", "support-content", "memory"],
     "route-lite": ["support-content", "memory"],
-    "full-palace": ["memory"],
+    "full-palace": [],
     "guarded-memory-palace": []
   }[mode];
+
+  const memoryLevel = mode === "guarded-memory-palace"
+    ? "guarded-evidence"
+    : mode === "full-palace"
+      ? "scoped-summary"
+      : "none";
 
   return {
     mode,
@@ -248,7 +254,7 @@ function buildSelection(
     reasons,
     disabledSections,
     maxContextTokens: budget,
-    memoryLevel: mode === "guarded-memory-palace" ? "guarded-evidence" : "none",
+    memoryLevel,
     riskSignals
   };
 }
