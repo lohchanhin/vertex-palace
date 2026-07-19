@@ -1,6 +1,6 @@
 {
   "name": "@vertex-palace/mcp",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Vertex Palace adaptive context MCP stdio server.",
   "license": "MIT",
   "type": "module",

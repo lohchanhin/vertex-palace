@@ -2,6 +2,22 @@
 
 ## Unreleased
 
+## 0.2.2 - 2026-07-19
+
+### Fixed
+
+- Preserve relevant, scoped memory when Adaptive mode selects `full-palace` instead of silently disabling the memory section.
+- Render Full Palace memory and its current-code-first guardrail in both Markdown and JSON while keeping the final serialized payload inside the selected budget.
+
+### Added
+
+- Regression coverage using the exact Aurora useful-memory task from the public 16-trial Adaptive v2.2 benchmark.
+- Memory-fidelity assertions for mode selection, delivered Markdown, delivered JSON, item counts, guardrails, and measured payload bytes.
+
+### Research
+
+- The public [Adaptive v2.2 benchmark](https://github.com/lohchanhin/benchmarks-ab-demo/blob/main/docs/research/ADAPTIVE_V2_2_FINAL.md) found the v0.2.1 omission in all four useful-memory trials. The frozen results remain unchanged; this release fixes the product behavior separately.
+
 ## 0.2.1 - 2026-07-19
 
 ### Fixed
