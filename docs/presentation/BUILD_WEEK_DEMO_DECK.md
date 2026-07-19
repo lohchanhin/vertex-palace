@@ -53,12 +53,14 @@ shippingQuote()` identifies one bounded context entry point.
 4. Demonstrate a real `palace context --auto` result.
 5. Show how `palace evaluate` measures context reduction, changed-file
    coverage, route focus, and confidence calibration.
-6. Show the frozen four-arm A/B design: Control, Route-only, Full Palace, and
-   Adaptive, with 16 paired trials and 64 total arms.
-7. Use the no-Palace Control result to reject an always-on Palace. Show the supported
-   tool-call overhead on deterministic synthetic tasks, then connect it to the
-   current bypass, route-lite, Full, and Guarded mode policy without presenting
-   that policy as post-fix performance proof.
+6. Show the frozen four-arm A/B design: Codex alone (the no-Palace Control),
+   Route-only, Full Palace, and Adaptive, with 16 paired trials and 64 total
+   arms. The Codex model, task, fixture, prompt, and tests remain fixed.
+7. Compare Adaptive Palace directly with Codex alone. Label every metric as an
+   `Adaptive - Codex alone` paired difference, use the result to reject an
+   always-on Palace for these synthetic tasks, and connect it to the current
+   bypass, route-lite, Full, and Guarded policy without presenting that policy
+   as post-fix performance proof.
 8. Compare Adaptive with always-on Full Palace using the same visual language
    for Palace-owned bytes, reported tokens, and wall time.
 9. Separate correctness from efficiency with the validity, public-test, hidden
@@ -92,6 +94,9 @@ used.
   interval of [-1,972, -550.5].
 - Adaptive versus Control median: +30,147 reported tokens, +10.919 seconds,
   and +4.5 tool calls; only the tool-call interval stayed entirely above zero.
+- In the benchmark, `Control` means Codex alone with no Vertex Palace. It uses
+  the same Codex, model, task, fixture, prompt, and tests as Adaptive; only the
+  repository-context treatment changes.
 - Adaptive versus Control paired intervals: tool calls [+2.5, +6.5], reported
   tokens [-1,518.5, +39,219], and wall time [-1.433s, +31.043s].
 - Current 0.2.3 mode selection can bypass packed source for a one-file task in
