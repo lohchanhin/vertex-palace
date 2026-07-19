@@ -42,7 +42,7 @@ and the Pitfall Board are metadata attached to places and routes; they are not
 additional spatial axes. For example, `checkout / implementation /
 shippingQuote()` identifies one bounded context entry point.
 
-## Twelve-Slide Arc
+## Eleven-Slide Arc
 
 1. Introduce Vertex Palace and the Developer Tools submission.
 2. Ground the project in the creator's experience of hour-long tasks, excessive
@@ -61,16 +61,14 @@ shippingQuote()` identifies one bounded context entry point.
    always-on Palace for these synthetic tasks, and connect it to the current
    bypass, route-lite, Full, and Guarded policy without presenting that policy
    as post-fix performance proof.
-8. Compare Adaptive with always-on Full Palace using the same visual language
-   for Palace-owned bytes, reported tokens, and wall time.
-9. Separate correctness from efficiency with the validity, public-test, hidden
+8. Separate correctness from efficiency with the validity, public-test, hidden
    oracle, declared-scope, and forbidden-file gates.
-10. Present the independent product evidence: 55 automated tests, build and
+9. Present the independent product evidence: 55 automated tests, build and
     TypeScript lint, ten-tool MCP smoke, five successful CI jobs, and clean
     public-distribution verification.
-11. Show the learning loop from the 0.2.1 memory omission to the 0.2.2
+10. Show the learning loop from the 0.2.1 memory omission to the 0.2.2
     regression contract and the 0.2.3 cross-ecosystem release-routing matrix.
-12. Give judges the public npm installation and GitHub test path.
+11. Give judges the public npm installation and GitHub test path.
 
 ## Recording Guidance
 
