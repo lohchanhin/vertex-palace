@@ -57,6 +57,11 @@ export type MemorySelectionTelemetry = {
   }[];
   candidateIds: string[];
   includedIds: string[];
+  scopeInference?: {
+    client: string;
+    reason: "unique_historical_alias_match";
+    evidenceTokens: string[];
+  };
 };
 
 export type PalaceExecutionBoundaries = {

@@ -19,9 +19,10 @@ async function main() {
   const packRoot = path.join(temporaryRoot, "pack");
   const installRoot = path.join(temporaryRoot, "install");
   const fixtureRoot = path.join(temporaryRoot, "fixture");
+  const memoryScopeRoot = path.join(temporaryRoot, "memory-scope-fixture");
 
   try {
-    await Promise.all([mkdir(packRoot), mkdir(installRoot), mkdir(fixtureRoot)]);
+    await Promise.all([mkdir(packRoot), mkdir(installRoot), mkdir(fixtureRoot), mkdir(memoryScopeRoot)]);
     const packResult = runNpm(
       ["pack", "--json", "--ignore-scripts", "--pack-destination", packRoot],
       { cwd: projectRoot }
@@ -121,6 +122,51 @@ async function main() {
     assert.equal(full.payload.contextBytes, Buffer.byteLength(fullRaw, "utf8"));
     assert.ok(full.payload.contextEstimatedTokens <= full.selection.maxContextTokens);
 
+    await createMemoryScopeFixture(memoryScopeRoot);
+    runNode([cliPath, "init"], { cwd: memoryScopeRoot });
+    runNode([cliPath, "index"], { cwd: memoryScopeRoot });
+    runNode([
+      cliPath,
+      "memory",
+      "write",
+      "--task",
+      "Record the independently governed launch tenant article-token ownership decision",
+      "--outcome",
+      "partial",
+      "--client",
+      "aurora",
+      "--changed-file",
+      "clients/aurora/article-tokens.mjs",
+      "--pitfall",
+      "A prior launch contrast fix changed the shared article token. Keep the launch-only change in Aurora.",
+      "--failed-attempt",
+      "Changing the shared fallback expanded the launch page fix to tenants outside the approved scope.",
+      "--tag",
+      "launch-tenant",
+      "article-token",
+      "tenant-ownership",
+      "accessibility"
+    ], { cwd: memoryScopeRoot });
+    const scopeTask = "Fix the article body text contrast regression for the independently governed launch tenant. Historical project decisions define which tenant owns this token. Keep the shared token and every other tenant unchanged.";
+    const scopeRaw = runNode(
+      [cliPath, "context", scopeTask, "--auto", "--format", "json", "--budget", "6000"],
+      { cwd: memoryScopeRoot }
+    ).stdout;
+    const scope = JSON.parse(scopeRaw);
+    assert.equal(scope.mode, "guarded-memory-palace");
+    assert.equal(scope.memoryTelemetry.memoryCandidates, 2);
+    assert.equal(scope.memoryTelemetry.memoryIncluded, 2);
+    assert.deepEqual(scope.memoryTelemetry.memoryExcluded, []);
+    assert.deepEqual(scope.memoryTelemetry.scopeInference, {
+      client: "aurora",
+      reason: "unique_historical_alias_match",
+      evidenceTokens: ["contrast", "governed", "independently", "launch"]
+    });
+    assert.deepEqual(scope.executionBoundaries.primary, ["clients/aurora/article-tokens.mjs"]);
+    assert.ok(scope.executionBoundaries.support.includes("src/themes/shared-article-tokens.mjs"));
+    assert.equal(scope.payload.contextBytes, Buffer.byteLength(scopeRaw, "utf8"));
+    assert.ok(scope.payload.contextEstimatedTokens <= scope.selection.maxContextTokens);
+
     const mcp = runNode([path.join(projectRoot, "scripts", "smoke-mcp.cjs"), mcpPath], { cwd: fixtureRoot });
     const report = {
       package: `${metadata.name}@${metadata.version}`,
@@ -138,6 +184,20 @@ async function main() {
         estimatedTokens: full.payload.contextEstimatedTokens,
         maxContextTokens: full.selection.maxContextTokens
       },
+      historicalScopeAlias: {
+        mode: scope.mode,
+        candidates: scope.memoryTelemetry.memoryCandidates,
+        included: scope.memoryTelemetry.memoryIncluded,
+        excluded: scope.memoryTelemetry.memoryExcluded.length,
+        inferredClient: scope.memoryTelemetry.scopeInference.client,
+        inferenceReason: scope.memoryTelemetry.scopeInference.reason,
+        primary: scope.executionBoundaries.primary,
+        sharedTier: scope.executionBoundaries.support.includes("src/themes/shared-article-tokens.mjs")
+          ? "support"
+          : "missing",
+        estimatedTokens: scope.payload.contextEstimatedTokens,
+        maxContextTokens: scope.selection.maxContextTokens
+      },
       installedMcp: mcp.stdout.trim()
     };
     process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);
@@ -148,6 +208,22 @@ async function main() {
       await rm(temporaryRoot, { recursive: true, force: true });
     }
   }
+}
+
+async function createMemoryScopeFixture(root) {
+  const files = new Map([
+    ["package.json", `${JSON.stringify({ name: "memory-scope-fixture", private: true, type: "module" }, null, 2)}\n`],
+    ["clients/aurora/article-tokens.mjs", "export const auroraArticleTokens = { text: '#94a3b8' };\n"],
+    ["clients/borealis/article-tokens.mjs", "export const borealisArticleTokens = { text: '#94a3b8' };\n"],
+    ["src/themes/shared-article-tokens.mjs", "export const sharedArticleTokens = { text: '#475569' };\n"],
+    ["src/rendering/article-tokens.mjs", "export function resolveArticleTokens(tokens) { return tokens; }\n"],
+    ["test/article-tokens.test.mjs", "// Public contract test intentionally omits tenant ownership.\n"]
+  ]);
+  await Promise.all([...files].map(async ([relative, source]) => {
+    const target = path.join(root, relative);
+    await mkdir(path.dirname(target), { recursive: true });
+    await writeFile(target, source, "utf8");
+  }));
 }
 
 async function createLargeFixture(root) {

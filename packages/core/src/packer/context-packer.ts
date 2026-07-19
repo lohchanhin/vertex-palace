@@ -114,7 +114,6 @@ async function packAdaptiveContext(
   options: PackContextOptions
 ): Promise<PackOutput> {
   const selection = options.modeSelection as PalaceModeSelection;
-  const tiered = tierRoute(route);
   const memory = selection.memoryLevel !== "none"
     ? await readGuardedMemory(root, {
         task,
@@ -124,6 +123,7 @@ async function packAdaptiveContext(
         maxAgeDays: selection.riskSignals.staleMemoryRisk ? 60 : 90
       })
     : emptyGuardedMemory();
+  const tiered = tierRoute(route, memory.telemetry.scopeInference?.client);
   const guardrails = adaptiveGuardrails(selection, memory);
   const boundaries = buildExecutionBoundaries(route, tiered, selection, memory);
   const desiredSteps = adaptiveLoadSteps(selection, tiered);
@@ -404,6 +404,9 @@ function renderAdaptiveMarkdown(
       "",
       `Candidates: ${memory.telemetry.memoryCandidates} | Included: ${memory.telemetry.memoryIncluded} | Excluded: ${memory.telemetry.memoryExcluded.length}`,
       `Included IDs: ${memory.telemetry.includedIds.length ? memory.telemetry.includedIds.join(", ") : "none"}`,
+      ...(memory.telemetry.scopeInference
+        ? [`Inferred scope: ${memory.telemetry.scopeInference.client} (${memory.telemetry.scopeInference.reason}; evidence: ${memory.telemetry.scopeInference.evidenceTokens.join(", ")})`]
+        : []),
       ...(memory.telemetry.memoryExcluded.length
         ? memory.telemetry.memoryExcluded.map((item) => `- ${item.id}: ${item.reason}`)
         : ["- No retrieved memory was excluded."]),
@@ -470,7 +473,7 @@ function renderAdaptiveMarkdown(
   return lines.join("\n");
 }
 
-function tierRoute(route: PalaceRoute): TieredRoute {
+function tierRoute(route: PalaceRoute, inferredClient?: string): TieredRoute {
   const tiered: TieredRoute = { primary: [], support: [], deferred: [] };
   for (const step of route.route) tiered[step.tier ?? inferredTier(step.priority)].push(step);
   if (!tiered.primary.length && route.route[0]) {
@@ -478,7 +481,52 @@ function tierRoute(route: PalaceRoute): TieredRoute {
     tiered.support = tiered.support.filter((step) => step.nodeId !== route.route[0].nodeId);
     tiered.deferred = tiered.deferred.filter((step) => step.nodeId !== route.route[0].nodeId);
   }
+  const scopedStep = inferredClient
+    ? route.route.find((step) => routePathMatchesScope(step.sourcePath, inferredClient))
+    : undefined;
+  if (scopedStep) {
+    const promoted = {
+      ...scopedStep,
+      tier: "primary" as const,
+      priority: 1,
+      reason: `${scopedStep.reason}; promoted by inferred memory scope ${inferredClient}`
+    };
+    tiered.primary = [promoted];
+    tiered.support = uniqueRouteSteps([
+      ...route.route.filter((step) => (
+        step.nodeId !== scopedStep.nodeId
+        && tiered.primary.every((primary) => primary.nodeId !== step.nodeId)
+        && (step.tier ?? inferredTier(step.priority)) !== "deferred"
+      )).map((step) => ({
+        ...step,
+        tier: "support" as const,
+        priority: Math.max(3, step.priority),
+        reason: (step.tier ?? inferredTier(step.priority)) === "primary"
+          ? `${step.reason}; demoted after inferred memory scope selected ${inferredClient}`
+          : step.reason
+      })),
+      ...tiered.support
+    ]);
+    tiered.deferred = tiered.deferred.filter((step) => step.nodeId !== scopedStep.nodeId);
+  }
   return tiered;
+}
+
+function routePathMatchesScope(sourcePath: string, scope: string): boolean {
+  const normalizedScope = scope.toLowerCase().replace(/[^a-z0-9㐀-鿿]+/g, "");
+  return sourcePath
+    .toLowerCase()
+    .split(/[\\/]/)
+    .some((segment) => segment.replace(/[^a-z0-9㐀-鿿]+/g, "") === normalizedScope);
+}
+
+function uniqueRouteSteps(steps: PalaceRouteStep[]): PalaceRouteStep[] {
+  const seen = new Set<string>();
+  return steps.filter((step) => {
+    if (seen.has(step.nodeId)) return false;
+    seen.add(step.nodeId);
+    return true;
+  });
 }
 
 function adaptiveLoadSteps(selection: PalaceModeSelection, tiered: TieredRoute): PalaceRouteStep[] {

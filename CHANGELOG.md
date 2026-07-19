@@ -19,11 +19,20 @@
 - Adaptive payload budgeting reserves space for memory telemetry and execution boundaries before loading source drawers.
 - The Codex plugin explicitly stops broad exploration after Primary, Required Evidence, tests, and conflict checks satisfy the delivered stop conditions.
 - Mixed feature-and-release routing now allocates implementation, regression, transport, CLI, MCP, plugin, documentation, and package surfaces in rounds, with English and Chinese regression coverage.
+- Tenant memory can resolve a client from a unique historical business alias when the task explicitly asks for prior decisions, at least three non-generic alias tokens match, and the winning client leads every alternative by at least two tokens.
+- A route entry matching that inferred client becomes the sole Primary while the former static Primary is demoted to Support with an explicit reason.
+
+### Fixed
+
+- Prevented tasks such as "independently governed launch tenant" from retrieving Aurora history and then excluding it as `scope_mismatch` merely because the literal client name was absent.
+- Prevented inferred client context from simultaneously labeling a shared fallback as Primary in the rendered execution boundaries.
 
 ### Verification
 
 - Four repeated small-local trials in a repository with 240 generated distractor files all selected `bypass`, named the intended `src/format-currency.mjs` target, emitted exactly three JSON fields, and stayed below 80 estimated payload tokens.
 - The mixed feature-and-release fixture reached 0.96 changed-file coverage and 0.96 route focus in both English and Chinese task variants.
+- A non-study memory-dependent smoke retrieved 2/2 Aurora candidates, excluded 0, emitted `unique_historical_alias_match`, promoted `clients/aurora/article-tokens.mjs` to the only Primary, and demoted the shared token to Support.
+- An ambiguous two-client regression keeps both memories excluded as `scope_mismatch`; alias inference does not break tenant isolation when evidence ties.
 - These product-contract tests do not yet prove parity with Control tool calls, reported tokens, or wall time; that requires the fresh Control-first benchmark planned for 0.3.1.
 
 ## 0.2.4 - 2026-07-19

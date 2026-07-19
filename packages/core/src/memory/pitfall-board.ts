@@ -60,6 +60,12 @@ export type GuardedMemoryOptions = {
   now?: Date;
 };
 
+type MemoryScopeResolution = {
+  enforce: boolean;
+  allowedClients: Set<string>;
+  inference?: NonNullable<MemorySelectionTelemetry["scopeInference"]>;
+};
+
 export function pitfallBoardPath(root: string): string {
   return path.join(root, ".palace", "00-entrance", "pitfall-board.md");
 }
@@ -141,8 +147,6 @@ export async function readGuardedMemory(
   const now = options.now ?? new Date();
   const index = await readPitfallIndex(pitfallIndexPath(root));
   const taskTokens = tokenizeForPitfall(options.task);
-  const hasExplicitScope = index.entries.some((entry) => entry.client && scopeMatchesTask(entry.client, options.task, taskTokens))
-    || hasScopeMarker(options.task);
   const candidates = index.entries
     .map((entry, index) => {
       const ageDays = ageInDays(entry.createdAt, now);
@@ -155,6 +159,11 @@ export async function readGuardedMemory(
     })
     .filter((candidate) => candidate.score >= minRelevance)
     .sort((a, b) => b.score - a.score || a.ageDays - b.ageDays || a.index - b.index);
+  const scopeResolution = resolveMemoryScope(
+    candidates.map((candidate) => candidate.entry),
+    options.task,
+    taskTokens
+  );
 
   const items: GuardedMemoryItem[] = [];
   const excluded: Array<{ id: string; reason: MemoryExclusionReason }> = [];
@@ -164,7 +173,9 @@ export async function readGuardedMemory(
       excluded.push({ id: candidate.entry.id, reason: "expired" });
       continue;
     }
-    if (candidate.entry.client && hasExplicitScope && !scopeMatchesTask(candidate.entry.client, options.task, taskTokens)) {
+    if (candidate.entry.client
+        && scopeResolution.enforce
+        && !scopeResolution.allowedClients.has(normalizeScope(candidate.entry.client))) {
       excluded.push({ id: candidate.entry.id, reason: "scope_mismatch" });
       continue;
     }
@@ -190,7 +201,8 @@ export async function readGuardedMemory(
       memoryIncluded: items.length,
       memoryExcluded: excluded,
       candidateIds: candidates.map((candidate) => candidate.entry.id),
-      includedIds: items.map((item) => item.id)
+      includedIds: items.map((item) => item.id),
+      ...(scopeResolution.inference ? { scopeInference: scopeResolution.inference } : {})
     }
   };
 }
@@ -268,15 +280,78 @@ function tokenizeForPitfall(value: string): Set<string> {
   return new Set([...ascii, ...cjk]);
 }
 
-function scopeMatchesTask(client: string, task: string, taskTokens = tokenizeForPitfall(task)): boolean {
+function scopeDirectlyMatchesTask(client: string, task: string, taskTokens = tokenizeForPitfall(task)): boolean {
   const normalizedClient = normalizeScope(client);
   if (normalizedClient && normalizeScope(task).includes(normalizedClient)) return true;
   const identityTokens = [...tokenizeForPitfall(client)].filter((token) => !["client", "tenant", "project"].includes(token));
   return identityTokens.length > 0 && identityTokens.every((token) => taskTokens.has(token));
 }
 
+function resolveMemoryScope(
+  entries: PitfallBoardEntry[],
+  task: string,
+  taskTokens: Set<string>
+): MemoryScopeResolution {
+  const scoped = entries.filter((entry): entry is PitfallBoardEntry & { client: string } => Boolean(entry.client));
+  const directClients = new Set(
+    scoped
+      .filter((entry) => scopeDirectlyMatchesTask(entry.client, task, taskTokens))
+      .map((entry) => normalizeScope(entry.client))
+  );
+  if (directClients.size) return { enforce: true, allowedClients: directClients };
+  if (!hasScopeMarker(task)) return { enforce: false, allowedClients: new Set() };
+  if (!requestsHistoricalScope(task)) return { enforce: true, allowedClients: new Set() };
+
+  const byClient = new Map<string, { client: string; score: number; evidenceTokens: string[] }>();
+  for (const entry of scoped) {
+    const normalizedClient = normalizeScope(entry.client);
+    const evidenceTokens = scopeAliasEvidence(entry, taskTokens);
+    const existing = byClient.get(normalizedClient);
+    if (!existing || evidenceTokens.length > existing.score) {
+      byClient.set(normalizedClient, {
+        client: entry.client,
+        score: evidenceTokens.length,
+        evidenceTokens
+      });
+    }
+  }
+  const ranked = [...byClient.values()].sort((first, second) => second.score - first.score);
+  const winner = ranked[0];
+  const runnerUp = ranked[1];
+  if (!winner || winner.score < 3 || (runnerUp && winner.score - runnerUp.score < 2)) {
+    return { enforce: true, allowedClients: new Set() };
+  }
+  return {
+    enforce: true,
+    allowedClients: new Set([normalizeScope(winner.client)]),
+    inference: {
+      client: winner.client,
+      reason: "unique_historical_alias_match",
+      evidenceTokens: winner.evidenceTokens
+    }
+  };
+}
+
+function scopeAliasEvidence(entry: PitfallBoardEntry, taskTokens: Set<string>): string[] {
+  const generic = new Set([
+    "api", "article", "client", "complete", "customer", "decision", "decisions", "every",
+    "historical", "history", "keep", "memory", "other", "pass", "pitfall", "previous",
+    "prior", "project", "public", "regression", "shared", "task", "tenant", "test", "tests",
+    "text", "token"
+  ]);
+  const sourceTokens = tokenizeForPitfall([entry.text, entry.task, ...entry.tags].join(" "));
+  return [...taskTokens]
+    .filter((token) => !generic.has(token) && sourceTokens.has(token))
+    .sort();
+}
+
+function requestsHistoricalScope(task: string): boolean {
+  return /\b(?:histor(?:y|ical)|memory|pitfall|previous|prior|remember(?:ed)?|decision)\b/i.test(task)
+    || /(?:历史|歷史|记忆|記憶|决定|決定|决策|決策|踩坑|之前|先前)/u.test(task);
+}
+
 function hasScopeMarker(task: string): boolean {
-  return /\b(?:client|tenant)[\s:_-]*[a-z0-9]/i.test(task)
+  return /\b(?:client|tenant|customer)\b/i.test(task)
     || /(?:客户|客戶|租户|租戶|专案|專案)/u.test(task);
 }
 

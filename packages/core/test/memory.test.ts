@@ -198,6 +198,92 @@ describe("memory", () => {
     });
   });
 
+  it("infers one client from unique historical scope aliases without requiring its literal name", async () => {
+    await withFixture("ts-api", async (root) => {
+      await initPalace(root);
+      const entry = (id: string, client: string, task: string, text: string) => ({
+        id,
+        text,
+        task,
+        outcome: "partial" as const,
+        client,
+        source: "pitfall" as const,
+        tags: ["article", "contrast", "tenant", "decision"],
+        memoryPath: `.palace/memory/${id}.md`,
+        createdAt: "2026-07-18T00:00:00.000Z"
+      });
+      await writeFile(
+        path.join(root, ".palace", "memory", "pitfall-board.json"),
+        JSON.stringify({
+          entries: [
+            entry(
+              "memory-aurora-launch",
+              "aurora",
+              "Record the independently governed launch tenant ownership decision",
+              "Keep the launch contrast change in Aurora and out of shared tokens."
+            ),
+            entry(
+              "memory-beta-preview",
+              "beta",
+              "Record the regional preview tenant article decision",
+              "Keep the Beta preview contrast override local."
+            )
+          ]
+        }),
+        "utf8"
+      );
+
+      const result = await readGuardedMemory(root, {
+        task: "Use the historical decision to fix contrast for the independently governed launch tenant",
+        now: new Date("2026-07-19T00:00:00.000Z")
+      });
+
+      expect(result.items.map((item) => item.id)).toEqual(["memory-aurora-launch"]);
+      expect(result.telemetry.memoryExcluded).toEqual([
+        { id: "memory-beta-preview", reason: "scope_mismatch" }
+      ]);
+      expect(result.telemetry.scopeInference).toEqual({
+        client: "aurora",
+        reason: "unique_historical_alias_match",
+        evidenceTokens: ["contrast", "governed", "independently", "launch"]
+      });
+    });
+  });
+
+  it("refuses historical alias inference when multiple clients are equally plausible", async () => {
+    await withFixture("ts-api", async (root) => {
+      await initPalace(root);
+      const entries = ["aurora", "beta"].map((client) => ({
+        id: `memory-${client}`,
+        text: `Keep the launch contrast override in ${client}.`,
+        task: "Record the independently governed launch tenant ownership decision",
+        outcome: "partial" as const,
+        client,
+        source: "pitfall" as const,
+        tags: ["launch", "contrast", "tenant"],
+        memoryPath: `.palace/memory/memory-${client}.md`,
+        createdAt: "2026-07-18T00:00:00.000Z"
+      }));
+      await writeFile(
+        path.join(root, ".palace", "memory", "pitfall-board.json"),
+        JSON.stringify({ entries }),
+        "utf8"
+      );
+
+      const result = await readGuardedMemory(root, {
+        task: "Use the historical decision to fix contrast for the independently governed launch tenant",
+        now: new Date("2026-07-19T00:00:00.000Z")
+      });
+
+      expect(result.items).toEqual([]);
+      expect(result.telemetry.memoryExcluded).toEqual([
+        { id: "memory-aurora", reason: "scope_mismatch" },
+        { id: "memory-beta", reason: "scope_mismatch" }
+      ]);
+      expect(result.telemetry.scopeInference).toBeUndefined();
+    });
+  });
+
   it("binds memory to the latest route when routeId is omitted", async () => {
     await withFixture("ts-api", async (root) => {
       await indexPalace(root);

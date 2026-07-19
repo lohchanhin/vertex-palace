@@ -309,6 +309,55 @@ describe("palaceContext", () => {
     });
   });
 
+  it("delivers a uniquely inferred historical client scope when the task uses a business alias", async () => {
+    await withFixture("ts-api", async (root) => {
+      await mkdir(path.join(root, "clients", "aurora"), { recursive: true });
+      await writeFile(
+        path.join(root, "clients", "aurora", "article-tokens.ts"),
+        "export const articleTokens = { text: '#94a3b8' };\n",
+        "utf8"
+      );
+      await indexPalace(root);
+      await writeMemory({
+        root,
+        client: "aurora",
+        task: "Record the independently governed launch tenant article-token ownership decision",
+        outcome: "partial",
+        pitfalls: [
+          "A prior launch contrast fix changed the shared article token. Keep the launch-only change in Aurora."
+        ],
+        failedAttempts: [
+          "Changing the shared fallback expanded the launch page fix to tenants outside the approved scope."
+        ],
+        tags: ["launch-tenant", "article-token", "tenant-ownership", "accessibility"]
+      });
+
+      const output = await palaceContext({
+        root,
+        task: "Fix the article body text contrast regression for the independently governed launch tenant. Historical project decisions define which tenant owns this token. Keep the shared token and every other tenant unchanged.",
+        budget: 6000,
+        auto: true
+      });
+
+      expect(output.mode).toBe("guarded-memory-palace");
+      expect(output.payload?.memoryItemCount).toBe(2);
+      expect(output.memoryTelemetry?.memoryIncluded).toBe(2);
+      expect(output.memoryTelemetry?.memoryExcluded).toEqual([]);
+      expect(output.memoryTelemetry?.scopeInference).toEqual({
+        client: "aurora",
+        reason: "unique_historical_alias_match",
+        evidenceTokens: expect.arrayContaining(["governed", "independently", "launch"])
+      });
+      expect(output.markdown).toContain("Inferred scope: aurora (unique_historical_alias_match");
+      expect(output.markdown).toContain("Keep the launch-only change in Aurora");
+      expect(output.executionBoundaries?.primary).toEqual([
+        "clients/aurora/article-tokens.ts"
+      ]);
+      expect(output.markdown).toMatch(/## Primary[\s\S]*clients\/aurora\/article-tokens\.ts/);
+      expect(output.markdown).not.toMatch(/### primary: (?!clients\/aurora\/article-tokens\.ts)/);
+    });
+  });
+
   it("keeps full-palace output inside its context ceiling when memory telemetry is dense", async () => {
     await withFixture("ts-api", async (root) => {
       const noiseRoot = path.join(root, "noise");
