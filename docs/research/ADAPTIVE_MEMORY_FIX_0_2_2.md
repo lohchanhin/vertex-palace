@@ -90,6 +90,26 @@ run set the working directory explicitly, installed only
 `vertex-palace@0.2.2`, regenerated and counted the fixture, asserted the
 delivered memory and exact JSON bytes, and ran the installed MCP server.
 
+## Remote Distribution Verification
+
+- GitHub `main` and the peeled `v0.2.2` annotated tag both resolved to
+  `d8b95b97aecb0ff51b72667f93edb30f0cd1f6cd` after the push.
+- A depth-one clone of the public tag reported package version 0.2.2, plugin
+  version 0.2.2, marketplace ref `v0.2.2`, and npm pin
+  `vertex-palace@0.2.2`.
+- A clean `npx -y -p vertex-palace@0.2.2 palace --version` returned 0.2.2.
+- The exact npx MCP entrypoint declared by `.mcp.json` initialized as version
+  0.2.2 and returned all 10 tools, including `palace_context` and
+  `palace_evaluate`.
+
+The first npx MCP harness tried to spawn `npx.cmd` directly from Node and
+failed with Windows `EINVAL` before Vertex Palace launched. The accepted retry
+used fixed literal arguments through the Windows command shell and passed. The
+Codex desktop-bundled executable returned `Access is denied` when invoked from
+the shell, so no direct `codex plugin marketplace add` result is claimed here;
+the public tag, manifest, npm pin, and exact npx MCP runtime were verified
+independently instead.
+
 ## Research Boundary
 
 This repair does not retroactively improve the frozen v2.2 benchmark. Any
