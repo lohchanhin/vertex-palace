@@ -305,6 +305,23 @@ export type ParsedHeading = {
   line: number;
 };
 
+export type ParsedPackageMetadata = {
+  name: string;
+  entryPoints: string[];
+};
+
+export type ParsedGeneratedArtifact = {
+  inputPath: string;
+  outputPath: string;
+  tool: string;
+};
+
+export type ParsedGeneratedArtifactNode = {
+  inputPath: string;
+  configPath: string;
+  tool: string;
+};
+
 export type ParsedFile = {
   sourcePath: string;
   language: string;
@@ -312,6 +329,9 @@ export type ParsedFile = {
   exports: string[];
   symbols: ParsedSymbol[];
   headings?: ParsedHeading[];
+  packageMetadata?: ParsedPackageMetadata;
+  generatedArtifacts?: ParsedGeneratedArtifact[];
+  generatedArtifact?: ParsedGeneratedArtifactNode;
   summarySeed: string;
 };
 
@@ -405,6 +425,7 @@ export type PalaceEvaluation = {
   context: {
     repositoryTextFiles: number;
     skippedBinaryFiles: number;
+    skippedGeneratedFiles: number;
     repositoryTokens: number;
     packTokens: number;
     savedTokens: number;

@@ -30,4 +30,78 @@ describe("indexPalace", () => {
       await expect(access(staleRoom)).rejects.toThrow();
     });
   });
+
+  it("indexes workspace imports, local co-consumers, and generated artifact provenance", async () => {
+    await withFixture("ts-api", async (root) => {
+      const files = new Map<string, string>([
+        ["packages/acme-core/package.json", JSON.stringify({ name: "@acme/core", main: "./dist/index.js" })],
+        [
+          "packages/acme-core/src/index.ts",
+          "export * from './router/analyze-task';\nexport * from './router/classify-task';\n"
+        ],
+        [
+          "packages/acme-core/src/router/publication-intent.ts",
+          "export function publicationIntent() { return 'publish'; }\n"
+        ],
+        [
+          "packages/acme-core/src/router/analyze-task.ts",
+          "import { publicationIntent } from './publication-intent';\nexport const analyzeTask = () => publicationIntent();\n"
+        ],
+        [
+          "packages/acme-core/src/router/classify-task.ts",
+          "import { publicationIntent } from './publication-intent';\nexport const classifyTask = () => publicationIntent();\n"
+        ],
+        [
+          "packages/acme-mcp/src/server.ts",
+          "import { analyzeTask } from '@acme/core';\nexport const startServer = () => analyzeTask();\n"
+        ],
+        [
+          "tsup.acme-mcp.config.ts",
+          "import { defineConfig } from 'tsup';\nexport default defineConfig({ entry: { server: 'packages/acme-mcp/src/server.ts' }, outDir: 'plugins/acme/mcp', outExtension: () => ({ js: '.cjs' }) });\n"
+        ],
+        ["plugins/acme/mcp/server.cjs", "module.exports = { generated: true };\n"]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+
+      await indexPalace(root);
+      const index = await readIndex(root);
+      const fileNode = (sourcePath: string) => index.nodes.find(
+        (node) => node.sourcePath === sourcePath && !node.startLine
+      );
+      const hasRelation = (leftPath: string, rightPath: string, type: string) => {
+        const left = fileNode(leftPath);
+        const right = fileNode(rightPath);
+        return Boolean(left && right && index.edges.some(
+          (edge) => edge.type === type
+            && ((edge.from === left.id && edge.to === right.id) || (edge.from === right.id && edge.to === left.id))
+        ));
+      };
+
+      expect(hasRelation(
+        "packages/acme-mcp/src/server.ts",
+        "packages/acme-core/src/index.ts",
+        "imports"
+      )).toBe(true);
+      expect(hasRelation(
+        "packages/acme-core/src/router/analyze-task.ts",
+        "packages/acme-core/src/router/classify-task.ts",
+        "changed_with"
+      )).toBe(true);
+      expect(hasRelation(
+        "tsup.acme-mcp.config.ts",
+        "plugins/acme/mcp/server.cjs",
+        "configures"
+      )).toBe(true);
+      expect(hasRelation(
+        "packages/acme-mcp/src/server.ts",
+        "plugins/acme/mcp/server.cjs",
+        "changed_with"
+      )).toBe(true);
+      expect(fileNode("plugins/acme/mcp/server.cjs")?.tags).toContain("generated-artifact");
+    });
+  });
 });

@@ -3,9 +3,17 @@ import { analyzePublicationIntent } from "./publication-intent";
 
 export function classifyTask(task: string): TaskType {
   const lower = task.toLowerCase();
+  const publication = analyzePublicationIntent(lower);
+  const codeSubject = /\b(parser|indexer|router|scorer|expander|module|function|class|source|code|schema|types?|contracts?|tests?|regressions?|bundle|estimator|metadata|api|cli|mcp)\b/.test(lower)
+    || /(解析器|索引器|路由器|模组|模組|函数|函式|类别|類別|源码|源碼|代码|代碼|测试|測試|回归|回歸|类型|類型|契约|契約|元数据|中繼資料)/.test(lower);
+  if (!publication.releaseIntent && codeSubject && /^\s*(?:add|create|implement|support)\b/.test(lower)) return "feature";
+  if (!publication.releaseIntent && codeSubject && /^\s*(?:refactor|restructure|simplify|optimi[sz]e|improve|enhance)\b/.test(lower)) return "refactor";
+  if (!publication.releaseIntent && codeSubject && /^\s*(?:fix|debug|repair|correct|resolve)\b/.test(lower)) return "bugfix";
+  if (!publication.releaseIntent && codeSubject && /^\s*(?:新增|增加|建立|创建|創建|实现|實作|支援|支持)/.test(lower)) return "feature";
+  if (!publication.releaseIntent && codeSubject && /^\s*(?:重构|重構|整理|简化|簡化|优化|優化|改善|改进|改進)/.test(lower)) return "refactor";
+  if (!publication.releaseIntent && codeSubject && /^\s*(?:修复|修正|修補|修补|纠正|糾正|解决|解決)/.test(lower)) return "bugfix";
   if (/\b(evaluate|evaluation|assessment|retrospective|postmortem|score|rating|grade|feedback|lessons|tooling memory)\b/.test(lower)) return "evaluation";
   if (/(回顾|回顧|复盘|復盤|评估|評估|评价|評價|评分|評分|打分|总结|總結|结论|結論|整体评价|整體評價)/.test(lower)) return "evaluation";
-  const publication = analyzePublicationIntent(lower);
   const {
     releaseIntent,
     releaseArtifactReference,

@@ -1,6 +1,8 @@
 import path from "node:path";
+import { stat } from "node:fs/promises";
 import type { IndexPalaceOutput, PalaceIndex } from "@vertex-palace/shared";
-import { scanRepo } from "../scanner/scan-repo";
+import { detectLanguage, scanRepo } from "../scanner/scan-repo";
+import { hashFile } from "../scanner/file-hash";
 import { parseFile } from "../parser/parse-file";
 import { buildDirectoryMap } from "./build-directory-map";
 import { buildNodes, type ParsedFileWithHash } from "./build-nodes";
@@ -22,6 +24,7 @@ export async function indexPalace(root: string): Promise<IndexPalaceOutput> {
     const parsed = await parseFile(root, file.path, file.language, file.size);
     parsedFiles.push({ ...parsed, hash: file.hash, size: file.size });
   }
+  await appendDeclaredGeneratedArtifacts(root, scan, parsedFiles);
 
   const previous = await readIndex(root);
   const nodes = buildNodes(scan, parsedFiles, now);
@@ -54,4 +57,47 @@ export async function indexPalace(root: string): Promise<IndexPalaceOutput> {
     ignoredCount: scan.ignored.length,
     indexedAt: now
   };
+}
+
+async function appendDeclaredGeneratedArtifacts(
+  root: string,
+  scan: Awaited<ReturnType<typeof scanRepo>>,
+  parsedFiles: ParsedFileWithHash[]
+): Promise<void> {
+  const known = new Set(scan.files.map((file) => file.path));
+  const declarations = parsedFiles.flatMap((parsed) => (
+    (parsed.generatedArtifacts ?? []).map((artifact) => ({ artifact, configPath: parsed.sourcePath }))
+  ));
+
+  for (const { artifact, configPath } of declarations) {
+    if (known.has(artifact.outputPath)) continue;
+    const absolute = path.resolve(root, artifact.outputPath);
+    const relative = path.relative(root, absolute);
+    if (!relative || relative.startsWith("..") || path.isAbsolute(relative)) continue;
+    try {
+      const info = await stat(absolute);
+      if (!info.isFile()) continue;
+      const hash = await hashFile(absolute);
+      const language = detectLanguage(artifact.outputPath);
+      scan.files.push({ path: artifact.outputPath, size: info.size, hash, language });
+      parsedFiles.push({
+        sourcePath: artifact.outputPath,
+        language,
+        imports: [],
+        exports: [],
+        symbols: [],
+        generatedArtifact: {
+          inputPath: artifact.inputPath,
+          configPath,
+          tool: artifact.tool
+        },
+        summarySeed: `Generated ${artifact.tool} artifact declared by ${configPath} from ${artifact.inputPath}`,
+        hash,
+        size: info.size
+      });
+      known.add(artifact.outputPath);
+    } catch {
+      // A declared output is indexed only after the build has produced it.
+    }
+  }
 }

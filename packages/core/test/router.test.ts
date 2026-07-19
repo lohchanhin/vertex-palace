@@ -43,6 +43,15 @@ describe("routePalace", () => {
     expect(analysis.entities).toEqual(expect.arrayContaining(["client6-blogunlock", "client6blogunlock", "blogunlock"]));
   });
 
+  it("keeps evaluation-subsystem implementation distinct from evaluating the product", () => {
+    expect(classifyTask(
+      "Implement generated-artifact token estimates and evaluation regression tests in the parser, indexer, and router"
+    )).toBe("feature");
+    expect(classifyTask(
+      "Build an evaluation report for changed-file coverage and confidence calibration"
+    )).toBe("evaluation");
+  });
+
   it("distinguishes release work from publish failures and application deployment", () => {
     const analysis = analyzeTask(RELEASE_TASK);
 
@@ -217,6 +226,67 @@ export const $ZodDiscriminatedUnion = core.$constructor("$ZodDiscriminatedUnion"
     });
   });
 
+  it("routes a coordinated refactor through sibling modules, focused tests, and its generated MCP artifact", async () => {
+    await withFixture("ts-api", async (root) => {
+      const files = new Map<string, string>([
+        ["packages/core/package.json", JSON.stringify({ name: "@vertex-palace/core", main: "./dist/index.js" })],
+        [
+          "packages/core/src/index.ts",
+          "export * from './router/analyze-task';\nexport * from './router/classify-task';\n"
+        ],
+        [
+          "packages/core/src/router/publication-intent.ts",
+          "export function publicationIntent() { return 'publish'; }\n"
+        ],
+        [
+          "packages/core/src/router/analyze-task.ts",
+          "import { publicationIntent } from './publication-intent';\nexport const analyzeTask = () => publicationIntent();\n"
+        ],
+        [
+          "packages/core/src/router/classify-task.ts",
+          "import { publicationIntent } from './publication-intent';\nexport const classifyTask = () => publicationIntent();\n"
+        ],
+        [
+          "packages/core/test/router.test.ts",
+          "import { analyzeTask } from '../src/router/analyze-task';\ntest('publication intent routing', () => analyzeTask());\n"
+        ],
+        [
+          "packages/mcp/src/server.ts",
+          "import { analyzeTask } from '@vertex-palace/core';\nexport const startServer = () => analyzeTask();\n"
+        ],
+        [
+          "tsup.plugin-mcp.config.ts",
+          "import { defineConfig } from 'tsup';\nexport default defineConfig({ entry: { server: 'packages/mcp/src/server.ts' }, outDir: 'plugins/vertex-palace/mcp', outExtension: () => ({ js: '.cjs' }) });\n"
+        ],
+        ["plugins/vertex-palace/mcp/server.cjs", "module.exports = { generated: true };\n"]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const route = await routePalace(
+        root,
+        "Refactor publication-intent routing across analyze-task and classify-task, update the focused router tests, and rebuild the generated MCP bundle",
+        { routeLimit: 8, budget: 6000 }
+      );
+      const routed = route.route.map((step) => step.sourcePath.replace(/:\d+(?:-\d+)?$/, ""));
+
+      expect(route.taskType).toBe("refactor");
+      expect(routed).toEqual(expect.arrayContaining([
+        "packages/core/src/router/analyze-task.ts",
+        "packages/core/src/router/classify-task.ts",
+        "packages/core/src/router/publication-intent.ts",
+        "packages/core/test/router.test.ts",
+        "plugins/vertex-palace/mcp/server.cjs"
+      ]));
+      expect(route.route.some((step) => step.reason.includes("changed_with"))).toBe(true);
+      expect(route.route.find((step) => step.sourcePath === "plugins/vertex-palace/mcp/server.cjs")?.loadLevel).toBe("summary");
+    });
+  });
+
   it("caps confidence for broad tasks that request several delivery surfaces", async () => {
     await withFixture("ts-api", async (root) => {
       await indexPalace(root);
@@ -229,6 +299,18 @@ export const $ZodDiscriminatedUnion = core.$constructor("$ZodDiscriminatedUnion"
 
       expect(route.confidence).toBeLessThanOrEqual(0.35);
     });
+  });
+
+  it("does not turn package parser or evidence-router implementation terms into artifact surfaces", () => {
+    const analysis = analyzeTask(
+      "Add structured package.json workspace metadata and machine-readable evidence routing with parser regressions"
+    );
+
+    expect(requestedRouteSurfaces(analysis)).not.toContain("package");
+    expect(requestedRouteSurfaces(analysis)).not.toContain("evidence");
+    expect(requestedRouteSurfaces(analyzeTask(
+      "Preserve the current machine-readable evaluation evidence in the control-first report"
+    ))).toContain("evidence");
   });
 
   it("routes bilingual evidence synchronization across its plan, generator, test, and documentation surfaces", async () => {
@@ -256,6 +338,10 @@ export const $ZodDiscriminatedUnion = core.$constructor("$ZodDiscriminatedUnion"
         ["docs/research/PROTOCOL_V2_2.md", "# Protocol v2.2\n\nSuperseded memory protocol.\n"],
         ["docs/research/evidence/guarded-stale-memory-v2.2-trial01.json", JSON.stringify({ trial: 1, status: "historic" })],
         ["docs/research/evidence/guarded-stale-memory-v2.2-trial02.json", JSON.stringify({ trial: 2, status: "historic" })],
+        [
+          "docs/research/evidence/vertex-palace-0.3.0-sync-evaluation.json",
+          JSON.stringify({ schemaVersion: 1, claimBoundary: "pin-sync route evaluation only", sourceCommit: "candidate" })
+        ],
         ["results/adaptive-pilot-v2.2/README.md", "# Historic adaptive pilot\n\nSuperseded result notes.\n"],
         [".github/workflows/ci.yml", "name: CI\non: [push]\njobs: { test: { runs-on: ubuntu-latest } }\n"],
         ["analysis/paired-analysis.mjs", "export function reportedTokenPrecisionAnalysis() { return 'paired benchmark precision'; }\n"],
@@ -337,6 +423,35 @@ export const $ZodDiscriminatedUnion = core.$constructor("$ZodDiscriminatedUnion"
       expect(pinEvaluation.route.fileCount).toBeLessThanOrEqual(9);
       expect(pinEvaluation.coverage.changedFileCoverage).toBe(1);
       expect(pinEvaluation.coverage.routeFocus).toBeGreaterThanOrEqual(0.88);
+
+      const postUpdateFiles = [
+        ...changedFiles,
+        "docs/research/evidence/vertex-palace-0.3.0-sync-evaluation.json"
+      ];
+      const postUpdateTask = "Pin Vertex Palace 0.3.0 in the control-first study generator, focused test, frozen plan, bilingual protocol and README; preserve the current machine-readable evaluation evidence while excluding historical v2.2 trials";
+      const postUpdateAnalysis = analyzeTask(postUpdateTask);
+      const postUpdateEvaluation = await evaluateRoute(root, postUpdateTask, {
+        changedFiles: postUpdateFiles,
+        budget: 5000,
+        routeLimit: 6,
+        maxDrawers: 4
+      });
+
+      expect(requestedRouteSurfaces(postUpdateAnalysis)).toEqual(expect.arrayContaining([
+        "implementation",
+        "test",
+        "config",
+        "docs",
+        "evidence"
+      ]));
+      expect(postUpdateEvaluation.route.files).toEqual(expect.arrayContaining(postUpdateFiles));
+      expect(postUpdateEvaluation.route.files).not.toEqual(expect.arrayContaining([
+        "docs/research/evidence/guarded-stale-memory-v2.2-trial01.json",
+        "docs/research/evidence/guarded-stale-memory-v2.2-trial02.json",
+        "results/adaptive-pilot-v2.2/plan.json"
+      ]));
+      expect(postUpdateEvaluation.coverage.changedFileCoverage).toBe(1);
+      expect(postUpdateEvaluation.coverage.routeFocus).toBeGreaterThanOrEqual(0.8);
     });
   });
 

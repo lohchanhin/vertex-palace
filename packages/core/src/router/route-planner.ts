@@ -61,11 +61,11 @@ export async function routePalace(root: string, task: string, options: number | 
         ? ensureReleaseSurfaceCoverage(scored, requestedSurfaces, analysis, routeLimit)
         : taskType === "bugfix"
           ? ensureBugfixVerificationCoverage(initialRoute, scored, requestedSurfaces, implementationAnchor, routeLimit)
-          : initialRoute;
+          : ensureGeneralSurfaceCoverage(initialRoute, scored, requestedSurfaces, analysis, routeLimit);
   const now = new Date().toISOString();
 
   const routeSteps = expanded.map((item, index) => {
-    const loadLevel = chooseLoadLevel(item.node.kind, index, item.score);
+    const loadLevel = chooseLoadLevel(item.node.kind, index, item.score, item.node.tags.includes("generated-artifact"));
     const tier = chooseRouteTier(item, index, taskType);
     return {
       nodeId: item.node.id,
@@ -153,6 +153,124 @@ function isDirectTestCandidate(item: ScoredNode): boolean {
     || /(^|\/)(?:test|tests|spec|__tests__)(\/|$)|\.(?:test|spec)\.[^.]+$/.test(sourcePath);
 }
 
+function ensureGeneralSurfaceCoverage(
+  selected: ScoredNode[],
+  scored: ScoredNode[],
+  requested: RouteSurface[],
+  analysis: ReturnType<typeof analyzeTask>,
+  limit: number
+): ScoredNode[] {
+  if (requested.length < 2) return selected;
+  const result: ScoredNode[] = [];
+  const sourcePaths = new Set<string>();
+  const append = (item: ScoredNode | undefined): void => {
+    if (!item || result.length >= limit || sourcePaths.has(item.node.sourcePath)) return;
+    result.push(item);
+    sourcePaths.add(item.node.sourcePath);
+  };
+
+  append(selected[0]);
+  for (const surface of requested) {
+    const quota = generalSurfaceQuota(scored, surface, requested, analysis);
+    for (const representative of selectGeneralSurfaceRepresentatives(scored, surface, analysis, quota)) {
+      append(representative);
+    }
+  }
+  for (const item of selected) append(item);
+
+  return result.sort((a, b) => b.score - a.score || a.node.sourcePath.localeCompare(b.node.sourcePath));
+}
+
+function selectGeneralSurfaceRepresentatives(
+  scored: ScoredNode[],
+  surface: RouteSurface,
+  analysis: ReturnType<typeof analyzeTask>,
+  quota: number
+): ScoredNode[] {
+  const ranked = [...scored]
+    .filter((item) => matchesRouteSurface(item.node, surface))
+    .sort(
+      (a, b) => generalSurfacePriority(b, surface, analysis) - generalSurfacePriority(a, surface, analysis)
+        || b.score - a.score
+        || a.node.sourcePath.localeCompare(b.node.sourcePath)
+    )
+    .filter((item, index, items) => items.findIndex((candidate) => candidate.node.sourcePath === item.node.sourcePath) === index);
+  if (surface !== "test" || quota <= 1) return ranked.slice(0, quota);
+
+  const result: ScoredNode[] = [];
+  const concepts = new Set<string>();
+  for (const item of ranked) {
+    const concept = testPathConcept(item.node.sourcePath, analysis);
+    if (!concept && result.length > 0) continue;
+    if (concept && concepts.has(concept)) continue;
+    result.push(item);
+    if (concept) concepts.add(concept);
+    if (result.length >= quota) break;
+  }
+  return result;
+}
+
+function generalSurfaceQuota(
+  scored: ScoredNode[],
+  surface: RouteSurface,
+  requested: RouteSurface[],
+  analysis: ReturnType<typeof analyzeTask>
+): number {
+  if (surface !== "test" || !requested.includes("implementation")) return 1;
+  const concepts = new Set(
+    scored
+      .filter((item) => matchesRouteSurface(item.node, "test") && item.node.kind === "test")
+      .map((item) => testPathConcept(item.node.sourcePath, analysis))
+      .filter((concept): concept is string => Boolean(concept))
+  );
+  return Math.max(1, Math.min(3, concepts.size));
+}
+
+function generalSurfacePriority(
+  item: ScoredNode,
+  surface: RouteSurface,
+  analysis: ReturnType<typeof analyzeTask>
+): number {
+  const sourcePath = item.node.sourcePath.toLowerCase();
+  const keywords = new Set(analysis.keywords);
+  let priority = item.score;
+  if (surface === "mcp" && hasAnyKeyword(keywords, ["generated", "artifact", "bundle"])) {
+    if (/generated\s+\w+\s+artifact/i.test(item.node.summary)) priority += 600;
+    else if (/(^|\/)packages\/mcp\/src\//.test(sourcePath)) priority += 200;
+  }
+  if (surface === "test") {
+    priority += item.node.kind === "test" ? 100 : -100;
+    if (isVerificationScriptPath(sourcePath)) priority -= 120;
+    if (/(?:^|[-_/])(?:release|publish)(?:[-_.\/]|$)/.test(sourcePath) && !hasAnyKeyword(keywords, ["release", "publish"])) {
+      priority -= 100;
+    }
+    const concept = testPathConcept(sourcePath, analysis);
+    if (concept) {
+      priority += 30;
+      if (new RegExp(`(?:^|/)${escapeRegExp(concept)}\\.(?:test|spec)\\.`).test(sourcePath)) priority += 40;
+    }
+  }
+  if (surface === "evidence" && /evaluation/.test(sourcePath)) priority += 500;
+  return priority;
+}
+
+function testPathConcept(sourcePath: string, analysis: ReturnType<typeof analyzeTask>): string | undefined {
+  const normalizedPath = sourcePath.toLowerCase().replace(/[^a-z0-9]+/g, " ");
+  return analysis.keywords.find(
+    (keyword) => keyword.length > 3
+      && !["test", "tests", "spec", "regression", "verification", "focused"].includes(keyword)
+      && new RegExp(`(?:^| )${escapeRegExp(keyword)}(?: |$)`).test(normalizedPath)
+  );
+}
+
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function isVerificationScriptPath(sourcePath: string): boolean {
+  return /(^|\/)scripts\/[^/]*(?:verify|smoke|benchmark)[^/]*$/.test(sourcePath);
+}
+
 async function ensureFreshIndex(root: string): Promise<void> {
   const status = await getPalaceStatus(root);
   if (!status.initialized || !status.indexed || status.stale) {
@@ -175,7 +293,8 @@ function defaultRouteLimitForBudget(budget: number): number {
   return 12;
 }
 
-function chooseLoadLevel(kind: string, index: number, score: number): LoadLevel {
+function chooseLoadLevel(kind: string, index: number, score: number, generatedArtifact = false): LoadLevel {
+  if (generatedArtifact) return "summary";
   if (index > 10) return "summary";
   if (["function", "class", "interface", "type", "symbol"].includes(kind)) return score > 80 || index < 4 ? "full_symbol" : "signature";
   if (kind === "test") return "snippet";
@@ -425,6 +544,11 @@ function evaluationSurfacePriority(
     if (keywords.has("plan") && /(^|\/)results\/[^/]+\/plan\.json$/.test(sourcePath)) return 600;
     if (keywords.has("plan") && /(^|\/)plan\.json$/.test(sourcePath)) return 550;
     if (keywords.has("manifest") && /(^|\/)manifest\.json$/.test(sourcePath)) return 500;
+    return 100;
+  }
+  if (surface === "evidence") {
+    if (/evaluation/.test(sourcePath)) return 650;
+    if (/(?:sync|validation|audit|summary|report)/.test(sourcePath)) return 600;
     return 100;
   }
   if (surface !== "docs") return 100;

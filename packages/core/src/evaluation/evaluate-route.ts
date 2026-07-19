@@ -18,6 +18,7 @@ export type EvaluateRouteOptions = Omit<PalaceEvaluationInput, "root" | "task">;
 type RepositoryTokenEstimate = {
   textFiles: number;
   skippedBinaryFiles: number;
+  skippedGeneratedFiles: number;
   tokens: number;
 };
 
@@ -78,6 +79,7 @@ export async function evaluateRoute(root: string, task: string, options: Evaluat
     context: {
       repositoryTextFiles: repository.textFiles,
       skippedBinaryFiles: repository.skippedBinaryFiles,
+      skippedGeneratedFiles: repository.skippedGeneratedFiles,
       repositoryTokens: repository.tokens,
       packTokens,
       savedTokens,
@@ -150,29 +152,37 @@ async function resolveRoute(
 
 async function estimateRepositoryTokens(root: string, index: PalaceIndex): Promise<RepositoryTokenEstimate> {
   const languages = new Map(index.nodes.map((node) => [node.sourcePath, node.language]));
+  const generatedArtifacts = new Set(
+    index.nodes.filter((node) => node.tags.includes("generated-artifact")).map((node) => node.sourcePath)
+  );
   const sourcePaths = Object.keys(index.fileHashes).sort();
   let textFiles = 0;
   let skippedBinaryFiles = 0;
+  let skippedGeneratedFiles = 0;
   let tokens = 0;
 
   for (let offset = 0; offset < sourcePaths.length; offset += 50) {
     const batch = sourcePaths.slice(offset, offset + 50);
     const estimates = await Promise.all(
       batch.map(async (sourcePath) => {
+        if (generatedArtifacts.has(sourcePath)) {
+          return { binary: false, generated: true, tokens: 0 };
+        }
         if (isBinaryLikePath(sourcePath, languages.get(sourcePath))) {
-          return { binary: true, tokens: 0 };
+          return { binary: true, generated: false, tokens: 0 };
         }
         try {
           const content = await readFile(path.join(root, sourcePath));
-          if (content.includes(0)) return { binary: true, tokens: 0 };
-          return { binary: false, tokens: estimateTokens(content.toString("utf8")) };
+          if (content.includes(0)) return { binary: true, generated: false, tokens: 0 };
+          return { binary: false, generated: false, tokens: estimateTokens(content.toString("utf8")) };
         } catch {
-          return { binary: false, tokens: 0 };
+          return { binary: false, generated: false, tokens: 0 };
         }
       })
     );
     for (const estimate of estimates) {
-      if (estimate.binary) skippedBinaryFiles += 1;
+      if (estimate.generated) skippedGeneratedFiles += 1;
+      else if (estimate.binary) skippedBinaryFiles += 1;
       else {
         textFiles += 1;
         tokens += estimate.tokens;
@@ -180,7 +190,7 @@ async function estimateRepositoryTokens(root: string, index: PalaceIndex): Promi
     }
   }
 
-  return { textFiles, skippedBinaryFiles, tokens };
+  return { textFiles, skippedBinaryFiles, skippedGeneratedFiles, tokens };
 }
 
 function normalizeChangedFile(root: string, value: string): string {
@@ -287,6 +297,7 @@ function renderEvaluationMarkdown(evaluation: Omit<PalaceEvaluation, "markdown">
     `- Reduction: ${evaluation.context.tokenReductionPercent}%`,
     `- Repository-to-pack ratio: ${evaluation.context.repositoryToPackRatio}x`,
     `- Skipped binary files: ${evaluation.context.skippedBinaryFiles}`,
+    `- Skipped generated artifacts: ${evaluation.context.skippedGeneratedFiles}`,
     "",
     "## Route Quality",
     "",

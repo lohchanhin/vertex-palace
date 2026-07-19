@@ -3,6 +3,7 @@ import type { TaskAnalysis } from "./analyze-task";
 import { floorTemplate } from "./locate-entry";
 import { isBinaryLikePath } from "../utils/binary-files";
 import { normalizeLexicalToken, tokenizeLexical } from "../utils/lexical-tokens";
+import { analyzePublicationIntent } from "./publication-intent";
 
 export type ScoredNode = {
   node: PalaceNode;
@@ -19,6 +20,7 @@ export type RouteSurface =
   | "config"
   | "docs"
   | "ci"
+  | "evidence"
   | "package"
   | "plugin"
   | "implementation";
@@ -37,6 +39,7 @@ export function scoreNodes(nodes: PalaceNode[], edges: PalaceEdge[], analysis: T
       const tokens = tokenize(haystack);
       const entityHit = entityHintBoost(node, analysis);
       const matchedKeywords = new Set<string>();
+      let semanticMatchCount = 0;
 
       for (const keyword of analysis.keywords) {
         if (!keyword) continue;
@@ -51,7 +54,8 @@ export function scoreNodes(nodes: PalaceNode[], edges: PalaceEdge[], analysis: T
           reasons.push(`symbol or file title matches "${keyword}"`);
           matchedKeywords.add(normalizedKeyword);
         } else if (tokens.has(normalizedKeyword)) {
-          score += 25;
+          score += semanticMatchCount < 4 ? 25 : 4;
+          semanticMatchCount += 1;
           reasons.push(`summary or tags match "${keyword}"`);
           matchedKeywords.add(normalizedKeyword);
         }
@@ -272,6 +276,7 @@ function isEvaluationMetaPath(path: string, analysis: TaskAnalysis): boolean {
 
 export function requestedRouteSurfaces(analysis: TaskAnalysis): RouteSurface[] {
   const keywords = new Set(analysis.keywords);
+  const publication = analyzePublicationIntent(analysis.raw);
   const requested: RouteSurface[] = [];
   if (hasAny(keywords, ["cli", "command", "commands"])) requested.push("cli");
   if (keywords.has("mcp")) requested.push("mcp");
@@ -285,11 +290,12 @@ export function requestedRouteSurfaces(analysis: TaskAnalysis): RouteSurface[] {
   if (hasAny(keywords, ["config", "plan", "protocol", "frozen"])) requested.push("config");
   if (hasAny(keywords, ["doc", "docs", "documentation", "readme"])) requested.push("docs");
   if (hasAny(keywords, ["ci", "workflow", "workflows", "actions"])) requested.push("ci");
-  if (hasAny(keywords, ["release", "publish", "package", "manifest", "version", "npm", "registry", "tag", "distribute", "distribution"])) requested.push("package");
+  if (isMachineEvidenceArtifactRequest(analysis.raw)) requested.push("evidence");
+  if (publication.releaseIntent) requested.push("package");
   if (hasAny(keywords, ["plugin", "marketplace"])) requested.push("plugin");
   const evaluationIntent = hasAny(keywords, ["evaluation", "evaluate", "retrospective"]);
   if (
-    hasAny(keywords, ["implementation", "source"])
+    hasAny(keywords, ["implementation", "source", "generator"])
     || (!evaluationIntent && hasAny(keywords, ["adaptive", "bypass", "mode", "selector", "context", "packer", "route", "router", "score", "scorer", "precision", "recall", "confidence"]))
   ) requested.push("implementation");
   if (hasAny(keywords, ["release", "changelog"]) && !requested.includes("docs")) requested.push("docs");
@@ -299,6 +305,12 @@ export function requestedRouteSurfaces(analysis: TaskAnalysis): RouteSurface[] {
     if (!requested.includes("shared")) requested.push("shared");
   }
   return requested;
+}
+
+function isMachineEvidenceArtifactRequest(task: string): boolean {
+  const english = /\b(?:sync|preserve|record|write|update|refresh|include|attach)\b.{0,80}\bmachine[-\s]?readable\b.{0,40}\bevidence\b/i;
+  const chinese = /(?:同步|保留|记录|記錄|写入|寫入|更新|刷新|纳入|納入|附上).{0,50}(?:机器可读|機器可讀).{0,30}(?:证据|證據)/;
+  return english.test(task) || chinese.test(task);
 }
 
 export function matchesRouteSurface(node: PalaceNode, surface: RouteSurface): boolean {
@@ -321,6 +333,8 @@ export function matchesRouteSurface(node: PalaceNode, surface: RouteSurface): bo
       return node.kind === "doc" || /(^|\/)(docs?|readme)(\/|\.|$)|build_week\.md$/.test(sourcePath);
     case "ci":
       return /(^|\/)\.github\/workflows(\/|$)|(^|\/)(ci|workflows?)(\/|$)/.test(sourcePath);
+    case "evidence":
+      return isMachineEvidencePath(sourcePath);
     case "package":
       return isPackageManifestPath(sourcePath);
     case "plugin":
@@ -338,6 +352,13 @@ function isVerificationScriptPath(sourcePath: string): boolean {
 
 function isPackageManifestPath(sourcePath: string): boolean {
   return /(^|\/)(?:package\.json|pyproject\.toml|setup\.(?:py|cfg)|cargo\.toml|go\.mod|pom\.xml|build\.gradle(?:\.kts)?|composer\.json|gemfile|[^/]+\.csproj)$/.test(sourcePath);
+}
+
+function isMachineEvidencePath(sourcePath: string): boolean {
+  const fileName = sourcePath.split("/").at(-1) ?? sourcePath;
+  if (!/(^|\/)(?:docs\/research\/)?evidence\//.test(sourcePath) || !/\.json$/.test(fileName)) return false;
+  if (/(?:^|[-_.])(?:trial|run|trace|transcript|raw)[-_]?\d*/.test(fileName)) return false;
+  return /(?:evaluation|summary|report|audit|validation|sync|gate|preflight|evidence)/.test(fileName);
 }
 
 function hasEvaluationKeywordPath(path: string, analysis: TaskAnalysis): boolean {
@@ -370,7 +391,8 @@ function tokenize(value: string): Set<string> {
 function relationBoosts(edges: PalaceEdge[]): Map<string, number> {
   const boosts = new Map<string, number>();
   for (const edge of edges) {
-    if (!["imports", "tests", "tested_by"].includes(edge.type)) continue;
+    if (!["imports", "tests", "tested_by", "changed_with", "configures", "depends_on"].includes(edge.type)) continue;
+    if (["changed_with", "configures", "depends_on"].includes(edge.type) && edge.weight < 0.8) continue;
     boosts.set(edge.from, (boosts.get(edge.from) ?? 0) + edge.weight * 8);
     boosts.set(edge.to, (boosts.get(edge.to) ?? 0) + edge.weight * 8);
   }

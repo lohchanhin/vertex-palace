@@ -4,12 +4,20 @@ import { hashText } from "../scanner/file-hash";
 import { normalizeRelativePath } from "../utils/path-utils";
 import { tokenizeLexical } from "../utils/lexical-tokens";
 
+type WorkspacePackage = {
+  name: string;
+  root: string;
+  entryPath?: string;
+};
+
 export function buildEdges(nodes: PalaceNode[], parsedFiles: ParsedFile[], now: string): PalaceEdge[] {
   const edges: PalaceEdge[] = [];
   const bySource = groupBy(nodes, (node) => node.sourcePath);
   const fileNodes = nodes.filter((node) => ["file", "api", "test", "config", "doc", "runtime-log"].includes(node.kind));
   const directoryNodes = nodes.filter((node) => node.kind === "directory");
   const fileNodeByPath = new Map(fileNodes.map((node) => [node.sourcePath, node]));
+  const candidatePaths = [...fileNodeByPath.keys()];
+  const workspacePackages = discoverWorkspacePackages(parsedFiles, candidatePaths);
 
   for (const fileNode of fileNodes) {
     const parentPath = normalizeRelativePath(path.posix.dirname(fileNode.sourcePath));
@@ -23,16 +31,22 @@ export function buildEdges(nodes: PalaceNode[], parsedFiles: ParsedFile[], now: 
     }
   }
 
+  const importersByTarget = new Map<string, PalaceNode[]>();
   for (const parsed of parsedFiles) {
     const from = fileNodeByPath.get(parsed.sourcePath);
     if (!from) continue;
     for (const importPath of [...parsed.imports, ...parsed.exports]) {
-      const targetPath = resolveImport(parsed.sourcePath, importPath, [...fileNodeByPath.keys()]);
+      const targetPath = resolveImport(parsed.sourcePath, importPath, candidatePaths, workspacePackages);
       if (!targetPath) continue;
       const to = fileNodeByPath.get(targetPath);
-      if (to) edges.push(makeEdge(from.id, to.id, "imports", 0.8, `${parsed.sourcePath} imports ${importPath}`, now));
+      if (to) {
+        edges.push(makeEdge(from.id, to.id, "imports", 0.8, `${parsed.sourcePath} imports ${importPath}`, now));
+        importersByTarget.set(targetPath, [...(importersByTarget.get(targetPath) ?? []), from]);
+      }
     }
   }
+  addLocalCoConsumerEdges(edges, importersByTarget, fileNodeByPath, now);
+  addGeneratedArtifactEdges(edges, parsedFiles, fileNodeByPath, now);
 
   const tests = fileNodes.filter((node) => node.kind === "test");
   const sources = fileNodes.filter((node) => !["test", "doc", "config", "runtime-log"].includes(node.kind));
@@ -116,27 +130,135 @@ function groupBy<T>(items: T[], getKey: (item: T) => string): Map<string, T[]> {
   return map;
 }
 
-function resolveImport(sourcePath: string, importPath: string, candidates: string[]): string | undefined {
-  if (!importPath.startsWith(".")) return undefined;
+function discoverWorkspacePackages(parsedFiles: ParsedFile[], candidates: string[]): WorkspacePackage[] {
+  return parsedFiles
+    .filter((parsed) => parsed.packageMetadata)
+    .map((parsed) => {
+      const metadata = parsed.packageMetadata!;
+      const root = normalizeRelativePath(path.posix.dirname(parsed.sourcePath));
+      const declared = metadata.entryPoints.flatMap((entry) => sourceCandidates(normalizeRelativePath(path.posix.join(root, entry))));
+      const conventional = [
+        ...sourceCandidates(normalizeRelativePath(path.posix.join(root, "src/index"))),
+        ...sourceCandidates(normalizeRelativePath(path.posix.join(root, "index")))
+      ];
+      return {
+        name: metadata.name,
+        root,
+        entryPath: [...declared, ...conventional].find((candidate) => candidates.includes(candidate))
+      };
+    })
+    .sort((a, b) => b.name.length - a.name.length || a.name.localeCompare(b.name));
+}
+
+function addLocalCoConsumerEdges(
+  edges: PalaceEdge[],
+  importersByTarget: Map<string, PalaceNode[]>,
+  fileNodeByPath: Map<string, PalaceNode>,
+  now: string
+): void {
+  for (const [targetPath, importers] of importersByTarget) {
+    const target = fileNodeByPath.get(targetPath);
+    const uniqueImporters = [...new Map(importers.map((node) => [node.sourcePath, node])).values()]
+      .filter((node) => !["test", "config", "doc", "runtime-log"].includes(node.kind));
+    if (!target || uniqueImporters.length < 2 || uniqueImporters.length > 4) continue;
+    const targetDirectory = path.posix.dirname(targetPath);
+    if (!uniqueImporters.every((node) => path.posix.dirname(node.sourcePath) === targetDirectory)) continue;
+
+    for (let left = 0; left < uniqueImporters.length; left += 1) {
+      for (let right = left + 1; right < uniqueImporters.length; right += 1) {
+        const first = uniqueImporters[left];
+        const second = uniqueImporters[right];
+        edges.push(makeEdge(
+          first.id,
+          second.id,
+          "changed_with",
+          0.86,
+          `${first.sourcePath} and ${second.sourcePath} consume local helper ${targetPath}`,
+          now
+        ));
+      }
+    }
+  }
+}
+
+function addGeneratedArtifactEdges(
+  edges: PalaceEdge[],
+  parsedFiles: ParsedFile[],
+  fileNodeByPath: Map<string, PalaceNode>,
+  now: string
+): void {
+  for (const parsed of parsedFiles) {
+    const config = fileNodeByPath.get(parsed.sourcePath);
+    if (!config) continue;
+    for (const artifact of parsed.generatedArtifacts ?? []) {
+      const input = fileNodeByPath.get(artifact.inputPath);
+      const output = fileNodeByPath.get(artifact.outputPath);
+      if (!input || !output) continue;
+      const evidence = `${parsed.sourcePath} maps ${artifact.inputPath} to ${artifact.outputPath} with ${artifact.tool}`;
+      edges.push(makeEdge(config.id, input.id, "configures", 0.92, evidence, now));
+      edges.push(makeEdge(config.id, output.id, "configures", 0.98, evidence, now));
+      edges.push(makeEdge(input.id, output.id, "changed_with", 0.98, evidence, now));
+    }
+  }
+}
+
+function resolveImport(
+  sourcePath: string,
+  importPath: string,
+  candidates: string[],
+  workspacePackages: WorkspacePackage[]
+): string | undefined {
+  if (!importPath.startsWith(".")) return resolveWorkspaceImport(importPath, candidates, workspacePackages);
   if (sourcePath.endsWith(".py")) return resolvePythonImport(sourcePath, importPath, candidates);
   const base = normalizeRelativePath(path.posix.join(path.posix.dirname(sourcePath), importPath));
   const withoutRuntimeExtension = base.replace(/\.(?:mjs|cjs|js|jsx)$/, "");
   const possible = [
     base,
-    `${base}.ts`,
-    `${base}.tsx`,
-    `${base}.js`,
-    `${base}.jsx`,
-    `${base}.json`,
-    `${base}/index.ts`,
-    `${base}/index.tsx`,
-    `${base}/index.js`,
+    ...sourceCandidates(base),
     `${withoutRuntimeExtension}.ts`,
     `${withoutRuntimeExtension}.tsx`,
     `${withoutRuntimeExtension}.mts`,
     `${withoutRuntimeExtension}.cts`
   ];
   return possible.find((candidate) => candidates.includes(candidate));
+}
+
+function resolveWorkspaceImport(
+  importPath: string,
+  candidates: string[],
+  workspacePackages: WorkspacePackage[]
+): string | undefined {
+  const workspacePackage = workspacePackages.find(
+    (candidate) => importPath === candidate.name || importPath.startsWith(`${candidate.name}/`)
+  );
+  if (!workspacePackage) return undefined;
+  if (importPath === workspacePackage.name) return workspacePackage.entryPath;
+
+  const subpath = importPath.slice(workspacePackage.name.length + 1);
+  const roots = [
+    normalizeRelativePath(path.posix.join(workspacePackage.root, subpath)),
+    normalizeRelativePath(path.posix.join(workspacePackage.root, "src", subpath))
+  ];
+  return roots.flatMap(sourceCandidates).find((candidate) => candidates.includes(candidate));
+}
+
+function sourceCandidates(base: string): string[] {
+  return [
+    base,
+    `${base}.ts`,
+    `${base}.tsx`,
+    `${base}.mts`,
+    `${base}.cts`,
+    `${base}.js`,
+    `${base}.jsx`,
+    `${base}.mjs`,
+    `${base}.cjs`,
+    `${base}.json`,
+    `${base}/index.ts`,
+    `${base}/index.tsx`,
+    `${base}/index.js`,
+    `${base}/index.mjs`
+  ];
 }
 
 function resolvePythonImport(sourcePath: string, importPath: string, candidates: string[]): string | undefined {

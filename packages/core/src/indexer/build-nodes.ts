@@ -42,6 +42,7 @@ export function buildNodes(scan: ScanRepoOutput, parsedFiles: ParsedFileWithHash
       language: parsed.language,
       title: path.posix.basename(parsed.sourcePath),
       summary: summarizeParsedFile(parsed),
+      extraTags: parsed.generatedArtifact ? ["generated-artifact", `generated-by-${parsed.generatedArtifact.tool}`] : undefined,
       sourceHash: parsed.hash,
       contentHash: hashText(parsed.summarySeed),
       now
@@ -118,6 +119,7 @@ function makeNode(input: {
   sourceHash?: string;
   contentHash?: string;
   signature?: string;
+  extraTags?: string[];
   now: string;
 }): PalaceNode {
   const sourcePath = normalizeRelativePath(input.sourcePath);
@@ -137,7 +139,7 @@ function makeNode(input: {
     language: input.language,
     title: input.title,
     summary: input.summary,
-    tags: buildTags(input),
+    tags: [...new Set([...buildTags(input), ...(input.extraTags ?? [])])].slice(0, 24),
     startLine: input.startLine,
     endLine: input.endLine,
     tokenCost,

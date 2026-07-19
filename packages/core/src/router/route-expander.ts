@@ -10,6 +10,8 @@ export type RouteExpansionOptions = {
 };
 
 const FILE_NODE_KINDS = new Set(["file", "api", "test", "config", "doc", "runtime-log"]);
+const EXPANDABLE_RELATIONS = new Set(["imports", "tests", "tested_by", "changed_with", "configures", "depends_on"]);
+const PROVENANCE_RELATIONS = new Set(["changed_with", "configures", "depends_on"]);
 
 export function expandRoute(
   scored: ScoredNode[],
@@ -35,6 +37,7 @@ export function expandRoute(
     selectedSources.add(item.node.sourcePath);
   }
 
+  const relationGroups: ScoredNode[][] = [];
   for (const item of [...selected.values()].slice(0, 8)) {
     const directEdges = uniqueEdges(adjacency.get(item.node.id) ?? []);
     const hasDirectCrossSourceRelation = directEdges.some((edge) => {
@@ -64,13 +67,29 @@ export function expandRoute(
       selectedSources
     );
     const bestRelationScore = candidates[0]?.score ?? 0;
-    for (const candidate of candidates) {
-      if (options.focused && candidate.score < bestRelationScore * options.minRelationScoreRatio) break;
+    relationGroups.push(candidates.filter(
+      (candidate) => !options.focused || candidate.score >= bestRelationScore * options.minRelationScoreRatio
+    ));
+  }
+
+  const relationOffsets = relationGroups.map(() => 0);
+  let addedRelation = true;
+  while (selected.size < limit && addedRelation) {
+    addedRelation = false;
+    for (let groupIndex = 0; groupIndex < relationGroups.length; groupIndex += 1) {
+      const group = relationGroups[groupIndex];
+      while (
+        relationOffsets[groupIndex] < group.length
+        && selectedSources.has(group[relationOffsets[groupIndex]].node.sourcePath)
+      ) relationOffsets[groupIndex] += 1;
+      const candidate = group[relationOffsets[groupIndex]];
+      if (!candidate) continue;
+      relationOffsets[groupIndex] += 1;
       selected.set(candidate.node.id, candidate);
       selectedSources.add(candidate.node.sourcePath);
+      addedRelation = true;
       if (selected.size >= limit) break;
     }
-    if (selected.size >= limit) break;
   }
 
   if (!options.focused) {
@@ -166,7 +185,7 @@ function diverseSeed(scored: ScoredNode[], limit: number, minScoreRatio: number)
   const result: ScoredNode[] = [];
   const bySource = new Map<string, number>();
   const byTop = new Map<string, number>();
-  const groupLimit = limit <= 8 ? 1 : Math.max(2, Math.ceil(limit / 5));
+  const groupLimit = limit <= 4 ? 1 : Math.max(3, Math.ceil(limit / 4));
   const minimumScore = (scored[0]?.score ?? 0) * minScoreRatio;
   const aboveThreshold = minScoreRatio > 0 ? scored.filter((item) => item.score >= minimumScore) : scored;
   const anchorVersion = versionSegment(scored[0]?.node.sourcePath ?? "");
@@ -216,7 +235,8 @@ function versionSegment(sourcePath: string): string | undefined {
 function buildAdjacency(edges: PalaceEdge[]): Map<string, PalaceEdge[]> {
   const adjacency = new Map<string, PalaceEdge[]>();
   for (const edge of edges) {
-    if (!["imports", "tests", "tested_by"].includes(edge.type)) continue;
+    if (!EXPANDABLE_RELATIONS.has(edge.type)) continue;
+    if (PROVENANCE_RELATIONS.has(edge.type) && edge.weight < 0.8) continue;
     const fromEdges = adjacency.get(edge.from) ?? [];
     fromEdges.push(edge);
     adjacency.set(edge.from, fromEdges);

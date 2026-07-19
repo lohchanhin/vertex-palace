@@ -68,6 +68,35 @@ describe("evaluateRoute", () => {
     });
   });
 
+  it("keeps declared generated artifacts routable without counting their bundled source", async () => {
+    await withFixture("ts-api", async (root) => {
+      const sources = new Map<string, string>([
+        ["packages/mcp/src/server.ts", "export const startServer = () => 'mcp';\n"],
+        [
+          "tsup.plugin-mcp.config.ts",
+          "import { defineConfig } from 'tsup';\nexport default defineConfig({ entry: { server: 'packages/mcp/src/server.ts' }, outDir: 'plugins/acme/mcp', outExtension: () => ({ js: '.cjs' }) });\n"
+        ],
+        ["plugins/acme/mcp/server.cjs", "const generated = 'bundle';\n".repeat(10000)]
+      ]);
+      for (const [relativePath, source] of sources) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const evaluation = await evaluateRoute(root, "Rebuild the generated MCP bundle", {
+        changedFiles: ["plugins/acme/mcp/server.cjs"],
+        routeLimit: 6,
+        budget: 6000
+      });
+
+      expect(evaluation.context.skippedGeneratedFiles).toBe(1);
+      expect(evaluation.context.repositoryTokens).toBeLessThan(50000);
+      expect(evaluation.route.files).toContain("plugins/acme/mcp/server.cjs");
+    });
+  });
+
   it("calibrates confidence in both directions", () => {
     expect(calibrateConfidence(0.8, 0.7).status).toBe("well-calibrated");
     expect(calibrateConfidence(0.9, 0.2).status).toBe("overconfident");

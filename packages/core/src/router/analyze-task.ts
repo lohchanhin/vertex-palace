@@ -126,6 +126,7 @@ const RELEASE_ROUTE_KEYWORDS = ["release", "publish", "package", "manifest", "ve
 const RELEASE_REFERENCE_ONLY_KEYWORDS = new Set(["release", "publish", "package", "version", "npm", "registry", "tag"]);
 
 const PHRASE_KEYWORDS: Array<[RegExp, string[]]> = [
+  [/machine[-\s]?readable\s+evidence|机器可读证据|機器可讀證據/i, ["machine", "readable", "evidence"]],
   [/plugin|marketplace|插件/i, ["plugin", "marketplace"]],
   [/adaptive|full[-\s]?palace|route[-\s]?lite|guarded[-\s]?memory[-\s]?palace/i, ["adaptive", "mode", "selector", "context", "packer"]],
   [/source\s+(?:code|implementation)|implementation\s+source|源码|源碼|源代码|源代碼/i, ["implementation", "source"]],
