@@ -9,7 +9,10 @@ is the first production stage for the public OpenAI Build Week demo video.
 The deck is designed to show judges that Vertex Palace is a working,
 installable context-routing and project-memory layer for Codex. Its strongest
 supported value is auditable focus and safer project history, not a universal
-claim that every task uses fewer end-to-end tokens or finishes faster.
+claim that every task uses fewer end-to-end tokens or finishes faster. Vertex
+Palace is not presented as an always-on context tax: current mode selection can
+bypass trivial work, route bounded work lightly, and reserve deeper context and
+memory for tasks whose scope or risk justifies it.
 
 ## Creator Motivation
 
@@ -52,8 +55,10 @@ shippingQuote()` identifies one bounded context entry point.
    coverage, route focus, and confidence calibration.
 6. Show the frozen four-arm A/B design: Control, Route-only, Full Palace, and
    Adaptive, with 16 paired trials and 64 total arms.
-7. Compare Adaptive with no-Palace Control using paired medians and 95%
-   bootstrap intervals for tool calls, reported tokens, and wall time.
+7. Use the no-Palace Control result to reject an always-on Palace. Show the supported
+   tool-call overhead on deterministic synthetic tasks, then connect it to the
+   current bypass, route-lite, Full, and Guarded mode policy without presenting
+   that policy as post-fix performance proof.
 8. Compare Adaptive with always-on Full Palace using the same visual language
    for Palace-owned bytes, reported tokens, and wall time.
 9. Separate correctness from efficiency with the validity, public-test, hidden
@@ -89,6 +94,11 @@ used.
   and +4.5 tool calls; only the tool-call interval stayed entirely above zero.
 - Adaptive versus Control paired intervals: tool calls [+2.5, +6.5], reported
   tokens [-1,518.5, +39,219], and wall time [-1.433s, +31.043s].
+- Current 0.2.3 mode selection can bypass packed source for a one-file task in
+  a small repository, use route-lite for bounded work, and reserve Full or
+  Guarded mode for broader contracts or memory risk. This is a product response
+  to the benchmark, not a confirmatory result from the 0.2.1 study. Bypass still
+  incurs a Palace decision call, so end-to-end overhead must be measured again.
 - Adaptive versus Full paired intervals: reported tokens [-38,931, +24,588]
   and wall time [-13.525s, +0.336s]; both cross zero.
 - Product gates: 51 Core tests, 2 CLI tests, 2 MCP tests, build, TypeScript
@@ -100,7 +110,9 @@ used.
 
 Context-pack reduction is intentionally kept separate from total Codex
 session-token usage. The benchmark ran Vertex Palace 0.2.1 and does not prove
-universal efficiency gains for later releases.
+universal efficiency gains for later releases. A confirmatory study still needs
+larger real repositories, hidden memory-dependent traps, and repetitions across
+models and machines; long-lived multi-session value also remains unproven.
 
 ## Sources
 
@@ -108,6 +120,7 @@ universal efficiency gains for later releases.
 - [`docs/research/ADAPTIVE_MEMORY_FIX_0_2_2.md`](../research/ADAPTIVE_MEMORY_FIX_0_2_2.md)
 - [`docs/research/RELEASE_ROUTING_MATRIX_RESULT_0_2_3.md`](../research/RELEASE_ROUTING_MATRIX_RESULT_0_2_3.md)
 - [`docs/research/RELEASE_0_2_3_VERIFICATION.md`](../research/RELEASE_0_2_3_VERIFICATION.md)
+- [`packages/core/src/router/mode-selector.ts`](../../packages/core/src/router/mode-selector.ts)
 - [Public benchmark final report](https://github.com/lohchanhin/benchmarks-ab-demo/blob/main/docs/research/ADAPTIVE_V2_2_FINAL.md)
 - [Verified five-job GitHub Actions run](https://github.com/lohchanhin/vertex-palace/actions/runs/29687844288)
 
