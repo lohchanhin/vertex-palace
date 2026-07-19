@@ -69,6 +69,11 @@ pitfall. It asserts:
 | Clean Aurora fixture | 105 generated files, `full-palace`, 2 memory items, 1 guardrail |
 | Clean JSON transport | 3,622 delivered bytes, measured bytes matched |
 | Clean installed MCP | 10 tools, passed |
+| npm registry | `latest=0.2.2`, SHA-1 `5eb6f0be59399c94311408b209b461a3aeea3fee` |
+| Clean registry install | CLI version 0.2.2, passed |
+| Registry Aurora fixture | 105 noise files, `full-palace`, 2 memory items, 2 guardrails |
+| Registry JSON transport | 4,190 delivered bytes, measured bytes matched |
+| Registry installed MCP | 10 tools, passed |
 
 The first clean-install harness attempt had broken nested shell quoting and did
 not stop after `node -e` failed. Its later checks were discarded. A second
@@ -76,6 +81,14 @@ attempt proved the new nonzero-exit gate worked but hit the same quoting issue.
 The accepted third attempt used direct temporary fixture generation, checked
 every external exit code, verified all 105 files existed, and then passed the
 complete CLI, context, payload, and installed-MCP gates.
+
+After publication, one combined public-install command was rejected by the
+local command-safety layer before any test step ran. The next command created
+the intended child directory but accidentally ran npm from its parent temp
+directory; its CLI result was discarded as non-isolated. The accepted registry
+run set the working directory explicitly, installed only
+`vertex-palace@0.2.2`, regenerated and counted the fixture, asserted the
+delivered memory and exact JSON bytes, and ran the installed MCP server.
 
 ## Research Boundary
 
