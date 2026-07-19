@@ -30,6 +30,7 @@ export function scoreNodes(nodes: PalaceNode[], edges: PalaceEdge[], analysis: T
   const edgeBoosts = relationBoosts(edges);
   const requestedSurfaces = requestedRouteSurfaces(analysis);
   const semanticMatchLimit = taskType === "bugfix" ? 8 : 4;
+  const typeDeclarationIntent = isTypeDeclarationIntent(analysis);
 
   return nodes
     .filter((node) => node.kind !== "directory")
@@ -108,6 +109,15 @@ export function scoreNodes(nodes: PalaceNode[], edges: PalaceEdge[], analysis: T
       if (releaseBoost > 0) {
         score += releaseBoost;
         reasons.push("matches release or distribution surface");
+      }
+      const typeDeclarationBoost = typeDeclarationHintBoost(node, analysis, typeDeclarationIntent);
+      if (typeDeclarationBoost !== 0) {
+        score += typeDeclarationBoost;
+        reasons.push(
+          typeDeclarationBoost > 0
+            ? "matches explicit type-declaration task intent"
+            : "runtime surface is secondary for a type-declaration-only task"
+        );
       }
       const surfaceHits = requestedSurfaces.filter(
         (surface) =>
@@ -218,7 +228,46 @@ function isFixtureLikePath(sourcePath: string): boolean {
 }
 
 function isBenchmarkLikePath(sourcePath: string): boolean {
-  return /(^|\/)(bench|benches|benchmark|benchmarks|perf)(\/|$)/i.test(sourcePath);
+  return /(^|\/)(?:bench(?:mark(?:er|s)?)?|benches|perf)(?:[._/-]|$)/i.test(sourcePath);
+}
+
+export function isTypeDeclarationIntent(analysis: TaskAnalysis): boolean {
+  const task = analysis.raw.toLowerCase();
+  const signals = [
+    /\b(?:typescript\s+)?declaration(?:s|\s+files?)?\b/,
+    /\bcompile[-\s]?time\b/,
+    /\btype[-\s]?tests?\b/,
+    /\btype\s+hints?\b/,
+    /\b(?:public|exported)\b.{0,40}\btypes?\b/,
+    /(?:类型|型別)(?:声明|宣告|测试|測試)/,
+    /(?:编译期|編譯期|编译时|編譯時)/
+  ].filter((pattern) => pattern.test(task)).length;
+  return /\btsd\b/.test(task) || signals >= 2;
+}
+
+function typeDeclarationHintBoost(node: PalaceNode, analysis: TaskAnalysis, enabled: boolean): number {
+  if (!enabled) return 0;
+  const sourcePath = node.sourcePath.toLowerCase();
+  if (isTypeTestPath(sourcePath)) return 170;
+  if (isTypeDeclarationPath(sourcePath)) return 150;
+  if (isPackageManifestPath(sourcePath) && requestsTypeTestSetup(analysis)) return 90;
+  if (node.kind === "test") return -130;
+  if (/\.[cm]?[jt]sx?$/.test(sourcePath)) return -110;
+  return 0;
+}
+
+function isTypeDeclarationPath(sourcePath: string): boolean {
+  return /\.d\.[cm]?ts$/.test(sourcePath);
+}
+
+function isTypeTestPath(sourcePath: string): boolean {
+  return /\.(?:test|spec)-d\.[cm]?ts$/.test(sourcePath)
+    || /(^|\/)(?:test-d|type-tests?)(\/|$)/.test(sourcePath);
+}
+
+function requestsTypeTestSetup(analysis: TaskAnalysis): boolean {
+  return /\b(?:type[-\s]?tests?|tsd|test\s+setup)\b/i.test(analysis.raw)
+    || /(?:类型|型別)(?:测试|測試)|(?:测试|測試)(?:配置|設定)/.test(analysis.raw);
 }
 
 function entityHintBoost(node: PalaceNode, analysis: TaskAnalysis): number {
@@ -315,7 +364,7 @@ export function requestedRouteSurfaces(analysis: TaskAnalysis): RouteSurface[] {
   if (hasAny(keywords, ["doc", "docs", "documentation", "readme"])) requested.push("docs");
   if (hasAny(keywords, ["ci", "workflow", "workflows", "actions"])) requested.push("ci");
   if (isMachineEvidenceArtifactRequest(analysis.raw)) requested.push("evidence");
-  if (publication.releaseIntent) requested.push("package");
+  if (publication.releaseIntent || (isTypeDeclarationIntent(analysis) && requestsTypeTestSetup(analysis))) requested.push("package");
   if (hasAny(keywords, ["plugin", "marketplace"])) requested.push("plugin");
   const evaluationIntent = hasAny(keywords, ["evaluation", "evaluate", "retrospective"]);
   if (
@@ -345,7 +394,7 @@ export function matchesRouteSurface(node: PalaceNode, surface: RouteSurface): bo
     case "mcp":
       return /(^|\/)packages\/mcp(\/|$)|(^|\/)mcp(\/|$)|(^|\/)scripts\/[^/]*mcp[^/]*$/.test(sourcePath);
     case "shared":
-      return /(^|\/)packages\/shared(\/|$)|(^|\/)shared(\/|$)|(^|\/)(types?|schemas?|contracts?)\.[^.]+$/.test(sourcePath);
+      return /(^|\/)packages\/shared(\/|$)|(^|\/)shared(\/|$)|(^|\/)(types?|schemas?|contracts?)\.[^.]+$|\.d\.[cm]?ts$/.test(sourcePath);
     case "test":
       return node.kind === "test"
         || /(^|\/)(test|tests|spec|__tests__)(\/|$)|\.(test|spec)\.[^.]+$/.test(sourcePath)

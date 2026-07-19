@@ -206,6 +206,42 @@ export const $ZodDiscriminatedUnion = core.$constructor("$ZodDiscriminatedUnion"
     });
   });
 
+  it("keeps declaration-only type fixes inside declarations, type tests, and package metadata", async () => {
+    await withFixture("ts-api", async (root) => {
+      const files = new Map<string, string>([
+        ["index.js", "export const limitFunction = (function_, options) => (...arguments_) => function_(...arguments_);\n"],
+        ["index.d.ts", "export function limitFunction<Arguments extends unknown[], ReturnType>(function_: (...arguments_: Arguments) => PromiseLike<ReturnType>, options: {concurrency: number}): (...arguments_: Arguments) => Promise<ReturnType>;\n"],
+        ["index.test-d.ts", "import {expectType} from 'tsd';\nimport {limitFunction} from './index.js';\nexpectType<Promise<number>>(limitFunction(async (value: number) => value, {concurrency: 1})(1));\n"],
+        ["test.js", "test('limitFunction runtime behavior', async t => t.is(await limitFunction(async () => 1)(), 1));\n"],
+        ["benchmark.js", "export const benchmark = () => limitFunction(async () => 1, {concurrency: 1});\n"],
+        ["scripts/benchmarker.js", "export const benchmarker = () => 'runtime benchmark';\n"],
+        ["package.json", JSON.stringify({ name: "p-limit", type: "module", exports: { types: "./index.d.ts", default: "./index.js" }, scripts: { test: "xo && ava && tsd" } })]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const route = await routePalace(
+        root,
+        "Fix the overly permissive public limitFunction type. It currently accepts synchronous functions even though limiting synchronous execution has no effect. Restrict it to asynchronous functions, preserve inferred argument and return types, and add focused compile-time regression coverage using the repository's existing type-test setup.",
+        { routeLimit: 6, budget: 6000 }
+      );
+      const filesOnly = route.route.map((step) => step.sourcePath.replace(/:\d+(?:-\d+)?$/, ""));
+
+      expect(route.taskType).toBe("bugfix");
+      expect(filesOnly).toEqual(["index.d.ts", "index.test-d.ts", "package.json"]);
+      expect(route.route.find((step) => step.sourcePath.startsWith("index.d.ts"))?.tier).toBe("primary");
+      expect(route.route.find((step) => step.sourcePath === "index.test-d.ts")?.tier).toBe("support");
+      expect(filesOnly).not.toContain("index.js");
+      expect(filesOnly).not.toContain("test.js");
+      expect(filesOnly).not.toContain("benchmark.js");
+      expect(filesOnly).not.toContain("scripts/benchmarker.js");
+    });
+  });
+
   it("keeps a focused regression test when release verification scripts compete for a small bugfix route", async () => {
     await withFixture("ts-api", async (root) => {
       const files = new Map<string, string>([

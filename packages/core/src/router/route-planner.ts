@@ -10,6 +10,7 @@ import { analyzeTask } from "./analyze-task";
 import { classifyTask } from "./classify-task";
 import { locateEntry } from "./locate-entry";
 import {
+  isTypeDeclarationIntent,
   matchesRouteSurface,
   requestedRouteSurfaces,
   scoreNodes,
@@ -32,6 +33,7 @@ export async function routePalace(root: string, task: string, options: number | 
   const taskType = classifyTask(task);
   const scored = scoreNodes(index.nodes, index.edges, analysis, taskType);
   const requestedSurfaces = requestedRouteSurfaces(analysis);
+  const typeDeclarationTask = taskType === "bugfix" && isTypeDeclarationIntent(analysis);
   const routeLimit =
     taskType === "evaluation"
       ? evaluationRouteLimit(normalized.routeLimit, requestedSurfaces, analysis)
@@ -41,11 +43,13 @@ export async function routePalace(root: string, task: string, options: number | 
     : undefined;
   const top = implementationAnchor ?? scored[0];
   const crossStack = analysis.wingHints.includes("frontend") && analysis.wingHints.includes("backend");
-  const focused = taskType === "bugfix"
+  const focused = typeDeclarationTask || (
+    taskType === "bugfix"
     && Boolean(top?.node.startLine)
     && (top?.matchedKeywordCount ?? 0) >= 4
     && requestedSurfaces.length <= 1
-    && !crossStack;
+    && !crossStack
+  );
   const expansionCandidates = focused && implementationAnchor
     ? [implementationAnchor, ...scored.filter((item) => item.node.id !== implementationAnchor.node.id)]
     : scored;
@@ -61,7 +65,9 @@ export async function routePalace(root: string, task: string, options: number | 
       : taskType === "release"
         ? ensureReleaseSurfaceCoverage(scored, requestedSurfaces, analysis, routeLimit)
         : taskType === "bugfix"
-          ? ensureBugfixVerificationCoverage(initialRoute, scored, requestedSurfaces, implementationAnchor, routeLimit)
+          ? typeDeclarationTask
+            ? ensureTypeDeclarationCoverage(initialRoute, scored, requestedSurfaces, routeLimit)
+            : ensureBugfixVerificationCoverage(initialRoute, scored, requestedSurfaces, implementationAnchor, routeLimit)
           : ensureGeneralSurfaceCoverage(initialRoute, scored, requestedSurfaces, analysis, routeLimit);
   const now = new Date().toISOString();
 
@@ -152,6 +158,40 @@ function isDirectTestCandidate(item: ScoredNode): boolean {
   const sourcePath = item.node.sourcePath.toLowerCase();
   return item.node.kind === "test"
     || /(^|\/)(?:test|tests|spec|__tests__)(\/|$)|\.(?:test|spec)\.[^.]+$/.test(sourcePath);
+}
+
+function ensureTypeDeclarationCoverage(
+  selected: ScoredNode[],
+  scored: ScoredNode[],
+  requested: RouteSurface[],
+  limit: number
+): ScoredNode[] {
+  const declaration = scored.find((item) => isTypeDeclarationPath(item.node.sourcePath) && !isTypeTestPath(item.node.sourcePath));
+  if (!declaration) return selected;
+
+  const result: ScoredNode[] = [];
+  const sourcePaths = new Set<string>();
+  const append = (item: ScoredNode | undefined): void => {
+    if (!item || result.length >= limit || sourcePaths.has(item.node.sourcePath)) return;
+    result.push(item);
+    sourcePaths.add(item.node.sourcePath);
+  };
+  append(declaration);
+  if (requested.includes("test")) append(scored.find((item) => isTypeTestPath(item.node.sourcePath)));
+  if (requested.includes("package")) append(scored.find((item) => matchesRouteSurface(item.node, "package")));
+  for (const item of selected) {
+    if (isTypeDeclarationPath(item.node.sourcePath) || matchesRouteSurface(item.node, "package")) append(item);
+  }
+  return result;
+}
+
+function isTypeDeclarationPath(sourcePath: string): boolean {
+  return /\.d\.[cm]?ts$/i.test(sourcePath);
+}
+
+function isTypeTestPath(sourcePath: string): boolean {
+  return /\.(?:test|spec)-d\.[cm]?ts$/i.test(sourcePath)
+    || /(^|\/)(?:test-d|type-tests?)(\/|$)/i.test(sourcePath);
 }
 
 function ensureGeneralSurfaceCoverage(
@@ -304,7 +344,9 @@ function chooseLoadLevel(kind: string, index: number, score: number, generatedAr
 }
 
 function chooseRouteTier(item: ScoredNode, index: number, taskType: TaskType): Exclude<RouteTier, "excluded"> {
-  const supportKind = item.node.floor === "05-verification" || ["test", "config", "doc"].includes(item.node.kind);
+  const supportKind = item.node.floor === "05-verification"
+    || ["test", "config", "doc"].includes(item.node.kind)
+    || isTypeTestPath(item.node.sourcePath);
   const expandedByRelation = item.reasons.some((reason) => reason.startsWith("expanded through"));
   const taskMakesSupportPrimary =
     (taskType === "test" && item.node.kind === "test") ||
