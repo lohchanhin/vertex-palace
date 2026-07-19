@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+## 0.2.1 - 2026-07-19
+
+### Fixed
+
+- Treat preservation-only wording such as "keep the public API stable" as a guardrail instead of evidence that the task changes a public contract.
+- Allow small, focused repositories with route confidence from 0.45 upward to use Route Lite instead of escalating mechanically to Full Palace.
+- Refresh the Codex marketplace metadata, plugin MCP pin, CLI version, and MCP server version together.
+
 ## 0.2.0 - 2026-07-19
 
 ### Added

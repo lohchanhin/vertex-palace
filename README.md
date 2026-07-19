@@ -67,10 +67,10 @@ Only `guarded-memory-palace` includes relevant entries from `.palace/00-entrance
 1. Install the plugin:
 
 ```bash
-codex plugin marketplace add lohchanhin/vertex-palace --ref v0.2.0
+codex plugin marketplace add lohchanhin/vertex-palace --ref v0.2.1
 ```
 
-Use `v0.2.0` or newer for Adaptive Palace. Avoid `v0.1.0` and `v0.1.1`; those early tags had broken MCP install metadata.
+Use `v0.2.1` or newer for the corrected Adaptive selector. Avoid `v0.1.0` and `v0.1.1`; those early tags had broken MCP install metadata.
 
 2. Or install the CLI directly from npm:
 
@@ -195,10 +195,10 @@ adaptive context（单次调用）-> 先读 Primary -> 证据需要时再展开 
 1. 安装插件：
 
 ```bash
-codex plugin marketplace add lohchanhin/vertex-palace --ref v0.2.0
+codex plugin marketplace add lohchanhin/vertex-palace --ref v0.2.1
 ```
 
-请使用 `v0.2.0` 或更新版本来启用 Adaptive Palace。不要再使用 `v0.1.0` 和 `v0.1.1`，这两个早期标签的 MCP 安装元数据有问题。
+请使用 `v0.2.1` 或更新版本，以启用修正后的 Adaptive 模式选择器。不要再使用 `v0.1.0` 和 `v0.1.1`，这两个早期标签的 MCP 安装元数据有问题。
 
 2. 打开 Codex，输入 `/plugins`，安装 Vertex Palace。
 
@@ -268,15 +268,15 @@ npx vertex-palace status
 Install the Codex plugin:
 
 ```bash
-codex plugin marketplace add lohchanhin/vertex-palace --ref v0.2.0
+codex plugin marketplace add lohchanhin/vertex-palace --ref v0.2.1
 ```
 
-Use `v0.2.0` or newer for Adaptive Palace; `v0.1.0` and `v0.1.1` are obsolete because their MCP install metadata was broken.
+Use `v0.2.1` or newer for the corrected Adaptive selector; `v0.1.0` and `v0.1.1` are obsolete because their MCP install metadata was broken.
 
 The plugin launches its MCP server through npm:
 
 ```bash
-npx -y -p vertex-palace@0.2.0 vertex-palace-mcp-stdio --stdio
+npx -y -p vertex-palace@0.2.1 vertex-palace-mcp-stdio --stdio
 ```
 
 Open Codex:

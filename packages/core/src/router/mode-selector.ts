@@ -24,7 +24,7 @@ export function selectPalaceMode(
   const explicitFiles = explicitFileReferences(task);
   const riskSignals = detectRiskSignals(normalizedTask, route);
   const primaryCount = route.route.filter((step) => (step.tier ?? inferredTier(step.priority)) === "primary").length;
-  const uncertainRoute = route.confidence < 0.55;
+  const uncertainRoute = route.confidence < 0.45;
 
   if (options.override) {
     return buildSelection(
@@ -159,7 +159,7 @@ function detectRiskSignals(task: string, route: PalaceRoute): PalaceRiskSignals 
     "多租户",
     "多租戶"
   ]);
-  const publicContractRisk = hasAny(task, [
+  const publicContractMention = hasAny(task, [
     "public api",
     "api contract",
     "response contract",
@@ -173,6 +173,43 @@ function detectRiskSignals(task: string, route: PalaceRoute): PalaceRiskSignals 
     "数据结构",
     "資料結構"
   ]);
+
+  const publicContractChange = hasAny(task, [
+    "change public api",
+    "update public api",
+    "modify public api",
+    "change the public api",
+    "update the public api",
+    "modify the public api",
+    "change api contract",
+    "update api contract",
+    "modify api contract",
+    "change the api contract",
+    "update the api contract",
+    "modify the api contract",
+    "breaking change",
+    "change public schema",
+    "update public schema",
+    "change database schema",
+    "update database schema"
+  ]);
+  const publicContractPreservation = hasAny(task, [
+    "keep public api stable",
+    "keep the public api stable",
+    "preserve public api",
+    "preserve the public api",
+    "without changing public api",
+    "without changing the public api",
+    "do not change public api",
+    "do not change the public api",
+    "keep api contract stable",
+    "keep the api contract stable",
+    "preserve api contract",
+    "preserve the api contract",
+    "without changing api contract",
+    "without changing the api contract"
+  ]);
+  const publicContractRisk = publicContractChange || (publicContractMention && !publicContractPreservation);
 
   return {
     crossStack: crossStackTerms || (frontendRoute && backendRoute),

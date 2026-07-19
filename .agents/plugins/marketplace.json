@@ -10,7 +10,7 @@
         "source": "git-subdir",
         "url": "https://github.com/lohchanhin/vertex-palace.git",
         "path": "./plugins/vertex-palace",
-        "ref": "v0.1.6"
+        "ref": "v0.2.1"
       },
       "policy": {
         "installation": "AVAILABLE",
