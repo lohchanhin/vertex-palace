@@ -14,12 +14,14 @@
 - Structured Python parsing for classes, qualified methods, async functions, imports, and complete indentation-bounded symbol ranges.
 - A pinned real-repository validation gate for Zod and Requests using a clean install of the local npm tarball.
 - A reproducible `pnpm test:release-candidate` gate that packs and installs the local tarball, exercises a 240-file fixture, validates memory fallback and execution boundaries, and starts the installed MCP server.
+- A clean-install dense-memory gate that verifies 50 auditable candidates against both JSON and Markdown context ceilings.
 
 ### Changed
 
 - Relevant memory now prevents bypass and selects scoped Full Palace delivery without mechanically converting every memory-bearing task into Guarded Memory mode.
 - Public API preservation wording is treated as a routing guardrail, so generic `api` and currency literals such as `0.00` no longer create false route targets.
-- Adaptive payload budgeting reserves space for memory telemetry and execution boundaries before loading source drawers.
+- Adaptive payload budgeting measures the complete serialized output, then summarizes or defers the lowest-priority loaded drawers until the selected ceiling is satisfied.
+- Guarded retrieval ranks and considers at most 50 relevant memory candidates, while retaining an inclusion or machine-readable exclusion reason for every candidate in that bounded set.
 - The Codex plugin explicitly stops broad exploration after Primary, Required Evidence, tests, and conflict checks satisfy the delivered stop conditions.
 - Mixed feature-and-release routing now allocates implementation, regression, transport, CLI, MCP, plugin, documentation, and package surfaces in rounds, with English and Chinese regression coverage.
 - Tenant memory can resolve a client from a unique historical business alias when the task explicitly asks for prior decisions, at least three non-generic alias tokens match, and the winning client leads every alternative by at least two tokens.
@@ -36,6 +38,7 @@
 - Prevented issue-style tasks from returning only tests while excluding the implementation in real TypeScript and Python repositories.
 - Prevented explicit requests to update regression tests from collapsing into a one-file bypass payload.
 - Prevented focused routes from expanding through every symbol in a large source file, following weak imports, or mixing explicit version families when same-version evidence exists.
+- Prevented dense memory-selection telemetry and execution boundaries from pushing delivered Markdown or JSON beyond the advertised `maxContextTokens` ceiling.
 
 ### Verification
 
@@ -46,6 +49,7 @@
 - These product-contract tests do not yet prove parity with Control tool calls, reported tokens, or wall time; that requires the fresh Control-first benchmark planned for 0.3.1.
 - The pinned Zod and Requests gate now requires both target recall and strict target precision to equal 1.000. Both repositories produced exact two-file routes with no unexpected boundary files in two deterministic repetitions; this remains a product gate, not an Agent-performance claim.
 - A broad self-evaluation improved from 1/6 to 4/6 changed-file coverage and capped confidence at 0.35, but still missed the regression test and generated MCP bundle. Cross-surface coverage remains a follow-up target.
+- In a clean install with 50 relevant memory candidates, JSON delivered 4,038 / 5,000 estimated tokens and Markdown delivered 4,473 / 5,000. Reported bytes matched the serialized outputs, and all 47 excluded candidates retained `selection_limit_reached` reasons.
 
 ## 0.2.4 - 2026-07-19
 

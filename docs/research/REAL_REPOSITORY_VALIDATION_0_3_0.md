@@ -33,11 +33,12 @@ The pinned repositories are:
 
 ## Recorded result
 
-The checked evidence was generated from product commit
-`b854434564efca8a9f01b48b04c8e961a99bef94`. Its cross-platform
-[GitHub Actions run](https://github.com/lohchanhin/vertex-palace/actions/runs/29697398778)
+The checked evidence was generated at repository commit
+`cb93369c642135d3d924166bff62b0eaf0cacde1`; the context-ceiling product fix is
+commit `143155ae697cb031b43cb31b73562c557026f5c4`. Its cross-platform
+[GitHub Actions run](https://github.com/lohchanhin/vertex-palace/actions/runs/29697801920)
 passed, and the packed candidate had SHA-1
-`70d07436888e4f17cf41e012c5c96cb10e0f7b07`.
+`fdce7d81b82cdd61d7558c2b1df0b152ab8249e7`.
 
 | Repository | Indexed files | Mode | Route confidence | Pack tokens | Target recall | Strict target precision | Extra files | Deterministic |
 | --- | ---: | --- | ---: | ---: | ---: | ---: | ---: | --- |
@@ -139,11 +140,12 @@ research targets.
 
 ## 实测结果
 
-本次证据由产品提交 `b854434564efca8a9f01b48b04c8e961a99bef94`
-生成；对应的跨平台
-[GitHub Actions](https://github.com/lohchanhin/vertex-palace/actions/runs/29697398778)
+本次证据在仓库提交 `cb93369c642135d3d924166bff62b0eaf0cacde1` 生成；
+context ceiling 产品修复位于 `143155ae697cb031b43cb31b73562c557026f5c4`。
+对应的跨平台
+[GitHub Actions](https://github.com/lohchanhin/vertex-palace/actions/runs/29697801920)
 已通过，候选 npm tarball 的 SHA-1 为
-`70d07436888e4f17cf41e012c5c96cb10e0f7b07`。
+`fdce7d81b82cdd61d7558c2b1df0b152ab8249e7`。
 
 | 仓库 | 索引文件 | 模式 | 路由置信度 | Pack tokens | 目标召回率 | 严格目标精度 | 额外文件 | 边界稳定性 |
 | --- | ---: | --- | ---: | ---: | ---: | ---: | ---: | --- |
