@@ -637,6 +637,13 @@ export function buildReportService() {
     expect(analysis.entities).toEqual(expect.arrayContaining(["build-week", "buildweek"]));
   });
 
+  it("recognizes a Simplified Chinese research report as documentation evidence", () => {
+    const analysis = analyzeTask("补齐英文与简体中文研究报告和机器证据，记录真实测试结果");
+
+    expect(analysis.keywords).toEqual(expect.arrayContaining(["docs", "documentation", "evidence", "test"]));
+    expect(requestedRouteSurfaces(analysis)).toEqual(expect.arrayContaining(["docs", "evidence", "test"]));
+  });
+
   it("routes measurable evaluation work toward the evaluation subsystem", async () => {
     await withFixture("ts-api", async (root) => {
       const files = [

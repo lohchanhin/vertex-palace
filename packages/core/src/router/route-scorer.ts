@@ -308,8 +308,8 @@ export function requestedRouteSurfaces(analysis: TaskAnalysis): RouteSurface[] {
 }
 
 function isMachineEvidenceArtifactRequest(task: string): boolean {
-  const english = /\b(?:sync|preserve|record|write|update|refresh|include|attach)\b.{0,80}\bmachine[-\s]?readable\b.{0,40}\bevidence\b/i;
-  const chinese = /(?:同步|保留|记录|記錄|写入|寫入|更新|刷新|纳入|納入|附上).{0,50}(?:机器可读|機器可讀).{0,30}(?:证据|證據)/;
+  const english = /\b(?:sync|preserve|record|write|update|refresh|include|attach)\b.{0,80}\bmachine(?:[-\s]?readable)?\b.{0,40}\bevidence\b/i;
+  const chinese = /(?:同步|保留|记录|記錄|写入|寫入|更新|刷新|纳入|納入|附上|补齐|補齊).{0,50}(?:机器(?:可读)?|機器(?:可讀)?).{0,30}(?:证据|證據)/;
   return english.test(task) || chinese.test(task);
 }
 
