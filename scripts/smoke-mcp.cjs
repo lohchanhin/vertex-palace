@@ -100,18 +100,29 @@ function verify() {
     fail(new Error("palace_context did not return a directly parseable JSON context body."));
     return;
   }
-  if (context.payload?.contextBytes !== Buffer.byteLength(contextText, "utf8")) {
-    fail(new Error(`palace_context byte metric mismatch: reported ${context.payload?.contextBytes ?? "none"}, delivered ${Buffer.byteLength(contextText, "utf8")}.`));
-    return;
-  }
-  if (context.payload?.contextEstimatedTokens > context.selection?.maxContextTokens) {
-    fail(new Error(`palace_context exceeded its selected budget: ${context.payload.contextEstimatedTokens} > ${context.selection.maxContextTokens}.`));
-    return;
+  if (context.mode === "bypass") {
+    const keys = Object.keys(context);
+    if (JSON.stringify(keys) !== JSON.stringify(["mode", "primaryCandidate", "reason"])) {
+      fail(new Error(`palace_context bypass contract mismatch: ${keys.join(", ") || "none"}.`));
+      return;
+    }
+  } else {
+    if (context.payload?.contextBytes !== Buffer.byteLength(contextText, "utf8")) {
+      fail(new Error(`palace_context byte metric mismatch: reported ${context.payload?.contextBytes ?? "none"}, delivered ${Buffer.byteLength(contextText, "utf8")}.`));
+      return;
+    }
+    if (context.payload?.contextEstimatedTokens > context.selection?.maxContextTokens) {
+      fail(new Error(`palace_context exceeded its selected budget: ${context.payload.contextEstimatedTokens} > ${context.selection.maxContextTokens}.`));
+      return;
+    }
   }
 
   finished = true;
   clearTimeout(timeout);
-  process.stdout.write(`MCP smoke test passed for Vertex Palace ${version} (${names.length} tools, ${context.mode} context, ${context.payload.contextEstimatedTokens} estimated tokens).\n`);
+  const payloadSummary = context.mode === "bypass"
+    ? `${Buffer.byteLength(contextText, "utf8")} delivered bytes`
+    : `${context.payload.contextEstimatedTokens} estimated tokens`;
+  process.stdout.write(`MCP smoke test passed for Vertex Palace ${version} (${names.length} tools, ${context.mode} context, ${payloadSummary}).\n`);
   child.stdin.end();
   child.kill();
 }

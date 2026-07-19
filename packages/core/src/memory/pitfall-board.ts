@@ -56,6 +56,7 @@ export type GuardedMemoryOptions = {
   limit?: number;
   maxTokens?: number;
   maxAgeDays?: number;
+  minRelevance?: number;
   now?: Date;
 };
 
@@ -136,6 +137,7 @@ export async function readGuardedMemory(
   const limit = Math.max(0, Math.min(3, options.limit ?? 3));
   const maxTokens = Math.max(100, Math.min(600, options.maxTokens ?? 600));
   const maxAgeDays = Math.max(1, options.maxAgeDays ?? 90);
+  const minRelevance = Math.max(1, options.minRelevance ?? 1);
   const now = options.now ?? new Date();
   const index = await readPitfallIndex(pitfallIndexPath(root));
   const taskTokens = tokenizeForPitfall(options.task);
@@ -151,7 +153,7 @@ export async function readGuardedMemory(
         score: pitfallRelevance(entry, taskTokens, options.taskType)
       };
     })
-    .filter((candidate) => candidate.score > 0)
+    .filter((candidate) => candidate.score >= minRelevance)
     .sort((a, b) => b.score - a.score || a.ageDays - b.ageDays || a.index - b.index);
 
   const items: GuardedMemoryItem[] = [];

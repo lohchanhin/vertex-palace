@@ -68,6 +68,14 @@ describe("routePalace", () => {
     ]));
   });
 
+  it("treats public API preservation as a guardrail instead of an API route target", () => {
+    const analysis = analyzeTask("Fix currency formatting so negative zero is rendered as $0.00. Keep the public API stable.");
+
+    expect(analysis.keywords).toEqual(expect.arrayContaining(["currency", "formatting", "negative", "zero"]));
+    expect(analysis.keywords).not.toEqual(expect.arrayContaining(["api", "controller", "0", "00"]));
+    expect(analysis.wingHints).not.toContain("api");
+  });
+
   it("covers implementation, regression, package, plugin, and release records for a release task", async () => {
     await withFixture("ts-api", async (root) => {
       const sources = new Map<string, string>([

@@ -80,7 +80,7 @@ export async function palacePack(input: {
 
 export async function palaceContext(input: import("@vertex-palace/shared").PalaceContextInput) {
   const root = resolveRoot(input.root);
-  const { packContext } = await import("./packer/context-packer");
+  const { packBypassContext, packContext } = await import("./packer/context-packer");
   if (!input.auto && !input.mode) {
     return packContext(root, input.task, {
       budget: input.budget,
@@ -91,20 +91,35 @@ export async function palaceContext(input: import("@vertex-palace/shared").Palac
     });
   }
 
-  const [{ routePalace }, { readIndex }, { selectPalaceMode }] = await Promise.all([
+  const [{ routePalace }, { readIndex }, { selectPalaceMode }, { readGuardedMemory }] = await Promise.all([
     import("./router/route-planner"),
     import("./storage/read-palace"),
-    import("./router/mode-selector")
+    import("./router/mode-selector"),
+    import("./memory/pitfall-board")
   ]);
   const route = await routePalace(root, input.task, {
     budget: input.budget,
     routeLimit: input.routeLimit
   });
   const index = await readIndex(root);
+  const memoryProbe = input.mode
+    ? undefined
+    : await readGuardedMemory(root, {
+        task: input.task,
+        taskType: route.taskType,
+        limit: 3,
+        maxTokens: 600,
+        maxAgeDays: 90,
+        minRelevance: 2
+      });
   const modeSelection = selectPalaceMode(index, route, input.task, {
     budget: input.budget,
-    override: input.mode
+    override: input.mode,
+    relevantMemoryCount: memoryProbe?.items.length
   });
+  if (modeSelection.mode === "bypass") {
+    return packBypassContext(input.task, route, modeSelection, input.format);
+  }
   return packContext(root, input.task, {
     budget: input.budget,
     format: input.format,

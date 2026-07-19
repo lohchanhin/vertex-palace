@@ -59,12 +59,27 @@ export type MemorySelectionTelemetry = {
   includedIds: string[];
 };
 
+export type PalaceExecutionBoundaries = {
+  primary: string[];
+  support: string[];
+  deferred: string[];
+  excluded: {
+    sourcePath: string;
+    reason: string;
+  }[];
+  requiredEvidence: string[];
+  doNot: string[];
+  stopCondition: string[];
+  conflictSummary: string[];
+};
+
 export type PalaceRiskSignals = {
   crossStack: boolean;
   memoryRelevant: boolean;
   staleMemoryRisk: boolean;
   tenantIsolationRisk: boolean;
   publicContractRisk: boolean;
+  scopeRisk: boolean;
   testOnly: boolean;
 };
 
@@ -343,6 +358,7 @@ export type PackOutput = {
   modeSelection?: PalaceModeSelection;
   payload?: PalacePayloadMetrics;
   memoryTelemetry?: MemorySelectionTelemetry;
+  executionBoundaries?: PalaceExecutionBoundaries;
   markdown?: string;
   json?: unknown;
 };

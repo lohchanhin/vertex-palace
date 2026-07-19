@@ -1,6 +1,8 @@
 import type {
   LoadLevel,
+  MemorySelectionTelemetry,
   PackOutput,
+  PalaceExecutionBoundaries,
   PalaceModeSelection,
   PalaceNode,
   PalacePayloadMetrics,
@@ -53,6 +55,9 @@ export async function packContext(root: string, task: string, options: PackConte
   const refreshedIndex = await readIndex(root);
 
   if (options.modeSelection) {
+    if (options.modeSelection.mode === "bypass") {
+      return packBypassContext(task, route, options.modeSelection, options.format);
+    }
     return packAdaptiveContext(root, task, route, refreshedIndex.nodes, options);
   }
 
@@ -120,12 +125,13 @@ async function packAdaptiveContext(
       })
     : emptyGuardedMemory();
   const guardrails = adaptiveGuardrails(selection, memory);
+  const boundaries = buildExecutionBoundaries(route, tiered, selection, memory);
   const desiredSteps = adaptiveLoadSteps(selection, tiered);
   const byId = new Map(nodes.map((node) => [node.id, node]));
   const maxDrawers = options.maxDrawers ?? adaptiveMaxDrawers(selection.mode);
   const drawers: PackedDrawer[] = [];
   const buffer = Math.min(400, Math.max(100, Math.floor(selection.maxContextTokens * 0.12)));
-  let used = estimateTokens(adaptiveRouteSummary(task, route, tiered, selection, guardrails, memory));
+  let used = estimateTokens(adaptiveRouteSummary(task, route, tiered, selection, guardrails, memory, boundaries));
 
   for (const step of desiredSteps) {
     if (drawers.length >= maxDrawers) break;
@@ -149,15 +155,15 @@ async function packAdaptiveContext(
 
   if (options.format === "json") {
     let payload = baseMetrics;
-    let json = adaptiveJson(task, route, selection, tiered, drawers, deferredReferences, guardrails, memory, payload);
+    let json = adaptiveJson(task, route, selection, tiered, drawers, deferredReferences, guardrails, memory, boundaries, payload);
     for (let attempt = 0; attempt < 4; attempt += 1) {
       const serialized = serializeJsonOutput(json);
       payload = withMeasuredPayload(baseMetrics, serialized);
-      json = adaptiveJson(task, route, selection, tiered, drawers, deferredReferences, guardrails, memory, payload);
+      json = adaptiveJson(task, route, selection, tiered, drawers, deferredReferences, guardrails, memory, boundaries, payload);
     }
     const serialized = serializeJsonOutput(json);
     payload = withMeasuredPayload(baseMetrics, serialized);
-    json = adaptiveJson(task, route, selection, tiered, drawers, deferredReferences, guardrails, memory, payload);
+    json = adaptiveJson(task, route, selection, tiered, drawers, deferredReferences, guardrails, memory, boundaries, payload);
     return {
       task,
       routeId: route.id,
@@ -165,6 +171,7 @@ async function packAdaptiveContext(
       modeSelection: selection,
       payload,
       memoryTelemetry: memory.telemetry,
+      executionBoundaries: boundaries,
       estimatedTokens: payload.contextEstimatedTokens,
       json
     };
@@ -180,6 +187,7 @@ async function packAdaptiveContext(
     deferredReferences,
     guardrails,
     memory,
+    boundaries,
     payload
   );
   for (let attempt = 0; attempt < 4; attempt += 1) {
@@ -193,6 +201,7 @@ async function packAdaptiveContext(
       deferredReferences,
       guardrails,
       memory,
+      boundaries,
       payload
     );
   }
@@ -206,6 +215,7 @@ async function packAdaptiveContext(
     deferredReferences,
     guardrails,
     memory,
+    boundaries,
     payload
   );
 
@@ -216,6 +226,7 @@ async function packAdaptiveContext(
     modeSelection: selection,
     payload,
     memoryTelemetry: memory.telemetry,
+    executionBoundaries: boundaries,
     estimatedTokens: payload.contextEstimatedTokens,
     markdown
   };
@@ -223,6 +234,56 @@ async function packAdaptiveContext(
 
 export function serializePackOutput(output: PackOutput): string {
   return output.markdown ?? serializeJsonOutput(output.json);
+}
+
+export function packBypassContext(
+  task: string,
+  route: PalaceRoute,
+  selection: PalaceModeSelection,
+  format: PackFormat = "markdown"
+): PackOutput {
+  const primary = route.route.find((step) => (step.tier ?? inferredTier(step.priority)) === "primary") ?? route.route[0];
+  const reason = selection.reasons.join(" ");
+  const minimal = {
+    mode: "bypass" as const,
+    primaryCandidate: primary?.sourcePath ?? null,
+    reason
+  };
+  const serialized = format === "json"
+    ? serializeJsonOutput(minimal)
+    : [
+        "Mode: bypass",
+        `Primary candidate: ${minimal.primaryCandidate ?? "none"}`,
+        `Reason: ${reason}`,
+        ""
+      ].join("\n");
+  const telemetry = emptyMemoryTelemetry();
+  const payload = withMeasuredPayload({
+    mode: "bypass",
+    calls: 1,
+    contextCalls: 1,
+    contextBytes: 0,
+    contextEstimatedTokens: 0,
+    routeStepCount: primary ? 1 : 0,
+    primaryCount: primary ? 1 : 0,
+    supportCount: 0,
+    deferredCount: 0,
+    memoryItemCount: 0,
+    memoryCandidateCount: 0,
+    memoryExcludedCount: 0,
+    memoryEstimatedTokens: 0,
+    guardrailCount: 0
+  }, serialized);
+  return {
+    task,
+    routeId: route.id,
+    mode: "bypass",
+    modeSelection: selection,
+    payload,
+    memoryTelemetry: telemetry,
+    estimatedTokens: payload.contextEstimatedTokens,
+    ...(format === "json" ? { json: minimal } : { markdown: serialized })
+  };
 }
 
 function serializeJsonOutput(value: unknown): string {
@@ -238,24 +299,9 @@ function adaptiveJson(
   deferredReferences: PalaceRouteStep[],
   guardrails: string[],
   memory: GuardedMemoryResult,
+  boundaries: PalaceExecutionBoundaries,
   payload: PalacePayloadMetrics
 ): unknown {
-  if (selection.mode === "bypass") {
-    return {
-      task,
-      mode: selection.mode,
-      selection: compactSelection(selection),
-      route: {
-        id: route.id,
-        taskType: route.taskType,
-        confidence: route.confidence,
-        directTarget: tiered.primary[0]?.sourcePath ?? null
-      },
-      context: [],
-      recommendedExecution: recommendedExecution(selection.mode),
-      payload
-    };
-  }
   return {
     task,
     mode: selection.mode,
@@ -281,6 +327,7 @@ function adaptiveJson(
     guardrails,
     memory: memory.items,
     memoryTelemetry: memory.telemetry,
+    executionBoundaries: boundaries,
     recommendedExecution: recommendedExecution(selection.mode),
     payload
   };
@@ -295,11 +342,9 @@ function renderAdaptiveMarkdown(
   deferredReferences: PalaceRouteStep[],
   guardrails: string[],
   memory: GuardedMemoryResult,
+  boundaries: PalaceExecutionBoundaries,
   payload: PalacePayloadMetrics
 ): string {
-  if (selection.mode === "bypass") {
-    return renderBypassMarkdown(task, route, selection, tiered, payload);
-  }
   const lines = [
     "# Vertex Palace Adaptive Context",
     "",
@@ -315,14 +360,28 @@ function renderAdaptiveMarkdown(
     "## Payload",
     "",
     `Calls: ${payload.contextCalls} | Bytes: ${payload.contextBytes} | Estimated tokens: ${payload.contextEstimatedTokens}`,
+    `Estimated context cost: ${payload.contextEstimatedTokens} / ${selection.maxContextTokens} token ceiling`,
     `Route: ${payload.routeStepCount} (${payload.primaryCount} primary, ${payload.supportCount} support, ${payload.deferredCount} deferred)`,
     `Memory: ${payload.memoryItemCount} included / ${payload.memoryCandidateCount} candidates / ${payload.memoryExcludedCount} excluded / ~${payload.memoryEstimatedTokens} tokens | Guardrails: ${payload.guardrailCount}`,
     "",
-    "## Primary Route",
+    "## Primary",
     "",
     ...(tiered.primary.length ? tiered.primary.map(renderRouteReference) : ["- No primary route selected."]),
     ""
   ];
+
+  lines.push(
+    "## Support",
+    "",
+    ...(tiered.support.length ? tiered.support.map(renderRouteReference) : ["- None."]),
+    "",
+    "## Required Evidence",
+    "",
+    ...(boundaries.requiredEvidence.length
+      ? boundaries.requiredEvidence.map((sourcePath) => `- ${sourcePath}`)
+      : ["- No separate supporting evidence was selected."]),
+    ""
+  );
 
   if (guardrails.length) {
     lines.push("## Guardrails", "", ...guardrails.map((guardrail) => `- ${guardrail}`), "");
@@ -379,11 +438,29 @@ function renderAdaptiveMarkdown(
   }
 
   lines.push(
-    "## Deferred Context",
+    "## Deferred",
     "",
     ...(deferredReferences.length
       ? deferredReferences.map(renderRouteReference)
       : ["- None. All selected route steps are already represented above."]),
+    "",
+    "## Excluded",
+    "",
+    ...(boundaries.excluded.length
+      ? boundaries.excluded.map((item) => `- ${item.sourcePath}: ${item.reason}`)
+      : ["- None."]),
+    "",
+    "## Do Not",
+    "",
+    ...boundaries.doNot.map((item) => `- ${item}`),
+    "",
+    "## Stop Condition",
+    "",
+    ...boundaries.stopCondition.map((item) => `- ${item}`),
+    "",
+    "## Conflict Summary",
+    "",
+    ...boundaries.conflictSummary.map((item) => `- ${item}`),
     "",
     "## Recommended Execution",
     "",
@@ -391,39 +468,6 @@ function renderAdaptiveMarkdown(
     ""
   );
   return lines.join("\n");
-}
-
-function renderBypassMarkdown(
-  task: string,
-  route: PalaceRoute,
-  selection: PalaceModeSelection,
-  tiered: TieredRoute,
-  payload: PalacePayloadMetrics
-): string {
-  return [
-    "# Vertex Palace Adaptive Context",
-    "",
-    "Mode: bypass",
-    `Mode confidence: ${selection.confidence}`,
-    `Why: ${selection.reasons.join(" ")}`,
-    "",
-    "## Task",
-    "",
-    task,
-    "",
-    "## Payload",
-    "",
-    `Calls: ${payload.contextCalls} | Bytes: ${payload.contextBytes} | Estimated tokens: ${payload.contextEstimatedTokens}`,
-    `Route: ${payload.routeStepCount} (${payload.primaryCount} primary, ${payload.supportCount} support, ${payload.deferredCount} deferred)`,
-    "Memory: 0 items / ~0 tokens | Guardrails: 0",
-    "",
-    "## Direct Target",
-    "",
-    tiered.primary[0]?.sourcePath ?? `Route ${route.id}`,
-    "",
-    "No source content packed. Inspect the target directly and expand only when code or test evidence requires it.",
-    ""
-  ].join("\n");
 }
 
 function tierRoute(route: PalaceRoute): TieredRoute {
@@ -468,6 +512,56 @@ function adaptiveGuardrails(selection: PalaceModeSelection, memory: GuardedMemor
   if (selection.riskSignals.crossStack) guardrails.push("Verify the contract at every routed layer boundary.");
   if (selection.riskSignals.publicContractRisk) guardrails.push("Check callers and compatibility before changing the public contract.");
   return guardrails;
+}
+
+function buildExecutionBoundaries(
+  route: PalaceRoute,
+  tiered: TieredRoute,
+  selection: PalaceModeSelection,
+  memory: GuardedMemoryResult
+): PalaceExecutionBoundaries {
+  const primary = uniquePaths(tiered.primary);
+  const support = uniquePaths(tiered.support);
+  const deferred = uniquePaths(tiered.deferred);
+  const requiredEvidence = uniquePaths([
+    ...tiered.support.filter((step) => /(?:test|spec|config|schema|docs?|readme|migration)/i.test(step.sourcePath)),
+    ...tiered.support
+  ]).slice(0, 4);
+  const doNot = [
+    "Do not inventory or broadly scan the repository.",
+    "Do not inspect Deferred or Excluded paths unless Primary or Required Evidence conflicts.",
+    "Do not continue exploration after the stop conditions pass."
+  ];
+  if (selection.riskSignals.tenantIsolationRisk) doNot.push("Do not change shared behavior without proving the tenant scope requires it.");
+  if (selection.riskSignals.publicContractRisk) doNot.push("Do not change the public contract without checking callers and compatibility evidence.");
+
+  const stopCondition = [
+    "The intended Primary implementation scope is resolved; expand it only when Required Evidence proves another dependency.",
+    "Targeted tests for the changed behavior pass.",
+    "No Excluded path or unrelated file is modified.",
+    "No unresolved conflict remains between current code, tests, and delivered memory."
+  ];
+  const conflictSummary: string[] = [];
+  if (selection.riskSignals.staleMemoryRisk) conflictSummary.push("Stale-memory risk is present; current code and tests must resolve any disagreement.");
+  if (memory.items.length) conflictSummary.push(`${memory.items.length} delivered memory item(s) still require current-code contradiction checks.`);
+  if (memory.telemetry.memoryExcluded.length) conflictSummary.push(`${memory.telemetry.memoryExcluded.length} retrieved memory item(s) were excluded with machine-readable reasons.`);
+  if (selection.confidence < 0.7 || route.confidence < 0.5) conflictSummary.push("Routing confidence is limited; stop and widen only if Primary evidence disagrees with the task.");
+  if (!conflictSummary.length) conflictSummary.push("Static routing found no explicit conflict; current code, tests, and runtime evidence remain authoritative.");
+
+  return {
+    primary,
+    support,
+    deferred,
+    excluded: route.excluded,
+    requiredEvidence,
+    doNot,
+    stopCondition,
+    conflictSummary
+  };
+}
+
+function uniquePaths(steps: PalaceRouteStep[]): string[] {
+  return [...new Set(steps.map((step) => step.sourcePath))];
 }
 
 function recommendedExecution(mode: PalaceModeSelection["mode"]): string[] {
@@ -573,13 +667,17 @@ function emptyGuardedMemory(): GuardedMemoryResult {
   return {
     items: [],
     estimatedTokens: 0,
-    telemetry: {
-      memoryCandidates: 0,
-      memoryIncluded: 0,
-      memoryExcluded: [],
-      candidateIds: [],
-      includedIds: []
-    }
+    telemetry: emptyMemoryTelemetry()
+  };
+}
+
+function emptyMemoryTelemetry(): MemorySelectionTelemetry {
+  return {
+    memoryCandidates: 0,
+    memoryIncluded: 0,
+    memoryExcluded: [],
+    candidateIds: [],
+    includedIds: []
   };
 }
 
@@ -589,7 +687,8 @@ function adaptiveRouteSummary(
   tiered: TieredRoute,
   selection: PalaceModeSelection,
   guardrails: string[],
-  memory: GuardedMemoryResult
+  memory: GuardedMemoryResult,
+  boundaries: PalaceExecutionBoundaries
 ): string {
   return [
     task,
@@ -601,7 +700,8 @@ function adaptiveRouteSummary(
     ...tiered.deferred.map((step) => step.sourcePath),
     ...guardrails,
     ...memory.items.map(renderGuardedMemoryItem),
-    JSON.stringify(memory.telemetry)
+    JSON.stringify(memory.telemetry),
+    JSON.stringify(boundaries)
   ].join("\n");
 }
 

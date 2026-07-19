@@ -237,13 +237,19 @@ export function requestedRouteSurfaces(analysis: TaskAnalysis): RouteSurface[] {
   if (hasAny(keywords, ["cli", "command", "commands"])) requested.push("cli");
   if (keywords.has("mcp")) requested.push("mcp");
   if (hasAny(keywords, ["shared", "schema", "schemas", "type", "types", "contract", "contracts"])) requested.push("shared");
+  if (hasAny(keywords, ["bypass", "boundaries", "boundary", "transport", "telemetry", "payload"]) && !requested.includes("shared")) requested.push("shared");
   if (hasAny(keywords, ["test", "tests", "verification", "regression"])) requested.push("test");
   if (hasAny(keywords, ["doc", "docs", "documentation", "readme"])) requested.push("docs");
   if (hasAny(keywords, ["ci", "workflow", "workflows", "actions"])) requested.push("ci");
   if (hasAny(keywords, ["release", "publish", "package", "manifest", "version", "npm", "registry", "tag"])) requested.push("package");
   if (hasAny(keywords, ["plugin", "marketplace"])) requested.push("plugin");
-  if (hasAny(keywords, ["adaptive", "mode", "selector", "context", "packer"])) requested.push("implementation");
+  if (hasAny(keywords, ["adaptive", "bypass", "mode", "selector", "context", "packer"])) requested.push("implementation");
   if (hasAny(keywords, ["release", "changelog"]) && !requested.includes("docs")) requested.push("docs");
+  if (keywords.has("release") && requested.includes("plugin")) {
+    if (!requested.includes("mcp")) requested.push("mcp");
+    if (!requested.includes("cli")) requested.push("cli");
+    if (!requested.includes("shared")) requested.push("shared");
+  }
   return requested;
 }
 
@@ -253,11 +259,13 @@ export function matchesRouteSurface(node: PalaceNode, surface: RouteSurface): bo
     case "cli":
       return /(^|\/)packages\/cli(\/|$)|(^|\/)cli(\/|$)/.test(sourcePath);
     case "mcp":
-      return /(^|\/)packages\/mcp(\/|$)|(^|\/)mcp(\/|$)/.test(sourcePath);
+      return /(^|\/)packages\/mcp(\/|$)|(^|\/)mcp(\/|$)|(^|\/)scripts\/[^/]*mcp[^/]*$/.test(sourcePath);
     case "shared":
       return /(^|\/)packages\/shared(\/|$)|(^|\/)shared(\/|$)|(^|\/)(types?|schemas?|contracts?)\.[^.]+$/.test(sourcePath);
     case "test":
-      return node.kind === "test" || /(^|\/)(test|tests|spec|__tests__)(\/|$)|\.(test|spec)\.[^.]+$/.test(sourcePath);
+      return node.kind === "test"
+        || /(^|\/)(test|tests|spec|__tests__)(\/|$)|\.(test|spec)\.[^.]+$/.test(sourcePath)
+        || /(^|\/)scripts\/[^/]*(?:verify|smoke|benchmark)[^/]*$/.test(sourcePath);
     case "docs":
       return node.kind === "doc" || /(^|\/)(docs?|readme)(\/|\.|$)|build_week\.md$/.test(sourcePath);
     case "ci":

@@ -25,12 +25,30 @@ function focusedRoute(confidence = 0.53): PalaceRoute {
 }
 
 describe("selectPalaceMode", () => {
-  it("uses route-lite for a small focused task that preserves the public API", () => {
+  it("bypasses a high-confidence single-file task after memory is confirmed absent", () => {
     const task = "Fix currency formatting so negative zero is rendered as $0.00. Keep the public API stable.";
-    const selection = selectPalaceMode(smallIndex(), focusedRoute(), task);
+    const selection = selectPalaceMode(smallIndex(), focusedRoute(), task, { relevantMemoryCount: 0 });
 
-    expect(selection.mode).toBe("route-lite");
+    expect(selection.mode).toBe("bypass");
     expect(selection.riskSignals.publicContractRisk).toBe(false);
+    expect(selection.riskSignals.scopeRisk).toBe(false);
+  });
+
+  it("does not bypass when relevant project memory exists", () => {
+    const task = "Fix currency formatting so negative zero is rendered as $0.00. Keep the public API stable.";
+    const selection = selectPalaceMode(smallIndex(), focusedRoute(), task, { relevantMemoryCount: 1 });
+
+    expect(selection.mode).toBe("full-palace");
+    expect(selection.memoryLevel).toBe("scoped-summary");
+    expect(selection.reasons).toContain("1 relevant memory item(s) require scoped delivery before narrowing context.");
+  });
+
+  it("does not bypass repository-wide work even when the route has one primary file", () => {
+    const task = "Fix currency formatting across the repository and update all callers.";
+    const selection = selectPalaceMode(smallIndex(), focusedRoute(), task, { relevantMemoryCount: 0 });
+
+    expect(selection.mode).toBe("full-palace");
+    expect(selection.riskSignals.scopeRisk).toBe(true);
   });
 
   it("keeps actual public contract changes in full-palace mode", () => {

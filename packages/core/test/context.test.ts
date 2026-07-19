@@ -39,8 +39,11 @@ describe("palaceContext", () => {
 
       expect(output.mode).toBe("bypass");
       expect(output.payload?.contextCalls).toBe(1);
-      expect(output.markdown).toContain("Mode: bypass");
-      expect(output.markdown).toContain("No source content packed");
+      expect(output.markdown?.trim().split("\n")).toEqual([
+        "Mode: bypass",
+        "Primary candidate: src/services/token.service.ts",
+        "Reason: High-confidence single-file route with no relevant memory, cross-stack dependency, contract risk, or scope risk."
+      ]);
       expect(output.markdown).not.toContain("generateAccessToken");
       expect(output.payload?.contextBytes).toBe(Buffer.byteLength(output.markdown ?? "", "utf8"));
       expect(output.payload?.contextEstimatedTokens).toBeLessThanOrEqual(output.modeSelection?.maxContextTokens ?? 0);
@@ -59,8 +62,98 @@ describe("palaceContext", () => {
 
       expect(output.mode).toBe("bypass");
       expect(output.payload?.contextEstimatedTokens).toBeLessThanOrEqual(output.modeSelection?.maxContextTokens ?? 0);
-      expect((output.json as { context: unknown[] }).context).toEqual([]);
+      expect(output.json).toEqual({
+        mode: "bypass",
+        primaryCandidate: "src/services/token.service.ts",
+        reason: "High-confidence single-file route with no relevant memory, cross-stack dependency, contract risk, or scope risk."
+      });
+      expect(Object.keys(output.json as Record<string, unknown>)).toEqual(["mode", "primaryCandidate", "reason"]);
       expect(output.payload?.contextBytes).toBe(Buffer.byteLength(serializePackOutput(output), "utf8"));
+    });
+  });
+
+  it("bypasses a high-confidence single-file route without an explicit filename", async () => {
+    await withFixture("ts-api", async (root) => {
+      const target = path.join(root, "src", "format-currency.mjs");
+      await writeFile(target, "export function formatCurrency(value) { return `$${value.toFixed(2)}`; }\n", "utf8");
+      await indexPalace(root);
+
+      const output = await palaceContext({
+        root,
+        task: "Fix currency formatting so negative zero is rendered as $0.00. Keep the public API stable.",
+        budget: 6000,
+        auto: true,
+        format: "json"
+      });
+
+      expect(output.mode).toBe("bypass");
+      expect(output.json).toMatchObject({
+        mode: "bypass",
+        primaryCandidate: "src/format-currency.mjs"
+      });
+      expect(Object.keys(output.json as Record<string, unknown>)).toEqual(["mode", "primaryCandidate", "reason"]);
+    });
+  });
+
+  it("bypasses all four repeated small-local trials in a large indexed repository", async () => {
+    await withFixture("ts-api", async (root) => {
+      const target = path.join(root, "src", "format-currency.mjs");
+      const noiseRoot = path.join(root, "noise");
+      await mkdir(noiseRoot, { recursive: true });
+      await writeFile(target, "export function formatCurrency(value) { return `$${value.toFixed(2)}`; }\n", "utf8");
+      await Promise.all(
+        Array.from({ length: 240 }, (_, index) => writeFile(
+          path.join(noiseRoot, `module-${String(index).padStart(3, "0")}.ts`),
+          `export const unrelatedValue${index} = ${index};\n`,
+          "utf8"
+        ))
+      );
+      await indexPalace(root);
+
+      const outputs = [];
+      for (let trial = 0; trial < 4; trial += 1) {
+        outputs.push(await palaceContext({
+          root,
+          task: "Fix currency formatting so negative zero is rendered as $0.00. Keep the public API stable.",
+          budget: 6000,
+          auto: true,
+          format: "json"
+        }));
+      }
+
+      expect(outputs.map((output) => output.mode)).toEqual(["bypass", "bypass", "bypass", "bypass"]);
+      for (const output of outputs) {
+        expect(output.json).toMatchObject({ mode: "bypass", primaryCandidate: "src/format-currency.mjs" });
+        expect(Object.keys(output.json as Record<string, unknown>)).toEqual(["mode", "primaryCandidate", "reason"]);
+        expect(output.payload?.contextEstimatedTokens).toBeLessThan(80);
+      }
+    });
+  });
+
+  it("keeps a single-file task in Palace when relevant memory exists", async () => {
+    await withFixture("ts-api", async (root) => {
+      const target = path.join(root, "src", "format-currency.mjs");
+      await writeFile(target, "export function formatCurrency(value) { return `$${value.toFixed(2)}`; }\n", "utf8");
+      await indexPalace(root);
+      await writeMemory({
+        root,
+        task: "currency formatting negative zero",
+        outcome: "partial",
+        pitfalls: ["Currency formatting must preserve the accounting sign policy for negative zero."],
+        tags: ["currency", "formatting", "negative", "zero"]
+      });
+
+      const output = await palaceContext({
+        root,
+        task: "Fix currency formatting so negative zero is rendered as $0.00. Keep the public API stable.",
+        budget: 6000,
+        auto: true,
+        format: "json"
+      });
+
+      expect(output.mode).toBe("full-palace");
+      expect(output.memoryTelemetry?.memoryIncluded).toBe(1);
+      expect(output.payload?.memoryItemCount).toBe(1);
     });
   });
 
@@ -76,12 +169,31 @@ describe("palaceContext", () => {
       const json = output.json as {
         context: Array<{ tier: string }>;
         deferredReferences: Array<{ tier: string }>;
+        executionBoundaries: {
+          primary: string[];
+          support: string[];
+          deferred: string[];
+          excluded: Array<{ sourcePath: string; reason: string }>;
+          requiredEvidence: string[];
+          doNot: string[];
+          stopCondition: string[];
+          conflictSummary: string[];
+        };
       };
 
       expect(output.mode).toBe("route-lite");
       expect(json.context.length).toBeGreaterThan(0);
       expect(json.context.every((item) => item.tier === "primary")).toBe(true);
       expect(json.deferredReferences.some((item) => item.tier === "support")).toBe(true);
+      expect(json.executionBoundaries.primary.length).toBeGreaterThan(0);
+      expect(json.executionBoundaries.support.length).toBeGreaterThan(0);
+      expect(json.executionBoundaries.deferred).toBeInstanceOf(Array);
+      expect(json.executionBoundaries.excluded).toBeInstanceOf(Array);
+      expect(json.executionBoundaries.requiredEvidence.length).toBeGreaterThan(0);
+      expect(json.executionBoundaries.doNot).toContain("Do not inventory or broadly scan the repository.");
+      expect(json.executionBoundaries.stopCondition).toContain("Targeted tests for the changed behavior pass.");
+      expect(json.executionBoundaries.conflictSummary.length).toBeGreaterThan(0);
+      expect(output.executionBoundaries).toEqual(json.executionBoundaries);
       expect(output.payload?.memoryItemCount).toBe(0);
       expect(output.payload?.contextEstimatedTokens).toBeLessThan(2000);
     });
@@ -158,6 +270,15 @@ describe("palaceContext", () => {
       expect(output.payload?.guardrailCount).toBeGreaterThanOrEqual(1);
       expect(output.markdown).toContain("## Relevant Memory");
       expect(output.markdown).toContain("## Memory Selection");
+      expect(output.markdown).toContain("## Primary");
+      expect(output.markdown).toContain("## Support");
+      expect(output.markdown).toContain("## Required Evidence");
+      expect(output.markdown).toContain("## Deferred");
+      expect(output.markdown).toContain("## Excluded");
+      expect(output.markdown).toContain("## Do Not");
+      expect(output.markdown).toContain("## Stop Condition");
+      expect(output.markdown).toContain("## Conflict Summary");
+      expect(output.markdown).toContain("Estimated context cost:");
       expect(output.markdown).toContain("Candidates: 2 | Included: 2 | Excluded: 0");
       expect(output.markdown).toContain("Never change the shared theme");
       expect(output.markdown).toContain("renderer previously ignored");

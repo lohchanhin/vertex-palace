@@ -140,7 +140,10 @@ const PHRASE_KEYWORDS: Array<[RegExp, string[]]> = [
 ];
 
 export function analyzeTask(task: string): TaskAnalysis {
-  const lexicalTask = task.replace(/\bproduct\s+intent\b/gi, "intent");
+  const lexicalTask = task
+    .replace(/\bproduct\s+intent\b/gi, "intent")
+    .replace(/\b(?:keep|preserve|without\s+changing|do\s+not\s+change)\s+(?:the\s+)?public\s+api(?:\s+stable)?\b/gi, " compatibility guardrail ")
+    .replace(/\b(?:keep|preserve|without\s+changing|do\s+not\s+change)\s+(?:the\s+)?api\s+contract(?:\s+stable)?\b/gi, " compatibility guardrail ");
   const entities = entityKeywords(task);
   const contextualStopWords = new Set(STOP_WORDS);
   if (/\bbuild\s+week\b/i.test(task)) contextualStopWords.add("build");
@@ -166,7 +169,7 @@ function englishKeywords(task: string): string[] {
     .toLowerCase()
     .split(/[^a-z0-9]+/)
     .map(slugify)
-    .filter(Boolean);
+    .filter((token) => Boolean(token) && !/^\d+$/.test(token));
 }
 
 function phraseKeywords(task: string): string[] {

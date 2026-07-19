@@ -76,10 +76,13 @@ and recording guidance are documented in
 
 ## Judge Quick Test
 
-Install the public competition release, then run it in the repository you want to evaluate:
+Until the 0.3 research candidate is published, use the last complete public
+release for installation smoke tests. The final submission must update this
+pin only after the same 0.3 tarball passes npm browser/device verification and
+fresh registry installation:
 
 ```bash
-npm install -g vertex-palace@0.2.4
+npm install -g vertex-palace@0.2.3
 palace --version
 palace context "improve route confidence calibration" --auto --format json
 palace evaluate "improve route confidence calibration" --changed-file packages/core/src/evaluation/evaluate-route.ts

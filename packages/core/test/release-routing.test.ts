@@ -126,6 +126,124 @@ describe("release routing matrix", () => {
     });
   });
 
+  it("balances implementation and distribution surfaces for a mixed feature release", async () => {
+    await withFixture("ts-api", async (root) => {
+      const changedFiles = [
+        "package.json",
+        "packages/core/src/index.ts",
+        "packages/core/src/memory/pitfall-board.ts",
+        "packages/core/src/packer/context-packer.ts",
+        "packages/core/src/router/mode-selector.ts",
+        "packages/core/src/router/route-planner.ts",
+        "packages/core/src/router/route-scorer.ts",
+        "packages/shared/src/types.ts",
+        "packages/core/test/context.test.ts",
+        "packages/core/test/mode-selector.test.ts",
+        "packages/core/test/router.test.ts",
+        "packages/core/test/release-routing.test.ts",
+        "packages/cli/src/index.ts",
+        "packages/mcp/src/server.ts",
+        "plugins/vertex-palace/.codex-plugin/plugin.json",
+        "plugins/vertex-palace/.mcp.json",
+        ".agents/plugins/marketplace.json",
+        "scripts/verify-release-candidate.cjs",
+        "scripts/smoke-mcp.cjs",
+        "README.md",
+        "CHANGELOG.md",
+        "BUILD_WEEK.md",
+        "docs/research/TRUE_ADAPTIVE_0_3_0.md"
+      ];
+      await writeSources(root, {
+        "package.json": JSON.stringify({ name: "vertex-palace", version: "0.3.0", workspaces: ["packages/*"] }),
+        "packages/core/package.json": JSON.stringify({ name: "@vertex-palace/core", version: "0.3.0" }),
+        "packages/cli/package.json": JSON.stringify({ name: "@vertex-palace/cli", version: "0.3.0" }),
+        "packages/mcp/package.json": JSON.stringify({ name: "@vertex-palace/mcp", version: "0.3.0" }),
+        "packages/shared/package.json": JSON.stringify({ name: "@vertex-palace/shared", version: "0.3.0" }),
+        "packages/core/src/index.ts": "export { palaceContext } from './packer/context-packer';\n",
+        "packages/core/src/memory/pitfall-board.ts": "export const memoryPreflight = true;\n",
+        "packages/core/src/packer/context-packer.ts": "export const packBypassContext = () => ({ mode: 'bypass' });\n",
+        "packages/core/src/router/mode-selector.ts": "export const selectAdaptiveMode = () => 'bypass';\n",
+        "packages/core/src/router/route-planner.ts": "export const routePalace = () => ['implementation', 'test', 'package'];\n",
+        "packages/core/src/router/route-scorer.ts": "export const requestedRouteSurfaces = () => ['implementation', 'test'];\n",
+        "packages/shared/src/types.ts": "export type PalaceExecutionBoundaries = { primary: string[] };\n",
+        "packages/core/test/context.test.ts": "describe('context bypass boundaries', () => it('packs three fields', () => true));\n",
+        "packages/core/test/mode-selector.test.ts": "describe('adaptive bypass preflight', () => it('selects bypass', () => true));\n",
+        "packages/core/test/router.test.ts": "describe('mixed feature release routing', () => it('covers surfaces', () => true));\n",
+        "packages/core/test/release-routing.test.ts": "describe('release routing matrix', () => it('balances feature and distribution', () => true));\n",
+        "packages/cli/src/index.ts": "export const cliVersion = '0.3.0';\n",
+        "packages/mcp/src/server.ts": "export const mcpVersion = '0.3.0';\n",
+        "plugins/vertex-palace/.codex-plugin/plugin.json": JSON.stringify({ name: "vertex-palace", version: "0.3.0" }),
+        "plugins/vertex-palace/.mcp.json": JSON.stringify({ mcpServers: { palace: { args: ["vertex-palace@0.3.0"] } } }),
+        ".agents/plugins/marketplace.json": JSON.stringify({ plugins: [{ name: "vertex-palace", source: { ref: "v0.3.0" } }] }),
+        "scripts/verify-release-candidate.cjs": "module.exports = async function verifyReleaseCandidate() { return 'clean tarball'; };\n",
+        "scripts/smoke-mcp.cjs": "module.exports = function smokeMcp() { return 'ten tools'; };\n",
+        "README.md": "# Vertex Palace\n\nTrue adaptive bypass and execution boundaries.\n",
+        "CHANGELOG.md": "# Changelog\n\n## 0.3.0\n\nAdd bypass preflight and execution boundaries.\n",
+        "BUILD_WEEK.md": "# Build Week\n\nVerify the Codex plugin release without publishing npm.\n",
+        "docs/research/TRUE_ADAPTIVE_0_3_0.md": "# True Adaptive 0.3.0\n\nRecord clean tarball and self-evaluation evidence.\n"
+      });
+      await indexPalace(root);
+
+      const evaluation = await evaluateRoute(
+        root,
+        "Prepare the Vertex Palace 0.3.0 release after implementing true adaptive bypass, memory preflight, and execution boundaries. Add context, mode-selector, and router regression tests; update shared transport types, CLI, MCP, plugin marketplace metadata, bilingual documentation, changelog, and the clean tarball research report without publishing npm.",
+        { changedFiles, routeLimit: 23, budget: 16000, maxDrawers: 4 }
+      );
+      reportMatrix("R5-mixed-feature-release", evaluation);
+
+      expect(evaluation.taskType).toBe("release");
+      expect(evaluation.route.files).toEqual(expect.arrayContaining([
+        "packages/core/src/packer/context-packer.ts",
+        "packages/core/src/router/mode-selector.ts",
+        "packages/core/src/router/route-planner.ts",
+        "packages/core/src/router/route-scorer.ts",
+        "packages/shared/src/types.ts",
+        "packages/core/test/context.test.ts",
+        "packages/core/test/mode-selector.test.ts",
+        "packages/core/test/release-routing.test.ts",
+        "plugins/vertex-palace/.codex-plugin/plugin.json",
+        "plugins/vertex-palace/.mcp.json",
+        ".agents/plugins/marketplace.json",
+        "packages/cli/src/index.ts",
+        "packages/mcp/src/server.ts",
+        "scripts/verify-release-candidate.cjs",
+        "scripts/smoke-mcp.cjs"
+      ]));
+      expect(evaluation.route.fileCount).toBeLessThanOrEqual(23);
+      expect(evaluation.coverage.changedFileCoverage).toBeGreaterThanOrEqual(0.72);
+      expect(evaluation.coverage.routeFocus).toBeGreaterThanOrEqual(0.72);
+
+      const chineseEvaluation = await evaluateRoute(
+        root,
+        "完成 Vertex Palace v0.3.0 真正自适应 bypass、记忆预检与执行边界；补齐混合功能加发布路由回归、CLI/MCP/插件元数据、双语文档、干净 tarball 研究验证并推送 Git，但暂不发布 npm。",
+        { changedFiles, routeLimit: 23, budget: 16000, maxDrawers: 4 }
+      );
+      reportMatrix("R5-zh-mixed-feature-release", chineseEvaluation);
+
+      expect(chineseEvaluation.taskType).toBe("release");
+      expect(chineseEvaluation.route.files).toEqual(expect.arrayContaining([
+        "packages/core/src/packer/context-packer.ts",
+        "packages/core/src/router/mode-selector.ts",
+        "packages/core/src/router/route-planner.ts",
+        "packages/core/src/router/route-scorer.ts",
+        "packages/shared/src/types.ts",
+        "packages/core/test/context.test.ts",
+        "packages/core/test/mode-selector.test.ts",
+        "packages/core/test/release-routing.test.ts",
+        "plugins/vertex-palace/.codex-plugin/plugin.json",
+        "plugins/vertex-palace/.mcp.json",
+        ".agents/plugins/marketplace.json",
+        "packages/cli/src/index.ts",
+        "packages/mcp/src/server.ts",
+        "scripts/verify-release-candidate.cjs",
+        "scripts/smoke-mcp.cjs"
+      ]));
+      expect(chineseEvaluation.route.fileCount).toBeLessThanOrEqual(23);
+      expect(chineseEvaluation.coverage.changedFileCoverage).toBeGreaterThanOrEqual(0.72);
+      expect(chineseEvaluation.coverage.routeFocus).toBeGreaterThanOrEqual(0.72);
+    });
+  });
+
   it("preserves action intent around release vocabulary", async () => {
     expect(classifyTask("发布 Acme 新版本到 npm，更新 changelog 与 Git tag")).toBe("release");
     expect(classifyTask("Fix npm publish authentication failure E401")).toBe("bugfix");

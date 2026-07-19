@@ -2,6 +2,30 @@
 
 ## Unreleased
 
+## 0.3.0 - 2026-07-19
+
+### Added
+
+- True auto-bypass for a high-confidence single-file route when a preflight confirms no relevant current memory and no cross-stack, contract, tenant, or broad-scope risk.
+- A three-field bypass transport containing only `mode`, `primaryCandidate`, and `reason`.
+- Machine-readable execution boundaries for Primary, Support, Deferred, Excluded, Required Evidence, Do Not, Stop Condition, and Conflict Summary.
+- A dedicated `scopeRisk` signal and a bounded memory-relevance preflight before automatic mode selection.
+- A reproducible `pnpm test:release-candidate` gate that packs and installs the local tarball, exercises a 240-file fixture, validates memory fallback and execution boundaries, and starts the installed MCP server.
+
+### Changed
+
+- Relevant memory now prevents bypass and selects scoped Full Palace delivery without mechanically converting every memory-bearing task into Guarded Memory mode.
+- Public API preservation wording is treated as a routing guardrail, so generic `api` and currency literals such as `0.00` no longer create false route targets.
+- Adaptive payload budgeting reserves space for memory telemetry and execution boundaries before loading source drawers.
+- The Codex plugin explicitly stops broad exploration after Primary, Required Evidence, tests, and conflict checks satisfy the delivered stop conditions.
+- Mixed feature-and-release routing now allocates implementation, regression, transport, CLI, MCP, plugin, documentation, and package surfaces in rounds, with English and Chinese regression coverage.
+
+### Verification
+
+- Four repeated small-local trials in a repository with 240 generated distractor files all selected `bypass`, named the intended `src/format-currency.mjs` target, emitted exactly three JSON fields, and stayed below 80 estimated payload tokens.
+- The mixed feature-and-release fixture reached 0.96 changed-file coverage and 0.96 route focus in both English and Chinese task variants.
+- These product-contract tests do not yet prove parity with Control tool calls, reported tokens, or wall time; that requires the fresh Control-first benchmark planned for 0.3.1.
+
 ## 0.2.4 - 2026-07-19
 
 ### Added

@@ -1,6 +1,6 @@
 {
   "name": "vertex-palace",
-  "version": "0.2.4",
+  "version": "0.3.0",
   "description": "Adaptive memory-palace context routing for Codex coding tasks.",
   "license": "MIT",
   "type": "module",
@@ -47,6 +47,7 @@
     "build:package-cli": "tsup --config tsup.package-cli.config.ts && node scripts/trim-generated.cjs",
     "test": "pnpm -r test",
     "test:mcp-smoke": "node scripts/smoke-mcp.cjs",
+    "test:release-candidate": "node scripts/verify-release-candidate.cjs",
     "lint": "pnpm -r exec tsc --noEmit -p tsconfig.json --pretty false",
     "clean": "pnpm -r clean"
   },

@@ -1,6 +1,6 @@
 {
   "name": "vertex-palace",
-  "version": "0.2.4",
+  "version": "0.3.0",
   "description": "Adaptive memory-palace context routing for Codex coding tasks.",
   "author": {
     "name": "Vertex Palace Contributors",
@@ -22,7 +22,7 @@
   "interface": {
     "displayName": "Vertex Palace",
     "shortDescription": "Select the smallest safe project context for Codex.",
-    "longDescription": "Vertex Palace builds a local spatial index, selects an adaptive context mode, and gives Codex measured Primary, Support, Deferred, and guarded-memory context before coding.",
+    "longDescription": "Vertex Palace builds a local spatial index, selects an adaptive context mode, and gives Codex measured Primary, Support, Deferred, Excluded, memory, and stop boundaries before coding.",
     "developerName": "Vertex Palace Contributors",
     "category": "Productivity",
     "capabilities": ["Read", "Write"],

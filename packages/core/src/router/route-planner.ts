@@ -237,15 +237,16 @@ function ensureReleaseSurfaceCoverage(
   analysis: ReturnType<typeof analyzeTask>,
   limit: number
 ): ScoredNode[] {
+  const packageQuota = requested.includes("implementation") ? 2 : 5;
   const quotas: Array<[RouteSurface, number]> = [
-    ["implementation", 2],
-    ["test", 1],
-    ["package", 5],
+    ["implementation", 4],
+    ["test", 3],
+    ["shared", 1],
+    ["docs", 3],
     ["plugin", 3],
-    ["docs", 1],
     ["mcp", 1],
     ["cli", 1],
-    ["shared", 1],
+    ["package", packageQuota],
     ["ci", 1]
   ];
   const result: ScoredNode[] = [];
@@ -257,18 +258,96 @@ function ensureReleaseSurfaceCoverage(
     return true;
   };
 
-  for (const [surface, quota] of quotas) {
-    if (!requested.includes(surface)) continue;
-    let added = 0;
-    for (const item of scored) {
-      if (!matchesRouteSurface(item.node, surface)) continue;
-      if (!isReleaseSurfaceCandidate(item, surface, analysis)) continue;
-      if (append(item)) added += 1;
-      if (added >= quota || result.length >= limit) break;
+  const addedBySurface = new Map<RouteSurface, number>();
+  const maxQuota = Math.max(...quotas.map(([, quota]) => quota));
+  for (let round = 0; round < maxQuota && result.length < limit; round += 1) {
+    for (const [surface, quota] of quotas) {
+      if (!requested.includes(surface) || (addedBySurface.get(surface) ?? 0) >= quota) continue;
+      const representative = [...scored]
+        .filter(
+          (item) =>
+          matchesRouteSurface(item.node, surface)
+          && isReleaseSurfaceCandidate(item, surface, analysis)
+          && !sourcePaths.has(item.node.sourcePath)
+        )
+        .sort((a, b) => releaseSurfacePriority(b, surface, analysis) - releaseSurfacePriority(a, surface, analysis) || b.score - a.score)[0];
+      if (representative && append(representative)) {
+        addedBySurface.set(surface, (addedBySurface.get(surface) ?? 0) + 1);
+      }
+      if (result.length >= limit) break;
     }
   }
 
+  const remaining = [...scored]
+    .filter((item) => requested.some(
+      (surface) => matchesRouteSurface(item.node, surface) && isReleaseSurfaceCandidate(item, surface, analysis)
+    ))
+    .sort(
+      (a, b) => maxReleaseSurfacePriority(b, requested, analysis) - maxReleaseSurfacePriority(a, requested, analysis)
+        || b.score - a.score
+    );
+  for (const item of remaining) {
+    if (result.length >= limit) break;
+    append(item);
+  }
+
   return result.sort((a, b) => b.score - a.score || a.node.sourcePath.localeCompare(b.node.sourcePath));
+}
+
+function maxReleaseSurfacePriority(
+  item: ScoredNode,
+  requested: RouteSurface[],
+  analysis: ReturnType<typeof analyzeTask>
+): number {
+  return Math.max(
+    0,
+    ...requested
+      .filter((surface) => matchesRouteSurface(item.node, surface))
+      .map((surface) => releaseSurfacePriority(item, surface, analysis))
+  );
+}
+
+function releaseSurfacePriority(
+  item: ScoredNode,
+  surface: RouteSurface,
+  analysis: ReturnType<typeof analyzeTask>
+): number {
+  const sourcePath = item.node.sourcePath.toLowerCase();
+  if (surface === "implementation") {
+    const keywords = new Set(analysis.keywords);
+    if (hasAnyKeyword(keywords, ["route", "router"]) && /route-planner\.[cm]?[jt]s$/.test(sourcePath)) return 500;
+    if (hasAnyKeyword(keywords, ["route", "router"]) && /route-scorer\.[cm]?[jt]s$/.test(sourcePath)) return 475;
+    if (/context-packer\.[cm]?[jt]s$/.test(sourcePath)) return 450;
+    if (/mode-selector\.[cm]?[jt]s$/.test(sourcePath)) return 425;
+    if (/pitfall-board\.[cm]?[jt]s$/.test(sourcePath)) return 400;
+    if (/analyze-task\.[cm]?[jt]s$/.test(sourcePath)) return 350;
+    if (/packages\/core\/src\/index\.[cm]?[jt]s$/.test(sourcePath)) return 200;
+    return 100;
+  }
+  if (surface === "test") {
+    const keywords = new Set(analysis.keywords);
+    if (hasAnyKeyword(keywords, ["route", "router"]) && /release-routing\.test\./.test(sourcePath)) return 500;
+    if (/context\.test\./.test(sourcePath)) return 450;
+    if (/mode-selector\.test\./.test(sourcePath)) return 425;
+    if (/router\.test\./.test(sourcePath)) return 400;
+    if (/scripts\/(?:verify-release-candidate|smoke-mcp)\./.test(sourcePath)) return 350;
+    return 100;
+  }
+  if (surface === "mcp") {
+    if (/(^|\/)packages\/mcp\/src\//.test(sourcePath)) return 300;
+    if (/\.mcp\.json$/.test(sourcePath)) return 200;
+    return 100;
+  }
+  if (surface === "cli") {
+    if (/(^|\/)packages\/cli\/src\//.test(sourcePath)) return 300;
+    return 100;
+  }
+  if (surface !== "plugin") return 0;
+  if (/\.codex-plugin\/plugin\.json$/.test(sourcePath)) return 400;
+  if (/\.mcp\.json$/.test(sourcePath)) return 350;
+  if (/(^|\/)\.agents\/plugins\/marketplace\.json$/.test(sourcePath)) return 300;
+  if (/(^|\/)skills?\//.test(sourcePath)) return 200;
+  return 100;
 }
 
 function isReleaseSurfaceCandidate(
@@ -277,17 +356,38 @@ function isReleaseSurfaceCandidate(
   analysis: ReturnType<typeof analyzeTask>
 ): boolean {
   const sourcePath = item.node.sourcePath.toLowerCase();
+  const keywords = new Set(analysis.keywords);
+  if (surface === "implementation" && hasAnyKeyword(keywords, ["preflight", "bypass", "boundaries", "boundary"])) {
+    const routeCandidate = hasAnyKeyword(keywords, ["route", "router"]) && /(route-planner|route-scorer|analyze-task)/.test(sourcePath);
+    return routeCandidate || /(context-packer|mode-selector|pitfall-board)|packages\/core\/src\/index\.ts$/.test(sourcePath);
+  }
   if (surface === "test") {
+    if (
+      hasAnyKeyword(keywords, ["release", "tarball", "verification", "mcp"])
+      && /scripts\/(?:verify-release-candidate|smoke-mcp)\./.test(sourcePath)
+    ) return true;
+    if (hasAnyKeyword(keywords, ["bypass", "boundaries", "boundary", "preflight"])) {
+      return /(mode-selector|context|router|release-routing)\.test\./.test(sourcePath);
+    }
     return /(release|publish|version|plugin|marketplace|mcp|mode-selector|context|packer|adaptive)/.test(sourcePath);
+  }
+  if (surface === "shared" && hasAnyKeyword(keywords, ["bypass", "boundaries", "boundary", "transport", "telemetry", "payload"])) {
+    return /(^|\/)packages\/shared\/src\/(types?|schemas?)\.[cm]?[jt]s$/.test(sourcePath);
+  }
+  if (surface === "docs" && hasAnyKeyword(keywords, ["documentation", "bilingual", "changelog", "release"])) {
+    return /(^|\/)(readme|changelog|build_week)\.md$|^docs\/research\/.*(?:adaptive|bypass|0_3_0)/.test(sourcePath);
   }
   if (surface !== "package") return true;
 
-  const keywords = new Set(analysis.keywords);
   if (keywords.has("python") || keywords.has("pypi")) return /(^|\/)(pyproject\.toml|setup\.(?:py|cfg))$/.test(sourcePath);
   if (keywords.has("rust") || keywords.has("cargo") || keywords.has("crate")) return /(^|\/)cargo\.toml$/.test(sourcePath);
   if (keywords.has("java") || keywords.has("maven") || keywords.has("gradle")) return /(^|\/)(pom\.xml|build\.gradle(?:\.kts)?)$/.test(sourcePath);
   if (keywords.has("dotnet") || keywords.has("nuget")) return /\.csproj$/.test(sourcePath);
   return true;
+}
+
+function hasAnyKeyword(keywords: Set<string>, candidates: string[]): boolean {
+  return candidates.some((candidate) => keywords.has(candidate));
 }
 
 function nodeHaystack(item: ScoredNode): string {

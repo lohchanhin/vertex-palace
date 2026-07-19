@@ -9,6 +9,7 @@ import type {
 export type SelectPalaceModeOptions = {
   budget?: number;
   override?: PalaceMode;
+  relevantMemoryCount?: number;
 };
 
 const DEFAULT_CONTEXT_BUDGET = 6_000;
@@ -23,7 +24,9 @@ export function selectPalaceMode(
   const fileCount = Object.keys(index.fileHashes).length;
   const explicitFiles = explicitFileReferences(task);
   const riskSignals = detectRiskSignals(normalizedTask, route);
-  const primaryCount = route.route.filter((step) => (step.tier ?? inferredTier(step.priority)) === "primary").length;
+  const memoryEvidenceAvailable = (options.relevantMemoryCount ?? 0) > 0;
+  const primarySteps = route.route.filter((step) => (step.tier ?? inferredTier(step.priority)) === "primary");
+  const primaryCount = primarySteps.length;
   const uncertainRoute = route.confidence < 0.45;
 
   if (options.override) {
@@ -45,19 +48,35 @@ export function selectPalaceMode(
     return buildSelection("guarded-memory-palace", reasons, riskSignals, options.budget, 0.88);
   }
 
-  const tinyExplicitTask = fileCount <= 30 && explicitFiles.length === 1;
+  const singleExplicitTarget = explicitFiles.length === 1 && route.confidence >= 0.45;
+  const singleImplicitTarget = explicitFiles.length === 0
+    && new Set(primarySteps.map((step) => step.sourcePath)).size === 1
+    && route.confidence >= 0.5;
+  const highConfidenceSingleFile = singleExplicitTarget || singleImplicitTarget;
+  const memoryCheckedAndAbsent = options.relevantMemoryCount === 0;
   if (
-    tinyExplicitTask &&
+    highConfidenceSingleFile &&
+    memoryCheckedAndAbsent &&
     !riskSignals.crossStack &&
     !riskSignals.publicContractRisk &&
-    route.confidence >= 0.45
+    !riskSignals.scopeRisk
   ) {
     return buildSelection(
       "bypass",
-      ["One explicit file in a small repository does not justify routed source context."],
+      ["High-confidence single-file route with no relevant memory, cross-stack dependency, contract risk, or scope risk."],
       riskSignals,
       options.budget,
-      0.9
+      explicitFiles.length === 1 ? 0.92 : 0.88
+    );
+  }
+
+  if (memoryEvidenceAvailable) {
+    return buildSelection(
+      "full-palace",
+      [`${options.relevantMemoryCount} relevant memory item(s) require scoped delivery before narrowing context.`],
+      riskSignals,
+      options.budget,
+      0.82
     );
   }
 
@@ -65,6 +84,7 @@ export function selectPalaceMode(
     !uncertainRoute &&
     !riskSignals.crossStack &&
     !riskSignals.publicContractRisk &&
+    !riskSignals.scopeRisk &&
     ((explicitFiles.length === 1 && primaryCount <= 2) || fileCount <= 100);
   if (boundedTask) {
     return buildSelection(
@@ -83,6 +103,7 @@ export function selectPalaceMode(
   const reasons = [
     riskSignals.crossStack ? "The route crosses implementation layers." : undefined,
     riskSignals.publicContractRisk ? "A public contract or schema may affect indirect dependencies." : undefined,
+    riskSignals.scopeRisk ? "The requested change has repository-wide or multi-file scope." : undefined,
     uncertainRoute ? "Route confidence is too low for a narrow context." : undefined,
     fileCount > 100 ? `The repository contains ${fileCount} indexed files.` : undefined
   ].filter((reason): reason is string => Boolean(reason));
@@ -210,6 +231,28 @@ function detectRiskSignals(task: string, route: PalaceRoute): PalaceRiskSignals 
     "without changing the api contract"
   ]);
   const publicContractRisk = publicContractChange || (publicContractMention && !publicContractPreservation);
+  const scopeRisk = hasAny(task, [
+    "repository-wide",
+    "repo-wide",
+    "across the repository",
+    "across the codebase",
+    "entire repository",
+    "entire codebase",
+    "all modules",
+    "every module",
+    "all callers",
+    "multiple packages",
+    "shared behavior",
+    "global behavior",
+    "全仓库",
+    "全倉庫",
+    "整个仓库",
+    "整個倉庫",
+    "所有模块",
+    "所有模組",
+    "多个文件",
+    "多個檔案"
+  ]);
 
   return {
     crossStack: crossStackTerms || (frontendRoute && backendRoute),
@@ -217,6 +260,7 @@ function detectRiskSignals(task: string, route: PalaceRoute): PalaceRiskSignals 
     staleMemoryRisk,
     tenantIsolationRisk: tenantWord && isolationWord,
     publicContractRisk,
+    scopeRisk,
     testOnly: route.taskType === "test"
   };
 }
