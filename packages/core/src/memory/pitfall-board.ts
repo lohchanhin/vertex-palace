@@ -1,6 +1,10 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
-import type { MemoryInput } from "@vertex-palace/shared";
+import type {
+  MemoryExclusionReason,
+  MemoryInput,
+  MemorySelectionTelemetry
+} from "@vertex-palace/shared";
 import { hashText } from "../scanner/file-hash";
 import { estimateTokens } from "../packer/token-estimator";
 import { writeJson } from "../storage/write-palace";
@@ -43,6 +47,7 @@ export type GuardedMemoryItem = {
 export type GuardedMemoryResult = {
   items: GuardedMemoryItem[];
   estimatedTokens: number;
+  telemetry: MemorySelectionTelemetry;
 };
 
 export type GuardedMemoryOptions = {
@@ -134,6 +139,8 @@ export async function readGuardedMemory(
   const now = options.now ?? new Date();
   const index = await readPitfallIndex(pitfallIndexPath(root));
   const taskTokens = tokenizeForPitfall(options.task);
+  const hasExplicitScope = index.entries.some((entry) => entry.client && scopeMatchesTask(entry.client, options.task, taskTokens))
+    || hasScopeMarker(options.task);
   const candidates = index.entries
     .map((entry, index) => {
       const ageDays = ageInDays(entry.createdAt, now);
@@ -144,21 +151,46 @@ export async function readGuardedMemory(
         score: pitfallRelevance(entry, taskTokens, options.taskType)
       };
     })
-    .filter((candidate) => candidate.score > 0 && candidate.ageDays <= maxAgeDays)
+    .filter((candidate) => candidate.score > 0)
     .sort((a, b) => b.score - a.score || a.ageDays - b.ageDays || a.index - b.index);
 
   const items: GuardedMemoryItem[] = [];
+  const excluded: Array<{ id: string; reason: MemoryExclusionReason }> = [];
   let estimatedTokens = 0;
   for (const candidate of candidates) {
-    if (items.length >= limit) break;
+    if (candidate.ageDays > maxAgeDays) {
+      excluded.push({ id: candidate.entry.id, reason: "expired" });
+      continue;
+    }
+    if (candidate.entry.client && hasExplicitScope && !scopeMatchesTask(candidate.entry.client, options.task, taskTokens)) {
+      excluded.push({ id: candidate.entry.id, reason: "scope_mismatch" });
+      continue;
+    }
+    if (items.length >= limit) {
+      excluded.push({ id: candidate.entry.id, reason: "selection_limit_reached" });
+      continue;
+    }
     const item = toGuardedMemoryItem(candidate.entry, candidate.score, candidate.ageDays, options.task);
     const itemTokens = estimateTokens(renderGuardedMemoryItem(item));
-    if (estimatedTokens + itemTokens > maxTokens) continue;
+    if (estimatedTokens + itemTokens > maxTokens) {
+      excluded.push({ id: candidate.entry.id, reason: "token_budget_exceeded" });
+      continue;
+    }
     items.push(item);
     estimatedTokens += itemTokens;
   }
 
-  return { items, estimatedTokens };
+  return {
+    items,
+    estimatedTokens,
+    telemetry: {
+      memoryCandidates: candidates.length,
+      memoryIncluded: items.length,
+      memoryExcluded: excluded,
+      candidateIds: candidates.map((candidate) => candidate.entry.id),
+      includedIds: items.map((item) => item.id)
+    }
+  };
 }
 
 export function renderGuardedMemoryItem(item: GuardedMemoryItem): string {
@@ -232,6 +264,22 @@ function tokenizeForPitfall(value: string): Set<string> {
     return tokens;
   });
   return new Set([...ascii, ...cjk]);
+}
+
+function scopeMatchesTask(client: string, task: string, taskTokens = tokenizeForPitfall(task)): boolean {
+  const normalizedClient = normalizeScope(client);
+  if (normalizedClient && normalizeScope(task).includes(normalizedClient)) return true;
+  const identityTokens = [...tokenizeForPitfall(client)].filter((token) => !["client", "tenant", "project"].includes(token));
+  return identityTokens.length > 0 && identityTokens.every((token) => taskTokens.has(token));
+}
+
+function hasScopeMarker(task: string): boolean {
+  return /\b(?:client|tenant)[\s:_-]*[a-z0-9]/i.test(task)
+    || /(?:客户|客戶|租户|租戶|专案|專案)/u.test(task);
+}
+
+function normalizeScope(value: string): string {
+  return value.toLowerCase().replace(/[^a-z0-9\u3400-\u9fff]+/g, "");
 }
 
 function toGuardedMemoryItem(

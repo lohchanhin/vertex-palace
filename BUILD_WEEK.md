@@ -79,7 +79,7 @@ and recording guidance are documented in
 Install the public competition release, then run it in the repository you want to evaluate:
 
 ```bash
-npm install -g vertex-palace@0.2.3
+npm install -g vertex-palace@0.2.4
 palace --version
 palace context "improve route confidence calibration" --auto --format json
 palace evaluate "improve route confidence calibration" --changed-file packages/core/src/evaluation/evaluate-route.ts

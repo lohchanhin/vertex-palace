@@ -147,20 +147,89 @@ describe("palaceContext", () => {
       expect(output.mode).toBe("full-palace");
       expect(output.modeSelection?.memoryLevel).toBe("scoped-summary");
       expect(output.payload?.memoryItemCount).toBe(2);
+      expect(output.payload?.memoryCandidateCount).toBe(2);
+      expect(output.payload?.memoryExcludedCount).toBe(0);
+      expect(output.memoryTelemetry).toMatchObject({
+        memoryCandidates: 2,
+        memoryIncluded: 2,
+        memoryExcluded: []
+      });
+      expect(output.memoryTelemetry?.candidateIds).toEqual(output.memoryTelemetry?.includedIds);
       expect(output.payload?.guardrailCount).toBeGreaterThanOrEqual(1);
       expect(output.markdown).toContain("## Relevant Memory");
+      expect(output.markdown).toContain("## Memory Selection");
+      expect(output.markdown).toContain("Candidates: 2 | Included: 2 | Excluded: 0");
       expect(output.markdown).toContain("Never change the shared theme");
       expect(output.markdown).toContain("renderer previously ignored");
       expect(output.markdown).toContain("Current code and tests outrank remembered decisions");
       expect(output.payload?.contextEstimatedTokens).toBeLessThanOrEqual(output.modeSelection?.maxContextTokens ?? 0);
 
       const jsonOutput = await palaceContext({ root, task, budget: 6000, auto: true, format: "json" });
-      const json = jsonOutput.json as { memory: unknown[]; guardrails: string[] };
+      const json = jsonOutput.json as {
+        memory: unknown[];
+        memoryTelemetry: {
+          memoryCandidates: number;
+          memoryIncluded: number;
+          memoryExcluded: unknown[];
+          candidateIds: string[];
+          includedIds: string[];
+        };
+        guardrails: string[];
+      };
 
       expect(jsonOutput.mode).toBe("full-palace");
       expect(json.memory).toHaveLength(2);
+      expect(json.memoryTelemetry.memoryCandidates).toBe(2);
+      expect(json.memoryTelemetry.memoryIncluded).toBe(2);
+      expect(json.memoryTelemetry.memoryExcluded).toEqual([]);
+      expect(json.memoryTelemetry.candidateIds).toEqual(json.memoryTelemetry.includedIds);
       expect(json.guardrails).toContain("Current code and tests outrank remembered decisions and pitfalls.");
       expect(jsonOutput.payload?.contextBytes).toBe(Buffer.byteLength(serializePackOutput(jsonOutput), "utf8"));
+    });
+  });
+
+  it("keeps full-palace output inside its context ceiling when memory telemetry is dense", async () => {
+    await withFixture("ts-api", async (root) => {
+      const noiseRoot = path.join(root, "noise");
+      await mkdir(noiseRoot, { recursive: true });
+      await Promise.all(
+        Array.from({ length: 105 }, (_, index) => writeFile(
+          path.join(noiseRoot, `module-${String(index).padStart(3, "0")}.ts`),
+          `export const value${index} = ${index};\n`,
+          "utf8"
+        ))
+      );
+      await indexPalace(root);
+      const entries = Array.from({ length: 50 }, (_, index) => ({
+        id: `memory-${String(index).padStart(2, "0")}`,
+        text: `Aurora article contrast renderer warning ${index}.`,
+        task: "Aurora article hero contrast tenant renderer",
+        outcome: "partial",
+        client: "aurora",
+        source: "pitfall",
+        tags: ["aurora", "article", "contrast", "renderer"],
+        memoryPath: `.palace/memory/memory-${String(index).padStart(2, "0")}.md`,
+        createdAt: "2026-07-18T00:00:00.000Z"
+      }));
+      await writeFile(
+        path.join(root, ".palace", "memory", "pitfall-board.json"),
+        JSON.stringify({ entries }),
+        "utf8"
+      );
+
+      const output = await palaceContext({
+        root,
+        task: "Fix the Aurora article hero contrast renderer without changing other tenants",
+        budget: 6000,
+        auto: true,
+        format: "json"
+      });
+
+      expect(output.mode).toBe("full-palace");
+      expect(output.memoryTelemetry?.memoryCandidates).toBe(50);
+      expect(output.memoryTelemetry?.memoryIncluded).toBe(3);
+      expect(output.memoryTelemetry?.memoryExcluded).toHaveLength(47);
+      expect(output.payload?.contextEstimatedTokens).toBeLessThanOrEqual(output.modeSelection?.maxContextTokens ?? 0);
     });
   });
 

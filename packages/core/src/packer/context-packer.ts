@@ -164,6 +164,7 @@ async function packAdaptiveContext(
       mode: selection.mode,
       modeSelection: selection,
       payload,
+      memoryTelemetry: memory.telemetry,
       estimatedTokens: payload.contextEstimatedTokens,
       json
     };
@@ -214,6 +215,7 @@ async function packAdaptiveContext(
     mode: selection.mode,
     modeSelection: selection,
     payload,
+    memoryTelemetry: memory.telemetry,
     estimatedTokens: payload.contextEstimatedTokens,
     markdown
   };
@@ -278,6 +280,7 @@ function adaptiveJson(
     deferredReferences: deferredReferences.map(compactDeferredStep),
     guardrails,
     memory: memory.items,
+    memoryTelemetry: memory.telemetry,
     recommendedExecution: recommendedExecution(selection.mode),
     payload
   };
@@ -313,7 +316,7 @@ function renderAdaptiveMarkdown(
     "",
     `Calls: ${payload.contextCalls} | Bytes: ${payload.contextBytes} | Estimated tokens: ${payload.contextEstimatedTokens}`,
     `Route: ${payload.routeStepCount} (${payload.primaryCount} primary, ${payload.supportCount} support, ${payload.deferredCount} deferred)`,
-    `Memory: ${payload.memoryItemCount} items / ~${payload.memoryEstimatedTokens} tokens | Guardrails: ${payload.guardrailCount}`,
+    `Memory: ${payload.memoryItemCount} included / ${payload.memoryCandidateCount} candidates / ${payload.memoryExcludedCount} excluded / ~${payload.memoryEstimatedTokens} tokens | Guardrails: ${payload.guardrailCount}`,
     "",
     "## Primary Route",
     "",
@@ -332,6 +335,19 @@ function renderAdaptiveMarkdown(
       ...(memory.items.length
         ? memory.items.flatMap((item) => renderGuardedMemoryItem(item).split("\n"))
         : ["- No relevant, current memory evidence met the scope and age checks."]),
+      ""
+    );
+  }
+
+  if (memory.telemetry.memoryCandidates > 0) {
+    lines.push(
+      "## Memory Selection",
+      "",
+      `Candidates: ${memory.telemetry.memoryCandidates} | Included: ${memory.telemetry.memoryIncluded} | Excluded: ${memory.telemetry.memoryExcluded.length}`,
+      `Included IDs: ${memory.telemetry.includedIds.length ? memory.telemetry.includedIds.join(", ") : "none"}`,
+      ...(memory.telemetry.memoryExcluded.length
+        ? memory.telemetry.memoryExcluded.map((item) => `- ${item.id}: ${item.reason}`)
+        : ["- No retrieved memory was excluded."]),
       ""
     );
   }
@@ -496,6 +512,8 @@ function metricSkeleton(
     supportCount: tiered.support.length,
     deferredCount: tiered.deferred.length,
     memoryItemCount: memory.items.length,
+    memoryCandidateCount: memory.telemetry.memoryCandidates,
+    memoryExcludedCount: memory.telemetry.memoryExcluded.length,
     memoryEstimatedTokens: memory.estimatedTokens,
     guardrailCount: guardrails.length
   };
@@ -552,7 +570,17 @@ function inferredTier(priority: number): "primary" | "support" | "deferred" {
 }
 
 function emptyGuardedMemory(): GuardedMemoryResult {
-  return { items: [], estimatedTokens: 0 };
+  return {
+    items: [],
+    estimatedTokens: 0,
+    telemetry: {
+      memoryCandidates: 0,
+      memoryIncluded: 0,
+      memoryExcluded: [],
+      candidateIds: [],
+      includedIds: []
+    }
+  };
 }
 
 function adaptiveRouteSummary(
@@ -572,7 +600,8 @@ function adaptiveRouteSummary(
     ...tiered.support.map((step) => step.sourcePath),
     ...tiered.deferred.map((step) => step.sourcePath),
     ...guardrails,
-    ...memory.items.map(renderGuardedMemoryItem)
+    ...memory.items.map(renderGuardedMemoryItem),
+    JSON.stringify(memory.telemetry)
   ].join("\n");
 }
 

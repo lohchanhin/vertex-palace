@@ -42,6 +42,23 @@ export type RouteTier = "primary" | "support" | "deferred" | "excluded";
 
 export type MemoryLevel = "none" | "hint" | "scoped-summary" | "guarded-evidence";
 
+export type MemoryExclusionReason =
+  | "scope_mismatch"
+  | "expired"
+  | "selection_limit_reached"
+  | "token_budget_exceeded";
+
+export type MemorySelectionTelemetry = {
+  memoryCandidates: number;
+  memoryIncluded: number;
+  memoryExcluded: {
+    id: string;
+    reason: MemoryExclusionReason;
+  }[];
+  candidateIds: string[];
+  includedIds: string[];
+};
+
 export type PalaceRiskSignals = {
   crossStack: boolean;
   memoryRelevant: boolean;
@@ -72,6 +89,8 @@ export type PalacePayloadMetrics = {
   supportCount: number;
   deferredCount: number;
   memoryItemCount: number;
+  memoryCandidateCount: number;
+  memoryExcludedCount: number;
   memoryEstimatedTokens: number;
   guardrailCount: number;
 };
@@ -323,6 +342,7 @@ export type PackOutput = {
   mode?: PalaceMode;
   modeSelection?: PalaceModeSelection;
   payload?: PalacePayloadMetrics;
+  memoryTelemetry?: MemorySelectionTelemetry;
   markdown?: string;
   json?: unknown;
 };

@@ -1,11 +1,11 @@
-import { readFile } from "node:fs/promises";
+import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { indexPalace } from "../src/indexer/index-palace";
 import { redactSecrets, writeMemory } from "../src/memory/write-memory";
 import { routePalace } from "../src/router/route-planner";
 import { initPalace } from "../src/storage/init-palace";
-import { readPitfallBoardForPack } from "../src/memory/pitfall-board";
+import { readGuardedMemory, readPitfallBoardForPack } from "../src/memory/pitfall-board";
 import { withFixture } from "./test-utils";
 
 describe("memory", () => {
@@ -104,6 +104,97 @@ describe("memory", () => {
       expect(index.entries).toHaveLength(2);
       expect(packed).toContain("do not index nested worktrees!");
       expect(packed).toContain("Route scanner tasks away from copied repositories.");
+    });
+  });
+
+  it("reports every retrieved memory inclusion and exclusion reason", async () => {
+    await withFixture("ts-api", async (root) => {
+      await initPalace(root);
+      const current = "2026-07-18T00:00:00.000Z";
+      const old = "2025-01-01T00:00:00.000Z";
+      const entry = (id: string, text: string, client: string, createdAt = current) => ({
+        id,
+        text,
+        task: "article hero contrast renderer",
+        outcome: "partial" as const,
+        client,
+        source: "pitfall" as const,
+        tags: ["article", "hero", "contrast", "renderer"],
+        memoryPath: `.palace/memory/${id}.md`,
+        createdAt
+      });
+      const entries = [
+        entry("memory-included", "Keep the Aurora renderer override scoped.", "aurora"),
+        entry("memory-scope", "Keep the Beta renderer override scoped.", "beta"),
+        entry("memory-expired", "An old Aurora renderer warning.", "aurora", old),
+        entry("memory-limit", "A second current Aurora renderer warning.", "aurora")
+      ];
+      await writeFile(
+        path.join(root, ".palace", "memory", "pitfall-board.json"),
+        JSON.stringify({ entries }),
+        "utf8"
+      );
+
+      const result = await readGuardedMemory(root, {
+        task: "Fix the Aurora article hero contrast renderer for this tenant",
+        limit: 1,
+        maxTokens: 600,
+        maxAgeDays: 90,
+        now: new Date("2026-07-19T00:00:00.000Z")
+      });
+
+      expect(result.items.map((item) => item.id)).toEqual(["memory-included"]);
+      expect(result.telemetry).toEqual({
+        memoryCandidates: 4,
+        memoryIncluded: 1,
+        memoryExcluded: [
+          { id: "memory-limit", reason: "selection_limit_reached" },
+          { id: "memory-expired", reason: "expired" },
+          { id: "memory-scope", reason: "scope_mismatch" }
+        ],
+        candidateIds: ["memory-included", "memory-limit", "memory-expired", "memory-scope"],
+        includedIds: ["memory-included"]
+      });
+    });
+  });
+
+  it("reports token budget exclusions without silently dropping a candidate", async () => {
+    await withFixture("ts-api", async (root) => {
+      await initPalace(root);
+      const verbose = Array.from({ length: 180 }, (_, index) => `renderer-${index}`).join(" ");
+      await writeFile(
+        path.join(root, ".palace", "memory", "pitfall-board.json"),
+        JSON.stringify({
+          entries: [{
+            id: "memory-too-large",
+            text: `Aurora article contrast ${verbose}`,
+            task: "Aurora article contrast renderer",
+            outcome: "partial",
+            client: "aurora",
+            source: "pitfall",
+            tags: ["aurora", "article", "contrast", "renderer"],
+            memoryPath: ".palace/memory/memory-too-large.md",
+            createdAt: "2026-07-18T00:00:00.000Z"
+          }]
+        }),
+        "utf8"
+      );
+
+      const result = await readGuardedMemory(root, {
+        task: "Fix the Aurora article contrast renderer",
+        limit: 3,
+        maxTokens: 100,
+        now: new Date("2026-07-19T00:00:00.000Z")
+      });
+
+      expect(result.items).toEqual([]);
+      expect(result.telemetry).toEqual({
+        memoryCandidates: 1,
+        memoryIncluded: 0,
+        memoryExcluded: [{ id: "memory-too-large", reason: "token_budget_exceeded" }],
+        candidateIds: ["memory-too-large"],
+        includedIds: []
+      });
     });
   });
 

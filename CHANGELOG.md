@@ -2,6 +2,23 @@
 
 ## Unreleased
 
+## 0.2.4 - 2026-07-19
+
+### Added
+
+- Machine-readable memory-selection telemetry for Adaptive context output: candidate and included IDs, included counts, and every excluded memory ID with a stable reason.
+- Payload counts for retrieved and excluded memory, plus a readable `Memory Selection` section in Markdown.
+- Regression coverage for useful Full Palace memory and the `scope_mismatch`, `expired`, `selection_limit_reached`, and `token_budget_exceeded` exclusion paths.
+
+### Changed
+
+- Guarded memory selection now keeps an auditable record of every retrieved candidate instead of discarding filtered entries before the packer can explain them.
+- Tenant-scoped candidates are rejected when an explicitly different client or tenant is named in the task.
+
+### Research
+
+- This release proves memory-delivery fidelity and observability at the product-contract level. It does not claim an end-to-end token, time, or correctness advantage over Control; that requires a new frozen benchmark.
+
 ## 0.2.3 - 2026-07-19
 
 ### Added
