@@ -8,6 +8,7 @@ export type ScoredNode = {
   node: PalaceNode;
   score: number;
   reasons: string[];
+  matchedKeywordCount: number;
 };
 
 export type RouteSurface =
@@ -153,7 +154,12 @@ export function scoreNodes(nodes: PalaceNode[], edges: PalaceEdge[], analysis: T
         reasons.push("penalized as likely unrelated room");
       }
 
-      return { node, score, reasons: [...new Set(reasons)].slice(0, 4) };
+      return {
+        node,
+        score,
+        reasons: [...new Set(reasons)].slice(0, 4),
+        matchedKeywordCount: matchedKeywords.size
+      };
     })
     .filter(
       (item) =>
@@ -266,12 +272,13 @@ export function requestedRouteSurfaces(analysis: TaskAnalysis): RouteSurface[] {
   if (keywords.has("mcp")) requested.push("mcp");
   if (hasAny(keywords, ["shared", "schema", "schemas", "type", "types", "contract", "contracts"])) requested.push("shared");
   if (hasAny(keywords, ["bypass", "boundaries", "boundary", "transport", "telemetry", "payload"]) && !requested.includes("shared")) requested.push("shared");
-  if (hasAny(keywords, ["test", "tests", "verification", "regression"])) requested.push("test");
+  if (hasAny(keywords, ["test", "tests", "validate", "validation", "verification", "regression"])) requested.push("test");
   if (hasAny(keywords, ["doc", "docs", "documentation", "readme"])) requested.push("docs");
   if (hasAny(keywords, ["ci", "workflow", "workflows", "actions"])) requested.push("ci");
-  if (hasAny(keywords, ["release", "publish", "package", "manifest", "version", "npm", "registry", "tag"])) requested.push("package");
+  if (hasAny(keywords, ["release", "publish", "package", "manifest", "version", "npm", "registry", "tag", "distribute", "distribution"])) requested.push("package");
   if (hasAny(keywords, ["plugin", "marketplace"])) requested.push("plugin");
-  if (hasAny(keywords, ["adaptive", "bypass", "mode", "selector", "context", "packer"])) requested.push("implementation");
+  const evaluationIntent = hasAny(keywords, ["evaluation", "evaluate", "retrospective"]);
+  if (!evaluationIntent && hasAny(keywords, ["adaptive", "bypass", "mode", "selector", "context", "packer", "route", "router", "score", "scorer", "precision", "recall", "confidence"])) requested.push("implementation");
   if (hasAny(keywords, ["release", "changelog"]) && !requested.includes("docs")) requested.push("docs");
   if (keywords.has("release") && requested.includes("plugin")) {
     if (!requested.includes("mcp")) requested.push("mcp");

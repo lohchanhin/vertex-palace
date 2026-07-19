@@ -130,6 +130,10 @@ def test_should_strip_auth_http_downgrade():
       expect(joined).toContain("src/requests/sessions.py");
       expect(joined).toContain("tests/test_requests.py");
       expect(route.route.find((step) => step.sourcePath.startsWith("src/requests/sessions.py"))?.sourcePath).toMatch(/:2-7$/);
+      expect(route.route.map((step) => step.sourcePath.replace(/:\d+(?:-\d+)?$/, ""))).toEqual([
+        "src/requests/sessions.py",
+        "tests/test_requests.py"
+      ]);
     });
   });
 
@@ -168,6 +172,24 @@ export const $ZodDiscriminatedUnion = core.$constructor("$ZodDiscriminatedUnion"
       expect(joined).toContain("packages/zod/src/v4/classic/tests/discriminated-unions.test.ts");
       expect(joined).not.toContain("packages/bench/discriminated-union.ts");
       expect(route.route.find((step) => step.sourcePath.startsWith("packages/zod/src/v4/core/schemas.ts"))?.tier).toBe("primary");
+      expect(route.route.map((step) => step.sourcePath.replace(/:\d+(?:-\d+)?$/, ""))).toEqual([
+        "packages/zod/src/v4/core/schemas.ts",
+        "packages/zod/src/v4/classic/tests/discriminated-unions.test.ts"
+      ]);
+    });
+  });
+
+  it("caps confidence for broad tasks that request several delivery surfaces", async () => {
+    await withFixture("ts-api", async (root) => {
+      await indexPalace(root);
+
+      const route = await routePalace(
+        root,
+        "Improve Vertex Palace 0.3.0 focused bugfix routing precision, preserve recall, calibrate broad-task confidence, strengthen strict real-repository validation, and update generated MCP distribution",
+        { routeLimit: 10 }
+      );
+
+      expect(route.confidence).toBeLessThanOrEqual(0.35);
     });
   });
 

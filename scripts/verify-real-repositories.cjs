@@ -10,6 +10,8 @@ const packageJson = require(path.join(projectRoot, "package.json"));
 const outputPath = outputArgument(process.argv.slice(2));
 const budget = 6_000;
 const trialsPerRepository = 2;
+const minimumTargetRecall = 1;
+const minimumTargetPrecision = 1;
 
 const repositories = [
   {
@@ -100,6 +102,8 @@ async function main() {
       protocol: {
         budget,
         trialsPerRepository,
+        minimumTargetRecall,
+        minimumTargetPrecision,
         cleanPinnedClonePerRepository: true,
         trackedWorktreeMutationAllowed: false
       },
@@ -172,6 +176,10 @@ async function validateRepository(repository, root, cliPath) {
   const expected = new Set([repository.expectedPrimary, repository.expectedVerification]);
   const routeFiles = trials[0].routeFiles;
   const truePositiveCount = routeFiles.filter((file) => expected.has(file)).length;
+  const targetRecall = round(truePositiveCount / expected.size);
+  const targetPrecision = round(truePositiveCount / routeFiles.length);
+  assert.equal(targetRecall, minimumTargetRecall, `${repository.name} target recall fell below the release gate`);
+  assert.equal(targetPrecision, minimumTargetPrecision, `${repository.name} target precision fell below the release gate`);
   const trackedStatus = run("git", ["status", "--short", "--untracked-files=no"], { cwd: root }).stdout.trim();
   assert.equal(trackedStatus, "");
   const fileHashes = JSON.parse(await readFile(path.join(root, ".palace", "indexes", "file-hashes.json"), "utf8"));
@@ -187,8 +195,8 @@ async function validateRepository(repository, root, cliPath) {
       verification: repository.expectedVerification
     },
     routeQuality: {
-      targetRecall: round(truePositiveCount / expected.size),
-      targetPrecision: round(truePositiveCount / routeFiles.length),
+      targetRecall,
+      targetPrecision,
       unexpectedBoundaryFiles: routeFiles.filter((file) => !expected.has(file))
     },
     deterministicBoundaries: true,

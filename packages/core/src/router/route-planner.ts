@@ -36,7 +36,24 @@ export async function routePalace(root: string, task: string, options: number | 
     taskType === "evaluation"
       ? Math.max(normalized.routeLimit, Math.min(10, requestedSurfaces.length + 1))
       : normalized.routeLimit;
-  const initialRoute = expandRoute(scored, index.edges, index.nodes, routeLimit);
+  const implementationAnchor = taskType === "bugfix"
+    ? scored.find((item) => isImplementationCandidate(item.node))
+    : undefined;
+  const top = implementationAnchor ?? scored[0];
+  const crossStack = analysis.wingHints.includes("frontend") && analysis.wingHints.includes("backend");
+  const focused = taskType === "bugfix"
+    && Boolean(top?.node.startLine)
+    && (top?.matchedKeywordCount ?? 0) >= 4
+    && requestedSurfaces.length <= 1
+    && !crossStack;
+  const expansionCandidates = focused && implementationAnchor
+    ? [implementationAnchor, ...scored.filter((item) => item.node.id !== implementationAnchor.node.id)]
+    : scored;
+  const initialRoute = expandRoute(expansionCandidates, index.edges, index.nodes, {
+    limit: routeLimit,
+    focused,
+    preferVerificationRelations: focused
+  });
   const expanded =
     taskType === "evaluation"
       ? ensureRequestedSurfaceCoverage(initialRoute, scored, requestedSurfaces, routeLimit)
@@ -81,6 +98,10 @@ export async function routePalace(root: string, task: string, options: number | 
 
   await appendRoute(root, index.routes, route);
   return route;
+}
+
+function isImplementationCandidate(node: Awaited<ReturnType<typeof readIndex>>["nodes"][number]): boolean {
+  return node.floor !== "05-verification" && !["test", "config", "doc", "runtime-log", "directory"].includes(node.kind);
 }
 
 async function ensureFreshIndex(root: string): Promise<void> {
@@ -180,7 +201,9 @@ function confidence(selected: ScoredNode[], analysis: ReturnType<typeof analyzeT
   const budgetFit = estimatedTokens <= budget ? 1 : 0;
   const surfacePenalty = requestedSurfacePenalty(top, analysis);
   const value = (0.08 + keywordCoverage * 0.34 + scoreStrength * 0.28 + focus * 0.2 + budgetFit * 0.1) * surfacePenalty;
-  const taskCap = taskType === "release" ? 0.65 : 0.98;
+  const requestedSurfaceCount = requestedRouteSurfaces(analysis).length;
+  const breadthCap = requestedSurfaceCount >= 3 ? 0.35 : requestedSurfaceCount === 2 ? 0.65 : 0.98;
+  const taskCap = Math.min(taskType === "release" ? 0.65 : 0.98, breadthCap);
   return Number(Math.max(0.1, Math.min(taskCap, value)).toFixed(2));
 }
 
