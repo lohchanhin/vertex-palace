@@ -1,7 +1,7 @@
 # Release Routing Cross-Ecosystem Matrix Result
 
-Status: source candidate and generated MCP bundle passed repository gates;
-packaged-install and public npm release gates are still pending.
+Status: source candidate, generated MCP bundle, and clean local tarball install
+passed; public npm 0.2.3 release gates are still pending.
 
 Protocol: [RELEASE_ROUTING_MATRIX_PROTOCOL.md](./RELEASE_ROUTING_MATRIX_PROTOCOL.md)
 
@@ -117,11 +117,36 @@ are opt-in so routine test output remains concise.
 | TypeScript lint | passed |
 | Monorepo and distributable bundle build | passed |
 | Generated MCP bundle smoke | version 0.2.2 development bundle, 10 tools, passed |
+| Clean local tarball install | CLI, real release route, and installed MCP passed |
 
 These checks were run serially because an earlier parallel monorepo run had
 produced an esbuild-service infrastructure failure. The clean serial run is
 the release gate; the earlier infrastructure event remains documented rather
 than silently discarded.
+
+## Clean Tarball Gate
+
+The candidate was packed before the release version bump, so the isolated
+artifact correctly reported development version 0.2.2. It was installed into
+a new npm project with no workspace dependencies. A separate fresh clone of
+the public repository was then initialized and indexed with that installed
+CLI.
+
+| Measure | Result |
+| --- | --- |
+| Tarball | `vertex-palace-0.2.2.tgz` |
+| Packed size | 3,658,158 bytes |
+| Unpacked size | 19,296,273 bytes |
+| npm entry count | 7 |
+| SHA-256 | `28B6E339C7E2BDE3594EE870076BCC11E5B992B9B6E686DA2CCA8404AC148437` |
+| Installed CLI version | 0.2.2, as expected before bump |
+| Exact R1 task type | `release` |
+| Exact R1 route | 12 files, including `.mcp.json` and all package manifests |
+| Installed MCP | 10 tools; initialize, tools/list, and `palace_context` passed |
+
+This gate proves that the candidate does not rely on local workspace package
+links or unbundled source. It does not prove npm registry availability; that
+requires publishing 0.2.3 and repeating installation from the public registry.
 
 ## Research Boundary
 
