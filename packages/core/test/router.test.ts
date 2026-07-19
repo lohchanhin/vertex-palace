@@ -158,6 +158,22 @@ export const $ZodDiscriminatedUnion = core.$constructor("$ZodDiscriminatedUnion"
 });
 `
         ],
+        [
+          "packages/zod/src/v3/types.ts",
+          `export class ZodDiscriminatedUnion {
+  _parse(input: unknown) {
+    const discriminator = "type";
+    const value = input;
+    const output = value;
+    return { discriminator, output };
+  }
+
+  static create(discriminator: string, options: unknown[]) {
+    return { discriminator, options };
+  }
+}
+`
+        ],
         ["packages/zod/src/v4/classic/schemas.ts", `export function discriminatedUnion() { return "v4 wrapper"; }\n`],
         ["packages/zod/src/v4/classic/tests/discriminated-unions.test.ts", `import { z } from "zod/v4";\ntest("encode with codec discriminator", () => z);\n`],
         ["packages/zod/src/v3/tests/discriminated-unions.test.ts", `import { z } from "zod/v3";\ntest("legacy discriminator", () => z);\n`],
@@ -180,6 +196,7 @@ export const $ZodDiscriminatedUnion = core.$constructor("$ZodDiscriminatedUnion"
       expect(route.taskType).toBe("bugfix");
       expect(joined).toContain("packages/zod/src/v4/core/schemas.ts");
       expect(joined).toContain("packages/zod/src/v4/classic/tests/discriminated-unions.test.ts");
+      expect(joined).not.toContain("packages/zod/src/v3/types.ts");
       expect(joined).not.toContain("packages/bench/discriminated-union.ts");
       expect(route.route.find((step) => step.sourcePath.startsWith("packages/zod/src/v4/core/schemas.ts"))?.tier).toBe("primary");
       expect(route.route.map((step) => step.sourcePath.replace(/:\d+(?:-\d+)?$/, ""))).toEqual([

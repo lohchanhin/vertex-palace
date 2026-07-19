@@ -52,7 +52,8 @@ export async function routePalace(root: string, task: string, options: number | 
   const initialRoute = expandRoute(expansionCandidates, index.edges, index.nodes, {
     limit: routeLimit,
     focused,
-    preferVerificationRelations: focused
+    preferVerificationRelations: focused,
+    minSeedScoreRatio: focused ? 0.75 : undefined
   });
   const expanded =
     taskType === "evaluation"

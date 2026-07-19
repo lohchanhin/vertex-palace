@@ -29,6 +29,7 @@ export function scoreNodes(nodes: PalaceNode[], edges: PalaceEdge[], analysis: T
   const floors = floorTemplate(taskType);
   const edgeBoosts = relationBoosts(edges);
   const requestedSurfaces = requestedRouteSurfaces(analysis);
+  const semanticMatchLimit = taskType === "bugfix" ? 8 : 4;
 
   return nodes
     .filter((node) => node.kind !== "directory")
@@ -54,8 +55,9 @@ export function scoreNodes(nodes: PalaceNode[], edges: PalaceEdge[], analysis: T
           reasons.push(`symbol or file title matches "${keyword}"`);
           matchedKeywords.add(normalizedKeyword);
         } else if (tokens.has(normalizedKeyword)) {
-          score += semanticMatchCount < 4 ? 25 : 4;
-          semanticMatchCount += 1;
+          const lowSignal = LOW_SIGNAL_SEMANTIC_KEYWORDS.has(normalizedKeyword);
+          score += lowSignal ? 8 : semanticMatchCount < semanticMatchLimit ? 25 : 4;
+          if (!lowSignal) semanticMatchCount += 1;
           reasons.push(`summary or tags match "${keyword}"`);
           matchedKeywords.add(normalizedKeyword);
         }
@@ -64,6 +66,13 @@ export function scoreNodes(nodes: PalaceNode[], edges: PalaceEdge[], analysis: T
       if (isImplementationNode(node) && taskType !== "test" && matchedKeywords.size >= 2) {
         score += 35;
         reasons.push("implementation covers multiple task concepts");
+      }
+      const discriminativeKeywordCount = [...matchedKeywords].filter(
+        (keyword) => !LOW_SIGNAL_SEMANTIC_KEYWORDS.has(keyword)
+      ).length;
+      if (isImplementationNode(node) && taskType === "bugfix" && discriminativeKeywordCount >= 4) {
+        score += Math.min(60, (discriminativeKeywordCount - 3) * 15);
+        reasons.push("implementation coherently matches several bug symptoms");
       }
       if (node.startLine && matchedKeywords.size > 0) {
         score += 12;
@@ -179,6 +188,21 @@ export function scoreNodes(nodes: PalaceNode[], edges: PalaceEdge[], analysis: T
 }
 
 const SURFACE_ONLY_KEYWORDS = new Set(["regression", "test", "verification"]);
+const LOW_SIGNAL_SEMANTIC_KEYWORDS = new Set([
+  "allow",
+  "allowing",
+  "data",
+  "input",
+  "option",
+  "options",
+  "output",
+  "preserve",
+  "result",
+  "results",
+  "select",
+  "value",
+  "values"
+]);
 
 function isImplementationNode(node: PalaceNode): boolean {
   return node.floor !== "05-verification" && !["test", "config", "doc", "runtime-log"].includes(node.kind);
