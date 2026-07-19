@@ -30,6 +30,8 @@
 - Test symbols remain verification context rather than receiving implementation-tier boosts, and symbol-level test names can link focused tests to the methods they exercise.
 - Focused bugfix routes now use an implementation anchor, evidence-strength thresholds, destination lexical relevance, verification-first relations, and explicit version coherence instead of filling every available route slot.
 - Multi-surface tasks recognize routing quality, validation, MCP, and distribution intent, cannot use focused expansion, and receive a conservative confidence cap based on task breadth.
+- Evidence-maintenance tasks now recognize English and Chinese source, precision, protocol, plan, documentation, README, localization, and memory-budget intent, then allocate implementation, test, config, and role-diverse documentation surfaces explicitly.
+- Evaluation documentation selection prefers narrative evidence, the current protocol, the project README, and localized counterparts instead of filling the route with old protocols, raw trial JSON, or nested historical READMEs.
 
 ### Fixed
 
@@ -39,6 +41,8 @@
 - Prevented explicit requests to update regression tests from collapsing into a one-file bypass payload.
 - Prevented focused routes from expanding through every symbol in a large source file, following weak imports, or mixing explicit version families when same-version evidence exists.
 - Prevented dense memory-selection telemetry and execution boundaries from pushing delivered Markdown or JSON beyond the advertised `maxContextTokens` ceiling.
+- Prevented explicit repair work from being misclassified as evidence evaluation merely because the task also mentions synchronization or research artifacts.
+- Prevented empty normalized non-ASCII entities from matching every source path.
 
 ### Verification
 
@@ -48,8 +52,8 @@
 - An ambiguous two-client regression keeps both memories excluded as `scope_mismatch`; alias inference does not break tenant isolation when evidence ties.
 - These product-contract tests do not yet prove parity with Control tool calls, reported tokens, or wall time; that requires the fresh Control-first benchmark planned for 0.3.1.
 - The pinned Zod and Requests gate now requires both target recall and strict target precision to equal 1.000. Both repositories produced exact two-file routes with no unexpected boundary files in two deterministic repetitions; this remains a product gate, not an Agent-performance claim.
-- A broad self-evaluation improved from 1/6 to 4/6 changed-file coverage and capped confidence at 0.35, but still missed the regression test and generated MCP bundle. Cross-surface coverage remains a follow-up target.
-- In a clean install with 50 relevant memory candidates, JSON delivered 4,038 / 5,000 estimated tokens and Markdown delivered 4,473 / 5,000. Reported bytes matched the serialized outputs, and all 47 excluded candidates retained `selection_limit_reached` reasons.
+- A fixed eight-file evidence-maintenance oracle in `benchmarks-demo` improved from 3/8 coverage and 0.30 focus to 8/8 and 1.00 focus, while route confidence stayed conservatively capped at 0.35. The product's own six-file implementation self-evaluation still reached only 3/6 coverage and 0.30 focus, so multi-module bugfix companions and generated-artifact linkage remain open work.
+- In a clean install with 50 relevant memory candidates, JSON delivered 4,050 / 5,000 estimated tokens and Markdown delivered 4,473 / 5,000. Reported bytes matched the serialized outputs, and all 47 excluded candidates retained `selection_limit_reached` reasons.
 
 ## 0.2.4 - 2026-07-19
 

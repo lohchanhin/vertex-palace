@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-07-19T18:31:29.977Z",
+  "claimBoundary": "Fixed-oracle product routing evaluation only; not an end-to-end Agent performance benchmark.",
+  "product": {
+    "repository": "https://github.com/lohchanhin/vertex-palace",
+    "sourceCommit": "5cae580a67c3b8d3b6885abb900a69cd285ecbc0",
+    "ciRun": "https://github.com/lohchanhin/vertex-palace/actions/runs/29698755147"
+  },
+  "benchmark": {
+    "repository": "https://github.com/lohchanhin/benchmarks-demo",
+    "commit": "8aa7886a2404fa5b91a7b59c6bbaa6451f51a277"
+  },
+  "task": "同步 Vertex Palace v0.3 最终源码与证据提交，更新严格真实仓库精度和高密度记忆预算验证，并保留 control-first 冻结边界与简体中文说明",
+  "oracle": {
+    "frozenDuringTuning": true,
+    "changedFiles": [
+      "src/commands/study.mjs",
+      "test/study.test.mjs",
+      "results/control-first-v3/plan.json",
+      "docs/research/CONTROL_FIRST_V3_PREFLIGHT.md",
+      "docs/research/PROTOCOL_V3.md",
+      "docs/zh-CN/PROTOCOL_V3.md",
+      "README.md",
+      "docs/zh-CN/README.md"
+    ]
+  },
+  "progression": [
+    {
+      "stage": "baseline",
+      "evaluationId": "evaluation_6d76c2a27a704b4e",
+      "taskType": "test",
+      "routeFileCount": 10,
+      "matchedFileCount": 3,
+      "changedFileCoverage": 0.38,
+      "routeFocus": 0.3,
+      "confidence": 0.78
+    },
+    {
+      "stage": "intent_and_surface_model",
+      "evaluationId": "evaluation_8e2d43c9bdf83e08",
+      "taskType": "evaluation",
+      "routeFileCount": 10,
+      "matchedFileCount": 4,
+      "changedFileCoverage": 0.5,
+      "routeFocus": 0.4,
+      "confidence": 0.35
+    },
+    {
+      "stage": "role_allocation",
+      "evaluationId": "evaluation_44f13ed10f323e7c",
+      "taskType": "evaluation",
+      "routeFileCount": 8,
+      "matchedFileCount": 6,
+      "changedFileCoverage": 0.75,
+      "routeFocus": 0.75,
+      "confidence": 0.35
+    },
+    {
+      "stage": "root_document_priority",
+      "evaluationId": "evaluation_54ffdceaa345e5f5",
+      "taskType": "evaluation",
+      "routeFileCount": 8,
+      "matchedFileCount": 7,
+      "changedFileCoverage": 0.88,
+      "routeFocus": 0.88,
+      "confidence": 0.35
+    },
+    {
+      "stage": "final",
+      "evaluationId": "evaluation_a8c363d1c0cba556",
+      "routeId": "route_b0cb23c06c72b318",
+      "taskType": "evaluation",
+      "routeFileCount": 8,
+      "matchedFileCount": 8,
+      "changedFileCoverage": 1,
+      "routeFocus": 1,
+      "confidence": 0.35,
+      "calibration": "underconfident",
+      "calibrationError": 0.65,
+      "routeFiles": [
+        "src/commands/study.mjs",
+        "results/control-first-v3/plan.json",
+        "docs/research/PROTOCOL_V3.md",
+        "docs/research/CONTROL_FIRST_V3_PREFLIGHT.md",
+        "docs/zh-CN/PROTOCOL_V3.md",
+        "README.md",
+        "docs/zh-CN/README.md",
+        "test/study.test.mjs"
+      ],
+      "staticContextEstimate": {
+        "repositoryTextFiles": 490,
+        "repositoryTokens": 1021230,
+        "packTokens": 2594,
+        "note": "Scanner estimates only; not total Agent prompt or completion tokens."
+      }
+    }
+  ],
+  "residualSelfEvaluation": {
+    "evaluationId": "evaluation_134c9050e4b57e97",
+    "taskType": "bugfix",
+    "changedFileCount": 6,
+    "matchedFileCount": 3,
+    "changedFileCoverage": 0.5,
+    "routeFocus": 0.3,
+    "confidence": 0.35,
+    "missedFiles": [
+      "packages/core/src/router/classify-task.ts",
+      "packages/core/test/router.test.ts",
+      "plugins/vertex-palace/mcp/server.cjs"
+    ]
+  },
+  "documentationSyncSelfEvaluation": {
+    "evaluationId": "evaluation_fa33602896fcb47f",
+    "taskType": "release",
+    "changedFileCount": 8,
+    "matchedFileCount": 1,
+    "changedFileCoverage": 0.13,
+    "routeFocus": 0.1,
+    "confidence": 0.35,
+    "finding": "The noun phrase release-candidate machine evidence was interpreted as a release action."
+  },
+  "verification": {
+    "targetedTests": "26/26 passed",
+    "workspaceTests": "77/77 passed",
+    "lint": "passed",
+    "releaseCandidate": "passed",
+    "realRepositories": "Zod and Requests target recall/strict precision 1.000/1.000",
+    "githubActions": "passed on Windows, macOS, Ubuntu Node 20, Ubuntu Node 24, and npm dry run"
+  }
+}

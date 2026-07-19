@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-19T17:59:49.360Z",
+  "generatedAt": "2026-07-19T18:29:56.845Z",
   "claimBoundary": "Product packaging and context-contract validation only; not an Agent performance benchmark.",
-  "sourceCommit": "cb93369c642135d3d924166bff62b0eaf0cacde1",
+  "sourceCommit": "5cae580a67c3b8d3b6885abb900a69cd285ecbc0",
   "package": "vertex-palace@0.3.0",
   "files": 7,
-  "shasum": "fdce7d81b82cdd61d7558c2b1df0b152ab8249e7",
+  "shasum": "d3b6888db80896a2837fe7e5222305749c2dd846",
   "cleanInstallVersion": "0.3.0",
   "distractorFiles": 240,
   "bypassTrials": [
@@ -66,8 +66,8 @@
     "included": 3,
     "excluded": 47,
     "json": {
-      "contextBytes": 16151,
-      "estimatedTokens": 4038,
+      "contextBytes": 16197,
+      "estimatedTokens": 4050,
       "maxContextTokens": 5000,
       "loadedDrawers": 2,
       "deferredReferences": 8

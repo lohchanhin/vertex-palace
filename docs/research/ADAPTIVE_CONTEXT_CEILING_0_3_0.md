@@ -42,14 +42,14 @@ The 0.3.0 candidate now:
 
 ## Clean-install result
 
-Evidence was generated from repository commit
-`cb93369c642135d3d924166bff62b0eaf0cacde1` by packing and installing
+Evidence was regenerated from repository commit
+`5cae580a67c3b8d3b6885abb900a69cd285ecbc0` by packing and installing
 `vertex-palace@0.3.0` in a new temporary prefix. The tarball SHA-1 was
-`fdce7d81b82cdd61d7558c2b1df0b152ab8249e7`.
+`d3b6888db80896a2837fe7e5222305749c2dd846`.
 
 | Format | Candidates | Included | Excluded with reasons | Bytes | Estimated tokens | Ceiling | Loaded drawers | Deferred references |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| JSON | 50 | 3 | 47 | 16,151 | 4,038 | 5,000 | 2 | 8 |
+| JSON | 50 | 3 | 47 | 16,197 | 4,050 | 5,000 | 2 | 8 |
 | Markdown | 50 | 3 | 47 | 17,891 | 4,473 | 5,000 | Not separately parsed | Not separately parsed |
 
 The reported byte count equaled the actual serialized byte count for both
@@ -111,13 +111,13 @@ payload。
 
 ## 干净安装结果
 
-证据由仓库提交 `cb93369c642135d3d924166bff62b0eaf0cacde1` 生成：先打包
+证据由仓库提交 `5cae580a67c3b8d3b6885abb900a69cd285ecbc0` 重新生成：先打包
 `vertex-palace@0.3.0`，再安装到全新临时目录。Tarball SHA-1 为
-`fdce7d81b82cdd61d7558c2b1df0b152ab8249e7`。
+`d3b6888db80896a2837fe7e5222305749c2dd846`。
 
 | 格式 | 候选 | 纳入 | 有原因的排除 | Bytes | Estimated tokens | 上限 | 已加载抽屉 | Deferred 引用 |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| JSON | 50 | 3 | 47 | 16,151 | 4,038 | 5,000 | 2 | 8 |
+| JSON | 50 | 3 | 47 | 16,197 | 4,050 | 5,000 | 2 | 8 |
 | Markdown | 50 | 3 | 47 | 17,891 | 4,473 | 5,000 | 未单独解析 | 未单独解析 |
 
 两种格式报告的 bytes 都与真实序列化输出完全相等，47 条排除记录全部使用稳定的
