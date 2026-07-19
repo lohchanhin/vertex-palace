@@ -1,7 +1,7 @@
 # Release Routing Cross-Ecosystem Matrix Result
 
-Status: source candidate passed the frozen routing matrix; packaged-install and
-public npm release gates are still pending.
+Status: source candidate and generated MCP bundle passed repository gates;
+packaged-install and public npm release gates are still pending.
 
 Protocol: [RELEASE_ROUTING_MATRIX_PROTOCOL.md](./RELEASE_ROUTING_MATRIX_PROTOCOL.md)
 
@@ -105,6 +105,23 @@ pnpm --filter @vertex-palace/core exec vitest run test/router.test.ts --reporter
 The first command emits structured R2-R4 metrics and verifies R5 plus all
 negative controls. The second emits the R1 replication result. The reporters
 are opt-in so routine test output remains concise.
+
+## Repository Gates
+
+| Gate | Result |
+| --- | --- |
+| Core | 51/51 passed |
+| CLI | 2/2 passed |
+| MCP | 2/2 passed |
+| Shared | no test files, passed with `--passWithNoTests` |
+| TypeScript lint | passed |
+| Monorepo and distributable bundle build | passed |
+| Generated MCP bundle smoke | version 0.2.2 development bundle, 10 tools, passed |
+
+These checks were run serially because an earlier parallel monorepo run had
+produced an esbuild-service infrastructure failure. The clean serial run is
+the release gate; the earlier infrastructure event remains documented rather
+than silently discarded.
 
 ## Research Boundary
 
