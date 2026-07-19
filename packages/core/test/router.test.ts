@@ -180,6 +180,43 @@ export const $ZodDiscriminatedUnion = core.$constructor("$ZodDiscriminatedUnion"
     });
   });
 
+  it("keeps a focused regression test when release verification scripts compete for a small bugfix route", async () => {
+    await withFixture("ts-api", async (root) => {
+      const files = new Map<string, string>([
+        ["packages/core/src/router/analyze-task.ts", "export function analyzeTask() { return ['evidence', 'route']; }\n"],
+        ["packages/core/src/router/classify-task.ts", "export function classifyTask() { return 'bugfix'; }\n"],
+        ["packages/core/src/router/route-planner.ts", "export function routePalace() { return ['implementation', 'verification']; }\n"],
+        ["packages/core/test/router.test.ts", "describe('release-candidate evidence routing', () => it('keeps the regression companion', () => true));\n"],
+        ["packages/core/test/unrelated.test.ts", "describe('payment checkout', () => it('stays unrelated', () => true));\n"],
+        ["scripts/verify-release-candidate.cjs", "module.exports = () => 'clean tarball release candidate';\n"],
+        ["scripts/verify-real-repositories.cjs", "module.exports = () => 'real repository evidence';\n"],
+        ["scripts/verify-release-classification.cjs", "module.exports = () => 'verify release candidate evidence classification';\n"],
+        ["scripts/verify-evidence-router.cjs", "module.exports = () => 'verify focused evidence router regression';\n"],
+        ["scripts/smoke-npm-release.cjs", "module.exports = () => 'smoke actual npm release intent';\n"],
+        ["scripts/benchmark-release-route.cjs", "module.exports = () => 'benchmark release candidate route evidence';\n"]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const route = await routePalace(
+        root,
+        "Fix release-candidate evidence classification and update the focused router regression tests while preserving actual npm release intent",
+        { routeLimit: 4, budget: 6000 }
+      );
+      const filesOnly = route.route.map((step) => step.sourcePath.replace(/:\d+(?:-\d+)?$/, ""));
+
+      expect(route.taskType).toBe("bugfix");
+      expect(filesOnly).toContain("packages/core/src/router/analyze-task.ts");
+      expect(filesOnly).toContain("packages/core/test/router.test.ts");
+      expect(filesOnly).not.toContain("packages/core/test/unrelated.test.ts");
+      expect(route.route).toHaveLength(4);
+    });
+  });
+
   it("caps confidence for broad tasks that request several delivery surfaces", async () => {
     await withFixture("ts-api", async (root) => {
       await indexPalace(root);
@@ -220,6 +257,7 @@ export const $ZodDiscriminatedUnion = core.$constructor("$ZodDiscriminatedUnion"
         ["docs/research/evidence/guarded-stale-memory-v2.2-trial01.json", JSON.stringify({ trial: 1, status: "historic" })],
         ["docs/research/evidence/guarded-stale-memory-v2.2-trial02.json", JSON.stringify({ trial: 2, status: "historic" })],
         ["results/adaptive-pilot-v2.2/README.md", "# Historic adaptive pilot\n\nSuperseded result notes.\n"],
+        [".github/workflows/ci.yml", "name: CI\non: [push]\njobs: { test: { runs-on: ubuntu-latest } }\n"],
         ["analysis/paired-analysis.mjs", "export function reportedTokenPrecisionAnalysis() { return 'paired benchmark precision'; }\n"],
         ["analysis/power-analysis.mjs", "export function benchmarkPower() { return 'analysis only'; }\n"]
       ]);
@@ -269,12 +307,36 @@ export const $ZodDiscriminatedUnion = core.$constructor("$ZodDiscriminatedUnion"
         "docs/research/PROTOCOL_V2_2.md",
         "docs/research/evidence/guarded-stale-memory-v2.2-trial01.json",
         "docs/research/evidence/guarded-stale-memory-v2.2-trial02.json",
-        "results/adaptive-pilot-v2.2/README.md"
+        "results/adaptive-pilot-v2.2/README.md",
+        ".github/workflows/ci.yml"
       ]));
       expect(evaluation.route.fileCount).toBeLessThanOrEqual(10);
       expect(evaluation.coverage.changedFileCoverage).toBe(1);
       expect(evaluation.coverage.routeFocus).toBeGreaterThanOrEqual(0.8);
       expect(evaluation.route.confidence).toBeLessThanOrEqual(0.35);
+
+      const pinTask = "同步 Vertex Palace 产品源码、研究证据与 CI 到 control-first v3 计划、英文协议、简体中文协议和 README；保留 frozen false 与零 Agent outcomes";
+      const pinAnalysis = analyzeTask(pinTask);
+      const pinEvaluation = await evaluateRoute(root, pinTask, {
+        changedFiles,
+        budget: 5000,
+        routeLimit: 6,
+        maxDrawers: 4
+      });
+
+      expect(classifyTask(pinTask)).toBe("evaluation");
+      expect(requestedRouteSurfaces(pinAnalysis)).toEqual(expect.arrayContaining([
+        "implementation",
+        "test",
+        "config",
+        "docs",
+        "ci"
+      ]));
+      expect(pinEvaluation.route.files).toEqual(expect.arrayContaining(changedFiles));
+      expect(pinEvaluation.route.files).toContain(".github/workflows/ci.yml");
+      expect(pinEvaluation.route.fileCount).toBeLessThanOrEqual(9);
+      expect(pinEvaluation.coverage.changedFileCoverage).toBe(1);
+      expect(pinEvaluation.coverage.routeFocus).toBeGreaterThanOrEqual(0.88);
     });
   });
 

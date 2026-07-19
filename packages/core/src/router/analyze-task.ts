@@ -1,5 +1,6 @@
 import { slugify } from "../utils/path-utils";
 import { normalizeLexicalToken, tokenizeLexical } from "../utils/lexical-tokens";
+import { analyzePublicationIntent } from "./publication-intent";
 
 export type TaskAnalysis = {
   raw: string;
@@ -121,9 +122,10 @@ const WING_HINTS = new Set([
   "variant"
 ]);
 const ROOM_HINTS = new Set(["api", "checkout", "footer", "general", "image", "login", "logout", "password", "policy", "product", "profile", "refresh", "session", "settings", "token", "upload", "user", "users", "variant"]);
+const RELEASE_ROUTE_KEYWORDS = ["release", "publish", "package", "manifest", "version", "npm", "registry", "tag", "changelog"];
+const RELEASE_REFERENCE_ONLY_KEYWORDS = new Set(["release", "publish", "package", "version", "npm", "registry", "tag"]);
 
 const PHRASE_KEYWORDS: Array<[RegExp, string[]]> = [
-  [/release|publish(?:ing|ed)?|npm\s+(?:publish|registry)|package\s+release|version\s+bump|dist[-\s]?tag|git\s+tag|发布|發佈|发行|發行/i, ["release", "publish", "package", "manifest", "version", "npm", "registry", "tag", "changelog"]],
   [/plugin|marketplace|插件/i, ["plugin", "marketplace"]],
   [/adaptive|full[-\s]?palace|route[-\s]?lite|guarded[-\s]?memory[-\s]?palace/i, ["adaptive", "mode", "selector", "context", "packer"]],
   [/source\s+(?:code|implementation)|implementation\s+source|源码|源碼|源代码|源代碼/i, ["implementation", "source"]],
@@ -168,12 +170,26 @@ export function analyzeTask(task: string): TaskAnalysis {
     .replace(/\b(?:keep|preserve|without\s+changing|do\s+not\s+change)\s+(?:the\s+)?public\s+api(?:\s+stable)?\b/gi, " compatibility guardrail ")
     .replace(/\b(?:keep|preserve|without\s+changing|do\s+not\s+change)\s+(?:the\s+)?api\s+contract(?:\s+stable)?\b/gi, " compatibility guardrail ");
   const entities = entityKeywords(task);
+  const publication = analyzePublicationIntent(task);
   const contextualStopWords = new Set(STOP_WORDS);
   if (/\bbuild\s+week\b/i.test(task)) contextualStopWords.add("build");
+  const collected = [
+    ...englishKeywords(lexicalTask),
+    ...phraseKeywords(lexicalTask),
+    ...entities,
+    ...(publication.releaseIntent ? RELEASE_ROUTE_KEYWORDS : [])
+  ];
   const keywords = [
     ...new Set(
-      [...englishKeywords(lexicalTask), ...phraseKeywords(lexicalTask), ...entities].filter(
-        (token) => token.length > 1 && !contextualStopWords.has(token)
+      collected.filter(
+        (token) =>
+          token.length > 1
+          && !contextualStopWords.has(token)
+          && !(
+            publication.releaseArtifactReference
+            && !publication.releaseIntent
+            && RELEASE_REFERENCE_ONLY_KEYWORDS.has(token)
+          )
       )
     )
   ];

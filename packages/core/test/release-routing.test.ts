@@ -251,6 +251,10 @@ describe("release routing matrix", () => {
     expect(classifyTask("Explain how to publish a package to npm")).toBe("explain");
     expect(classifyTask("Review the release checklist for security risks")).toBe("review");
     expect(classifyTask("Test the release workflow without publishing")).toBe("test");
+    expect(classifyTask("Update the release-candidate machine evidence and README")).toBe("evaluation");
+    expect(classifyTask("更新 Vertex Palace 发布候选与真实仓库机器证据说明")).toBe("evaluation");
+    expect(classifyTask("Fix release-candidate evidence classification")).toBe("bugfix");
+    expect(classifyTask("Publish the verified Vertex Palace package to npm")).toBe("release");
     expect(classifyTask("Deploy the application to production")).toBe("unknown");
 
     await withFixture("ts-api", async (root) => {

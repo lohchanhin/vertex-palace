@@ -96,7 +96,11 @@ export function scoreNodes(nodes: PalaceNode[], edges: PalaceEdge[], analysis: T
         score += releaseBoost;
         reasons.push("matches release or distribution surface");
       }
-      const surfaceHits = requestedSurfaces.filter((surface) => matchesRouteSurface(node, surface));
+      const surfaceHits = requestedSurfaces.filter(
+        (surface) =>
+          matchesRouteSurface(node, surface)
+          && !(taskType === "bugfix" && surface === "test" && isVerificationScriptPath(node.sourcePath))
+      );
       if (surfaceHits.length) {
         score += 45;
         reasons.push(`matches requested ${surfaceHits.join("/")} surface`);
@@ -273,7 +277,11 @@ export function requestedRouteSurfaces(analysis: TaskAnalysis): RouteSurface[] {
   if (keywords.has("mcp")) requested.push("mcp");
   if (hasAny(keywords, ["shared", "schema", "schemas", "type", "types", "contract", "contracts"])) requested.push("shared");
   if (hasAny(keywords, ["bypass", "boundaries", "boundary", "transport", "telemetry", "payload"]) && !requested.includes("shared")) requested.push("shared");
-  if (hasAny(keywords, ["test", "tests", "validate", "validation", "verification", "regression"])) requested.push("test");
+  const explicitVerification = hasAny(keywords, ["test", "tests", "validate", "validation", "verification", "regression"]);
+  const evidencePinVerification = keywords.has("evidence")
+    && hasAny(keywords, ["implementation", "source"])
+    && hasAny(keywords, ["config", "plan", "protocol", "frozen"]);
+  if (explicitVerification || evidencePinVerification) requested.push("test");
   if (hasAny(keywords, ["config", "plan", "protocol", "frozen"])) requested.push("config");
   if (hasAny(keywords, ["doc", "docs", "documentation", "readme"])) requested.push("docs");
   if (hasAny(keywords, ["ci", "workflow", "workflows", "actions"])) requested.push("ci");
@@ -322,6 +330,10 @@ export function matchesRouteSurface(node: PalaceNode, surface: RouteSurface): bo
         && node.kind !== "test"
         && !["config", "doc", "runtime-log"].includes(node.kind);
   }
+}
+
+function isVerificationScriptPath(sourcePath: string): boolean {
+  return /(^|\/)scripts\/[^/]*(?:verify|smoke|benchmark)[^/]*$/.test(sourcePath.toLowerCase());
 }
 
 function isPackageManifestPath(sourcePath: string): boolean {

@@ -59,7 +59,9 @@ export async function routePalace(root: string, task: string, options: number | 
       ? ensureRequestedSurfaceCoverage(initialRoute, scored, requestedSurfaces, analysis, routeLimit)
       : taskType === "release"
         ? ensureReleaseSurfaceCoverage(scored, requestedSurfaces, analysis, routeLimit)
-        : initialRoute;
+        : taskType === "bugfix"
+          ? ensureBugfixVerificationCoverage(initialRoute, scored, requestedSurfaces, implementationAnchor, routeLimit)
+          : initialRoute;
   const now = new Date().toISOString();
 
   const routeSteps = expanded.map((item, index) => {
@@ -102,6 +104,53 @@ export async function routePalace(root: string, task: string, options: number | 
 
 function isImplementationCandidate(node: Awaited<ReturnType<typeof readIndex>>["nodes"][number]): boolean {
   return node.floor !== "05-verification" && !["test", "config", "doc", "runtime-log", "directory"].includes(node.kind);
+}
+
+function ensureBugfixVerificationCoverage(
+  selected: ScoredNode[],
+  scored: ScoredNode[],
+  requested: RouteSurface[],
+  implementationAnchor: ScoredNode | undefined,
+  limit: number
+): ScoredNode[] {
+  if (!requested.includes("test") || selected.some(isDirectTestCandidate)) return selected;
+
+  const selectedPaths = new Set(selected.map((item) => item.node.sourcePath));
+  const companion = scored.find(
+    (item) =>
+      isDirectTestCandidate(item)
+      && item.matchedKeywordCount > 0
+      && !selectedPaths.has(item.node.sourcePath)
+  );
+  if (!companion) return selected;
+
+  const result = [...selected];
+  if (result.length < limit) {
+    result.push(companion);
+  } else {
+    let removableIndex = -1;
+    for (let index = result.length - 1; index >= 0; index -= 1) {
+      const item = result[index];
+      if (item.node.id !== implementationAnchor?.node.id && !isDirectTestCandidate(item)) {
+        removableIndex = index;
+        break;
+      }
+    }
+    if (removableIndex < 0) return selected;
+    result[removableIndex] = companion;
+  }
+
+  return result.sort((a, b) => {
+    if (a.node.id === implementationAnchor?.node.id) return -1;
+    if (b.node.id === implementationAnchor?.node.id) return 1;
+    return b.score - a.score || a.node.sourcePath.localeCompare(b.node.sourcePath);
+  });
+}
+
+function isDirectTestCandidate(item: ScoredNode): boolean {
+  const sourcePath = item.node.sourcePath.toLowerCase();
+  return item.node.kind === "test"
+    || /(^|\/)(?:test|tests|spec|__tests__)(\/|$)|\.(?:test|spec)\.[^.]+$/.test(sourcePath);
 }
 
 async function ensureFreshIndex(root: string): Promise<void> {
