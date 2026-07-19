@@ -1,7 +1,9 @@
 # Release Routing Cross-Ecosystem Matrix Result
 
-Status: source candidate, generated MCP bundle, and clean local tarball install
-passed; public npm 0.2.3 release gates are still pending.
+Status: source candidate, generated MCP bundle, clean local tarball install,
+and public npm 0.2.3 registry installation passed. Git tag verification is
+recorded separately in
+[RELEASE_0_2_3_VERIFICATION.md](./RELEASE_0_2_3_VERIFICATION.md).
 
 Protocol: [RELEASE_ROUTING_MATRIX_PROTOCOL.md](./RELEASE_ROUTING_MATRIX_PROTOCOL.md)
 

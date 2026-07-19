@@ -1,7 +1,7 @@
 # Vertex Palace 0.2.3 Release Verification
 
-Status: prepublish source, bundle, and clean-tarball gates passed; public npm,
-Git tag, and marketplace-install gates are pending.
+Status: prepublish and public npm registry gates passed; Git tag and public-tag
+clone verification are pending.
 
 Date: 2026-07-19
 
@@ -51,12 +51,27 @@ using only that installed CLI.
 | Required surfaces | root package, marketplace, plugin manifest, and MCP pin all present |
 | Installed MCP | 10 tools; initialize, tools/list, and `palace_context` passed |
 
-## Public Gates Still Required
+## Public npm Verification
 
-- Publish `vertex-palace@0.2.3` to npm.
-- Confirm npm `latest`, integrity, and registry tarball metadata.
-- Install from the public registry in a second clean directory.
-- Exercise public CLI, current release route, and MCP stdio server.
+The exact candidate tarball passed npm WebAuth publication and registry
+propagation. Its prepublish SHA-1 matches the registry `dist.shasum` byte for
+byte.
+
+| Measure | Result |
+| --- | --- |
+| npm package | `vertex-palace@0.2.3` |
+| npm `latest` | 0.2.3 |
+| Registry SHA-1 | `e1740751948ea857746d6bb0521327120a77284b` |
+| Candidate SHA-1 | `e1740751948ea857746d6bb0521327120a77284b`, exact match |
+| Registry integrity | `sha512-V8k690m7soE3XIsqSMQnUo4yoC4/jiiv6MXgP7Guff934nRQHo5Jcip4bHRZSaaZz0F5OQmdY8V/22W2mUTCSA==` |
+| Registry install | clean npm project, passed |
+| Public CLI | installed and `npx`, both 0.2.3 |
+| Public current release route | `release`, confidence 0.65, 11 files, required distribution surfaces present |
+| Public installed MCP | 10 tools; initialize, tools/list, and context call passed |
+| Exact plugin npx MCP command | version 0.2.3, 10 tools, passed |
+
+## Distribution Gates Still Required
+
 - Create and push annotated `v0.2.3` only after public npm verification.
 - Clone the public tag and verify plugin manifest, marketplace ref, and MCP pin.
 
@@ -71,7 +86,7 @@ outcomes.
 ## 简体中文摘要
 
 0.2.3 的源码、全仓测试、构建、版本一致性、候选 tarball 隔离安装、CLI 与 MCP
-都已通过发布前门禁。真实当前发布任务能命中 package、Marketplace、plugin
-manifest 与 MCP pin。npm 公开发布、registry clean install、Git tag 和公开 tag
-克隆验证仍待执行；在 npm 0.2.3 真正可安装前，不会把 0.2.3 pin 推到 GitHub。
+都已通过发布前门禁。npm registry 的 latest 已是 0.2.3，候选 tarball SHA-1
+与 registry shasum 完全一致；公网 install、npx CLI、真实发布路线、安装包 MCP
+和插件原样 npx MCP 命令也全部通过。现在只剩 Git tag 与公开 tag 克隆验证。
 本版本只声明已量测的路由质量改善，不宣称所有任务都会节省总 Token 或时间。
