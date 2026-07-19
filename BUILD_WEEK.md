@@ -65,6 +65,15 @@ Human product and engineering decisions included:
 
 The Devpost submission will include the `/feedback` Session ID from the primary Build Week development task.
 
+## Demo Presentation
+
+The English Build Week presentation is available at
+[`outputs/vertex-palace-build-week-demo.pptx`](./outputs/vertex-palace-build-week-demo.pptx).
+It is structured for an under-three-minute narrated video and includes speaker
+notes for the live CLI recording transition. The verified claims, slide arc,
+and recording guidance are documented in
+[`docs/presentation/BUILD_WEEK_DEMO_DECK.md`](./docs/presentation/BUILD_WEEK_DEMO_DECK.md).
+
 ## Judge Quick Test
 
 Install the public competition release, then run it in the repository you want to evaluate:
