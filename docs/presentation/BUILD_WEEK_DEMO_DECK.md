@@ -14,6 +14,24 @@ Palace is not presented as an always-on context tax: current mode selection can
 bypass trivial work, route bounded work lightly, and reserve deeper context and
 memory for tasks whose scope or risk justifies it.
 
+## Value Claims Shown Visibly
+
+The deck now separates the product's supported value from the unproven
+acceleration hypothesis:
+
+- **Structured routing:** a task receives a bounded entry path with a selected
+  mode, route reasons, load depth, guardrails, and measured payload.
+- **Project continuity:** scoped prior decisions can change the next agent's
+  starting point without requiring a full chat transcript.
+- **Pitfall prevention:** the entrance Pitfall Board surfaces relevant previous
+  mistakes before source inspection, while current code and tests remain the
+  authority.
+- **Auditable context:** route evaluation connects selected context with actual
+  changed files; task memory records tests, decisions, failed attempts, and
+  future pitfalls.
+- **Honest boundary:** the public benchmark is presented as a test of the
+  acceleration claim, not as a verdict on all four forms of product value.
+
 ## Creator Motivation
 
 Vertex Palace began with a recurring problem in the creator's own large
@@ -42,7 +60,7 @@ and the Pitfall Board are metadata attached to places and routes; they are not
 additional spatial axes. For example, `checkout / implementation /
 shippingQuote()` identifies one bounded context entry point.
 
-## Twelve-Slide Arc
+## Thirteen-Slide Arc
 
 1. Introduce Vertex Palace and the Developer Tools submission.
 2. Ground the project in the creator's experience of hour-long tasks, excessive
@@ -50,30 +68,34 @@ shippingQuote()` identifies one bounded context entry point.
 3. Define the building's coordinate system: X for functional domain, Y for
    architectural floor, and Z for inspection depth, with routes and memory
    layered on top.
-4. Demonstrate a real `palace context --auto` result.
-5. Show how `palace evaluate` measures context reduction, changed-file
-   coverage, route focus, and confidence calibration.
-6. Show the frozen four-arm A/B design: Codex alone (the no-Palace Control),
+4. Demonstrate how one `palace context --auto` call produces an explainable
+   route, selected mode, scoped memory, guardrails, and measured payload.
+5. Use this deck revision as a live memory case: a prior Pitfall Board warning
+   changed the next task's starting decision before the presentation was
+   opened.
+6. Show the auditable task receipt: context reduction, changed-file coverage,
+   route focus, confidence calibration, tests, decisions, and pitfalls.
+7. Show the frozen four-arm A/B design: Codex alone (the no-Palace Control),
    Route-only, Full Palace, and Adaptive, across four scenarios, four
    repetitions, and 64 total arms. The Codex model, task, fixture, prompt, and
    tests remain fixed.
-7. Plot the actual four-arm medians for reported tokens, wall time, and tool
+8. Plot the actual four-arm medians for reported tokens, wall time, and tool
    calls. Keep the bars descriptive and pair them with the 64/64 validity,
    correctness, public-test, hidden-oracle, and scope results.
-8. Plot the paired `Adaptive - Codex alone` estimates and 95% bootstrap
+9. Plot the paired `Adaptive - Codex alone` estimates and 95% bootstrap
    intervals. Show that only the +4.5 tool-call overhead cleared zero, retain
    the supported -898.5-byte Adaptive-versus-Full payload result as a separate
    Palace-owned metric, and state the unsupported universal claims.
-9. Compare Adaptive with Codex alone across small-local, cross-stack,
-   useful-memory, and stale-memory task profiles. Treat them as complexity and
-   risk profiles rather than calibrated difficulty levels, and identify which
-   scenario-level intervals stayed above zero.
-10. Present the independent product evidence: 55 automated tests, build and
-    TypeScript lint, ten-tool MCP smoke, five successful CI jobs, and clean
-    public-distribution verification.
-11. Show the learning loop from the 0.2.1 memory omission to the 0.2.2
-    regression contract and the 0.2.3 cross-ecosystem release-routing matrix.
-12. Give judges the public npm installation and GitHub test path.
+10. Compare Adaptive with Codex alone across small-local, cross-stack,
+    useful-memory, and stale-memory task profiles. Treat them as complexity and
+    risk profiles rather than calibrated difficulty levels, and identify which
+    scenario-level intervals stayed above zero.
+11. Present the independent product evidence: 55 automated tests, build and
+     TypeScript lint, ten-tool MCP smoke, five successful CI jobs, and clean
+     public-distribution verification.
+12. Show the learning loop from the 0.2.1 memory omission to the 0.2.2
+     regression contract and the 0.2.3 cross-ecosystem release-routing matrix.
+13. Give judges the public npm installation and GitHub test path.
 
 ## Recording Guidance
 
@@ -85,9 +107,19 @@ used.
 
 ## Verified Evidence Used
 
-- Live 0.2.3 context result: `guarded-memory-palace`, route confidence `0.81`,
+- Current deck-revision memory case: `guarded-memory-palace`, mode confidence
+  `0.88`, route confidence `0.78`, route ID `route_5c04653effbb6b8c`, 2,245
+  estimated payload tokens, three memory items, and two guardrails. A prior
+  warning against showing the overhead chart alone changed the next revision's
+  starting plan. This is continuity evidence, not acceleration evidence.
+- Current deck-revision route evaluation: 91,102 indexed estimated tokens,
+  4,787 context-pack tokens, 94.7% context-pack reduction, 33% changed-file
+  coverage, 10% route focus, and a 0.78 route confidence labeled
+  overconfident. The route found the deck document but missed the new research
+  note and binary PPTX. This supports auditability, not route accuracy.
+- Earlier live 0.2.3 context result: `guarded-memory-palace`, route confidence `0.81`,
   1,165 estimated payload tokens, three memory items, and one guardrail.
-- Live route evaluation: 87,622 indexed estimated tokens, 8,900 context-pack
+- Earlier live route evaluation: 87,622 indexed estimated tokens, 8,900 context-pack
   tokens, 89.8% reduction, 100% declared changed-file coverage, and 30% route
   focus.
 - Adaptive v2.2 exploratory study: 16 trials and 64/64 valid, successful,
@@ -135,6 +167,7 @@ models and machines; long-lived multi-session value also remains unproven.
 ## Sources
 
 - [`BUILD_WEEK.md`](../../BUILD_WEEK.md)
+- [`docs/research/DECK_MEMORY_CASE_2026-07-19.md`](../research/DECK_MEMORY_CASE_2026-07-19.md)
 - [`docs/research/ADAPTIVE_MEMORY_FIX_0_2_2.md`](../research/ADAPTIVE_MEMORY_FIX_0_2_2.md)
 - [`docs/research/RELEASE_ROUTING_MATRIX_RESULT_0_2_3.md`](../research/RELEASE_ROUTING_MATRIX_RESULT_0_2_3.md)
 - [`docs/research/RELEASE_0_2_3_VERIFICATION.md`](../research/RELEASE_0_2_3_VERIFICATION.md)
@@ -145,7 +178,7 @@ models and machines; long-lived multi-session value also remains unproven.
 
 ## Quality Checks
 
-- All twelve exported slides were rendered from the final PPTX and inspected at
+- All thirteen exported slides were rendered from the final PPTX and inspected at
   full size.
 - The PowerPoint overflow test passed with no out-of-slide content.
 - No unresolved placeholders or layout-warning text remains.
