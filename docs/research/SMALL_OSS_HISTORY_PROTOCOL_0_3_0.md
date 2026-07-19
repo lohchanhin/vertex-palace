@@ -54,7 +54,7 @@ The protocol commit must exist before running:
 
 ```bash
 pnpm build
-node scripts/verify-small-oss-history.cjs --out docs/research/evidence/small-oss-history-validation-0.3.0-after-type-route-fix.json
+node scripts/verify-small-oss-history.cjs --out docs/research/evidence/small-oss-history-validation-0.3.0-after-boundary-consistency-fix.json
 ```
 
 The output records a failure before returning non-zero, so an unfavorable case
@@ -75,6 +75,13 @@ parent, ground-truth commit, required files, accepted boundary, route budget,
 and pass thresholds remain unchanged for the post-fix run. The harness still
 requires the complete upstream `npm test`; separate `ava` and `tsd` runs are
 diagnostics only and cannot turn a failed upstream command into a pass.
+
+The post-type-route result is preserved at commit
+`510bbfe111c9ffd6bed46e44df64d96e2a8bc700`. Its routing gate passed with
+`requiredRecall: 1` and `acceptedPrecision: 1`, but audit found that selected
+source paths could still appear in `excluded` through sibling symbol nodes.
+Commit `81beebceb5c040658a4886a4b49039daa54f693b` fixes that path-level boundary
+contradiction. A final unchanged-oracle rerun remains required.
 
 ---
 
@@ -130,3 +137,9 @@ commit `acec14ef9cbb0a404f2418768774695759137c2b` 加入通用的 type-declarati
 与 benchmark 路径惩罚。修复后复测仍使用完全相同的仓库、任务、parent、ground-truth commit、
 必需文件、可接受边界、预算与通过阈值。完整 `npm test` 仍是正式闸门；单独执行 `ava`、`tsd`
 只用于诊断，不能把失败改写成通过。
+
+type-route 修复后的结果保留在 commit
+`510bbfe111c9ffd6bed46e44df64d96e2a8bc700`。路由闸门达到 `requiredRecall: 1`、
+`acceptedPrecision: 1`，但审计发现同一个已选 source path 仍可能通过其他 symbol node 出现在
+`excluded`。commit `81beebceb5c040658a4886a4b49039daa54f693b` 已修复这个路径层级矛盾；
+仍需使用不变 Oracle 完成最后一次复测。
