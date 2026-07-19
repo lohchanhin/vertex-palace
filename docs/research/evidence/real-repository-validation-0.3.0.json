@@ -1,0 +1,469 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-07-19T17:12:20.006Z",
+  "claimBoundary": "Product routing and packaging validation only; not an Agent performance benchmark.",
+  "candidate": {
+    "package": "vertex-palace@0.3.0",
+    "files": 7,
+    "shasum": "20a351363316ff5227ffe5cc5bfc75a281c7ad74",
+    "integrity": "sha512-+4emR62zt2p8YY1tGjcFM5+9gpMK7cUr6d/TX8TsYbACX3lYKesUkhQByy0REmYzqBto/Isjt7DCxDWGL+1Ayg==",
+    "cleanInstallVersion": "0.3.0"
+  },
+  "environment": {
+    "platform": "win32",
+    "arch": "x64",
+    "node": "v24.13.1",
+    "npm": "11.8.0",
+    "git": "git version 2.53.0.windows.1"
+  },
+  "protocol": {
+    "budget": 6000,
+    "trialsPerRepository": 2,
+    "cleanPinnedClonePerRepository": true,
+    "trackedWorktreeMutationAllowed": false
+  },
+  "repositories": [
+    {
+      "name": "zod",
+      "language": "TypeScript",
+      "url": "https://github.com/colinhacks/zod.git",
+      "commit": "912f0f51b0ced654d0069741e7160834dca742ee",
+      "indexedFiles": 581,
+      "expected": {
+        "primary": "packages/zod/src/v4/core/schemas.ts",
+        "verification": "packages/zod/src/v4/classic/tests/discriminated-unions.test.ts"
+      },
+      "routeQuality": {
+        "targetRecall": 1,
+        "targetPrecision": 0.333,
+        "unexpectedBoundaryFiles": [
+          "packages/zod/src/v3/types.ts",
+          "packages/zod/src/v4/classic/tests/standard-schema.test.ts",
+          "packages/zod/src/v4/classic/tests/string-formats.test.ts",
+          "packages/tsc/generate.ts"
+        ]
+      },
+      "deterministicBoundaries": true,
+      "trackedWorktreeClean": true,
+      "trials": [
+        {
+          "trial": 1,
+          "elapsedMs": 5261,
+          "mode": "full-palace",
+          "taskType": "bugfix",
+          "routeConfidence": 0.85,
+          "boundaries": {
+            "primary": [
+              "packages/zod/src/v4/core/schemas.ts:2360-2441",
+              "packages/zod/src/v3/types.ts:3120-3160"
+            ],
+            "support": [
+              "packages/zod/src/v4/classic/tests/discriminated-unions.test.ts",
+              "packages/zod/src/v4/classic/tests/standard-schema.test.ts",
+              "packages/zod/src/v4/classic/tests/string-formats.test.ts"
+            ],
+            "deferred": [
+              "packages/tsc/generate.ts:49-182"
+            ],
+            "excluded": [
+              {
+                "reason": "No strong keyword, room, or route relation match.",
+                "sourcePath": "packages"
+              },
+              {
+                "reason": "No strong keyword, room, or route relation match.",
+                "sourcePath": "logo"
+              },
+              {
+                "reason": "No strong keyword, room, or route relation match.",
+                "sourcePath": "AGENTS.md"
+              },
+              {
+                "reason": "No strong keyword, room, or route relation match.",
+                "sourcePath": "scripts"
+              },
+              {
+                "reason": "No strong keyword, room, or route relation match.",
+                "sourcePath": "CODE_OF_CONDUCT.md"
+              },
+              {
+                "reason": "No strong keyword, room, or route relation match.",
+                "sourcePath": ".vscode"
+              },
+              {
+                "reason": "No strong keyword, room, or route relation match.",
+                "sourcePath": "CONTRIBUTING.md"
+              },
+              {
+                "reason": "No strong keyword, room, or route relation match.",
+                "sourcePath": "package.json"
+              }
+            ],
+            "requiredEvidence": [
+              "packages/zod/src/v4/classic/tests/discriminated-unions.test.ts",
+              "packages/zod/src/v4/classic/tests/standard-schema.test.ts",
+              "packages/zod/src/v4/classic/tests/string-formats.test.ts"
+            ],
+            "doNot": [
+              "Do not inventory or broadly scan the repository.",
+              "Do not inspect Deferred or Excluded paths unless Primary or Required Evidence conflicts.",
+              "Do not continue exploration after the stop conditions pass."
+            ],
+            "stopCondition": [
+              "The intended Primary implementation scope is resolved; expand it only when Required Evidence proves another dependency.",
+              "Targeted tests for the changed behavior pass.",
+              "No Excluded path or unrelated file is modified.",
+              "No unresolved conflict remains between current code, tests, and delivered memory."
+            ],
+            "conflictSummary": [
+              "Static routing found no explicit conflict; current code, tests, and runtime evidence remain authoritative."
+            ]
+          },
+          "payload": {
+            "mode": "full-palace",
+            "calls": 1,
+            "contextCalls": 1,
+            "contextBytes": 10798,
+            "contextEstimatedTokens": 2700,
+            "routeStepCount": 6,
+            "primaryCount": 2,
+            "supportCount": 3,
+            "deferredCount": 1,
+            "memoryItemCount": 0,
+            "memoryCandidateCount": 0,
+            "memoryExcludedCount": 0,
+            "memoryEstimatedTokens": 0,
+            "guardrailCount": 0
+          },
+          "routeFiles": [
+            "packages/zod/src/v4/core/schemas.ts",
+            "packages/zod/src/v3/types.ts",
+            "packages/zod/src/v4/classic/tests/discriminated-unions.test.ts",
+            "packages/zod/src/v4/classic/tests/standard-schema.test.ts",
+            "packages/zod/src/v4/classic/tests/string-formats.test.ts",
+            "packages/tsc/generate.ts"
+          ]
+        },
+        {
+          "trial": 2,
+          "elapsedMs": 1304,
+          "mode": "full-palace",
+          "taskType": "bugfix",
+          "routeConfidence": 0.85,
+          "boundaries": {
+            "primary": [
+              "packages/zod/src/v4/core/schemas.ts:2360-2441",
+              "packages/zod/src/v3/types.ts:3120-3160"
+            ],
+            "support": [
+              "packages/zod/src/v4/classic/tests/discriminated-unions.test.ts",
+              "packages/zod/src/v4/classic/tests/standard-schema.test.ts",
+              "packages/zod/src/v4/classic/tests/string-formats.test.ts"
+            ],
+            "deferred": [
+              "packages/tsc/generate.ts:49-182"
+            ],
+            "excluded": [
+              {
+                "reason": "No strong keyword, room, or route relation match.",
+                "sourcePath": "packages"
+              },
+              {
+                "reason": "No strong keyword, room, or route relation match.",
+                "sourcePath": "logo"
+              },
+              {
+                "reason": "No strong keyword, room, or route relation match.",
+                "sourcePath": "AGENTS.md"
+              },
+              {
+                "reason": "No strong keyword, room, or route relation match.",
+                "sourcePath": "scripts"
+              },
+              {
+                "reason": "No strong keyword, room, or route relation match.",
+                "sourcePath": "CODE_OF_CONDUCT.md"
+              },
+              {
+                "reason": "No strong keyword, room, or route relation match.",
+                "sourcePath": ".vscode"
+              },
+              {
+                "reason": "No strong keyword, room, or route relation match.",
+                "sourcePath": "CONTRIBUTING.md"
+              },
+              {
+                "reason": "No strong keyword, room, or route relation match.",
+                "sourcePath": "package.json"
+              }
+            ],
+            "requiredEvidence": [
+              "packages/zod/src/v4/classic/tests/discriminated-unions.test.ts",
+              "packages/zod/src/v4/classic/tests/standard-schema.test.ts",
+              "packages/zod/src/v4/classic/tests/string-formats.test.ts"
+            ],
+            "doNot": [
+              "Do not inventory or broadly scan the repository.",
+              "Do not inspect Deferred or Excluded paths unless Primary or Required Evidence conflicts.",
+              "Do not continue exploration after the stop conditions pass."
+            ],
+            "stopCondition": [
+              "The intended Primary implementation scope is resolved; expand it only when Required Evidence proves another dependency.",
+              "Targeted tests for the changed behavior pass.",
+              "No Excluded path or unrelated file is modified.",
+              "No unresolved conflict remains between current code, tests, and delivered memory."
+            ],
+            "conflictSummary": [
+              "Static routing found no explicit conflict; current code, tests, and runtime evidence remain authoritative."
+            ]
+          },
+          "payload": {
+            "mode": "full-palace",
+            "calls": 1,
+            "contextCalls": 1,
+            "contextBytes": 10798,
+            "contextEstimatedTokens": 2700,
+            "routeStepCount": 6,
+            "primaryCount": 2,
+            "supportCount": 3,
+            "deferredCount": 1,
+            "memoryItemCount": 0,
+            "memoryCandidateCount": 0,
+            "memoryExcludedCount": 0,
+            "memoryEstimatedTokens": 0,
+            "guardrailCount": 0
+          },
+          "routeFiles": [
+            "packages/zod/src/v4/core/schemas.ts",
+            "packages/zod/src/v3/types.ts",
+            "packages/zod/src/v4/classic/tests/discriminated-unions.test.ts",
+            "packages/zod/src/v4/classic/tests/standard-schema.test.ts",
+            "packages/zod/src/v4/classic/tests/string-formats.test.ts",
+            "packages/tsc/generate.ts"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "requests",
+      "language": "Python",
+      "url": "https://github.com/psf/requests.git",
+      "commit": "f361ead047be5cb873174218582f7d8b9fcd9f49",
+      "indexedFiles": 123,
+      "expected": {
+        "primary": "src/requests/sessions.py",
+        "verification": "tests/test_requests.py"
+      },
+      "routeQuality": {
+        "targetRecall": 1,
+        "targetPrecision": 0.333,
+        "unexpectedBoundaryFiles": [
+          "tests/test_utils.py",
+          "src/requests/_types.py",
+          "src/requests/adapters.py",
+          "src/requests/compat.py"
+        ]
+      },
+      "deterministicBoundaries": true,
+      "trackedWorktreeClean": true,
+      "trials": [
+        {
+          "trial": 1,
+          "elapsedMs": 1080,
+          "mode": "full-palace",
+          "taskType": "bugfix",
+          "routeConfidence": 0.77,
+          "boundaries": {
+            "primary": [
+              "src/requests/sessions.py:154-184"
+            ],
+            "support": [
+              "tests/test_requests.py:1984-1986",
+              "tests/test_utils.py:156-181",
+              "src/requests/_types.py",
+              "src/requests/adapters.py",
+              "src/requests/compat.py"
+            ],
+            "deferred": [],
+            "excluded": [
+              {
+                "reason": "No strong keyword, room, or route relation match.",
+                "sourcePath": "src/requests"
+              },
+              {
+                "reason": "No strong keyword, room, or route relation match.",
+                "sourcePath": "docs"
+              },
+              {
+                "reason": "No strong keyword, room, or route relation match.",
+                "sourcePath": ".github"
+              },
+              {
+                "reason": "No strong keyword, room, or route relation match.",
+                "sourcePath": "ext"
+              },
+              {
+                "reason": "No strong keyword, room, or route relation match.",
+                "sourcePath": "README.md"
+              },
+              {
+                "reason": "No strong keyword, room, or route relation match.",
+                "sourcePath": ".git-blame-ignore-revs"
+              },
+              {
+                "reason": "No strong keyword, room, or route relation match.",
+                "sourcePath": "Makefile"
+              },
+              {
+                "reason": "No strong keyword, room, or route relation match.",
+                "sourcePath": ".gitignore"
+              }
+            ],
+            "requiredEvidence": [
+              "tests/test_requests.py:1984-1986",
+              "tests/test_utils.py:156-181",
+              "src/requests/_types.py",
+              "src/requests/adapters.py"
+            ],
+            "doNot": [
+              "Do not inventory or broadly scan the repository.",
+              "Do not inspect Deferred or Excluded paths unless Primary or Required Evidence conflicts.",
+              "Do not continue exploration after the stop conditions pass."
+            ],
+            "stopCondition": [
+              "The intended Primary implementation scope is resolved; expand it only when Required Evidence proves another dependency.",
+              "Targeted tests for the changed behavior pass.",
+              "No Excluded path or unrelated file is modified.",
+              "No unresolved conflict remains between current code, tests, and delivered memory."
+            ],
+            "conflictSummary": [
+              "Static routing found no explicit conflict; current code, tests, and runtime evidence remain authoritative."
+            ]
+          },
+          "payload": {
+            "mode": "full-palace",
+            "calls": 1,
+            "contextCalls": 1,
+            "contextBytes": 10385,
+            "contextEstimatedTokens": 2597,
+            "routeStepCount": 6,
+            "primaryCount": 1,
+            "supportCount": 5,
+            "deferredCount": 0,
+            "memoryItemCount": 0,
+            "memoryCandidateCount": 0,
+            "memoryExcludedCount": 0,
+            "memoryEstimatedTokens": 0,
+            "guardrailCount": 0
+          },
+          "routeFiles": [
+            "src/requests/sessions.py",
+            "tests/test_requests.py",
+            "tests/test_utils.py",
+            "src/requests/_types.py",
+            "src/requests/adapters.py",
+            "src/requests/compat.py"
+          ]
+        },
+        {
+          "trial": 2,
+          "elapsedMs": 696,
+          "mode": "full-palace",
+          "taskType": "bugfix",
+          "routeConfidence": 0.77,
+          "boundaries": {
+            "primary": [
+              "src/requests/sessions.py:154-184"
+            ],
+            "support": [
+              "tests/test_requests.py:1984-1986",
+              "tests/test_utils.py:156-181",
+              "src/requests/_types.py",
+              "src/requests/adapters.py",
+              "src/requests/compat.py"
+            ],
+            "deferred": [],
+            "excluded": [
+              {
+                "reason": "No strong keyword, room, or route relation match.",
+                "sourcePath": "src/requests"
+              },
+              {
+                "reason": "No strong keyword, room, or route relation match.",
+                "sourcePath": "docs"
+              },
+              {
+                "reason": "No strong keyword, room, or route relation match.",
+                "sourcePath": ".github"
+              },
+              {
+                "reason": "No strong keyword, room, or route relation match.",
+                "sourcePath": "ext"
+              },
+              {
+                "reason": "No strong keyword, room, or route relation match.",
+                "sourcePath": "README.md"
+              },
+              {
+                "reason": "No strong keyword, room, or route relation match.",
+                "sourcePath": ".git-blame-ignore-revs"
+              },
+              {
+                "reason": "No strong keyword, room, or route relation match.",
+                "sourcePath": "Makefile"
+              },
+              {
+                "reason": "No strong keyword, room, or route relation match.",
+                "sourcePath": ".gitignore"
+              }
+            ],
+            "requiredEvidence": [
+              "tests/test_requests.py:1984-1986",
+              "tests/test_utils.py:156-181",
+              "src/requests/_types.py",
+              "src/requests/adapters.py"
+            ],
+            "doNot": [
+              "Do not inventory or broadly scan the repository.",
+              "Do not inspect Deferred or Excluded paths unless Primary or Required Evidence conflicts.",
+              "Do not continue exploration after the stop conditions pass."
+            ],
+            "stopCondition": [
+              "The intended Primary implementation scope is resolved; expand it only when Required Evidence proves another dependency.",
+              "Targeted tests for the changed behavior pass.",
+              "No Excluded path or unrelated file is modified.",
+              "No unresolved conflict remains between current code, tests, and delivered memory."
+            ],
+            "conflictSummary": [
+              "Static routing found no explicit conflict; current code, tests, and runtime evidence remain authoritative."
+            ]
+          },
+          "payload": {
+            "mode": "full-palace",
+            "calls": 1,
+            "contextCalls": 1,
+            "contextBytes": 10385,
+            "contextEstimatedTokens": 2597,
+            "routeStepCount": 6,
+            "primaryCount": 1,
+            "supportCount": 5,
+            "deferredCount": 0,
+            "memoryItemCount": 0,
+            "memoryCandidateCount": 0,
+            "memoryExcludedCount": 0,
+            "memoryEstimatedTokens": 0,
+            "guardrailCount": 0
+          },
+          "routeFiles": [
+            "src/requests/sessions.py",
+            "tests/test_requests.py",
+            "tests/test_utils.py",
+            "src/requests/_types.py",
+            "src/requests/adapters.py",
+            "src/requests/compat.py"
+          ]
+        }
+      ]
+    }
+  ]
+}
