@@ -47,6 +47,8 @@ Adaptive mode reports `contextBytes`, `contextEstimatedTokens`, route-tier count
 
 The 0.3.0 source candidate adds True Adaptive Bypass and explicit execution boundaries. Bypass no longer requires the task to spell out a filename: after routing, a lightweight memory preflight must confirm zero relevant current memory, and the route must identify one high-confidence Primary file without cross-stack, contract, tenant, or broad-scope risk. Its delivered body contains only `mode`, `primaryCandidate`, and `reason`. Non-bypass output includes Primary, Support, Deferred, Excluded, Required Evidence, Do Not, Stop Condition, Conflict Summary, and an estimated context ceiling so the agent knows when to stop exploring.
 
+The same candidate adds structured Python class, method, async-function, import, and symbol-range indexing; searchable implementation terms; and symbol-level test-to-source relationships. Explicit requests to add or update tests now set `verificationChangeRisk` and cannot collapse into single-file bypass. The pinned [Zod and Requests validation](./docs/research/REAL_REPOSITORY_VALIDATION_0_3_0.md) retrieves both known targets in two deterministic repetitions per repository and reports the remaining extra context. It is a packaging and routing gate, not an end-to-end Agent performance claim.
+
 Version 0.2.4 makes memory filtering auditable. Adaptive JSON now includes `memoryTelemetry` with `memoryCandidates`, `memoryIncluded`, candidate and included IDs, and `memoryExcluded` entries whose reasons are one of `scope_mismatch`, `expired`, `selection_limit_reached`, or `token_budget_exceeded`. Markdown shows the same counts and exclusions under `Memory Selection`, while the existing `memory` array remains compatible.
 
 Version 0.2.2 preserves relevant memory when Adaptive selects `full-palace`. This fixes the omission reproduced in all four useful-memory trials of the public [Adaptive v2.2 benchmark](https://github.com/lohchanhin/benchmarks-ab-demo/blob/main/docs/research/ADAPTIVE_V2_2_FINAL.md); the frozen v0.2.1 research results remain unchanged. The [0.2.2 remediation record](https://github.com/lohchanhin/vertex-palace/blob/main/docs/research/ADAPTIVE_MEMORY_FIX_0_2_2.md) documents the root cause and clean-install evidence.
@@ -403,7 +405,7 @@ Vertex Palace runs locally by default. It does not upload source code, call exte
 
 - Local memory-palace data model
 - Repository scanner with ignore rules
-- TypeScript, JavaScript, Markdown, JSON, and fallback parsers
+- TypeScript, JavaScript, Python, Markdown, JSON, and fallback parsers
 - Indexes for nodes, edges, rooms, symbols, directory tree, hashes, and routes
 - Route planner with task classification, confidence, reasons, and excluded areas
 - Adaptive selector with `bypass`, `route-lite`, `full-palace`, and `guarded-memory-palace`

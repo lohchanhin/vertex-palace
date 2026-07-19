@@ -246,7 +246,7 @@ export function packBypassContext(
   const reason = selection.reasons.join(" ");
   const minimal = {
     mode: "bypass" as const,
-    primaryCandidate: primary?.sourcePath ?? null,
+    primaryCandidate: primary ? stripSourceLocation(primary.sourcePath) : null,
     reason
   };
   const serialized = format === "json"
@@ -288,6 +288,10 @@ export function packBypassContext(
 
 function serializeJsonOutput(value: unknown): string {
   return `${JSON.stringify(value, null, 2)}\n`;
+}
+
+function stripSourceLocation(sourcePath: string): string {
+  return sourcePath.replace(/:\d+(?:-\d+)?$/, "");
 }
 
 function adaptiveJson(

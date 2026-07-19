@@ -4,6 +4,7 @@ import type { ParsedFile } from "@vertex-palace/shared";
 import { parseFallback } from "./parse-fallback";
 import { parseJson } from "./parse-json";
 import { parseMarkdown } from "./parse-markdown";
+import { parsePython } from "./parse-python";
 import { parseTsJs } from "./parse-ts-js";
 import { binarySummary, isBinaryLikePath } from "../utils/binary-files";
 
@@ -31,6 +32,9 @@ export async function parseFile(root: string, sourcePath: string, language: stri
     }
     if (language === "json") {
       return parseJson(sourcePath, content);
+    }
+    if (language === "py" || language === "python") {
+      return parsePython(sourcePath, content);
     }
     return parseFallback(sourcePath, language, content);
   } catch {

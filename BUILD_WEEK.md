@@ -104,4 +104,5 @@ The Codex plugin is pinned to the same npm release, so judges do not need to reb
 - The root CLI bundle builds.
 - The bundled MCP server answers framed JSON-RPC `initialize` and `tools/list` requests.
 - The npm tarball is installed and exercised from a clean temporary directory before publishing.
+- The same tarball passes two deterministic repetitions on pinned Zod and Requests commits, with known implementation and verification targets retrieved inside budget.
 - The plugin MCP pin matches the published competition release.

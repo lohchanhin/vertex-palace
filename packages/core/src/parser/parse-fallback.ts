@@ -1,4 +1,5 @@
 import type { ParsedFile, ParsedSymbol } from "@vertex-palace/shared";
+import { extractSearchTerms } from "../utils/lexical-tokens";
 
 export function parseFallback(sourcePath: string, language: string, content: string): ParsedFile {
   const lines = content.split(/\r?\n/);
@@ -14,7 +15,8 @@ export function parseFallback(sourcePath: string, language: string, content: str
         kind: classMatch ? "class" : "function",
         startLine: index + 1,
         endLine: Math.min(lines.length, index + 8),
-        signature: line.trim().slice(0, 160)
+        signature: line.trim().slice(0, 160),
+        searchText: extractSearchTerms(lines.slice(index, Math.min(lines.length, index + 12)).join("\n"))
       });
     }
   });

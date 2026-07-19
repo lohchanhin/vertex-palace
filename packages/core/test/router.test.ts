@@ -76,6 +76,101 @@ describe("routePalace", () => {
     expect(analysis.wingHints).not.toContain("api");
   });
 
+  it("normalizes bug-report morphology without inventing evaluation or product-variant intent", () => {
+    const zodTask = "A codec-backed discriminated union fails when encoding because discriminator values differ.";
+    const requestsTask = "Fix redirect authorization handling for HTTP-to-HTTPS upgrades and stripped credentials.";
+
+    expect(classifyTask(zodTask)).toBe("bugfix");
+    expect(analyzeTask(zodTask).keywords).toEqual(expect.arrayContaining(["codec", "discriminated", "union", "encode", "discriminator", "value"]));
+    expect(analyzeTask(zodTask).wingHints).not.toContain("variant");
+    expect(analyzeTask(requestsTask).keywords).toEqual(expect.arrayContaining(["redirect", "auth", "upgrade", "strip", "credential"]));
+    expect(analyzeTask(requestsTask).keywords).not.toEqual(expect.arrayContaining(["evaluation", "evaluate", "confidence", "grade"]));
+  });
+
+  it("routes a Python redirect-auth bug from focused tests to the complete implementation method", async () => {
+    await withFixture("ts-api", async (root) => {
+      const files = new Map<string, string>([
+        [
+          "src/requests/sessions.py",
+          `class SessionRedirectMixin:
+    def should_strip_auth(self, old_url: str, new_url: str) -> bool:
+        if old_url == new_url:
+            return False
+        if old_url.startswith("https") and new_url.startswith("http:"):
+            return True
+        return old_url != new_url
+`
+        ],
+        [
+          "tests/test_requests.py",
+          `def test_should_strip_auth_default_port():
+    assert True
+
+def test_should_strip_auth_http_downgrade():
+    assert True
+`
+        ],
+        ["tests/test_utils.py", "def test_default_credentials():\n    assert True\n"]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const route = await routePalace(
+        root,
+        "Fix redirect authorization handling so credentials are preserved for same-host default-port redirects and HTTP-to-HTTPS upgrades, but stripped on host, downgrade, or nonstandard port changes. Update the focused regression tests.",
+        { routeLimit: 6 }
+      );
+      const joined = route.route.map((step) => step.sourcePath).join("\n");
+
+      expect(route.taskType).toBe("bugfix");
+      expect(joined).toContain("src/requests/sessions.py");
+      expect(joined).toContain("tests/test_requests.py");
+      expect(route.route.find((step) => step.sourcePath.startsWith("src/requests/sessions.py"))?.sourcePath).toMatch(/:2-7$/);
+    });
+  });
+
+  it("routes a codec-backed discriminated-union bug to v4 core implementation and tests", async () => {
+    await withFixture("ts-api", async (root) => {
+      const files = new Map<string, string>([
+        [
+          "packages/zod/src/v4/core/schemas.ts",
+          `export const $ZodCodec = core.$constructor("$ZodCodec", () => true);
+export const $ZodDiscriminatedUnion = core.$constructor("$ZodDiscriminatedUnion", (inst, def) => {
+  inst.parse = (payload, ctx) => ctx.direction === "backward" ? encode(payload) : decode(payload);
+});
+`
+        ],
+        ["packages/zod/src/v4/classic/schemas.ts", `export function discriminatedUnion() { return "v4 wrapper"; }\n`],
+        ["packages/zod/src/v4/classic/tests/discriminated-unions.test.ts", `import { z } from "zod/v4";\ntest("encode with codec discriminator", () => z);\n`],
+        ["packages/zod/src/v3/tests/discriminated-unions.test.ts", `import { z } from "zod/v3";\ntest("legacy discriminator", () => z);\n`],
+        ["packages/bench/discriminated-union.ts", `export const discriminatedUnionBenchmark = () => "benchmark";\n`]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const route = await routePalace(
+        root,
+        "A codec-backed discriminated union decodes correctly but fails when encoding because input and output discriminator values differ. Preserve fast decoding while allowing backward encoding to select the right option, and update the focused regression tests.",
+        { routeLimit: 6 }
+      );
+      const joined = route.route.map((step) => step.sourcePath).join("\n");
+
+      expect(route.taskType).toBe("bugfix");
+      expect(joined).toContain("packages/zod/src/v4/core/schemas.ts");
+      expect(joined).toContain("packages/zod/src/v4/classic/tests/discriminated-unions.test.ts");
+      expect(joined).not.toContain("packages/bench/discriminated-union.ts");
+      expect(route.route.find((step) => step.sourcePath.startsWith("packages/zod/src/v4/core/schemas.ts"))?.tier).toBe("primary");
+    });
+  });
+
   it("covers implementation, regression, package, plugin, and release records for a release task", async () => {
     await withFixture("ts-api", async (root) => {
       const sources = new Map<string, string>([

@@ -114,7 +114,7 @@ function chooseLoadLevel(kind: string, index: number, score: number): LoadLevel 
 }
 
 function chooseRouteTier(item: ScoredNode, index: number, taskType: TaskType): Exclude<RouteTier, "excluded"> {
-  const supportKind = ["test", "config", "doc"].includes(item.node.kind);
+  const supportKind = item.node.floor === "05-verification" || ["test", "config", "doc"].includes(item.node.kind);
   const expandedByRelation = item.reasons.some((reason) => reason.startsWith("expanded through"));
   const taskMakesSupportPrimary =
     (taskType === "test" && item.node.kind === "test") ||

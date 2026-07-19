@@ -20,7 +20,7 @@ export function classifyTask(task: string): TaskType {
   if (/(测试|測試|规格|規格|覆盖率|覆蓋率|fixture|驗證|验证)/.test(lower)) return "test";
   if (/(解释|解釋|说明|說明|为什么|為什麼|如何|怎么|怎麼|总结|總結|差异|差異)/.test(lower)) return "explain";
   if (/(审核|審核|检查|檢查|审查|審查|风险|風險|安全|review|audit)/.test(lower)) return "review";
-  if (/\b(fix|error|failed|failing|bug|exception|stack|crash|broken)\b/.test(lower)) return "bugfix";
+  if (/\b(fix|error|fail|fails|failed|failing|failure|bug|exception|stack|crash|broken)\b/.test(lower)) return "bugfix";
   if (/\b(add|create|implement|build|support|new)\b/.test(lower)) return "feature";
   if (/\b(refactor|cleanup|restructure|simplify|rename|optimize|optimise|improve|enhance|reduce|control|tune)\b/.test(lower)) return "refactor";
   if (/\b(test|spec|coverage|fixture)\b/.test(lower)) return "test";

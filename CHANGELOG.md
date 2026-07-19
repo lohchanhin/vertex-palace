@@ -10,6 +10,9 @@
 - A three-field bypass transport containing only `mode`, `primaryCandidate`, and `reason`.
 - Machine-readable execution boundaries for Primary, Support, Deferred, Excluded, Required Evidence, Do Not, Stop Condition, and Conflict Summary.
 - A dedicated `scopeRisk` signal and a bounded memory-relevance preflight before automatic mode selection.
+- A `verificationChangeRisk` signal that keeps explicitly requested test changes out of single-file bypass mode.
+- Structured Python parsing for classes, qualified methods, async functions, imports, and complete indentation-bounded symbol ranges.
+- A pinned real-repository validation gate for Zod and Requests using a clean install of the local npm tarball.
 - A reproducible `pnpm test:release-candidate` gate that packs and installs the local tarball, exercises a 240-file fixture, validates memory fallback and execution boundaries, and starts the installed MCP server.
 
 ### Changed
@@ -21,11 +24,15 @@
 - Mixed feature-and-release routing now allocates implementation, regression, transport, CLI, MCP, plugin, documentation, and package surfaces in rounds, with English and Chinese regression coverage.
 - Tenant memory can resolve a client from a unique historical business alias when the task explicitly asks for prior decisions, at least three non-generic alias tokens match, and the winning client leads every alternative by at least two tokens.
 - A route entry matching that inferred client becomes the sole Primary while the former static Primary is demoted to Support with an explicit reason.
+- Lexical routing now normalizes common code-task morphology, avoids substring intent matches such as `grade` inside `upgrades`, indexes bounded implementation search terms, and reserves route capacity for test-to-implementation relationships.
+- Test symbols remain verification context rather than receiving implementation-tier boosts, and symbol-level test names can link focused tests to the methods they exercise.
 
 ### Fixed
 
 - Prevented tasks such as "independently governed launch tenant" from retrieving Aurora history and then excluding it as `scope_mismatch` merely because the literal client name was absent.
 - Prevented inferred client context from simultaneously labeling a shared fallback as Primary in the rendered execution boundaries.
+- Prevented issue-style tasks from returning only tests while excluding the implementation in real TypeScript and Python repositories.
+- Prevented explicit requests to update regression tests from collapsing into a one-file bypass payload.
 
 ### Verification
 
@@ -34,6 +41,7 @@
 - A non-study memory-dependent smoke retrieved 2/2 Aurora candidates, excluded 0, emitted `unique_historical_alias_match`, promoted `clients/aurora/article-tokens.mjs` to the only Primary, and demoted the shared token to Support.
 - An ambiguous two-client regression keeps both memories excluded as `scope_mismatch`; alias inference does not break tenant isolation when evidence ties.
 - These product-contract tests do not yet prove parity with Control tool calls, reported tokens, or wall time; that requires the fresh Control-first benchmark planned for 0.3.1.
+- The pinned Zod and Requests gate retrieves both known target files in two deterministic repetitions per repository while reporting all extra route files; it is a product gate, not an Agent-performance claim.
 
 ## 0.2.4 - 2026-07-19
 

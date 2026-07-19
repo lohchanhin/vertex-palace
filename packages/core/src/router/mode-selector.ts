@@ -59,7 +59,8 @@ export function selectPalaceMode(
     memoryCheckedAndAbsent &&
     !riskSignals.crossStack &&
     !riskSignals.publicContractRisk &&
-    !riskSignals.scopeRisk
+    !riskSignals.scopeRisk &&
+    !riskSignals.verificationChangeRisk
   ) {
     return buildSelection(
       "bypass",
@@ -85,6 +86,7 @@ export function selectPalaceMode(
     !riskSignals.crossStack &&
     !riskSignals.publicContractRisk &&
     !riskSignals.scopeRisk &&
+    !riskSignals.verificationChangeRisk &&
     ((explicitFiles.length === 1 && primaryCount <= 2) || fileCount <= 100);
   if (boundedTask) {
     return buildSelection(
@@ -104,6 +106,7 @@ export function selectPalaceMode(
     riskSignals.crossStack ? "The route crosses implementation layers." : undefined,
     riskSignals.publicContractRisk ? "A public contract or schema may affect indirect dependencies." : undefined,
     riskSignals.scopeRisk ? "The requested change has repository-wide or multi-file scope." : undefined,
+    riskSignals.verificationChangeRisk ? "The task explicitly requests verification-file changes." : undefined,
     uncertainRoute ? "Route confidence is too low for a narrow context." : undefined,
     fileCount > 100 ? `The repository contains ${fileCount} indexed files.` : undefined
   ].filter((reason): reason is string => Boolean(reason));
@@ -253,6 +256,12 @@ function detectRiskSignals(task: string, route: PalaceRoute): PalaceRiskSignals 
     "多个文件",
     "多個檔案"
   ]);
+  const verificationChangeRisk = !/\b(?:without|do not|don't|must not|should not)\s+(?:changing?|editing?|modifying?|updating?)\s+(?:the\s+)?(?:tests?|specs?)\b/.test(task)
+    && (
+      /\b(?:add|create|extend|update|change|edit|modify|write)\b.{0,80}\b(?:tests?|specs?|coverage)\b/.test(task)
+      || /\b(?:tests?|specs?)\b.{0,80}\b(?:add|create|extend|update|change|edit|modify|write)\b/.test(task)
+      || /\bregression\s+(?:tests?|specs?)\b/.test(task)
+    );
 
   return {
     crossStack: crossStackTerms || (frontendRoute && backendRoute),
@@ -261,6 +270,7 @@ function detectRiskSignals(task: string, route: PalaceRoute): PalaceRiskSignals 
     tenantIsolationRisk: tenantWord && isolationWord,
     publicContractRisk,
     scopeRisk,
+    verificationChangeRisk,
     testOnly: route.taskType === "test"
   };
 }

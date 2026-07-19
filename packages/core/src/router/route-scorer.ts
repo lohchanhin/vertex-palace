@@ -2,6 +2,7 @@ import type { PalaceEdge, PalaceNode, TaskType } from "@vertex-palace/shared";
 import type { TaskAnalysis } from "./analyze-task";
 import { floorTemplate } from "./locate-entry";
 import { isBinaryLikePath } from "../utils/binary-files";
+import { normalizeLexicalToken, tokenizeLexical } from "../utils/lexical-tokens";
 
 export type ScoredNode = {
   node: PalaceNode;
@@ -30,24 +31,37 @@ export function scoreNodes(nodes: PalaceNode[], edges: PalaceEdge[], analysis: T
     .map((node) => {
       const reasons: string[] = [];
       let score = 0;
-      const haystack = [node.sourcePath, node.title, node.summary, node.wing, node.room, ...node.tags].filter(Boolean).join(" ").toLowerCase();
+      const haystack = [node.sourcePath, node.title, node.summary, node.lod.level4, node.wing, node.room, ...node.tags].filter(Boolean).join(" ").toLowerCase();
       const tokens = tokenize(haystack);
       const entityHit = entityHintBoost(node, analysis);
+      const matchedKeywords = new Set<string>();
 
       for (const keyword of analysis.keywords) {
         if (!keyword) continue;
-        if (tokenize(node.sourcePath).has(keyword)) {
+        const normalizedKeyword = normalizeLexicalToken(keyword);
+        if (SURFACE_ONLY_KEYWORDS.has(normalizedKeyword)) continue;
+        if (tokenize(node.sourcePath).has(normalizedKeyword)) {
           score += 35;
           reasons.push(`source path matches "${keyword}"`);
-        }
-        if (tokenize(node.title).has(keyword)) {
+          matchedKeywords.add(normalizedKeyword);
+        } else if (tokenize(node.title).has(normalizedKeyword)) {
           score += 30;
           reasons.push(`symbol or file title matches "${keyword}"`);
-        }
-        if (tokens.has(keyword)) {
+          matchedKeywords.add(normalizedKeyword);
+        } else if (tokens.has(normalizedKeyword)) {
           score += 25;
           reasons.push(`summary or tags match "${keyword}"`);
+          matchedKeywords.add(normalizedKeyword);
         }
+      }
+
+      if (isImplementationNode(node) && taskType !== "test" && matchedKeywords.size >= 2) {
+        score += 35;
+        reasons.push("implementation covers multiple task concepts");
+      }
+      if (node.startLine && matchedKeywords.size > 0) {
+        score += 12;
+        reasons.push("symbol-level match provides a precise source range");
       }
 
       if (entityHit > 0) {
@@ -124,6 +138,10 @@ export function scoreNodes(nodes: PalaceNode[], edges: PalaceEdge[], analysis: T
         score -= 120;
         reasons.push("fixture is secondary for non-test tasks");
       }
+      if (isBenchmarkLikePath(node.sourcePath) && !analysis.keywords.some((keyword) => ["benchmark", "performance", "profiling"].includes(keyword))) {
+        score -= 90;
+        reasons.push("benchmark code is secondary for this task");
+      }
       if (isBinaryLikePath(node.sourcePath, node.language) && !wantsMediaAsset(analysis)) {
         score -= 120;
         reasons.push("binary/media asset is secondary for non-asset task");
@@ -145,6 +163,12 @@ export function scoreNodes(nodes: PalaceNode[], edges: PalaceEdge[], analysis: T
     .sort((a, b) => b.score - a.score || a.node.sourcePath.localeCompare(b.node.sourcePath));
 }
 
+const SURFACE_ONLY_KEYWORDS = new Set(["regression", "test", "verification"]);
+
+function isImplementationNode(node: PalaceNode): boolean {
+  return node.floor !== "05-verification" && !["test", "config", "doc", "runtime-log"].includes(node.kind);
+}
+
 function wantsMediaAsset(analysis: TaskAnalysis): boolean {
   const mediaKeywords = new Set(["asset", "assets", "image", "images", "img", "logo", "icon", "png", "jpg", "jpeg", "gif", "webp", "screenshot", "picture", "photo"]);
   return analysis.keywords.some((keyword) => mediaKeywords.has(keyword));
@@ -152,6 +176,10 @@ function wantsMediaAsset(analysis: TaskAnalysis): boolean {
 
 function isFixtureLikePath(sourcePath: string): boolean {
   return /(^|\/)(fixtures?|__fixtures__)(\/|$)/i.test(sourcePath);
+}
+
+function isBenchmarkLikePath(sourcePath: string): boolean {
+  return /(^|\/)(bench|benches|benchmark|benchmarks|perf)(\/|$)/i.test(sourcePath);
 }
 
 function entityHintBoost(node: PalaceNode, analysis: TaskAnalysis): number {
@@ -307,13 +335,7 @@ function hasAny(values: Set<string>, candidates: string[]): boolean {
 }
 
 function tokenize(value: string): Set<string> {
-  return new Set(
-    value
-      .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
-      .toLowerCase()
-      .split(/[^a-z0-9]+/)
-      .filter(Boolean)
-  );
+  return tokenizeLexical(value);
 }
 
 function relationBoosts(edges: PalaceEdge[]): Map<string, number> {

@@ -1,5 +1,6 @@
 import { Project, SyntaxKind, type Node } from "ts-morph";
 import type { ParsedFile, ParsedSymbol } from "@vertex-palace/shared";
+import { extractSearchTerms } from "../utils/lexical-tokens";
 
 export function parseTsJs(sourcePath: string, content: string, language: string): ParsedFile {
   const project = new Project({ useInMemoryFileSystem: true, compilerOptions: { allowJs: true, jsx: 4 } });
@@ -69,7 +70,8 @@ function makeSymbol(name: string, kind: ParsedSymbol["kind"], node: Node): Parse
     kind,
     startLine,
     endLine,
-    signature: signatureFor(node)
+    signature: signatureFor(node),
+    searchText: extractSearchTerms(node.getText())
   };
 }
 

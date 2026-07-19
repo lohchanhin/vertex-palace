@@ -7,7 +7,7 @@ export function expandRoute(scored: ScoredNode[], edges: PalaceEdge[], nodes: Pa
   const adjacency = buildAdjacency(edges);
   const selected = new Map<string, ScoredNode>();
   const selectedSources = new Set<string>();
-  const seedLimit = Math.min(limit, Math.max(4, Math.ceil(limit * 0.67)));
+  const seedLimit = Math.min(limit, Math.max(3, Math.ceil(limit * 0.5)));
 
   for (const item of diverseSeed(scored, seedLimit)) {
     selected.set(item.node.id, item);

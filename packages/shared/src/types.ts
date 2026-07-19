@@ -85,6 +85,7 @@ export type PalaceRiskSignals = {
   tenantIsolationRisk: boolean;
   publicContractRisk: boolean;
   scopeRisk: boolean;
+  verificationChangeRisk: boolean;
   testOnly: boolean;
 };
 
@@ -295,6 +296,7 @@ export type ParsedSymbol = {
   startLine: number;
   endLine: number;
   signature: string;
+  searchText?: string;
 };
 
 export type ParsedHeading = {

@@ -1,4 +1,5 @@
 import { slugify } from "../utils/path-utils";
+import { normalizeLexicalToken, tokenizeLexical } from "../utils/lexical-tokens";
 
 export type TaskAnalysis = {
   raw: string;
@@ -75,7 +76,24 @@ const STOP_WORDS = new Set([
   "tools",
   "unknown",
   "assessment",
-  "vertex"
+  "vertex",
+  "are",
+  "be",
+  "because",
+  "been",
+  "being",
+  "but",
+  "correctly",
+  "focused",
+  "handling",
+  "is",
+  "right",
+  "so",
+  "update",
+  "was",
+  "were",
+  "when",
+  "while"
 ]);
 const WING_HINTS = new Set([
   "api",
@@ -119,14 +137,14 @@ const PHRASE_KEYWORDS: Array<[RegExp, string[]]> = [
   [/接口|\bapi\b|\bcontroller\b|控制器/i, ["api", "controller"]],
   [/数据库|資料庫|资料表|資料表|schema|model|prisma/i, ["database", "schema", "model"]],
   [/路由|路线|路線|route|router|routing/i, ["route", "router"]],
-  [/准确|準確|完整度|相关度|相關度|score|scorer|scoring|relevance/i, ["score", "scorer", "route"]],
+  [/准确|準確|完整度|相关度|相關度|\b(?:score|scorer|scoring|relevance)\b/i, ["score", "scorer", "route"]],
   [/依赖|依賴|导入|導入|引用|import|dependency|dependencies/i, ["import", "dependency", "edge"]],
   [/unknown|未识别|未識別|任务判断|任務判斷|任务分类|任務分類|任务类型|任務類型|classify|classification|task type/i, ["classify", "analyze", "task"]],
   [/索引|新鲜度|新鮮度|过期|過期|刷新|stale|fresh|freshness|index/i, ["index", "stale", "fresh"]],
-  [/evaluation|evaluate|assessment|score|rating|grade|评估|評估|评价|評價|评分|評分|打分/i, ["evaluation", "evaluate", "route", "confidence"]],
+  [/\b(?:evaluation|evaluate|assessment|score|rating|grade)\b|评估|評估|评价|評價|评分|評分|打分/i, ["evaluation", "evaluate", "route", "confidence"]],
   [/retrospective|postmortem|feedback|lessons|回顾|回顧|复盘|復盤|总结|總結|结论|結論/i, ["evaluation", "retrospective", "memory"]],
   [/商品|产品|產品|product/i, ["product"]],
-  [/规格|規格|款式|variant|option/i, ["variant"]],
+  [/规格|規格|款式|\bvariant\b/i, ["variant"]],
   [/图片|圖片|图像|圖像|照片|image|photo|picture/i, ["image"]],
   [/上传|上傳|upload/i, ["upload"]],
   [/筛选|篩選|过滤|過濾|filter/i, ["filter"]],
@@ -164,11 +182,8 @@ export function analyzeTask(task: string): TaskAnalysis {
 }
 
 function englishKeywords(task: string): string[] {
-  return task
-    .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
-    .toLowerCase()
-    .split(/[^a-z0-9]+/)
-    .map(slugify)
+  return [...tokenizeLexical(task)]
+    .map((token) => normalizeLexicalToken(slugify(token)))
     .filter((token) => Boolean(token) && !/^\d+$/.test(token));
 }
 

@@ -48,6 +48,7 @@
     "test": "pnpm -r test",
     "test:mcp-smoke": "node scripts/smoke-mcp.cjs",
     "test:release-candidate": "node scripts/verify-release-candidate.cjs",
+    "test:real-repositories": "pnpm build && node scripts/verify-real-repositories.cjs",
     "lint": "pnpm -r exec tsc --noEmit -p tsconfig.json --pretty false",
     "clean": "pnpm -r clean"
   },

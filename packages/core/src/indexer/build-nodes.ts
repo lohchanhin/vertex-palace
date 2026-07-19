@@ -62,11 +62,14 @@ export function buildNodes(scan: ScanRepoOutput, parsedFiles: ParsedFileWithHash
           kind: mapSymbolKind(symbol.kind),
           language: parsed.language,
           title: symbol.name,
-          summary: `${symbol.kind} ${symbol.name} in ${parsed.sourcePath}`,
+          summary: [
+            `${symbol.kind} ${symbol.name} in ${parsed.sourcePath}`,
+            symbol.searchText ? `Search terms: ${symbol.searchText}` : ""
+          ].filter(Boolean).join(". "),
           startLine: symbol.startLine,
           endLine: symbol.endLine,
           sourceHash: parsed.hash,
-          contentHash: hashText(`${parsed.sourcePath}:${symbol.name}:${symbol.signature}`),
+          contentHash: hashText(`${parsed.sourcePath}:${symbol.name}:${symbol.signature}:${symbol.searchText ?? ""}`),
           signature: symbol.signature,
           now
         })

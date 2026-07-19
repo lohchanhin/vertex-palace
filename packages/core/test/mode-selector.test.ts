@@ -51,6 +51,23 @@ describe("selectPalaceMode", () => {
     expect(selection.riskSignals.scopeRisk).toBe(true);
   });
 
+  it("does not bypass an explicit verification-file change", () => {
+    const task = "Fix redirect authorization handling and update the focused regression tests.";
+    const selection = selectPalaceMode(smallIndex(123), focusedRoute(0.73), task, { relevantMemoryCount: 0 });
+
+    expect(selection.mode).toBe("full-palace");
+    expect(selection.riskSignals.verificationChangeRisk).toBe(true);
+    expect(selection.reasons).toContain("The task explicitly requests verification-file changes.");
+  });
+
+  it("still bypasses when tests must pass without being changed", () => {
+    const task = "Fix currency formatting and make the complete test suite pass without changing tests.";
+    const selection = selectPalaceMode(smallIndex(), focusedRoute(), task, { relevantMemoryCount: 0 });
+
+    expect(selection.mode).toBe("bypass");
+    expect(selection.riskSignals.verificationChangeRisk).toBe(false);
+  });
+
   it("keeps actual public contract changes in full-palace mode", () => {
     const task = "Update the public API contract for currency formatting while preserving backward compatibility.";
     const selection = selectPalaceMode(smallIndex(), focusedRoute(), task);
