@@ -33,9 +33,10 @@ The pinned repositories are:
 
 ## Recorded result
 
-The checked evidence was regenerated from final product source
-`2d167f81d688160649a8768c863b4e5fe188d1a6`. The clean packed candidate had
-SHA-1 `80633512200b2cc022b9e457309f834852824a07`.
+The checked evidence was regenerated from the pinned release source
+`8328ea29d55260e34e2e6170bd420e4c659af39e`. The clean packed candidate had
+SHA-1 `4f4f7843cbfebaec0a9f3aade31fac24d96d1133` and integrity
+`sha512-wfxQUxLKk1kQxQm8X1eGKbRaXX/yxIla8KO6PAxj83Fx+7ofwQSzla6tTVvLIlBOxchGy0OmopFdS684GDz9RA==`.
 
 | Repository | Indexed files | Mode | Route confidence | Pack tokens | Target recall | Strict target precision | Extra files | Deterministic |
 | --- | ---: | --- | ---: | ---: | ---: | ---: | ---: | --- |
@@ -137,9 +138,10 @@ research targets.
 
 ## 实测结果
 
-本次证据由最终产品源码 `2d167f81d688160649a8768c863b4e5fe188d1a6`
+本次证据由固定的发布源码 `8328ea29d55260e34e2e6170bd420e4c659af39e`
 重新生成；干净安装候选 npm tarball 的 SHA-1 为
-`80633512200b2cc022b9e457309f834852824a07`。
+`4f4f7843cbfebaec0a9f3aade31fac24d96d1133`，integrity 为
+`sha512-wfxQUxLKk1kQxQm8X1eGKbRaXX/yxIla8KO6PAxj83Fx+7ofwQSzla6tTVvLIlBOxchGy0OmopFdS684GDz9RA==`。
 
 | 仓库 | 索引文件 | 模式 | 路由置信度 | Pack tokens | 目标召回率 | 严格目标精度 | 额外文件 | 边界稳定性 |
 | --- | ---: | --- | ---: | ---: | ---: | ---: | ---: | --- |
