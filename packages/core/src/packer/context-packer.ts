@@ -149,34 +149,139 @@ async function packAdaptiveContext(
     drawers.push({ node, content, tokens, reason: step.reason, step: { ...step, loadLevel } });
   }
 
-  const loadedIds = new Set(drawers.map((drawer) => drawer.step.nodeId));
-  const deferredReferences = route.route.filter((step) => !loadedIds.has(step.nodeId));
   const baseMetrics = metricSkeleton(selection, tiered, memory, guardrails);
 
   if (options.format === "json") {
-    let payload = baseMetrics;
-    let json = adaptiveJson(task, route, selection, tiered, drawers, deferredReferences, guardrails, memory, boundaries, payload);
-    for (let attempt = 0; attempt < 4; attempt += 1) {
-      const serialized = serializeJsonOutput(json);
-      payload = withMeasuredPayload(baseMetrics, serialized);
-      json = adaptiveJson(task, route, selection, tiered, drawers, deferredReferences, guardrails, memory, boundaries, payload);
+    while (true) {
+      const deferredReferences = adaptiveDeferredReferences(route, drawers);
+      const measured = measureAdaptiveJson(
+        task,
+        route,
+        selection,
+        tiered,
+        drawers,
+        deferredReferences,
+        guardrails,
+        memory,
+        boundaries,
+        baseMetrics
+      );
+      if (measured.payload.contextEstimatedTokens <= selection.maxContextTokens) {
+        return {
+          task,
+          routeId: route.id,
+          mode: selection.mode,
+          modeSelection: selection,
+          payload: measured.payload,
+          memoryTelemetry: memory.telemetry,
+          executionBoundaries: boundaries,
+          estimatedTokens: measured.payload.contextEstimatedTokens,
+          json: measured.json
+        };
+      }
+      assertAdaptiveReduction(drawers, selection, measured.payload, "JSON");
     }
-    const serialized = serializeJsonOutput(json);
-    payload = withMeasuredPayload(baseMetrics, serialized);
-    json = adaptiveJson(task, route, selection, tiered, drawers, deferredReferences, guardrails, memory, boundaries, payload);
-    return {
-      task,
-      routeId: route.id,
-      mode: selection.mode,
-      modeSelection: selection,
-      payload,
-      memoryTelemetry: memory.telemetry,
-      executionBoundaries: boundaries,
-      estimatedTokens: payload.contextEstimatedTokens,
-      json
-    };
   }
 
+  while (true) {
+    const deferredReferences = adaptiveDeferredReferences(route, drawers);
+    const measured = measureAdaptiveMarkdown(
+      task,
+      route,
+      selection,
+      tiered,
+      drawers,
+      deferredReferences,
+      guardrails,
+      memory,
+      boundaries,
+      baseMetrics
+    );
+    if (measured.payload.contextEstimatedTokens <= selection.maxContextTokens) {
+      return {
+        task,
+        routeId: route.id,
+        mode: selection.mode,
+        modeSelection: selection,
+        payload: measured.payload,
+        memoryTelemetry: memory.telemetry,
+        executionBoundaries: boundaries,
+        estimatedTokens: measured.payload.contextEstimatedTokens,
+        markdown: measured.markdown
+      };
+    }
+    assertAdaptiveReduction(drawers, selection, measured.payload, "Markdown");
+  }
+}
+
+function adaptiveDeferredReferences(route: PalaceRoute, drawers: PackedDrawer[]): PalaceRouteStep[] {
+  const loadedIds = new Set(drawers.map((drawer) => drawer.step.nodeId));
+  return route.route.filter((step) => !loadedIds.has(step.nodeId));
+}
+
+function assertAdaptiveReduction(
+  drawers: PackedDrawer[],
+  selection: PalaceModeSelection,
+  payload: PalacePayloadMetrics,
+  format: "JSON" | "Markdown"
+): void {
+  if (reduceAdaptiveDrawers(drawers)) return;
+  throw new Error(
+    `${format} adaptive context requires ${payload.contextEstimatedTokens} estimated tokens, `
+    + `which exceeds the ${selection.maxContextTokens}-token ceiling even without source drawers.`
+  );
+}
+
+function reduceAdaptiveDrawers(drawers: PackedDrawer[]): boolean {
+  const index = drawers.length - 1;
+  if (index < 0) return false;
+  const drawer = drawers[index];
+  const summary = drawer.node.summary.trim();
+  if (summary && drawer.content.trim() !== summary) {
+    drawer.content = summary;
+    drawer.tokens = estimateTokens(summary) + estimateTokens(drawer.reason);
+    drawer.step = { ...drawer.step, loadLevel: "summary" };
+    return true;
+  }
+  drawers.pop();
+  return true;
+}
+
+function measureAdaptiveJson(
+  task: string,
+  route: PalaceRoute,
+  selection: PalaceModeSelection,
+  tiered: TieredRoute,
+  drawers: PackedDrawer[],
+  deferredReferences: PalaceRouteStep[],
+  guardrails: string[],
+  memory: GuardedMemoryResult,
+  boundaries: PalaceExecutionBoundaries,
+  baseMetrics: PalacePayloadMetrics
+): { json: unknown; payload: PalacePayloadMetrics } {
+  let payload = baseMetrics;
+  let json = adaptiveJson(task, route, selection, tiered, drawers, deferredReferences, guardrails, memory, boundaries, payload);
+  for (let attempt = 0; attempt < 12; attempt += 1) {
+    const measured = withMeasuredPayload(baseMetrics, serializeJsonOutput(json));
+    if (sameMeasuredPayload(payload, measured)) return { json, payload: measured };
+    payload = measured;
+    json = adaptiveJson(task, route, selection, tiered, drawers, deferredReferences, guardrails, memory, boundaries, payload);
+  }
+  throw new Error("JSON adaptive payload metrics did not converge.");
+}
+
+function measureAdaptiveMarkdown(
+  task: string,
+  route: PalaceRoute,
+  selection: PalaceModeSelection,
+  tiered: TieredRoute,
+  drawers: PackedDrawer[],
+  deferredReferences: PalaceRouteStep[],
+  guardrails: string[],
+  memory: GuardedMemoryResult,
+  boundaries: PalaceExecutionBoundaries,
+  baseMetrics: PalacePayloadMetrics
+): { markdown: string; payload: PalacePayloadMetrics } {
   let payload = baseMetrics;
   let markdown = renderAdaptiveMarkdown(
     task,
@@ -190,8 +295,10 @@ async function packAdaptiveContext(
     boundaries,
     payload
   );
-  for (let attempt = 0; attempt < 4; attempt += 1) {
-    payload = withMeasuredPayload(baseMetrics, markdown);
+  for (let attempt = 0; attempt < 12; attempt += 1) {
+    const measured = withMeasuredPayload(baseMetrics, markdown);
+    if (sameMeasuredPayload(payload, measured)) return { markdown, payload: measured };
+    payload = measured;
     markdown = renderAdaptiveMarkdown(
       task,
       route,
@@ -205,31 +312,12 @@ async function packAdaptiveContext(
       payload
     );
   }
-  payload = withMeasuredPayload(baseMetrics, markdown);
-  markdown = renderAdaptiveMarkdown(
-    task,
-    route,
-    selection,
-    tiered,
-    drawers,
-    deferredReferences,
-    guardrails,
-    memory,
-    boundaries,
-    payload
-  );
+  throw new Error("Markdown adaptive payload metrics did not converge.");
+}
 
-  return {
-    task,
-    routeId: route.id,
-    mode: selection.mode,
-    modeSelection: selection,
-    payload,
-    memoryTelemetry: memory.telemetry,
-    executionBoundaries: boundaries,
-    estimatedTokens: payload.contextEstimatedTokens,
-    markdown
-  };
+function sameMeasuredPayload(left: PalacePayloadMetrics, right: PalacePayloadMetrics): boolean {
+  return left.contextBytes === right.contextBytes
+    && left.contextEstimatedTokens === right.contextEstimatedTokens;
 }
 
 export function serializePackOutput(output: PackOutput): string {

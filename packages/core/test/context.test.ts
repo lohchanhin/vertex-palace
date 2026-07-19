@@ -403,6 +403,60 @@ describe("palaceContext", () => {
     });
   });
 
+  it("hard-bounds guarded Markdown and JSON with fifty auditable memory candidates", async () => {
+    await withFixture("ts-api", async (root) => {
+      const payloadRoot = path.join(root, "src", "payload");
+      await mkdir(payloadRoot, { recursive: true });
+      await Promise.all(
+        Array.from({ length: 10 }, (_, index) => writeFile(
+          path.join(payloadRoot, `context-${index}.ts`),
+          `export function fitMemoryTelemetry${index}() {\n${`  const payloadBudget${index} = "guarded memory telemetry context ceiling route evidence ${index}";\n`.repeat(45)}  return payloadBudget${index};\n}\n`,
+          "utf8"
+        ))
+      );
+      await indexPalace(root);
+      const entries = Array.from({ length: 50 }, (_, index) => ({
+        id: `memory-${String(index).padStart(2, "0")}`,
+        text: `Guarded memory telemetry context ceiling warning ${index}.`,
+        task: "Guarded memory telemetry context ceiling",
+        outcome: "partial",
+        source: "pitfall",
+        tags: ["guarded", "memory", "telemetry", "context", "ceiling"],
+        memoryPath: `.palace/memory/memory-${index}.md`,
+        createdAt: "2026-07-18T00:00:00.000Z"
+      }));
+      await writeFile(
+        path.join(root, ".palace", "memory", "pitfall-board.json"),
+        JSON.stringify({ entries }),
+        "utf8"
+      );
+
+      const task = "Use historical project decisions to fix guarded memory telemetry context ceiling across the payload packer and all regression validation surfaces";
+      for (const format of ["markdown", "json"] as const) {
+        const output = await palaceContext({
+          root,
+          task,
+          budget: 5000,
+          routeLimit: 10,
+          maxDrawers: 5,
+          mode: "guarded-memory-palace",
+          format
+        });
+        const serialized = serializePackOutput(output);
+
+        expect(output.mode).toBe("guarded-memory-palace");
+        expect(output.memoryTelemetry?.memoryCandidates).toBe(50);
+        expect(output.memoryTelemetry?.memoryIncluded).toBe(3);
+        expect(output.memoryTelemetry?.candidateIds).toHaveLength(50);
+        expect(output.memoryTelemetry?.memoryExcluded).toHaveLength(47);
+        expect(output.memoryTelemetry?.memoryExcluded.every((item) => item.reason === "selection_limit_reached")).toBe(true);
+        expect(serialized).toContain("memory-49");
+        expect(output.payload?.contextEstimatedTokens).toBeLessThanOrEqual(5000);
+        expect(output.payload?.contextBytes).toBe(Buffer.byteLength(serialized, "utf8"));
+      }
+    });
+  });
+
   it("uses only relevant, scoped memory for tenant-sensitive tasks", async () => {
     await withFixture("ts-api", async (root) => {
       await indexPalace(root);

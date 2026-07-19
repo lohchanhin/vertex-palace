@@ -141,6 +141,7 @@ export async function readGuardedMemory(
   options: GuardedMemoryOptions
 ): Promise<GuardedMemoryResult> {
   const limit = Math.max(0, Math.min(3, options.limit ?? 3));
+  const maxCandidates = 50;
   const maxTokens = Math.max(100, Math.min(600, options.maxTokens ?? 600));
   const maxAgeDays = Math.max(1, options.maxAgeDays ?? 90);
   const minRelevance = Math.max(1, options.minRelevance ?? 1);
@@ -158,7 +159,8 @@ export async function readGuardedMemory(
       };
     })
     .filter((candidate) => candidate.score >= minRelevance)
-    .sort((a, b) => b.score - a.score || a.ageDays - b.ageDays || a.index - b.index);
+    .sort((a, b) => b.score - a.score || a.ageDays - b.ageDays || a.index - b.index)
+    .slice(0, maxCandidates);
   const scopeResolution = resolveMemoryScope(
     candidates.map((candidate) => candidate.entry),
     options.task,
