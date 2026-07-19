@@ -1,0 +1,305 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-07-19T22:34:53.422Z",
+  "claimBoundary": "Small-OSS routing, real-history oracle, architecture-contract, and ground-truth test validation only; no Agent execution or efficiency claim.",
+  "status": "failed",
+  "failures": [
+    "ground-truth repository tests failed"
+  ],
+  "package": {
+    "sourceCommit": "acec14ef9cbb0a404f2418768774695759137c2b",
+    "validationHarnessCommit": "31ec3da87ee361fbfbc02598cd07c0c3890da5c6",
+    "name": "vertex-palace",
+    "version": "0.3.0",
+    "files": 7,
+    "shasum": "b3af366d0b5e9f2bd5545e7f05f2ad9ac33065f7",
+    "integrity": "sha512-eoLk0UB9FkzFQ9Sh8n34yKTW+mHm9jCan+LL5wwxahGemCJtHiqSVLYvDAt2q7rxEDghgVI/wlVYjS/ZK92efA==",
+    "cleanInstallVersion": "0.3.0"
+  },
+  "environment": {
+    "platform": "win32",
+    "arch": "x64",
+    "node": "v24.13.1",
+    "npm": "11.8.0",
+    "git": "git version 2.53.0.windows.1"
+  },
+  "selection": {
+    "lockedBeforeFirstPalaceRun": true,
+    "repositoryClass": "independent-small-oss-real-history",
+    "maximumTrackedFiles": 100,
+    "requiredLicense": "OSI-approved",
+    "requiredIssueState": "closed",
+    "requiredGroundTruth": "A real commit after the routed parent must modify implementation/type surface and focused tests.",
+    "requiredTestCommand": true,
+    "selectionRule": "Select without observing a Palace route; preserve a failing route or test instead of replacing the repository."
+  },
+  "repository": {
+    "name": "p-limit",
+    "owner": "sindresorhus",
+    "language": "JavaScript runtime with TypeScript declarations",
+    "url": "https://github.com/sindresorhus/p-limit.git",
+    "issue": {
+      "number": 97,
+      "title": "limitFunction: overly permissive type hint",
+      "url": "https://github.com/sindresorhus/p-limit/issues/97",
+      "state": "closed"
+    },
+    "parentCommit": "c944e4a4363ff41a7202d5dec346cc174c3ecf49",
+    "groundTruthCommit": "ccb80b2721a6a4a27ce5ad7721fe939162a35b31",
+    "task": "Fix the overly permissive public limitFunction type. It currently accepts synchronous functions even though limiting synchronous execution has no effect. Restrict it to asynchronous functions, preserve inferred argument and return types, and add focused compile-time regression coverage using the repository's existing type-test setup.",
+    "expectedChangedFiles": [
+      "index.d.ts",
+      "index.test-d.ts"
+    ],
+    "acceptedRouteFiles": [
+      "index.d.ts",
+      "index.test-d.ts",
+      "package.json"
+    ],
+    "architectureContract": {
+      "typeExport": "./index.d.ts",
+      "runtimeExport": "./index.js",
+      "typeTestRunner": "tsd"
+    },
+    "trackedFilesAtParent": 15,
+    "actualChangedFiles": [
+      "index.d.ts",
+      "index.test-d.ts"
+    ],
+    "architecture": {
+      "packageName": "p-limit",
+      "license": "MIT",
+      "typeExport": "./index.d.ts",
+      "runtimeExport": "./index.js",
+      "testCommand": "xo && ava && tsd",
+      "typeTestsUseTsd": true
+    }
+  },
+  "routing": {
+    "budget": 6000,
+    "repetitions": 2,
+    "deterministicBoundaries": true,
+    "requiredRecall": 1,
+    "strictDiffPrecision": 0.667,
+    "acceptedPrecision": 1,
+    "matchedChangedFiles": [
+      "index.d.ts",
+      "index.test-d.ts"
+    ],
+    "unexpectedRouteFiles": [],
+    "trials": [
+      {
+        "trial": 1,
+        "status": 0,
+        "elapsedMs": 798,
+        "outputSha256": "fcbc299bd7da1f9688ef7af41bee82e595b9f0bddc64e178a1ca487025113881",
+        "processError": null,
+        "mode": "full-palace",
+        "taskType": "bugfix",
+        "routeConfidence": 0.35,
+        "payload": {
+          "mode": "full-palace",
+          "calls": 1,
+          "contextCalls": 1,
+          "contextBytes": 6933,
+          "contextEstimatedTokens": 1734,
+          "routeStepCount": 3,
+          "primaryCount": 1,
+          "supportCount": 2,
+          "deferredCount": 0,
+          "memoryItemCount": 0,
+          "memoryCandidateCount": 0,
+          "memoryExcludedCount": 0,
+          "memoryEstimatedTokens": 0,
+          "guardrailCount": 0
+        },
+        "boundaries": {
+          "primary": [
+            "index.d.ts:1-49"
+          ],
+          "support": [
+            "index.test-d.ts",
+            "package.json"
+          ],
+          "deferred": [],
+          "excluded": [
+            {
+              "reason": "No strong keyword, room, or route relation match.",
+              "sourcePath": "package.json"
+            },
+            {
+              "reason": "No strong keyword, room, or route relation match.",
+              "sourcePath": "readme.md"
+            },
+            {
+              "reason": "No strong keyword, room, or route relation match.",
+              "sourcePath": "scripts"
+            },
+            {
+              "reason": "No strong keyword, room, or route relation match.",
+              "sourcePath": "index.d.ts"
+            },
+            {
+              "reason": "No strong keyword, room, or route relation match.",
+              "sourcePath": "index.js"
+            },
+            {
+              "reason": "No strong keyword, room, or route relation match.",
+              "sourcePath": "benchmark.js"
+            },
+            {
+              "reason": "No strong keyword, room, or route relation match.",
+              "sourcePath": "license"
+            }
+          ],
+          "requiredEvidence": [
+            "index.test-d.ts",
+            "package.json"
+          ],
+          "doNot": [
+            "Do not inventory or broadly scan the repository.",
+            "Do not inspect Deferred or Excluded paths unless Primary or Required Evidence conflicts.",
+            "Do not continue exploration after the stop conditions pass."
+          ],
+          "stopCondition": [
+            "The intended Primary implementation scope is resolved; expand it only when Required Evidence proves another dependency.",
+            "Targeted tests for the changed behavior pass.",
+            "No Excluded path or unrelated file is modified.",
+            "No unresolved conflict remains between current code, tests, and delivered memory."
+          ],
+          "conflictSummary": [
+            "Routing confidence is limited; stop and widen only if Primary evidence disagrees with the task."
+          ]
+        },
+        "routeFiles": [
+          "index.d.ts",
+          "index.test-d.ts",
+          "package.json"
+        ]
+      },
+      {
+        "trial": 2,
+        "status": 0,
+        "elapsedMs": 500,
+        "outputSha256": "87b70a5a5216dd838f71f40ae4b065e22225ca9d0564a7dd2a4e1e21e09e2592",
+        "processError": null,
+        "mode": "full-palace",
+        "taskType": "bugfix",
+        "routeConfidence": 0.35,
+        "payload": {
+          "mode": "full-palace",
+          "calls": 1,
+          "contextCalls": 1,
+          "contextBytes": 6933,
+          "contextEstimatedTokens": 1734,
+          "routeStepCount": 3,
+          "primaryCount": 1,
+          "supportCount": 2,
+          "deferredCount": 0,
+          "memoryItemCount": 0,
+          "memoryCandidateCount": 0,
+          "memoryExcludedCount": 0,
+          "memoryEstimatedTokens": 0,
+          "guardrailCount": 0
+        },
+        "boundaries": {
+          "primary": [
+            "index.d.ts:1-49"
+          ],
+          "support": [
+            "index.test-d.ts",
+            "package.json"
+          ],
+          "deferred": [],
+          "excluded": [
+            {
+              "reason": "No strong keyword, room, or route relation match.",
+              "sourcePath": "package.json"
+            },
+            {
+              "reason": "No strong keyword, room, or route relation match.",
+              "sourcePath": "readme.md"
+            },
+            {
+              "reason": "No strong keyword, room, or route relation match.",
+              "sourcePath": "scripts"
+            },
+            {
+              "reason": "No strong keyword, room, or route relation match.",
+              "sourcePath": "index.d.ts"
+            },
+            {
+              "reason": "No strong keyword, room, or route relation match.",
+              "sourcePath": "index.js"
+            },
+            {
+              "reason": "No strong keyword, room, or route relation match.",
+              "sourcePath": "benchmark.js"
+            },
+            {
+              "reason": "No strong keyword, room, or route relation match.",
+              "sourcePath": "license"
+            }
+          ],
+          "requiredEvidence": [
+            "index.test-d.ts",
+            "package.json"
+          ],
+          "doNot": [
+            "Do not inventory or broadly scan the repository.",
+            "Do not inspect Deferred or Excluded paths unless Primary or Required Evidence conflicts.",
+            "Do not continue exploration after the stop conditions pass."
+          ],
+          "stopCondition": [
+            "The intended Primary implementation scope is resolved; expand it only when Required Evidence proves another dependency.",
+            "Targeted tests for the changed behavior pass.",
+            "No Excluded path or unrelated file is modified.",
+            "No unresolved conflict remains between current code, tests, and delivered memory."
+          ],
+          "conflictSummary": [
+            "Routing confidence is limited; stop and widen only if Primary evidence disagrees with the task."
+          ]
+        },
+        "routeFiles": [
+          "index.d.ts",
+          "index.test-d.ts",
+          "package.json"
+        ]
+      }
+    ]
+  },
+  "gates": {
+    "candidatePackage": "passed",
+    "repositorySelectionAndArchitecture": "passed",
+    "routing": "passed",
+    "groundTruthTestCommand": "failed",
+    "focusedBehaviorAndTypeDiagnostics": "passed"
+  },
+  "groundTruthTests": {
+    "commit": "ccb80b2721a6a4a27ce5ad7721fe939162a35b31",
+    "dependencyResolutionPinnedByRepository": false,
+    "installCommand": "npm install --ignore-scripts --no-audit --no-fund --loglevel=error",
+    "installStatus": 0,
+    "installDurationMs": 30634,
+    "installOutputSha256": "699f803bd4805b1d244ad9936e3cc6fe4901891462c983a2ea73c3e8366974c1",
+    "testCommand": "npm test",
+    "testStatus": 1,
+    "testDurationMs": 9042,
+    "testOutputSha256": "508f9b217551f1a1976725f441d326dd389b6ae31c79e0ba27b7d2686bcdccdb",
+    "testOutputSummary": "> p-limit@7.1.0 test\n> xo && ava && tsd\n  scripts\\benchmarker.js:3:1\n  ‼  3:1  Unexpected todo comment: TODO: I will move this to a proper....                                                                                                                                                                                   no-warning-comments\n  index.d.ts:undefined:undefined\n  ×  0:0  Parsing error: <temporary-validation-root>\\repository\\index.d.ts was not found by the project service. Consider either including it in the tsconfig.json or including it in allowDefaultProject.\n  index.test-d.ts:undefined:undefined\n  ×  0:0  Parsing error: <temporary-validation-root>\\repository\\index.test-d.ts was not found by the project service. Consider either including it in the tsconfig.json or including it in allowDefaultProject.\n  1 warning\n  2 errors",
+    "diagnostics": {
+      "reason": "The preregistered npm test command failed; run its behavior and type-test stages separately without changing the gate result.",
+      "behaviorCommand": "npm exec -- ava",
+      "behaviorStatus": 0,
+      "behaviorDurationMs": 5045,
+      "behaviorOutputSha256": "efce3e2a56906b6d2e4e3a360fdf5c0aabdd9e6d3535c14008febc9d82592c3b",
+      "behaviorOutputSummary": "  √ throws on invalid concurrency argument\n  √ clearQueue\n  √ accepts additional arguments\n  √ continues after sync throw\n  √ runs all tasks asynchronously\n  √ non-promise returning function\n  √ map\n  √ propagates async execution context properly\n  √ map passes index and preserves order with concurrency\n  √ does not ignore errors (135ms)\n  √ change concurrency to bigger value (180ms)\n  √ change concurrency to smaller value (243ms)\n  √ concurrency: 1 (619ms)\n  √ concurrency: 4 (2.5s)\n  √ limitFunction() (2.6s)\n  √ activeCount and pendingCount properties (3s)\n  ─\n  16 tests passed",
+      "typeCommand": "npm exec -- tsd",
+      "typeStatus": 0,
+      "typeDurationMs": 3132,
+      "typeOutputSha256": "75a11da44c802486bc6f65640aa48a730f0f684c5c07a42ba3cd1735eb3fb070",
+      "typeOutputSummary": ""
+    },
+    "trackedWorktreeClean": true
+  }
+}
