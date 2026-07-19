@@ -1,7 +1,7 @@
 # Vertex Palace 0.2.3 Release Verification
 
-Status: prepublish and public npm registry gates passed; Git tag and public-tag
-clone verification are pending.
+Status: complete. Prepublish, public npm registry, annotated Git tag, public-tag
+clone, CLI, and MCP distribution gates passed.
 
 Date: 2026-07-19
 
@@ -70,10 +70,23 @@ byte.
 | Public installed MCP | 10 tools; initialize, tools/list, and context call passed |
 | Exact plugin npx MCP command | version 0.2.3, 10 tools, passed |
 
-## Distribution Gates Still Required
+## Git And Plugin Distribution Verification
 
-- Create and push annotated `v0.2.3` only after public npm verification.
-- Clone the public tag and verify plugin manifest, marketplace ref, and MCP pin.
+| Measure | Result |
+| --- | --- |
+| Public `main` at tag time | `20b5e6098cc64a7eb1eea87377f758bc22a8ba83` |
+| Annotated tag object | `4261ff5e3ed9664b6bf184a71b09f2b6ea41471f` |
+| Peeled `v0.2.3` commit | `20b5e6098cc64a7eb1eea87377f758bc22a8ba83` |
+| Public tag package version | 0.2.3 |
+| Public tag plugin version | 0.2.3 |
+| Public tag marketplace ref | `v0.2.3` |
+| Public tag MCP npm pin | `vertex-palace@0.2.3` |
+
+The Codex desktop-bundled executable is visible under WindowsApps but returned
+`Access is denied` when invoked from PowerShell. Therefore this record does not
+claim a direct `codex plugin marketplace add` CLI pass. The public annotated
+tag, plugin manifest, marketplace ref, npm pin, registry package, and exact
+declared npx MCP runtime were verified independently.
 
 ## Claim Boundary
 
@@ -88,5 +101,7 @@ outcomes.
 0.2.3 的源码、全仓测试、构建、版本一致性、候选 tarball 隔离安装、CLI 与 MCP
 都已通过发布前门禁。npm registry 的 latest 已是 0.2.3，候选 tarball SHA-1
 与 registry shasum 完全一致；公网 install、npx CLI、真实发布路线、安装包 MCP
-和插件原样 npx MCP 命令也全部通过。现在只剩 Git tag 与公开 tag 克隆验证。
+和插件原样 npx MCP 命令也全部通过。annotated `v0.2.3` 与公开 tag 克隆的
+package、plugin、Marketplace ref 和 MCP pin 也已验证。WindowsApps 权限阻止从
+PowerShell 直接执行 Codex 内置 CLI，因此没有虚构 marketplace CLI 成功记录。
 本版本只声明已量测的路由质量改善，不宣称所有任务都会节省总 Token 或时间。
