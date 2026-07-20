@@ -8,7 +8,7 @@ const path = require("node:path");
 const projectRoot = path.resolve(__dirname, "..");
 const packageJson = require(path.join(projectRoot, "package.json"));
 const outputPath = outputArgument(process.argv.slice(2));
-const packageSourceCommit = "e901c1739c5aa907bc44ebcbd25bbdd7abd75e7a";
+const packageSourceCommit = "209c6e2ac5196ed30cf148b8a11a88b13bcc675d";
 const task = "Fix currency formatting so negative zero is rendered as $0.00. Keep the public API stable.";
 
 main().catch((error) => {
