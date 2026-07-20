@@ -360,8 +360,8 @@ export function requestedRouteSurfaces(analysis: TaskAnalysis): RouteSurface[] {
     && hasAny(keywords, ["implementation", "source"])
     && hasAny(keywords, ["config", "plan", "protocol", "frozen"]);
   if (explicitVerification || evidencePinVerification) requested.push("test");
-  if (hasAny(keywords, ["config", "plan", "protocol", "frozen"])) requested.push("config");
-  if (hasAny(keywords, ["doc", "docs", "documentation", "readme"])) requested.push("docs");
+  if (hasAny(keywords, ["config", "configuration", "migration", "migrate", "migrated", "plan", "protocol", "frozen"])) requested.push("config");
+  if (hasAny(keywords, ["doc", "docs", "documentation", "readme", "migration", "migrate", "migrated"])) requested.push("docs");
   if (hasAny(keywords, ["ci", "workflow", "workflows", "actions"])) requested.push("ci");
   if (isMachineEvidenceArtifactRequest(analysis.raw)) requested.push("evidence");
   if (publication.releaseIntent || (isTypeDeclarationIntent(analysis) && requestsTypeTestSetup(analysis))) requested.push("package");

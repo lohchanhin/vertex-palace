@@ -34,6 +34,14 @@ describe("selectPalaceMode", () => {
     expect(selection.riskSignals.scopeRisk).toBe(false);
   });
 
+  it("treats preserving a public response contract as a guard, not a contract change", () => {
+    const task = "Fix currency formatting and preserve the public response contract.";
+    const selection = selectPalaceMode(smallIndex(), focusedRoute(), task, { relevantMemoryCount: 0 });
+
+    expect(selection.mode).toBe("bypass");
+    expect(selection.riskSignals.publicContractRisk).toBe(false);
+  });
+
   it("does not bypass when relevant project memory exists", () => {
     const task = "Fix currency formatting so negative zero is rendered as $0.00. Keep the public API stable.";
     const selection = selectPalaceMode(smallIndex(), focusedRoute(), task, { relevantMemoryCount: 1 });

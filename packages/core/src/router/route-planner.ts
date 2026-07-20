@@ -120,32 +120,29 @@ function ensureBugfixVerificationCoverage(
   implementationAnchor: ScoredNode | undefined,
   limit: number
 ): ScoredNode[] {
-  if (!requested.includes("test") || selected.some(isDirectTestCandidate)) return selected;
+  const requiredSurfaces = requested.filter((surface) => ["test", "config", "docs", "shared"].includes(surface));
+  if (!requiredSurfaces.length) return selected;
 
-  const selectedPaths = new Set(selected.map((item) => item.node.sourcePath));
-  const companion = scored.find(
-    (item) =>
-      isDirectTestCandidate(item)
-      && item.matchedKeywordCount > 0
-      && !selectedPaths.has(item.node.sourcePath)
-  );
-  if (!companion) return selected;
+  const result: ScoredNode[] = [];
+  const selectedPaths = new Set<string>();
+  const append = (item: ScoredNode | undefined): void => {
+    if (!item || result.length >= limit || selectedPaths.has(item.node.sourcePath)) return;
+    result.push(item);
+    selectedPaths.add(item.node.sourcePath);
+  };
 
-  const result = [...selected];
-  if (result.length < limit) {
-    result.push(companion);
-  } else {
-    let removableIndex = -1;
-    for (let index = result.length - 1; index >= 0; index -= 1) {
-      const item = result[index];
-      if (item.node.id !== implementationAnchor?.node.id && !isDirectTestCandidate(item)) {
-        removableIndex = index;
-        break;
-      }
-    }
-    if (removableIndex < 0) return selected;
-    result[removableIndex] = companion;
+  append(implementationAnchor ?? selected[0]);
+  for (const surface of requiredSurfaces) {
+    const matchesSurface = (item: ScoredNode): boolean => surface === "test"
+      ? isDirectTestCandidate(item)
+      : matchesRouteSurface(item.node, surface);
+    const existing = selected.find(matchesSurface);
+    const companion = existing ?? scored.find(
+      (item) => matchesSurface(item) && item.matchedKeywordCount > 0
+    );
+    append(companion);
   }
+  for (const item of selected) append(item);
 
   return result.sort((a, b) => {
     if (a.node.id === implementationAnchor?.node.id) return -1;

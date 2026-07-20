@@ -231,7 +231,19 @@ function detectRiskSignals(task: string, route: PalaceRoute): PalaceRiskSignals 
     "preserve api contract",
     "preserve the api contract",
     "without changing api contract",
-    "without changing the api contract"
+    "without changing the api contract",
+    "keep response contract stable",
+    "keep the response contract stable",
+    "keep public response contract stable",
+    "keep the public response contract stable",
+    "preserve response contract",
+    "preserve the response contract",
+    "preserve public response contract",
+    "preserve the public response contract",
+    "without changing response contract",
+    "without changing the response contract",
+    "do not change response contract",
+    "do not change the response contract"
   ]);
   const publicContractRisk = publicContractChange || (publicContractMention && !publicContractPreservation);
   const scopeRisk = hasAny(task, [

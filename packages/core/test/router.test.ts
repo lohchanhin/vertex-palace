@@ -831,6 +831,36 @@ export function buildReportService() {
     });
   });
 
+  it("keeps configuration migration documents in focused bugfix routes", async () => {
+    await withFixture("ts-api", async (root) => {
+      const sources = new Map<string, string>([
+        ["src/scheduler/batch-scheduler-v2.ts", "export function scheduleV2Batch() { return 'scheduler-v2'; }\n"],
+        ["src/scheduler/batch-scheduler-v1.ts", "export function scheduleV1Batch() { return 'scheduler-v1 legacy'; }\n"],
+        ["src/config/scheduler-config-loader.ts", "export function loadSchedulerV2Config() { return 'scheduler-v2'; }\n"],
+        ["config/scheduler-v2.json", JSON.stringify({ schedulerVersion: 2, batchSize: 20 })],
+        ["docs/configuration-migration.md", "# Scheduler configuration migration\n\nVersion 2 replaces the legacy scheduler-v1 keys.\n"],
+        ["tests/batch-scheduler-v2.test.ts", "describe('scheduler v2 batch', () => it('loads migrated configuration', () => true));\n"]
+      ]);
+      for (const [relativePath, source] of sources) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const task = "Fix the v2 batch scheduler now that the configuration migration is complete.";
+      const analysis = analyzeTask(task);
+      const route = await routePalace(root, task, { routeLimit: 6 });
+      const routed = route.route.map((step) => step.sourcePath.replace(/:\d+(?:-\d+)?$/, ""));
+
+      expect(requestedRouteSurfaces(analysis)).toEqual(expect.arrayContaining(["config", "docs"]));
+      expect(routed).toContain("src/scheduler/batch-scheduler-v2.ts");
+      expect(routed).toContain("config/scheduler-v2.json");
+      expect(routed).toContain("docs/configuration-migration.md");
+      expect(routed).not.toContain("README.md");
+    });
+  });
+
   it("does not pull unrelated verification tests into bugfix routes", async () => {
     await withFixture("ts-api", async (root) => {
       const testsDir = path.join(root, "tests");
