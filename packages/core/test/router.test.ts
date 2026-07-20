@@ -144,6 +144,7 @@ def test_should_strip_auth_http_downgrade():
         "src/requests/sessions.py",
         "tests/test_requests.py"
       ]);
+      expect(route.excluded.map((item) => item.sourcePath)).not.toContain("src/requests");
     });
   });
 
@@ -203,6 +204,7 @@ export const $ZodDiscriminatedUnion = core.$constructor("$ZodDiscriminatedUnion"
         "packages/zod/src/v4/core/schemas.ts",
         "packages/zod/src/v4/classic/tests/discriminated-unions.test.ts"
       ]);
+      expect(route.excluded.map((item) => item.sourcePath)).not.toContain("packages");
     });
   });
 

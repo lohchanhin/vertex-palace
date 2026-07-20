@@ -382,14 +382,16 @@ function linePath(sourcePath: string, startLine?: number, endLine?: number): str
 
 function buildExcluded(nodes: Awaited<ReturnType<typeof readIndex>>["nodes"], selectedIds: string[], analysis: ReturnType<typeof analyzeTask>): PalaceRoute["excluded"] {
   const selected = new Set(selectedIds);
-  const selectedSourcePaths = new Set(
-    nodes.filter((node) => selected.has(node.id)).map((node) => node.sourcePath)
-  );
+  const selectedSourcePaths = nodes
+    .filter((node) => selected.has(node.id))
+    .map((node) => node.sourcePath);
+  const selectedSourcePathSet = new Set(selectedSourcePaths);
   const byTop = new Map<string, number>();
   for (const node of nodes) {
-    if (selected.has(node.id) || selectedSourcePaths.has(node.sourcePath)) continue;
+    if (selected.has(node.id) || selectedSourcePathSet.has(node.sourcePath)) continue;
     const parts = node.sourcePath.split("/");
     const top = parts[0] === "src" && parts[1] ? `${parts[0]}/${parts[1]}` : parts[0] ?? node.sourcePath;
+    if (selectedSourcePaths.some((sourcePath) => pathsOverlap(top, sourcePath))) continue;
     const haystack = [node.sourcePath, node.wing, node.room, node.title].join(" ").toLowerCase();
     if (analysis.keywords.some((keyword) => haystack.includes(keyword))) continue;
     byTop.set(top, (byTop.get(top) ?? 0) + 1);
@@ -401,6 +403,14 @@ function buildExcluded(nodes: Awaited<ReturnType<typeof readIndex>>["nodes"], se
       sourcePath,
       reason: "No strong keyword, room, or route relation match."
     }));
+}
+
+function pathsOverlap(left: string, right: string): boolean {
+  const normalizedLeft = left.replaceAll("\\", "/").replace(/^\.\//, "").replace(/\/$/, "").toLowerCase();
+  const normalizedRight = right.replaceAll("\\", "/").replace(/^\.\//, "").replace(/\/$/, "").toLowerCase();
+  return normalizedLeft === normalizedRight
+    || normalizedLeft.startsWith(`${normalizedRight}/`)
+    || normalizedRight.startsWith(`${normalizedLeft}/`);
 }
 
 function confidence(selected: ScoredNode[], analysis: ReturnType<typeof analyzeTask>, estimatedTokens: number, budget: number, taskType: TaskType): number {
