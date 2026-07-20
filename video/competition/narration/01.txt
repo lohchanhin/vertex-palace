@@ -1,0 +1,1 @@
+Codex became too useful for me to stop using. But as my projects grew, a single task could take more than an hour, repeatedly scanning the same repository and consuming an unreasonable amount of context. I built Vertex Palace around one practical question: can an agent receive the right context without reading everything?

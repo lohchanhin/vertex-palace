@@ -1,0 +1,1 @@
+Vertex Palace is open source, and the benchmark process is public. Visit the product repository for source code, architecture, releases, and installation. Visit the research repository for protocols, raw trials, negative results, and reproducible evidence. Build it. Test it. Publish the evidence.

@@ -1,0 +1,1 @@
+But a shorter route is only a hypothesis, so I designed a public research process. I used Codex with G P T five point six to build the command-line interface, M C P server, plugin, tests, and benchmark harness. Then I froze protocols before results, preserved failed runs, found mechanisms, changed the product, and tested again.

@@ -4,6 +4,7 @@ coverage/
 .palace/
 work/
 outputs/
+video/competition/build/
 .tmp-package-test-*/
 *.tgz
 *.log

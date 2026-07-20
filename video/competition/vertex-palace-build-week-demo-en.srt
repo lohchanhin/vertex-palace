@@ -1,0 +1,119 @@
+1
+00:00:00,050 --> 00:00:02,488
+Codex became too useful for me to stop using.
+
+2
+00:00:02,488 --> 00:00:11,659
+But as my projects grew, a single task could take more than an hour, repeatedly scanning the same repository and consuming an unreasonable amount of context.
+
+3
+00:00:11,659 --> 00:00:18,306
+I built Vertex Palace around one practical question: can an agent receive the right context without reading everything?
+
+4
+00:00:18,960 --> 00:00:25,989
+The inspiration came from turning flat, two-dimensional repository data into a navigable, three-dimensional memory palace.
+
+5
+00:00:25,989 --> 00:00:32,410
+Directory location becomes the X axis, business function the Y axis, and dependencies the Z axis.
+
+6
+00:00:32,410 --> 00:00:40,148
+Domains become floors, functional areas become rooms, and files, symbols, tests, and memories become drawers.
+
+7
+00:00:40,148 --> 00:00:45,546
+For each task, Palace plans a route and delivers a small, explainable context pack.
+
+8
+00:00:46,198 --> 00:00:50,511
+But a shorter route is only a hypothesis, so I designed a public research process.
+
+9
+00:00:50,511 --> 00:00:58,795
+I used Codex with G P T five point six to build the command-line interface, M C P server, plugin, tests, and benchmark harness.
+
+10
+00:00:58,795 --> 00:01:05,886
+Then I froze protocols before results, preserved failed runs, found mechanisms, changed the product, and tested again.
+
+11
+00:01:06,565 --> 00:01:10,355
+In the first formal study, sixty out of sixty agent arms were correct.
+
+12
+00:01:10,355 --> 00:01:14,640
+Full Palace also rejected stale memory in every stale-memory run.
+
+13
+00:01:14,640 --> 00:01:24,435
+But compared with Control, it used a median sixty-seven thousand two hundred twenty-three more reported tokens, eight point five more tool calls, and about thirty extra seconds.
+
+14
+00:01:24,435 --> 00:01:29,526
+The first conclusion was uncomfortable but useful: Palace was safe, but too heavy.
+
+15
+00:01:30,179 --> 00:01:35,958
+Study two introduced Adaptive Palace, choosing among route-lite, full context, and guarded memory.
+
+16
+00:01:35,958 --> 00:01:38,492
+All sixty-four arms were valid and correct.
+
+17
+00:01:38,492 --> 00:01:45,435
+Adaptive reduced Palace's own output, but it still did not prove a universal end-to-end advantage over pure Codex.
+
+18
+00:01:45,435 --> 00:01:52,492
+More importantly, the study exposed a memory-fidelity bug: required useful memories were missed in four out of four cases.
+
+19
+00:01:52,492 --> 00:01:54,026
+We published that failure too.
+
+20
+00:01:54,681 --> 00:01:57,574
+That negative result changed the engineering direction.
+
+21
+00:01:57,574 --> 00:02:09,506
+Generation three focuses on causes: true bypass for simple tasks, complete and explainable memory selection, stop conditions that limit unnecessary exploration, and stronger type and task-intent routing.
+
+22
+00:02:09,506 --> 00:02:19,085
+Validation is expanding to real issues, real Git commits, real tests, TypeScript and Python repositories, hidden oracles, and public failure records.
+
+23
+00:02:19,085 --> 00:02:24,608
+Correctness comes first, modification scope second, and token efficiency only after both.
+
+24
+00:02:24,608 --> 00:02:30,903
+The new question is whether Adaptive Palace can beat pure Codex without hiding information or weakening correctness.
+
+25
+00:02:31,581 --> 00:02:35,769
+Vertex Palace is open source, and the benchmark process is public.
+
+26
+00:02:35,769 --> 00:02:40,996
+Visit the product repository for source code, architecture, releases, and installation.
+
+27
+00:02:40,996 --> 00:02:47,428
+Visit the research repository for protocols, raw trials, negative results, and reproducible evidence.
+
+28
+00:02:47,428 --> 00:02:48,099
+Build it.
+
+29
+00:02:48,099 --> 00:02:48,792
+Test it.
+
+30
+00:02:48,792 --> 00:02:50,076
+Publish the evidence.
