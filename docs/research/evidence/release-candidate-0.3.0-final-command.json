@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-07-20T19:45:09.058Z",
+  "claimBoundary": "Product packaging and context-contract validation only; not an Agent performance benchmark.",
+  "sourceCommit": "a29053f5952131887ff057a8fa7e6777ab045e1f",
+  "validationHarnessCommit": "a29053f5952131887ff057a8fa7e6777ab045e1f",
+  "package": "vertex-palace@0.3.0",
+  "files": 7,
+  "shasum": "9a04440d7e95c4d34e68e1b7e2cd3f6ecd62e83e",
+  "integrity": "sha512-DXALXKH1k/Gj7PoprNDmz/tHlYum2T7QsU32el76mHy/U3u42zY02cshm5P8lwY6yqzkIoZ6h9/6df0QOlJp4Q==",
+  "cleanInstallVersion": "0.3.0",
+  "gitIsolation": {
+    "statusCleanAfterContext": true,
+    "localExcludeEntries": 1,
+    "ignoreSource": ".git/info/exclude:7:/.palace/\t.palace/palace.yml"
+  },
+  "distractorFiles": 240,
+  "bypassTrials": [
+    {
+      "trial": 1,
+      "mode": "bypass",
+      "primaryCandidate": "src/format-currency.mjs",
+      "fields": 3,
+      "bytes": 288
+    },
+    {
+      "trial": 2,
+      "mode": "bypass",
+      "primaryCandidate": "src/format-currency.mjs",
+      "fields": 3,
+      "bytes": 288
+    },
+    {
+      "trial": 3,
+      "mode": "bypass",
+      "primaryCandidate": "src/format-currency.mjs",
+      "fields": 3,
+      "bytes": 288
+    },
+    {
+      "trial": 4,
+      "mode": "bypass",
+      "primaryCandidate": "src/format-currency.mjs",
+      "fields": 3,
+      "bytes": 288
+    }
+  ],
+  "relevantMemory": {
+    "mode": "full-palace",
+    "candidates": 1,
+    "included": 1,
+    "excluded": 0,
+    "boundaryFields": 8,
+    "estimatedTokens": 1006,
+    "maxContextTokens": 6000
+  },
+  "historicalScopeAlias": {
+    "mode": "guarded-memory-palace",
+    "candidates": 2,
+    "included": 2,
+    "excluded": 0,
+    "inferredClient": "aurora",
+    "inferenceReason": "unique_historical_alias_match",
+    "primary": [
+      "clients/aurora/article-tokens.mjs"
+    ],
+    "sharedTier": "support",
+    "estimatedTokens": 1700,
+    "maxContextTokens": 5000
+  },
+  "denseMemoryCeiling": {
+    "candidates": 50,
+    "included": 3,
+    "excluded": 47,
+    "json": {
+      "contextBytes": 16099,
+      "estimatedTokens": 4025,
+      "maxContextTokens": 5000,
+      "loadedDrawers": 2,
+      "deferredReferences": 8
+    },
+    "markdown": {
+      "contextBytes": 17933,
+      "contextEstimatedTokens": 4484,
+      "maxContextTokens": 5000
+    }
+  },
+  "installedMcp": "MCP smoke test passed for Vertex Palace 0.3.0 (10 tools, bypass context, 266 delivered bytes)."
+}
