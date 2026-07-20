@@ -12,6 +12,9 @@ const budget = 6_000;
 const trialsPerRepository = 2;
 const minimumTargetRecall = 1;
 const minimumTargetPrecision = 1;
+const packageSourceCommit = "805074b78a65e1d50c88085a7ea66f50d30bce5d";
+const expectedPackageShasum = "45513d0001a00f34b55e0fe2bbdf19b14e516bff";
+const expectedPackageIntegrity = "sha512-IE6dixh5nLQScK4dKpF35cWFmesUeK5iNEsXB6zGUARD7G+32ck3MepjPAFV4umtPh1mLT3RV7vkzaKZqrp9pA==";
 
 const repositories = [
   {
@@ -58,13 +61,15 @@ async function main() {
     );
     const metadata = parsePackMetadata(packResult.stdout);
     assert.equal(metadata.name, packageJson.name);
-    assert.equal(metadata.version, packageJson.version);
+    assert.equal(metadata.version, "0.3.0");
     assert.equal(metadata.files.length, 7);
 
     const tarballPath = path.join(packRoot, metadata.filename);
     const tarball = await readFile(tarballPath);
     const shasum = createHash("sha1").update(tarball).digest("hex");
     assert.equal(shasum, metadata.shasum);
+    assert.equal(shasum, expectedPackageShasum);
+    assert.equal(metadata.integrity, expectedPackageIntegrity);
 
     runNpm(
       ["install", "--ignore-scripts", "--no-audit", "--no-fund", "--loglevel=error", "--prefix", installRoot, tarballPath],
@@ -85,7 +90,8 @@ async function main() {
       schemaVersion: 1,
       generatedAt: new Date().toISOString(),
       claimBoundary: "Product routing and packaging validation only; not an Agent performance benchmark.",
-      sourceCommit: run("git", ["rev-parse", "HEAD"], { cwd: projectRoot }).stdout.trim(),
+      sourceCommit: packageSourceCommit,
+      validationHarnessCommit: run("git", ["rev-parse", "HEAD"], { cwd: projectRoot }).stdout.trim(),
       candidate: {
         package: `${metadata.name}@${metadata.version}`,
         files: metadata.files.length,
@@ -149,17 +155,28 @@ async function validateRepository(repository, root, cliPath) {
     assert.ok(output.payload.contextEstimatedTokens <= budget);
 
     const boundaries = output.executionBoundaries;
+    for (const key of ["primary", "support", "deferred", "excluded"]) assert.ok(Array.isArray(boundaries[key]));
     const routeFiles = unique([
       ...boundaries.primary,
       ...boundaries.support,
       ...boundaries.deferred
     ].map(stripLocation));
+    const excludedFiles = unique(
+      boundaries.excluded
+        .map((entry) => typeof entry === "string" ? entry : entry?.sourcePath)
+        .filter((sourcePath) => typeof sourcePath === "string" && sourcePath.length > 0)
+        .map(stripLocation)
+    );
+    const selectedExcludedOverlap = routeFiles.filter((selected) =>
+      excludedFiles.some((excluded) => pathsOverlap(selected, excluded))
+    );
     assert.ok(boundaries.primary.some((entry) => stripLocation(entry) === repository.expectedPrimary));
     assert.ok(
       [...boundaries.primary, ...boundaries.support].some(
         (entry) => stripLocation(entry) === repository.expectedVerification
       )
     );
+    assert.deepEqual(selectedExcludedOverlap, []);
 
     trials.push({
       trial,
@@ -169,7 +186,9 @@ async function validateRepository(repository, root, cliPath) {
       routeConfidence: output.route.confidence,
       boundaries,
       payload: output.payload,
-      routeFiles
+      routeFiles,
+      excludedFiles,
+      selectedExcludedOverlap
     });
   }
 
@@ -179,6 +198,7 @@ async function validateRepository(repository, root, cliPath) {
   const truePositiveCount = routeFiles.filter((file) => expected.has(file)).length;
   const targetRecall = round(truePositiveCount / expected.size);
   const targetPrecision = round(truePositiveCount / routeFiles.length);
+  const selectedExcludedOverlap = unique(trials.flatMap((trial) => trial.selectedExcludedOverlap));
   assert.equal(targetRecall, minimumTargetRecall, `${repository.name} target recall fell below the release gate`);
   assert.equal(targetPrecision, minimumTargetPrecision, `${repository.name} target precision fell below the release gate`);
   const trackedStatus = run("git", ["status", "--short", "--untracked-files=no"], { cwd: root }).stdout.trim();
@@ -198,7 +218,8 @@ async function validateRepository(repository, root, cliPath) {
     routeQuality: {
       targetRecall,
       targetPrecision,
-      unexpectedBoundaryFiles: routeFiles.filter((file) => !expected.has(file))
+      unexpectedBoundaryFiles: routeFiles.filter((file) => !expected.has(file)),
+      selectedExcludedOverlap
     },
     deterministicBoundaries: true,
     trackedWorktreeClean: true,
@@ -229,6 +250,14 @@ function parsePackMetadata(stdout) {
 
 function stripLocation(sourcePath) {
   return sourcePath.replace(/:\d+(?:-\d+)?$/, "");
+}
+
+function pathsOverlap(left, right) {
+  const normalizedLeft = left.replaceAll("\\", "/").replace(/^\.\//, "").replace(/\/$/, "").toLowerCase();
+  const normalizedRight = right.replaceAll("\\", "/").replace(/^\.\//, "").replace(/\/$/, "").toLowerCase();
+  return normalizedLeft === normalizedRight
+    || normalizedLeft.startsWith(`${normalizedRight}/`)
+    || normalizedRight.startsWith(`${normalizedLeft}/`);
 }
 
 function unique(values) {
