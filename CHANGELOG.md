@@ -37,6 +37,7 @@
 
 ### Fixed
 
+- Prevented a selected file from simultaneously falling under an Excluded parent directory, so Primary and Support routes never contradict the delivered exploration boundaries.
 - Prevented tasks such as "independently governed launch tenant" from retrieving Aurora history and then excluding it as `scope_mismatch` merely because the literal client name was absent.
 - Prevented inferred client context from simultaneously labeling a shared fallback as Primary in the rendered execution boundaries.
 - Prevented issue-style tasks from returning only tests while excluding the implementation in real TypeScript and Python repositories.
@@ -56,6 +57,7 @@
 - An ambiguous two-client regression keeps both memories excluded as `scope_mismatch`; alias inference does not break tenant isolation when evidence ties.
 - These product-contract tests do not yet prove parity with Control tool calls, reported tokens, or wall time; that requires the fresh Control-first benchmark planned for 0.3.1.
 - The pinned Zod and Requests gate now requires both target recall and strict target precision to equal 1.000. Both repositories produced exact two-file routes with no unexpected boundary files in two deterministic repetitions; this remains a product gate, not an Agent-performance claim.
+- The same real-repository gate now rejects ancestor or descendant overlap between selected and Excluded paths; Zod and Requests both reported an empty overlap set in two deterministic repetitions.
 - A fixed eight-file evidence-maintenance oracle in `benchmarks-demo` improved from 3/8 coverage and 0.30 focus to 8/8 and 1.00 focus, while route confidence stayed conservatively capped at 0.35. The product's own six-file implementation self-evaluation still reached only 3/6 coverage and 0.30 focus, so multi-module bugfix companions and generated-artifact linkage remain open work.
 - A follow-up real benchmark synchronization selected all 8/8 changed files plus the explicitly requested CI workflow: coverage 1.00, focus 0.89, and confidence 0.35. A separate eight-file product self-evaluation reached only 5/8 coverage and 0.50 focus, missing the publication-intent helper, classifier sibling, and generated MCP bundle; sibling and provenance routing therefore remain open.
 - In a clean install with 50 relevant memory candidates, JSON delivered 4,050 / 5,000 estimated tokens and Markdown delivered 4,473 / 5,000. Reported bytes matched the serialized outputs, and all 47 excluded candidates retained `selection_limit_reached` reasons.
