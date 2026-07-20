@@ -8,9 +8,9 @@ const path = require("node:path");
 const projectRoot = path.resolve(__dirname, "..");
 const packageJson = require(path.join(projectRoot, "package.json"));
 const outputPath = outputArgument(process.argv.slice(2));
-const packageSourceCommit = "81beebceb5c040658a4886a4b49039daa54f693b";
-const expectedPackageShasum = "3a5f9f6449f123a198d48e21757140b2cf35f50a";
-const expectedPackageIntegrity = "sha512-ikOrl1ckDUyhHv2ryXrhl3g4nEwIT8IvIAsbk9NWFM7m1Cxt6Y+HbMoZaRtsqbEL1wwCTyEM/KHF4ZUiFM4d5w==";
+const packageSourceCommit = "dd1745d3dee3e7220c8f8f4c1290959e93c1b79e";
+const expectedPackageShasum = "cbdbf10adbeb21ebfbb1fdf9c7c362f33651bba1";
+const expectedPackageIntegrity = "sha512-673j+Lz2QYhg84QSvCCwZHFuKGhJln2qqPPbIF+0K6mk6i3j927Z8B0g5lBtId3pQy2sjxsTQK0BQpOLnak5yQ==";
 const budget = 6_000;
 const trials = 2;
 
