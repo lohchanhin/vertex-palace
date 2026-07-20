@@ -43,7 +43,9 @@ The locked case is [`sindresorhus/p-limit`](https://github.com/sindresorhus/p-li
 Required route files are the two files in the real commit diff. `package.json`
 is accepted as architecture support; any other boundary file lowers accepted
 precision. Two runs must produce identical boundaries under a 6,000-token
-ceiling. After routing the parent, the harness checks out the real target,
+ceiling. A selected file or directory must never also appear in `excluded`;
+the harness treats exact-path and ancestor/descendant overlaps as a routing
+gate failure. After routing the parent, the harness checks out the real target,
 installs dependencies with lifecycle scripts disabled, and runs upstream
 `npm test`. Because the repository has no committed lockfile, dependency
 resolution is explicitly recorded as unpinned.
@@ -81,7 +83,8 @@ The post-type-route result is preserved at commit
 `requiredRecall: 1` and `acceptedPrecision: 1`, but audit found that selected
 source paths could still appear in `excluded` through sibling symbol nodes.
 Commit `81beebceb5c040658a4886a4b49039daa54f693b` fixes that path-level boundary
-contradiction. A final unchanged-oracle rerun remains required.
+contradiction. The verifier now records `selectedExcludedOverlap` and requires
+it to be empty. A final unchanged-oracle rerun remains required.
 
 ---
 
@@ -120,7 +123,8 @@ Control 更省 Token、更快或更正确。
 任务要求收紧过度宽松的 public `limitFunction` 类型，只接受异步函数，同时保留参数与
 返回值推断，并使用现有 type-test setup 加入聚焦回归覆盖。真实 commit diff 的两个文件
 都是必需路线；`package.json` 只作为可接受的 architecture support。两次路线必须在
-6,000-token 上限下产生相同边界。
+6,000-token 上限下产生相同边界。任何已选文件或目录都不能同时出现在 `excluded`；
+harness 会把完全相同路径，以及目录与子路径之间的重叠，视为路由闸门失败。
 
 路由 parent 后，harness 会 checkout 真实 target、禁止 lifecycle scripts 安装依赖，
 再执行上游 `npm test`。由于仓库没有提交 lockfile，依赖解析未固定这一限制会明确写进
@@ -142,4 +146,4 @@ type-route 修复后的结果保留在 commit
 `510bbfe111c9ffd6bed46e44df64d96e2a8bc700`。路由闸门达到 `requiredRecall: 1`、
 `acceptedPrecision: 1`，但审计发现同一个已选 source path 仍可能通过其他 symbol node 出现在
 `excluded`。commit `81beebceb5c040658a4886a4b49039daa54f693b` 已修复这个路径层级矛盾；
-仍需使用不变 Oracle 完成最后一次复测。
+验证器现会记录 `selectedExcludedOverlap`，并要求它为空。仍需使用不变 Oracle 完成最后一次复测。

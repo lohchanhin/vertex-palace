@@ -138,9 +138,13 @@ async function main() {
       ? 0
       : round(routeFiles.filter((file) => accepted.has(file)).length / routeFiles.length);
     const unexpectedRouteFiles = routeFiles.filter((file) => !accepted.has(file));
+    const selectedExcludedOverlap = unique(
+      validRouteTrials.flatMap((trial) => trial.selectedExcludedOverlap ?? [])
+    );
     if (!deterministicBoundaries) failures.push("route boundaries differed across repetitions");
     if (requiredRecall !== 1) failures.push("route missed a real changed file");
     if (acceptedPrecision !== 1) failures.push("route crossed the preregistered accepted boundary");
+    if (selectedExcludedOverlap.length > 0) failures.push("selected route paths also appeared in excluded boundaries");
     if (validRouteTrials.some((trial) => trial.payload.contextEstimatedTokens > budget)) failures.push("context budget exceeded");
 
     const parentTrackedStatus = run("git", ["status", "--short", "--untracked-files=no"], { cwd: repositoryRoot }).stdout.trim();
@@ -205,6 +209,7 @@ async function main() {
         acceptedPrecision,
         matchedChangedFiles,
         unexpectedRouteFiles,
+        selectedExcludedOverlap,
         trials: routeTrials
       },
       gates: {
@@ -220,6 +225,7 @@ async function main() {
         routing: deterministicBoundaries
           && requiredRecall === 1
           && acceptedPrecision === 1
+          && selectedExcludedOverlap.length === 0
           && !validRouteTrials.some((trial) => trial.payload.contextEstimatedTokens > budget)
           ? "passed"
           : "failed",
@@ -356,7 +362,7 @@ function parseRouteTrial(trial, result) {
     const output = JSON.parse(result.stdout);
     const boundaries = output.executionBoundaries;
     assert.ok(boundaries && typeof boundaries === "object");
-    for (const key of ["primary", "support", "deferred"]) assert.ok(Array.isArray(boundaries[key]));
+    for (const key of ["primary", "support", "deferred", "excluded"]) assert.ok(Array.isArray(boundaries[key]));
     assert.ok(output.route && typeof output.route === "object");
     assert.ok(output.payload && typeof output.payload.contextEstimatedTokens === "number");
     const routeFiles = unique([
@@ -364,6 +370,15 @@ function parseRouteTrial(trial, result) {
       ...boundaries.support,
       ...boundaries.deferred
     ].map(stripLocation));
+    const excludedFiles = unique(
+      boundaries.excluded
+        .map((entry) => typeof entry === "string" ? entry : entry?.sourcePath)
+        .filter((sourcePath) => typeof sourcePath === "string" && sourcePath.length > 0)
+        .map(stripLocation)
+    );
+    const selectedExcludedOverlap = routeFiles.filter((selected) =>
+      excludedFiles.some((excluded) => pathsOverlap(selected, excluded))
+    );
     return {
       ...base,
       mode: output.mode,
@@ -371,7 +386,9 @@ function parseRouteTrial(trial, result) {
       routeConfidence: output.route.confidence,
       payload: output.payload,
       boundaries,
-      routeFiles
+      routeFiles,
+      excludedFiles,
+      selectedExcludedOverlap
     };
   } catch (error) {
     return {
@@ -379,6 +396,14 @@ function parseRouteTrial(trial, result) {
       parseError: error instanceof Error ? error.message : String(error)
     };
   }
+}
+
+function pathsOverlap(left, right) {
+  const normalizedLeft = left.replaceAll("\\", "/").replace(/^\.\//, "").replace(/\/$/, "").toLowerCase();
+  const normalizedRight = right.replaceAll("\\", "/").replace(/^\.\//, "").replace(/\/$/, "").toLowerCase();
+  return normalizedLeft === normalizedRight
+    || normalizedLeft.startsWith(`${normalizedRight}/`)
+    || normalizedRight.startsWith(`${normalizedLeft}/`);
 }
 
 function runNpm(args, options) {
