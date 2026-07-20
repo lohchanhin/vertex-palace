@@ -8,6 +8,7 @@ const path = require("node:path");
 const projectRoot = path.resolve(__dirname, "..");
 const packageJson = require(path.join(projectRoot, "package.json"));
 const outputPath = outputArgument(process.argv.slice(2));
+const packageSourceCommit = "e901c1739c5aa907bc44ebcbd25bbdd7abd75e7a";
 const task = "Fix currency formatting so negative zero is rendered as $0.00. Keep the public API stable.";
 
 main().catch((error) => {
@@ -234,10 +235,12 @@ async function main() {
       schemaVersion: 1,
       generatedAt: new Date().toISOString(),
       claimBoundary: "Product packaging and context-contract validation only; not an Agent performance benchmark.",
-      sourceCommit: run("git", ["rev-parse", "HEAD"], { cwd: projectRoot }).stdout.trim(),
+      sourceCommit: packageSourceCommit,
+      validationHarnessCommit: run("git", ["rev-parse", "HEAD"], { cwd: projectRoot }).stdout.trim(),
       package: `${metadata.name}@${metadata.version}`,
       files: metadata.files.length,
       shasum,
+      integrity: metadata.integrity,
       cleanInstallVersion: version,
       gitIsolation: {
         statusCleanAfterContext: fixtureGitStatus === "",
