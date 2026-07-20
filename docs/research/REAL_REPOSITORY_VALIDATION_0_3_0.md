@@ -101,6 +101,22 @@ strict gate reports precision alongside recall and fails if either falls below
 for these two pinned tasks only. It does not establish a general routing or
 Agent-performance advantage.
 
+## Public registry revalidation
+
+After `vertex-palace@0.3.0` was published, the same protocol was rerun against
+the tarball downloaded directly from the public npm registry rather than a
+workspace pack. The downloaded seven-file artifact matched SHA-1
+`9a04440d7e95c4d34e68e1b7e2cd3f6ecd62e83e` and the published SHA-512
+integrity, then reported CLI version `0.3.0` after a clean install.
+
+Both pinned repositories again produced identical boundaries in 2/2
+repetitions: one implementation file and one focused test, target recall 1.000,
+strict target precision 1.000, no selected/Excluded overlap, and clean tracked
+worktrees. The [public-package machine evidence](./evidence/real-repository-validation-0.3.0-public.json)
+is the artifact used by the Control-first v3 freeze gate. It supersedes the
+candidate artifact only for release provenance; the original candidate record
+remains unchanged as research history.
+
 ## Internal route self-evaluation
 
 The earlier candidate was evaluated against a broad 25-file implementation
@@ -173,6 +189,18 @@ research targets.
 被错误当成有益多样性。最新修正改用实现符号锚点、证据强度门槛、目标相关度、测试关系
 优先和明确版本一致性。最终两个固定仓库都只返回实现与对应测试，召回率与严格精度均为
 1.000。这个结果仍只能证明这两个固定案例，不能扩大解释成普遍性能优势。
+
+## npm 公开包复验
+
+`vertex-palace@0.3.0` 发布后，同一协议改为直接从公共 npm registry 下载 tarball，
+不再打包当前工作区。下载到的 7 文件 artifact 的 SHA-1 为
+`9a04440d7e95c4d34e68e1b7e2cd3f6ecd62e83e`，SHA-512 integrity 与 registry 一致；
+干净安装后 CLI 回报 `0.3.0`。
+
+两个固定仓库再次各完成 2/2 次边界一致复验：路线都只有一个实现文件与一个聚焦测试，
+目标召回率 1.000、严格目标精度 1.000、已选路线与 Excluded 无重叠，tracked worktree
+保持干净。[公开包机器证据](./evidence/real-repository-validation-0.3.0-public.json)
+将用于 Control-first v3 冻结闸门；旧候选证据继续原样保留为研究历史。
 
 ## 内部路由自评
 

@@ -12,9 +12,11 @@ const budget = 6_000;
 const trialsPerRepository = 2;
 const minimumTargetRecall = 1;
 const minimumTargetPrecision = 1;
-const packageSourceCommit = "e901c1739c5aa907bc44ebcbd25bbdd7abd75e7a";
-const expectedPackageShasum = "04602918f8e661a57c8286fb7b6d344baf9fb3aa";
-const expectedPackageIntegrity = "sha512-muQvR5KxELoxhFKCUfnASJW58g9xdWp3+u6UJxtzAtiCpz8nh2GWDSm6UNmVIMeFt+qY7IdQ/s5yWrCcwgPRvg==";
+const packageSpec = "vertex-palace@0.3.0";
+const packageSourceCommit = "a29053f5952131887ff057a8fa7e6777ab045e1f";
+const packageReleaseCommit = "1331d9da0aa242549026d70e7c752638c3169044";
+const expectedPackageShasum = "9a04440d7e95c4d34e68e1b7e2cd3f6ecd62e83e";
+const expectedPackageIntegrity = "sha512-DXALXKH1k/Gj7PoprNDmz/tHlYum2T7QsU32el76mHy/U3u42zY02cshm5P8lwY6yqzkIoZ6h9/6df0QOlJp4Q==";
 
 const repositories = [
   {
@@ -56,8 +58,16 @@ async function main() {
     await Promise.all([mkdir(packRoot), mkdir(installRoot), mkdir(repositoriesRoot)]);
 
     const packResult = runNpm(
-      ["pack", "--json", "--ignore-scripts", "--pack-destination", packRoot],
-      { cwd: projectRoot }
+      [
+        "pack",
+        packageSpec,
+        "--json",
+        "--ignore-scripts",
+        "--pack-destination",
+        packRoot,
+        "--registry=https://registry.npmjs.org"
+      ],
+      { cwd: temporaryRoot }
     );
     const metadata = parsePackMetadata(packResult.stdout);
     assert.equal(metadata.name, packageJson.name);
@@ -91,9 +101,11 @@ async function main() {
       generatedAt: new Date().toISOString(),
       claimBoundary: "Product routing and packaging validation only; not an Agent performance benchmark.",
       sourceCommit: packageSourceCommit,
+      releaseCommit: packageReleaseCommit,
       validationHarnessCommit: run("git", ["rev-parse", "HEAD"], { cwd: projectRoot }).stdout.trim(),
       candidate: {
         package: `${metadata.name}@${metadata.version}`,
+        distribution: "npm-registry",
         files: metadata.files.length,
         shasum,
         integrity: metadata.integrity,
