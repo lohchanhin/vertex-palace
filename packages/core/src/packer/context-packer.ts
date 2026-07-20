@@ -335,16 +335,18 @@ export async function packBypassContext(
   format: PackFormat = "markdown"
 ): Promise<PackOutput> {
   const primary = route.route.find((step) => (step.tier ?? inferredTier(step.priority)) === "primary") ?? route.route[0];
+  const primaryCandidate = primary ? stripSourceLocation(primary.sourcePath) : null;
   const verificationCommand = await inferVerificationCommand(root);
+  const finalCheckCommand = inferFinalCheckCommand(primaryCandidate);
   const reason = [
     selection.reasons.join(" "),
     verificationCommand
-      ? `Direct: inspect once, edit, run ${verificationCommand}, batch final diff and status, stop.`
-      : "Direct: inspect once, edit, run the known test, batch final diff and status, stop."
+      ? `Direct: inspect once, edit; run ${verificationCommand}; final once: \`${finalCheckCommand}\`; stop.`
+      : `Direct: inspect once, edit; run the known test; final once: \`${finalCheckCommand}\`; stop.`
   ].join(" ");
   const minimal = {
     mode: "bypass" as const,
-    primaryCandidate: primary ? stripSourceLocation(primary.sourcePath) : null,
+    primaryCandidate,
     reason
   };
   const serialized = format === "json"
@@ -382,6 +384,13 @@ export async function packBypassContext(
     estimatedTokens: payload.contextEstimatedTokens,
     ...(format === "json" ? { json: minimal } : { markdown: serialized })
   };
+}
+
+function inferFinalCheckCommand(primaryCandidate: string | null): string {
+  const pathArgument = primaryCandidate && /^[A-Za-z0-9_./@+-]+$/.test(primaryCandidate)
+    ? ` -- ${primaryCandidate}`
+    : "";
+  return `git diff --check; git status --short; git diff${pathArgument}`;
 }
 
 async function inferVerificationCommand(root: string): Promise<string | null> {

@@ -64,7 +64,7 @@ export function selectPalaceMode(
   ) {
     return buildSelection(
       "bypass",
-      ["High-confidence single-file route with no relevant memory, cross-stack dependency, contract risk, or scope risk."],
+      ["Safe one-file route: no relevant memory or boundary risk."],
       riskSignals,
       options.budget,
       explicitFiles.length === 1 ? 0.92 : 0.88

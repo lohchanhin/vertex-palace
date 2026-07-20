@@ -42,7 +42,7 @@ describe("palaceContext", () => {
       expect(output.markdown?.trim().split("\n")).toEqual([
         "Mode: bypass",
         "Primary candidate: src/services/token.service.ts",
-        "Reason: High-confidence single-file route with no relevant memory, cross-stack dependency, contract risk, or scope risk. Direct: inspect once, edit, run npm test, batch final diff and status, stop."
+        "Reason: Safe one-file route: no relevant memory or boundary risk. Direct: inspect once, edit; run npm test; final once: `git diff --check; git status --short; git diff -- src/services/token.service.ts`; stop."
       ]);
       expect(output.markdown).not.toContain("generateAccessToken");
       expect(output.payload?.contextBytes).toBe(Buffer.byteLength(output.markdown ?? "", "utf8"));
@@ -65,7 +65,7 @@ describe("palaceContext", () => {
       expect(output.json).toEqual({
         mode: "bypass",
         primaryCandidate: "src/services/token.service.ts",
-        reason: "High-confidence single-file route with no relevant memory, cross-stack dependency, contract risk, or scope risk. Direct: inspect once, edit, run npm test, batch final diff and status, stop."
+        reason: "Safe one-file route: no relevant memory or boundary risk. Direct: inspect once, edit; run npm test; final once: `git diff --check; git status --short; git diff -- src/services/token.service.ts`; stop."
       });
       expect(Object.keys(output.json as Record<string, unknown>)).toEqual(["mode", "primaryCandidate", "reason"]);
       expect(output.payload?.contextBytes).toBe(Buffer.byteLength(serializePackOutput(output), "utf8"));
@@ -96,6 +96,7 @@ describe("palaceContext", () => {
 
       expect(output.mode).toBe("bypass");
       expect(json.reason).toContain("run pnpm test");
+      expect(json.reason).toContain("final once: `git diff --check; git status --short; git diff -- src/services/token.service.ts`");
       expect(Object.keys(json)).toEqual(["mode", "primaryCandidate", "reason"]);
       expect(output.payload?.contextEstimatedTokens).toBeLessThan(80);
     });
@@ -120,6 +121,9 @@ describe("palaceContext", () => {
         mode: "bypass",
         primaryCandidate: "src/format-currency.mjs"
       });
+      expect((output.json as Record<string, unknown>).reason).toContain(
+        "final once: `git diff --check; git status --short; git diff -- src/format-currency.mjs`"
+      );
       expect(Object.keys(output.json as Record<string, unknown>)).toEqual(["mode", "primaryCandidate", "reason"]);
     });
   });
@@ -153,6 +157,9 @@ describe("palaceContext", () => {
       expect(outputs.map((output) => output.mode)).toEqual(["bypass", "bypass", "bypass", "bypass"]);
       for (const output of outputs) {
         expect(output.json).toMatchObject({ mode: "bypass", primaryCandidate: "src/format-currency.mjs" });
+        expect((output.json as Record<string, unknown>).reason).toContain(
+          "final once: `git diff --check; git status --short; git diff -- src/format-currency.mjs`"
+        );
         expect(Object.keys(output.json as Record<string, unknown>)).toEqual(["mode", "primaryCandidate", "reason"]);
         expect(output.payload?.contextEstimatedTokens).toBeLessThan(80);
       }

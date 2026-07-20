@@ -81,6 +81,10 @@ async function main() {
       assert.deepEqual(Object.keys(output), ["mode", "primaryCandidate", "reason"]);
       assert.equal(output.mode, "bypass");
       assert.equal(output.primaryCandidate, "src/format-currency.mjs");
+      assert.match(
+        output.reason,
+        /final once: `git diff --check; git status --short; git diff -- src\/format-currency\.mjs`/
+      );
       bypassTrials.push({
         trial,
         mode: output.mode,
