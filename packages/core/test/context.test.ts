@@ -42,7 +42,7 @@ describe("palaceContext", () => {
       expect(output.markdown?.trim().split("\n")).toEqual([
         "Mode: bypass",
         "Primary candidate: src/services/token.service.ts",
-        "Reason: High-confidence single-file route with no relevant memory, cross-stack dependency, contract risk, or scope risk."
+        "Reason: High-confidence single-file route with no relevant memory, cross-stack dependency, contract risk, or scope risk. Direct: inspect once, edit, run the known or conventional test, batch final diff and status, stop."
       ]);
       expect(output.markdown).not.toContain("generateAccessToken");
       expect(output.payload?.contextBytes).toBe(Buffer.byteLength(output.markdown ?? "", "utf8"));
@@ -65,7 +65,7 @@ describe("palaceContext", () => {
       expect(output.json).toEqual({
         mode: "bypass",
         primaryCandidate: "src/services/token.service.ts",
-        reason: "High-confidence single-file route with no relevant memory, cross-stack dependency, contract risk, or scope risk."
+        reason: "High-confidence single-file route with no relevant memory, cross-stack dependency, contract risk, or scope risk. Direct: inspect once, edit, run the known or conventional test, batch final diff and status, stop."
       });
       expect(Object.keys(output.json as Record<string, unknown>)).toEqual(["mode", "primaryCandidate", "reason"]);
       expect(output.payload?.contextBytes).toBe(Buffer.byteLength(serializePackOutput(output), "utf8"));
@@ -167,8 +167,9 @@ describe("palaceContext", () => {
         format: "json"
       });
       const json = output.json as {
-        context: Array<{ tier: string }>;
+        context: Array<{ tier: string; loadLevel: string }>;
         deferredReferences: Array<{ tier: string }>;
+        recommendedExecution: string[];
         executionBoundaries: {
           primary: string[];
           support: string[];
@@ -189,7 +190,10 @@ describe("palaceContext", () => {
       expect(json.executionBoundaries.support.length).toBeGreaterThan(0);
       expect(json.executionBoundaries.deferred).toBeInstanceOf(Array);
       expect(json.executionBoundaries.excluded).toBeInstanceOf(Array);
-      expect(json.executionBoundaries.requiredEvidence.length).toBeGreaterThan(0);
+      expect(json.executionBoundaries.requiredEvidence).toEqual(["tests/auth.e2e.test.ts"]);
+      expect(json.executionBoundaries.requiredEvidence).not.toContain("README.md");
+      expect(json.context.every((item) => item.loadLevel === "full_symbol" || item.loadLevel === "full_file")).toBe(true);
+      expect(json.recommendedExecution).toContain("Use delivered full_file or full_symbol drawers directly; do not reopen those paths.");
       expect(json.executionBoundaries.doNot).toContain("Do not inventory or broadly scan the repository.");
       expect(json.executionBoundaries.stopCondition).toContain("Targeted tests for the changed behavior pass.");
       expect(json.executionBoundaries.conflictSummary.length).toBeGreaterThan(0);
@@ -215,11 +219,19 @@ describe("palaceContext", () => {
         auto: true,
         format: "json"
       });
-      const json = output.json as { context: Array<{ tier: string }> };
+      const json = output.json as {
+        context: Array<{ sourcePath: string; tier: string; loadLevel: string }>;
+        executionBoundaries: { requiredEvidence: string[] };
+      };
 
       expect(output.mode).toBe("full-palace");
       expect(output.modeSelection?.riskSignals.crossStack).toBe(true);
       expect(json.context.some((item) => item.tier === "support")).toBe(true);
+      expect(json.context).toContainEqual(expect.objectContaining({
+        sourcePath: "tests/auth.e2e.test.ts",
+        loadLevel: "full_file"
+      }));
+      expect(json.executionBoundaries.requiredEvidence).toEqual(["tests/auth.e2e.test.ts"]);
       expect(output.payload?.memoryItemCount).toBe(0);
     });
   });

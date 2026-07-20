@@ -137,11 +137,12 @@ async function packAdaptiveContext(
     if (drawers.length >= maxDrawers) break;
     const node = byId.get(step.nodeId);
     if (!node) continue;
-    const loadLevel = adaptiveLoadLevel(step.loadLevel, selection.mode, node);
+    let loadLevel = adaptiveLoadLevel(step.loadLevel, selection.mode, node);
     let content = await extractNodeContent(root, node, loadLevel);
     let tokens = estimateTokens(content) + estimateTokens(step.reason);
     if (used + tokens > selection.maxContextTokens - buffer) {
       content = node.summary;
+      loadLevel = "summary";
       tokens = estimateTokens(content) + estimateTokens(step.reason);
     }
     if (used + tokens > selection.maxContextTokens - buffer) continue;
@@ -331,7 +332,10 @@ export function packBypassContext(
   format: PackFormat = "markdown"
 ): PackOutput {
   const primary = route.route.find((step) => (step.tier ?? inferredTier(step.priority)) === "primary") ?? route.route[0];
-  const reason = selection.reasons.join(" ");
+  const reason = [
+    selection.reasons.join(" "),
+    "Direct: inspect once, edit, run the known or conventional test, batch final diff and status, stop."
+  ].join(" ");
   const minimal = {
     mode: "bypass" as const,
     primaryCandidate: primary ? stripSourceLocation(primary.sourcePath) : null,
@@ -632,7 +636,10 @@ function adaptiveLoadLevel(
   mode: PalaceModeSelection["mode"],
   node: PalaceNode
 ): LoadLevel {
-  if (!node.startLine) return "summary";
+  if (!node.startLine) {
+    if (loadLevel !== "summary" && node.tokenCost <= 500) return "full_file";
+    return "summary";
+  }
   if (mode === "route-lite" && loadLevel === "full_file") return "snippet";
   return loadLevel;
 }
@@ -663,10 +670,12 @@ function buildExecutionBoundaries(
   const primary = uniquePaths(tiered.primary);
   const support = uniquePaths(tiered.support);
   const deferred = uniquePaths(tiered.deferred);
-  const requiredEvidence = uniquePaths([
-    ...tiered.support.filter((step) => /(?:test|spec|config|schema|docs?|readme|migration)/i.test(step.sourcePath)),
-    ...tiered.support
-  ]).slice(0, 4);
+  const taskRequestsDocumentation = /\b(?:docs?|documentation|readme|migration|migrate|migrated)\b/i.test(route.task);
+  const requiredEvidence = uniquePaths(tiered.support.filter((step) => {
+    if (/(?:^|\/)(?:tests?|specs?)(?:\/|\.|$)|\.(?:test|spec)\.[^/]+$/i.test(step.sourcePath)) return true;
+    if (/(?:config|schema|contract)/i.test(step.sourcePath)) return true;
+    return taskRequestsDocumentation && /(?:docs?|readme|migration)/i.test(step.sourcePath);
+  })).slice(0, 4);
   const doNot = [
     "Do not inventory or broadly scan the repository.",
     "Do not inspect Deferred or Excluded paths unless Primary or Required Evidence conflicts.",
@@ -713,19 +722,22 @@ function recommendedExecution(mode: PalaceModeSelection["mode"]): string[] {
   }
   if (mode === "route-lite") {
     return [
-      "Read the primary routed context before opening additional files.",
-      "Use deferred references only when the primary code or targeted tests expose a dependency."
+      "Use delivered full_file or full_symbol drawers directly; do not reopen those paths.",
+      "Batch-read only Required Evidence that was not delivered in full, then run targeted verification.",
+      "Combine final status and diff checks in one command and stop when the stated conditions pass."
     ];
   }
   if (mode === "guarded-memory-palace") {
     return [
       "Validate each memory item against current code before relying on it.",
-      "Inspect primary context, then supporting context, and run scope-specific tests."
+      "Use delivered full_file or full_symbol drawers directly; batch-read only incomplete Required Evidence.",
+      "Run scope-specific verification, combine final status and diff checks, and stop when the stated conditions pass."
     ];
   }
   return [
-    "Inspect primary context first, then supporting context in route order.",
-    "Run targeted tests before broadening into deferred references."
+    "Use delivered full_file or full_symbol drawers directly; do not reopen those paths.",
+    "Batch-read only incomplete Required Evidence, then run targeted and broader verification in one invocation when both are needed.",
+    "Combine final status and diff checks in one command; broaden into Deferred only when evidence conflicts."
   ];
 }
 
