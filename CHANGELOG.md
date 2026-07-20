@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-## 0.3.0 - 2026-07-19
+## 0.3.0 - 2026-07-21
 
 ### Added
 
@@ -34,6 +34,8 @@
 - Evaluation documentation selection prefers narrative evidence, the current protocol, the project README, and localized counterparts instead of filling the route with old protocols, raw trial JSON, or nested historical READMEs.
 - Publication intent now distinguishes an instruction to publish from maintenance of release-candidate evidence, release notes, release checklists, and release reports.
 - Evidence/source/config synchronization reserves a verification surface, while bounded bugfix routes that explicitly request regression work require a direct test or spec file instead of treating release smoke scripts as the companion.
+- Bypass now resolves the repository's declared test command before returning, emits an exact target-aware final Git check, and keeps the same three-field response below 80 estimated tokens.
+- Plugin guidance tells Codex to use delivered full drawers directly, inspect each file once, batch independent checks, and stop after the stated verification boundary passes.
 
 ### Fixed
 
@@ -48,6 +50,8 @@
 - Prevented empty normalized non-ASCII entities from matching every source path.
 - Prevented documentation updates containing `release-candidate` from being routed as npm publication work.
 - Prevented high-scoring release verification scripts from displacing the requested regression test in a small bugfix route.
+- Prevented memories tied to a superseded subsystem version from entering a current-version route merely because their keywords overlap.
+- Preserved migration configuration and documentation evidence in focused routes while still treating public-API preservation language as a compatibility guardrail rather than a requested contract change.
 
 ### Verification
 
@@ -55,12 +59,13 @@
 - The mixed feature-and-release fixture reached 0.96 changed-file coverage and 0.96 route focus in both English and Chinese task variants.
 - A non-study memory-dependent smoke retrieved 2/2 Aurora candidates, excluded 0, emitted `unique_historical_alias_match`, promoted `clients/aurora/article-tokens.mjs` to the only Primary, and demoted the shared token to Support.
 - An ambiguous two-client regression keeps both memories excluded as `scope_mismatch`; alias inference does not break tenant isolation when evidence ties.
-- These product-contract tests do not yet prove parity with Control tool calls, reported tokens, or wall time; that requires the fresh Control-first benchmark planned for 0.3.1.
+- The final clean-install tarball selected `bypass` in 4/4 repeated 240-distractor trials, emitted exactly three fields at 288 bytes, passed CLI and ten-tool MCP smoke tests, kept Git status clean, and stayed inside dense-memory JSON and Markdown ceilings.
 - The pinned Zod and Requests gate now requires both target recall and strict target precision to equal 1.000. Both repositories produced exact two-file routes with no unexpected boundary files in two deterministic repetitions; this remains a product gate, not an Agent-performance claim.
 - The same real-repository gate now rejects ancestor or descendant overlap between selected and Excluded paths; Zod and Requests both reported an empty overlap set in two deterministic repetitions.
 - A fixed eight-file evidence-maintenance oracle in `benchmarks-demo` improved from 3/8 coverage and 0.30 focus to 8/8 and 1.00 focus, while route confidence stayed conservatively capped at 0.35. The product's own six-file implementation self-evaluation still reached only 3/6 coverage and 0.30 focus, so multi-module bugfix companions and generated-artifact linkage remain open work.
 - A follow-up real benchmark synchronization selected all 8/8 changed files plus the explicitly requested CI workflow: coverage 1.00, focus 0.89, and confidence 0.35. A separate eight-file product self-evaluation reached only 5/8 coverage and 0.50 focus, missing the publication-intent helper, classifier sibling, and generated MCP bundle; sibling and provenance routing therefore remain open.
-- In a clean install with 50 relevant memory candidates, JSON delivered 4,050 / 5,000 estimated tokens and Markdown delivered 4,473 / 5,000. Reported bytes matched the serialized outputs, and all 47 excluded candidates retained `selection_limit_reached` reasons.
+- In the final clean install with 50 relevant memory candidates, JSON delivered 4,025 / 5,000 estimated tokens and Markdown delivered 4,484 / 5,000. Reported bytes matched the serialized outputs, and all 47 excluded candidates retained `selection_limit_reached` reasons.
+- Two fresh opposite-order small-local Agent pairs used the final tarball. All 8 Arms passed public tests, the hidden oracle, strict changed-file scope, and runtime validity. Adaptive inspected one file in both pairs and had paired medians of -17,316.5 reported tokens, -9.445 seconds, and +1 tool call versus Control. This is exploratory post-candidate evidence, not a general performance claim.
 
 ## 0.2.4 - 2026-07-19
 
