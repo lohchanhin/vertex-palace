@@ -12,9 +12,9 @@ const budget = 6_000;
 const trialsPerRepository = 2;
 const minimumTargetRecall = 1;
 const minimumTargetPrecision = 1;
-const packageSourceCommit = "805074b78a65e1d50c88085a7ea66f50d30bce5d";
-const expectedPackageShasum = "45513d0001a00f34b55e0fe2bbdf19b14e516bff";
-const expectedPackageIntegrity = "sha512-IE6dixh5nLQScK4dKpF35cWFmesUeK5iNEsXB6zGUARD7G+32ck3MepjPAFV4umtPh1mLT3RV7vkzaKZqrp9pA==";
+const packageSourceCommit = "dd1745d3dee3e7220c8f8f4c1290959e93c1b79e";
+const expectedPackageShasum = "cbdbf10adbeb21ebfbb1fdf9c7c362f33651bba1";
+const expectedPackageIntegrity = "sha512-673j+Lz2QYhg84QSvCCwZHFuKGhJln2qqPPbIF+0K6mk6i3j927Z8B0g5lBtId3pQy2sjxsTQK0BQpOLnak5yQ==";
 
 const repositories = [
   {
