@@ -36,9 +36,9 @@ The pinned repositories are:
 ## Recorded result
 
 The checked evidence was regenerated from the pinned release source
-`dd1745d3dee3e7220c8f8f4c1290959e93c1b79e`. The clean packed candidate had
-SHA-1 `cbdbf10adbeb21ebfbb1fdf9c7c362f33651bba1` and integrity
-`sha512-673j+Lz2QYhg84QSvCCwZHFuKGhJln2qqPPbIF+0K6mk6i3j927Z8B0g5lBtId3pQy2sjxsTQK0BQpOLnak5yQ==`.
+`e901c1739c5aa907bc44ebcbd25bbdd7abd75e7a`. The clean packed candidate had
+SHA-1 `04602918f8e661a57c8286fb7b6d344baf9fb3aa` and integrity
+`sha512-muQvR5KxELoxhFKCUfnASJW58g9xdWp3+u6UJxtzAtiCpz8nh2GWDSm6UNmVIMeFt+qY7IdQ/s5yWrCcwgPRvg==`.
 
 | Repository | Indexed files | Mode | Route confidence | Pack tokens | Target recall | Strict target precision | Extra files | Deterministic |
 | --- | ---: | --- | ---: | ---: | ---: | ---: | ---: | --- |
@@ -143,10 +143,10 @@ research targets.
 
 ## 实测结果
 
-本次证据由固定的发布源码 `dd1745d3dee3e7220c8f8f4c1290959e93c1b79e`
+本次证据由固定的发布源码 `e901c1739c5aa907bc44ebcbd25bbdd7abd75e7a`
 重新生成；干净安装候选 npm tarball 的 SHA-1 为
-`cbdbf10adbeb21ebfbb1fdf9c7c362f33651bba1`，integrity 为
-`sha512-673j+Lz2QYhg84QSvCCwZHFuKGhJln2qqPPbIF+0K6mk6i3j927Z8B0g5lBtId3pQy2sjxsTQK0BQpOLnak5yQ==`。
+`04602918f8e661a57c8286fb7b6d344baf9fb3aa`，integrity 为
+`sha512-muQvR5KxELoxhFKCUfnASJW58g9xdWp3+u6UJxtzAtiCpz8nh2GWDSm6UNmVIMeFt+qY7IdQ/s5yWrCcwgPRvg==`。
 
 | 仓库 | 索引文件 | 模式 | 路由置信度 | Pack tokens | 目标召回率 | 严格目标精度 | 额外文件 | 边界稳定性 |
 | --- | ---: | --- | ---: | ---: | ---: | ---: | ---: | --- |

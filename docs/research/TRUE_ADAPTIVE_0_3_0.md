@@ -125,7 +125,7 @@ scenario.
 | Generated CLI | reports 0.3.0 |
 | Version consistency | root, four workspaces, plugin, marketplace ref, and MCP pin all match 0.3.0 |
 | Repository MCP smoke | 10 tools, version 0.3.0, passed |
-| npm pack | 7 files, package id `vertex-palace@0.3.0`, SHA-1 `cbdbf10adbeb21ebfbb1fdf9c7c362f33651bba1` |
+| npm pack | 7 files, package id `vertex-palace@0.3.0`, SHA-1 `04602918f8e661a57c8286fb7b6d344baf9fb3aa` |
 | Clean tarball install | CLI version 0.3.0, passed |
 | Clean Git isolation | `palace context --auto` left `git status` empty; one `/.palace/` entry in local `.git/info/exclude` |
 | Clean large-index bypass | 240 distractors, 4/4 bypass, intended target, exactly 3 fields and 200 bytes each |

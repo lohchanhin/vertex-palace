@@ -89,7 +89,7 @@ it to be empty.
 
 The final unchanged-oracle rerun is preserved in
 `docs/research/evidence/small-oss-history-validation-0.3.0-final-release-candidate.json`.
-It used package source `dd1745d3dee3e7220c8f8f4c1290959e93c1b79e`,
+It used package source `e901c1739c5aa907bc44ebcbd25bbdd7abd75e7a`,
 retrieved the two real diff files plus the accepted `package.json` architecture
 support in 2/2 deterministic runs, reached required recall 1.000 and accepted
 precision 1.000, and reported no selected-versus-Excluded overlap. Strict diff
@@ -164,7 +164,7 @@ type-route 修复后的结果保留在 commit
 
 最终不变 Oracle 复测保存在
 `docs/research/evidence/small-oss-history-validation-0.3.0-final-release-candidate.json`。
-它使用包源码 `dd1745d3dee3e7220c8f8f4c1290959e93c1b79e`，2/2 次稳定路线都命中
+它使用包源码 `e901c1739c5aa907bc44ebcbd25bbdd7abd75e7a`，2/2 次稳定路线都命中
 两个真实 diff 文件与允许的 `package.json` 架构支持，必需召回率与允许边界精度均为 1.000，
 已选路线与 Excluded 路径没有重叠。由于 `package.json` 不在真实 commit diff 中，严格 diff
 精度仍为 0.667。预注册的完整 `npm test` 仍因仓库当前未锁定的 `xo` 依赖解析失败；诊断性
