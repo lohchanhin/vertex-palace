@@ -42,7 +42,7 @@ describe("palaceContext", () => {
       expect(output.markdown?.trim().split("\n")).toEqual([
         "Mode: bypass",
         "Primary candidate: src/services/token.service.ts",
-        "Reason: High-confidence single-file route with no relevant memory, cross-stack dependency, contract risk, or scope risk. Direct: inspect once, edit, run the known or conventional test, batch final diff and status, stop."
+        "Reason: High-confidence single-file route with no relevant memory, cross-stack dependency, contract risk, or scope risk. Direct: inspect once, edit, run npm test, batch final diff and status, stop."
       ]);
       expect(output.markdown).not.toContain("generateAccessToken");
       expect(output.payload?.contextBytes).toBe(Buffer.byteLength(output.markdown ?? "", "utf8"));
@@ -65,10 +65,39 @@ describe("palaceContext", () => {
       expect(output.json).toEqual({
         mode: "bypass",
         primaryCandidate: "src/services/token.service.ts",
-        reason: "High-confidence single-file route with no relevant memory, cross-stack dependency, contract risk, or scope risk. Direct: inspect once, edit, run the known or conventional test, batch final diff and status, stop."
+        reason: "High-confidence single-file route with no relevant memory, cross-stack dependency, contract risk, or scope risk. Direct: inspect once, edit, run npm test, batch final diff and status, stop."
       });
       expect(Object.keys(output.json as Record<string, unknown>)).toEqual(["mode", "primaryCandidate", "reason"]);
       expect(output.payload?.contextBytes).toBe(Buffer.byteLength(serializePackOutput(output), "utf8"));
+    });
+  });
+
+  it("emits the declared package-manager test command without adding a bypass field", async () => {
+    await withFixture("ts-api", async (root) => {
+      await writeFile(
+        path.join(root, "package.json"),
+        `${JSON.stringify({
+          name: "ts-api-fixture",
+          version: "1.0.0",
+          packageManager: "pnpm@10.34.5",
+          scripts: { test: "vitest run" }
+        }, null, 2)}\n`,
+        "utf8"
+      );
+
+      const output = await palaceContext({
+        root,
+        task: "Fix formatting in src/services/token.service.ts",
+        budget: 6000,
+        auto: true,
+        format: "json"
+      });
+      const json = output.json as Record<string, unknown>;
+
+      expect(output.mode).toBe("bypass");
+      expect(json.reason).toContain("run pnpm test");
+      expect(Object.keys(json)).toEqual(["mode", "primaryCandidate", "reason"]);
+      expect(output.payload?.contextEstimatedTokens).toBeLessThan(80);
     });
   });
 

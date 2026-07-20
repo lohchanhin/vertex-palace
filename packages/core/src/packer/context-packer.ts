@@ -1,3 +1,5 @@
+import { access, readFile } from "node:fs/promises";
+import path from "node:path";
 import type {
   LoadLevel,
   MemorySelectionTelemetry,
@@ -56,7 +58,7 @@ export async function packContext(root: string, task: string, options: PackConte
 
   if (options.modeSelection) {
     if (options.modeSelection.mode === "bypass") {
-      return packBypassContext(task, route, options.modeSelection, options.format);
+      return packBypassContext(root, task, route, options.modeSelection, options.format);
     }
     return packAdaptiveContext(root, task, route, refreshedIndex.nodes, options);
   }
@@ -325,16 +327,20 @@ export function serializePackOutput(output: PackOutput): string {
   return output.markdown ?? serializeJsonOutput(output.json);
 }
 
-export function packBypassContext(
+export async function packBypassContext(
+  root: string,
   task: string,
   route: PalaceRoute,
   selection: PalaceModeSelection,
   format: PackFormat = "markdown"
-): PackOutput {
+): Promise<PackOutput> {
   const primary = route.route.find((step) => (step.tier ?? inferredTier(step.priority)) === "primary") ?? route.route[0];
+  const verificationCommand = await inferVerificationCommand(root);
   const reason = [
     selection.reasons.join(" "),
-    "Direct: inspect once, edit, run the known or conventional test, batch final diff and status, stop."
+    verificationCommand
+      ? `Direct: inspect once, edit, run ${verificationCommand}, batch final diff and status, stop.`
+      : "Direct: inspect once, edit, run the known test, batch final diff and status, stop."
   ].join(" ");
   const minimal = {
     mode: "bypass" as const,
@@ -376,6 +382,49 @@ export function packBypassContext(
     estimatedTokens: payload.contextEstimatedTokens,
     ...(format === "json" ? { json: minimal } : { markdown: serialized })
   };
+}
+
+async function inferVerificationCommand(root: string): Promise<string | null> {
+  try {
+    const packageJson = JSON.parse(await readFile(path.join(root, "package.json"), "utf8")) as {
+      packageManager?: string;
+      scripts?: { test?: unknown };
+    };
+    if (typeof packageJson.scripts?.test === "string") {
+      return `${await packageManagerCommand(root, packageJson.packageManager)} test`;
+    }
+  } catch {
+    // Fall through to non-Node repository conventions.
+  }
+
+  const conventions = [
+    ["pyproject.toml", "python -m pytest"],
+    ["pytest.ini", "python -m pytest"],
+    ["go.mod", "go test ./..."],
+    ["Cargo.toml", "cargo test"]
+  ] as const;
+  for (const [marker, command] of conventions) {
+    if (await pathExists(path.join(root, marker))) return command;
+  }
+  return null;
+}
+
+async function packageManagerCommand(root: string, declared?: string): Promise<"npm" | "pnpm" | "yarn" | "bun"> {
+  const name = declared?.split("@")[0]?.toLowerCase();
+  if (name === "pnpm" || name === "yarn" || name === "bun" || name === "npm") return name;
+  if (await pathExists(path.join(root, "pnpm-lock.yaml"))) return "pnpm";
+  if (await pathExists(path.join(root, "yarn.lock"))) return "yarn";
+  if (await pathExists(path.join(root, "bun.lock")) || await pathExists(path.join(root, "bun.lockb"))) return "bun";
+  return "npm";
+}
+
+async function pathExists(target: string): Promise<boolean> {
+  try {
+    await access(target);
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 function serializeJsonOutput(value: unknown): string {

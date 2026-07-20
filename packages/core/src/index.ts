@@ -118,7 +118,7 @@ export async function palaceContext(input: import("@vertex-palace/shared").Palac
     relevantMemoryCount: memoryProbe?.items.length
   });
   if (modeSelection.mode === "bypass") {
-    return packBypassContext(input.task, route, modeSelection, input.format);
+    return packBypassContext(root, input.task, route, modeSelection, input.format);
   }
   return packContext(root, input.task, {
     budget: input.budget,
