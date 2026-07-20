@@ -87,10 +87,11 @@ adaptive context (one call) -> inspect Primary -> expand Deferred only when need
 
 ### Manual Mode: Step By Step
 
-1. Install the plugin:
+1. Add the marketplace, then install the plugin:
 
 ```bash
 codex plugin marketplace add lohchanhin/vertex-palace --ref v0.3.0
+codex plugin add vertex-palace@vertex-palace-marketplace
 ```
 
 `v0.3.0` is the competition plugin/CLI pair and contains True Bypass, auditable memory selection, and execution boundaries. Avoid `v0.1.0`, `v0.1.1`, and the incomplete `v0.2.4` plugin tag.
@@ -108,7 +109,8 @@ For one-off use without a global install:
 npx -y -p vertex-palace@0.3.0 palace status
 ```
 
-3. Open Codex and install Vertex Palace from `/plugins`.
+3. Restart Codex or start a new task so the plugin skills and MCP server reload.
+   You can confirm the installation from `/plugins`.
 
 4. Prepare task context in one call:
 
@@ -235,15 +237,17 @@ adaptive context（单次调用）-> 先读 Primary -> 证据需要时再展开 
 
 ### 勤劳用法：自己一步一步跑
 
-1. 安装插件：
+1. 加入 marketplace，然后安装插件：
 
 ```bash
 codex plugin marketplace add lohchanhin/vertex-palace --ref v0.3.0
+codex plugin add vertex-palace@vertex-palace-marketplace
 ```
 
 `v0.3.0` 是比赛使用的插件与 CLI 配对版本，包含 True Bypass、可审计记忆筛选与停止边界。不要使用 `v0.1.0`、`v0.1.1`，也不要使用不完整的 `v0.2.4` 插件标签。
 
-2. 打开 Codex，输入 `/plugins`，安装 Vertex Palace。
+2. 重新启动 Codex 或开启新对话，让插件 skill 与 MCP server 重新载入；可输入
+   `/plugins` 确认 Vertex Palace 已安装。
 
 3. 每次任务前用一个命令准备上下文：
 
@@ -312,6 +316,7 @@ Install the Codex plugin:
 
 ```bash
 codex plugin marketplace add lohchanhin/vertex-palace --ref v0.3.0
+codex plugin add vertex-palace@vertex-palace-marketplace
 ```
 
 Use the exact `v0.3.0` tag so the plugin MCP pin and npm package stay aligned. Do not use the incomplete `v0.2.4` plugin tag.
