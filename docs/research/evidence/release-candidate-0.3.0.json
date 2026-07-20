@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-19T20:40:50.246Z",
+  "generatedAt": "2026-07-20T12:43:26.717Z",
   "claimBoundary": "Product packaging and context-contract validation only; not an Agent performance benchmark.",
-  "sourceCommit": "97d1736f971438f7f2913f0b731633b0bab8441d",
+  "sourceCommit": "5dd6db89d5518da7e4dacf22b39f82d1513f8b73",
   "package": "vertex-palace@0.3.0",
   "files": 7,
-  "shasum": "4f4f7843cbfebaec0a9f3aade31fac24d96d1133",
+  "shasum": "cbdbf10adbeb21ebfbb1fdf9c7c362f33651bba1",
   "cleanInstallVersion": "0.3.0",
   "gitIsolation": {
     "statusCleanAfterContext": true,
@@ -49,7 +49,7 @@
     "included": 1,
     "excluded": 0,
     "boundaryFields": 8,
-    "estimatedTokens": 987,
+    "estimatedTokens": 958,
     "maxContextTokens": 6000
   },
   "historicalScopeAlias": {
@@ -63,7 +63,7 @@
       "clients/aurora/article-tokens.mjs"
     ],
     "sharedTier": "support",
-    "estimatedTokens": 1780,
+    "estimatedTokens": 1659,
     "maxContextTokens": 5000
   },
   "denseMemoryCeiling": {
@@ -71,15 +71,15 @@
     "included": 3,
     "excluded": 47,
     "json": {
-      "contextBytes": 16197,
-      "estimatedTokens": 4050,
+      "contextBytes": 19997,
+      "estimatedTokens": 5000,
       "maxContextTokens": 5000,
       "loadedDrawers": 2,
       "deferredReferences": 8
     },
     "markdown": {
-      "contextBytes": 17891,
-      "contextEstimatedTokens": 4473,
+      "contextBytes": 17842,
+      "contextEstimatedTokens": 4461,
       "maxContextTokens": 5000
     }
   },

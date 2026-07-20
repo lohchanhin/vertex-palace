@@ -1,13 +1,14 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-19T21:51:52.706Z",
+  "generatedAt": "2026-07-20T12:43:45.453Z",
   "claimBoundary": "Product routing and packaging validation only; not an Agent performance benchmark.",
-  "sourceCommit": "8328ea29d55260e34e2e6170bd420e4c659af39e",
+  "sourceCommit": "dd1745d3dee3e7220c8f8f4c1290959e93c1b79e",
+  "validationHarnessCommit": "5dd6db89d5518da7e4dacf22b39f82d1513f8b73",
   "candidate": {
     "package": "vertex-palace@0.3.0",
     "files": 7,
-    "shasum": "4f4f7843cbfebaec0a9f3aade31fac24d96d1133",
-    "integrity": "sha512-wfxQUxLKk1kQxQm8X1eGKbRaXX/yxIla8KO6PAxj83Fx+7ofwQSzla6tTVvLIlBOxchGy0OmopFdS684GDz9RA==",
+    "shasum": "cbdbf10adbeb21ebfbb1fdf9c7c362f33651bba1",
+    "integrity": "sha512-673j+Lz2QYhg84QSvCCwZHFuKGhJln2qqPPbIF+0K6mk6i3j927Z8B0g5lBtId3pQy2sjxsTQK0BQpOLnak5yQ==",
     "cleanInstallVersion": "0.3.0"
   },
   "environment": {
@@ -39,14 +40,15 @@
       "routeQuality": {
         "targetRecall": 1,
         "targetPrecision": 1,
-        "unexpectedBoundaryFiles": []
+        "unexpectedBoundaryFiles": [],
+        "selectedExcludedOverlap": []
       },
       "deterministicBoundaries": true,
       "trackedWorktreeClean": true,
       "trials": [
         {
           "trial": 1,
-          "elapsedMs": 5849,
+          "elapsedMs": 6507,
           "mode": "full-palace",
           "taskType": "bugfix",
           "routeConfidence": 0.87,
@@ -59,10 +61,6 @@
             ],
             "deferred": [],
             "excluded": [
-              {
-                "reason": "No strong keyword, room, or route relation match.",
-                "sourcePath": "packages"
-              },
               {
                 "reason": "No strong keyword, room, or route relation match.",
                 "sourcePath": "logo"
@@ -90,6 +88,10 @@
               {
                 "reason": "No strong keyword, room, or route relation match.",
                 "sourcePath": "package.json"
+              },
+              {
+                "reason": "No strong keyword, room, or route relation match.",
+                "sourcePath": ".github"
               }
             ],
             "requiredEvidence": [
@@ -114,7 +116,7 @@
             "mode": "full-palace",
             "calls": 1,
             "contextCalls": 1,
-            "contextBytes": 7544,
+            "contextBytes": 7543,
             "contextEstimatedTokens": 1886,
             "routeStepCount": 2,
             "primaryCount": 1,
@@ -129,11 +131,22 @@
           "routeFiles": [
             "packages/zod/src/v4/core/schemas.ts",
             "packages/zod/src/v4/classic/tests/discriminated-unions.test.ts"
-          ]
+          ],
+          "excludedFiles": [
+            "logo",
+            "AGENTS.md",
+            "scripts",
+            "CODE_OF_CONDUCT.md",
+            ".vscode",
+            "CONTRIBUTING.md",
+            "package.json",
+            ".github"
+          ],
+          "selectedExcludedOverlap": []
         },
         {
           "trial": 2,
-          "elapsedMs": 1283,
+          "elapsedMs": 1580,
           "mode": "full-palace",
           "taskType": "bugfix",
           "routeConfidence": 0.87,
@@ -146,10 +159,6 @@
             ],
             "deferred": [],
             "excluded": [
-              {
-                "reason": "No strong keyword, room, or route relation match.",
-                "sourcePath": "packages"
-              },
               {
                 "reason": "No strong keyword, room, or route relation match.",
                 "sourcePath": "logo"
@@ -177,6 +186,10 @@
               {
                 "reason": "No strong keyword, room, or route relation match.",
                 "sourcePath": "package.json"
+              },
+              {
+                "reason": "No strong keyword, room, or route relation match.",
+                "sourcePath": ".github"
               }
             ],
             "requiredEvidence": [
@@ -201,7 +214,7 @@
             "mode": "full-palace",
             "calls": 1,
             "contextCalls": 1,
-            "contextBytes": 7544,
+            "contextBytes": 7543,
             "contextEstimatedTokens": 1886,
             "routeStepCount": 2,
             "primaryCount": 1,
@@ -216,7 +229,18 @@
           "routeFiles": [
             "packages/zod/src/v4/core/schemas.ts",
             "packages/zod/src/v4/classic/tests/discriminated-unions.test.ts"
-          ]
+          ],
+          "excludedFiles": [
+            "logo",
+            "AGENTS.md",
+            "scripts",
+            "CODE_OF_CONDUCT.md",
+            ".vscode",
+            "CONTRIBUTING.md",
+            "package.json",
+            ".github"
+          ],
+          "selectedExcludedOverlap": []
         }
       ]
     },
@@ -233,14 +257,15 @@
       "routeQuality": {
         "targetRecall": 1,
         "targetPrecision": 1,
-        "unexpectedBoundaryFiles": []
+        "unexpectedBoundaryFiles": [],
+        "selectedExcludedOverlap": []
       },
       "deterministicBoundaries": true,
       "trackedWorktreeClean": true,
       "trials": [
         {
           "trial": 1,
-          "elapsedMs": 1155,
+          "elapsedMs": 1464,
           "mode": "full-palace",
           "taskType": "bugfix",
           "routeConfidence": 0.72,
@@ -253,10 +278,6 @@
             ],
             "deferred": [],
             "excluded": [
-              {
-                "reason": "No strong keyword, room, or route relation match.",
-                "sourcePath": "src/requests"
-              },
               {
                 "reason": "No strong keyword, room, or route relation match.",
                 "sourcePath": "docs"
@@ -284,6 +305,10 @@
               {
                 "reason": "No strong keyword, room, or route relation match.",
                 "sourcePath": ".gitignore"
+              },
+              {
+                "reason": "No strong keyword, room, or route relation match.",
+                "sourcePath": "setup.py"
               }
             ],
             "requiredEvidence": [
@@ -308,8 +333,8 @@
             "mode": "full-palace",
             "calls": 1,
             "contextCalls": 1,
-            "contextBytes": 6296,
-            "contextEstimatedTokens": 1574,
+            "contextBytes": 6292,
+            "contextEstimatedTokens": 1573,
             "routeStepCount": 2,
             "primaryCount": 1,
             "supportCount": 1,
@@ -323,11 +348,22 @@
           "routeFiles": [
             "src/requests/sessions.py",
             "tests/test_requests.py"
-          ]
+          ],
+          "excludedFiles": [
+            "docs",
+            ".github",
+            "ext",
+            "README.md",
+            ".git-blame-ignore-revs",
+            "Makefile",
+            ".gitignore",
+            "setup.py"
+          ],
+          "selectedExcludedOverlap": []
         },
         {
           "trial": 2,
-          "elapsedMs": 610,
+          "elapsedMs": 720,
           "mode": "full-palace",
           "taskType": "bugfix",
           "routeConfidence": 0.72,
@@ -340,10 +376,6 @@
             ],
             "deferred": [],
             "excluded": [
-              {
-                "reason": "No strong keyword, room, or route relation match.",
-                "sourcePath": "src/requests"
-              },
               {
                 "reason": "No strong keyword, room, or route relation match.",
                 "sourcePath": "docs"
@@ -371,6 +403,10 @@
               {
                 "reason": "No strong keyword, room, or route relation match.",
                 "sourcePath": ".gitignore"
+              },
+              {
+                "reason": "No strong keyword, room, or route relation match.",
+                "sourcePath": "setup.py"
               }
             ],
             "requiredEvidence": [
@@ -395,8 +431,8 @@
             "mode": "full-palace",
             "calls": 1,
             "contextCalls": 1,
-            "contextBytes": 6296,
-            "contextEstimatedTokens": 1574,
+            "contextBytes": 6292,
+            "contextEstimatedTokens": 1573,
             "routeStepCount": 2,
             "primaryCount": 1,
             "supportCount": 1,
@@ -410,7 +446,18 @@
           "routeFiles": [
             "src/requests/sessions.py",
             "tests/test_requests.py"
-          ]
+          ],
+          "excludedFiles": [
+            "docs",
+            ".github",
+            "ext",
+            "README.md",
+            ".git-blame-ignore-revs",
+            "Makefile",
+            ".gitignore",
+            "setup.py"
+          ],
+          "selectedExcludedOverlap": []
         }
       ]
     }

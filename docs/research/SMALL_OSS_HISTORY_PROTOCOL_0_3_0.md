@@ -1,6 +1,7 @@
 # Small-OSS Real-History Protocol for 0.3.0
 
-Status: selection locked before the first Vertex Palace route.
+Status: selection locked before the first Vertex Palace route; the final 0.3.0
+candidate rerun is recorded below, including its unfavorable upstream test gate.
 
 ## Claim Boundary
 
@@ -56,7 +57,7 @@ The protocol commit must exist before running:
 
 ```bash
 pnpm build
-node scripts/verify-small-oss-history.cjs --out docs/research/evidence/small-oss-history-validation-0.3.0-after-boundary-consistency-fix.json
+node scripts/verify-small-oss-history.cjs --out docs/research/evidence/small-oss-history-validation-0.3.0-final-release-candidate.json
 ```
 
 The output records a failure before returning non-zero, so an unfavorable case
@@ -82,15 +83,28 @@ The post-type-route result is preserved at commit
 `510bbfe111c9ffd6bed46e44df64d96e2a8bc700`. Its routing gate passed with
 `requiredRecall: 1` and `acceptedPrecision: 1`, but audit found that selected
 source paths could still appear in `excluded` through sibling symbol nodes.
-Commit `81beebceb5c040658a4886a4b49039daa54f693b` fixes that path-level boundary
+Commit `81beebceb5c040658a4886a4b49039daa54f693b` fixed that path-level boundary
 contradiction. The verifier now records `selectedExcludedOverlap` and requires
-it to be empty. A final unchanged-oracle rerun remains required.
+it to be empty.
+
+The final unchanged-oracle rerun is preserved in
+`docs/research/evidence/small-oss-history-validation-0.3.0-final-release-candidate.json`.
+It used package source `dd1745d3dee3e7220c8f8f4c1290959e93c1b79e`,
+retrieved the two real diff files plus the accepted `package.json` architecture
+support in 2/2 deterministic runs, reached required recall 1.000 and accepted
+precision 1.000, and reported no selected-versus-Excluded overlap. Strict diff
+precision remained 0.667 because architecture support is not part of the
+ground-truth commit diff. The preregistered full `npm test` still failed under
+the repository's current unpinned `xo` resolution; diagnostic AVA tests passed
+16/16 and `tsd` passed. The overall evidence status therefore remains
+`failed`, without changing the successful routing gate into a broader claim.
 
 ---
 
 # 0.3.0 小型开源仓库真实历史协议（简体中文）
 
-状态：仓库与 Oracle 已在第一次 Vertex Palace 路由前锁定。
+状态：仓库与 Oracle 已在第一次 Vertex Palace 路由前锁定；最终 0.3.0 候选复测已记录，
+并保留不利的上游完整测试结果。
 
 ## 结论边界
 
@@ -146,4 +160,13 @@ type-route 修复后的结果保留在 commit
 `510bbfe111c9ffd6bed46e44df64d96e2a8bc700`。路由闸门达到 `requiredRecall: 1`、
 `acceptedPrecision: 1`，但审计发现同一个已选 source path 仍可能通过其他 symbol node 出现在
 `excluded`。commit `81beebceb5c040658a4886a4b49039daa54f693b` 已修复这个路径层级矛盾；
-验证器现会记录 `selectedExcludedOverlap`，并要求它为空。仍需使用不变 Oracle 完成最后一次复测。
+验证器现会记录 `selectedExcludedOverlap`，并要求它为空。
+
+最终不变 Oracle 复测保存在
+`docs/research/evidence/small-oss-history-validation-0.3.0-final-release-candidate.json`。
+它使用包源码 `dd1745d3dee3e7220c8f8f4c1290959e93c1b79e`，2/2 次稳定路线都命中
+两个真实 diff 文件与允许的 `package.json` 架构支持，必需召回率与允许边界精度均为 1.000，
+已选路线与 Excluded 路径没有重叠。由于 `package.json` 不在真实 commit diff 中，严格 diff
+精度仍为 0.667。预注册的完整 `npm test` 仍因仓库当前未锁定的 `xo` 依赖解析失败；诊断性
+AVA 测试 16/16 通过，`tsd` 通过。因此整体证据状态继续保留为 `failed`，不会把成功的路由
+闸门扩写成更广泛结论。

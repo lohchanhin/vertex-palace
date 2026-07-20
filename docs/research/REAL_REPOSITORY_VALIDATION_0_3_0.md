@@ -19,6 +19,8 @@ Control.
   or Support.
 - Require both target recall and strict target precision to equal 1.000. Any
   unexpected boundary file fails the release gate.
+- Require no ancestor or descendant overlap between selected route files and
+  Excluded paths. A contradictory execution boundary fails the release gate.
 - Fail if the context exceeds its budget or tracked files in the cloned project
   change.
 - Preserve route files and timing in machine-readable evidence for audit, while
@@ -34,16 +36,17 @@ The pinned repositories are:
 ## Recorded result
 
 The checked evidence was regenerated from the pinned release source
-`8328ea29d55260e34e2e6170bd420e4c659af39e`. The clean packed candidate had
-SHA-1 `4f4f7843cbfebaec0a9f3aade31fac24d96d1133` and integrity
-`sha512-wfxQUxLKk1kQxQm8X1eGKbRaXX/yxIla8KO6PAxj83Fx+7ofwQSzla6tTVvLIlBOxchGy0OmopFdS684GDz9RA==`.
+`dd1745d3dee3e7220c8f8f4c1290959e93c1b79e`. The clean packed candidate had
+SHA-1 `cbdbf10adbeb21ebfbb1fdf9c7c362f33651bba1` and integrity
+`sha512-673j+Lz2QYhg84QSvCCwZHFuKGhJln2qqPPbIF+0K6mk6i3j927Z8B0g5lBtId3pQy2sjxsTQK0BQpOLnak5yQ==`.
 
 | Repository | Indexed files | Mode | Route confidence | Pack tokens | Target recall | Strict target precision | Extra files | Deterministic |
 | --- | ---: | --- | ---: | ---: | ---: | ---: | ---: | --- |
 | Zod | 581 | `full-palace` | 0.87 | 1,886 | 1.000 | 1.000 | 0 | Yes, 2/2 |
 | Requests | 123 | `full-palace` | 0.72 | 1,574 | 1.000 | 1.000 | 0 | Yes, 2/2 |
 
-Both cloned worktrees remained clean. Trial elapsed time is retained in the
+Both cloned worktrees remained clean, and all four repetitions reported an
+empty selected-versus-Excluded overlap set. Trial elapsed time is retained in the
 [machine-readable evidence](./evidence/real-repository-validation-0.3.0.json)
 for diagnostics, but is not treated as a performance result because this gate
 has no Control arm and the first run includes cold indexing.
@@ -91,7 +94,8 @@ is now a ceiling for focused routes rather than a target count.
 ## Honest interpretation
 
 Both known targets are retrieved on both repositories, repeated boundaries are
-deterministic, and no unexpected route file remains in these two cases. The
+deterministic, no unexpected route file remains, and no selected file falls
+under an Excluded directory in these two cases. The
 strict gate reports precision alongside recall and fails if either falls below
 1.000. It proves packaging, cross-language indexing, and exact target retrieval
 for these two pinned tasks only. It does not establish a general routing or
@@ -133,22 +137,23 @@ research targets.
 - 两次运行的执行边界必须完全一致。
 - 已知实现必须位于 Primary；对应测试必须位于 Primary 或 Support。
 - 目标召回率与严格目标精度都必须等于 1.000；只要出现额外边界文件就判定失败。
+- 已选路线与 Excluded 路径之间不得存在祖先或后代重叠；只要执行边界自相矛盾就判定失败。
 - 超出预算或修改真实仓库的 tracked 文件时立即失败。
 - 路由文件与时间会保留在机器可读证据中供审计，但时间不属于本次性能结论。
 
 ## 实测结果
 
-本次证据由固定的发布源码 `8328ea29d55260e34e2e6170bd420e4c659af39e`
+本次证据由固定的发布源码 `dd1745d3dee3e7220c8f8f4c1290959e93c1b79e`
 重新生成；干净安装候选 npm tarball 的 SHA-1 为
-`4f4f7843cbfebaec0a9f3aade31fac24d96d1133`，integrity 为
-`sha512-wfxQUxLKk1kQxQm8X1eGKbRaXX/yxIla8KO6PAxj83Fx+7ofwQSzla6tTVvLIlBOxchGy0OmopFdS684GDz9RA==`。
+`cbdbf10adbeb21ebfbb1fdf9c7c362f33651bba1`，integrity 为
+`sha512-673j+Lz2QYhg84QSvCCwZHFuKGhJln2qqPPbIF+0K6mk6i3j927Z8B0g5lBtId3pQy2sjxsTQK0BQpOLnak5yQ==`。
 
 | 仓库 | 索引文件 | 模式 | 路由置信度 | Pack tokens | 目标召回率 | 严格目标精度 | 额外文件 | 边界稳定性 |
 | --- | ---: | --- | ---: | ---: | ---: | ---: | ---: | --- |
 | Zod | 581 | `full-palace` | 0.87 | 1,886 | 1.000 | 1.000 | 0 | 是，2/2 |
 | Requests | 123 | `full-palace` | 0.72 | 1,574 | 1.000 | 1.000 | 0 | 是，2/2 |
 
-两个克隆仓库的 tracked worktree 都保持干净。每次执行时间保留在
+两个克隆仓库的 tracked worktree 都保持干净，四次重复的已选路线与 Excluded 路径重叠集均为空。每次执行时间保留在
 [机器可读证据](./evidence/real-repository-validation-0.3.0.json)中供诊断，
 但由于本门槛没有 Control 组，而且第一次运行包含冷索引，因此不能把它解释为性能结果。
 
