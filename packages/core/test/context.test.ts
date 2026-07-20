@@ -358,6 +358,53 @@ describe("palaceContext", () => {
     });
   });
 
+  it("guards a migration task while excluding memories from the superseded subsystem version", async () => {
+    await withFixture("ts-api", async (root) => {
+      await mkdir(path.join(root, "src", "scheduler"), { recursive: true });
+      await mkdir(path.join(root, "config"), { recursive: true });
+      await writeFile(
+        path.join(root, "src", "scheduler", "load-batch-limit.mjs"),
+        "export function loadBatchLimit() { return 25; }\n",
+        "utf8"
+      );
+      await writeFile(
+        path.join(root, "config", "runtime-limits.mjs"),
+        "export const runtimeLimits = { maxBatch: 25 };\n",
+        "utf8"
+      );
+      await indexPalace(root);
+      await writeMemory({
+        root,
+        client: "scheduler-v1",
+        task: "Repair the v1 scheduler batch configuration",
+        outcome: "partial",
+        pitfalls: [
+          "The v1 worker consumed legacy limits.",
+          "A previous v1 repair left the active legacy value unchanged."
+        ],
+        tags: ["scheduler", "batch", "configuration", "migration"]
+      });
+
+      const output = await palaceContext({
+        root,
+        task: "Fix the v2 batch scheduler now that the configuration migration is complete.",
+        budget: 6000,
+        auto: true
+      });
+
+      expect(output.mode).toBe("guarded-memory-palace");
+      expect(output.payload?.memoryCandidateCount).toBe(2);
+      expect(output.payload?.memoryItemCount).toBe(0);
+      expect(output.payload?.memoryExcludedCount).toBe(2);
+      expect(output.memoryTelemetry?.memoryExcluded).toEqual([
+        expect.objectContaining({ reason: "scope_mismatch" }),
+        expect.objectContaining({ reason: "scope_mismatch" })
+      ]);
+      expect(output.markdown).toContain("No relevant, current memory evidence met the scope and age checks.");
+      expect(output.markdown).toContain("2 retrieved memory item(s) were excluded with machine-readable reasons.");
+    });
+  });
+
   it("keeps full-palace output inside its context ceiling when memory telemetry is dense", async () => {
     await withFixture("ts-api", async (root) => {
       const noiseRoot = path.join(root, "noise");

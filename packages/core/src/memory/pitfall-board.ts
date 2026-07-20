@@ -175,6 +175,10 @@ export async function readGuardedMemory(
       excluded.push({ id: candidate.entry.id, reason: "expired" });
       continue;
     }
+    if (candidate.entry.client && versionedScopeContradictsTask(candidate.entry.client, options.task, taskTokens)) {
+      excluded.push({ id: candidate.entry.id, reason: "scope_mismatch" });
+      continue;
+    }
     if (candidate.entry.client
         && scopeResolution.enforce
         && !scopeResolution.allowedClients.has(normalizeScope(candidate.entry.client))) {
@@ -287,6 +291,36 @@ function scopeDirectlyMatchesTask(client: string, task: string, taskTokens = tok
   if (normalizedClient && normalizeScope(task).includes(normalizedClient)) return true;
   const identityTokens = [...tokenizeForPitfall(client)].filter((token) => !["client", "tenant", "project"].includes(token));
   return identityTokens.length > 0 && identityTokens.every((token) => taskTokens.has(token));
+}
+
+function versionedScopeContradictsTask(client: string, task: string, taskTokens: Set<string>): boolean {
+  const scopeVersions = versionMarkers(client);
+  const taskVersions = versionMarkers(task);
+  if (!scopeVersions.size || !taskVersions.size) return false;
+  if ([...scopeVersions].some((version) => taskVersions.has(version))) return false;
+
+  const identityTokens = [...tokenizeForPitfall(client)].filter(
+    (token) => !["client", "tenant", "project", "legacy", "version"].includes(token)
+  );
+  return identityTokens.length === 0 || identityTokens.some((token) => taskTokens.has(token));
+}
+
+function versionMarkers(value: string): Set<string> {
+  const versions = new Set<string>();
+  for (const match of value.matchAll(/\b(?:v|version\s*)(\d+(?:\.\d+)*)\b/gi)) {
+    if (match[1]) versions.add(normalizeVersion(match[1]));
+  }
+  for (const match of value.matchAll(/版本\s*(\d+(?:\.\d+)*)/gu)) {
+    if (match[1]) versions.add(normalizeVersion(match[1]));
+  }
+  return versions;
+}
+
+function normalizeVersion(value: string): string {
+  return value
+    .split(".")
+    .map((part) => String(Number(part)))
+    .join(".");
 }
 
 function resolveMemoryScope(

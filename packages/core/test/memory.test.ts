@@ -198,6 +198,43 @@ describe("memory", () => {
     });
   });
 
+  it("excludes memory from an explicitly different version of the same subsystem", async () => {
+    await withFixture("ts-api", async (root) => {
+      await initPalace(root);
+      const entry = (id: string, client: string, text: string) => ({
+        id,
+        text,
+        task: "Fix scheduler batch configuration after migration",
+        outcome: "partial" as const,
+        client,
+        source: "pitfall" as const,
+        tags: ["scheduler", "batch", "configuration", "migration"],
+        memoryPath: `.palace/memory/${id}.md`,
+        createdAt: "2026-07-18T00:00:00.000Z"
+      });
+      await writeFile(
+        path.join(root, ".palace", "memory", "pitfall-board.json"),
+        JSON.stringify({
+          entries: [
+            entry("memory-scheduler-v1", "scheduler-v1", "The v1 worker consumed legacy limits."),
+            entry("memory-scheduler-v2", "scheduler-v2", "The v2 worker consumes runtime limits.")
+          ]
+        }),
+        "utf8"
+      );
+
+      const result = await readGuardedMemory(root, {
+        task: "Fix the v2 scheduler batch configuration now that migration is complete",
+        now: new Date("2026-07-19T00:00:00.000Z")
+      });
+
+      expect(result.items.map((item) => item.id)).toEqual(["memory-scheduler-v2"]);
+      expect(result.telemetry.memoryExcluded).toEqual([
+        { id: "memory-scheduler-v1", reason: "scope_mismatch" }
+      ]);
+    });
+  });
+
   it("infers one client from unique historical scope aliases without requiring its literal name", async () => {
     await withFixture("ts-api", async (root) => {
       await initPalace(root);
