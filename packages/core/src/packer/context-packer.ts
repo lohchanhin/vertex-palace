@@ -145,7 +145,7 @@ async function packAdaptiveContext(
       })
     : emptyGuardedMemory());
   const memory = withModeTelemetry(selectedMemory, selection);
-  const tiered = tierRoute(route, memory.telemetry.scopeInference?.client);
+  const tiered = tierRoute(route, memory.telemetry.scopeInference?.client, selection.riskSignals.crossStack);
   const guardrails = adaptiveGuardrails(selection, memory);
   const boundaries = buildExecutionBoundaries(route, tiered, selection, memory);
   const desiredSteps = adaptiveLoadSteps(selection, tiered);
@@ -176,7 +176,7 @@ async function packAdaptiveContext(
 
   if (options.format === "json") {
     while (true) {
-      const deferredReferences = adaptiveDeferredReferences(route, drawers);
+      const deferredReferences = adaptiveDeferredReferences(tiered, drawers);
       const measured = measureAdaptiveJson(
         task,
         route,
@@ -207,7 +207,7 @@ async function packAdaptiveContext(
   }
 
   while (true) {
-    const deferredReferences = adaptiveDeferredReferences(route, drawers);
+    const deferredReferences = adaptiveDeferredReferences(tiered, drawers);
     const measured = measureAdaptiveMarkdown(
       task,
       route,
@@ -237,9 +237,12 @@ async function packAdaptiveContext(
   }
 }
 
-function adaptiveDeferredReferences(route: PalaceRoute, drawers: PackedDrawer[]): PalaceRouteStep[] {
-  const loadedIds = new Set(drawers.map((drawer) => drawer.step.nodeId));
-  return route.route.filter((step) => !loadedIds.has(step.nodeId));
+function adaptiveDeferredReferences(tiered: TieredRoute, drawers: PackedDrawer[]): PalaceRouteStep[] {
+  const loadedPaths = new Set(drawers.map((drawer) => normalizedRoutePath(drawer.step.sourcePath)));
+  return uniqueRouteSteps(
+    [...tiered.support, ...tiered.deferred]
+      .filter((step) => !loadedPaths.has(normalizedRoutePath(step.sourcePath)))
+  );
 }
 
 function assertAdaptiveReduction(
@@ -519,7 +522,7 @@ function adaptiveJson(
       taskType: route.taskType,
       confidence: route.confidence,
       entry: route.entry,
-      primary: tiered.primary.map(compactRouteStep)
+      primary: unloadedRouteSteps(tiered.primary, drawers).map(compactRouteStep)
     },
     context: drawers.map(compactDrawer),
     deferredReferences: deferredReferences.map(compactDeferredStep),
@@ -545,6 +548,11 @@ function renderAdaptiveMarkdown(
   boundaries: PalaceExecutionBoundaries,
   payload: PalacePayloadMetrics
 ): string {
+  const primaryReferences = unloadedRouteSteps(tiered.primary, drawers);
+  const loadedPaths = new Set(drawers.map((drawer) => normalizedRoutePath(drawer.step.sourcePath)));
+  const requiredEvidenceReferences = boundaries.requiredEvidence.filter(
+    (sourcePath) => !loadedPaths.has(normalizedRoutePath(sourcePath))
+  );
   const lines = [
     "# Vertex Palace Adaptive Context",
     "",
@@ -568,20 +576,22 @@ function renderAdaptiveMarkdown(
     "",
     "## Primary",
     "",
-    ...(tiered.primary.length ? tiered.primary.map(renderRouteReference) : ["- No primary route selected."]),
+    ...(primaryReferences.length ? primaryReferences.map(renderRouteReference) : ["- Delivered below in Routed Context."]),
     ""
   ];
 
   lines.push(
     "## Support",
     "",
-    ...(tiered.support.length ? tiered.support.map(renderRouteReference) : ["- None."]),
+    "- Delivered below in Routed Context or listed under Deferred.",
     "",
     "## Required Evidence",
     "",
-    ...(boundaries.requiredEvidence.length
-      ? boundaries.requiredEvidence.map((sourcePath) => `- ${sourcePath}`)
-      : ["- No separate supporting evidence was selected."]),
+    ...(requiredEvidenceReferences.length
+      ? requiredEvidenceReferences.map((sourcePath) => `- ${sourcePath}`)
+      : boundaries.requiredEvidence.length
+        ? ["- Already delivered below as routed context; do not reopen it."]
+        : ["- No separate supporting evidence was selected."]),
     ""
   );
 
@@ -649,7 +659,20 @@ function renderAdaptiveMarkdown(
     ...(boundaries.excluded.length
       ? boundaries.excluded.map((item) => `- ${item.sourcePath}: ${item.reason}`)
       : ["- None."]),
-    "",
+    ""
+  );
+  if (boundaries.contractCapsule) {
+    lines.push(
+      "## Contract Capsule",
+      "",
+      `Input: ${boundaries.contractCapsule.input}`,
+      `Output: ${boundaries.contractCapsule.output}`,
+      `Invariant: ${boundaries.contractCapsule.invariant}`,
+      `Prohibited change: ${boundaries.contractCapsule.prohibitedChange}`,
+      ""
+    );
+  }
+  lines.push(
     "## Do Not",
     "",
     ...boundaries.doNot.map((item) => `- ${item}`),
@@ -670,16 +693,17 @@ function renderAdaptiveMarkdown(
   return lines.join("\n");
 }
 
-function tierRoute(route: PalaceRoute, inferredClient?: string): TieredRoute {
-  const tiered: TieredRoute = { primary: [], support: [], deferred: [] };
-  for (const step of route.route) tiered[step.tier ?? inferredTier(step.priority)].push(step);
-  if (!tiered.primary.length && route.route[0]) {
-    tiered.primary.push(route.route[0]);
-    tiered.support = tiered.support.filter((step) => step.nodeId !== route.route[0].nodeId);
-    tiered.deferred = tiered.deferred.filter((step) => step.nodeId !== route.route[0].nodeId);
+function tierRoute(route: PalaceRoute, inferredClient?: string, crossStack = false): TieredRoute {
+  const routeSteps = uniqueRouteSteps(route.route);
+  let tiered: TieredRoute = { primary: [], support: [], deferred: [] };
+  for (const step of routeSteps) tiered[step.tier ?? inferredTier(step.priority)].push(step);
+  if (!tiered.primary.length && routeSteps[0]) {
+    tiered.primary.push(routeSteps[0]);
+    tiered.support = tiered.support.filter((step) => step.nodeId !== routeSteps[0].nodeId);
+    tiered.deferred = tiered.deferred.filter((step) => step.nodeId !== routeSteps[0].nodeId);
   }
   const scopedStep = inferredClient
-    ? route.route.find((step) => routePathMatchesScope(step.sourcePath, inferredClient))
+    ? routeSteps.find((step) => routePathMatchesScope(step.sourcePath, inferredClient))
     : undefined;
   if (scopedStep) {
     const promoted = {
@@ -690,7 +714,7 @@ function tierRoute(route: PalaceRoute, inferredClient?: string): TieredRoute {
     };
     tiered.primary = [promoted];
     tiered.support = uniqueRouteSteps([
-      ...route.route.filter((step) => (
+      ...routeSteps.filter((step) => (
         step.nodeId !== scopedStep.nodeId
         && tiered.primary.every((primary) => primary.nodeId !== step.nodeId)
         && (step.tier ?? inferredTier(step.priority)) !== "deferred"
@@ -706,7 +730,57 @@ function tierRoute(route: PalaceRoute, inferredClient?: string): TieredRoute {
     ]);
     tiered.deferred = tiered.deferred.filter((step) => step.nodeId !== scopedStep.nodeId);
   }
+  if (crossStack && !inferredClient) tiered = limitCrossStackAnchors(tiered);
   return tiered;
+}
+
+function limitCrossStackAnchors(tiered: TieredRoute): TieredRoute {
+  const all = uniqueRouteSteps([...tiered.primary, ...tiered.support, ...tiered.deferred]);
+  const selectedByLayer = new Map<string, string>();
+  for (const step of all) {
+    const layer = crossStackImplementationLayer(step.sourcePath);
+    if (layer && !selectedByLayer.has(layer)) selectedByLayer.set(layer, step.nodeId);
+  }
+
+  const result: TieredRoute = { primary: [], support: [], deferred: [] };
+  for (const step of all) {
+    const layer = crossStackImplementationLayer(step.sourcePath);
+    if (layer) {
+      if (selectedByLayer.get(layer) !== step.nodeId) {
+        result.deferred.push({ ...step, tier: "deferred" });
+      } else if (layer === "frontend" || layer === "backend") {
+        result.primary.push({ ...step, tier: "primary" });
+      } else {
+        result.support.push({ ...step, tier: "support" });
+      }
+      continue;
+    }
+    if (isVerificationPath(step.sourcePath)) {
+      result.support.push({ ...step, tier: "support" });
+      continue;
+    }
+    result[step.tier ?? inferredTier(step.priority)].push(step);
+  }
+  return {
+    primary: uniqueRouteSteps(result.primary),
+    support: uniqueRouteSteps(result.support),
+    deferred: uniqueRouteSteps(result.deferred)
+  };
+}
+
+function crossStackImplementationLayer(sourcePath: string): "frontend" | "backend" | "contract" | undefined {
+  const normalized = normalizedRoutePath(sourcePath);
+  if (isVerificationPath(normalized) || /(?:^|\/)(?:docs?|examples?)(?:\/|$)|readme|package\.json$/i.test(normalized)) {
+    return undefined;
+  }
+  if (/(?:^|\/)(?:frontend|client|ui|components?|pages?)(?:\/|$)/i.test(normalized)) return "frontend";
+  if (/(?:^|\/)(?:schema|schemas|contracts?|types?)(?:\/|\.|$)/i.test(normalized)) return "contract";
+  if (/(?:^|\/)(?:backend|server|api|controllers?|services?|src)(?:\/|$)/i.test(normalized)) return "backend";
+  return undefined;
+}
+
+function isVerificationPath(sourcePath: string): boolean {
+  return /(?:^|\/)(?:tests?|specs?)(?:\/|\.|$)|\.(?:test|spec)\.[^/]+$/i.test(normalizedRoutePath(sourcePath));
 }
 
 function routePathMatchesScope(sourcePath: string, scope: string): boolean {
@@ -720,10 +794,20 @@ function routePathMatchesScope(sourcePath: string, scope: string): boolean {
 function uniqueRouteSteps(steps: PalaceRouteStep[]): PalaceRouteStep[] {
   const seen = new Set<string>();
   return steps.filter((step) => {
-    if (seen.has(step.nodeId)) return false;
-    seen.add(step.nodeId);
+    const sourcePath = normalizedRoutePath(step.sourcePath);
+    if (seen.has(sourcePath)) return false;
+    seen.add(sourcePath);
     return true;
   });
+}
+
+function normalizedRoutePath(sourcePath: string): string {
+  return stripSourceLocation(sourcePath).replaceAll("\\", "/").toLowerCase();
+}
+
+function unloadedRouteSteps(steps: PalaceRouteStep[], drawers: PackedDrawer[]): PalaceRouteStep[] {
+  const loadedPaths = new Set(drawers.map((drawer) => normalizedRoutePath(drawer.step.sourcePath)));
+  return steps.filter((step) => !loadedPaths.has(normalizedRoutePath(step.sourcePath)));
 }
 
 function adaptiveLoadSteps(selection: PalaceModeSelection, tiered: TieredRoute): PalaceRouteStep[] {
@@ -782,6 +866,7 @@ function buildExecutionBoundaries(
   const taskRequestsDocumentation = /\b(?:docs?|documentation|readme|migration|migrate|migrated)\b/i.test(route.task);
   const requiredEvidence = uniquePaths(tiered.support.filter((step) => {
     if (/(?:^|\/)(?:tests?|specs?)(?:\/|\.|$)|\.(?:test|spec)\.[^/]+$/i.test(step.sourcePath)) return true;
+    if (selection.riskSignals.crossStack && crossStackImplementationLayer(step.sourcePath) === "contract") return false;
     if (/(?:config|schema|contract)/i.test(step.sourcePath)) return true;
     return taskRequestsDocumentation && /(?:docs?|readme|migration)/i.test(step.sourcePath);
   })).slice(0, 4);
@@ -797,7 +882,8 @@ function buildExecutionBoundaries(
     "The intended Primary implementation scope is resolved; expand it only when Required Evidence proves another dependency.",
     "Targeted tests for the changed behavior pass.",
     "No Excluded path or unrelated file is modified.",
-    "No unresolved conflict remains between current code, tests, and delivered memory."
+    "No unresolved conflict remains between current code, tests, and delivered memory.",
+    "Stop immediately after tests pass and changed-file scope matches Primary and Required Evidence."
   ];
   const conflictSummary: string[] = [];
   const safeMemoryRejection = isSafeMemoryRejection(memory);
@@ -807,6 +893,7 @@ function buildExecutionBoundaries(
   if (selection.confidence < 0.7 || route.confidence < 0.5) conflictSummary.push("Routing confidence is limited; stop and widen only if Primary evidence disagrees with the task.");
   if (!conflictSummary.length) conflictSummary.push("Static routing found no explicit conflict; current code, tests, and runtime evidence remain authoritative.");
 
+  const contractCapsule = selection.riskSignals.crossStack ? buildContractCapsule(tiered) : undefined;
   return {
     primary,
     support,
@@ -815,7 +902,29 @@ function buildExecutionBoundaries(
     requiredEvidence,
     doNot,
     stopCondition,
-    conflictSummary
+    conflictSummary,
+    ...(contractCapsule ? { contractCapsule } : {}),
+    verification: {
+      batchCommands: true,
+      finalScopeCheckRequired: true
+    },
+    stopEnforced: true
+  };
+}
+
+function buildContractCapsule(tiered: TieredRoute): NonNullable<PalaceExecutionBoundaries["contractCapsule"]> {
+  const implementation = [...tiered.primary, ...tiered.support];
+  const hasFrontend = implementation.some((step) => crossStackImplementationLayer(step.sourcePath) === "frontend");
+  const hasBackend = implementation.some((step) => crossStackImplementationLayer(step.sourcePath) === "backend");
+  return {
+    input: hasFrontend
+      ? "The request emitted by the routed frontend implementation anchor."
+      : "The request entering the routed public interface.",
+    output: hasBackend
+      ? "The response returned by the routed backend implementation anchor."
+      : "The response consumed by the routed caller.",
+    invariant: "The request and response contract remains compatible across every routed layer.",
+    prohibitedChange: "Do not change unrelated public behavior, tenant scope, or files outside the routed anchors and required evidence."
   };
 }
 
@@ -833,21 +942,21 @@ function recommendedExecution(mode: PalaceModeSelection["mode"]): string[] {
   if (mode === "route-lite") {
     return [
       "Use delivered full_file or full_symbol drawers directly; do not reopen those paths.",
-      "Batch-read only Required Evidence that was not delivered in full, then run targeted verification.",
-      "Combine final status and diff checks in one command and stop when the stated conditions pass."
+      "Batch-read only Required Evidence that was not delivered in full, then run targeted verification in one batched command.",
+      "Combine final status and diff checks in one command. Stop immediately when tests pass and changed-file scope matches."
     ];
   }
   if (mode === "guarded-memory-palace") {
     return [
       "Validate each memory item against current code before relying on it.",
       "Use delivered full_file or full_symbol drawers directly; batch-read only incomplete Required Evidence.",
-      "Run scope-specific verification, combine final status and diff checks, and stop when the stated conditions pass."
+      "Run scope-specific verification in one batched command, combine final status and diff checks, and stop immediately when the stated conditions pass."
     ];
   }
   return [
     "Use delivered full_file or full_symbol drawers directly; do not reopen those paths.",
-    "Batch-read only incomplete Required Evidence, then run targeted and broader verification in one invocation when both are needed.",
-    "Combine final status and diff checks in one command; broaden into Deferred only when evidence conflicts."
+    "Batch-read only incomplete Required Evidence, then run targeted and broader verification in one batched command when both are needed.",
+    "Combine final status and diff checks in one command; broaden into Deferred only when evidence conflicts. Stop immediately when tests pass and changed-file scope matches."
   ];
 }
 
@@ -876,7 +985,15 @@ function adaptiveMarkdownSectionMaterial(
   material.excluded = boundaries.excluded.map((item) => `- ${item.sourcePath}: ${item.reason}`).join("\n");
   material.memory = markdownMemoryMaterial(selection, memory);
   material.guardrails = guardrails.map((item) => `- ${item}`).join("\n");
-  material.requiredEvidence = boundaries.requiredEvidence.map((item) => `- ${item}`).join("\n");
+  const loadedPaths = new Set(drawers.map((drawer) => normalizedRoutePath(drawer.step.sourcePath)));
+  const requiredEvidenceReferences = boundaries.requiredEvidence.filter(
+    (sourcePath) => !loadedPaths.has(normalizedRoutePath(sourcePath))
+  );
+  material.requiredEvidence = requiredEvidenceReferences.length
+    ? requiredEvidenceReferences.map((item) => `- ${item}`).join("\n")
+    : boundaries.requiredEvidence.length
+      ? "- Already delivered below as routed context; do not reopen it."
+      : "- No separate supporting evidence was selected.";
   material.doNot = boundaries.doNot.map((item) => `- ${item}`).join("\n");
   material.stopCondition = boundaries.stopCondition.map((item) => `- ${item}`).join("\n");
   material.conflictSummary = boundaries.conflictSummary.map((item) => `- ${item}`).join("\n");
@@ -910,7 +1027,7 @@ function adaptiveJsonSectionMaterial(
     }
   });
   material.primary = jsonLeafMaterial({
-    route: tiered.primary.map(compactRouteStep),
+    route: unloadedRouteSteps(tiered.primary, drawers).map(compactRouteStep),
     context: drawerObjects.filter((item) => item.tier === "primary").map((item) => item.value),
     boundary: boundaries.primary
   });
@@ -941,8 +1058,13 @@ function markdownTierMaterial(
   steps: PalaceRouteStep[],
   drawers: PackedDrawer[]
 ): string {
+  const references = tier === "primary" ? unloadedRouteSteps(steps, drawers) : [];
   return [
-    ...steps.map(renderRouteReference),
+    ...(references.length
+      ? references.map(renderRouteReference)
+      : [tier === "primary"
+          ? "- Delivered below in Routed Context."
+          : "- Delivered below in Routed Context or listed under Deferred."]),
     ...drawers
       .filter((drawer) => (drawer.step.tier ?? inferredTier(drawer.step.priority)) === tier)
       .map((drawer) => renderAdaptiveDrawerLines(drawer).join("\n"))
@@ -1064,7 +1186,8 @@ function compactDrawer(drawer: PackedDrawer): unknown {
     loadLevel: drawer.step.loadLevel,
     reason: drawer.reason,
     estimatedTokens: drawer.tokens,
-    content: drawer.content
+    content: drawer.content,
+    do_not_reopen: drawer.step.loadLevel === "full_file" || drawer.step.loadLevel === "full_symbol"
   };
 }
 
@@ -1108,11 +1231,13 @@ function renderAdaptiveDrawerLines(drawer: PackedDrawer): string[] {
   const location = drawer.node.startLine
     ? `${drawer.node.sourcePath}:${drawer.node.startLine}${drawer.node.endLine ? `-${drawer.node.endLine}` : ""}`
     : drawer.node.sourcePath;
+  const doNotReopen = drawer.step.loadLevel === "full_file" || drawer.step.loadLevel === "full_symbol";
   return [
     `### ${drawer.step.tier ?? inferredTier(drawer.step.priority)}: ${location}`,
     "",
     `Reason: ${drawer.reason}`,
     "",
+    ...(doNotReopen ? ["Do not reopen: true", ""] : []),
     `\`\`\`${languageFence(drawer.node)}`,
     drawer.content.trimEnd(),
     "```",

@@ -125,6 +125,17 @@ export type PalaceExecutionBoundaries = {
   doNot: string[];
   stopCondition: string[];
   conflictSummary: string[];
+  contractCapsule?: {
+    input: string;
+    output: string;
+    invariant: string;
+    prohibitedChange: string;
+  };
+  verification: {
+    batchCommands: boolean;
+    finalScopeCheckRequired: boolean;
+  };
+  stopEnforced: boolean;
 };
 
 export type PalaceRiskSignals = {

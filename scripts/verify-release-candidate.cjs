@@ -143,12 +143,19 @@ async function main() {
       "requiredEvidence",
       "doNot",
       "stopCondition",
-      "conflictSummary"
+      "conflictSummary",
+      "verification",
+      "stopEnforced"
     ];
     assert.equal(full.mode, "full-palace");
     assert.equal(full.memoryTelemetry.memoryIncluded, 1);
     assert.equal(full.payload.memoryItemCount, 1);
     assert.deepEqual(Object.keys(boundaries), boundaryFields);
+    assert.deepEqual(boundaries.verification, {
+      batchCommands: true,
+      finalScopeCheckRequired: true
+    });
+    assert.equal(boundaries.stopEnforced, true);
     assert.equal(full.payload.contextBytes, Buffer.byteLength(fullRaw, "utf8"));
     assert.ok(full.payload.contextEstimatedTokens <= full.selection.maxContextTokens);
 

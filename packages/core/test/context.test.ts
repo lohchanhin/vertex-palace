@@ -379,8 +379,30 @@ describe("palaceContext", () => {
         format: "json"
       });
       const json = output.json as {
-        context: Array<{ sourcePath: string; tier: string; loadLevel: string }>;
-        executionBoundaries: { requiredEvidence: string[] };
+        route: { primary: Array<{ sourcePath: string }> };
+        context: Array<{
+          sourcePath: string;
+          tier: string;
+          loadLevel: string;
+          do_not_reopen?: boolean;
+        }>;
+        deferredReferences: Array<{ sourcePath: string }>;
+        recommendedExecution: string[];
+        executionBoundaries: {
+          requiredEvidence: string[];
+          contractCapsule?: {
+            input: string;
+            output: string;
+            invariant: string;
+            prohibitedChange: string;
+          };
+          verification?: {
+            batchCommands: boolean;
+            finalScopeCheckRequired: boolean;
+          };
+          stopEnforced?: boolean;
+          stopCondition: string[];
+        };
       };
 
       expect(output.mode).toBe("full-palace");
@@ -391,7 +413,60 @@ describe("palaceContext", () => {
         loadLevel: "full_file"
       }));
       expect(json.executionBoundaries.requiredEvidence).toEqual(["tests/auth.e2e.test.ts"]);
+      expect(Object.keys(json.executionBoundaries.contractCapsule ?? {})).toEqual([
+        "input",
+        "output",
+        "invariant",
+        "prohibitedChange"
+      ]);
+      expect(json.executionBoundaries.contractCapsule?.invariant).toContain("request and response contract");
+      expect(json.executionBoundaries.verification).toEqual({
+        batchCommands: true,
+        finalScopeCheckRequired: true
+      });
+      expect(json.executionBoundaries.stopEnforced).toBe(true);
+      expect(json.executionBoundaries.stopCondition).toContain(
+        "Stop immediately after tests pass and changed-file scope matches Primary and Required Evidence."
+      );
+      expect(json.recommendedExecution.some((step) => step.includes("one batched command"))).toBe(true);
+      expect(json.recommendedExecution.some((step) => step.includes("Stop immediately"))).toBe(true);
+
+      const loadedFullDrawers = json.context.filter((item) => item.loadLevel === "full_file" || item.loadLevel === "full_symbol");
+      expect(loadedFullDrawers.length).toBeGreaterThan(0);
+      expect(loadedFullDrawers.every((item) => item.do_not_reopen === true)).toBe(true);
+
+      const implementationLayers = json.context
+        .filter((item) => !/(?:^|\/)(?:tests?|specs?)(?:\/|\.|$)/i.test(item.sourcePath))
+        .map((item) => {
+          if (/(?:^|\/)(?:frontend|client|ui|components?|pages?)(?:\/|$)/i.test(item.sourcePath)) return "frontend";
+          if (/(?:^|\/)(?:schema|schemas|contracts?|types?)(?:\/|\.|$)/i.test(item.sourcePath)) return "contract";
+          return "backend";
+        });
+      expect(implementationLayers.filter((layer) => layer === "frontend")).toHaveLength(1);
+      expect(implementationLayers.filter((layer) => layer === "backend")).toHaveLength(1);
+      for (const layer of new Set(implementationLayers)) {
+        expect(implementationLayers.filter((candidate) => candidate === layer).length).toBeLessThanOrEqual(1);
+      }
+
+      const deliveredOrReferencedPaths = [
+        ...json.route.primary.map((item) => item.sourcePath),
+        ...json.context.map((item) => item.sourcePath),
+        ...json.deferredReferences.map((item) => item.sourcePath)
+      ].map((sourcePath) => sourcePath.replace(/:\d+(?:-\d+)?$/, ""));
+      expect(new Set(deliveredOrReferencedPaths).size).toBe(deliveredOrReferencedPaths.length);
       expect(output.payload?.memoryItemCount).toBe(0);
+
+      const markdownOutput = await palaceContext({
+        root,
+        task: "Update the frontend and backend API contract for login",
+        budget: 6000,
+        auto: true
+      });
+      expect(markdownOutput.markdown).toContain("## Contract Capsule");
+      expect(markdownOutput.markdown).toContain("Do not reopen: true");
+      expect(markdownOutput.markdown).toContain(
+        "Stop immediately after tests pass and changed-file scope matches Primary and Required Evidence."
+      );
     });
   });
 
