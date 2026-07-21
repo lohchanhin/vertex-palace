@@ -152,6 +152,27 @@ export type PalaceModeSelection = {
   modeDowngradeReason?: "all_candidates_safely_rejected";
 };
 
+export type PalaceSectionMetric = {
+  bytes: number;
+  estimatedTokens: number;
+};
+
+export type PalaceSectionMetrics = {
+  task: PalaceSectionMetric;
+  modeExplanation: PalaceSectionMetric;
+  primary: PalaceSectionMetric;
+  support: PalaceSectionMetric;
+  deferred: PalaceSectionMetric;
+  excluded: PalaceSectionMetric;
+  memory: PalaceSectionMetric;
+  guardrails: PalaceSectionMetric;
+  requiredEvidence: PalaceSectionMetric;
+  doNot: PalaceSectionMetric;
+  stopCondition: PalaceSectionMetric;
+  conflictSummary: PalaceSectionMetric;
+  serializationOverheadBytes: number;
+};
+
 export type PalacePayloadMetrics = {
   mode: PalaceMode;
   calls: number;
@@ -167,6 +188,7 @@ export type PalacePayloadMetrics = {
   memoryExcludedCount: number;
   memoryEstimatedTokens: number;
   guardrailCount: number;
+  sectionMetrics: PalaceSectionMetrics;
 };
 
 export type TaskType =

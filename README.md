@@ -8,9 +8,9 @@ OpenAI Build Week work is documented separately in [BUILD_WEEK.md](./BUILD_WEEK.
 
 **Release status:** Version `0.3.0` is the competition release. The CLI, MCP server, and plugin instructions below are pinned to the same exact version. Do not install the incomplete `v0.2.4` plugin tag: its npm pin was never published.
 
-**Development note:** `main` now contains the unreleased `0.4.0-alpha` Memory Preflight work derived from the frozen v3 findings. It selects memory once, safely downgrades fully rejected stale or scope-mismatched candidates, and preserves guarded decision memory. Read the bilingual [engineering result](./docs/research/MEMORY_PREFLIGHT_0_4_ALPHA_RESULT.md). No `0.4.0-alpha` npm package, tag, or GitHub Release exists yet.
+**Development note:** `main` now contains unreleased `0.4.0-alpha` work derived from the frozen v3 findings. Memory Preflight selects memory once, safely downgrades fully rejected stale or scope-mismatched candidates, and preserves guarded decision memory. PR3 adds exact section-level UTF-8 accounting and benchmark Agent-adherence telemetry. Read the [Memory Preflight result](./docs/research/MEMORY_PREFLIGHT_0_4_ALPHA_RESULT.md) and [telemetry design](./docs/research/SECTION_AND_ADHERENCE_TELEMETRY_0_4_ALPHA.md). No `0.4.0-alpha` npm package, tag, or GitHub Release exists yet.
 
-**研发说明：** `main` 目前包含依据冻结 v3 研究结果完成、但尚未发布的 `0.4.0-alpha` Memory Preflight。它只筛选一次记忆，在陈旧或范围不符候选全部安全排除时自动降级，同时保留决策记忆的 guarded 保护。详见双语[工程结果](./docs/zh-CN/MEMORY_PREFLIGHT_0_4_ALPHA_RESULT.md)。目前尚未发布 `0.4.0-alpha` npm、Git tag 或 GitHub Release。
+**研发说明：** `main` 目前包含依据冻结 v3 研究结果完成、但尚未发布的 `0.4.0-alpha` 工作。Memory Preflight 只筛选一次记忆，在陈旧或范围不符候选全部安全排除时自动降级，同时保留决策记忆的 guarded 保护；PR3 新增精确的 UTF-8 分区成本与 benchmark Agent 遵循指标。详见[记忆预检结果](./docs/zh-CN/MEMORY_PREFLIGHT_0_4_ALPHA_RESULT.md)和[指标设计](./docs/zh-CN/SECTION_AND_ADHERENCE_TELEMETRY_0_4_ALPHA.md)。目前尚未发布 `0.4.0-alpha` npm、Git tag 或 GitHub Release。
 
 **发布状态：** `0.3.0` 是比赛发布版本。以下 CLI、MCP server 与插件说明都固定到同一个准确版本。不要安装不完整的 `v0.2.4` 插件标签，因为它指向的 npm 版本从未发布。
 

@@ -650,6 +650,58 @@ describe("palaceContext", () => {
     });
   });
 
+  it("accounts exactly for every adaptive payload section in Markdown and JSON", async () => {
+    await withFixture("ts-api", async (root) => {
+      const sectionNames = [
+        "task",
+        "modeExplanation",
+        "primary",
+        "support",
+        "deferred",
+        "excluded",
+        "memory",
+        "guardrails",
+        "requiredEvidence",
+        "doNot",
+        "stopCondition",
+        "conflictSummary"
+      ] as const;
+
+      for (const format of ["markdown", "json"] as const) {
+        const output = await palaceContext({
+          root,
+          task: "Review the login refresh token contract across implementation and tests, preserve the public API, and report the required verification evidence.",
+          budget: 6000,
+          mode: "full-palace",
+          format
+        });
+        const sectionMetrics = (output.payload as typeof output.payload & {
+          sectionMetrics?: Record<(typeof sectionNames)[number], { bytes: number; estimatedTokens: number }> & {
+            serializationOverheadBytes: number;
+          };
+        })?.sectionMetrics;
+
+        expect(sectionMetrics).toBeDefined();
+        expect(Object.keys(sectionMetrics ?? {})).toEqual([...sectionNames, "serializationOverheadBytes"]);
+        expect(sectionMetrics?.task.bytes).toBeGreaterThan(0);
+        expect(sectionMetrics?.modeExplanation.bytes).toBeGreaterThan(0);
+        expect(sectionMetrics?.primary.bytes).toBeGreaterThan(0);
+        for (const name of sectionNames) {
+          expect(sectionMetrics?.[name].bytes).toBeGreaterThanOrEqual(0);
+          expect(sectionMetrics?.[name].estimatedTokens).toBeGreaterThanOrEqual(0);
+        }
+        const measuredSectionBytes = sectionNames.reduce(
+          (total, name) => total + (sectionMetrics?.[name].bytes ?? 0),
+          0
+        );
+        expect(measuredSectionBytes + (sectionMetrics?.serializationOverheadBytes ?? -1)).toBe(
+          output.payload?.contextBytes
+        );
+        expect(output.payload?.contextBytes).toBe(Buffer.byteLength(serializePackOutput(output), "utf8"));
+      }
+    });
+  });
+
   it("hard-bounds guarded Markdown and JSON with fifty auditable memory candidates", async () => {
     await withFixture("ts-api", async (root) => {
       const payloadRoot = path.join(root, "src", "payload");

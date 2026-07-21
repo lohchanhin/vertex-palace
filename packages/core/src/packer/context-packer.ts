@@ -9,7 +9,8 @@ import type {
   PalaceNode,
   PalacePayloadMetrics,
   PalaceRoute,
-  PalaceRouteStep
+  PalaceRouteStep,
+  PalaceSectionMetrics
 } from "@vertex-palace/shared";
 import { DEFAULT_BUDGET } from "../config/defaults";
 import {
@@ -49,6 +50,24 @@ type TieredRoute = {
   support: PalaceRouteStep[];
   deferred: PalaceRouteStep[];
 };
+
+const SECTION_NAMES = [
+  "task",
+  "modeExplanation",
+  "primary",
+  "support",
+  "deferred",
+  "excluded",
+  "memory",
+  "guardrails",
+  "requiredEvidence",
+  "doNot",
+  "stopCondition",
+  "conflictSummary"
+] as const;
+
+type PalaceSectionName = (typeof SECTION_NAMES)[number];
+type PalaceSectionMaterial = Record<PalaceSectionName, string>;
 
 export async function packContext(root: string, task: string, options: PackContextOptions = {}): Promise<PackOutput> {
   const index = await readIndex(root);
@@ -263,10 +282,21 @@ function measureAdaptiveJson(
   boundaries: PalaceExecutionBoundaries,
   baseMetrics: PalacePayloadMetrics
 ): { json: unknown; payload: PalacePayloadMetrics } {
+  const sectionMaterial = adaptiveJsonSectionMaterial(
+    task,
+    route,
+    selection,
+    tiered,
+    drawers,
+    deferredReferences,
+    guardrails,
+    memory,
+    boundaries
+  );
   let payload = baseMetrics;
   let json = adaptiveJson(task, route, selection, tiered, drawers, deferredReferences, guardrails, memory, boundaries, payload);
   for (let attempt = 0; attempt < 12; attempt += 1) {
-    const measured = withMeasuredPayload(baseMetrics, serializeJsonOutput(json));
+    const measured = withMeasuredPayload(baseMetrics, serializeJsonOutput(json), sectionMaterial);
     if (sameMeasuredPayload(payload, measured)) return { json, payload: measured };
     payload = measured;
     json = adaptiveJson(task, route, selection, tiered, drawers, deferredReferences, guardrails, memory, boundaries, payload);
@@ -286,6 +316,17 @@ function measureAdaptiveMarkdown(
   boundaries: PalaceExecutionBoundaries,
   baseMetrics: PalacePayloadMetrics
 ): { markdown: string; payload: PalacePayloadMetrics } {
+  const sectionMaterial = adaptiveMarkdownSectionMaterial(
+    task,
+    route,
+    selection,
+    tiered,
+    drawers,
+    deferredReferences,
+    guardrails,
+    memory,
+    boundaries
+  );
   let payload = baseMetrics;
   let markdown = renderAdaptiveMarkdown(
     task,
@@ -300,7 +341,7 @@ function measureAdaptiveMarkdown(
     payload
   );
   for (let attempt = 0; attempt < 12; attempt += 1) {
-    const measured = withMeasuredPayload(baseMetrics, markdown);
+    const measured = withMeasuredPayload(baseMetrics, markdown, sectionMaterial);
     if (sameMeasuredPayload(payload, measured)) return { markdown, payload: measured };
     payload = measured;
     markdown = renderAdaptiveMarkdown(
@@ -321,7 +362,8 @@ function measureAdaptiveMarkdown(
 
 function sameMeasuredPayload(left: PalacePayloadMetrics, right: PalacePayloadMetrics): boolean {
   return left.contextBytes === right.contextBytes
-    && left.contextEstimatedTokens === right.contextEstimatedTokens;
+    && left.contextEstimatedTokens === right.contextEstimatedTokens
+    && JSON.stringify(left.sectionMetrics) === JSON.stringify(right.sectionMetrics);
 }
 
 export function serializePackOutput(output: PackOutput): string {
@@ -359,6 +401,14 @@ export async function packBypassContext(
         `Reason: ${reason}`,
         ""
       ].join("\n");
+  const sectionMaterial = emptySectionMaterial();
+  if (format === "json") {
+    sectionMaterial.modeExplanation = jsonLeafMaterial({ mode: minimal.mode, reason: minimal.reason });
+    sectionMaterial.primary = jsonLeafMaterial(minimal.primaryCandidate);
+  } else {
+    sectionMaterial.modeExplanation = `Mode: bypass\nReason: ${reason}`;
+    sectionMaterial.primary = `Primary candidate: ${minimal.primaryCandidate ?? "none"}`;
+  }
   const memory = withModeTelemetry(preparedMemory ?? emptyGuardedMemory(), selection);
   const telemetry = memory.telemetry;
   const payload = withMeasuredPayload({
@@ -375,8 +425,9 @@ export async function packBypassContext(
     memoryCandidateCount: memory.candidates,
     memoryExcludedCount: memory.excluded.length,
     memoryEstimatedTokens: 0,
-    guardrailCount: 0
-  }, serialized);
+    guardrailCount: 0,
+    sectionMetrics: emptySectionMetrics()
+  }, serialized, sectionMaterial);
   return {
     task,
     routeId: route.id,
@@ -470,16 +521,7 @@ function adaptiveJson(
       entry: route.entry,
       primary: tiered.primary.map(compactRouteStep)
     },
-    context: drawers.map((drawer) => ({
-      sourcePath: drawer.node.sourcePath,
-      palacePath: drawer.node.palacePath,
-      title: drawer.node.title,
-      tier: drawer.step.tier ?? inferredTier(drawer.step.priority),
-      loadLevel: drawer.step.loadLevel,
-      reason: drawer.reason,
-      estimatedTokens: drawer.tokens,
-      content: drawer.content
-    })),
+    context: drawers.map(compactDrawer),
     deferredReferences: deferredReferences.map(compactDeferredStep),
     guardrails,
     memory: memory.items,
@@ -521,6 +563,8 @@ function renderAdaptiveMarkdown(
     `Estimated context cost: ${payload.contextEstimatedTokens} / ${selection.maxContextTokens} token ceiling`,
     `Route: ${payload.routeStepCount} (${payload.primaryCount} primary, ${payload.supportCount} support, ${payload.deferredCount} deferred)`,
     `Memory: ${payload.memoryItemCount} included / ${payload.memoryCandidateCount} candidates / ${payload.memoryExcludedCount} excluded / ~${payload.memoryEstimatedTokens} tokens | Guardrails: ${payload.guardrailCount}`,
+    `Section metrics (bytes/tokens): ${renderSectionMetricSummary(payload.sectionMetrics)}`,
+    `Serialization overhead bytes: ${payload.sectionMetrics.serializationOverheadBytes}`,
     "",
     "## Primary",
     "",
@@ -582,19 +626,7 @@ function renderAdaptiveMarkdown(
   if (drawers.length) {
     lines.push("## Routed Context", "");
     for (const drawer of drawers) {
-      const location = drawer.node.startLine
-        ? `${drawer.node.sourcePath}:${drawer.node.startLine}${drawer.node.endLine ? `-${drawer.node.endLine}` : ""}`
-        : drawer.node.sourcePath;
-      lines.push(
-        `### ${drawer.step.tier ?? inferredTier(drawer.step.priority)}: ${location}`,
-        "",
-        `Reason: ${drawer.reason}`,
-        "",
-        `\`\`\`${languageFence(drawer.node)}`,
-        drawer.content.trimEnd(),
-        "```",
-        ""
-      );
+      lines.push(...renderAdaptiveDrawerLines(drawer));
     }
   } else {
     lines.push(
@@ -819,6 +851,128 @@ function recommendedExecution(mode: PalaceModeSelection["mode"]): string[] {
   ];
 }
 
+function adaptiveMarkdownSectionMaterial(
+  task: string,
+  route: PalaceRoute,
+  selection: PalaceModeSelection,
+  tiered: TieredRoute,
+  drawers: PackedDrawer[],
+  deferredReferences: PalaceRouteStep[],
+  guardrails: string[],
+  memory: GuardedMemoryResult,
+  boundaries: PalaceExecutionBoundaries
+): PalaceSectionMaterial {
+  const material = emptySectionMaterial();
+  material.task = task;
+  material.modeExplanation = [
+    `Mode: ${selection.mode}`,
+    `Mode confidence: ${selection.confidence}`,
+    `Route confidence: ${route.confidence}`,
+    `Why: ${selection.reasons.join(" ")}`
+  ].join("\n");
+  material.primary = markdownTierMaterial("primary", tiered.primary, drawers);
+  material.support = markdownTierMaterial("support", tiered.support, drawers);
+  material.deferred = deferredReferences.map(renderRouteReference).join("\n");
+  material.excluded = boundaries.excluded.map((item) => `- ${item.sourcePath}: ${item.reason}`).join("\n");
+  material.memory = markdownMemoryMaterial(selection, memory);
+  material.guardrails = guardrails.map((item) => `- ${item}`).join("\n");
+  material.requiredEvidence = boundaries.requiredEvidence.map((item) => `- ${item}`).join("\n");
+  material.doNot = boundaries.doNot.map((item) => `- ${item}`).join("\n");
+  material.stopCondition = boundaries.stopCondition.map((item) => `- ${item}`).join("\n");
+  material.conflictSummary = boundaries.conflictSummary.map((item) => `- ${item}`).join("\n");
+  return material;
+}
+
+function adaptiveJsonSectionMaterial(
+  task: string,
+  route: PalaceRoute,
+  selection: PalaceModeSelection,
+  tiered: TieredRoute,
+  drawers: PackedDrawer[],
+  deferredReferences: PalaceRouteStep[],
+  guardrails: string[],
+  memory: GuardedMemoryResult,
+  boundaries: PalaceExecutionBoundaries
+): PalaceSectionMaterial {
+  const material = emptySectionMaterial();
+  const drawerObjects = drawers.map((drawer) => ({
+    tier: drawer.step.tier ?? inferredTier(drawer.step.priority),
+    value: compactDrawer(drawer)
+  }));
+  material.task = jsonLeafMaterial(task);
+  material.modeExplanation = jsonLeafMaterial({
+    mode: selection.mode,
+    selection: compactSelection(selection),
+    route: {
+      taskType: route.taskType,
+      confidence: route.confidence,
+      entry: route.entry
+    }
+  });
+  material.primary = jsonLeafMaterial({
+    route: tiered.primary.map(compactRouteStep),
+    context: drawerObjects.filter((item) => item.tier === "primary").map((item) => item.value),
+    boundary: boundaries.primary
+  });
+  material.support = jsonLeafMaterial({
+    context: drawerObjects.filter((item) => item.tier === "support").map((item) => item.value),
+    boundary: boundaries.support
+  });
+  material.deferred = jsonLeafMaterial({
+    references: deferredReferences.map(compactDeferredStep),
+    boundary: boundaries.deferred
+  });
+  material.excluded = jsonLeafMaterial(boundaries.excluded);
+  material.memory = jsonLeafMaterial({
+    items: memory.items,
+    rejection: memoryRejectionSummary(memory),
+    telemetry: memory.telemetry
+  });
+  material.guardrails = jsonLeafMaterial(guardrails);
+  material.requiredEvidence = jsonLeafMaterial(boundaries.requiredEvidence);
+  material.doNot = jsonLeafMaterial(boundaries.doNot);
+  material.stopCondition = jsonLeafMaterial(boundaries.stopCondition);
+  material.conflictSummary = jsonLeafMaterial(boundaries.conflictSummary);
+  return material;
+}
+
+function markdownTierMaterial(
+  tier: "primary" | "support",
+  steps: PalaceRouteStep[],
+  drawers: PackedDrawer[]
+): string {
+  return [
+    ...steps.map(renderRouteReference),
+    ...drawers
+      .filter((drawer) => (drawer.step.tier ?? inferredTier(drawer.step.priority)) === tier)
+      .map((drawer) => renderAdaptiveDrawerLines(drawer).join("\n"))
+  ].join("\n");
+}
+
+function markdownMemoryMaterial(selection: PalaceModeSelection, memory: GuardedMemoryResult): string {
+  const lines: string[] = [];
+  if ((selection.mode === "guarded-memory-palace" && !isSafeMemoryRejection(memory)) || memory.items.length) {
+    lines.push(...(memory.items.length
+      ? memory.items.flatMap((item) => renderGuardedMemoryItem(item).split("\n"))
+      : ["- No relevant, current memory evidence met the scope and age checks."]));
+  }
+  if (isSafeMemoryRejection(memory)) {
+    lines.push(renderMemoryRejectionSummary(memory));
+  } else if (memory.telemetry.memoryCandidates > 0) {
+    lines.push(
+      `Candidates: ${memory.telemetry.memoryCandidates} | Included: ${memory.telemetry.memoryIncluded} | Excluded: ${memory.telemetry.memoryExcluded.length}`,
+      `Included IDs: ${memory.telemetry.includedIds.length ? memory.telemetry.includedIds.join(", ") : "none"}`,
+      ...(memory.telemetry.scopeInference
+        ? [`Inferred scope: ${memory.telemetry.scopeInference.client} (${memory.telemetry.scopeInference.reason}; evidence: ${memory.telemetry.scopeInference.evidenceTokens.join(", ")})`]
+        : []),
+      ...(memory.telemetry.memoryExcluded.length
+        ? memory.telemetry.memoryExcluded.map((item) => `- ${item.id}: ${item.reason}`)
+        : ["- No retrieved memory was excluded."])
+    );
+  }
+  return lines.join("\n");
+}
+
 function metricSkeleton(
   selection: PalaceModeSelection,
   tiered: TieredRoute,
@@ -839,15 +993,78 @@ function metricSkeleton(
     memoryCandidateCount: memory.telemetry.memoryCandidates,
     memoryExcludedCount: memory.telemetry.memoryExcluded.length,
     memoryEstimatedTokens: memory.estimatedTokens,
-    guardrailCount: guardrails.length
+    guardrailCount: guardrails.length,
+    sectionMetrics: emptySectionMetrics()
   };
 }
 
-function withMeasuredPayload(base: PalacePayloadMetrics, payload: string): PalacePayloadMetrics {
+function withMeasuredPayload(
+  base: PalacePayloadMetrics,
+  payload: string,
+  sectionMaterial: PalaceSectionMaterial = emptySectionMaterial()
+): PalacePayloadMetrics {
+  const contextBytes = Buffer.byteLength(payload, "utf8");
   return {
     ...base,
-    contextBytes: Buffer.byteLength(payload, "utf8"),
-    contextEstimatedTokens: estimateTokens(payload)
+    contextBytes,
+    contextEstimatedTokens: estimateTokens(payload),
+    sectionMetrics: measureSections(sectionMaterial, contextBytes)
+  };
+}
+
+function emptySectionMaterial(): PalaceSectionMaterial {
+  return Object.fromEntries(SECTION_NAMES.map((name) => [name, ""])) as PalaceSectionMaterial;
+}
+
+function emptySectionMetrics(): PalaceSectionMetrics {
+  return {
+    ...Object.fromEntries(SECTION_NAMES.map((name) => [name, { bytes: 0, estimatedTokens: 0 }])),
+    serializationOverheadBytes: 0
+  } as PalaceSectionMetrics;
+}
+
+function measureSections(material: PalaceSectionMaterial, contextBytes: number): PalaceSectionMetrics {
+  const metrics = emptySectionMetrics();
+  let measuredBytes = 0;
+  for (const name of SECTION_NAMES) {
+    const bytes = Buffer.byteLength(material[name], "utf8");
+    metrics[name] = {
+      bytes,
+      estimatedTokens: estimateTokens(material[name])
+    };
+    measuredBytes += bytes;
+  }
+  const serializationOverheadBytes = contextBytes - measuredBytes;
+  if (serializationOverheadBytes < 0) {
+    throw new Error(`Section metrics exceed the serialized payload by ${Math.abs(serializationOverheadBytes)} bytes.`);
+  }
+  metrics.serializationOverheadBytes = serializationOverheadBytes;
+  return metrics;
+}
+
+function renderSectionMetricSummary(metrics: PalaceSectionMetrics): string {
+  return SECTION_NAMES
+    .map((name) => `${name}=${metrics[name].bytes}/${metrics[name].estimatedTokens}`)
+    .join(" | ");
+}
+
+function jsonLeafMaterial(value: unknown): string {
+  if (value === undefined) return "";
+  if (value === null || typeof value !== "object") return JSON.stringify(value) ?? "";
+  if (Array.isArray(value)) return value.map(jsonLeafMaterial).join("");
+  return Object.values(value).map(jsonLeafMaterial).join("");
+}
+
+function compactDrawer(drawer: PackedDrawer): unknown {
+  return {
+    sourcePath: drawer.node.sourcePath,
+    palacePath: drawer.node.palacePath,
+    title: drawer.node.title,
+    tier: drawer.step.tier ?? inferredTier(drawer.step.priority),
+    loadLevel: drawer.step.loadLevel,
+    reason: drawer.reason,
+    estimatedTokens: drawer.tokens,
+    content: drawer.content
   };
 }
 
@@ -885,6 +1102,22 @@ function compactSelection(selection: PalaceModeSelection): unknown {
 function renderRouteReference(step: PalaceRouteStep): string {
   const tier = step.tier ?? inferredTier(step.priority);
   return `- ${step.sourcePath} (${tier}, ${step.loadLevel}): ${step.reason}`;
+}
+
+function renderAdaptiveDrawerLines(drawer: PackedDrawer): string[] {
+  const location = drawer.node.startLine
+    ? `${drawer.node.sourcePath}:${drawer.node.startLine}${drawer.node.endLine ? `-${drawer.node.endLine}` : ""}`
+    : drawer.node.sourcePath;
+  return [
+    `### ${drawer.step.tier ?? inferredTier(drawer.step.priority)}: ${location}`,
+    "",
+    `Reason: ${drawer.reason}`,
+    "",
+    `\`\`\`${languageFence(drawer.node)}`,
+    drawer.content.trimEnd(),
+    "```",
+    ""
+  ];
 }
 
 function inferredTier(priority: number): "primary" | "support" | "deferred" {
