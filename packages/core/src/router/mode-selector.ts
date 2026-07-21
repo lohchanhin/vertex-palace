@@ -1,4 +1,5 @@
 import type {
+  MemoryPreflightResult,
   PalaceIndex,
   PalaceMode,
   PalaceModeSelection,
@@ -10,6 +11,7 @@ export type SelectPalaceModeOptions = {
   budget?: number;
   override?: PalaceMode;
   relevantMemoryCount?: number;
+  memoryPreflight?: MemoryPreflightResult;
 };
 
 const DEFAULT_CONTEXT_BUDGET = 6_000;
@@ -24,99 +26,183 @@ export function selectPalaceMode(
   const fileCount = Object.keys(index.fileHashes).length;
   const explicitFiles = explicitFileReferences(task);
   const riskSignals = detectRiskSignals(normalizedTask, route);
-  const memoryEvidenceAvailable = (options.relevantMemoryCount ?? 0) > 0;
+  const memoryEvidenceCount = options.memoryPreflight?.included ?? options.relevantMemoryCount ?? 0;
+  const memoryEvidenceAvailable = memoryEvidenceCount > 0;
   const primarySteps = route.route.filter((step) => (step.tier ?? inferredTier(step.priority)) === "primary");
   const primaryCount = primarySteps.length;
   const uncertainRoute = route.confidence < 0.45;
+  const singleExplicitTarget = explicitFiles.length === 1 && route.confidence >= 0.45;
+  const singleImplicitTarget = explicitFiles.length === 0
+    && new Set(primarySteps.map((step) => step.sourcePath)).size === 1
+    && route.confidence >= 0.5;
+  const highConfidenceSingleFile = singleExplicitTarget || singleImplicitTarget;
+  const memoryCheckedAndAbsent = options.memoryPreflight
+    ? options.memoryPreflight.included === 0
+    : options.relevantMemoryCount === 0;
+  const structuralSelection = selectStructuralMode({
+    fileCount,
+    explicitFiles,
+    primaryCount,
+    highConfidenceSingleFile,
+    memoryCheckedAndAbsent,
+    uncertainRoute,
+    riskSignals,
+    budget: options.budget
+  });
 
   if (options.override) {
-    return buildSelection(
+    const overridden = buildSelection(
       options.override,
       [`Mode explicitly set to ${options.override}.`],
       riskSignals,
       options.budget,
       1
     );
+    return withMemoryTransition(overridden, options.override, options.memoryPreflight);
   }
 
-  if (riskSignals.memoryRelevant || riskSignals.staleMemoryRisk || riskSignals.tenantIsolationRisk) {
-    const reasons = [
-      riskSignals.tenantIsolationRisk ? "Tenant or client isolation needs scoped historical evidence." : undefined,
-      riskSignals.staleMemoryRisk ? "The task may conflict with stale or migrated behavior." : undefined,
-      riskSignals.memoryRelevant ? "The task explicitly depends on prior decisions or pitfalls." : undefined
-    ].filter((reason): reason is string => Boolean(reason));
-    return buildSelection("guarded-memory-palace", reasons, riskSignals, options.budget, 0.88);
-  }
+  const keywordGuardRequired = riskSignals.memoryRelevant
+    || riskSignals.staleMemoryRisk
+    || riskSignals.tenantIsolationRisk;
+  const selectionBeforeMemory = keywordGuardRequired
+    ? buildSelection("guarded-memory-palace", guardedReasons(riskSignals), riskSignals, options.budget, 0.88)
+    : memoryEvidenceAvailable
+      ? buildSelection(
+          "full-palace",
+          [`${memoryEvidenceCount} relevant memory item(s) require scoped delivery before narrowing context.`],
+          riskSignals,
+          options.budget,
+          0.82
+        )
+      : structuralSelection;
 
-  const singleExplicitTarget = explicitFiles.length === 1 && route.confidence >= 0.45;
-  const singleImplicitTarget = explicitFiles.length === 0
-    && new Set(primarySteps.map((step) => step.sourcePath)).size === 1
-    && route.confidence >= 0.5;
-  const highConfidenceSingleFile = singleExplicitTarget || singleImplicitTarget;
-  const memoryCheckedAndAbsent = options.relevantMemoryCount === 0;
+  if (!options.memoryPreflight) return selectionBeforeMemory;
+
+  const guardedDeliveryRequired = options.memoryPreflight.conflictCount > 0
+    || options.memoryPreflight.requiresGuardedDelivery
+    || (memoryEvidenceAvailable && keywordGuardRequired);
+  const finalSelection = guardedDeliveryRequired
+    ? buildSelection("guarded-memory-palace", guardedReasons(riskSignals, options.memoryPreflight), riskSignals, options.budget, 0.88)
+    : memoryEvidenceAvailable
+      ? buildSelection(
+          "full-palace",
+          [`${memoryEvidenceCount} current relevant memory item(s) require scoped delivery before narrowing context.`],
+          riskSignals,
+          options.budget,
+          0.82
+        )
+      : structuralSelection;
+
+  return withMemoryTransition(finalSelection, selectionBeforeMemory.mode, options.memoryPreflight);
+}
+
+function selectStructuralMode(input: {
+  fileCount: number;
+  explicitFiles: string[];
+  primaryCount: number;
+  highConfidenceSingleFile: boolean;
+  memoryCheckedAndAbsent: boolean;
+  uncertainRoute: boolean;
+  riskSignals: PalaceRiskSignals;
+  budget?: number;
+}): PalaceModeSelection {
   if (
-    highConfidenceSingleFile &&
-    memoryCheckedAndAbsent &&
-    !riskSignals.crossStack &&
-    !riskSignals.publicContractRisk &&
-    !riskSignals.scopeRisk &&
-    !riskSignals.verificationChangeRisk
+    input.highConfidenceSingleFile
+    && input.memoryCheckedAndAbsent
+    && !input.riskSignals.crossStack
+    && !input.riskSignals.tenantIsolationRisk
+    && !input.riskSignals.publicContractRisk
+    && !input.riskSignals.scopeRisk
+    && !input.riskSignals.verificationChangeRisk
   ) {
     return buildSelection(
       "bypass",
       ["Safe one-file route: no relevant memory or boundary risk."],
-      riskSignals,
-      options.budget,
-      explicitFiles.length === 1 ? 0.92 : 0.88
-    );
-  }
-
-  if (memoryEvidenceAvailable) {
-    return buildSelection(
-      "full-palace",
-      [`${options.relevantMemoryCount} relevant memory item(s) require scoped delivery before narrowing context.`],
-      riskSignals,
-      options.budget,
-      0.82
+      input.riskSignals,
+      input.budget,
+      input.explicitFiles.length === 1 ? 0.92 : 0.88
     );
   }
 
   const boundedTask =
-    !uncertainRoute &&
-    !riskSignals.crossStack &&
-    !riskSignals.publicContractRisk &&
-    !riskSignals.scopeRisk &&
-    !riskSignals.verificationChangeRisk &&
-    ((explicitFiles.length === 1 && primaryCount <= 2) || fileCount <= 100);
+    !input.uncertainRoute
+    && !input.riskSignals.crossStack
+    && !input.riskSignals.tenantIsolationRisk
+    && !input.riskSignals.publicContractRisk
+    && !input.riskSignals.scopeRisk
+    && !input.riskSignals.verificationChangeRisk
+    && ((input.explicitFiles.length === 1 && input.primaryCount <= 2) || input.fileCount <= 100);
   if (boundedTask) {
     return buildSelection(
       "route-lite",
       [
-        explicitFiles.length === 1
+        input.explicitFiles.length === 1
           ? "The task names one file and the route is focused."
           : "The repository and route are small enough for a primary-only context."
       ],
-      riskSignals,
-      options.budget,
+      input.riskSignals,
+      input.budget,
       0.82
     );
   }
 
   const reasons = [
-    riskSignals.crossStack ? "The route crosses implementation layers." : undefined,
-    riskSignals.publicContractRisk ? "A public contract or schema may affect indirect dependencies." : undefined,
-    riskSignals.scopeRisk ? "The requested change has repository-wide or multi-file scope." : undefined,
-    riskSignals.verificationChangeRisk ? "The task explicitly requests verification-file changes." : undefined,
-    uncertainRoute ? "Route confidence is too low for a narrow context." : undefined,
-    fileCount > 100 ? `The repository contains ${fileCount} indexed files.` : undefined
+    input.riskSignals.crossStack ? "The route crosses implementation layers." : undefined,
+    input.riskSignals.tenantIsolationRisk ? "Tenant or client isolation requires broader scope evidence." : undefined,
+    input.riskSignals.publicContractRisk ? "A public contract or schema may affect indirect dependencies." : undefined,
+    input.riskSignals.scopeRisk ? "The requested change has repository-wide or multi-file scope." : undefined,
+    input.riskSignals.verificationChangeRisk ? "The task explicitly requests verification-file changes." : undefined,
+    input.uncertainRoute ? "Route confidence is too low for a narrow context." : undefined,
+    input.fileCount > 100 ? `The repository contains ${input.fileCount} indexed files.` : undefined
   ].filter((reason): reason is string => Boolean(reason));
   return buildSelection(
     "full-palace",
     reasons.length ? reasons : ["The task benefits from primary and supporting routed context."],
-    riskSignals,
-    options.budget,
-    uncertainRoute ? 0.68 : 0.8
+    input.riskSignals,
+    input.budget,
+    input.uncertainRoute ? 0.68 : 0.8
   );
+}
+
+function guardedReasons(
+  riskSignals: PalaceRiskSignals,
+  memoryPreflight?: MemoryPreflightResult
+): string[] {
+  const reasons = [
+    riskSignals.tenantIsolationRisk ? "Tenant or client isolation needs scoped historical evidence." : undefined,
+    riskSignals.staleMemoryRisk ? "The task may conflict with stale or migrated behavior." : undefined,
+    riskSignals.memoryRelevant ? "The task explicitly depends on prior decisions or pitfalls." : undefined,
+    memoryPreflight?.conflictCount
+      ? `${memoryPreflight.conflictCount} memory conflict(s) could not be safely resolved during preflight.`
+      : undefined,
+    memoryPreflight?.included
+      ? `${memoryPreflight.included} current memory item(s) require guarded delivery.`
+      : undefined
+  ].filter((reason): reason is string => Boolean(reason));
+  return reasons.length ? reasons : ["Memory evidence requires guarded delivery."];
+}
+
+function withMemoryTransition(
+  selection: PalaceModeSelection,
+  selectedModeBeforeMemory: PalaceMode,
+  memoryPreflight?: MemoryPreflightResult
+): PalaceModeSelection {
+  if (!memoryPreflight) return selection;
+  const safelyRejected = memoryPreflight.candidates > 0
+    && memoryPreflight.included === 0
+    && memoryPreflight.conflictCount === 0
+    && memoryPreflight.excluded.length === memoryPreflight.candidates
+    && memoryPreflight.excluded.every((item) => item.reason === "expired" || item.reason === "scope_mismatch");
+  const downgraded = safelyRejected
+    && selectedModeBeforeMemory === "guarded-memory-palace"
+    && selection.mode !== "guarded-memory-palace";
+  return {
+    ...selection,
+    memoryDecision: memoryPreflight.decision,
+    selectedModeBeforeMemory,
+    selectedModeAfterMemory: selection.mode,
+    ...(downgraded ? { modeDowngradeReason: "all_candidates_safely_rejected" as const } : {})
+  };
 }
 
 function detectRiskSignals(task: string, route: PalaceRoute): PalaceRiskSignals {

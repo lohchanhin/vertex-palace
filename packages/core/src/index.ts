@@ -91,7 +91,7 @@ export async function palaceContext(input: import("@vertex-palace/shared").Palac
     });
   }
 
-  const [{ routePalace }, { readIndex }, { selectPalaceMode }, { readGuardedMemory }] = await Promise.all([
+  const [{ routePalace }, { readIndex }, { selectPalaceMode }, { readGuardedMemory, MEMORY_PREFLIGHT_POLICY }] = await Promise.all([
     import("./router/route-planner"),
     import("./storage/read-palace"),
     import("./router/mode-selector"),
@@ -102,23 +102,18 @@ export async function palaceContext(input: import("@vertex-palace/shared").Palac
     routeLimit: input.routeLimit
   });
   const index = await readIndex(root);
-  const memoryProbe = input.mode
-    ? undefined
-    : await readGuardedMemory(root, {
-        task: input.task,
-        taskType: route.taskType,
-        limit: 3,
-        maxTokens: 600,
-        maxAgeDays: 90,
-        minRelevance: 2
-      });
+  const memoryPreflight = await readGuardedMemory(root, {
+    task: input.task,
+    taskType: route.taskType,
+    ...MEMORY_PREFLIGHT_POLICY
+  });
   const modeSelection = selectPalaceMode(index, route, input.task, {
     budget: input.budget,
     override: input.mode,
-    relevantMemoryCount: memoryProbe?.items.length
+    memoryPreflight
   });
   if (modeSelection.mode === "bypass") {
-    return packBypassContext(root, input.task, route, modeSelection, input.format);
+    return packBypassContext(root, input.task, route, modeSelection, input.format, memoryPreflight);
   }
   return packContext(root, input.task, {
     budget: input.budget,
@@ -127,7 +122,8 @@ export async function palaceContext(input: import("@vertex-palace/shared").Palac
     routeLimit: input.routeLimit,
     maxDrawers: input.maxDrawers,
     includeExcluded: false,
-    modeSelection
+    modeSelection,
+    preparedMemory: memoryPreflight
   });
 }
 

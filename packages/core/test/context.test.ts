@@ -1,7 +1,8 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { indexPalace, palaceContext, serializePackOutput } from "../src/index";
+import * as memoryModule from "../src/memory/pitfall-board";
 import { writeMemory } from "../src/memory/write-memory";
 import { getPalaceStatus } from "../src/storage/status";
 import { withFixture } from "./test-utils";
@@ -190,6 +191,128 @@ describe("palaceContext", () => {
       expect(output.mode).toBe("full-palace");
       expect(output.memoryTelemetry?.memoryIncluded).toBe(1);
       expect(output.payload?.memoryItemCount).toBe(1);
+    });
+  });
+
+  it("selects memory once and reuses the prepared result for the payload", async () => {
+    await withFixture("ts-api", async (root) => {
+      const target = path.join(root, "src", "format-currency.mjs");
+      await writeFile(target, "export function formatCurrency(value) { return `$${value.toFixed(2)}`; }\n", "utf8");
+      await indexPalace(root);
+      await writeMemory({
+        root,
+        task: "format currency historical decision",
+        outcome: "partial",
+        pitfalls: ["Keep the negative-zero formatting decision local to the formatter."],
+        tags: ["currency", "formatting", "decision"]
+      });
+      const memorySpy = vi.spyOn(memoryModule, "readGuardedMemory");
+
+      try {
+        const output = await palaceContext({
+          root,
+          task: "Use the historical decision to fix negative-zero currency formatting in src/format-currency.mjs",
+          budget: 6000,
+          auto: true,
+          format: "json"
+        });
+
+        expect(output.memoryTelemetry?.memoryIncluded).toBe(1);
+        expect(memorySpy).toHaveBeenCalledTimes(1);
+      } finally {
+        memorySpy.mockRestore();
+      }
+    });
+  });
+
+  it("uses one age policy for preflight and final memory delivery", async () => {
+    await withFixture("ts-api", async (root) => {
+      await mkdir(path.join(root, "src", "scheduler"), { recursive: true });
+      await writeFile(
+        path.join(root, "src", "scheduler", "load-batch-limit.mjs"),
+        "export function loadBatchLimit() { return 25; }\n",
+        "utf8"
+      );
+      await indexPalace(root);
+      const createdAt = new Date(Date.now() - 70 * 86_400_000).toISOString();
+      await writeFile(
+        path.join(root, ".palace", "memory", "pitfall-board.json"),
+        JSON.stringify({
+          entries: [{
+            id: "scheduler-current-policy",
+            text: "Keep the migrated scheduler batch limit in the runtime loader.",
+            task: "scheduler migration batch limit decision",
+            outcome: "partial",
+            source: "pitfall",
+            tags: ["scheduler", "migration", "batch", "decision"],
+            memoryPath: ".palace/memory/scheduler-current-policy.md",
+            createdAt
+          }]
+        }),
+        "utf8"
+      );
+
+      const output = await palaceContext({
+        root,
+        task: "Use the previous scheduler migration decision to fix the batch limit in src/scheduler/load-batch-limit.mjs",
+        budget: 6000,
+        auto: true,
+        format: "json"
+      });
+      const json = output.json as { memory: Array<{ id: string }>; memoryTelemetry: { includedIds: string[] } };
+
+      expect(output.memoryTelemetry?.memoryCandidates).toBe(1);
+      expect(output.memoryTelemetry?.memoryIncluded).toBe(1);
+      expect(output.memoryTelemetry?.memoryExcluded).toEqual([]);
+      expect(json.memory.map((item) => item.id)).toEqual(["scheduler-current-policy"]);
+      expect(json.memoryTelemetry.includedIds).toEqual(["scheduler-current-policy"]);
+    });
+  });
+
+  it("downgrades safely rejected stale memory without changing the bypass JSON contract", async () => {
+    await withFixture("ts-api", async (root) => {
+      const target = path.join(root, "src", "format-currency.mjs");
+      await writeFile(target, "export function formatCurrency(value) { return `$${value.toFixed(2)}`; }\n", "utf8");
+      await indexPalace(root);
+      await writeFile(
+        path.join(root, ".palace", "memory", "pitfall-board.json"),
+        JSON.stringify({
+          entries: [{
+            id: "expired-v1-formatting",
+            text: "Use the legacy v1 currency formatter after migration.",
+            task: "legacy currency formatter migration",
+            outcome: "partial",
+            source: "pitfall",
+            tags: ["currency", "formatter", "migration", "legacy"],
+            memoryPath: ".palace/memory/expired-v1-formatting.md",
+            createdAt: "2025-01-01T00:00:00.000Z"
+          }]
+        }),
+        "utf8"
+      );
+
+      const output = await palaceContext({
+        root,
+        task: "Fix stale legacy currency migration behavior in src/format-currency.mjs",
+        budget: 6000,
+        auto: true,
+        format: "json"
+      });
+
+      expect(output.mode).toBe("bypass");
+      expect(Object.keys(output.json as Record<string, unknown>)).toEqual(["mode", "primaryCandidate", "reason"]);
+      expect(output.memoryTelemetry).toMatchObject({
+        memoryCandidates: 1,
+        memoryIncluded: 0,
+        memoryDecision: "stale_rejected",
+        rejectedStaleCount: 1,
+        rejectedScopeCount: 0,
+        conflictCount: 0,
+        requiresGuardedDelivery: false,
+        selectedModeBeforeMemory: "guarded-memory-palace",
+        selectedModeAfterMemory: "bypass",
+        modeDowngradeReason: "all_candidates_safely_rejected"
+      });
     });
   });
 
@@ -440,7 +563,7 @@ describe("palaceContext", () => {
         auto: true
       });
 
-      expect(output.mode).toBe("guarded-memory-palace");
+      expect(output.mode).not.toBe("guarded-memory-palace");
       expect(output.payload?.memoryCandidateCount).toBe(2);
       expect(output.payload?.memoryItemCount).toBe(0);
       expect(output.payload?.memoryExcludedCount).toBe(2);
@@ -448,8 +571,37 @@ describe("palaceContext", () => {
         expect.objectContaining({ reason: "scope_mismatch" }),
         expect.objectContaining({ reason: "scope_mismatch" })
       ]);
-      expect(output.markdown).toContain("No relevant, current memory evidence met the scope and age checks.");
-      expect(output.markdown).toContain("2 retrieved memory item(s) were excluded with machine-readable reasons.");
+      expect(output.memoryTelemetry).toMatchObject({
+        memoryDecision: "scope_rejected",
+        rejectedStaleCount: 0,
+        rejectedScopeCount: 2,
+        conflictCount: 0,
+        requiresGuardedDelivery: false,
+        selectedModeBeforeMemory: "guarded-memory-palace",
+        selectedModeAfterMemory: output.mode,
+        modeDowngradeReason: "all_candidates_safely_rejected"
+      });
+      expect(output.markdown).toContain("Memory preflight: scope_rejected; 2 candidate(s) rejected (scope_mismatch); no memory delivered.");
+      expect(output.markdown).not.toContain("## Guarded Memory");
+      expect(output.markdown).not.toContain("No relevant, current memory evidence met the scope and age checks.");
+
+      const jsonOutput = await palaceContext({
+        root,
+        task: "Fix the v2 batch scheduler now that the configuration migration is complete.",
+        budget: 6000,
+        auto: true,
+        format: "json"
+      });
+      const json = jsonOutput.json as {
+        memory: unknown[];
+        memoryRejection: { decision: string; rejectedCount: number; reasons: string[] };
+      };
+      expect(json.memory).toEqual([]);
+      expect(json.memoryRejection).toEqual({
+        decision: "scope_rejected",
+        rejectedCount: 2,
+        reasons: ["scope_mismatch"]
+      });
     });
   });
 

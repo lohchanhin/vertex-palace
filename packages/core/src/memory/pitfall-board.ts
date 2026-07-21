@@ -1,8 +1,11 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import type {
-  MemoryExclusionReason,
+  GuardedMemoryItem as SharedGuardedMemoryItem,
+  MemoryExclusion,
   MemoryInput,
+  MemoryPreflightDecision,
+  MemoryPreflightResult,
   MemorySelectionTelemetry
 } from "@vertex-palace/shared";
 import { hashText } from "../scanner/file-hash";
@@ -32,23 +35,18 @@ type PitfallBoardPackOptions = {
   limit?: number;
 };
 
-export type GuardedMemoryItem = {
-  id: string;
-  text: string;
-  scope: string;
-  ageDays: number;
-  confidence: number;
-  risk: "low" | "medium" | "high";
-  source: PitfallBoardEntry["source"];
-  memoryPath: string;
-  contradictionCheck: string;
-};
+type GuardedMemoryItem = SharedGuardedMemoryItem;
 
-export type GuardedMemoryResult = {
-  items: GuardedMemoryItem[];
-  estimatedTokens: number;
+export type GuardedMemoryResult = MemoryPreflightResult & {
   telemetry: MemorySelectionTelemetry;
 };
+
+export const MEMORY_PREFLIGHT_POLICY = {
+  limit: 3,
+  maxTokens: 600,
+  maxAgeDays: 90,
+  minRelevance: 2
+} as const;
 
 export type GuardedMemoryOptions = {
   task: string;
@@ -168,7 +166,7 @@ export async function readGuardedMemory(
   );
 
   const items: GuardedMemoryItem[] = [];
-  const excluded: Array<{ id: string; reason: MemoryExclusionReason }> = [];
+  const excluded: MemoryExclusion[] = [];
   let estimatedTokens = 0;
   for (const candidate of candidates) {
     if (candidate.ageDays > maxAgeDays) {
@@ -199,18 +197,112 @@ export async function readGuardedMemory(
     estimatedTokens += itemTokens;
   }
 
+  const candidateIds = candidates.map((candidate) => candidate.entry.id);
+  const includedIds = items.map((item) => item.id);
+  const preflight = buildMemoryPreflight({
+    task: options.task,
+    items,
+    estimatedTokens,
+    candidateIds,
+    includedIds,
+    excluded,
+    scopeInference: scopeResolution.inference
+  });
+
   return {
+    ...preflight,
     items,
     estimatedTokens,
     telemetry: {
       memoryCandidates: candidates.length,
       memoryIncluded: items.length,
       memoryExcluded: excluded,
-      candidateIds: candidates.map((candidate) => candidate.entry.id),
-      includedIds: items.map((item) => item.id),
-      ...(scopeResolution.inference ? { scopeInference: scopeResolution.inference } : {})
+      candidateIds,
+      includedIds,
+      ...(scopeResolution.inference ? { scopeInference: scopeResolution.inference } : {}),
+      memoryDecision: preflight.decision,
+      currentRelevantCount: preflight.currentRelevantCount,
+      rejectedStaleCount: preflight.rejectedStaleCount,
+      rejectedScopeCount: preflight.rejectedScopeCount,
+      conflictCount: preflight.conflictCount,
+      requiresGuardedDelivery: preflight.requiresGuardedDelivery
     }
   };
+}
+
+function buildMemoryPreflight(input: {
+  task: string;
+  items: GuardedMemoryItem[];
+  estimatedTokens: number;
+  candidateIds: string[];
+  includedIds: string[];
+  excluded: MemoryExclusion[];
+  scopeInference?: NonNullable<MemorySelectionTelemetry["scopeInference"]>;
+}): MemoryPreflightResult {
+  const rejectedStaleCount = input.excluded.filter((item) => item.reason === "expired").length;
+  const rejectedScopeCount = input.excluded.filter((item) => item.reason === "scope_mismatch").length;
+  const conflictCount = input.excluded.filter((item) => item.reason === "token_budget_exceeded").length;
+  const currentRelevantCount = input.items.length;
+  const decision = memoryPreflightDecision({
+    candidates: input.candidateIds.length,
+    included: input.items.length,
+    rejectedStaleCount,
+    rejectedScopeCount,
+    conflictCount
+  });
+  const taskExplicitlyNeedsMemory = taskExplicitlyDependsOnMemory(input.task);
+  const taskNeedsGuardedMemory = taskRequiresGuardedDelivery(input.task, input.items);
+  const requiresGuardedDelivery = conflictCount > 0
+    || (input.items.length > 0 && taskNeedsGuardedMemory)
+    || (input.candidateIds.length === 0 && taskExplicitlyNeedsMemory);
+
+  return {
+    decision,
+    candidates: input.candidateIds.length,
+    included: input.items.length,
+    excluded: input.excluded,
+    candidateIds: input.candidateIds,
+    includedIds: input.includedIds,
+    currentRelevantCount,
+    rejectedStaleCount,
+    rejectedScopeCount,
+    conflictCount,
+    requiresGuardedDelivery,
+    items: input.items,
+    estimatedTokens: input.estimatedTokens,
+    ...(input.scopeInference ? { scopeInference: input.scopeInference } : {})
+  };
+}
+
+function memoryPreflightDecision(input: {
+  candidates: number;
+  included: number;
+  rejectedStaleCount: number;
+  rejectedScopeCount: number;
+  conflictCount: number;
+}): MemoryPreflightDecision {
+  if (input.conflictCount > 0) return "conflict_requires_guard";
+  if (input.included > 0) return "current_memory_available";
+  if (input.candidates === 0) return "none";
+  if (input.rejectedStaleCount > 0) return "stale_rejected";
+  if (input.rejectedScopeCount > 0) return "scope_rejected";
+  return "none";
+}
+
+function taskRequiresGuardedDelivery(task: string, items: GuardedMemoryItem[]): boolean {
+  const normalized = task.toLowerCase();
+  const historicalDecision = taskExplicitlyDependsOnMemory(normalized);
+  const staleRisk = /\b(?:stale|legacy|deprecated|outdated|migration|migrate|old behavior)\b/.test(normalized);
+  const tenantWord = /\b(?:tenant|client|customer)\b/.test(normalized);
+  const isolationWord = /\b(?:isolation|isolated|shared|multi-client|multi-tenant)\b/.test(normalized);
+  const tenantScope = tenantWord && isolationWord;
+  return historicalDecision || staleRisk || tenantScope || items.some((item) => item.risk === "high");
+}
+
+function taskExplicitlyDependsOnMemory(task: string): boolean {
+  return /\b(?:history|historical|memory|pitfall|decision|remembered)\b/i.test(task)
+    || /\b(?:previous|prior)\s+(?:decision|pitfall|history|memory)\b/i.test(task)
+    || /(?:åŽ†å²|æ­·å²|è®°å¿†|è¨˜æ†¶|å†³å®š|æ±ºå®š|å†³ç­–|æ±ºç­–|è¸©å‘)/u.test(task);
 }
 
 export function renderGuardedMemoryItem(item: GuardedMemoryItem): string {

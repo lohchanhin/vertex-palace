@@ -144,6 +144,11 @@ describe("memory", () => {
       });
 
       expect(result.items.map((item) => item.id)).toEqual(["memory-included"]);
+      expect(result.decision).toBe("current_memory_available");
+      expect(result.currentRelevantCount).toBe(1);
+      expect(result.rejectedStaleCount).toBe(1);
+      expect(result.rejectedScopeCount).toBe(1);
+      expect(result.conflictCount).toBe(0);
       expect(result.telemetry).toEqual({
         memoryCandidates: 4,
         memoryIncluded: 1,
@@ -153,7 +158,13 @@ describe("memory", () => {
           { id: "memory-scope", reason: "scope_mismatch" }
         ],
         candidateIds: ["memory-included", "memory-limit", "memory-expired", "memory-scope"],
-        includedIds: ["memory-included"]
+        includedIds: ["memory-included"],
+        memoryDecision: "current_memory_available",
+        currentRelevantCount: 1,
+        rejectedStaleCount: 1,
+        rejectedScopeCount: 1,
+        conflictCount: 0,
+        requiresGuardedDelivery: false
       });
     });
   });
@@ -193,8 +204,32 @@ describe("memory", () => {
         memoryIncluded: 0,
         memoryExcluded: [{ id: "memory-too-large", reason: "token_budget_exceeded" }],
         candidateIds: ["memory-too-large"],
-        includedIds: []
+        includedIds: [],
+        memoryDecision: "conflict_requires_guard",
+        currentRelevantCount: 0,
+        rejectedStaleCount: 0,
+        rejectedScopeCount: 0,
+        conflictCount: 1,
+        requiresGuardedDelivery: true
       });
+    });
+  });
+
+  it("guards missing explicit decision memory without guarding a bare migration keyword", async () => {
+    await withFixture("ts-api", async (root) => {
+      await initPalace(root);
+
+      const decision = await readGuardedMemory(root, {
+        task: "Use the historical ownership decision for this token"
+      });
+      const migration = await readGuardedMemory(root, {
+        task: "Fix the scheduler after migration"
+      });
+
+      expect(decision.decision).toBe("none");
+      expect(decision.requiresGuardedDelivery).toBe(true);
+      expect(migration.decision).toBe("none");
+      expect(migration.requiresGuardedDelivery).toBe(false);
     });
   });
 
@@ -229,6 +264,9 @@ describe("memory", () => {
       });
 
       expect(result.items.map((item) => item.id)).toEqual(["memory-scheduler-v2"]);
+      expect(result.decision).toBe("current_memory_available");
+      expect(result.currentRelevantCount).toBe(1);
+      expect(result.rejectedScopeCount).toBe(1);
       expect(result.telemetry.memoryExcluded).toEqual([
         { id: "memory-scheduler-v1", reason: "scope_mismatch" }
       ]);
@@ -313,6 +351,11 @@ describe("memory", () => {
       });
 
       expect(result.items).toEqual([]);
+      expect(result.decision).toBe("scope_rejected");
+      expect(result.currentRelevantCount).toBe(0);
+      expect(result.rejectedScopeCount).toBe(2);
+      expect(result.conflictCount).toBe(0);
+      expect(result.requiresGuardedDelivery).toBe(false);
       expect(result.telemetry.memoryExcluded).toEqual([
         { id: "memory-aurora", reason: "scope_mismatch" },
         { id: "memory-beta", reason: "scope_mismatch" }

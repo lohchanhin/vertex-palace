@@ -13,6 +13,7 @@ import type {
 } from "@vertex-palace/shared";
 import { DEFAULT_BUDGET } from "../config/defaults";
 import {
+  MEMORY_PREFLIGHT_POLICY,
   readGuardedMemory,
   readPitfallBoardForPack,
   renderGuardedMemoryItem,
@@ -32,6 +33,7 @@ export type PackContextOptions = {
   maxDrawers?: number;
   includeExcluded?: boolean;
   modeSelection?: PalaceModeSelection;
+  preparedMemory?: GuardedMemoryResult;
 };
 
 type PackedDrawer = {
@@ -58,7 +60,7 @@ export async function packContext(root: string, task: string, options: PackConte
 
   if (options.modeSelection) {
     if (options.modeSelection.mode === "bypass") {
-      return packBypassContext(root, task, route, options.modeSelection, options.format);
+      return packBypassContext(root, task, route, options.modeSelection, options.format, options.preparedMemory);
     }
     return packAdaptiveContext(root, task, route, refreshedIndex.nodes, options);
   }
@@ -116,15 +118,14 @@ async function packAdaptiveContext(
   options: PackContextOptions
 ): Promise<PackOutput> {
   const selection = options.modeSelection as PalaceModeSelection;
-  const memory = selection.memoryLevel !== "none"
+  const selectedMemory = options.preparedMemory ?? (selection.memoryLevel !== "none"
     ? await readGuardedMemory(root, {
         task,
         taskType: route.taskType,
-        limit: selection.riskSignals.staleMemoryRisk ? 2 : 3,
-        maxTokens: selection.riskSignals.staleMemoryRisk ? 500 : 600,
-        maxAgeDays: selection.riskSignals.staleMemoryRisk ? 60 : 90
+        ...MEMORY_PREFLIGHT_POLICY
       })
-    : emptyGuardedMemory();
+    : emptyGuardedMemory());
+  const memory = withModeTelemetry(selectedMemory, selection);
   const tiered = tierRoute(route, memory.telemetry.scopeInference?.client);
   const guardrails = adaptiveGuardrails(selection, memory);
   const boundaries = buildExecutionBoundaries(route, tiered, selection, memory);
@@ -332,7 +333,8 @@ export async function packBypassContext(
   task: string,
   route: PalaceRoute,
   selection: PalaceModeSelection,
-  format: PackFormat = "markdown"
+  format: PackFormat = "markdown",
+  preparedMemory?: GuardedMemoryResult
 ): Promise<PackOutput> {
   const primary = route.route.find((step) => (step.tier ?? inferredTier(step.priority)) === "primary") ?? route.route[0];
   const primaryCandidate = primary ? stripSourceLocation(primary.sourcePath) : null;
@@ -357,7 +359,8 @@ export async function packBypassContext(
         `Reason: ${reason}`,
         ""
       ].join("\n");
-  const telemetry = emptyMemoryTelemetry();
+  const memory = withModeTelemetry(preparedMemory ?? emptyGuardedMemory(), selection);
+  const telemetry = memory.telemetry;
   const payload = withMeasuredPayload({
     mode: "bypass",
     calls: 1,
@@ -369,8 +372,8 @@ export async function packBypassContext(
     supportCount: 0,
     deferredCount: 0,
     memoryItemCount: 0,
-    memoryCandidateCount: 0,
-    memoryExcludedCount: 0,
+    memoryCandidateCount: memory.candidates,
+    memoryExcludedCount: memory.excluded.length,
     memoryEstimatedTokens: 0,
     guardrailCount: 0
   }, serialized);
@@ -480,6 +483,7 @@ function adaptiveJson(
     deferredReferences: deferredReferences.map(compactDeferredStep),
     guardrails,
     memory: memory.items,
+    ...(memoryRejectionSummary(memory) ? { memoryRejection: memoryRejectionSummary(memory) } : {}),
     memoryTelemetry: memory.telemetry,
     executionBoundaries: boundaries,
     recommendedExecution: recommendedExecution(selection.mode),
@@ -541,7 +545,7 @@ function renderAdaptiveMarkdown(
     lines.push("## Guardrails", "", ...guardrails.map((guardrail) => `- ${guardrail}`), "");
   }
 
-  if (selection.mode === "guarded-memory-palace" || memory.items.length) {
+  if ((selection.mode === "guarded-memory-palace" && !isSafeMemoryRejection(memory)) || memory.items.length) {
     lines.push(
       selection.mode === "guarded-memory-palace" ? "## Guarded Memory" : "## Relevant Memory",
       "",
@@ -552,7 +556,14 @@ function renderAdaptiveMarkdown(
     );
   }
 
-  if (memory.telemetry.memoryCandidates > 0) {
+  if (isSafeMemoryRejection(memory)) {
+    lines.push(
+      "## Memory Preflight",
+      "",
+      renderMemoryRejectionSummary(memory),
+      ""
+    );
+  } else if (memory.telemetry.memoryCandidates > 0) {
     lines.push(
       "## Memory Selection",
       "",
@@ -712,8 +723,16 @@ function adaptiveMaxDrawers(mode: PalaceModeSelection["mode"]): number {
 function adaptiveGuardrails(selection: PalaceModeSelection, memory: GuardedMemoryResult): string[] {
   const guardrails: string[] = [];
   if (memory.items.length) guardrails.push("Current code and tests outrank remembered decisions and pitfalls.");
+  if (isSafeMemoryRejection(memory)) {
+    guardrails.push("Current code and tests are authoritative; rejected historical memory must not be applied.");
+  }
+  if (memory.requiresGuardedDelivery && memory.items.length === 0 && !isSafeMemoryRejection(memory)) {
+    guardrails.push("Current code and tests are authoritative; do not infer a missing or undeliverable decision.");
+  }
   if (selection.riskSignals.tenantIsolationRisk) guardrails.push("Confirm tenant or client scope before changing shared behavior.");
-  if (selection.riskSignals.staleMemoryRisk) guardrails.push("Treat stale or legacy evidence as a warning, not an instruction.");
+  if (selection.riskSignals.staleMemoryRisk && !isSafeMemoryRejection(memory)) {
+    guardrails.push("Treat stale or legacy evidence as a warning, not an instruction.");
+  }
   if (selection.riskSignals.crossStack) guardrails.push("Verify the contract at every routed layer boundary.");
   if (selection.riskSignals.publicContractRisk) guardrails.push("Check callers and compatibility before changing the public contract.");
   return guardrails;
@@ -749,9 +768,10 @@ function buildExecutionBoundaries(
     "No unresolved conflict remains between current code, tests, and delivered memory."
   ];
   const conflictSummary: string[] = [];
-  if (selection.riskSignals.staleMemoryRisk) conflictSummary.push("Stale-memory risk is present; current code and tests must resolve any disagreement.");
+  const safeMemoryRejection = isSafeMemoryRejection(memory);
+  if (selection.riskSignals.staleMemoryRisk && !safeMemoryRejection) conflictSummary.push("Stale-memory risk is present; current code and tests must resolve any disagreement.");
   if (memory.items.length) conflictSummary.push(`${memory.items.length} delivered memory item(s) still require current-code contradiction checks.`);
-  if (memory.telemetry.memoryExcluded.length) conflictSummary.push(`${memory.telemetry.memoryExcluded.length} retrieved memory item(s) were excluded with machine-readable reasons.`);
+  if (memory.telemetry.memoryExcluded.length && !safeMemoryRejection) conflictSummary.push(`${memory.telemetry.memoryExcluded.length} retrieved memory item(s) were excluded with machine-readable reasons.`);
   if (selection.confidence < 0.7 || route.confidence < 0.5) conflictSummary.push("Routing confidence is limited; stop and widen only if Primary evidence disagrees with the task.");
   if (!conflictSummary.length) conflictSummary.push("Static routing found no explicit conflict; current code, tests, and runtime evidence remain authoritative.");
 
@@ -875,6 +895,17 @@ function inferredTier(priority: number): "primary" | "support" | "deferred" {
 
 function emptyGuardedMemory(): GuardedMemoryResult {
   return {
+    decision: "none",
+    candidates: 0,
+    included: 0,
+    excluded: [],
+    candidateIds: [],
+    includedIds: [],
+    currentRelevantCount: 0,
+    rejectedStaleCount: 0,
+    rejectedScopeCount: 0,
+    conflictCount: 0,
+    requiresGuardedDelivery: false,
     items: [],
     estimatedTokens: 0,
     telemetry: emptyMemoryTelemetry()
@@ -887,8 +918,62 @@ function emptyMemoryTelemetry(): MemorySelectionTelemetry {
     memoryIncluded: 0,
     memoryExcluded: [],
     candidateIds: [],
-    includedIds: []
+    includedIds: [],
+    memoryDecision: "none",
+    currentRelevantCount: 0,
+    rejectedStaleCount: 0,
+    rejectedScopeCount: 0,
+    conflictCount: 0,
+    requiresGuardedDelivery: false
   };
+}
+
+function withModeTelemetry(
+  memory: GuardedMemoryResult,
+  selection: PalaceModeSelection
+): GuardedMemoryResult {
+  return {
+    ...memory,
+    telemetry: {
+      ...memory.telemetry,
+      memoryDecision: memory.decision,
+      currentRelevantCount: memory.currentRelevantCount,
+      rejectedStaleCount: memory.rejectedStaleCount,
+      rejectedScopeCount: memory.rejectedScopeCount,
+      conflictCount: memory.conflictCount,
+      requiresGuardedDelivery: memory.requiresGuardedDelivery,
+      selectedModeBeforeMemory: selection.selectedModeBeforeMemory ?? selection.mode,
+      selectedModeAfterMemory: selection.selectedModeAfterMemory ?? selection.mode,
+      ...(selection.modeDowngradeReason ? { modeDowngradeReason: selection.modeDowngradeReason } : {})
+    }
+  };
+}
+
+function isSafeMemoryRejection(memory: GuardedMemoryResult): boolean {
+  return memory.candidates > 0
+    && memory.included === 0
+    && memory.conflictCount === 0
+    && memory.excluded.length === memory.candidates
+    && memory.excluded.every((item) => item.reason === "expired" || item.reason === "scope_mismatch");
+}
+
+function memoryRejectionSummary(memory: GuardedMemoryResult): {
+  decision: GuardedMemoryResult["decision"];
+  rejectedCount: number;
+  reasons: string[];
+} | undefined {
+  if (!isSafeMemoryRejection(memory)) return undefined;
+  return {
+    decision: memory.decision,
+    rejectedCount: memory.excluded.length,
+    reasons: [...new Set(memory.excluded.map((item) => item.reason))]
+  };
+}
+
+function renderMemoryRejectionSummary(memory: GuardedMemoryResult): string {
+  const summary = memoryRejectionSummary(memory);
+  if (!summary) return "";
+  return `Memory preflight: ${summary.decision}; ${summary.rejectedCount} candidate(s) rejected (${summary.reasons.join(", ")}); no memory delivered.`;
 }
 
 function adaptiveRouteSummary(

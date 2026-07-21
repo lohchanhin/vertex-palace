@@ -8,6 +8,10 @@ OpenAI Build Week work is documented separately in [BUILD_WEEK.md](./BUILD_WEEK.
 
 **Release status:** Version `0.3.0` is the competition release. The CLI, MCP server, and plugin instructions below are pinned to the same exact version. Do not install the incomplete `v0.2.4` plugin tag: its npm pin was never published.
 
+**Development note:** `main` now contains the unreleased `0.4.0-alpha` Memory Preflight work derived from the frozen v3 findings. It selects memory once, safely downgrades fully rejected stale or scope-mismatched candidates, and preserves guarded decision memory. Read the bilingual [engineering result](./docs/research/MEMORY_PREFLIGHT_0_4_ALPHA_RESULT.md). No `0.4.0-alpha` npm package, tag, or GitHub Release exists yet.
+
+**研发说明：** `main` 目前包含依据冻结 v3 研究结果完成、但尚未发布的 `0.4.0-alpha` Memory Preflight。它只筛选一次记忆，在陈旧或范围不符候选全部安全排除时自动降级，同时保留决策记忆的 guarded 保护。详见双语[工程结果](./docs/zh-CN/MEMORY_PREFLIGHT_0_4_ALPHA_RESULT.md)。目前尚未发布 `0.4.0-alpha` npm、Git tag 或 GitHub Release。
+
 **发布状态：** `0.3.0` 是比赛发布版本。以下 CLI、MCP server 与插件说明都固定到同一个准确版本。不要安装不完整的 `v0.2.4` 插件标签，因为它指向的 npm 版本从未发布。
 
 Name note: `记忆宫殿工具`, `记忆宫殿`, `memory palace`, `palace tool`, and the old name `Context Palace` all refer to Vertex Palace. The preferred MCP entry is `palace_context`; the preferred CLI entry is `palace context`. Lower-level `palace_status`, `palace_index`, `palace_route`, and `palace_pack` remain available for diagnosis and manual control.

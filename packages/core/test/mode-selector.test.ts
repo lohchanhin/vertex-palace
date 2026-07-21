@@ -25,6 +25,82 @@ function focusedRoute(confidence = 0.53): PalaceRoute {
 }
 
 describe("selectPalaceMode", () => {
+  it("does not let safely rejected stale memory force guarded mode", () => {
+    const task = "Fix the stale v1 migration behavior in src/format-currency.mjs after the old memory expired.";
+    const memoryPreflight = {
+      decision: "stale_rejected",
+      candidates: 2,
+      included: 0,
+      excluded: [
+        { id: "old-1", reason: "expired" },
+        { id: "old-2", reason: "expired" }
+      ],
+      candidateIds: ["old-1", "old-2"],
+      includedIds: [],
+      currentRelevantCount: 0,
+      rejectedStaleCount: 2,
+      rejectedScopeCount: 0,
+      conflictCount: 0,
+      requiresGuardedDelivery: false,
+      items: [],
+      estimatedTokens: 0
+    };
+    const selection = selectPalaceMode(smallIndex(), focusedRoute(), task, {
+      memoryPreflight
+    } as unknown as Parameters<typeof selectPalaceMode>[3]);
+
+    expect(selection.mode).toBe("bypass");
+  });
+
+  it("keeps current decision memory in a memory-bearing guarded mode", () => {
+    const task = "Use the historical tenant decision for Aurora and keep shared behavior isolated.";
+    const memoryPreflight = {
+      decision: "current_memory_available",
+      candidates: 1,
+      included: 1,
+      excluded: [],
+      candidateIds: ["aurora-owner"],
+      includedIds: ["aurora-owner"],
+      currentRelevantCount: 1,
+      rejectedStaleCount: 0,
+      rejectedScopeCount: 0,
+      conflictCount: 0,
+      requiresGuardedDelivery: true,
+      items: [{ id: "aurora-owner" }],
+      estimatedTokens: 20
+    };
+    const selection = selectPalaceMode(smallIndex(120), focusedRoute(), task, {
+      memoryPreflight
+    } as unknown as Parameters<typeof selectPalaceMode>[3]);
+
+    expect(selection.mode).toBe("guarded-memory-palace");
+    expect(selection.memoryLevel).toBe("guarded-evidence");
+  });
+
+  it("does not silently narrow an explicit decision-memory task when no candidate exists", () => {
+    const task = "Use the historical ownership decision to fix the tenant token without changing shared behavior.";
+    const memoryPreflight = {
+      decision: "none",
+      candidates: 0,
+      included: 0,
+      excluded: [],
+      candidateIds: [],
+      includedIds: [],
+      currentRelevantCount: 0,
+      rejectedStaleCount: 0,
+      rejectedScopeCount: 0,
+      conflictCount: 0,
+      requiresGuardedDelivery: true,
+      items: [],
+      estimatedTokens: 0
+    };
+    const selection = selectPalaceMode(smallIndex(), focusedRoute(), task, {
+      memoryPreflight
+    } as unknown as Parameters<typeof selectPalaceMode>[3]);
+
+    expect(selection.mode).toBe("guarded-memory-palace");
+  });
+
   it("bypasses a high-confidence single-file task after memory is confirmed absent", () => {
     const task = "Fix currency formatting so negative zero is rendered as $0.00. Keep the public API stable.";
     const selection = selectPalaceMode(smallIndex(), focusedRoute(), task, { relevantMemoryCount: 0 });

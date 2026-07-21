@@ -3,10 +3,61 @@ import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { indexPalace } from "../src/indexer/index-palace";
 import { writeMemory } from "../src/memory/write-memory";
+import { readGuardedMemory } from "../src/memory/pitfall-board";
 import { packContext } from "../src/packer/context-packer";
+import type { PackContextOptions } from "../src/packer/context-packer";
 import { withFixture } from "./test-utils";
 
 describe("packContext", () => {
+  it("uses a prepared memory result without reading the mutable board again", async () => {
+    await withFixture("ts-api", async (root) => {
+      await indexPalace(root);
+      await writeMemory({
+        root,
+        task: "login refresh token decision",
+        outcome: "partial",
+        pitfalls: ["Keep refresh-token validation in the token service."],
+        tags: ["login", "refresh", "token", "decision"]
+      });
+      const task = "Use the previous login refresh token decision";
+      const preparedMemory = await readGuardedMemory(root, { task, minRelevance: 2 });
+      await writeFile(
+        path.join(root, ".palace", "memory", "pitfall-board.json"),
+        JSON.stringify({ entries: [] }),
+        "utf8"
+      );
+      const modeSelection = {
+        mode: "full-palace",
+        confidence: 0.82,
+        reasons: ["Prepared current memory is available."],
+        disabledSections: [],
+        maxContextTokens: 6000,
+        memoryLevel: "scoped-summary",
+        riskSignals: {
+          crossStack: false,
+          memoryRelevant: true,
+          staleMemoryRisk: false,
+          tenantIsolationRisk: false,
+          publicContractRisk: false,
+          scopeRisk: false,
+          verificationChangeRisk: false,
+          testOnly: false
+        }
+      } as const;
+
+      const pack = await packContext(root, task, {
+        budget: 6000,
+        format: "json",
+        modeSelection,
+        preparedMemory
+      } as unknown as PackContextOptions);
+
+      expect(preparedMemory.telemetry.memoryIncluded).toBe(1);
+      expect(pack.memoryTelemetry?.includedIds).toEqual(preparedMemory.telemetry.includedIds);
+      expect(pack.memoryTelemetry?.memoryIncluded).toBe(1);
+    });
+  });
+
   it("outputs Markdown with route, source paths, and snippets", async () => {
     await withFixture("ts-api", async (root) => {
       await indexPalace(root);

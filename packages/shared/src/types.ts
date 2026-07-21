@@ -48,20 +48,69 @@ export type MemoryExclusionReason =
   | "selection_limit_reached"
   | "token_budget_exceeded";
 
+export type MemoryExclusion = {
+  id: string;
+  reason: MemoryExclusionReason;
+};
+
+export type MemoryScopeInference = {
+  client: string;
+  reason: "unique_historical_alias_match";
+  evidenceTokens: string[];
+};
+
+export type GuardedMemoryItem = {
+  id: string;
+  text: string;
+  scope: string;
+  ageDays: number;
+  confidence: number;
+  risk: "low" | "medium" | "high";
+  source: "pitfall" | "failed-attempt";
+  memoryPath: string;
+  contradictionCheck: string;
+};
+
+export type MemoryPreflightDecision =
+  | "none"
+  | "current_memory_available"
+  | "stale_rejected"
+  | "scope_rejected"
+  | "conflict_requires_guard";
+
+export type MemoryPreflightResult = {
+  decision: MemoryPreflightDecision;
+  candidates: number;
+  included: number;
+  excluded: MemoryExclusion[];
+  candidateIds: string[];
+  includedIds: string[];
+  currentRelevantCount: number;
+  rejectedStaleCount: number;
+  rejectedScopeCount: number;
+  conflictCount: number;
+  requiresGuardedDelivery: boolean;
+  items: GuardedMemoryItem[];
+  estimatedTokens: number;
+  scopeInference?: MemoryScopeInference;
+};
+
 export type MemorySelectionTelemetry = {
   memoryCandidates: number;
   memoryIncluded: number;
-  memoryExcluded: {
-    id: string;
-    reason: MemoryExclusionReason;
-  }[];
+  memoryExcluded: MemoryExclusion[];
   candidateIds: string[];
   includedIds: string[];
-  scopeInference?: {
-    client: string;
-    reason: "unique_historical_alias_match";
-    evidenceTokens: string[];
-  };
+  scopeInference?: MemoryScopeInference;
+  memoryDecision?: MemoryPreflightDecision;
+  currentRelevantCount?: number;
+  rejectedStaleCount?: number;
+  rejectedScopeCount?: number;
+  conflictCount?: number;
+  requiresGuardedDelivery?: boolean;
+  selectedModeBeforeMemory?: PalaceMode;
+  selectedModeAfterMemory?: PalaceMode;
+  modeDowngradeReason?: "all_candidates_safely_rejected";
 };
 
 export type PalaceExecutionBoundaries = {
@@ -97,6 +146,10 @@ export type PalaceModeSelection = {
   maxContextTokens: number;
   memoryLevel: MemoryLevel;
   riskSignals: PalaceRiskSignals;
+  memoryDecision?: MemoryPreflightDecision;
+  selectedModeBeforeMemory?: PalaceMode;
+  selectedModeAfterMemory?: PalaceMode;
+  modeDowngradeReason?: "all_candidates_safely_rejected";
 };
 
 export type PalacePayloadMetrics = {
