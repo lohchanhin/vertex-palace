@@ -1,0 +1,134 @@
+{
+  "schemaVersion": 1,
+  "evidenceType": "route-precision-regression",
+  "releaseLine": "0.4-alpha",
+  "generatedAt": "2026-07-22T16:20:47.902Z",
+  "sourceBaseCommit": "fec16398324a261b7ca500a78e27f5f98d6318bc",
+  "claimBoundary": "Static route-quality evidence for a frozen real-repository oracle plus an adversarial self-audit; not an end-to-end Agent token, wall-time, or task-success benchmark.",
+  "task": "Improve multi-surface routing and release-verification artifact intent; add role-aware implementation and focused regression tests, bilingual research records, record machine-readable evidence, and rebuild the generated MCP bundle.",
+  "oracle": {
+    "changedFiles": [
+      "packages/core/src/router/publication-intent.ts",
+      "packages/core/src/router/route-planner.ts",
+      "packages/core/test/router.test.ts",
+      "plugins/vertex-palace/mcp/server.cjs",
+      "docs/research/MULTI_SURFACE_ROUTING_0_4_ALPHA.md",
+      "docs/zh-CN/MULTI_SURFACE_ROUTING_0_4_ALPHA.md",
+      "docs/research/evidence/advisory-multi-surface-routing-0.4-alpha.json"
+    ],
+    "routeLimit": 12,
+    "budget": 6000,
+    "maxDrawers": 4
+  },
+  "baseline": {
+    "evaluationId": "evaluation_b8125773b31dd3ae",
+    "routeId": "route_c6a0c83e4a555494",
+    "routeFiles": [
+      "docs/research/MULTI_SURFACE_EVIDENCE_ROUTING_0_3_0.md",
+      "docs/research/evidence/advisory-multi-surface-routing-0.4-alpha.json",
+      "docs/research/evidence/multi-surface-evidence-routing-0.3.0.json",
+      "packages/core/src/router/route-scorer.ts",
+      "packages/core/src/router/route-planner.ts",
+      "packages/core/src/router/analyze-task.ts",
+      "docs/research/MULTI_SURFACE_ROUTING_0_4_ALPHA.md",
+      "docs/zh-CN/MULTI_SURFACE_ROUTING_0_4_ALPHA.md",
+      "plugins/vertex-palace/mcp/server.cjs",
+      "packages/core/src/packer/context-packer.ts",
+      "packages/core/src/router/publication-intent.ts",
+      "packages/core/test/router.test.ts"
+    ],
+    "changedFileCoverage": 1,
+    "routeFocus": 0.58,
+    "routeFileCount": 12,
+    "routeConfidence": 0.35,
+    "staticPackTokens": 3756
+  },
+  "candidate": {
+    "evaluationId": "evaluation_0843e4b45c7858ab",
+    "routeId": "route_21a256e8e8a25975",
+    "routeFiles": [
+      "packages/core/src/router/route-planner.ts",
+      "docs/research/evidence/advisory-multi-surface-routing-0.4-alpha.json",
+      "docs/research/MULTI_SURFACE_ROUTING_0_4_ALPHA.md",
+      "docs/zh-CN/MULTI_SURFACE_ROUTING_0_4_ALPHA.md",
+      "plugins/vertex-palace/mcp/server.cjs",
+      "packages/core/src/packer/context-packer.ts",
+      "packages/core/src/router/route-expander.ts",
+      "packages/core/src/router/publication-intent.ts",
+      "packages/core/test/router.test.ts"
+    ],
+    "changedFileCoverage": 1,
+    "routeFocus": 0.78,
+    "routeFileCount": 9,
+    "routeConfidence": 0.75,
+    "confidenceCalibration": {
+      "status": "underconfident",
+      "error": 0.25
+    },
+    "staticPackTokens": 2631
+  },
+  "delta": {
+    "changedFileCoverage": 0,
+    "routeFocus": 0.2,
+    "routeFileCount": -3,
+    "routeConfidence": 0.4,
+    "staticPackTokens": -1125
+  },
+  "selfAudit": {
+    "task": "Improve 0.4 Alpha route precision: make multi-surface routeLimit a ceiling, prioritize role representatives, recognize evidence-directory JSON, calibrate broad-task confidence dynamically, add regression tests and bilingual route-precision research evidence, and rebuild the generated MCP bundle.",
+    "changedFiles": [
+      "packages/core/src/router/route-planner.ts",
+      "packages/core/src/router/route-scorer.ts",
+      "packages/core/test/router.test.ts",
+      "plugins/vertex-palace/mcp/server.cjs",
+      "docs/research/ROUTE_PRECISION_0_4_ALPHA.md",
+      "docs/zh-CN/ROUTE_PRECISION_0_4_ALPHA.md",
+      "docs/research/evidence/route-precision-0.4-alpha.json"
+    ],
+    "before": {
+      "evaluationId": "evaluation_a382c60303a3e6e5",
+      "changedFileCoverage": 0.57,
+      "routeFocus": 0.44,
+      "routeFileCount": 9,
+      "routeConfidence": 0.77,
+      "calibration": "overconfident"
+    },
+    "after": {
+      "evaluationId": "evaluation_3e0b7d341232e2dc",
+      "changedFileCoverage": 1,
+      "routeFocus": 0.78,
+      "routeFileCount": 9,
+      "routeConfidence": 0.77,
+      "calibration": "underconfident",
+      "warnings": []
+    }
+  },
+  "acceptance": {
+    "changedFileCoverageAtLeast": 0.9,
+    "routeFileCountAtMost": 9,
+    "routeFocusAtLeast": 0.75,
+    "passed": true
+  },
+  "verification": {
+    "lint": "passed",
+    "build": "passed",
+    "tests": {
+      "core": 107,
+      "cli": 2,
+      "mcp": 2,
+      "total": 111,
+      "status": "passed"
+    },
+    "mcpSmoke": {
+      "registeredTools": 10,
+      "status": "passed"
+    },
+    "releaseCandidate": "passed"
+  },
+  "limitations": [
+    "The oracle was used during development and is not a held-out calibration sample.",
+    "The confidence score remains underconfident against observed changed-file coverage.",
+    "Static pack token counts do not measure end-to-end Agent token use.",
+    "Cross-repository replication and randomized Agent trials remain pending."
+  ]
+}

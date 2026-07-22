@@ -426,6 +426,109 @@ export const $ZodDiscriminatedUnion = core.$constructor("$ZodDiscriminatedUnion"
     });
   });
 
+  it("keeps complete real-shaped multi-surface recall without filling the route with generic siblings", async () => {
+    await withFixture("ts-api", async (root) => {
+      const changedFiles = [
+        "packages/core/src/router/publication-intent.ts",
+        "packages/core/src/router/route-planner.ts",
+        "packages/core/test/router.test.ts",
+        "plugins/vertex-palace/mcp/server.cjs",
+        "docs/research/MULTI_SURFACE_ROUTING_0_4_ALPHA.md",
+        "docs/zh-CN/MULTI_SURFACE_ROUTING_0_4_ALPHA.md",
+        "docs/research/evidence/advisory-multi-surface-routing-0.4-alpha.json"
+      ];
+      const sources = new Map<string, string>([
+        ["packages/core/src/router/publication-intent.ts", "export function analyzePublicationIntent() { return { releaseArtifactReference: true }; }\n"],
+        ["packages/core/src/router/route-planner.ts", "export function planMultiSurfaceRoute() { return ['implementation', 'test', 'docs', 'evidence', 'mcp']; }\n"],
+        ["packages/core/test/router.test.ts", "describe('multi-surface route precision', () => it('preserves complete recall with a focused route', () => true));\n"],
+        ["packages/mcp/src/server.ts", "export const startMcpServer = () => 'multi-surface route precision';\n"],
+        ["tsup.plugin-mcp.config.ts", "import { defineConfig } from 'tsup';\nexport default defineConfig({ entry: { server: 'packages/mcp/src/server.ts' }, outDir: 'plugins/vertex-palace/mcp', outExtension: () => ({ js: '.cjs' }) });\n"],
+        ["plugins/vertex-palace/mcp/server.cjs", "module.exports = { generated: true, routePrecision: '0.4-alpha' };\n"],
+        ["docs/research/MULTI_SURFACE_ROUTING_0_4_ALPHA.md", "# Multi-Surface Routing 0.4 Alpha\n\nCurrent role-aware routing research and release-verification artifact intent.\n"],
+        ["docs/zh-CN/MULTI_SURFACE_ROUTING_0_4_ALPHA.md", "# Multi-Surface Routing 0.4 Alpha - Simplified Chinese\n\nCurrent bilingual role-aware routing research.\n"],
+        ["docs/research/evidence/advisory-multi-surface-routing-0.4-alpha.json", JSON.stringify({ schemaVersion: 1, routeFocus: 0.75, changedFileCoverage: 1 })],
+        ["docs/research/MULTI_SURFACE_EVIDENCE_ROUTING_0_3_0.md", "# Historic Multi-Surface Evidence Routing\n\nOlder dense report about implementation, tests, bilingual docs, machine-readable evidence, generated MCP bundles, precision, and recall.\n"],
+        ["docs/research/evidence/multi-surface-evidence-routing-0.3.0.json", JSON.stringify({ schemaVersion: 1, status: "historic", routeFocus: 0.58 })],
+        ["packages/core/src/router/route-scorer.ts", "export function scoreRouteConfidence() { return 0.35; }\n"],
+        ["packages/core/src/router/analyze-task.ts", "export function analyzeRoutingTask() { return ['precision', 'recall', 'confidence']; }\n"],
+        ["packages/core/src/packer/context-packer.ts", "export function packRoutingContext() { return { routeLimit: 12 }; }\n"]
+      ]);
+      for (const [relativePath, source] of sources) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const task = "Improve multi-surface routing and release-verification artifact intent; add role-aware implementation and focused regression tests, bilingual research records, record machine-readable evidence, and rebuild the generated MCP bundle.";
+      const evaluation = await evaluateRoute(root, task, {
+        changedFiles,
+        routeLimit: 12,
+        budget: 6000,
+        maxDrawers: 4
+      });
+
+      expect(evaluation.route.files).toEqual(expect.arrayContaining(changedFiles));
+      expect(evaluation.route.fileCount).toBeLessThanOrEqual(9);
+      expect(evaluation.coverage.changedFileCoverage).toBe(1);
+      expect(evaluation.coverage.routeFocus).toBeGreaterThanOrEqual(0.75);
+      expect(evaluation.route.confidence).toBeGreaterThan(0.35);
+      expect(evaluation.calibration.status).not.toBe("overconfident");
+    });
+  });
+
+  it("routes simultaneous planner and scorer work with its current bilingual precision evidence", async () => {
+    await withFixture("ts-api", async (root) => {
+      const changedFiles = [
+        "packages/core/src/router/route-planner.ts",
+        "packages/core/src/router/route-scorer.ts",
+        "packages/core/test/router.test.ts",
+        "plugins/vertex-palace/mcp/server.cjs",
+        "docs/research/ROUTE_PRECISION_0_4_ALPHA.md",
+        "docs/zh-CN/ROUTE_PRECISION_0_4_ALPHA.md",
+        "docs/research/evidence/route-precision-0.4-alpha.json"
+      ];
+      const sources = new Map<string, string>([
+        ["packages/core/src/router/route-planner.ts", "export function planRoleRepresentatives() { return { routeLimit: 'ceiling' }; }\n"],
+        ["packages/core/src/router/route-scorer.ts", "export function scoreBroadTaskConfidence() { return 'dynamic'; }\n"],
+        ["packages/core/test/router.test.ts", "describe('route precision', () => it('covers planner and scorer', () => true));\n"],
+        ["packages/mcp/src/server.ts", "export const startMcpServer = () => 'route precision';\n"],
+        ["tsup.plugin-mcp.config.ts", "import { defineConfig } from 'tsup';\nexport default defineConfig({ entry: { server: 'packages/mcp/src/server.ts' }, outDir: 'plugins/vertex-palace/mcp', outExtension: () => ({ js: '.cjs' }) });\n"],
+        ["plugins/vertex-palace/mcp/server.cjs", "module.exports = { generated: true, routePrecision: '0.4-alpha' };\n"],
+        ["docs/research/ROUTE_PRECISION_0_4_ALPHA.md", "# Route Precision 0.4 Alpha\n\nCurrent planner, scorer, confidence, and route-focus research.\n"],
+        ["docs/zh-CN/ROUTE_PRECISION_0_4_ALPHA.md", "# Route Precision 0.4 Alpha - Simplified Chinese\n\nCurrent bilingual route-precision research.\n"],
+        ["docs/research/evidence/route-precision-0.4-alpha.json", JSON.stringify({ schemaVersion: 1, routeFocus: 0.78, routeConfidence: 0.76 })],
+        ["docs/research/MULTI_SURFACE_ROUTING_0_4_ALPHA.md", "# Multi-Surface Routing 0.4 Alpha\n\nEarlier multi-surface route planning report.\n"],
+        ["docs/zh-CN/MULTI_SURFACE_ROUTING_0_4_ALPHA.md", "# Multi-Surface Routing 0.4 Alpha - Simplified Chinese\n\nEarlier bilingual report.\n"],
+        ["docs/research/evidence/advisory-multi-surface-routing-0.4-alpha.json", JSON.stringify({ schemaVersion: 1, routeFocus: 0.58 })],
+        ["packages/core/src/router/analyze-task.ts", "export function analyzeTaskWords() { return ['broad-task', 'json']; }\n"],
+        ["packages/core/src/indexer/index-palace.ts", "export function indexEvidenceDirectoryJson() { return true; }\n"],
+        ["packages/core/src/packer/context-packer.ts", "export function packRouteContext() { return true; }\n"],
+        ["packages/core/src/utils/stable-json.ts", "export function stableJson() { return '{}'; }\n"]
+      ]);
+      for (const [relativePath, source] of sources) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const task = "Improve 0.4 Alpha route precision: make multi-surface routeLimit a ceiling, prioritize role representatives, recognize evidence-directory JSON, calibrate broad-task confidence dynamically, add regression tests and bilingual route-precision research evidence, and rebuild the generated MCP bundle.";
+      const evaluation = await evaluateRoute(root, task, {
+        changedFiles,
+        routeLimit: 12,
+        budget: 6000,
+        maxDrawers: 4
+      });
+
+      expect(evaluation.route.files).toEqual(expect.arrayContaining(changedFiles));
+      expect(evaluation.route.fileCount).toBeLessThanOrEqual(9);
+      expect(evaluation.coverage.changedFileCoverage).toBe(1);
+      expect(evaluation.coverage.routeFocus).toBeGreaterThanOrEqual(0.75);
+      expect(evaluation.calibration.status).not.toBe("overconfident");
+    });
+  });
+
   it("keeps the current bilingual document pair when an older report has denser matching prose", async () => {
     await withFixture("ts-api", async (root) => {
       const sources = new Map<string, string>([
@@ -453,7 +556,7 @@ export const $ZodDiscriminatedUnion = core.$constructor("$ZodDiscriminatedUnion"
     });
   });
 
-  it("caps confidence for broad tasks that request several delivery surfaces", async () => {
+  it("calibrates broad-task confidence from surface coverage and route focus", async () => {
     await withFixture("ts-api", async (root) => {
       await indexPalace(root);
 
@@ -463,7 +566,8 @@ export const $ZodDiscriminatedUnion = core.$constructor("$ZodDiscriminatedUnion"
         { routeLimit: 10 }
       );
 
-      expect(route.confidence).toBeLessThanOrEqual(0.35);
+      expect(route.confidence).toBeGreaterThan(0.35);
+      expect(route.confidence).toBeLessThan(1);
     });
   });
 
@@ -565,7 +669,8 @@ export const $ZodDiscriminatedUnion = core.$constructor("$ZodDiscriminatedUnion"
       expect(evaluation.route.fileCount).toBeLessThanOrEqual(10);
       expect(evaluation.coverage.changedFileCoverage).toBe(1);
       expect(evaluation.coverage.routeFocus).toBeGreaterThanOrEqual(0.8);
-      expect(evaluation.route.confidence).toBeLessThanOrEqual(0.35);
+      expect(evaluation.route.confidence).toBeGreaterThan(0.35);
+      expect(evaluation.calibration.status).not.toBe("overconfident");
 
       const pinTask = "同步 Vertex Palace 产品源码、研究证据与 CI 到 control-first v3 计划、英文协议、简体中文协议和 README；保留 frozen false 与零 Agent outcomes";
       const pinAnalysis = analyzeTask(pinTask);

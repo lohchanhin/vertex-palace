@@ -382,8 +382,9 @@ export function requestedRouteSurfaces(analysis: TaskAnalysis): RouteSurface[] {
 
 function isMachineEvidenceArtifactRequest(task: string): boolean {
   const english = /\b(?:sync|preserve|record|write|update|refresh|include|attach)\b.{0,80}\bmachine(?:[-\s]?readable)?\b.{0,40}\bevidence\b/i;
+  const structuredEnglish = /\b(?:add|attach|include|recognize|record|sync|update|write)\b.{0,80}\bevidence(?:[-\s]?directory)?\b.{0,40}\bjson\b/i;
   const chinese = /(?:同步|保留|记录|記錄|写入|寫入|更新|刷新|纳入|納入|附上|补齐|補齊).{0,50}(?:机器(?:可读)?|機器(?:可讀)?).{0,30}(?:证据|證據)/;
-  return english.test(task) || chinese.test(task);
+  return english.test(task) || structuredEnglish.test(task) || chinese.test(task);
 }
 
 export function matchesRouteSurface(node: PalaceNode, surface: RouteSurface): boolean {
@@ -431,7 +432,7 @@ function isMachineEvidencePath(sourcePath: string): boolean {
   const fileName = sourcePath.split("/").at(-1) ?? sourcePath;
   if (!/(^|\/)(?:docs\/research\/)?evidence\//.test(sourcePath) || !/\.json$/.test(fileName)) return false;
   if (/(?:^|[-_.])(?:trial|run|trace|transcript|raw)[-_]?\d*/.test(fileName)) return false;
-  return /(?:evaluation|summary|report|audit|validation|sync|gate|preflight|evidence)/.test(fileName);
+  return true;
 }
 
 function hasEvaluationKeywordPath(path: string, analysis: TaskAnalysis): boolean {

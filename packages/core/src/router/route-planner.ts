@@ -207,7 +207,6 @@ function ensureGeneralSurfaceCoverage(
     sourcePaths.add(item.node.sourcePath);
   };
 
-  append(selected[0]);
   for (const surface of requested) {
     const quota = generalSurfaceQuota(scored, surface, requested, analysis);
     for (const representative of selectGeneralSurfaceRepresentatives(scored, surface, analysis, quota)) {
@@ -218,9 +217,28 @@ function ensureGeneralSurfaceCoverage(
       append(related ?? representative);
     }
   }
-  for (const item of selected) append(item);
+
+  const supplementalLimit = Math.min(2, Math.max(0, limit - result.length));
+  let supplementalCount = 0;
+  for (const item of selected) {
+    if (supplementalCount >= supplementalLimit) break;
+    if (!hasIndependentRelationEvidence(item)) continue;
+    const before = result.length;
+    append(item);
+    if (result.length > before) supplementalCount += 1;
+  }
+
+  if (!result.length) return selected.slice(0, limit);
 
   return result.sort((a, b) => b.score - a.score || a.node.sourcePath.localeCompare(b.node.sourcePath));
+}
+
+function hasIndependentRelationEvidence(item: ScoredNode): boolean {
+  return item.reasons.some(
+    (reason) => reason.startsWith("expanded through")
+      || reason.includes("changed_with")
+      || reason.startsWith("generated from")
+  );
 }
 
 function selectGeneralSurfaceRepresentatives(
@@ -240,6 +258,9 @@ function selectGeneralSurfaceRepresentatives(
   if (surface === "docs" && quota > 1) {
     return selectGeneralDocumentRepresentatives(ranked, analysis, quota);
   }
+  if (surface === "evidence") {
+    return selectGeneralEvidenceRepresentatives(ranked, analysis, quota);
+  }
   if (surface === "test") {
     return selectGeneralTestRepresentatives(ranked, analysis, quota);
   }
@@ -247,9 +268,9 @@ function selectGeneralSurfaceRepresentatives(
 
   const result: ScoredNode[] = [];
   const concepts = new Set<string>();
-  const conceptual = ranked.filter((item) => routePathConcept(item.node.sourcePath, analysis));
+  const conceptual = ranked.filter((item) => implementationPathConcept(item.node.sourcePath, analysis));
   for (const item of conceptual.length ? conceptual : ranked) {
-    const concept = routePathConcept(item.node.sourcePath, analysis);
+    const concept = implementationPathConcept(item.node.sourcePath, analysis);
     if (concept && concepts.has(concept)) continue;
     result.push(item);
     if (concept) concepts.add(concept);
@@ -271,7 +292,7 @@ function generalSurfaceQuota(
     const concepts = new Set(
       scored
         .filter((item) => matchesRouteSurface(item.node, "implementation"))
-        .map((item) => routePathConcept(item.node.sourcePath, analysis))
+        .map((item) => implementationPathConcept(item.node.sourcePath, analysis))
         .filter((concept): concept is string => Boolean(concept))
     );
     return Math.max(1, Math.min(3, concepts.size));
@@ -298,6 +319,11 @@ function generalSurfacePriority(
   if (surface === "mcp" && hasAnyKeyword(keywords, ["generated", "artifact", "bundle"])) {
     if (/generated\s+\w+\s+artifact/i.test(item.node.summary)) priority += 600;
     else if (/(^|\/)packages\/mcp\/src\//.test(sourcePath)) priority += 200;
+  }
+  if (surface === "implementation") {
+    priority += implementationTaskAffinity(sourcePath, analysis.raw) * 60;
+    if (/(?:^|\/)route-planner\.[^.]+$/.test(sourcePath) && hasRoutePlanningIntent(analysis.raw)) priority += 260;
+    if (/(?:^|\/)route-scorer\.[^.]+$/.test(sourcePath) && hasRouteScoringIntent(analysis.raw)) priority += 260;
   }
   if (surface === "test") {
     priority += item.node.kind === "test" ? 100 : -100;
@@ -345,6 +371,56 @@ function routePathConcept(sourcePath: string, analysis: ReturnType<typeof analyz
   );
 }
 
+function implementationPathConcept(sourcePath: string, analysis: ReturnType<typeof analyzeTask>): string | undefined {
+  const basename = path.posix.basename(sourcePath).toLowerCase().replace(/\.[^.]+$/, "");
+  const pathTokens = new Set(basename.match(/[a-z0-9]+/g) ?? []);
+  const rawTokens = analysis.raw.toLowerCase().match(/[a-z0-9]+/g) ?? [];
+  const routeComponent = [...pathTokens].some((token) => ["route", "router", "routing"].includes(token));
+  const routeTask = rawTokens.some((token) => ["route", "router", "routing"].includes(token));
+  if (routeComponent && routeTask) {
+    const planningIntent = hasRoutePlanningIntent(analysis.raw);
+    const scoringIntent = hasRouteScoringIntent(analysis.raw);
+    if (pathTokens.has("planner") && planningIntent) return "routing-plan";
+    if (pathTokens.has("scorer") && scoringIntent) return "routing-score";
+    if (planningIntent || scoringIntent) return undefined;
+    return "routing";
+  }
+
+  const ignored = new Set([
+    "implementation",
+    "source",
+    "shared",
+    "generated",
+    "artifact",
+    "directory",
+    "file",
+    "json",
+    "task",
+    "test",
+    "tests"
+  ]);
+  return rawTokens.find((token) => token.length > 3 && !ignored.has(token) && pathTokens.has(token));
+}
+
+function implementationTaskAffinity(sourcePath: string, task: string): number {
+  const basenameTokens = new Set(path.posix.basename(sourcePath).toLowerCase().match(/[a-z0-9]+/g) ?? []);
+  const taskTokens = new Set(task.toLowerCase().match(/[a-z0-9]+/g) ?? []);
+  let matches = [...basenameTokens].filter((token) => taskTokens.has(token)).length;
+  if (
+    [...basenameTokens].some((token) => ["route", "router", "routing"].includes(token))
+    && [...taskTokens].some((token) => ["route", "router", "routing"].includes(token))
+  ) matches += 1;
+  return matches;
+}
+
+function hasRoutePlanningIntent(task: string): boolean {
+  return /\b(?:role[-\s]?aware|multi[-\s]?surface|route[-\s]?(?:allocation|limit|focus)|routing\s+(?:precision|recall))\b/i.test(task);
+}
+
+function hasRouteScoringIntent(task: string): boolean {
+  return /\b(?:score|scorer|scoring|confidence|calibrat(?:e|ed|ion))\b/i.test(task);
+}
+
 function selectGeneralTestRepresentatives(
   ranked: ScoredNode[],
   analysis: ReturnType<typeof analyzeTask>,
@@ -387,6 +463,10 @@ function selectGeneralDocumentRepresentatives(
   analysis: ReturnType<typeof analyzeTask>,
   quota: number
 ): ScoredNode[] {
+  const narrative = ranked.filter(
+    (item) => item.node.kind === "doc" || /\.(?:md|mdx)$/i.test(item.node.sourcePath)
+  );
+  const candidates = narrative.length ? narrative : ranked;
   const result: ScoredNode[] = [];
   const selectedPaths = new Set<string>();
   const localized = (sourcePath: string): boolean => /(^|\/)(?:zh-cn|zh-hans|zh_cn)(\/|$)/.test(sourcePath.toLowerCase());
@@ -398,7 +478,7 @@ function selectGeneralDocumentRepresentatives(
 
   const requestedVersion = documentVersionPriority(analysis.raw);
   const groups = new Map<string, ScoredNode[]>();
-  for (const item of ranked) {
+  for (const item of candidates) {
     const fileName = path.posix.basename(item.node.sourcePath).toLowerCase();
     groups.set(fileName, [...(groups.get(fileName) ?? []), item]);
   }
@@ -423,9 +503,54 @@ function selectGeneralDocumentRepresentatives(
 
   append(bestGroup.find((item) => !localized(item.node.sourcePath)));
   append(bestGroup.find((item) => localized(item.node.sourcePath)));
-  append(ranked.find((item) => localized(item.node.sourcePath)));
-  for (const item of ranked) append(item);
+  append(candidates.find((item) => localized(item.node.sourcePath)));
+  for (const item of candidates) append(item);
   return result;
+}
+
+function selectGeneralEvidenceRepresentatives(
+  ranked: ScoredNode[],
+  analysis: ReturnType<typeof analyzeTask>,
+  quota: number
+): ScoredNode[] {
+  return [...ranked]
+    .sort((left, right) => {
+      const leftPath = left.node.sourcePath;
+      const rightPath = right.node.sourcePath;
+      return documentLeadAffinity(rightPath, analysis.raw) - documentLeadAffinity(leftPath, analysis.raw)
+        || documentTaskAffinity(rightPath, analysis.raw) - documentTaskAffinity(leftPath, analysis.raw)
+        || documentVersionPriority(rightPath) - documentVersionPriority(leftPath)
+        || right.score - left.score
+        || leftPath.localeCompare(rightPath);
+    })
+    .slice(0, quota);
+}
+
+function documentLeadAffinity(sourcePath: string, task: string): number {
+  const ignored = new Set([
+    "add",
+    "and",
+    "doc",
+    "docs",
+    "documentation",
+    "evidence",
+    "make",
+    "record",
+    "records",
+    "report",
+    "research",
+    "the"
+  ]);
+  const taskTokens = (task.toLowerCase().match(/[a-z0-9]+/g) ?? [])
+    .filter((token) => token.length > 2 && !ignored.has(token) && !/^\d+$/.test(token));
+  const pathTokens = new Set(
+    (sourcePath.toLowerCase().match(/[a-z0-9]+/g) ?? [])
+      .filter((token) => token.length > 2 && !ignored.has(token) && !/^\d+$/.test(token))
+  );
+  return taskTokens.slice(0, 12).reduce(
+    (score, token, index) => score + (pathTokens.has(token) ? 12 - index : 0),
+    0
+  );
 }
 
 function documentTaskAffinity(sourcePath: string, task: string): number {
@@ -609,9 +734,33 @@ function confidence(selected: ScoredNode[], analysis: ReturnType<typeof analyzeT
   const surfacePenalty = requestedSurfacePenalty(top, analysis);
   const value = (0.08 + keywordCoverage * 0.34 + scoreStrength * 0.28 + focus * 0.2 + budgetFit * 0.1) * surfacePenalty;
   const requestedSurfaceCount = requestedRouteSurfaces(analysis).length;
-  const breadthCap = requestedSurfaceCount >= 3 ? 0.35 : requestedSurfaceCount === 2 ? 0.65 : 0.98;
+  const breadthEvidence = requestedSurfaceEvidence(top, analysis, taskType);
+  const breadthCap = requestedSurfaceCount >= 3
+    ? 0.5 + breadthEvidence * 0.4
+    : requestedSurfaceCount === 2
+      ? 0.65 + breadthEvidence * 0.25
+      : 0.98;
   const taskCap = Math.min(taskType === "release" ? 0.65 : 0.98, breadthCap);
   return Number(Math.max(0.1, Math.min(taskCap, value)).toFixed(2));
+}
+
+function requestedSurfaceEvidence(
+  items: ScoredNode[],
+  analysis: ReturnType<typeof analyzeTask>,
+  taskType: TaskType
+): number {
+  const requested = requestedRouteSurfaces(analysis);
+  if (!requested.length || !items.length) return 1;
+  const covered = requested.filter((surface) => items.some((item) => matchesRouteSurface(item.node, surface))).length;
+  const surfaceCoverage = covered / requested.length;
+  const roleSlots = requested.reduce((sum, surface) => {
+    const quota = taskType === "evaluation"
+      ? evaluationSurfaceQuota(surface, analysis)
+      : generalSurfaceQuota(items, surface, requested, analysis);
+    return sum + quota;
+  }, 0);
+  const routeFocus = Math.min(1, roleSlots / items.length);
+  return surfaceCoverage * routeFocus;
 }
 
 function requestedSurfacePenalty(items: ScoredNode[], analysis: ReturnType<typeof analyzeTask>): number {
