@@ -3,6 +3,10 @@
 状态：实现与验证完成。这是第三代研究之后的工程研发，不是第四代 Agent
 正式实验，也没有修改或扩写已经冻结的 v1、v2.2 与 Control-First v3 结果。
 
+兼容说明（2026-07-22）：后续 advisory-safety 研发已在最小 bypass 输出中新增
+`evidenceStatus` 与 `interventionPolicy`。下文“三字段”描述保留为本次记忆预检
+阶段当时的工程记录。
+
 [English](../research/MEMORY_PREFLIGHT_0_4_ALPHA_RESULT.md) | [设计说明](../research/MEMORY_PREFLIGHT_0_4_ALPHA_DESIGN.md)
 
 ## 根因
@@ -35,7 +39,7 @@ packer 后又重新筛选一次。两次筛选采用不同的年龄、数量、T
   的任务，仍然保持 guarded。
 - Markdown 只显示一条紧凑拒绝摘要；JSON 增加 `memoryRejection`，同时保留
   原有可审计 telemetry。
-- bypass JSON 仍严格只有 `mode`、`primaryCandidate`、`reason` 三个字段。
+- 在这个阶段，bypass JSON 仍严格只有 `mode`、`primaryCandidate`、`reason` 三个字段。
 
 ## Before / After
 

@@ -38,6 +38,10 @@ export type PalaceMode =
   | "full-palace"
   | "guarded-memory-palace";
 
+export type PalaceEvidenceStatus = "sufficient" | "insufficient" | "conflicted";
+
+export type PalaceInterventionPolicy = "advisory" | "bounded";
+
 export type RouteTier = "primary" | "support" | "deferred" | "excluded";
 
 export type MemoryLevel = "none" | "hint" | "scoped-summary" | "guarded-evidence";
@@ -153,6 +157,9 @@ export type PalaceModeSelection = {
   mode: PalaceMode;
   confidence: number;
   reasons: string[];
+  evidenceStatus: PalaceEvidenceStatus;
+  evidenceReasons: string[];
+  interventionPolicy: PalaceInterventionPolicy;
   disabledSections: string[];
   maxContextTokens: number;
   memoryLevel: MemoryLevel;

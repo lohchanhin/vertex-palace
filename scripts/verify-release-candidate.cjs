@@ -78,16 +78,26 @@ async function main() {
         { cwd: fixtureRoot }
       ).stdout;
       const output = JSON.parse(raw);
-      assert.deepEqual(Object.keys(output), ["mode", "primaryCandidate", "reason"]);
+      assert.deepEqual(Object.keys(output), [
+        "mode",
+        "evidenceStatus",
+        "interventionPolicy",
+        "primaryCandidate",
+        "reason"
+      ]);
       assert.equal(output.mode, "bypass");
+      assert.equal(output.evidenceStatus, "insufficient");
+      assert.equal(output.interventionPolicy, "advisory");
       assert.equal(output.primaryCandidate, "src/format-currency.mjs");
       assert.match(
         output.reason,
-        /final once: `git diff --check; git status --short; git diff -- src\/format-currency\.mjs`/
+        /final scope check `git diff --check; git status --short; git diff -- src\/format-currency\.mjs`/
       );
       bypassTrials.push({
         trial,
         mode: output.mode,
+        evidenceStatus: output.evidenceStatus,
+        interventionPolicy: output.interventionPolicy,
         primaryCandidate: output.primaryCandidate,
         fields: Object.keys(output).length,
         bytes: Buffer.byteLength(raw, "utf8")
@@ -155,7 +165,8 @@ async function main() {
       batchCommands: true,
       finalScopeCheckRequired: true
     });
-    assert.equal(boundaries.stopEnforced, true);
+    assert.equal(full.selection.interventionPolicy, "advisory");
+    assert.equal(boundaries.stopEnforced, false);
     assert.equal(full.payload.contextBytes, Buffer.byteLength(fullRaw, "utf8"));
     assert.ok(full.payload.contextEstimatedTokens <= full.selection.maxContextTokens);
 
@@ -243,7 +254,7 @@ async function main() {
 
     const mcp = runNode([path.join(projectRoot, "scripts", "smoke-mcp.cjs"), mcpPath], { cwd: fixtureRoot });
     const report = {
-      schemaVersion: 1,
+      schemaVersion: 2,
       generatedAt: new Date().toISOString(),
       claimBoundary: "Product packaging and context-contract validation only; not an Agent performance benchmark.",
       sourceCommit: packageSourceCommit,

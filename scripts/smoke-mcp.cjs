@@ -102,8 +102,17 @@ function verify() {
   }
   if (context.mode === "bypass") {
     const keys = Object.keys(context);
-    if (JSON.stringify(keys) !== JSON.stringify(["mode", "primaryCandidate", "reason"])) {
+    const expectedKeys = ["mode", "evidenceStatus", "interventionPolicy", "primaryCandidate", "reason"];
+    if (JSON.stringify(keys) !== JSON.stringify(expectedKeys)) {
       fail(new Error(`palace_context bypass contract mismatch: ${keys.join(", ") || "none"}.`));
+      return;
+    }
+    if (!["sufficient", "insufficient", "conflicted"].includes(context.evidenceStatus)) {
+      fail(new Error(`palace_context returned an invalid evidence status: ${context.evidenceStatus ?? "none"}.`));
+      return;
+    }
+    if (!["advisory", "bounded"].includes(context.interventionPolicy)) {
+      fail(new Error(`palace_context returned an invalid intervention policy: ${context.interventionPolicy ?? "none"}.`));
       return;
     }
   } else {

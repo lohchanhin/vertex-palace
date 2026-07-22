@@ -39,9 +39,15 @@ describe("palaceContext", () => {
       });
 
       expect(output.mode).toBe("bypass");
+      expect(output.modeSelection).toMatchObject({
+        evidenceStatus: "sufficient",
+        interventionPolicy: "bounded"
+      });
       expect(output.payload?.contextCalls).toBe(1);
       expect(output.markdown?.trim().split("\n")).toEqual([
         "Mode: bypass",
+        "Evidence status: sufficient",
+        "Intervention policy: bounded",
         "Primary candidate: src/services/token.service.ts",
         "Reason: Safe one-file route: no relevant memory or boundary risk. Direct: inspect once, edit; run npm test; final once: `git diff --check; git status --short; git diff -- src/services/token.service.ts`; stop."
       ]);
@@ -65,15 +71,23 @@ describe("palaceContext", () => {
       expect(output.payload?.contextEstimatedTokens).toBeLessThanOrEqual(output.modeSelection?.maxContextTokens ?? 0);
       expect(output.json).toEqual({
         mode: "bypass",
+        evidenceStatus: "sufficient",
+        interventionPolicy: "bounded",
         primaryCandidate: "src/services/token.service.ts",
         reason: "Safe one-file route: no relevant memory or boundary risk. Direct: inspect once, edit; run npm test; final once: `git diff --check; git status --short; git diff -- src/services/token.service.ts`; stop."
       });
-      expect(Object.keys(output.json as Record<string, unknown>)).toEqual(["mode", "primaryCandidate", "reason"]);
+      expect(Object.keys(output.json as Record<string, unknown>)).toEqual([
+        "mode",
+        "evidenceStatus",
+        "interventionPolicy",
+        "primaryCandidate",
+        "reason"
+      ]);
       expect(output.payload?.contextBytes).toBe(Buffer.byteLength(serializePackOutput(output), "utf8"));
     });
   });
 
-  it("emits the declared package-manager test command without adding a bypass field", async () => {
+  it("emits the declared package-manager test command in the minimal bypass contract", async () => {
     await withFixture("ts-api", async (root) => {
       await writeFile(
         path.join(root, "package.json"),
@@ -98,12 +112,12 @@ describe("palaceContext", () => {
       expect(output.mode).toBe("bypass");
       expect(json.reason).toContain("run pnpm test");
       expect(json.reason).toContain("final once: `git diff --check; git status --short; git diff -- src/services/token.service.ts`");
-      expect(Object.keys(json)).toEqual(["mode", "primaryCandidate", "reason"]);
-      expect(output.payload?.contextEstimatedTokens).toBeLessThan(80);
+      expect(Object.keys(json)).toEqual(["mode", "evidenceStatus", "interventionPolicy", "primaryCandidate", "reason"]);
+      expect(output.payload?.contextEstimatedTokens).toBeLessThan(120);
     });
   });
 
-  it("bypasses a high-confidence single-file route without an explicit filename", async () => {
+  it("keeps a focused implicit candidate minimal but advisory below sufficiency", async () => {
     await withFixture("ts-api", async (root) => {
       const target = path.join(root, "src", "format-currency.mjs");
       await writeFile(target, "export function formatCurrency(value) { return `$${value.toFixed(2)}`; }\n", "utf8");
@@ -120,12 +134,20 @@ describe("palaceContext", () => {
       expect(output.mode).toBe("bypass");
       expect(output.json).toMatchObject({
         mode: "bypass",
+        evidenceStatus: "insufficient",
+        interventionPolicy: "advisory",
         primaryCandidate: "src/format-currency.mjs"
       });
       expect((output.json as Record<string, unknown>).reason).toContain(
-        "final once: `git diff --check; git status --short; git diff -- src/format-currency.mjs`"
+        "treat the Primary candidate as a starting point"
       );
-      expect(Object.keys(output.json as Record<string, unknown>)).toEqual(["mode", "primaryCandidate", "reason"]);
+      expect(Object.keys(output.json as Record<string, unknown>)).toEqual([
+        "mode",
+        "evidenceStatus",
+        "interventionPolicy",
+        "primaryCandidate",
+        "reason"
+      ]);
     });
   });
 
@@ -157,12 +179,23 @@ describe("palaceContext", () => {
 
       expect(outputs.map((output) => output.mode)).toEqual(["bypass", "bypass", "bypass", "bypass"]);
       for (const output of outputs) {
-        expect(output.json).toMatchObject({ mode: "bypass", primaryCandidate: "src/format-currency.mjs" });
+        expect(output.json).toMatchObject({
+          mode: "bypass",
+          evidenceStatus: "insufficient",
+          interventionPolicy: "advisory",
+          primaryCandidate: "src/format-currency.mjs"
+        });
         expect((output.json as Record<string, unknown>).reason).toContain(
-          "final once: `git diff --check; git status --short; git diff -- src/format-currency.mjs`"
+          "treat the Primary candidate as a starting point"
         );
-        expect(Object.keys(output.json as Record<string, unknown>)).toEqual(["mode", "primaryCandidate", "reason"]);
-        expect(output.payload?.contextEstimatedTokens).toBeLessThan(80);
+        expect(Object.keys(output.json as Record<string, unknown>)).toEqual([
+          "mode",
+          "evidenceStatus",
+          "interventionPolicy",
+          "primaryCandidate",
+          "reason"
+        ]);
+        expect(output.payload?.contextEstimatedTokens).toBeLessThan(200);
       }
     });
   });
@@ -269,7 +302,7 @@ describe("palaceContext", () => {
     });
   });
 
-  it("downgrades safely rejected stale memory without changing the bypass JSON contract", async () => {
+  it("downgrades safely rejected stale memory into an advisory bypass contract", async () => {
     await withFixture("ts-api", async (root) => {
       const target = path.join(root, "src", "format-currency.mjs");
       await writeFile(target, "export function formatCurrency(value) { return `$${value.toFixed(2)}`; }\n", "utf8");
@@ -300,7 +333,17 @@ describe("palaceContext", () => {
       });
 
       expect(output.mode).toBe("bypass");
-      expect(Object.keys(output.json as Record<string, unknown>)).toEqual(["mode", "primaryCandidate", "reason"]);
+      expect(output.json).toMatchObject({
+        evidenceStatus: "insufficient",
+        interventionPolicy: "advisory"
+      });
+      expect(Object.keys(output.json as Record<string, unknown>)).toEqual([
+        "mode",
+        "evidenceStatus",
+        "interventionPolicy",
+        "primaryCandidate",
+        "reason"
+      ]);
       expect(output.memoryTelemetry).toMatchObject({
         memoryCandidates: 1,
         memoryIncluded: 0,
@@ -338,6 +381,7 @@ describe("palaceContext", () => {
           doNot: string[];
           stopCondition: string[];
           conflictSummary: string[];
+          stopEnforced: boolean;
         };
       };
 
@@ -356,6 +400,8 @@ describe("palaceContext", () => {
       expect(json.executionBoundaries.doNot).toContain("Do not inventory or broadly scan the repository.");
       expect(json.executionBoundaries.stopCondition).toContain("Targeted tests for the changed behavior pass.");
       expect(json.executionBoundaries.conflictSummary.length).toBeGreaterThan(0);
+      expect(output.modeSelection?.interventionPolicy).toBe("bounded");
+      expect(json.executionBoundaries.stopEnforced).toBe(true);
       expect(output.executionBoundaries).toEqual(json.executionBoundaries);
       expect(output.payload?.memoryItemCount).toBe(0);
       expect(output.payload?.contextEstimatedTokens).toBeLessThan(2000);
@@ -390,6 +436,7 @@ describe("palaceContext", () => {
         recommendedExecution: string[];
         executionBoundaries: {
           requiredEvidence: string[];
+          doNot: string[];
           contractCapsule?: {
             input: string;
             output: string;
@@ -424,12 +471,14 @@ describe("palaceContext", () => {
         batchCommands: true,
         finalScopeCheckRequired: true
       });
-      expect(json.executionBoundaries.stopEnforced).toBe(true);
+      expect(output.modeSelection?.interventionPolicy).toBe("advisory");
+      expect(json.executionBoundaries.stopEnforced).toBe(false);
+      expect(json.executionBoundaries.doNot).not.toContain("Do not inventory or broadly scan the repository.");
       expect(json.executionBoundaries.stopCondition).toContain(
-        "Stop immediately after tests pass and changed-file scope matches Primary and Required Evidence."
+        "Palace does not authorize an early stop; completion must be established by current code, tests, and runtime evidence."
       );
-      expect(json.recommendedExecution.some((step) => step.includes("one batched command"))).toBe(true);
-      expect(json.recommendedExecution.some((step) => step.includes("Stop immediately"))).toBe(true);
+      expect(json.recommendedExecution.some((step) => step.includes("starting points"))).toBe(true);
+      expect(json.recommendedExecution.some((step) => step.includes("Stop immediately"))).toBe(false);
 
       const loadedFullDrawers = json.context.filter((item) => item.loadLevel === "full_file" || item.loadLevel === "full_symbol");
       expect(loadedFullDrawers.length).toBeGreaterThan(0);
@@ -465,8 +514,47 @@ describe("palaceContext", () => {
       expect(markdownOutput.markdown).toContain("## Contract Capsule");
       expect(markdownOutput.markdown).toContain("Do not reopen: true");
       expect(markdownOutput.markdown).toContain(
-        "Stop immediately after tests pass and changed-file scope matches Primary and Required Evidence."
+        "Palace does not authorize an early stop; completion must be established by current code, tests, and runtime evidence."
       );
+    });
+  });
+
+  it("fails open when routing evidence is insufficient", async () => {
+    await withFixture("ts-api", async (root) => {
+      const output = await palaceContext({
+        root,
+        task: "Investigate the unexplained quasar handshake.",
+        budget: 6000,
+        auto: true,
+        format: "json"
+      });
+      const json = output.json as {
+        selection: {
+          evidenceStatus: string;
+          interventionPolicy: string;
+        };
+        executionBoundaries: {
+          doNot: string[];
+          stopCondition: string[];
+          stopEnforced: boolean;
+        };
+        recommendedExecution: string[];
+      };
+
+      expect(output.modeSelection?.evidenceStatus).toBe("insufficient");
+      expect(output.modeSelection?.interventionPolicy).toBe("advisory");
+      expect(json.selection).toMatchObject({
+        evidenceStatus: "insufficient",
+        interventionPolicy: "advisory"
+      });
+      expect(json.executionBoundaries.stopEnforced).toBe(false);
+      expect(json.executionBoundaries.doNot).toContain(
+        "Do not treat Palace omissions as proof that a file or dependency is irrelevant."
+      );
+      expect(json.executionBoundaries.stopCondition).toContain(
+        "Expand beyond the routed paths whenever the task, code, tests, or runtime evidence points elsewhere."
+      );
+      expect(json.recommendedExecution.some((step) => step.includes("starting points"))).toBe(true);
     });
   });
 

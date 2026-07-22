@@ -16,7 +16,7 @@ v3 证据显示，跨栈 payload 即使较大，只要带有可执行边界，�
 - 提供包含 input、output、invariant、prohibited change 的 Contract Capsule；
 - 对已完整交付的 `full_file` / `full_symbol` 标记 `do_not_reopen: true`；
 - 要求批量验证与最终 changed-file scope 检查；
-- 输出 `stopEnforced: true` 和明确的立即停止条件。
+- 输出 advisory 介入策略和 `stopEnforced: false`，由当前代码、测试与运行证据决定何时完成。
 
 面向人的 Markdown 不再在源码 drawer 上方重复已载入的 Primary / Support 路径，也不会重复已经完整交付的 Required Evidence 路径。JSON 的路线交付记录会把同一个正规化路径只放在“未载入 Primary、已交付 Context、Deferred”其中一个位置。为兼容和审计保留的 execution-boundary 数组仍是显式控制 metadata。
 
@@ -26,4 +26,4 @@ v3 证据显示，跨栈 payload 即使较大，只要带有可执行边界，�
 
 ## 回归证据
 
-跨栈 fixture 同时要求 frontend、backend、contract 与测试覆盖；验证每层一个实现 anchor、正规化 route path 不重复、Contract Capsule、禁止重开、批量验证与停止约束，并同时检查 JSON 和 Markdown。原有 decision-memory scope 回归必须继续通过。
+跨栈 fixture 同时要求 frontend、backend、contract 与测试覆盖；验证每层一个实现 anchor、正规化 route path 不重复、Contract Capsule、禁止重开、批量验证与 advisory fail-open 行为，并同时检查 JSON 和 Markdown。原有 decision-memory scope 回归必须继续通过。

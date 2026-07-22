@@ -10,7 +10,7 @@ function smallIndex(fileCount = 11): PalaceIndex {
   } as unknown as PalaceIndex;
 }
 
-function focusedRoute(confidence = 0.53): PalaceRoute {
+function focusedRoute(confidence = 0.75): PalaceRoute {
   return {
     confidence,
     taskType: "bugfix",
@@ -50,6 +50,8 @@ describe("selectPalaceMode", () => {
     } as unknown as Parameters<typeof selectPalaceMode>[3]);
 
     expect(selection.mode).toBe("bypass");
+    expect(selection.evidenceStatus).toBe("sufficient");
+    expect(selection.interventionPolicy).toBe("advisory");
   });
 
   it("keeps current decision memory in a memory-bearing guarded mode", () => {
@@ -106,8 +108,53 @@ describe("selectPalaceMode", () => {
     const selection = selectPalaceMode(smallIndex(), focusedRoute(), task, { relevantMemoryCount: 0 });
 
     expect(selection.mode).toBe("bypass");
+    expect(selection.evidenceStatus).toBe("sufficient");
+    expect(selection.interventionPolicy).toBe("bounded");
     expect(selection.riskSignals.publicContractRisk).toBe(false);
     expect(selection.riskSignals.scopeRisk).toBe(false);
+  });
+
+  it("keeps low-confidence routing advisory and fail-open", () => {
+    const selection = selectPalaceMode(
+      smallIndex(120),
+      focusedRoute(0.35),
+      "Investigate an unexplained repository behavior.",
+      { relevantMemoryCount: 0 }
+    );
+
+    expect(selection.mode).toBe("full-palace");
+    expect(selection.evidenceStatus).toBe("insufficient");
+    expect(selection.interventionPolicy).toBe("advisory");
+    expect(selection.evidenceReasons).toContain("Route confidence 0.35 is below the 0.7 sufficiency threshold.");
+  });
+
+  it("marks unresolved memory evidence as conflicted and advisory", () => {
+    const memoryPreflight = {
+      decision: "conflict_requires_guard",
+      candidates: 1,
+      included: 0,
+      excluded: [{ id: "decision-1", reason: "token_budget_exceeded" }],
+      candidateIds: ["decision-1"],
+      includedIds: [],
+      currentRelevantCount: 0,
+      rejectedStaleCount: 0,
+      rejectedScopeCount: 0,
+      conflictCount: 1,
+      requiresGuardedDelivery: true,
+      items: [],
+      estimatedTokens: 0
+    };
+    const selection = selectPalaceMode(
+      smallIndex(120),
+      focusedRoute(),
+      "Use the previous ownership decision without changing shared behavior.",
+      { memoryPreflight } as unknown as Parameters<typeof selectPalaceMode>[3]
+    );
+
+    expect(selection.mode).toBe("guarded-memory-palace");
+    expect(selection.evidenceStatus).toBe("conflicted");
+    expect(selection.interventionPolicy).toBe("advisory");
+    expect(selection.evidenceReasons).toContain("1 unresolved memory conflict(s) remain.");
   });
 
   it("treats preserving a public response contract as a guard, not a contract change", () => {

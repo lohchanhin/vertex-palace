@@ -385,14 +385,27 @@ export async function packBypassContext(
   const primaryCandidate = primary ? stripSourceLocation(primary.sourcePath) : null;
   const verificationCommand = await inferVerificationCommand(root);
   const finalCheckCommand = inferFinalCheckCommand(primaryCandidate);
-  const reason = [
-    selection.reasons.join(" "),
-    verificationCommand
+  const bounded = selection.interventionPolicy === "bounded";
+  const executionInstruction = bounded
+    ? verificationCommand
       ? `Direct: inspect once, edit; run ${verificationCommand}; final once: \`${finalCheckCommand}\`; stop.`
       : `Direct: inspect once, edit; run the known test; final once: \`${finalCheckCommand}\`; stop.`
+    : [
+        "Advisory: treat the Primary candidate as a starting point, not a complete scope.",
+        "Inspect dependencies, callers, tests, and runtime evidence as needed.",
+        verificationCommand
+          ? `Run ${verificationCommand} and use final scope check \`${finalCheckCommand}\` before deciding completion; Palace does not authorize stopping.`
+          : `Run the known test and use final scope check \`${finalCheckCommand}\` before deciding completion; Palace does not authorize stopping.`
+      ].join(" ");
+  const reason = [
+    selection.reasons.join(" "),
+    ...(bounded ? [] : [`Evidence: ${selection.evidenceReasons.join(" ")}`]),
+    executionInstruction
   ].join(" ");
   const minimal = {
     mode: "bypass" as const,
+    evidenceStatus: selection.evidenceStatus,
+    interventionPolicy: selection.interventionPolicy,
     primaryCandidate,
     reason
   };
@@ -400,16 +413,28 @@ export async function packBypassContext(
     ? serializeJsonOutput(minimal)
     : [
         "Mode: bypass",
+        `Evidence status: ${minimal.evidenceStatus}`,
+        `Intervention policy: ${minimal.interventionPolicy}`,
         `Primary candidate: ${minimal.primaryCandidate ?? "none"}`,
         `Reason: ${reason}`,
         ""
       ].join("\n");
   const sectionMaterial = emptySectionMaterial();
   if (format === "json") {
-    sectionMaterial.modeExplanation = jsonLeafMaterial({ mode: minimal.mode, reason: minimal.reason });
+    sectionMaterial.modeExplanation = jsonLeafMaterial({
+      mode: minimal.mode,
+      evidenceStatus: minimal.evidenceStatus,
+      interventionPolicy: minimal.interventionPolicy,
+      reason: minimal.reason
+    });
     sectionMaterial.primary = jsonLeafMaterial(minimal.primaryCandidate);
   } else {
-    sectionMaterial.modeExplanation = `Mode: bypass\nReason: ${reason}`;
+    sectionMaterial.modeExplanation = [
+      "Mode: bypass",
+      `Evidence status: ${minimal.evidenceStatus}`,
+      `Intervention policy: ${minimal.interventionPolicy}`,
+      `Reason: ${reason}`
+    ].join("\n");
     sectionMaterial.primary = `Primary candidate: ${minimal.primaryCandidate ?? "none"}`;
   }
   const memory = withModeTelemetry(preparedMemory ?? emptyGuardedMemory(), selection);
@@ -531,7 +556,7 @@ function adaptiveJson(
     ...(memoryRejectionSummary(memory) ? { memoryRejection: memoryRejectionSummary(memory) } : {}),
     memoryTelemetry: memory.telemetry,
     executionBoundaries: boundaries,
-    recommendedExecution: recommendedExecution(selection.mode),
+    recommendedExecution: recommendedExecution(selection),
     payload
   };
 }
@@ -559,6 +584,9 @@ function renderAdaptiveMarkdown(
     `Mode: ${selection.mode}`,
     `Mode confidence: ${selection.confidence}`,
     `Route confidence: ${route.confidence}`,
+    `Evidence status: ${selection.evidenceStatus}`,
+    `Intervention policy: ${selection.interventionPolicy}`,
+    `Evidence: ${selection.evidenceReasons.join(" ")}`,
     `Why: ${selection.reasons.join(" ")}`,
     "",
     "## Task",
@@ -687,7 +715,7 @@ function renderAdaptiveMarkdown(
     "",
     "## Recommended Execution",
     "",
-    ...recommendedExecution(selection.mode).map((step, index) => `${index + 1}. ${step}`),
+    ...recommendedExecution(selection).map((step, index) => `${index + 1}. ${step}`),
     ""
   );
   return lines.join("\n");
@@ -870,27 +898,45 @@ function buildExecutionBoundaries(
     if (/(?:config|schema|contract)/i.test(step.sourcePath)) return true;
     return taskRequestsDocumentation && /(?:docs?|readme|migration)/i.test(step.sourcePath);
   })).slice(0, 4);
-  const doNot = [
-    "Do not inventory or broadly scan the repository.",
-    "Do not inspect Deferred or Excluded paths unless Primary or Required Evidence conflicts.",
-    "Do not continue exploration after the stop conditions pass."
-  ];
+  const bounded = selection.interventionPolicy === "bounded";
+  const doNot = bounded
+    ? [
+        "Do not inventory or broadly scan the repository.",
+        "Do not inspect Deferred or Excluded paths unless Primary or Required Evidence conflicts.",
+        "Do not continue exploration after the stop conditions pass."
+      ]
+    : [
+        "Do not treat Palace omissions as proof that a file or dependency is irrelevant.",
+        "Do not treat route order, confidence, or memory as a substitute for current code and test evidence."
+      ];
   if (selection.riskSignals.tenantIsolationRisk) doNot.push("Do not change shared behavior without proving the tenant scope requires it.");
   if (selection.riskSignals.publicContractRisk) doNot.push("Do not change the public contract without checking callers and compatibility evidence.");
 
-  const stopCondition = [
-    "The intended Primary implementation scope is resolved; expand it only when Required Evidence proves another dependency.",
-    "Targeted tests for the changed behavior pass.",
-    "No Excluded path or unrelated file is modified.",
-    "No unresolved conflict remains between current code, tests, and delivered memory.",
-    "Stop immediately after tests pass and changed-file scope matches Primary and Required Evidence."
-  ];
+  const stopCondition = bounded
+    ? [
+        "The intended Primary implementation scope is resolved; expand it only when Required Evidence proves another dependency.",
+        "Targeted tests for the changed behavior pass.",
+        "No Excluded path or unrelated file is modified.",
+        "No unresolved conflict remains between current code, tests, and delivered memory.",
+        "Stop immediately after tests pass and changed-file scope matches Primary and Required Evidence."
+      ]
+    : [
+        "Palace does not authorize an early stop; completion must be established by current code, tests, and runtime evidence.",
+        "Expand beyond the routed paths whenever the task, code, tests, or runtime evidence points elsewhere.",
+        "Before stopping, resolve known conflicts and verify the actual changed-file scope."
+      ];
   const conflictSummary: string[] = [];
   const safeMemoryRejection = isSafeMemoryRejection(memory);
   if (selection.riskSignals.staleMemoryRisk && !safeMemoryRejection) conflictSummary.push("Stale-memory risk is present; current code and tests must resolve any disagreement.");
   if (memory.items.length) conflictSummary.push(`${memory.items.length} delivered memory item(s) still require current-code contradiction checks.`);
   if (memory.telemetry.memoryExcluded.length && !safeMemoryRejection) conflictSummary.push(`${memory.telemetry.memoryExcluded.length} retrieved memory item(s) were excluded with machine-readable reasons.`);
-  if (selection.confidence < 0.7 || route.confidence < 0.5) conflictSummary.push("Routing confidence is limited; stop and widen only if Primary evidence disagrees with the task.");
+  if (selection.evidenceStatus === "conflicted") {
+    conflictSummary.push("Evidence is conflicted; the route is advisory until current code, tests, or runtime evidence resolves it.");
+  } else if (selection.evidenceStatus === "insufficient") {
+    conflictSummary.push("Evidence is insufficient; widen proactively until independent evidence confirms the working scope.");
+  } else if (selection.confidence < 0.7 || route.confidence < 0.5) {
+    conflictSummary.push("Routing confidence is limited; treat the route as a starting hypothesis.");
+  }
   if (!conflictSummary.length) conflictSummary.push("Static routing found no explicit conflict; current code, tests, and runtime evidence remain authoritative.");
 
   const contractCapsule = selection.riskSignals.crossStack ? buildContractCapsule(tiered) : undefined;
@@ -908,7 +954,7 @@ function buildExecutionBoundaries(
       batchCommands: true,
       finalScopeCheckRequired: true
     },
-    stopEnforced: true
+    stopEnforced: bounded
   };
 }
 
@@ -932,7 +978,18 @@ function uniquePaths(steps: PalaceRouteStep[]): string[] {
   return [...new Set(steps.map((step) => step.sourcePath))];
 }
 
-function recommendedExecution(mode: PalaceModeSelection["mode"]): string[] {
+function recommendedExecution(selection: PalaceModeSelection): string[] {
+  if (selection.interventionPolicy === "advisory") {
+    return [
+      "Treat Primary paths as starting points, not a complete or exclusive scope.",
+      "Inspect dependencies, callers, tests, and runtime evidence as needed; expand beyond Deferred or Excluded paths whenever evidence points there.",
+      ...(selection.mode === "guarded-memory-palace"
+        ? ["Validate every delivered memory item against current code before relying on it."]
+        : []),
+      "Decide completion from current code, tests, and runtime behavior; Palace does not enforce an early stop."
+    ];
+  }
+  const mode = selection.mode;
   if (mode === "bypass") {
     return [
       "Open the explicitly named file and inspect the smallest relevant symbol.",
@@ -977,6 +1034,9 @@ function adaptiveMarkdownSectionMaterial(
     `Mode: ${selection.mode}`,
     `Mode confidence: ${selection.confidence}`,
     `Route confidence: ${route.confidence}`,
+    `Evidence status: ${selection.evidenceStatus}`,
+    `Intervention policy: ${selection.interventionPolicy}`,
+    `Evidence: ${selection.evidenceReasons.join(" ")}`,
     `Why: ${selection.reasons.join(" ")}`
   ].join("\n");
   material.primary = markdownTierMaterial("primary", tiered.primary, drawers);
@@ -1214,6 +1274,9 @@ function compactSelection(selection: PalaceModeSelection): unknown {
   return {
     confidence: selection.confidence,
     reasons: selection.reasons,
+    evidenceStatus: selection.evidenceStatus,
+    evidenceReasons: selection.evidenceReasons,
+    interventionPolicy: selection.interventionPolicy,
     maxContextTokens: selection.maxContextTokens,
     memoryLevel: selection.memoryLevel,
     risks: Object.entries(selection.riskSignals)

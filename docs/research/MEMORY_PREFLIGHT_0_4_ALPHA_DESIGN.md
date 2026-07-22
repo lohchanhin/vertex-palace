@@ -69,7 +69,7 @@ machine-readable telemetry for audit compatibility.
 - Expired or contradictory-version memory is never included.
 - Ambiguous tenant evidence remains excluded as `scope_mismatch`.
 - Unique historical alias inference remains supported.
-- Bypass keeps its three-field JSON contract and stays memory-free.
+- Bypass stays memory-free and adds explicit evidence-status and intervention-policy fields to its minimal JSON contract.
 - Frozen benchmark evidence is not modified or reinterpreted.
 - No npm publication, Git tag, or GitHub Release is part of this change.
 

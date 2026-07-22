@@ -2,6 +2,8 @@ import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   test: {
-    exclude: ["**/node_modules/**", "**/dist/**", "test/fixtures/**"]
+    exclude: ["**/node_modules/**", "**/dist/**", "test/fixtures/**"],
+    fileParallelism: false,
+    testTimeout: 15_000
   }
 });

@@ -15,6 +15,12 @@ export type SelectPalaceModeOptions = {
 };
 
 const DEFAULT_CONTEXT_BUDGET = 6_000;
+const MIN_SUFFICIENT_ROUTE_CONFIDENCE = 0.7;
+
+type BasePalaceModeSelection = Omit<
+  PalaceModeSelection,
+  "evidenceStatus" | "evidenceReasons" | "interventionPolicy"
+>;
 
 export function selectPalaceMode(
   index: PalaceIndex,
@@ -58,7 +64,11 @@ export function selectPalaceMode(
       options.budget,
       1
     );
-    return withMemoryTransition(overridden, options.override, options.memoryPreflight);
+    return withMemoryTransition(
+      withEvidencePolicy(overridden, route, options),
+      options.override,
+      options.memoryPreflight
+    );
   }
 
   const keywordGuardRequired = riskSignals.memoryRelevant
@@ -76,7 +86,7 @@ export function selectPalaceMode(
         )
       : structuralSelection;
 
-  if (!options.memoryPreflight) return selectionBeforeMemory;
+  if (!options.memoryPreflight) return withEvidencePolicy(selectionBeforeMemory, route, options);
 
   const guardedDeliveryRequired = options.memoryPreflight.conflictCount > 0
     || options.memoryPreflight.requiresGuardedDelivery
@@ -93,7 +103,11 @@ export function selectPalaceMode(
         )
       : structuralSelection;
 
-  return withMemoryTransition(finalSelection, selectionBeforeMemory.mode, options.memoryPreflight);
+  return withMemoryTransition(
+    withEvidencePolicy(finalSelection, route, options),
+    selectionBeforeMemory.mode,
+    options.memoryPreflight
+  );
 }
 
 function selectStructuralMode(input: {
@@ -105,7 +119,7 @@ function selectStructuralMode(input: {
   uncertainRoute: boolean;
   riskSignals: PalaceRiskSignals;
   budget?: number;
-}): PalaceModeSelection {
+}): BasePalaceModeSelection {
   if (
     input.highConfidenceSingleFile
     && input.memoryCheckedAndAbsent
@@ -188,11 +202,7 @@ function withMemoryTransition(
   memoryPreflight?: MemoryPreflightResult
 ): PalaceModeSelection {
   if (!memoryPreflight) return selection;
-  const safelyRejected = memoryPreflight.candidates > 0
-    && memoryPreflight.included === 0
-    && memoryPreflight.conflictCount === 0
-    && memoryPreflight.excluded.length === memoryPreflight.candidates
-    && memoryPreflight.excluded.every((item) => item.reason === "expired" || item.reason === "scope_mismatch");
+  const safelyRejected = isSafelyRejectedMemory(memoryPreflight);
   const downgraded = safelyRejected
     && selectedModeBeforeMemory === "guarded-memory-palace"
     && selection.mode !== "guarded-memory-palace";
@@ -203,6 +213,91 @@ function withMemoryTransition(
     selectedModeAfterMemory: selection.mode,
     ...(downgraded ? { modeDowngradeReason: "all_candidates_safely_rejected" as const } : {})
   };
+}
+
+function withEvidencePolicy(
+  selection: BasePalaceModeSelection,
+  route: PalaceRoute,
+  options: SelectPalaceModeOptions
+): PalaceModeSelection {
+  const memoryPreflight = options.memoryPreflight;
+  const primaryCount = route.route.filter(
+    (step) => (step.tier ?? inferredTier(step.priority)) === "primary"
+  ).length;
+  const evidenceReasons: string[] = [];
+
+  if (memoryPreflight?.conflictCount) {
+    evidenceReasons.push(`${memoryPreflight.conflictCount} unresolved memory conflict(s) remain.`);
+    return {
+      ...selection,
+      evidenceStatus: "conflicted",
+      evidenceReasons,
+      interventionPolicy: "advisory"
+    };
+  }
+
+  if (primaryCount === 0) {
+    evidenceReasons.push("The route contains no Primary implementation evidence.");
+  }
+  if (route.confidence < MIN_SUFFICIENT_ROUTE_CONFIDENCE) {
+    evidenceReasons.push(
+      `Route confidence ${route.confidence} is below the ${MIN_SUFFICIENT_ROUTE_CONFIDENCE} sufficiency threshold.`
+    );
+  }
+
+  const memoryChecked = Boolean(memoryPreflight) || options.relevantMemoryCount !== undefined;
+  if (!memoryChecked) {
+    evidenceReasons.push("Memory preflight has not confirmed whether relevant project history is absent.");
+  }
+  if (
+    memoryPreflight?.requiresGuardedDelivery
+    && memoryPreflight.included === 0
+    && !isSafelyRejectedMemory(memoryPreflight)
+  ) {
+    evidenceReasons.push("The task requires historical evidence, but no usable memory was delivered.");
+  }
+  const omittedRelevantMemory = memoryPreflight?.excluded.filter(
+    (item) => item.reason === "selection_limit_reached" || item.reason === "token_budget_exceeded"
+  ).length ?? 0;
+  if (omittedRelevantMemory > 0) {
+    evidenceReasons.push(`${omittedRelevantMemory} relevant memory candidate(s) were not delivered.`);
+  }
+
+  const evidenceStatus = evidenceReasons.length ? "insufficient" : "sufficient";
+  if (evidenceStatus === "sufficient") {
+    evidenceReasons.push(
+      `Route confidence ${route.confidence} meets the ${MIN_SUFFICIENT_ROUTE_CONFIDENCE} threshold and memory preflight has no unresolved gap.`
+    );
+  }
+
+  const boundaryRisk = selection.riskSignals.crossStack
+    || selection.riskSignals.memoryRelevant
+    || selection.riskSignals.staleMemoryRisk
+    || selection.riskSignals.tenantIsolationRisk
+    || selection.riskSignals.publicContractRisk
+    || selection.riskSignals.scopeRisk
+    || selection.riskSignals.verificationChangeRisk;
+  const boundedMode = selection.mode === "bypass" || selection.mode === "route-lite";
+  const interventionPolicy = evidenceStatus === "sufficient" && boundedMode && !boundaryRisk
+    ? "bounded"
+    : "advisory";
+
+  return {
+    ...selection,
+    evidenceStatus,
+    evidenceReasons,
+    interventionPolicy
+  };
+}
+
+function isSafelyRejectedMemory(memoryPreflight: MemoryPreflightResult): boolean {
+  return memoryPreflight.candidates > 0
+    && memoryPreflight.included === 0
+    && memoryPreflight.conflictCount === 0
+    && memoryPreflight.excluded.length === memoryPreflight.candidates
+    && memoryPreflight.excluded.every(
+      (item) => item.reason === "expired" || item.reason === "scope_mismatch"
+    );
 }
 
 function detectRiskSignals(task: string, route: PalaceRoute): PalaceRiskSignals {
@@ -379,7 +474,7 @@ function buildSelection(
   riskSignals: PalaceRiskSignals,
   requestedBudget: number | undefined,
   confidence: number
-): PalaceModeSelection {
+): BasePalaceModeSelection {
   const modeBudget = {
     bypass: 512,
     "route-lite": 2_400,

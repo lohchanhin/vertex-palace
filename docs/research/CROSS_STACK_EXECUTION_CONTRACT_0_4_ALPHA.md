@@ -16,7 +16,7 @@ Cross-stack adaptive packs now:
 - attach a Contract Capsule with input, output, invariant, and prohibited change;
 - mark delivered `full_file` and `full_symbol` drawers with `do_not_reopen: true`;
 - require batched verification and a final changed-file scope check;
-- expose `stopEnforced: true` and an explicit immediate-stop condition.
+- expose an advisory intervention policy with `stopEnforced: false`; current code, tests, and runtime evidence determine completion.
 
 Human-facing Markdown no longer repeats loaded Primary or Support paths above their delivered drawers, and it does not repeat Required Evidence paths already delivered in full. JSON route delivery records are normalized so a source path is represented by only one of unloaded Primary, delivered Context, or Deferred. Execution-boundary arrays remain explicit control metadata for compatibility and auditability.
 
@@ -26,4 +26,4 @@ An inferred tenant/client decision scope outranks cross-stack anchor promotion. 
 
 ## Regression evidence
 
-The cross-stack fixture requires frontend, backend, contract, and test coverage; verifies one implementation anchor per layer; checks normalized route-path uniqueness; and checks the Contract Capsule, no-reopen marker, batched verification, and stop enforcement in JSON and Markdown. Existing decision-memory scope tests remain mandatory.
+The cross-stack fixture requires frontend, backend, contract, and test coverage; verifies one implementation anchor per layer; checks normalized route-path uniqueness; and checks the Contract Capsule, no-reopen marker, batched verification, and advisory fail-open behavior in JSON and Markdown. Existing decision-memory scope tests remain mandatory.

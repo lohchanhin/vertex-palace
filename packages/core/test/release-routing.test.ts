@@ -166,7 +166,7 @@ describe("release routing matrix", () => {
         "packages/core/src/router/route-planner.ts": "export const routePalace = () => ['implementation', 'test', 'package'];\n",
         "packages/core/src/router/route-scorer.ts": "export const requestedRouteSurfaces = () => ['implementation', 'test'];\n",
         "packages/shared/src/types.ts": "export type PalaceExecutionBoundaries = { primary: string[] };\n",
-        "packages/core/test/context.test.ts": "describe('context bypass boundaries', () => it('packs three fields', () => true));\n",
+        "packages/core/test/context.test.ts": "describe('context bypass boundaries', () => it('packs evidence and policy fields', () => true));\n",
         "packages/core/test/mode-selector.test.ts": "describe('adaptive bypass preflight', () => it('selects bypass', () => true));\n",
         "packages/core/test/router.test.ts": "describe('mixed feature release routing', () => it('covers surfaces', () => true));\n",
         "packages/core/test/release-routing.test.ts": "describe('release routing matrix', () => it('balances feature and distribution', () => true));\n",

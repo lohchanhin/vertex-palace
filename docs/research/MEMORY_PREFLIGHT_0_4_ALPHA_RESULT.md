@@ -4,6 +4,11 @@ Status: implemented and verified as post-v3 engineering work. This is not a v4
 Agent benchmark and does not modify or extend the frozen v1, v2.2, or
 Control-First v3 outcomes.
 
+Compatibility note (2026-07-22): the later advisory-safety iteration extends
+the minimal bypass serialization with `evidenceStatus` and
+`interventionPolicy`. Three-field statements below describe this earlier
+memory-preflight checkpoint.
+
 [Simplified Chinese](../zh-CN/MEMORY_PREFLIGHT_0_4_ALPHA_RESULT.md) | [Design](MEMORY_PREFLIGHT_0_4_ALPHA_DESIGN.md)
 
 ## Root Cause
@@ -47,8 +52,8 @@ No benchmark outcome file was edited during this work.
 - Markdown emits one compact rejection summary instead of a full empty guarded
   section. JSON adds a compact `memoryRejection` object while preserving the
   existing auditable telemetry fields.
-- The bypass JSON contract remains exactly `mode`, `primaryCandidate`, and
-  `reason`.
+- At this checkpoint, the bypass JSON contract remained exactly `mode`,
+  `primaryCandidate`, and `reason`.
 
 ## Mode Decision Change
 
