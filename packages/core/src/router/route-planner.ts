@@ -1,5 +1,5 @@
 import path from "node:path";
-import type { LoadLevel, PalaceRoute, RouteTier, TaskType } from "@vertex-palace/shared";
+import type { LoadLevel, PalaceEdge, PalaceNode, PalaceRoute, RouteTier, TaskType } from "@vertex-palace/shared";
 import { DEFAULT_BUDGET } from "../config/defaults";
 import { indexPalace } from "../indexer/index-palace";
 import { readIndex } from "../storage/read-palace";
@@ -40,7 +40,8 @@ export async function routePalace(root: string, task: string, options: number | 
     taskType === "evaluation"
       ? evaluationRouteLimit(normalized.routeLimit, requestedSurfaces, analysis)
       : normalized.routeLimit;
-  const implementationAnchor = taskType === "bugfix"
+  const codeTask = isCodeTaskType(taskType);
+  const implementationAnchor = codeTask
     ? scored.find((item) => isImplementationCandidate(item.node))
     : undefined;
   const top = implementationAnchor ?? scored[0];
@@ -65,7 +66,7 @@ export async function routePalace(root: string, task: string, options: number | 
     preferVerificationRelations: boundedBugfix,
     minSeedScoreRatio: boundedBugfix ? 0.75 : undefined
   });
-  const expanded =
+  const surfaceExpanded =
     taskType === "evaluation"
       ? ensureRequestedSurfaceCoverage(initialRoute, scored, requestedSurfaces, analysis, routeLimit)
       : taskType === "release"
@@ -75,6 +76,16 @@ export async function routePalace(root: string, task: string, options: number | 
             ? ensureTypeDeclarationCoverage(initialRoute, scored, requestedSurfaces, routeLimit)
             : ensureBugfixVerificationCoverage(initialRoute, scored, requestedSurfaces, implementationAnchor, analysis, routeLimit, focused)
           : ensureGeneralSurfaceCoverage(initialRoute, scored, requestedSurfaces, analysis, routeLimit);
+  const coreSelection = selectEvidenceSufficientCoreRoute(
+    scored,
+    index.edges,
+    index.nodes,
+    analysis,
+    taskType,
+    requestedSurfaces,
+    routeLimit
+  );
+  const expanded = coreSelection?.route ?? surfaceExpanded;
   const now = new Date().toISOString();
 
   const routeSteps = expanded.map((item, index) => {
@@ -107,7 +118,7 @@ export async function routePalace(root: string, task: string, options: number | 
       estimatedTokens,
       reservedOutputTokens: DEFAULT_BUDGET.reservedOutputTokens
     },
-    confidence: confidence(expanded, analysis, estimatedTokens, budget, taskType),
+    confidence: confidence(expanded, analysis, estimatedTokens, budget, taskType, coreSelection?.confidenceCap),
     createdAt: now
   };
 
@@ -119,6 +130,10 @@ function isImplementationCandidate(node: Awaited<ReturnType<typeof readIndex>>["
   return node.floor !== "05-verification" && !["test", "config", "doc", "runtime-log", "directory"].includes(node.kind);
 }
 
+function isCodeTaskType(taskType: TaskType): boolean {
+  return ["bugfix", "feature", "refactor"].includes(taskType);
+}
+
 function ensureBugfixVerificationCoverage(
   selected: ScoredNode[],
   scored: ScoredNode[],
@@ -128,7 +143,10 @@ function ensureBugfixVerificationCoverage(
   limit: number,
   focused: boolean
 ): ScoredNode[] {
-  if (requested.includes("implementation") && requested.length >= 3) {
+  if (
+    requested.includes("implementation")
+    && (requested.length >= 3 || routingImplementationConcernCount(analysis.raw) >= 3)
+  ) {
     return ensureGeneralSurfaceCoverage(selected, scored, requested, analysis, limit, false);
   }
   const requiredSurfaces = requested.filter((surface) => ["test", "config", "docs", "shared"].includes(surface));
@@ -211,10 +229,445 @@ function focusedTestCompanionPriority(
   return taskAffinity ** 2 * 250 + relationEvidence + semanticEvidence + pairAffinity * 80 + item.score;
 }
 
+type CoreEvidenceCandidate = {
+  item: ScoredNode;
+  directEvidence: number;
+  relationEvidence: number;
+  pairEvidence: number;
+  totalEvidence: number;
+  taskCoverage: Set<string>;
+  entityCoverage: Set<string>;
+};
+
+type CoreEvidencePair = {
+  implementation: CoreEvidenceCandidate;
+  test: CoreEvidenceCandidate;
+  relationEvidence: number;
+  pairEvidence: number;
+  taskCoverage: Set<string>;
+  entityCoverage: Set<string>;
+  totalEvidence: number;
+};
+
+type CoreRouteSelection = {
+  route: ScoredNode[];
+  confidenceCap: number;
+};
+
+const CORE_EVIDENCE_NOISE = new Set([
+  "add",
+  "change",
+  "enhance",
+  "feat",
+  "feature",
+  "fix",
+  "keep",
+  "perform",
+  "preserve",
+  "test"
+]);
+
+const CORE_EVIDENCE_LOW_SIGNAL = new Set([
+  "collection",
+  "command",
+  "fixture",
+  "help",
+  "method",
+  "node",
+  "order",
+  "output",
+  "request",
+  "value"
+]);
+
+const CORE_PATH_NOISE = new Set([
+  "app",
+  "file",
+  "js",
+  "jsx",
+  "lib",
+  "main",
+  "package",
+  "packages",
+  "py",
+  "spec",
+  "src",
+  "test",
+  "tests",
+  "ts",
+  "tsx",
+  "unit"
+]);
+
+const CORE_RELATION_TYPES = new Set([
+  "changed_with",
+  "depends_on",
+  "imports",
+  "tested_by",
+  "tests"
+]);
+
+function selectEvidenceSufficientCoreRoute(
+  scored: ScoredNode[],
+  edges: PalaceEdge[],
+  nodes: PalaceNode[],
+  analysis: ReturnType<typeof analyzeTask>,
+  taskType: TaskType,
+  requested: RouteSurface[],
+  limit: number
+): CoreRouteSelection | undefined {
+  if (!isCodeTaskType(taskType) || requested.length > 1) return undefined;
+  if (analysis.wingHints.includes("frontend") && analysis.wingHints.includes("backend")) return undefined;
+
+  const implementationCandidates = bestPhysicalEvidenceCandidates(
+    scored.filter((item) => isImplementationCandidate(item.node) && !isDirectTestCandidate(item)),
+    analysis
+  ).slice(0, 12);
+  if (!implementationCandidates.length || implementationCandidates[0].directEvidence < 100) return undefined;
+  const sourceRelations = buildSourceRelations(edges, nodes);
+
+  const testCandidates = bestPhysicalEvidenceCandidates(
+    scored.filter(isDirectTestCandidate),
+    analysis
+  ).slice(0, 16);
+  const pairs = implementationCandidates.flatMap((implementation) =>
+    testCandidates.map((test) => buildCoreEvidencePair(implementation, test, sourceRelations))
+  ).filter(
+    (pair) => pair.implementation.directEvidence >= 100
+      && pair.test.directEvidence >= 100
+      && (
+        pair.relationEvidence >= 0.6
+        || pair.pairEvidence >= 1
+        || pair.taskCoverage.size >= 3
+        || pair.entityCoverage.size > 0
+      )
+  ).sort(
+    (left, right) => right.totalEvidence - left.totalEvidence
+      || right.relationEvidence - left.relationEvidence
+      || right.implementation.item.score - left.implementation.item.score
+      || left.implementation.item.node.sourcePath.localeCompare(right.implementation.item.node.sourcePath)
+  );
+  const anchor = pairs[0];
+  if (!anchor || anchor.totalEvidence < 650) return undefined;
+
+  const competitor = pairs.find(
+    (pair) => pair.implementation.item.node.sourcePath !== anchor.implementation.item.node.sourcePath
+  );
+  const margin = competitor
+    ? (anchor.totalEvidence - competitor.totalEvidence) / Math.max(anchor.totalEvidence, 1)
+    : 1;
+  const anchorHasDirectIdentity = anchor.relationEvidence >= 0.75
+    || anchor.entityCoverage.size > 0
+    || (anchor.taskCoverage.size >= 3 && anchor.pairEvidence >= 1);
+  const competitorComplementsImplementation = competitor !== undefined
+    && sourcePathFamilyEvidence(
+      anchor.implementation.item.node.sourcePath,
+      competitor.implementation.item.node.sourcePath
+    ) >= 0.5
+    && setDifference(competitor.implementation.entityCoverage, anchor.implementation.entityCoverage).size > 0;
+  const anchorBeatsCompetingConcepts = !competitor
+    || margin >= 0.08
+    || anchor.taskCoverage.size > competitor.taskCoverage.size
+    || anchor.entityCoverage.size > competitor.entityCoverage.size
+    || competitorComplementsImplementation;
+  if (!anchorHasDirectIdentity || !anchorBeatsCompetingConcepts) return undefined;
+
+  const implementations = [anchor.implementation];
+  const tests = [anchor.test];
+  const coveredTaskTokens = new Set(anchor.taskCoverage);
+  const coveredEntities = new Set(anchor.entityCoverage);
+  const coveredImplementationTaskTokens = new Set(anchor.implementation.taskCoverage);
+  const coveredImplementationEntities = new Set(anchor.implementation.entityCoverage);
+
+  for (const candidate of implementationCandidates) {
+    if (implementations.length >= 3 || candidate.item.node.sourcePath === anchor.implementation.item.node.sourcePath) continue;
+    const newTaskCoverage = setDifference(candidate.taskCoverage, coveredImplementationTaskTokens);
+    const newEntityCoverage = setDifference(candidate.entityCoverage, coveredImplementationEntities);
+    const relationToSelectedTests = strongestRelationTo(
+      candidate.item.node.sourcePath,
+      new Set(tests.map((test) => test.item.node.sourcePath)),
+      sourceRelations
+    );
+    const relationToSelectedImplementations = strongestRelationTo(
+      candidate.item.node.sourcePath,
+      new Set(implementations.map((implementation) => implementation.item.node.sourcePath)),
+      sourceRelations
+    );
+    const entityExpansion = newEntityCoverage.size > 0 && candidate.directEvidence >= 180;
+    const relatedConceptExpansion = relationToSelectedTests >= 0.75
+      && newTaskCoverage.size > 0
+      && candidate.directEvidence >= Math.max(160, anchor.implementation.directEvidence * 0.45);
+    const relatedPeerExpansion = relationToSelectedImplementations >= 0.75
+      && candidate.directEvidence >= anchor.implementation.directEvidence * 0.75;
+    if (!entityExpansion && !relatedConceptExpansion && !relatedPeerExpansion) continue;
+    implementations.push(candidate);
+    addAll(coveredTaskTokens, candidate.taskCoverage);
+    addAll(coveredEntities, candidate.entityCoverage);
+    addAll(coveredImplementationTaskTokens, candidate.taskCoverage);
+    addAll(coveredImplementationEntities, candidate.entityCoverage);
+  }
+
+  const anchorTestEvidence = testEvidenceForImplementations(anchor.test, implementations, sourceRelations);
+  for (const candidate of testCandidates) {
+    if (tests.length >= 3 || candidate.item.node.sourcePath === anchor.test.item.node.sourcePath) continue;
+    const evidence = testEvidenceForImplementations(candidate, implementations, sourceRelations);
+    const newTaskCoverage = setDifference(candidate.taskCoverage, coveredTaskTokens);
+    const newEntityCoverage = setDifference(candidate.entityCoverage, coveredEntities);
+    const evidenceRatio = evidence.totalEvidence / Math.max(anchorTestEvidence.totalEvidence, 1);
+    const relatedNewConcept = evidence.relationEvidence >= 0.75
+      && evidenceRatio >= 0.55
+      && (newTaskCoverage.size > 0 || newEntityCoverage.size > 0);
+    const independentlyImportedSibling = evidence.relationEvidence >= 0.95 && evidenceRatio >= 0.75;
+    const focusedTestSibling = evidence.relationEvidence >= 0.75
+      && evidenceRatio >= 0.75
+      && sharedTestIdentityCount(anchor.test.item.node.sourcePath, candidate.item.node.sourcePath) >= 2;
+    if (!relatedNewConcept && !independentlyImportedSibling && !focusedTestSibling) continue;
+    tests.push(evidence);
+    addAll(coveredTaskTokens, candidate.taskCoverage);
+    addAll(coveredEntities, candidate.entityCoverage);
+  }
+
+  const route = [...implementations, ...tests]
+    .map((candidate) => candidate.item)
+    .filter(
+      (item, index, items) => items.findIndex((candidate) => candidate.node.sourcePath === item.node.sourcePath) === index
+    )
+    .slice(0, limit);
+  if (!route.some((item) => isImplementationCandidate(item.node)) || !route.some(isDirectTestCandidate)) return undefined;
+
+  const confidenceCap = anchor.relationEvidence >= 0.75 && margin >= 0.08 ? 0.9 : 0.68;
+  return { route, confidenceCap };
+}
+
+function buildCoreEvidencePair(
+  implementation: CoreEvidenceCandidate,
+  test: CoreEvidenceCandidate,
+  relations: Map<string, number>
+): CoreEvidencePair {
+  const relationEvidence = relations.get(sourceRelationKey(
+    implementation.item.node.sourcePath,
+    test.item.node.sourcePath
+  )) ?? 0;
+  const pairEvidence = strongestPairEvidence(test.item, [implementation.item]);
+  const taskCoverage = new Set([...implementation.taskCoverage, ...test.taskCoverage]);
+  const entityCoverage = new Set([...implementation.entityCoverage, ...test.entityCoverage]);
+  const familyEvidence = sourcePathFamilyEvidence(
+    implementation.item.node.sourcePath,
+    test.item.node.sourcePath
+  );
+  const totalEvidence = implementation.directEvidence
+    + test.directEvidence
+    + relationEvidence * 500
+    + pairEvidence * 40
+    + familyEvidence * 100
+    + taskCoverage.size * 55
+    + entityCoverage.size * 80
+    + (implementation.item.score + test.item.score) * 0.15;
+  return {
+    implementation,
+    test,
+    relationEvidence,
+    pairEvidence,
+    taskCoverage,
+    entityCoverage,
+    totalEvidence
+  };
+}
+
+function testEvidenceForImplementations(
+  test: CoreEvidenceCandidate,
+  implementations: CoreEvidenceCandidate[],
+  relations: Map<string, number>
+): CoreEvidenceCandidate {
+  const implementationPaths = new Set(implementations.map((candidate) => candidate.item.node.sourcePath));
+  const relationEvidence = strongestRelationTo(test.item.node.sourcePath, implementationPaths, relations);
+  const pairEvidence = strongestPairEvidence(test.item, implementations.map((candidate) => candidate.item));
+  return {
+    ...test,
+    relationEvidence,
+    pairEvidence,
+    totalEvidence: test.directEvidence + relationEvidence * 500 + pairEvidence * 40
+  };
+}
+
+function bestPhysicalEvidenceCandidates(
+  items: ScoredNode[],
+  analysis: ReturnType<typeof analyzeTask>
+): CoreEvidenceCandidate[] {
+  const bySource = new Map<string, CoreEvidenceCandidate>();
+  for (const item of items) {
+    const profile = coreEvidenceProfile(item, analysis);
+    const candidate: CoreEvidenceCandidate = {
+      item,
+      directEvidence: profile.directEvidence,
+      relationEvidence: 0,
+      pairEvidence: 0,
+      totalEvidence: profile.directEvidence,
+      taskCoverage: profile.taskCoverage,
+      entityCoverage: profile.entityCoverage
+    };
+    const current = bySource.get(item.node.sourcePath);
+    if (
+      !current
+      || candidate.directEvidence > current.directEvidence
+      || (candidate.directEvidence === current.directEvidence && item.score > current.item.score)
+    ) {
+      bySource.set(item.node.sourcePath, candidate);
+    }
+  }
+  return [...bySource.values()].sort(
+    (left, right) => right.directEvidence - left.directEvidence
+      || right.item.score - left.item.score
+      || left.item.node.sourcePath.localeCompare(right.item.node.sourcePath)
+  );
+}
+
+function directCoreEvidence(item: ScoredNode, analysis: ReturnType<typeof analyzeTask>): number {
+  return coreEvidenceProfile(item, analysis).directEvidence;
+}
+
+function coreEvidenceProfile(item: ScoredNode, analysis: ReturnType<typeof analyzeTask>): {
+  directEvidence: number;
+  taskCoverage: Set<string>;
+  entityCoverage: Set<string>;
+} {
+  const taskTokens = coreTaskTokens(analysis);
+  const pathTokens = coreNodeTokens(path.posix.basename(item.node.sourcePath));
+  const titleTokens = coreNodeTokens(item.node.title);
+  const summaryTokens = coreNodeTokens(item.node.summary);
+  const nodeTokens = new Set([...pathTokens, ...titleTokens, ...summaryTokens]);
+  const identityHaystack = [path.posix.basename(item.node.sourcePath), item.node.title, item.node.summary]
+    .join(" ")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "");
+  const pathMatches = weightedCoreMatches(pathTokens, taskTokens);
+  const titleMatches = weightedCoreMatches(titleTokens, taskTokens);
+  const summaryMatches = weightedCoreMatches(summaryTokens, taskTokens);
+  const taskCoverage = new Set(
+    [...taskTokens].filter((token) => !CORE_EVIDENCE_LOW_SIGNAL.has(token) && nodeTokens.has(token))
+  );
+  const entityCoverage = new Set(
+    analysis.entities.filter((entity) => {
+      const entityTokens = [...coreNodeTokens(entity)].filter((token) => !CORE_EVIDENCE_LOW_SIGNAL.has(token));
+      const compactEntity = entity.toLowerCase().replace(/[^a-z0-9]+/g, "");
+      return (entityTokens.length > 0 && entityTokens.every((token) => nodeTokens.has(token)))
+        || (compactEntity.length > 3 && identityHaystack.includes(compactEntity));
+    })
+  );
+  const auxiliaryPath = /(^|\/)(?:bench|benchmark|benchmarks|example|examples)(\/|$)|(?:^|[-_.])bench(?:mark)?(?:[-_.]|$)/i.test(item.node.sourcePath);
+  const auxiliaryRequested = analysis.keywords.some((keyword) => ["bench", "benchmark", "example", "examples"].includes(keyword));
+  const auxiliaryPenalty = auxiliaryPath && !auxiliaryRequested ? 500 : 0;
+  const directEvidence = pathMatches * 110
+    + titleMatches * 140
+    + Math.min(5, summaryMatches) * 40
+    + routePathTaskAffinity(item.node.sourcePath, analysis) * 70
+    + entityCoverage.size * 140
+    + taskCoverage.size * 25
+    + (item.node.startLine && titleMatches > 0 ? 20 : 0)
+    - auxiliaryPenalty;
+  return {
+    directEvidence: Math.max(0, directEvidence),
+    taskCoverage,
+    entityCoverage
+  };
+}
+
+function coreTaskTokens(analysis: ReturnType<typeof analyzeTask>): Set<string> {
+  return new Set(
+    analysis.keywords.flatMap((keyword) => [...tokenizeLexical(keyword)])
+      .filter((token) => token.length > 2 && !CORE_EVIDENCE_NOISE.has(token))
+  );
+}
+
+function coreNodeTokens(value: string): Set<string> {
+  return new Set(
+    [...tokenizeLexical(value)]
+      .filter((token) => token.length > 2 && !CORE_PATH_NOISE.has(token) && !CORE_EVIDENCE_NOISE.has(token))
+  );
+}
+
+function weightedCoreMatches(candidateTokens: Set<string>, taskTokens: Set<string>): number {
+  return [...candidateTokens]
+    .filter((token) => taskTokens.has(token))
+    .reduce((sum, token) => sum + (CORE_EVIDENCE_LOW_SIGNAL.has(token) ? 0.25 : 1), 0);
+}
+
+function strongestPairEvidence(test: ScoredNode, implementations: ScoredNode[]): number {
+  const testTokens = new Set([
+    ...coreNodeTokens(path.posix.basename(test.node.sourcePath)),
+    ...coreNodeTokens(test.node.title)
+  ]);
+  return implementations.reduce((strongest, implementation) => {
+    const implementationTokens = new Set([
+      ...coreNodeTokens(path.posix.basename(implementation.node.sourcePath)),
+      ...coreNodeTokens(implementation.node.title)
+    ]);
+    return Math.max(strongest, weightedCoreMatches(testTokens, implementationTokens));
+  }, 0);
+}
+
+function buildSourceRelations(edges: PalaceEdge[], nodes: PalaceNode[]): Map<string, number> {
+  const byId = new Map(nodes.map((node) => [node.id, node]));
+  const relations = new Map<string, number>();
+  for (const edge of edges) {
+    if (!CORE_RELATION_TYPES.has(edge.type)) continue;
+    const from = byId.get(edge.from)?.sourcePath;
+    const to = byId.get(edge.to)?.sourcePath;
+    if (!from || !to || from === to) continue;
+    const key = sourceRelationKey(from, to);
+    relations.set(key, Math.max(relations.get(key) ?? 0, edge.weight));
+  }
+  return relations;
+}
+
+function strongestRelationTo(
+  sourcePath: string,
+  targets: Set<string>,
+  relations: Map<string, number>
+): number {
+  return [...targets].reduce(
+    (strongest, target) => Math.max(strongest, relations.get(sourceRelationKey(sourcePath, target)) ?? 0),
+    0
+  );
+}
+
+function sourceRelationKey(left: string, right: string): string {
+  return [left, right].sort().join("\u0000");
+}
+
+function sourcePathFamilyEvidence(left: string, right: string): number {
+  const leftParts = left.toLowerCase().split("/").slice(0, -1);
+  const rightParts = right.toLowerCase().split("/").slice(0, -1);
+  let sharedPrefix = 0;
+  while (sharedPrefix < leftParts.length && sharedPrefix < rightParts.length && leftParts[sharedPrefix] === rightParts[sharedPrefix]) {
+    sharedPrefix += 1;
+  }
+  return Math.min(1, sharedPrefix / 4);
+}
+
+function setDifference(values: Set<string>, covered: Set<string>): Set<string> {
+  return new Set([...values].filter((value) => !covered.has(value)));
+}
+
+function addAll(target: Set<string>, values: Set<string>): void {
+  for (const value of values) target.add(value);
+}
+
+function sharedTestIdentityCount(left: string, right: string): number {
+  const ignored = new Set([...CORE_PATH_NOISE, ...CORE_EVIDENCE_LOW_SIGNAL, "test", "tests", "spec"]);
+  const leftTokens = [...tokenizeLexical(path.posix.basename(left))]
+    .filter((token) => token.length > 2 && !ignored.has(token));
+  const rightTokens = new Set(
+    [...tokenizeLexical(path.posix.basename(right))]
+      .filter((token) => token.length > 2 && !ignored.has(token))
+  );
+  return leftTokens.filter((token) => rightTokens.has(token)).length;
+}
+
 function isDirectTestCandidate(item: ScoredNode): boolean {
   const sourcePath = item.node.sourcePath.toLowerCase();
   return item.node.kind === "test"
-    || /(^|\/)(?:test|tests|spec|__tests__)(\/|$)|\.(?:test|spec)\.[^.]+$/.test(sourcePath)
+    || /(^|\/)(?:test|tests|testing|spec|__tests__)(\/|$)|\.(?:test|spec)\.[^.]+$/.test(sourcePath)
     || /(^|\/)(?:test_[^/]+|[^/]+_(?:test|spec))\.[a-z0-9]+$/.test(sourcePath)
     || /(^|\/)[^/]+tests?\.(?:cs|java|kt)$/.test(sourcePath);
 }
@@ -490,9 +943,9 @@ function implementationPathConcept(sourcePath: string, analysis: ReturnType<type
   }
   const routeComponent = [...pathTokens].some((token) => ["route", "router", "routing"].includes(token));
   const routeTask = rawTokens.some((token) => ["route", "router", "routing"].includes(token));
-  if (routeComponent && routeTask) {
-    const planningIntent = hasRoutePlanningIntent(analysis.raw);
-    const scoringIntent = hasRouteScoringIntent(analysis.raw);
+  const planningIntent = hasRoutePlanningIntent(analysis.raw);
+  const scoringIntent = hasRouteScoringIntent(analysis.raw);
+  if (routeComponent && (routeTask || planningIntent || scoringIntent)) {
     if (pathTokens.has("planner") && planningIntent) return "routing-plan";
     if (pathTokens.has("scorer") && scoringIntent) return "routing-score";
     if (planningIntent || scoringIntent) return undefined;
@@ -516,7 +969,7 @@ function implementationPathConcept(sourcePath: string, analysis: ReturnType<type
 }
 
 function hasRoutePlanningIntent(task: string): boolean {
-  return /\b(?:role[-\s]?aware|multi[-\s]?surface|artifact[-\s]?family|route[-\s]?(?:allocation|limit|focus|plan|planning|planner)|routing\s+(?:precision|recall|plan|planning))\b/i.test(task);
+  return /\b(?:role[-\s]?aware|multi[-\s]?surface|artifact[-\s]?family|evidence[-\s]?sufficien(?:cy|t)|focused[-\s]?anchor|anchor[-\s]?validation|early[-\s]?stop(?:ping)?|route[-\s]?(?:allocation|limit|focus|plan|planning|planner)|routing\s+(?:precision|recall|plan|planning)|stopp?ing\s+(?:condition|rule|logic))\b/i.test(task);
 }
 
 function hasRouteScoringIntent(task: string): boolean {
@@ -524,7 +977,7 @@ function hasRouteScoringIntent(task: string): boolean {
 }
 
 function hasTaskAnalysisIntent(task: string): boolean {
-  return /\b(?:task[-\s]?(?:analysis|analyzer)|analy[sz](?:e|ing)\s+(?:the\s+)?task)\b/i.test(task);
+  return /\b(?:task[-\s]?(?:analysis|analyzer)|analy[sz](?:e|ing)\s+(?:the\s+)?task|compound[-\s]?intent|intent[-\s]?preservation|lexical[-\s]?(?:normalization|tokens?))\b/i.test(task);
 }
 
 function hasTaskClassificationIntent(task: string): boolean {
@@ -537,6 +990,17 @@ function hasPublicationIntentIntent(task: string): boolean {
 
 function hasIndexFreshnessIntent(task: string): boolean {
   return /\b(?:index[-\s]?freshness|fresh(?:ness)?|stale|storage[-\s]?status|generated[-\s]?artifact)\b/i.test(task);
+}
+
+function routingImplementationConcernCount(task: string): number {
+  return [
+    hasRoutePlanningIntent(task),
+    hasRouteScoringIntent(task),
+    hasTaskAnalysisIntent(task),
+    hasTaskClassificationIntent(task),
+    hasPublicationIntentIntent(task),
+    hasIndexFreshnessIntent(task)
+  ].filter(Boolean).length;
 }
 
 function selectGeneralTestRepresentatives(
@@ -876,7 +1340,14 @@ function pathsOverlap(left: string, right: string): boolean {
     || normalizedRight.startsWith(`${normalizedLeft}/`);
 }
 
-function confidence(selected: ScoredNode[], analysis: ReturnType<typeof analyzeTask>, estimatedTokens: number, budget: number, taskType: TaskType): number {
+function confidence(
+  selected: ScoredNode[],
+  analysis: ReturnType<typeof analyzeTask>,
+  estimatedTokens: number,
+  budget: number,
+  taskType: TaskType,
+  coreEvidenceCap?: number
+): number {
   if (!selected.length) return 0.1;
   const top = selected.slice(0, 12);
   const keywords = analysis.keywords.filter((keyword) => !["task", "fresh"].includes(keyword));
@@ -900,63 +1371,35 @@ function confidence(selected: ScoredNode[], analysis: ReturnType<typeof analyzeT
   const artifactFamilyCap = artifactFamilyCoverage === undefined
     ? 0.98
     : 0.15 + artifactFamilyCoverage * 0.75;
-  const directEvidenceCap = directBugfixEvidenceCap(top, analysis, taskType);
+  const directEvidenceCap = coreEvidenceCap ?? directCodeEvidenceCap(top, analysis, taskType);
   const compoundBugfixCap = taskType === "bugfix" && requestedSurfaceCount >= 3 && keywords.length >= 12
     ? 0.4
     : 0.98;
   return Number(Math.max(0.1, Math.min(taskCap, artifactFamilyCap, directEvidenceCap, compoundBugfixCap, value)).toFixed(2));
 }
 
-const DIRECT_EVIDENCE_NOISE = new Set([
-  "allow",
-  "cli",
-  "data",
-  "file",
-  "fix",
-  "flaky",
-  "go",
-  "input",
-  "javascript",
-  "mac",
-  "method",
-  "option",
-  "os",
-  "output",
-  "preserve",
-  "python",
-  "result",
-  "rust",
-  "skip",
-  "test",
-  "typescript",
-  "value"
-]);
-
-function directBugfixEvidenceCap(
+function directCodeEvidenceCap(
   items: ScoredNode[],
   analysis: ReturnType<typeof analyzeTask>,
   taskType: TaskType
 ): number {
-  if (taskType !== "bugfix") return 0.98;
-  const taskTokens = new Set(
-    analysis.keywords.filter((keyword) => keyword.length > 2 && !DIRECT_EVIDENCE_NOISE.has(keyword))
-  );
-  let strongestConceptMatches = 0;
-  let strongestPathAffinity = 0;
-  for (const item of items.filter((candidate) => isImplementationCandidate(candidate.node))) {
-    const nodeTokens = tokenizeLexical(nodeHaystack(item));
-    strongestConceptMatches = Math.max(
-      strongestConceptMatches,
-      [...taskTokens].filter((token) => nodeTokens.has(token)).length
+  if (!isCodeTaskType(taskType)) return 0.98;
+  if (hasExplicitSelectedPathReference(items, analysis.raw)) return 0.98;
+  const requestedSurfaceCount = requestedRouteSurfaces(analysis).length;
+  const strongestDirectEvidence = items
+    .filter((candidate) => isImplementationCandidate(candidate.node) && !isDirectTestCandidate(candidate))
+    .reduce(
+      (strongest, item) => Math.max(strongest, directCoreEvidence(item, analysis)),
+      0
     );
-    strongestPathAffinity = Math.max(
-      strongestPathAffinity,
-      routePathTaskAffinity(item.node.sourcePath, analysis)
-    );
-  }
-  if (strongestConceptMatches === 0 && strongestPathAffinity === 0) return 0.15;
-  if (strongestConceptMatches < 2 && strongestPathAffinity < 1.25) return 0.4;
-  return 0.98;
+  if (strongestDirectEvidence < 140) return requestedSurfaceCount >= 2 ? 0.4 : 0.15;
+  if (strongestDirectEvidence < 220) return 0.4;
+  return 0.68;
+}
+
+function hasExplicitSelectedPathReference(items: ScoredNode[], task: string): boolean {
+  const normalizedTask = task.replaceAll("\\", "/").toLowerCase();
+  return items.some((item) => normalizedTask.includes(item.node.sourcePath.toLowerCase()));
 }
 
 function requestedSurfaceEvidence(

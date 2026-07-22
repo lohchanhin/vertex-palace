@@ -127,6 +127,26 @@ const WING_HINTS = new Set([
 const ROOM_HINTS = new Set(["api", "checkout", "footer", "general", "image", "login", "logout", "password", "policy", "product", "profile", "refresh", "session", "settings", "token", "upload", "user", "users", "variant"]);
 const RELEASE_ROUTE_KEYWORDS = ["release", "publish", "package", "manifest", "version", "npm", "registry", "tag", "changelog"];
 const RELEASE_REFERENCE_ONLY_KEYWORDS = new Set(["release", "publish", "package", "version", "npm", "registry", "tag"]);
+const CAPITALIZED_ENTITY_STOP_WORDS = new Set([
+  "add",
+  "api",
+  "build",
+  "create",
+  "fix",
+  "implement",
+  "improve",
+  "javascript",
+  "linux",
+  "python",
+  "release",
+  "rust",
+  "support",
+  "the",
+  "this",
+  "typescript",
+  "update",
+  "windows"
+]);
 
 const PHRASE_KEYWORDS: Array<[RegExp, string[]]> = [
   [/\b(?:macos|os\s*x|windows|linux|posix|free[-\s]?threaded|no[-\s]?gil|nogil)\b/i, ["compat", "platform"]],
@@ -222,6 +242,8 @@ function phraseKeywords(task: string): string[] {
 
 function entityKeywords(task: string): string[] {
   const candidates = task.match(/[A-Za-z0-9]+(?:[-_][A-Za-z0-9]+)+|[A-Z][a-z0-9]+(?:[A-Z][a-z0-9]+)+/g) ?? [];
+  const capitalizedIdentifiers = (task.match(/\b[A-Z][A-Za-z0-9]{2,}\b/g) ?? [])
+    .filter((candidate) => !CAPITALIZED_ENTITY_STOP_WORDS.has(candidate.toLowerCase()));
   const namedPhrases = [
     ...(/\bbuild\s+week\b/i.test(task) ? ["build-week", "buildweek"] : []),
     ...(/跨仓库|跨倉庫/.test(task) ? ["cross-repository", "crossrepository"] : [])
@@ -230,7 +252,7 @@ function entityKeywords(task: string): string[] {
     ...new Set(
       [
         ...namedPhrases,
-        ...candidates.flatMap((candidate) => {
+        ...[...candidates, ...capitalizedIdentifiers].flatMap((candidate) => {
           const slug = slugify(candidate);
           const compact = candidate.toLowerCase().replace(/[^a-z0-9]+/g, "");
           return [slug, compact].filter((value) => value.length > 2);

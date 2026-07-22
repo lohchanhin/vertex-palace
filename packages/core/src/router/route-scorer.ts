@@ -208,6 +208,7 @@ const LOW_SIGNAL_SEMANTIC_KEYWORDS = new Set([
   "allow",
   "allowing",
   "data",
+  "help",
   "input",
   "option",
   "options",
@@ -508,12 +509,14 @@ function hasAny(values: Set<string>, candidates: string[]): boolean {
 const ROUTE_PATH_NOISE = new Set([
   "app",
   "file",
+  "help",
   "index",
   "javascript",
   "js",
   "jsx",
   "lib",
   "main",
+  "output",
   "package",
   "packages",
   "py",
@@ -527,6 +530,15 @@ const ROUTE_PATH_NOISE = new Set([
   "unit"
 ]);
 
+const ROUTE_PATH_LOW_SIGNAL = new Set([
+  "collection",
+  "command",
+  "fixture",
+  "method",
+  "request",
+  "value"
+]);
+
 export function routePathTaskAffinity(sourcePath: string, analysis: TaskAnalysis): number {
   const taskTokens = new Set(analysis.keywords.map(normalizeLexicalToken));
   const pathTokens = new Set(
@@ -535,9 +547,11 @@ export function routePathTaskAffinity(sourcePath: string, analysis: TaskAnalysis
       .filter((token) => !ROUTE_PATH_NOISE.has(token))
   );
   if (!pathTokens.size) return 0;
-  const matched = [...pathTokens].filter((token) => taskTokens.has(token)).length;
-  if (!matched) return 0;
-  return matched + matched / pathTokens.size;
+  const matchedWeight = [...pathTokens]
+    .filter((token) => taskTokens.has(token))
+    .reduce((sum, token) => sum + (ROUTE_PATH_LOW_SIGNAL.has(token) ? 0.35 : 1), 0);
+  if (!matchedWeight) return 0;
+  return matchedWeight + matchedWeight / pathTokens.size;
 }
 
 function tokenize(value: string): Set<string> {

@@ -50,6 +50,8 @@ describe("routePalace", () => {
     expect(classifyTask(
       "Build an evaluation report for changed-file coverage and confidence calibration"
     )).toBe("evaluation");
+    expect(classifyTask("feat(complete): Index-aware ValueCompleter")).toBe("feature");
+    expect(classifyTask("fix(router)!: preserve exact route identity")).toBe("bugfix");
   });
 
   it("distinguishes release work from publish failures and application deployment", () => {
@@ -526,6 +528,48 @@ export const $ZodDiscriminatedUnion = core.$constructor("$ZodDiscriminatedUnion"
       expect(evaluation.route.fileCount).toBeLessThanOrEqual(9);
       expect(evaluation.coverage.changedFileCoverage).toBe(1);
       expect(evaluation.coverage.routeFocus).toBeGreaterThanOrEqual(0.75);
+      expect(evaluation.calibration.status).not.toBe("overconfident");
+    });
+  });
+
+  it("routes evidence-sufficiency repair across planning, analysis, classification, scoring, and tests", async () => {
+    await withFixture("ts-api", async (root) => {
+      const changedFiles = [
+        "packages/core/src/router/route-planner.ts",
+        "packages/core/src/router/analyze-task.ts",
+        "packages/core/src/router/classify-task.ts",
+        "packages/core/src/router/route-scorer.ts",
+        "packages/core/test/router.test.ts"
+      ];
+      const sources = new Map<string, string>([
+        [changedFiles[0], "export function selectEvidenceSufficientRoute() { return 'focused anchor'; }\n"],
+        [changedFiles[1], "export function preserveCompoundIntent() { return ['implementation', 'test']; }\n"],
+        [changedFiles[2], "export function classifyScopedConventionalCommit() { return 'feature'; }\n"],
+        [changedFiles[3], "export function capUnsupportedRouteConfidence() { return 0.4; }\n"],
+        [changedFiles[4], "describe('evidence sufficiency', () => it('validates focused anchors', () => true));\n"],
+        ["packages/core/src/router/publication-intent.ts", "export function analyzePublicationIntent() { return false; }\n"],
+        ["packages/core/src/router/mode-selector.ts", "export function selectMode() { return 'advisory'; }\n"],
+        ["packages/shared/src/types.ts", "export type RouteEvidence = { confidence: number };\n"]
+      ]);
+      for (const [relativePath, source] of sources) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const task = "Repair evidence-sufficiency stopping with focused-anchor validation, scoped Conventional Commit classification, compound-intent preservation, confidence caps, and regression tests.";
+      const evaluation = await evaluateRoute(root, task, {
+        changedFiles,
+        routeLimit: 10,
+        budget: 6000,
+        maxDrawers: 4
+      });
+
+      expect(evaluation.route.files).toEqual(expect.arrayContaining(changedFiles));
+      expect(evaluation.route.fileCount).toBeLessThanOrEqual(8);
+      expect(evaluation.coverage.changedFileCoverage).toBe(1);
+      expect(evaluation.coverage.routeFocus).toBeGreaterThanOrEqual(0.625);
       expect(evaluation.calibration.status).not.toBe("overconfident");
     });
   });
@@ -1750,6 +1794,210 @@ export function uploadProductVariantImageController(file: File) {
       );
 
       expect(route.confidence).toBeLessThanOrEqual(0.4);
+    });
+  });
+
+  it("stops a specific request-method bug after its implementation and exact test", async () => {
+    await withFixture("ts-api", async (root) => {
+      const changedFiles = ["lib/request.js", "test/req.acceptsCharsets.js"];
+      const files = new Map<string, string>([
+        ["lib/request.js", "export function acceptsCharsets(request, values) { return request.acceptsCharsets(values); }\n"],
+        ["test/req.acceptsCharsets.js", "import { acceptsCharsets } from '../lib/request.js';\ntest('req acceptsCharsets handles values', () => acceptsCharsets(req, ['utf-8']));\n"],
+        ["test/req.accepts.js", "test('req accepts media types', () => true);\n"],
+        ["test/req.acceptsEncodings.js", "test('req accepts encodings', () => true);\n"],
+        ["test/req.acceptsLanguages.js", "test('req accepts languages', () => true);\n"],
+        ["test/req.query.js", "test('req query', () => true);\n"],
+        ["test/res.format.js", "test('response format', () => true);\n"]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const evaluation = await evaluateRoute(root, "fix: enhance req.acceptsCharsets method", {
+        changedFiles,
+        routeLimit: 9,
+        budget: 6000,
+        maxDrawers: 4
+      });
+
+      expect(evaluation.route.files).toEqual(expect.arrayContaining(changedFiles));
+      expect(evaluation.route.fileCount).toBeLessThanOrEqual(3);
+      expect(evaluation.coverage.changedFileCoverage).toBe(1);
+      expect(evaluation.coverage.routeFocus).toBeGreaterThanOrEqual(0.67);
+    });
+  });
+
+  it("applies evidence-sufficiency stopping to a feature implementation and focused test", async () => {
+    await withFixture("ts-api", async (root) => {
+      const changedFiles = ["httpx/_auth.py", "tests/test_auth.py"];
+      const files = new Map<string, string>([
+        ["httpx/_auth.py", "class DigestAuth:\n    def auth_flow(self, request):\n        request.cookies.set('retry', '1')\n        return request\n"],
+        ["tests/test_auth.py", "from httpx._auth import DigestAuth\ndef test_digest_auth_retried_request_cookies():\n    assert DigestAuth()\n"],
+        ["tests/client/test_auth.py", "def test_client_auth_configuration():\n    assert True\n"],
+        ["httpx/_client.py", "class Client:\n    def send(self, request): return request\n"],
+        ["httpx/_api.py", "def request(method, url): return (method, url)\n"],
+        ["httpx/_main.py", "def main(): return 'httpx'\n"]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const evaluation = await evaluateRoute(
+        root,
+        "Add cookies to the retried request when performing digest authentication.",
+        { changedFiles, routeLimit: 9, budget: 6000, maxDrawers: 4 }
+      );
+
+      expect(evaluation.taskType).toBe("feature");
+      expect(evaluation.route.files).toEqual(expect.arrayContaining(changedFiles));
+      expect(evaluation.route.fileCount).toBeLessThanOrEqual(3);
+      expect(evaluation.coverage.changedFileCoverage).toBe(1);
+      expect(evaluation.coverage.routeFocus).toBeGreaterThanOrEqual(0.67);
+    });
+  });
+
+  it("prefers the specific completion pair over a generic help-output pair", async () => {
+    await withFixture("ts-api", async (root) => {
+      const changedFiles = ["completion.go", "completion_test.go"];
+      const files = new Map<string, string>([
+        ["completion.go", "package cli\nfunc completionSubcommandOrder(items []string) []string { return items }\n"],
+        ["completion_test.go", "package cli\nfunc TestCompletionSubcommandOrderDeterministic(t *testing.T) {}\n"],
+        ["help.go", "package cli\nfunc renderHelpOutput(items []string) string { return \"help output\" }\n"],
+        ["help_test.go", "package cli\nfunc TestHelpOutput(t *testing.T) {}\n"],
+        ["command.go", "package cli\ntype Command struct { Name string }\n"]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const evaluation = await evaluateRoute(
+        root,
+        "fix: keep completion subcommand order deterministic in help output",
+        { changedFiles, routeLimit: 9, budget: 6000, maxDrawers: 4 }
+      );
+
+      expect(evaluation.route.files).toEqual(expect.arrayContaining(changedFiles));
+      expect(evaluation.route.files).not.toEqual(expect.arrayContaining(["help.go", "help_test.go"]));
+      expect(evaluation.route.fileCount).toBeLessThanOrEqual(3);
+      expect(evaluation.coverage.changedFileCoverage).toBe(1);
+      expect(evaluation.calibration.status).not.toBe("overconfident");
+    });
+  });
+
+  it("keeps a scoped feature route to its two implementations and focused testsuite", async () => {
+    await withFixture("ts-api", async (root) => {
+      const changedFiles = [
+        "clap_complete/src/engine/complete.rs",
+        "clap_complete/src/engine/custom.rs",
+        "clap_complete/tests/testsuite/engine.rs"
+      ];
+      const files = new Map<string, string>([
+        [changedFiles[0], "pub fn complete_index(value: &str, index: usize) -> String { value.to_string() }\n"],
+        [changedFiles[1], "pub struct ValueCompleter;\nimpl ValueCompleter { pub fn complete(&self, index: usize) {} }\n"],
+        [changedFiles[2], "#[test]\nfn value_completer_is_index_aware() { assert!(true); }\n"],
+        ["clap_complete/src/env/shells.rs", "pub fn complete_shell() {}\n"],
+        ["clap_builder/src/builder/value_parser.rs", "pub struct ValueParser;\n"],
+        ["tests/builder/multiple_values.rs", "#[test]\nfn multiple_values() {}\n"]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const evaluation = await evaluateRoute(root, "feat(complete): Index-aware ValueCompleter", {
+        changedFiles,
+        routeLimit: 9,
+        budget: 6000,
+        maxDrawers: 4
+      });
+
+      expect(evaluation.taskType).toBe("feature");
+      expect(evaluation.route.files).toEqual(expect.arrayContaining(changedFiles));
+      expect(evaluation.route.fileCount).toBeLessThanOrEqual(5);
+      expect(evaluation.coverage.changedFileCoverage).toBe(1);
+      expect(evaluation.coverage.routeFocus).toBeGreaterThanOrEqual(0.6);
+    });
+  });
+
+  it("keeps multiple directly named feature tests without filling unrelated command siblings", async () => {
+    await withFixture("ts-api", async (root) => {
+      const changedFiles = [
+        "lib/command.js",
+        "tests/command.executableSubcommand.mock.test.js",
+        "tests/command.executableSubcommand.search.test.js"
+      ];
+      const files = new Map<string, string>([
+        [changedFiles[0], "export function findExecutableSubcommand(name) { return process.platform === 'win32' ? `${name}.exe` : name; }\n"],
+        [changedFiles[1], "import { findExecutableSubcommand } from '../lib/command.js';\ntest('missing executable subcommand mock', () => findExecutableSubcommand('missing'));\n"],
+        [changedFiles[2], "import { findExecutableSubcommand } from '../lib/command.js';\ntest('search missing executable on Windows', () => findExecutableSubcommand('missing'));\n"],
+        ["tests/command.addHelpText.test.js", "test('command add help text', () => true);\n"],
+        ["tests/command.addCommand.test.js", "test('command add command', () => true);\n"],
+        ["typings/index.d.ts", "export declare class Command {}\n"],
+        ["examples/custom-command-class.js", "export class CustomCommand {}\n"]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const evaluation = await evaluateRoute(
+        root,
+        "Add informative message for missing executable on Windows",
+        { changedFiles, routeLimit: 9, budget: 6000, maxDrawers: 4 }
+      );
+
+      expect(evaluation.route.files).toEqual(expect.arrayContaining(changedFiles));
+      expect(evaluation.route.fileCount).toBeLessThanOrEqual(5);
+      expect(evaluation.coverage.changedFileCoverage).toBe(1);
+      expect(evaluation.coverage.routeFocus).toBeGreaterThanOrEqual(0.6);
+    });
+  });
+
+  it("preserves a capitalized implementation identity and its imported Python regression test", async () => {
+    await withFixture("ts-api", async (root) => {
+      const changedFiles = ["src/_pytest/main.py", "testing/test_conftest.py"];
+      const files = new Map<string, string>([
+        [changedFiles[0], "class Directory:\n    def recollect(self, fixture_identity):\n        return fixture_identity\n"],
+        [changedFiles[1], "from _pytest.main import Directory\ndef test_directory_recollection_preserves_fixture_identity():\n    assert Directory().recollect(object())\n"],
+        ["src/_pytest/hookspec.py", "def pytest_collection(session): return session\n"],
+        ["src/_pytest/junitxml.py", "def record_fixture_identity(value): return value\n"],
+        ["src/_pytest/fixtures.py", "class FixtureManager: pass\n"],
+        ["src/_pytest/python.py", "class PythonCollector: pass\n"],
+        ["testing/python/fixtures.py", "def test_fixture_identity(): assert True\n"],
+        ["testing/python/collect.py", "def test_directory_collection(): assert True\n"]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const evaluation = await evaluateRoute(
+        root,
+        "fix: deduplicate Directory nodes on re-collection to preserve fixture identity",
+        { changedFiles, routeLimit: 9, budget: 6000, maxDrawers: 4 }
+      );
+
+      expect(analyzeTask("fix: deduplicate Directory nodes").entities).toContain("directory");
+      expect(evaluation.route.files).toEqual(expect.arrayContaining(changedFiles));
+      expect(evaluation.route.fileCount).toBeLessThanOrEqual(4);
+      expect(evaluation.coverage.changedFileCoverage).toBe(1);
+      expect(evaluation.coverage.routeFocus).toBeGreaterThanOrEqual(0.5);
+      expect(evaluation.calibration.status).not.toBe("overconfident");
     });
   });
 });

@@ -4,6 +4,9 @@ import { analyzePublicationIntent } from "./publication-intent";
 export function classifyTask(task: string): TaskType {
   const lower = task.toLowerCase();
   const publication = analyzePublicationIntent(lower);
+  const conventionalCommit = lower.match(/^\s*(fix|feat)(?:\([^)]*\))?!?:/);
+  if (conventionalCommit?.[1] === "fix") return "bugfix";
+  if (conventionalCommit?.[1] === "feat") return "feature";
   const codeSubject = /\b(parser|indexer|router|scorer|expander|module|function|class|source|code|schema|types?|contracts?|tests?|regressions?|bundle|estimator|metadata|api|cli|mcp)\b/.test(lower)
     || /(解析器|索引器|路由器|模组|模組|函数|函式|类别|類別|源码|源碼|代码|代碼|测试|測試|回归|回歸|类型|類型|契约|契約|元数据|中繼資料)/.test(lower);
   if (!publication.releaseIntent && codeSubject && /^\s*(?:add|create|implement|support)\b/.test(lower)) return "feature";
