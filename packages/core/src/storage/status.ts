@@ -1,6 +1,7 @@
 import path from "node:path";
 import type { PalaceStatus } from "@vertex-palace/shared";
 import { configPath } from "../config/palace-config";
+import { hashFile } from "../scanner/file-hash";
 import { scanRepo } from "../scanner/scan-repo";
 import { exists, readIndex, readJson } from "./read-palace";
 
@@ -14,6 +15,7 @@ export async function getPalaceStatus(root: string): Promise<PalaceStatus> {
   if (initialized && indexed && index) {
     const scan = await scanRepo({ root, includeHidden: true });
     const nextHashes = Object.fromEntries(scan.files.map((file) => [file.path, file.hash]));
+    await appendIndexedGeneratedArtifactHashes(root, index, nextHashes);
     stale =
       Object.keys(nextHashes).length !== Object.keys(index.fileHashes).length ||
       Object.entries(nextHashes).some(([filePath, hash]) => index.fileHashes[filePath] !== hash);
@@ -32,4 +34,27 @@ export async function getPalaceStatus(root: string): Promise<PalaceStatus> {
     lastIndexedAt: lastIndex.indexedAt,
     configPath: initialized ? configPath(root) : undefined
   };
+}
+
+async function appendIndexedGeneratedArtifactHashes(
+  root: string,
+  index: NonNullable<Awaited<ReturnType<typeof readIndex>>>,
+  hashes: Record<string, string>
+): Promise<void> {
+  const generatedPaths = new Set(
+    index.nodes
+      .filter((node) => node.tags.includes("generated-artifact"))
+      .map((node) => node.sourcePath)
+  );
+  for (const sourcePath of generatedPaths) {
+    if (Object.prototype.hasOwnProperty.call(hashes, sourcePath)) continue;
+    const absolute = path.resolve(root, sourcePath);
+    const relative = path.relative(root, absolute);
+    if (!relative || relative.startsWith("..") || path.isAbsolute(relative)) continue;
+    try {
+      hashes[sourcePath] = await hashFile(absolute);
+    } catch {
+      // A removed generated artifact makes the stored hash count differ and the index stale.
+    }
+  }
 }

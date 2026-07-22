@@ -248,7 +248,10 @@ function selectGeneralSurfaceRepresentatives(
   quota: number
 ): ScoredNode[] {
   const ranked = [...scored]
-    .filter((item) => matchesRouteSurface(item.node, surface))
+    .filter(
+      (item) => matchesRouteSurface(item.node, surface)
+        && !(surface === "docs" && matchesRouteSurface(item.node, "evidence"))
+    )
     .sort(
       (a, b) => generalSurfacePriority(b, surface, analysis) - generalSurfacePriority(a, surface, analysis)
         || b.score - a.score
@@ -781,7 +784,9 @@ function ensureRequestedSurfaceCoverage(
 
   const result: ScoredNode[] = [];
   const protectedIds = new Set<string>();
-  if (!requested.includes("implementation") && selected[0]) {
+  const firstAlreadyHasRequestedSurface = selected[0]
+    && requested.some((surface) => matchesRouteSurface(selected[0].node, surface));
+  if (!requested.includes("implementation") && selected[0] && !firstAlreadyHasRequestedSurface) {
     result.push(selected[0]);
     protectedIds.add(selected[0].node.id);
   }
@@ -851,6 +856,7 @@ function selectEvaluationSurfaceRepresentatives(
   quota: number
 ): ScoredNode[] {
   const ranked = [...candidates]
+    .filter((item) => !(surface === "docs" && matchesRouteSurface(item.node, "evidence")))
     .sort((a, b) => compareEvaluationSurfaceCandidates(a, b, surface, analysis))
     .filter((item, index, items) => items.findIndex((candidate) => candidate.node.sourcePath === item.node.sourcePath) === index);
   if (surface !== "docs" || quota <= 1) return ranked.slice(0, quota);
@@ -870,7 +876,12 @@ function selectEvaluationSurfaceRepresentatives(
   const narrative = (sourcePath: string): boolean => /\.(?:md|mdx|rst|txt)$/.test(sourcePath);
 
   if (keywords.has("evidence")) {
-    appendFirst((sourcePath) => !localized(sourcePath) && narrative(sourcePath) && isNarrativeEvidencePath(sourcePath));
+    appendFirst(
+      (sourcePath) => !localized(sourcePath)
+        && narrative(sourcePath)
+        && isNarrativeEvidencePath(sourcePath)
+        && (!keywords.has("protocol") || !/(?:^|[-_/])protocol(?:[-_.\/]|$)/.test(sourcePath))
+    );
   }
   if (keywords.has("protocol")) {
     appendFirst((sourcePath) => !localized(sourcePath) && /protocol/.test(sourcePath));
@@ -898,10 +909,29 @@ function compareEvaluationSurfaceCandidates(
   surface: RouteSurface,
   analysis: ReturnType<typeof analyzeTask>
 ): number {
-  return evaluationSurfacePriority(b, surface, analysis) - evaluationSurfacePriority(a, surface, analysis)
+  return evaluationArtifactFamilyAffinity(b.node.sourcePath, analysis) - evaluationArtifactFamilyAffinity(a.node.sourcePath, analysis)
+    || evaluationSurfacePriority(b, surface, analysis) - evaluationSurfacePriority(a, surface, analysis)
     || evaluationSurfaceVersionPriority(b.node.sourcePath) - evaluationSurfaceVersionPriority(a.node.sourcePath)
     || b.score - a.score
     || a.node.sourcePath.localeCompare(b.node.sourcePath);
+}
+
+function evaluationArtifactFamilyAffinity(
+  sourcePath: string,
+  analysis: ReturnType<typeof analyzeTask>
+): number {
+  const compactSourcePath = compactRouteValue(sourcePath);
+  const entityMatches = analysis.entities.filter((entity) => {
+    const compactEntity = compactRouteValue(entity);
+    return compactEntity.length > 0 && compactSourcePath.includes(compactEntity);
+  }).length;
+  const pathTokens = new Set(sourcePath.toLowerCase().match(/[a-z0-9]+/g) ?? []);
+  const keywordMatches = analysis.keywords.filter(
+    (keyword) => keyword.length > 2 && pathTokens.has(keyword.toLowerCase())
+  ).length;
+  return entityMatches * 500
+    + documentLeadAffinity(sourcePath, analysis.raw) * 10
+    + keywordMatches * 30;
 }
 
 function evaluationSurfaceVersionPriority(sourcePath: string): number {
@@ -957,7 +987,8 @@ function evaluationSurfacePriority(
 
 function isNarrativeEvidencePath(sourcePath: string): boolean {
   const fileName = sourcePath.split("/").at(-1) ?? sourcePath;
-  return /\.(?:md|mdx|rst|txt)$/.test(fileName) && /(?:preflight|evidence|research)/.test(fileName);
+  return /\.(?:md|mdx|rst|txt)$/.test(fileName)
+    && /(?:preflight|evidence|research|protocol|report|result)/.test(fileName);
 }
 
 function compactRouteValue(value: string): string {

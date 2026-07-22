@@ -356,12 +356,14 @@ export function requestedRouteSurfaces(analysis: TaskAnalysis): RouteSurface[] {
   if (hasAny(keywords, ["shared", "schema", "schemas", "type", "types", "contract", "contracts"])) requested.push("shared");
   if (hasAny(keywords, ["bypass", "boundaries", "boundary", "transport", "telemetry", "payload"]) && !requested.includes("shared")) requested.push("shared");
   const explicitVerification = hasAny(keywords, ["test", "tests", "validate", "validation", "verification", "regression"]);
+  const empiricalReplication = keywords.has("replication")
+    && hasAny(keywords, ["route", "precision", "evidence", "evaluation"]);
   const evidencePinVerification = keywords.has("evidence")
     && hasAny(keywords, ["implementation", "source"])
     && hasAny(keywords, ["config", "plan", "protocol", "frozen"]);
-  if (explicitVerification || evidencePinVerification) requested.push("test");
+  if (explicitVerification || evidencePinVerification || empiricalReplication) requested.push("test");
   if (hasAny(keywords, ["config", "configuration", "migration", "migrate", "migrated", "plan", "protocol", "frozen"])) requested.push("config");
-  if (hasAny(keywords, ["doc", "docs", "documentation", "readme", "migration", "migrate", "migrated"])) requested.push("docs");
+  if (hasAny(keywords, ["doc", "docs", "documentation", "readme", "report", "reports", "bilingual", "localization", "migration", "migrate", "migrated"])) requested.push("docs");
   if (hasAny(keywords, ["ci", "workflow", "workflows", "actions"])) requested.push("ci");
   if (isMachineEvidenceArtifactRequest(analysis.raw)) requested.push("evidence");
   if (publication.releaseIntent || (isTypeDeclarationIntent(analysis) && requestsTypeTestSetup(analysis))) requested.push("package");
@@ -384,7 +386,15 @@ function isMachineEvidenceArtifactRequest(task: string): boolean {
   const english = /\b(?:sync|preserve|record|write|update|refresh|include|attach)\b.{0,80}\bmachine(?:[-\s]?readable)?\b.{0,40}\bevidence\b/i;
   const structuredEnglish = /\b(?:add|attach|include|recognize|record|sync|update|write)\b.{0,80}\bevidence(?:[-\s]?directory)?\b.{0,40}\bjson\b/i;
   const chinese = /(?:同步|保留|记录|記錄|写入|寫入|更新|刷新|纳入|納入|附上|补齐|補齊).{0,50}(?:机器(?:可读)?|機器(?:可讀)?).{0,30}(?:证据|證據)/;
-  return english.test(task) || structuredEnglish.test(task) || chinese.test(task);
+  const action = /\b(?:attach|include|preserve|record|sync|update|write)\b/i.test(task);
+  const structured = /\bjson\b|\bmachine(?:[-\s]?readable)?\b/i.test(task);
+  const evidence = /\bevidence\b/i.test(task);
+  const chineseAnyOrder = /(?:同步|保留|记录|記錄|写入|寫入|更新|刷新|纳入|納入|附上|补齐|補齊)/.test(task)
+    && /(?:json|机器(?:可读)?|機器(?:可讀)?)/i.test(task)
+    && /(?:证据|證據)/.test(task);
+  return english.test(task) || structuredEnglish.test(task) || chinese.test(task)
+    || (action && structured && evidence)
+    || chineseAnyOrder;
 }
 
 export function matchesRouteSurface(node: PalaceNode, surface: RouteSurface): boolean {

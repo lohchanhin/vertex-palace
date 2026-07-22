@@ -29,6 +29,30 @@ describe("palaceContext", () => {
     });
   });
 
+  it("keeps ignored declared generated artifacts fresh until their content changes", async () => {
+    await withFixture("ts-api", async (root) => {
+      const files = new Map<string, string>([
+        ["packages/cli/src/index.ts", "export const runCli = () => 'palace';\n"],
+        [
+          "tsup.package-cli.config.ts",
+          "import { defineConfig } from 'tsup';\nexport default defineConfig({ entry: { palace: 'packages/cli/src/index.ts' }, outDir: 'dist', outExtension: () => ({ js: '.cjs' }) });\n"
+        ],
+        ["dist/palace.cjs", "module.exports = { version: 1 };\n"]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+
+      await indexPalace(root);
+
+      expect((await getPalaceStatus(root)).stale).toBe(false);
+      await writeFile(path.join(root, "dist", "palace.cjs"), "module.exports = { version: 2 };\n", "utf8");
+      expect((await getPalaceStatus(root)).stale).toBe(true);
+    });
+  });
+
   it("bypasses packed source context for one explicit file in a small repository", async () => {
     await withFixture("ts-api", async (root) => {
       const output = await palaceContext({

@@ -529,6 +529,65 @@ export const $ZodDiscriminatedUnion = core.$constructor("$ZodDiscriminatedUnion"
     });
   });
 
+  it("routes a frozen cross-repository replication to its complete artifact family", async () => {
+    await withFixture("ts-api", async (root) => {
+      const changedFiles = [
+        "scripts/verify-route-precision-cross-repositories.cjs",
+        "docs/research/CROSS_REPOSITORY_ROUTE_PRECISION_PROTOCOL_0_4_ALPHA.md",
+        "docs/zh-CN/CROSS_REPOSITORY_ROUTE_PRECISION_PROTOCOL_0_4_ALPHA.md",
+        "docs/research/evidence/cross-repository-route-precision-0.4-alpha.json",
+        "docs/research/CROSS_REPOSITORY_ROUTE_PRECISION_RESULT_0_4_ALPHA.md",
+        "docs/zh-CN/CROSS_REPOSITORY_ROUTE_PRECISION_RESULT_0_4_ALPHA.md"
+      ];
+      const sources = new Map<string, string>([
+        ["scripts/verify-route-precision-cross-repositories.cjs", "export function verifyCrossRepositoryRoutePrecision() { return ['zod', 'requests', 'p-limit']; }\n"],
+        ["docs/research/CROSS_REPOSITORY_ROUTE_PRECISION_PROTOCOL_0_4_ALPHA.md", "# Cross-Repository Route Precision Protocol 0.4 Alpha\n\nFreeze the replication gates before the first observation.\n"],
+        ["docs/zh-CN/CROSS_REPOSITORY_ROUTE_PRECISION_PROTOCOL_0_4_ALPHA.md", "# 0.4 Alpha 跨仓库路由精度协议\n\n首次观察前冻结复制门槛。\n"],
+        ["docs/research/evidence/cross-repository-route-precision-0.4-alpha.json", JSON.stringify({ schemaVersion: 1, status: "passed", repositories: 3 })],
+        ["docs/research/CROSS_REPOSITORY_ROUTE_PRECISION_RESULT_0_4_ALPHA.md", "# Cross-Repository Route Precision Result 0.4 Alpha\n\nReport the first replication observation.\n"],
+        ["docs/zh-CN/CROSS_REPOSITORY_ROUTE_PRECISION_RESULT_0_4_ALPHA.md", "# 0.4 Alpha 跨仓库路由精度结果\n\n记录首次复制结果。\n"],
+        ["packages/core/src/router/route-scorer.ts", "export function scoreGenericRoute() { return 0.72; }\n"],
+        ["tsconfig.base.json", JSON.stringify({ compilerOptions: { strict: true } })],
+        ["docs/research/MEMORY_PREFLIGHT_0_4_ALPHA_RESULT.md", "# Memory Preflight Result\n\nAn older first evidence report.\n"],
+        ["docs/zh-CN/MEMORY_PREFLIGHT_0_4_ALPHA_RESULT.md", "# 记忆预检旧结果\n\n旧的首次证据报告。\n"],
+        ["docs/research/MULTI_SURFACE_EVIDENCE_ROUTING_0_3_0.md", "# Historic Multi-Surface Evidence Routing\n\nOld route evidence research.\n"]
+      ]);
+      for (const [relativePath, source] of sources) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const tasks = [
+        "Freeze and execute a cross-repository route precision replication across Zod, Requests, and p-limit; preserve the first JSON evidence and write English and Simplified Chinese result reports",
+        "冻结并执行 Zod、Requests、p-limit 跨仓库路由精度复现实验，保留首次 JSON 证据并编写英文与简体中文结果报告"
+      ];
+      for (const task of tasks) {
+        const analysis = analyzeTask(task);
+        const evaluation = await evaluateRoute(root, task, {
+          changedFiles,
+          routeLimit: 9,
+          budget: 6000,
+          maxDrawers: 4
+        });
+
+        expect(classifyTask(task)).toBe("evaluation");
+        expect(requestedRouteSurfaces(analysis)).toEqual(expect.arrayContaining(["test", "docs", "evidence"]));
+        expect(evaluation.route.files).toEqual(expect.arrayContaining(changedFiles));
+        expect(evaluation.route.files).not.toEqual(expect.arrayContaining([
+          "docs/research/MEMORY_PREFLIGHT_0_4_ALPHA_RESULT.md",
+          "docs/zh-CN/MEMORY_PREFLIGHT_0_4_ALPHA_RESULT.md",
+          "docs/research/MULTI_SURFACE_EVIDENCE_ROUTING_0_3_0.md"
+        ]));
+        expect(evaluation.route.fileCount).toBeLessThanOrEqual(8);
+        expect(evaluation.coverage.changedFileCoverage).toBe(1);
+        expect(evaluation.coverage.routeFocus).toBeGreaterThanOrEqual(0.75);
+        expect(evaluation.calibration.status).not.toBe("overconfident");
+      }
+    });
+  });
+
   it("keeps the current bilingual document pair when an older report has denser matching prose", async () => {
     await withFixture("ts-api", async (root) => {
       const sources = new Map<string, string>([

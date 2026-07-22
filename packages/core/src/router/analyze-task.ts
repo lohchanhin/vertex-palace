@@ -126,13 +126,16 @@ const RELEASE_ROUTE_KEYWORDS = ["release", "publish", "package", "manifest", "ve
 const RELEASE_REFERENCE_ONLY_KEYWORDS = new Set(["release", "publish", "package", "version", "npm", "registry", "tag"]);
 
 const PHRASE_KEYWORDS: Array<[RegExp, string[]]> = [
+  [/\b(?:route|routing)[-\s]+precision[-\s]+replication\b|(?:跨仓库|跨倉庫).{0,20}(?:路由|路線|路线).{0,20}(?:复现|復現|复制|複製|实验|實驗)/i, ["evaluation", "replication", "test", "verification", "route", "precision"]],
+  [/\bfreeze(?:d)?\b|冻结|凍結/i, ["protocol", "frozen"]],
   [/machine[-\s]?readable\s+evidence|机器可读证据|機器可讀證據/i, ["machine", "readable", "evidence"]],
   [/plugin|marketplace|插件/i, ["plugin", "marketplace"]],
   [/adaptive|full[-\s]?palace|route[-\s]?lite|guarded[-\s]?memory[-\s]?palace/i, ["adaptive", "mode", "selector", "context", "packer"]],
   [/source\s+(?:code|implementation)|implementation\s+source|源码|源碼|源代码|源代碼/i, ["implementation", "source"]],
   [/evidence|research(?:\s+(?:record|report|evidence))?|strict\s+precision|target\s+(?:precision|recall)|证据|證據|研究(?:记录|記錄|报告|報告)?|严格精度|嚴格精度|目标精度|目標精度|召回率?/i, ["evidence", "precision", "recall", "route", "confidence"]],
   [/protocol|study\s+plan|result\s+manifest|freeze\s+gate|frozen|协议|協議|计划|計划|計畫|结果清单|結果清單|冻结|凍結/i, ["protocol", "plan", "config", "frozen"]],
-  [/documentation|\bdocs?\b|readme|bilingual|locali[sz](?:e|ed|ation)|simplified\s+chinese|简体中文(?:辅助)?说明|簡體中文(?:輔助)?說明|研究(?:报告|報告)|双语|雙語|文档|文檔/i, ["docs", "documentation", "readme", "bilingual", "localization"]],
+  [/readme|简体中文(?:辅助)?说明|簡體中文(?:輔助)?說明/i, ["docs", "documentation", "readme", "bilingual", "localization"]],
+  [/documentation|\bdocs?\b|bilingual|locali[sz](?:e|ed|ation)|simplified\s+chinese|(?:research|result|study)\s+reports?|简体中文|簡體中文|研究(?:报告|報告)|结果报告|結果報告|双语|雙語|文档|文檔/i, ["docs", "documentation", "bilingual", "localization"]],
   [/memory.{0,24}budget|context.{0,16}ceiling|记忆.{0,16}预算|記憶.{0,16}預算/i, ["memory", "context", "token", "budget"]],
   [/verify|verification|regression|test suite|测试|測試|验证|驗證|回归|回歸/i, ["test", "verification", "regression"]],
   [/benchmark|evaluate route|evaluation report|changed[-\s]?file coverage|confidence calibration|token reduction|context savings?/i, ["evaluation", "evaluate", "route", "confidence", "pack", "token"]],
@@ -215,7 +218,10 @@ function phraseKeywords(task: string): string[] {
 
 function entityKeywords(task: string): string[] {
   const candidates = task.match(/[A-Za-z0-9]+(?:[-_][A-Za-z0-9]+)+|[A-Z][a-z0-9]+(?:[A-Z][a-z0-9]+)+/g) ?? [];
-  const namedPhrases = /\bbuild\s+week\b/i.test(task) ? ["build-week", "buildweek"] : [];
+  const namedPhrases = [
+    ...(/\bbuild\s+week\b/i.test(task) ? ["build-week", "buildweek"] : []),
+    ...(/跨仓库|跨倉庫/.test(task) ? ["cross-repository", "crossrepository"] : [])
+  ];
   return [
     ...new Set(
       [
