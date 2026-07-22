@@ -1,0 +1,311 @@
+{
+  "schemaVersion": 1,
+  "studyId": "route-precision-cross-repository-replication-0.4-alpha",
+  "generatedAt": "2026-07-22T16:36:04.119Z",
+  "claimBoundary": "Pinned cross-repository static routing replication only; not held-out and not an end-to-end Agent performance benchmark.",
+  "status": "passed",
+  "failures": [],
+  "candidate": {
+    "productCommit": "b6ff88fc126800a799973447f5ce6b37b925a6a3",
+    "validationHarnessCommit": "119f9bd8e899a040fcebe9237aba97bf3288166e",
+    "cliPath": "dist/palace.cjs",
+    "frozenPaths": [
+      "packages",
+      "plugins/vertex-palace/mcp",
+      "package.json",
+      "pnpm-lock.yaml",
+      "pnpm-workspace.yaml",
+      "tsconfig.base.json",
+      "tsconfig.json",
+      "tsup.package-cli.config.ts",
+      "tsup.plugin-mcp.config.ts",
+      "scripts/trim-generated.cjs"
+    ]
+  },
+  "environment": {
+    "platform": "win32",
+    "arch": "x64",
+    "node": "v24.13.1",
+    "npm": "11.8.0",
+    "git": "git version 2.53.0.windows.1"
+  },
+  "protocol": {
+    "repositorySet": "previously used replication targets",
+    "heldOut": false,
+    "selectionLockedBeforeFirstCandidateRun": true,
+    "budget": 6000,
+    "routeLimit": 9,
+    "maxDrawers": 4,
+    "repetitions": 2,
+    "gates": {
+      "changedFileCoverage": 1,
+      "acceptedRoutePrecision": 1,
+      "deterministicRoutes": true,
+      "overconfidentRoutes": 0,
+      "contextWithinBudget": true,
+      "trackedWorktreeClean": true
+    }
+  },
+  "aggregate": {
+    "repositories": 3,
+    "trials": 6,
+    "completedTrials": 6,
+    "passedRepositories": 3,
+    "macroChangedFileCoverage": 1,
+    "macroRouteFocus": 0.89,
+    "macroAcceptedRoutePrecision": 1,
+    "overconfidentTrials": 0,
+    "maxContextEstimatedTokens": 2277
+  },
+  "repositories": [
+    {
+      "name": "zod",
+      "language": "TypeScript",
+      "url": "https://github.com/colinhacks/zod.git",
+      "routeCommit": "912f0f51b0ced654d0069741e7160834dca742ee",
+      "groundTruthCommit": null,
+      "oracleSource": "previously frozen target-file replication",
+      "changedFiles": [
+        "packages/zod/src/v4/core/schemas.ts",
+        "packages/zod/src/v4/classic/tests/discriminated-unions.test.ts"
+      ],
+      "historyChangedFiles": null,
+      "acceptedRouteFiles": [
+        "packages/zod/src/v4/core/schemas.ts",
+        "packages/zod/src/v4/classic/tests/discriminated-unions.test.ts"
+      ],
+      "status": "passed",
+      "failures": [],
+      "deterministicRoutes": true,
+      "trackedWorktreeClean": true,
+      "trials": [
+        {
+          "trial": 1,
+          "status": "completed",
+          "evaluationCacheState": "cold-index",
+          "contextCacheState": "warm-index-after-evaluation",
+          "evaluationElapsedMs": 16646,
+          "contextElapsedMs": 3546,
+          "mode": "full-palace",
+          "taskType": "bugfix",
+          "routeFiles": [
+            "packages/zod/src/v4/core/schemas.ts",
+            "packages/zod/src/v4/classic/tests/discriminated-unions.test.ts"
+          ],
+          "routeFileCount": 2,
+          "changedFileCoverage": 1,
+          "routeFocus": 1,
+          "routeConfidence": 0.87,
+          "calibration": {
+            "status": "well-calibrated",
+            "predictedConfidence": 0.87,
+            "observedCoverage": 1,
+            "error": 0.13
+          },
+          "acceptedRoutePrecision": 1,
+          "unexpectedRouteFiles": [],
+          "contextEstimatedTokens": 2277,
+          "contextBytes": 9108,
+          "selectedExcludedOverlap": []
+        },
+        {
+          "trial": 2,
+          "status": "completed",
+          "evaluationCacheState": "warm-index",
+          "contextCacheState": "warm-index-after-evaluation",
+          "evaluationElapsedMs": 7032,
+          "contextElapsedMs": 4459,
+          "mode": "full-palace",
+          "taskType": "bugfix",
+          "routeFiles": [
+            "packages/zod/src/v4/core/schemas.ts",
+            "packages/zod/src/v4/classic/tests/discriminated-unions.test.ts"
+          ],
+          "routeFileCount": 2,
+          "changedFileCoverage": 1,
+          "routeFocus": 1,
+          "routeConfidence": 0.87,
+          "calibration": {
+            "status": "well-calibrated",
+            "predictedConfidence": 0.87,
+            "observedCoverage": 1,
+            "error": 0.13
+          },
+          "acceptedRoutePrecision": 1,
+          "unexpectedRouteFiles": [],
+          "contextEstimatedTokens": 2277,
+          "contextBytes": 9108,
+          "selectedExcludedOverlap": []
+        }
+      ]
+    },
+    {
+      "name": "requests",
+      "language": "Python",
+      "url": "https://github.com/psf/requests.git",
+      "routeCommit": "f361ead047be5cb873174218582f7d8b9fcd9f49",
+      "groundTruthCommit": null,
+      "oracleSource": "previously frozen target-file replication",
+      "changedFiles": [
+        "src/requests/sessions.py",
+        "tests/test_requests.py"
+      ],
+      "historyChangedFiles": null,
+      "acceptedRouteFiles": [
+        "src/requests/sessions.py",
+        "tests/test_requests.py"
+      ],
+      "status": "passed",
+      "failures": [],
+      "deterministicRoutes": true,
+      "trackedWorktreeClean": true,
+      "trials": [
+        {
+          "trial": 1,
+          "status": "completed",
+          "evaluationCacheState": "cold-index",
+          "contextCacheState": "warm-index-after-evaluation",
+          "evaluationElapsedMs": 4125,
+          "contextElapsedMs": 1691,
+          "mode": "full-palace",
+          "taskType": "bugfix",
+          "routeFiles": [
+            "src/requests/sessions.py",
+            "tests/test_requests.py"
+          ],
+          "routeFileCount": 2,
+          "changedFileCoverage": 1,
+          "routeFocus": 1,
+          "routeConfidence": 0.72,
+          "calibration": {
+            "status": "underconfident",
+            "predictedConfidence": 0.72,
+            "observedCoverage": 1,
+            "error": 0.28
+          },
+          "acceptedRoutePrecision": 1,
+          "unexpectedRouteFiles": [],
+          "contextEstimatedTokens": 1958,
+          "contextBytes": 7832,
+          "selectedExcludedOverlap": []
+        },
+        {
+          "trial": 2,
+          "status": "completed",
+          "evaluationCacheState": "warm-index",
+          "contextCacheState": "warm-index-after-evaluation",
+          "evaluationElapsedMs": 2462,
+          "contextElapsedMs": 2133,
+          "mode": "full-palace",
+          "taskType": "bugfix",
+          "routeFiles": [
+            "src/requests/sessions.py",
+            "tests/test_requests.py"
+          ],
+          "routeFileCount": 2,
+          "changedFileCoverage": 1,
+          "routeFocus": 1,
+          "routeConfidence": 0.72,
+          "calibration": {
+            "status": "underconfident",
+            "predictedConfidence": 0.72,
+            "observedCoverage": 1,
+            "error": 0.28
+          },
+          "acceptedRoutePrecision": 1,
+          "unexpectedRouteFiles": [],
+          "contextEstimatedTokens": 1958,
+          "contextBytes": 7832,
+          "selectedExcludedOverlap": []
+        }
+      ]
+    },
+    {
+      "name": "p-limit",
+      "language": "JavaScript with TypeScript declarations",
+      "url": "https://github.com/sindresorhus/p-limit.git",
+      "routeCommit": "c944e4a4363ff41a7202d5dec346cc174c3ecf49",
+      "groundTruthCommit": "ccb80b2721a6a4a27ce5ad7721fe939162a35b31",
+      "oracleSource": "real Git-history diff",
+      "changedFiles": [
+        "index.d.ts",
+        "index.test-d.ts"
+      ],
+      "historyChangedFiles": [
+        "index.d.ts",
+        "index.test-d.ts"
+      ],
+      "acceptedRouteFiles": [
+        "index.d.ts",
+        "index.test-d.ts",
+        "package.json"
+      ],
+      "status": "passed",
+      "failures": [],
+      "deterministicRoutes": true,
+      "trackedWorktreeClean": true,
+      "trials": [
+        {
+          "trial": 1,
+          "status": "completed",
+          "evaluationCacheState": "cold-index",
+          "contextCacheState": "warm-index-after-evaluation",
+          "evaluationElapsedMs": 1878,
+          "contextElapsedMs": 1058,
+          "mode": "full-palace",
+          "taskType": "bugfix",
+          "routeFiles": [
+            "index.d.ts",
+            "index.test-d.ts",
+            "package.json"
+          ],
+          "routeFileCount": 3,
+          "changedFileCoverage": 1,
+          "routeFocus": 0.67,
+          "routeConfidence": 0.55,
+          "calibration": {
+            "status": "underconfident",
+            "predictedConfidence": 0.55,
+            "observedCoverage": 1,
+            "error": 0.45
+          },
+          "acceptedRoutePrecision": 1,
+          "unexpectedRouteFiles": [],
+          "contextEstimatedTokens": 2159,
+          "contextBytes": 8633,
+          "selectedExcludedOverlap": []
+        },
+        {
+          "trial": 2,
+          "status": "completed",
+          "evaluationCacheState": "warm-index",
+          "contextCacheState": "warm-index-after-evaluation",
+          "evaluationElapsedMs": 1331,
+          "contextElapsedMs": 1045,
+          "mode": "full-palace",
+          "taskType": "bugfix",
+          "routeFiles": [
+            "index.d.ts",
+            "index.test-d.ts",
+            "package.json"
+          ],
+          "routeFileCount": 3,
+          "changedFileCoverage": 1,
+          "routeFocus": 0.67,
+          "routeConfidence": 0.55,
+          "calibration": {
+            "status": "underconfident",
+            "predictedConfidence": 0.55,
+            "observedCoverage": 1,
+            "error": 0.45
+          },
+          "acceptedRoutePrecision": 1,
+          "unexpectedRouteFiles": [],
+          "contextEstimatedTokens": 2159,
+          "contextBytes": 8633,
+          "selectedExcludedOverlap": []
+        }
+      ]
+    }
+  ]
+}
