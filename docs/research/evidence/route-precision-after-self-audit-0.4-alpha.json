@@ -1,0 +1,547 @@
+{
+  "schemaVersion": 1,
+  "studyId": "route-precision-after-self-audit-0.4-alpha",
+  "generatedAt": "2026-07-22T17:12:36.247Z",
+  "claimBoundary": "Pinned seen-repository static routing regression plus bilingual Vertex Palace self-audit only; not held-out and not an end-to-end Agent performance benchmark.",
+  "status": "passed",
+  "failures": [],
+  "candidate": {
+    "productCommit": "543a670ff06d65d8df3fe6d63f0915918812aaaf",
+    "validationHarnessCommit": "d71e6c463c2f78817beddba3e63be7168cbe6c30",
+    "cliPath": "dist/palace.cjs",
+    "frozenPaths": [
+      "packages",
+      "plugins/vertex-palace/mcp",
+      "package.json",
+      "pnpm-lock.yaml",
+      "pnpm-workspace.yaml",
+      "tsconfig.base.json",
+      "tsconfig.json",
+      "tsup.package-cli.config.ts",
+      "tsup.plugin-mcp.config.ts",
+      "scripts/trim-generated.cjs"
+    ]
+  },
+  "environment": {
+    "platform": "win32",
+    "arch": "x64",
+    "node": "v24.13.1",
+    "npm": "11.8.0",
+    "git": "git version 2.53.0.windows.1"
+  },
+  "protocol": {
+    "repositorySet": "previously used replication targets",
+    "heldOut": false,
+    "selectionLockedBeforeFirstCandidateRun": true,
+    "budget": 6000,
+    "routeLimit": 9,
+    "maxDrawers": 4,
+    "repetitions": 2,
+    "gates": {
+      "changedFileCoverage": 1,
+      "acceptedRoutePrecision": 1,
+      "deterministicRoutes": true,
+      "overconfidentRoutes": 0,
+      "contextWithinBudget": true,
+      "trackedWorktreeClean": true,
+      "selfAuditFreshAfterExplicitIndex": true,
+      "selfAuditChangedFileCoverage": 1,
+      "selfAuditRouteFocusAtLeast": 0.75,
+      "selfAuditMaximumRouteFiles": 8
+    }
+  },
+  "aggregate": {
+    "repositories": 3,
+    "trials": 6,
+    "completedTrials": 6,
+    "passedRepositories": 3,
+    "macroChangedFileCoverage": 1,
+    "macroRouteFocus": 0.89,
+    "macroAcceptedRoutePrecision": 1,
+    "overconfidentTrials": 0,
+    "maxContextEstimatedTokens": 2277
+  },
+  "repositories": [
+    {
+      "name": "zod",
+      "language": "TypeScript",
+      "url": "https://github.com/colinhacks/zod.git",
+      "routeCommit": "912f0f51b0ced654d0069741e7160834dca742ee",
+      "groundTruthCommit": null,
+      "oracleSource": "previously frozen target-file replication",
+      "changedFiles": [
+        "packages/zod/src/v4/core/schemas.ts",
+        "packages/zod/src/v4/classic/tests/discriminated-unions.test.ts"
+      ],
+      "historyChangedFiles": null,
+      "acceptedRouteFiles": [
+        "packages/zod/src/v4/core/schemas.ts",
+        "packages/zod/src/v4/classic/tests/discriminated-unions.test.ts"
+      ],
+      "status": "passed",
+      "failures": [],
+      "deterministicRoutes": true,
+      "trackedWorktreeClean": true,
+      "trials": [
+        {
+          "trial": 1,
+          "status": "completed",
+          "evaluationCacheState": "cold-index",
+          "contextCacheState": "warm-index-after-evaluation",
+          "evaluationElapsedMs": 6233,
+          "contextElapsedMs": 1585,
+          "mode": "full-palace",
+          "taskType": "bugfix",
+          "routeFiles": [
+            "packages/zod/src/v4/core/schemas.ts",
+            "packages/zod/src/v4/classic/tests/discriminated-unions.test.ts"
+          ],
+          "routeFileCount": 2,
+          "changedFileCoverage": 1,
+          "routeFocus": 1,
+          "routeConfidence": 0.87,
+          "calibration": {
+            "status": "well-calibrated",
+            "predictedConfidence": 0.87,
+            "observedCoverage": 1,
+            "error": 0.13
+          },
+          "acceptedRoutePrecision": 1,
+          "unexpectedRouteFiles": [],
+          "contextEstimatedTokens": 2277,
+          "contextBytes": 9108,
+          "selectedExcludedOverlap": []
+        },
+        {
+          "trial": 2,
+          "status": "completed",
+          "evaluationCacheState": "warm-index",
+          "contextCacheState": "warm-index-after-evaluation",
+          "evaluationElapsedMs": 2253,
+          "contextElapsedMs": 1688,
+          "mode": "full-palace",
+          "taskType": "bugfix",
+          "routeFiles": [
+            "packages/zod/src/v4/core/schemas.ts",
+            "packages/zod/src/v4/classic/tests/discriminated-unions.test.ts"
+          ],
+          "routeFileCount": 2,
+          "changedFileCoverage": 1,
+          "routeFocus": 1,
+          "routeConfidence": 0.87,
+          "calibration": {
+            "status": "well-calibrated",
+            "predictedConfidence": 0.87,
+            "observedCoverage": 1,
+            "error": 0.13
+          },
+          "acceptedRoutePrecision": 1,
+          "unexpectedRouteFiles": [],
+          "contextEstimatedTokens": 2277,
+          "contextBytes": 9108,
+          "selectedExcludedOverlap": []
+        }
+      ]
+    },
+    {
+      "name": "requests",
+      "language": "Python",
+      "url": "https://github.com/psf/requests.git",
+      "routeCommit": "f361ead047be5cb873174218582f7d8b9fcd9f49",
+      "groundTruthCommit": null,
+      "oracleSource": "previously frozen target-file replication",
+      "changedFiles": [
+        "src/requests/sessions.py",
+        "tests/test_requests.py"
+      ],
+      "historyChangedFiles": null,
+      "acceptedRouteFiles": [
+        "src/requests/sessions.py",
+        "tests/test_requests.py"
+      ],
+      "status": "passed",
+      "failures": [],
+      "deterministicRoutes": true,
+      "trackedWorktreeClean": true,
+      "trials": [
+        {
+          "trial": 1,
+          "status": "completed",
+          "evaluationCacheState": "cold-index",
+          "contextCacheState": "warm-index-after-evaluation",
+          "evaluationElapsedMs": 1636,
+          "contextElapsedMs": 833,
+          "mode": "full-palace",
+          "taskType": "bugfix",
+          "routeFiles": [
+            "src/requests/sessions.py",
+            "tests/test_requests.py"
+          ],
+          "routeFileCount": 2,
+          "changedFileCoverage": 1,
+          "routeFocus": 1,
+          "routeConfidence": 0.72,
+          "calibration": {
+            "status": "underconfident",
+            "predictedConfidence": 0.72,
+            "observedCoverage": 1,
+            "error": 0.28
+          },
+          "acceptedRoutePrecision": 1,
+          "unexpectedRouteFiles": [],
+          "contextEstimatedTokens": 1958,
+          "contextBytes": 7832,
+          "selectedExcludedOverlap": []
+        },
+        {
+          "trial": 2,
+          "status": "completed",
+          "evaluationCacheState": "warm-index",
+          "contextCacheState": "warm-index-after-evaluation",
+          "evaluationElapsedMs": 1026,
+          "contextElapsedMs": 794,
+          "mode": "full-palace",
+          "taskType": "bugfix",
+          "routeFiles": [
+            "src/requests/sessions.py",
+            "tests/test_requests.py"
+          ],
+          "routeFileCount": 2,
+          "changedFileCoverage": 1,
+          "routeFocus": 1,
+          "routeConfidence": 0.72,
+          "calibration": {
+            "status": "underconfident",
+            "predictedConfidence": 0.72,
+            "observedCoverage": 1,
+            "error": 0.28
+          },
+          "acceptedRoutePrecision": 1,
+          "unexpectedRouteFiles": [],
+          "contextEstimatedTokens": 1958,
+          "contextBytes": 7832,
+          "selectedExcludedOverlap": []
+        }
+      ]
+    },
+    {
+      "name": "p-limit",
+      "language": "JavaScript with TypeScript declarations",
+      "url": "https://github.com/sindresorhus/p-limit.git",
+      "routeCommit": "c944e4a4363ff41a7202d5dec346cc174c3ecf49",
+      "groundTruthCommit": "ccb80b2721a6a4a27ce5ad7721fe939162a35b31",
+      "oracleSource": "real Git-history diff",
+      "changedFiles": [
+        "index.d.ts",
+        "index.test-d.ts"
+      ],
+      "historyChangedFiles": [
+        "index.d.ts",
+        "index.test-d.ts"
+      ],
+      "acceptedRouteFiles": [
+        "index.d.ts",
+        "index.test-d.ts",
+        "package.json"
+      ],
+      "status": "passed",
+      "failures": [],
+      "deterministicRoutes": true,
+      "trackedWorktreeClean": true,
+      "trials": [
+        {
+          "trial": 1,
+          "status": "completed",
+          "evaluationCacheState": "cold-index",
+          "contextCacheState": "warm-index-after-evaluation",
+          "evaluationElapsedMs": 636,
+          "contextElapsedMs": 544,
+          "mode": "full-palace",
+          "taskType": "bugfix",
+          "routeFiles": [
+            "index.d.ts",
+            "index.test-d.ts",
+            "package.json"
+          ],
+          "routeFileCount": 3,
+          "changedFileCoverage": 1,
+          "routeFocus": 0.67,
+          "routeConfidence": 0.55,
+          "calibration": {
+            "status": "underconfident",
+            "predictedConfidence": 0.55,
+            "observedCoverage": 1,
+            "error": 0.45
+          },
+          "acceptedRoutePrecision": 1,
+          "unexpectedRouteFiles": [],
+          "contextEstimatedTokens": 2159,
+          "contextBytes": 8633,
+          "selectedExcludedOverlap": []
+        },
+        {
+          "trial": 2,
+          "status": "completed",
+          "evaluationCacheState": "warm-index",
+          "contextCacheState": "warm-index-after-evaluation",
+          "evaluationElapsedMs": 577,
+          "contextElapsedMs": 499,
+          "mode": "full-palace",
+          "taskType": "bugfix",
+          "routeFiles": [
+            "index.d.ts",
+            "index.test-d.ts",
+            "package.json"
+          ],
+          "routeFileCount": 3,
+          "changedFileCoverage": 1,
+          "routeFocus": 0.67,
+          "routeConfidence": 0.55,
+          "calibration": {
+            "status": "underconfident",
+            "predictedConfidence": 0.55,
+            "observedCoverage": 1,
+            "error": 0.45
+          },
+          "acceptedRoutePrecision": 1,
+          "unexpectedRouteFiles": [],
+          "contextEstimatedTokens": 2159,
+          "contextBytes": 8633,
+          "selectedExcludedOverlap": []
+        }
+      ]
+    }
+  ],
+  "selfAudit": {
+    "repositoryCommit": "543a670ff06d65d8df3fe6d63f0915918812aaaf",
+    "status": "passed",
+    "failures": [],
+    "statusAfterExplicitIndex": {
+      "root": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-route-precision-after-self-audit-62SJ7A\\vertex-palace-self-audit",
+      "palaceRoot": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-route-precision-after-self-audit-62SJ7A\\vertex-palace-self-audit\\.palace",
+      "initialized": true,
+      "indexed": true,
+      "stale": false,
+      "nodeCount": 1634,
+      "edgeCount": 5839,
+      "roomCount": 41,
+      "lastIndexedAt": "2026-07-22T17:12:26.184Z",
+      "configPath": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-route-precision-after-self-audit-62SJ7A\\vertex-palace-self-audit\\.palace\\palace.yml"
+    },
+    "generatedArtifactFixture": "dist/palace.cjs copied from the frozen candidate build",
+    "trackedWorktreeClean": true,
+    "aggregate": {
+      "repositories": 2,
+      "trials": 4,
+      "completedTrials": 4,
+      "passedRepositories": 2,
+      "macroChangedFileCoverage": 1,
+      "macroRouteFocus": 0.86,
+      "macroAcceptedRoutePrecision": 1,
+      "overconfidentTrials": 0,
+      "maxContextEstimatedTokens": 4827
+    },
+    "targets": [
+      {
+        "name": "vertex-palace-self-audit-en",
+        "language": "English",
+        "url": "local frozen candidate worktree",
+        "routeCommit": "543a670ff06d65d8df3fe6d63f0915918812aaaf",
+        "groundTruthCommit": null,
+        "oracleSource": "frozen prior cross-repository research artifact family",
+        "changedFiles": [
+          "scripts/verify-route-precision-cross-repositories.cjs",
+          "docs/research/CROSS_REPOSITORY_ROUTE_PRECISION_PROTOCOL_0_4_ALPHA.md",
+          "docs/zh-CN/CROSS_REPOSITORY_ROUTE_PRECISION_PROTOCOL_0_4_ALPHA.md",
+          "docs/research/evidence/cross-repository-route-precision-0.4-alpha.json",
+          "docs/research/CROSS_REPOSITORY_ROUTE_PRECISION_RESULT_0_4_ALPHA.md",
+          "docs/zh-CN/CROSS_REPOSITORY_ROUTE_PRECISION_RESULT_0_4_ALPHA.md"
+        ],
+        "historyChangedFiles": null,
+        "acceptedRouteFiles": [
+          "scripts/verify-route-precision-cross-repositories.cjs",
+          "docs/research/CROSS_REPOSITORY_ROUTE_PRECISION_PROTOCOL_0_4_ALPHA.md",
+          "docs/zh-CN/CROSS_REPOSITORY_ROUTE_PRECISION_PROTOCOL_0_4_ALPHA.md",
+          "docs/research/evidence/cross-repository-route-precision-0.4-alpha.json",
+          "docs/research/CROSS_REPOSITORY_ROUTE_PRECISION_RESULT_0_4_ALPHA.md",
+          "docs/zh-CN/CROSS_REPOSITORY_ROUTE_PRECISION_RESULT_0_4_ALPHA.md",
+          "tsconfig.base.json"
+        ],
+        "status": "passed",
+        "failures": [],
+        "deterministicRoutes": true,
+        "trackedWorktreeClean": true,
+        "trials": [
+          {
+            "trial": 1,
+            "status": "completed",
+            "evaluationCacheState": "warm-index-after-explicit-index",
+            "contextCacheState": "warm-index-after-evaluation",
+            "evaluationElapsedMs": 1218,
+            "contextElapsedMs": 967,
+            "mode": "full-palace",
+            "taskType": "evaluation",
+            "routeFiles": [
+              "docs/research/evidence/cross-repository-route-precision-0.4-alpha.json",
+              "docs/research/CROSS_REPOSITORY_ROUTE_PRECISION_RESULT_0_4_ALPHA.md",
+              "docs/research/CROSS_REPOSITORY_ROUTE_PRECISION_PROTOCOL_0_4_ALPHA.md",
+              "docs/zh-CN/CROSS_REPOSITORY_ROUTE_PRECISION_PROTOCOL_0_4_ALPHA.md",
+              "docs/zh-CN/CROSS_REPOSITORY_ROUTE_PRECISION_RESULT_0_4_ALPHA.md",
+              "scripts/verify-route-precision-cross-repositories.cjs",
+              "tsconfig.base.json"
+            ],
+            "routeFileCount": 7,
+            "changedFileCoverage": 1,
+            "routeFocus": 0.86,
+            "routeConfidence": 0.75,
+            "calibration": {
+              "status": "underconfident",
+              "predictedConfidence": 0.75,
+              "observedCoverage": 1,
+              "error": 0.25
+            },
+            "acceptedRoutePrecision": 1,
+            "unexpectedRouteFiles": [],
+            "contextEstimatedTokens": 4827,
+            "contextBytes": 19308,
+            "selectedExcludedOverlap": []
+          },
+          {
+            "trial": 2,
+            "status": "completed",
+            "evaluationCacheState": "warm-index",
+            "contextCacheState": "warm-index-after-evaluation",
+            "evaluationElapsedMs": 1285,
+            "contextElapsedMs": 1025,
+            "mode": "full-palace",
+            "taskType": "evaluation",
+            "routeFiles": [
+              "docs/research/evidence/cross-repository-route-precision-0.4-alpha.json",
+              "docs/research/CROSS_REPOSITORY_ROUTE_PRECISION_RESULT_0_4_ALPHA.md",
+              "docs/research/CROSS_REPOSITORY_ROUTE_PRECISION_PROTOCOL_0_4_ALPHA.md",
+              "docs/zh-CN/CROSS_REPOSITORY_ROUTE_PRECISION_PROTOCOL_0_4_ALPHA.md",
+              "docs/zh-CN/CROSS_REPOSITORY_ROUTE_PRECISION_RESULT_0_4_ALPHA.md",
+              "scripts/verify-route-precision-cross-repositories.cjs",
+              "tsconfig.base.json"
+            ],
+            "routeFileCount": 7,
+            "changedFileCoverage": 1,
+            "routeFocus": 0.86,
+            "routeConfidence": 0.75,
+            "calibration": {
+              "status": "underconfident",
+              "predictedConfidence": 0.75,
+              "observedCoverage": 1,
+              "error": 0.25
+            },
+            "acceptedRoutePrecision": 1,
+            "unexpectedRouteFiles": [],
+            "contextEstimatedTokens": 4827,
+            "contextBytes": 19308,
+            "selectedExcludedOverlap": []
+          }
+        ]
+      },
+      {
+        "name": "vertex-palace-self-audit-zh-cn",
+        "language": "Simplified Chinese",
+        "url": "local frozen candidate worktree",
+        "routeCommit": "543a670ff06d65d8df3fe6d63f0915918812aaaf",
+        "groundTruthCommit": null,
+        "oracleSource": "frozen prior cross-repository research artifact family",
+        "changedFiles": [
+          "scripts/verify-route-precision-cross-repositories.cjs",
+          "docs/research/CROSS_REPOSITORY_ROUTE_PRECISION_PROTOCOL_0_4_ALPHA.md",
+          "docs/zh-CN/CROSS_REPOSITORY_ROUTE_PRECISION_PROTOCOL_0_4_ALPHA.md",
+          "docs/research/evidence/cross-repository-route-precision-0.4-alpha.json",
+          "docs/research/CROSS_REPOSITORY_ROUTE_PRECISION_RESULT_0_4_ALPHA.md",
+          "docs/zh-CN/CROSS_REPOSITORY_ROUTE_PRECISION_RESULT_0_4_ALPHA.md"
+        ],
+        "historyChangedFiles": null,
+        "acceptedRouteFiles": [
+          "scripts/verify-route-precision-cross-repositories.cjs",
+          "docs/research/CROSS_REPOSITORY_ROUTE_PRECISION_PROTOCOL_0_4_ALPHA.md",
+          "docs/zh-CN/CROSS_REPOSITORY_ROUTE_PRECISION_PROTOCOL_0_4_ALPHA.md",
+          "docs/research/evidence/cross-repository-route-precision-0.4-alpha.json",
+          "docs/research/CROSS_REPOSITORY_ROUTE_PRECISION_RESULT_0_4_ALPHA.md",
+          "docs/zh-CN/CROSS_REPOSITORY_ROUTE_PRECISION_RESULT_0_4_ALPHA.md",
+          "tsconfig.base.json"
+        ],
+        "status": "passed",
+        "failures": [],
+        "deterministicRoutes": true,
+        "trackedWorktreeClean": true,
+        "trials": [
+          {
+            "trial": 1,
+            "status": "completed",
+            "evaluationCacheState": "warm-index-after-explicit-index",
+            "contextCacheState": "warm-index-after-evaluation",
+            "evaluationElapsedMs": 1184,
+            "contextElapsedMs": 962,
+            "mode": "full-palace",
+            "taskType": "evaluation",
+            "routeFiles": [
+              "docs/research/evidence/cross-repository-route-precision-0.4-alpha.json",
+              "docs/research/CROSS_REPOSITORY_ROUTE_PRECISION_RESULT_0_4_ALPHA.md",
+              "docs/zh-CN/CROSS_REPOSITORY_ROUTE_PRECISION_PROTOCOL_0_4_ALPHA.md",
+              "docs/research/CROSS_REPOSITORY_ROUTE_PRECISION_PROTOCOL_0_4_ALPHA.md",
+              "docs/zh-CN/CROSS_REPOSITORY_ROUTE_PRECISION_RESULT_0_4_ALPHA.md",
+              "scripts/verify-route-precision-cross-repositories.cjs",
+              "tsconfig.base.json"
+            ],
+            "routeFileCount": 7,
+            "changedFileCoverage": 1,
+            "routeFocus": 0.86,
+            "routeConfidence": 0.75,
+            "calibration": {
+              "status": "underconfident",
+              "predictedConfidence": 0.75,
+              "observedCoverage": 1,
+              "error": 0.25
+            },
+            "acceptedRoutePrecision": 1,
+            "unexpectedRouteFiles": [],
+            "contextEstimatedTokens": 4795,
+            "contextBytes": 19258,
+            "selectedExcludedOverlap": []
+          },
+          {
+            "trial": 2,
+            "status": "completed",
+            "evaluationCacheState": "warm-index",
+            "contextCacheState": "warm-index-after-evaluation",
+            "evaluationElapsedMs": 1427,
+            "contextElapsedMs": 1100,
+            "mode": "full-palace",
+            "taskType": "evaluation",
+            "routeFiles": [
+              "docs/research/evidence/cross-repository-route-precision-0.4-alpha.json",
+              "docs/research/CROSS_REPOSITORY_ROUTE_PRECISION_RESULT_0_4_ALPHA.md",
+              "docs/zh-CN/CROSS_REPOSITORY_ROUTE_PRECISION_PROTOCOL_0_4_ALPHA.md",
+              "docs/research/CROSS_REPOSITORY_ROUTE_PRECISION_PROTOCOL_0_4_ALPHA.md",
+              "docs/zh-CN/CROSS_REPOSITORY_ROUTE_PRECISION_RESULT_0_4_ALPHA.md",
+              "scripts/verify-route-precision-cross-repositories.cjs",
+              "tsconfig.base.json"
+            ],
+            "routeFileCount": 7,
+            "changedFileCoverage": 1,
+            "routeFocus": 0.86,
+            "routeConfidence": 0.75,
+            "calibration": {
+              "status": "underconfident",
+              "predictedConfidence": 0.75,
+              "observedCoverage": 1,
+              "error": 0.25
+            },
+            "acceptedRoutePrecision": 1,
+            "unexpectedRouteFiles": [],
+            "contextEstimatedTokens": 4795,
+            "contextBytes": 19258,
+            "selectedExcludedOverlap": []
+          }
+        ]
+      }
+    ]
+  }
+}
