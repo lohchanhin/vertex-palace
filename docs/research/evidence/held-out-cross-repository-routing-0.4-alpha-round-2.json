@@ -1,0 +1,893 @@
+{
+  "schemaVersion": 2,
+  "studyId": "held-out-cross-repository-routing-round-2-0.4-alpha",
+  "generatedAt": "2026-07-22T20:53:46.236Z",
+  "status": "failed",
+  "failures": [
+    "express: route focus fell below 0.50",
+    "express: route precision fell below 0.50",
+    "httpx: route focus fell below 0.50",
+    "httpx: route precision fell below 0.50",
+    "urfave-cli: implementation or test surface coverage was incomplete",
+    "urfave-cli: route focus fell below 0.50",
+    "urfave-cli: route precision fell below 0.50",
+    "urfave-cli: route was overconfident against observed coverage",
+    "clap: task type differed from feature",
+    "clap: route focus fell below 0.50",
+    "clap: route precision fell below 0.50",
+    "commander: route focus fell below 0.50",
+    "commander: route precision fell below 0.50",
+    "pytest: implementation or test surface coverage was incomplete",
+    "pytest: route focus fell below 0.50",
+    "pytest: route precision fell below 0.50",
+    "pytest: route was overconfident against observed coverage",
+    "aggregate: task type mapping was incomplete",
+    "aggregate: implementation/test coverage was incomplete",
+    "aggregate: changed-file coverage fell below 0.90",
+    "aggregate: route focus fell below 0.75",
+    "aggregate: route precision fell below 0.75",
+    "aggregate: a target route focus fell below 0.50",
+    "aggregate: a target route precision fell below 0.50",
+    "aggregate: overconfident trials were observed"
+  ],
+  "claimBoundary": "First static routing observation on six mechanically selected repositories and Git-history tasks unseen during candidate development. This is not an end-to-end Agent performance benchmark and cannot support Token or wall-time claims.",
+  "heldOutAgainstCandidate": true,
+  "evidenceClass": "preregistered-held-out-static-routing",
+  "candidate": {
+    "productCommit": "0ef19a7bbef1901d813b81389405f87482db47c5",
+    "validationHarnessCommit": "eb529b416d05560003dff480d30b81e8293eab73",
+    "cliPath": "dist/palace.cjs",
+    "frozenPaths": [
+      "packages",
+      "plugins/vertex-palace/mcp",
+      "package.json",
+      "pnpm-lock.yaml",
+      "pnpm-workspace.yaml",
+      "tsconfig.base.json",
+      "tsconfig.json",
+      "tsup.package-cli.config.ts",
+      "tsup.plugin-mcp.config.ts",
+      "scripts/trim-generated.cjs"
+    ],
+    "trackedWorktreeCleanBeforeMeasurement": true
+  },
+  "targetSelection": {
+    "manifestPath": "docs/research/evidence/held-out-routing-target-manifest-0.4-alpha-round-2.json",
+    "manifestCommit": "4dfdf420fe56d397946e6f7920528697f1cd9629",
+    "manifestSha256": "694BF80DDB45A381F19FCA993674A71EA5BA78EB963258E3A2675C416D3B09A8",
+    "selectorCommit": "0f3a8bc13c9de670cc4f3caf880f3bfb6b744bc2",
+    "palaceCallsOnCandidateTasksDuringSelection": 0,
+    "targetCount": 6,
+    "languageFamilies": [
+      "javascript-typescript",
+      "python",
+      "go",
+      "rust"
+    ]
+  },
+  "preregistrationClarification": {
+    "reason": "The target selector admitted behavioral fix, feat, and add subjects, while the selection protocol's summary gate incorrectly said every task must remain bugfix.",
+    "timing": "Corrected after target selection but before any Palace call on a selected task.",
+    "replacementRule": "No target was removed, replaced, or rerouted.",
+    "fixedRule": "Expected task type is derived mechanically from the unedited subject prefix: fix -> bugfix; feat or add -> feature. Unknown or mismatched classification fails."
+  },
+  "environment": {
+    "platform": "win32",
+    "arch": "x64",
+    "node": "v24.13.1",
+    "npm": "11.8.0",
+    "git": "git version 2.53.0.windows.1"
+  },
+  "protocol": {
+    "repetitions": 2,
+    "sequential": true,
+    "budget": 6000,
+    "routeLimit": 9,
+    "maxDrawers": 4,
+    "outputCreateOnly": true,
+    "gates": {
+      "completedTargets": 6,
+      "completedTrials": 12,
+      "coreImplementationAndTestCoveragePerTarget": 1,
+      "minimumMacroCoverage": 0.9,
+      "minimumMacroFocus": 0.75,
+      "minimumMacroPrecision": 0.75,
+      "minimumTargetFocus": 0.5,
+      "minimumTargetPrecision": 0.5,
+      "deterministicRoutes": true,
+      "overconfidentTrials": 0,
+      "contextWithinBudget": true,
+      "selectedExcludedOverlap": 0,
+      "trackedWorktreeClean": true,
+      "freshAfterExplicitIndex": true
+    }
+  },
+  "aggregate": {
+    "targetCount": 6,
+    "passedTargets": 0,
+    "failedTargets": 6,
+    "trialCount": 12,
+    "completedTrials": 12,
+    "taskTypeMatchedTargets": 5,
+    "coreSurfaceCompleteTargets": 4,
+    "macroChangedFileCoverage": 0.667,
+    "macroRouteFocus": 0.183,
+    "macroRoutePrecision": 0.185,
+    "minimumTargetRouteFocus": 0,
+    "minimumTargetRoutePrecision": 0,
+    "overconfidentTrials": 4,
+    "maxContextEstimatedTokens": 3784,
+    "environmentOrSetupFailures": 0,
+    "harnessContractFailures": 0,
+    "productOrContractFailures": 6
+  },
+  "targets": [
+    {
+      "name": "express",
+      "language": "JavaScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/expressjs/express.git",
+      "pinnedHead": "ae6dd37680e3a00618d6c8a3e522f0ee4eeba1a4",
+      "routeCommit": "3e81873b52e107898ed7ba45874959fb0546df3f",
+      "groundTruthCommit": "6cd404eb28ff861180f435b3015f8d0c8c0b44d4",
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "task": "fix: enhance req.acceptsCharsets method (#6088)",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "lib/request.js",
+        "test/req.acceptsCharsets.js"
+      ],
+      "implementationFiles": [
+        "lib/request.js"
+      ],
+      "testFiles": [
+        "test/req.acceptsCharsets.js"
+      ],
+      "status": "failed",
+      "failureCategory": "product-or-contract",
+      "failures": [
+        "route focus fell below 0.50",
+        "route precision fell below 0.50"
+      ],
+      "deterministicRoutes": true,
+      "statusAfterExplicitIndex": {
+        "root": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-held-out-routing-round-2-mPNLex\\express",
+        "palaceRoot": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-held-out-routing-round-2-mPNLex\\express\\.palace",
+        "initialized": true,
+        "indexed": true,
+        "stale": false,
+        "nodeCount": 786,
+        "edgeCount": 3819,
+        "roomCount": 108,
+        "lastIndexedAt": "2026-07-22T20:49:58.389Z",
+        "configPath": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-held-out-routing-round-2-mPNLex\\express\\.palace\\palace.yml"
+      },
+      "trackedWorktreeClean": true,
+      "trials": [
+        {
+          "trial": 1,
+          "status": "completed",
+          "expectedTaskType": "bugfix",
+          "taskType": "bugfix",
+          "evaluationCacheState": "warm-index-after-explicit-index",
+          "contextCacheState": "warm-index-after-evaluation",
+          "evaluationElapsedMs": 2772,
+          "contextElapsedMs": 1592,
+          "mode": "full-palace",
+          "evidenceStatus": null,
+          "routeFiles": [
+            "test/req.acceptsCharsets.js",
+            "test/req.accepts.js",
+            "test/req.acceptsEncodings.js",
+            "test/req.acceptsLanguages.js",
+            "lib/request.js",
+            "test/req.query.js",
+            "test/req.ip.js",
+            "test/res.format.js",
+            "test/req.fresh.js"
+          ],
+          "routeFileCount": 9,
+          "changedFileCoverage": 1,
+          "coreSurfaceCoverage": 1,
+          "missingImplementationFiles": [],
+          "missingTestFiles": [],
+          "routeFocus": 0.22,
+          "routePrecision": 0.222,
+          "routeConfidence": 0.78,
+          "calibration": {
+            "status": "underconfident",
+            "predictedConfidence": 0.78,
+            "observedCoverage": 1,
+            "error": 0.22
+          },
+          "contextEstimatedTokens": 3724,
+          "contextBytes": 14893,
+          "contextMetricSource": "reported",
+          "selectedExcludedOverlap": []
+        },
+        {
+          "trial": 2,
+          "status": "completed",
+          "expectedTaskType": "bugfix",
+          "taskType": "bugfix",
+          "evaluationCacheState": "warm-index",
+          "contextCacheState": "warm-index-after-evaluation",
+          "evaluationElapsedMs": 2402,
+          "contextElapsedMs": 1398,
+          "mode": "full-palace",
+          "evidenceStatus": null,
+          "routeFiles": [
+            "test/req.acceptsCharsets.js",
+            "test/req.accepts.js",
+            "test/req.acceptsEncodings.js",
+            "test/req.acceptsLanguages.js",
+            "lib/request.js",
+            "test/req.query.js",
+            "test/req.ip.js",
+            "test/res.format.js",
+            "test/req.fresh.js"
+          ],
+          "routeFileCount": 9,
+          "changedFileCoverage": 1,
+          "coreSurfaceCoverage": 1,
+          "missingImplementationFiles": [],
+          "missingTestFiles": [],
+          "routeFocus": 0.22,
+          "routePrecision": 0.222,
+          "routeConfidence": 0.78,
+          "calibration": {
+            "status": "underconfident",
+            "predictedConfidence": 0.78,
+            "observedCoverage": 1,
+            "error": 0.22
+          },
+          "contextEstimatedTokens": 3724,
+          "contextBytes": 14893,
+          "contextMetricSource": "reported",
+          "selectedExcludedOverlap": []
+        }
+      ]
+    },
+    {
+      "name": "httpx",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/encode/httpx.git",
+      "pinnedHead": "b5addb64f0161ff6bfe94c124ef76f6a1fba5254",
+      "routeCommit": "c3585a5ccfa57bec653f3846b8625a27d11dcd5e",
+      "groundTruthCommit": "88e84314378b31336027363af862619c519a4a3a",
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "task": "Add cookies to the retried request when performing digest authentication. (#2846)",
+      "expectedTaskType": "feature",
+      "changedFiles": [
+        "httpx/_auth.py",
+        "tests/test_auth.py"
+      ],
+      "implementationFiles": [
+        "httpx/_auth.py"
+      ],
+      "testFiles": [
+        "tests/test_auth.py"
+      ],
+      "status": "failed",
+      "failureCategory": "product-or-contract",
+      "failures": [
+        "route focus fell below 0.50",
+        "route precision fell below 0.50"
+      ],
+      "deterministicRoutes": true,
+      "statusAfterExplicitIndex": {
+        "root": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-held-out-routing-round-2-mPNLex\\httpx",
+        "palaceRoot": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-held-out-routing-round-2-mPNLex\\httpx\\.palace",
+        "initialized": true,
+        "indexed": true,
+        "stale": false,
+        "nodeCount": 1754,
+        "edgeCount": 7450,
+        "roomCount": 49,
+        "lastIndexedAt": "2026-07-22T20:50:18.521Z",
+        "configPath": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-held-out-routing-round-2-mPNLex\\httpx\\.palace\\palace.yml"
+      },
+      "trackedWorktreeClean": true,
+      "trials": [
+        {
+          "trial": 1,
+          "status": "completed",
+          "expectedTaskType": "feature",
+          "taskType": "feature",
+          "evaluationCacheState": "warm-index-after-explicit-index",
+          "contextCacheState": "warm-index-after-evaluation",
+          "evaluationElapsedMs": 2073,
+          "contextElapsedMs": 1557,
+          "mode": "full-palace",
+          "evidenceStatus": null,
+          "routeFiles": [
+            "httpx/_auth.py",
+            "tests/test_auth.py",
+            "tests/client/test_auth.py",
+            "httpx/_client.py",
+            "httpx/__init__.py",
+            "httpx/_main.py",
+            "httpx/_api.py",
+            "httpx/_exceptions.py",
+            "tests/client/test_properties.py"
+          ],
+          "routeFileCount": 9,
+          "changedFileCoverage": 1,
+          "coreSurfaceCoverage": 1,
+          "missingImplementationFiles": [],
+          "missingTestFiles": [],
+          "routeFocus": 0.22,
+          "routePrecision": 0.222,
+          "routeConfidence": 0.74,
+          "calibration": {
+            "status": "underconfident",
+            "predictedConfidence": 0.74,
+            "observedCoverage": 1,
+            "error": 0.26
+          },
+          "contextEstimatedTokens": 2913,
+          "contextBytes": 11651,
+          "contextMetricSource": "reported",
+          "selectedExcludedOverlap": []
+        },
+        {
+          "trial": 2,
+          "status": "completed",
+          "expectedTaskType": "feature",
+          "taskType": "feature",
+          "evaluationCacheState": "warm-index",
+          "contextCacheState": "warm-index-after-evaluation",
+          "evaluationElapsedMs": 1235,
+          "contextElapsedMs": 1079,
+          "mode": "full-palace",
+          "evidenceStatus": null,
+          "routeFiles": [
+            "httpx/_auth.py",
+            "tests/test_auth.py",
+            "tests/client/test_auth.py",
+            "httpx/_client.py",
+            "httpx/__init__.py",
+            "httpx/_main.py",
+            "httpx/_api.py",
+            "httpx/_exceptions.py",
+            "tests/client/test_properties.py"
+          ],
+          "routeFileCount": 9,
+          "changedFileCoverage": 1,
+          "coreSurfaceCoverage": 1,
+          "missingImplementationFiles": [],
+          "missingTestFiles": [],
+          "routeFocus": 0.22,
+          "routePrecision": 0.222,
+          "routeConfidence": 0.74,
+          "calibration": {
+            "status": "underconfident",
+            "predictedConfidence": 0.74,
+            "observedCoverage": 1,
+            "error": 0.26
+          },
+          "contextEstimatedTokens": 2913,
+          "contextBytes": 11651,
+          "contextMetricSource": "reported",
+          "selectedExcludedOverlap": []
+        }
+      ]
+    },
+    {
+      "name": "urfave-cli",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/urfave/cli.git",
+      "pinnedHead": "c6f4cf7e9223793478cfcde9b8f135cc8f86e78f",
+      "routeCommit": "f980ca84bf6559aa0571b213534b4d3b8d37f5d2",
+      "groundTruthCommit": "0045bbdaa06af2eba6c1a5d38907665fb2e839e3",
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "task": "fix: keep completion subcommand order deterministic in help output",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "completion.go",
+        "completion_test.go"
+      ],
+      "implementationFiles": [
+        "completion.go"
+      ],
+      "testFiles": [
+        "completion_test.go"
+      ],
+      "status": "failed",
+      "failureCategory": "product-or-contract",
+      "failures": [
+        "implementation or test surface coverage was incomplete",
+        "route focus fell below 0.50",
+        "route precision fell below 0.50",
+        "route was overconfident against observed coverage"
+      ],
+      "deterministicRoutes": true,
+      "statusAfterExplicitIndex": {
+        "root": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-held-out-routing-round-2-mPNLex\\urfave-cli",
+        "palaceRoot": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-held-out-routing-round-2-mPNLex\\urfave-cli\\.palace",
+        "initialized": true,
+        "indexed": true,
+        "stale": false,
+        "nodeCount": 682,
+        "edgeCount": 2557,
+        "roomCount": 86,
+        "lastIndexedAt": "2026-07-22T20:50:39.413Z",
+        "configPath": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-held-out-routing-round-2-mPNLex\\urfave-cli\\.palace\\palace.yml"
+      },
+      "trackedWorktreeClean": true,
+      "trials": [
+        {
+          "trial": 1,
+          "status": "completed",
+          "expectedTaskType": "bugfix",
+          "taskType": "bugfix",
+          "evaluationCacheState": "warm-index-after-explicit-index",
+          "contextCacheState": "warm-index-after-evaluation",
+          "evaluationElapsedMs": 2341,
+          "contextElapsedMs": 1492,
+          "mode": "full-palace",
+          "evidenceStatus": null,
+          "routeFiles": [
+            "help.go",
+            "help_test.go"
+          ],
+          "routeFileCount": 2,
+          "changedFileCoverage": 0,
+          "coreSurfaceCoverage": 0,
+          "missingImplementationFiles": [
+            "completion.go"
+          ],
+          "missingTestFiles": [
+            "completion_test.go"
+          ],
+          "routeFocus": 0,
+          "routePrecision": 0,
+          "routeConfidence": 0.68,
+          "calibration": {
+            "status": "overconfident",
+            "predictedConfidence": 0.68,
+            "observedCoverage": 0,
+            "error": 0.68
+          },
+          "contextEstimatedTokens": 1622,
+          "contextBytes": 6488,
+          "contextMetricSource": "reported",
+          "selectedExcludedOverlap": []
+        },
+        {
+          "trial": 2,
+          "status": "completed",
+          "expectedTaskType": "bugfix",
+          "taskType": "bugfix",
+          "evaluationCacheState": "warm-index",
+          "contextCacheState": "warm-index-after-evaluation",
+          "evaluationElapsedMs": 2138,
+          "contextElapsedMs": 1537,
+          "mode": "full-palace",
+          "evidenceStatus": null,
+          "routeFiles": [
+            "help.go",
+            "help_test.go"
+          ],
+          "routeFileCount": 2,
+          "changedFileCoverage": 0,
+          "coreSurfaceCoverage": 0,
+          "missingImplementationFiles": [
+            "completion.go"
+          ],
+          "missingTestFiles": [
+            "completion_test.go"
+          ],
+          "routeFocus": 0,
+          "routePrecision": 0,
+          "routeConfidence": 0.68,
+          "calibration": {
+            "status": "overconfident",
+            "predictedConfidence": 0.68,
+            "observedCoverage": 0,
+            "error": 0.68
+          },
+          "contextEstimatedTokens": 1622,
+          "contextBytes": 6488,
+          "contextMetricSource": "reported",
+          "selectedExcludedOverlap": []
+        }
+      ]
+    },
+    {
+      "name": "clap",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/clap-rs/clap.git",
+      "pinnedHead": "466b2be56c5811d1af62c407f5a00456350ece62",
+      "routeCommit": "1565a3cbb411dedc410154fca0de7ec445fcdb08",
+      "groundTruthCommit": "ac0d148f7e21068fd1f544230456f30c95311f78",
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "task": "feat(complete): Index-aware ValueCompleter",
+      "expectedTaskType": "feature",
+      "changedFiles": [
+        "clap_complete/src/engine/complete.rs",
+        "clap_complete/src/engine/custom.rs",
+        "clap_complete/tests/testsuite/engine.rs"
+      ],
+      "implementationFiles": [
+        "clap_complete/src/engine/complete.rs",
+        "clap_complete/src/engine/custom.rs"
+      ],
+      "testFiles": [
+        "clap_complete/tests/testsuite/engine.rs"
+      ],
+      "status": "failed",
+      "failureCategory": "product-or-contract",
+      "failures": [
+        "task type differed from feature",
+        "route focus fell below 0.50",
+        "route precision fell below 0.50"
+      ],
+      "deterministicRoutes": true,
+      "statusAfterExplicitIndex": {
+        "root": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-held-out-routing-round-2-mPNLex\\clap",
+        "palaceRoot": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-held-out-routing-round-2-mPNLex\\clap\\.palace",
+        "initialized": true,
+        "indexed": true,
+        "stale": false,
+        "nodeCount": 5882,
+        "edgeCount": 17857,
+        "roomCount": 76,
+        "lastIndexedAt": "2026-07-22T20:51:15.007Z",
+        "configPath": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-held-out-routing-round-2-mPNLex\\clap\\.palace\\palace.yml"
+      },
+      "trackedWorktreeClean": true,
+      "trials": [
+        {
+          "trial": 1,
+          "status": "completed",
+          "expectedTaskType": "feature",
+          "taskType": "unknown",
+          "evaluationCacheState": "warm-index-after-explicit-index",
+          "contextCacheState": "warm-index-after-evaluation",
+          "evaluationElapsedMs": 5158,
+          "contextElapsedMs": 3801,
+          "mode": "full-palace",
+          "evidenceStatus": null,
+          "routeFiles": [
+            "clap_complete/src/engine/complete.rs",
+            "clap_complete/src/env/shells.rs",
+            "clap_complete/src/engine/custom.rs",
+            "clap_complete/tests/testsuite/engine.rs",
+            "clap_complete/tests/testsuite/general.rs",
+            "clap_builder/src/builder/arg.rs",
+            "tests/builder/multiple_values.rs",
+            "clap_builder/src/builder/value_parser.rs",
+            "tests/builder/app_settings.rs"
+          ],
+          "routeFileCount": 9,
+          "changedFileCoverage": 1,
+          "coreSurfaceCoverage": 1,
+          "missingImplementationFiles": [],
+          "missingTestFiles": [],
+          "routeFocus": 0.33,
+          "routePrecision": 0.333,
+          "routeConfidence": 0.74,
+          "calibration": {
+            "status": "underconfident",
+            "predictedConfidence": 0.74,
+            "observedCoverage": 1,
+            "error": 0.26
+          },
+          "contextEstimatedTokens": 2362,
+          "contextBytes": 9445,
+          "contextMetricSource": "reported",
+          "selectedExcludedOverlap": []
+        },
+        {
+          "trial": 2,
+          "status": "completed",
+          "expectedTaskType": "feature",
+          "taskType": "unknown",
+          "evaluationCacheState": "warm-index",
+          "contextCacheState": "warm-index-after-evaluation",
+          "evaluationElapsedMs": 5479,
+          "contextElapsedMs": 3568,
+          "mode": "full-palace",
+          "evidenceStatus": null,
+          "routeFiles": [
+            "clap_complete/src/engine/complete.rs",
+            "clap_complete/src/env/shells.rs",
+            "clap_complete/src/engine/custom.rs",
+            "clap_complete/tests/testsuite/engine.rs",
+            "clap_complete/tests/testsuite/general.rs",
+            "clap_builder/src/builder/arg.rs",
+            "tests/builder/multiple_values.rs",
+            "clap_builder/src/builder/value_parser.rs",
+            "tests/builder/app_settings.rs"
+          ],
+          "routeFileCount": 9,
+          "changedFileCoverage": 1,
+          "coreSurfaceCoverage": 1,
+          "missingImplementationFiles": [],
+          "missingTestFiles": [],
+          "routeFocus": 0.33,
+          "routePrecision": 0.333,
+          "routeConfidence": 0.74,
+          "calibration": {
+            "status": "underconfident",
+            "predictedConfidence": 0.74,
+            "observedCoverage": 1,
+            "error": 0.26
+          },
+          "contextEstimatedTokens": 2362,
+          "contextBytes": 9445,
+          "contextMetricSource": "reported",
+          "selectedExcludedOverlap": []
+        }
+      ]
+    },
+    {
+      "name": "commander",
+      "language": "JavaScript and TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/tj/commander.js.git",
+      "pinnedHead": "ba6d13ddb4243e5913367734f8c159089ffe7834",
+      "routeCommit": "02c603ebedaec334ba9edc7c3c2e48484e2aeaf8",
+      "groundTruthCommit": "a8ef5cf3e1975380974ab5c4f92c26fb2c5e3209",
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "task": "Add informative message for missing executable on Windows (#2291)",
+      "expectedTaskType": "feature",
+      "changedFiles": [
+        "lib/command.js",
+        "tests/command.executableSubcommand.mock.test.js",
+        "tests/command.executableSubcommand.search.test.js"
+      ],
+      "implementationFiles": [
+        "lib/command.js"
+      ],
+      "testFiles": [
+        "tests/command.executableSubcommand.mock.test.js",
+        "tests/command.executableSubcommand.search.test.js"
+      ],
+      "status": "failed",
+      "failureCategory": "product-or-contract",
+      "failures": [
+        "route focus fell below 0.50",
+        "route precision fell below 0.50"
+      ],
+      "deterministicRoutes": true,
+      "statusAfterExplicitIndex": {
+        "root": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-held-out-routing-round-2-mPNLex\\commander",
+        "palaceRoot": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-held-out-routing-round-2-mPNLex\\commander\\.palace",
+        "initialized": true,
+        "indexed": true,
+        "stale": false,
+        "nodeCount": 1193,
+        "edgeCount": 5132,
+        "roomCount": 147,
+        "lastIndexedAt": "2026-07-22T20:51:49.656Z",
+        "configPath": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-held-out-routing-round-2-mPNLex\\commander\\.palace\\palace.yml"
+      },
+      "trackedWorktreeClean": true,
+      "trials": [
+        {
+          "trial": 1,
+          "status": "completed",
+          "expectedTaskType": "feature",
+          "taskType": "feature",
+          "evaluationCacheState": "warm-index-after-explicit-index",
+          "contextCacheState": "warm-index-after-evaluation",
+          "evaluationElapsedMs": 2864,
+          "contextElapsedMs": 1717,
+          "mode": "full-palace",
+          "evidenceStatus": null,
+          "routeFiles": [
+            "lib/command.js",
+            "typings/index.d.ts",
+            "examples/custom-command-class.js",
+            "tests/command.executableSubcommand.mock.test.js",
+            "tests/command.executableSubcommand.search.test.js",
+            "tests/command.addHelpText.test.js",
+            "tests/command.addCommand.test.js",
+            "tests/command.addHelpOption.test.js",
+            "tests/command.createArgument.test.js"
+          ],
+          "routeFileCount": 9,
+          "changedFileCoverage": 1,
+          "coreSurfaceCoverage": 1,
+          "missingImplementationFiles": [],
+          "missingTestFiles": [],
+          "routeFocus": 0.33,
+          "routePrecision": 0.333,
+          "routeConfidence": 0.72,
+          "calibration": {
+            "status": "underconfident",
+            "predictedConfidence": 0.72,
+            "observedCoverage": 1,
+            "error": 0.28
+          },
+          "contextEstimatedTokens": 3784,
+          "contextBytes": 15133,
+          "contextMetricSource": "reported",
+          "selectedExcludedOverlap": []
+        },
+        {
+          "trial": 2,
+          "status": "completed",
+          "expectedTaskType": "feature",
+          "taskType": "feature",
+          "evaluationCacheState": "warm-index",
+          "contextCacheState": "warm-index-after-evaluation",
+          "evaluationElapsedMs": 2934,
+          "contextElapsedMs": 1757,
+          "mode": "full-palace",
+          "evidenceStatus": null,
+          "routeFiles": [
+            "lib/command.js",
+            "typings/index.d.ts",
+            "examples/custom-command-class.js",
+            "tests/command.executableSubcommand.mock.test.js",
+            "tests/command.executableSubcommand.search.test.js",
+            "tests/command.addHelpText.test.js",
+            "tests/command.addCommand.test.js",
+            "tests/command.addHelpOption.test.js",
+            "tests/command.createArgument.test.js"
+          ],
+          "routeFileCount": 9,
+          "changedFileCoverage": 1,
+          "coreSurfaceCoverage": 1,
+          "missingImplementationFiles": [],
+          "missingTestFiles": [],
+          "routeFocus": 0.33,
+          "routePrecision": 0.333,
+          "routeConfidence": 0.72,
+          "calibration": {
+            "status": "underconfident",
+            "predictedConfidence": 0.72,
+            "observedCoverage": 1,
+            "error": 0.28
+          },
+          "contextEstimatedTokens": 3784,
+          "contextBytes": 15133,
+          "contextMetricSource": "reported",
+          "selectedExcludedOverlap": []
+        }
+      ]
+    },
+    {
+      "name": "pytest",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/pytest-dev/pytest.git",
+      "pinnedHead": "b4e846616cbb0ba74dc548f7066b09d820f5dc05",
+      "routeCommit": "eb79044cea1c2c7b6e58ebcce17c55da871fef6c",
+      "groundTruthCommit": "fc8f56bd211128db4dd33b1a9ad42f50d9c8a3f8",
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "task": "fix: deduplicate Directory nodes on re-collection to preserve fixture identity (#14635)",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "src/_pytest/main.py",
+        "testing/test_conftest.py"
+      ],
+      "implementationFiles": [
+        "src/_pytest/main.py"
+      ],
+      "testFiles": [
+        "testing/test_conftest.py"
+      ],
+      "status": "failed",
+      "failureCategory": "product-or-contract",
+      "failures": [
+        "implementation or test surface coverage was incomplete",
+        "route focus fell below 0.50",
+        "route precision fell below 0.50",
+        "route was overconfident against observed coverage"
+      ],
+      "deterministicRoutes": true,
+      "statusAfterExplicitIndex": {
+        "root": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-held-out-routing-round-2-mPNLex\\pytest",
+        "palaceRoot": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-held-out-routing-round-2-mPNLex\\pytest\\.palace",
+        "initialized": true,
+        "indexed": true,
+        "stale": false,
+        "nodeCount": 12200,
+        "edgeCount": 23339,
+        "roomCount": 57,
+        "lastIndexedAt": "2026-07-22T20:53:16.818Z",
+        "configPath": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-held-out-routing-round-2-mPNLex\\pytest\\.palace\\palace.yml"
+      },
+      "trackedWorktreeClean": true,
+      "trials": [
+        {
+          "trial": 1,
+          "status": "completed",
+          "expectedTaskType": "bugfix",
+          "taskType": "bugfix",
+          "evaluationCacheState": "warm-index-after-explicit-index",
+          "contextCacheState": "warm-index-after-evaluation",
+          "evaluationElapsedMs": 8637,
+          "contextElapsedMs": 4884,
+          "mode": "full-palace",
+          "evidenceStatus": null,
+          "routeFiles": [
+            "src/_pytest/hookspec.py",
+            "src/_pytest/junitxml.py",
+            "testing/python/fixtures.py",
+            "src/_pytest/python.py",
+            "testing/python/collect.py",
+            "src/_pytest/fixtures.py",
+            "src/_pytest/monkeypatch.py",
+            "src/_pytest/doctest.py",
+            "src/_pytest/reports.py"
+          ],
+          "routeFileCount": 9,
+          "changedFileCoverage": 0,
+          "coreSurfaceCoverage": 0,
+          "missingImplementationFiles": [
+            "src/_pytest/main.py"
+          ],
+          "missingTestFiles": [
+            "testing/test_conftest.py"
+          ],
+          "routeFocus": 0,
+          "routePrecision": 0,
+          "routeConfidence": 0.76,
+          "calibration": {
+            "status": "overconfident",
+            "predictedConfidence": 0.76,
+            "observedCoverage": 0,
+            "error": 0.76
+          },
+          "contextEstimatedTokens": 3506,
+          "contextBytes": 14024,
+          "contextMetricSource": "reported",
+          "selectedExcludedOverlap": []
+        },
+        {
+          "trial": 2,
+          "status": "completed",
+          "expectedTaskType": "bugfix",
+          "taskType": "bugfix",
+          "evaluationCacheState": "warm-index",
+          "contextCacheState": "warm-index-after-evaluation",
+          "evaluationElapsedMs": 7395,
+          "contextElapsedMs": 4815,
+          "mode": "full-palace",
+          "evidenceStatus": null,
+          "routeFiles": [
+            "src/_pytest/hookspec.py",
+            "src/_pytest/junitxml.py",
+            "testing/python/fixtures.py",
+            "src/_pytest/python.py",
+            "testing/python/collect.py",
+            "src/_pytest/fixtures.py",
+            "src/_pytest/monkeypatch.py",
+            "src/_pytest/doctest.py",
+            "src/_pytest/reports.py"
+          ],
+          "routeFileCount": 9,
+          "changedFileCoverage": 0,
+          "coreSurfaceCoverage": 0,
+          "missingImplementationFiles": [
+            "src/_pytest/main.py"
+          ],
+          "missingTestFiles": [
+            "testing/test_conftest.py"
+          ],
+          "routeFocus": 0,
+          "routePrecision": 0,
+          "routeConfidence": 0.76,
+          "calibration": {
+            "status": "overconfident",
+            "predictedConfidence": 0.76,
+            "observedCoverage": 0,
+            "error": 0.76
+          },
+          "contextEstimatedTokens": 3506,
+          "contextBytes": 14024,
+          "contextMetricSource": "reported",
+          "selectedExcludedOverlap": []
+        }
+      ]
+    }
+  ]
+}
