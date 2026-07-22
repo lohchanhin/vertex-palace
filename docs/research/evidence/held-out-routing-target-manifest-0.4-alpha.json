@@ -1,0 +1,356 @@
+{
+  "schemaVersion": 1,
+  "studyId": "held-out-cross-repository-routing-0.4-alpha",
+  "generatedAt": "2026-07-22T19:01:19.991Z",
+  "status": "selected",
+  "claimBoundary": "Mechanical target selection only. The frozen Vertex Palace candidate has not routed or evaluated these tasks.",
+  "candidateCommit": "0b6a0fd92f43a74c983663cd32f937087e3ec923",
+  "selectorCommit": "2be2dc11673fbdf23112a420048af3a2a27914fb",
+  "previouslyObservedRepositories": [
+    "https://github.com/colinhacks/zod.git",
+    "https://github.com/psf/requests.git",
+    "https://github.com/sindresorhus/p-limit.git"
+  ],
+  "rules": {
+    "desiredTargets": 4,
+    "repositoryOrderIsBinding": true,
+    "fallbackOnlyAfterNoEligibleCommitOrSetupFailure": true,
+    "fetchDepth": 250,
+    "scanLimit": 200,
+    "nonMergeSingleParent": true,
+    "newestEligibleCommitWins": true,
+    "minimumFiles": 2,
+    "maximumFiles": 6,
+    "allFilesMustBeModifiedSourceFiles": true,
+    "requiresImplementationAndFocusedTest": true,
+    "maximumChangedLines": 400,
+    "behavioralCommitSubjectRequired": true,
+    "palaceCallsDuringSelection": 0,
+    "outputCreateOnly": true
+  },
+  "repositoryPool": [
+    {
+      "name": "fastify",
+      "language": "JavaScript",
+      "url": "https://github.com/fastify/fastify.git",
+      "pinnedHead": "ada0623dce9ed776306f2ccaa095b8ee01a492ba",
+      "extensions": [
+        ".cjs",
+        ".js",
+        ".mjs",
+        ".ts"
+      ]
+    },
+    {
+      "name": "click",
+      "language": "Python",
+      "url": "https://github.com/pallets/click.git",
+      "pinnedHead": "cfa01eeb7894a408af70b29d28c0b24f8680f9fb",
+      "extensions": [
+        ".py"
+      ]
+    },
+    {
+      "name": "date-fns",
+      "language": "TypeScript",
+      "url": "https://github.com/date-fns/date-fns.git",
+      "pinnedHead": "4098115cf705e3af7f663d8e5b0686e39a9f478a",
+      "extensions": [
+        ".js",
+        ".jsx",
+        ".ts",
+        ".tsx"
+      ]
+    },
+    {
+      "name": "ripgrep",
+      "language": "Rust fallback parser",
+      "url": "https://github.com/BurntSushi/ripgrep.git",
+      "pinnedHead": "8372866810a1f2a647d11d7780984d4402a5c1e9",
+      "extensions": [
+        ".rs"
+      ]
+    },
+    {
+      "name": "cobra",
+      "language": "Go fallback parser",
+      "url": "https://github.com/spf13/cobra.git",
+      "pinnedHead": "adbc8813901bba65827259daa8e22ff94ec1f30e",
+      "extensions": [
+        ".go"
+      ]
+    },
+    {
+      "name": "marked",
+      "language": "JavaScript and TypeScript",
+      "url": "https://github.com/markedjs/marked.git",
+      "pinnedHead": "1d3229a4cc423dbfef9dc2d1e325f7a9231ad60b",
+      "extensions": [
+        ".js",
+        ".mjs",
+        ".ts"
+      ]
+    }
+  ],
+  "repositoryReports": [
+    {
+      "name": "fastify",
+      "url": "https://github.com/fastify/fastify.git",
+      "pinnedHead": "ada0623dce9ed776306f2ccaa095b8ee01a492ba",
+      "status": "selected",
+      "scannedCommits": 6,
+      "rejectionCounts": {
+        "non-behavioral-subject": 4,
+        "file-count-outside-range": 1
+      },
+      "selectedTarget": {
+        "name": "fastify",
+        "language": "JavaScript",
+        "url": "https://github.com/fastify/fastify.git",
+        "pinnedHead": "ada0623dce9ed776306f2ccaa095b8ee01a492ba",
+        "routeCommit": "ab9b96eb2f93373949c253933eddb46f6772bbf4",
+        "groundTruthCommit": "6682c4f9a76cbb60c372ba5cad9dd2fc6e2fdb51",
+        "task": "fix: normalize method in findRoute (#6838)",
+        "changedFiles": [
+          "lib/route.js",
+          "test/find-route.test.js"
+        ],
+        "implementationFiles": [
+          "lib/route.js"
+        ],
+        "testFiles": [
+          "test/find-route.test.js"
+        ],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 37,
+        "additions": 36,
+        "deletions": 1
+      }
+    },
+    {
+      "name": "click",
+      "url": "https://github.com/pallets/click.git",
+      "pinnedHead": "cfa01eeb7894a408af70b29d28c0b24f8680f9fb",
+      "status": "selected",
+      "scannedCommits": 78,
+      "rejectionCounts": {
+        "non-behavioral-subject": 55,
+        "contains-non-modified-file": 3,
+        "file-count-outside-range": 12,
+        "contains-excluded-path": 7
+      },
+      "selectedTarget": {
+        "name": "click",
+        "language": "Python",
+        "url": "https://github.com/pallets/click.git",
+        "pinnedHead": "cfa01eeb7894a408af70b29d28c0b24f8680f9fb",
+        "routeCommit": "e0d1678ebc10cc663f2bc1973e0399b31415f8db",
+        "groundTruthCommit": "d15f3c23a177e80c324e1ee9681c9449c31ac965",
+        "task": "fix: Skip flaky pager test on macOS with free-threaded Python 3.14t",
+        "changedFiles": [
+          "src/click/_compat.py",
+          "tests/test_utils.py"
+        ],
+        "implementationFiles": [
+          "src/click/_compat.py"
+        ],
+        "testFiles": [
+          "tests/test_utils.py"
+        ],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 6,
+        "additions": 6,
+        "deletions": 0
+      }
+    },
+    {
+      "name": "date-fns",
+      "url": "https://github.com/date-fns/date-fns.git",
+      "pinnedHead": "4098115cf705e3af7f663d8e5b0686e39a9f478a",
+      "status": "no-eligible-commit",
+      "scannedCommits": 200,
+      "rejectionCounts": {
+        "non-behavioral-subject": 188,
+        "file-count-outside-range": 8,
+        "contains-excluded-path": 2,
+        "missing-implementation-or-test": 1,
+        "not-single-parent": 1
+      },
+      "selectedTarget": null
+    },
+    {
+      "name": "ripgrep",
+      "url": "https://github.com/BurntSushi/ripgrep.git",
+      "pinnedHead": "8372866810a1f2a647d11d7780984d4402a5c1e9",
+      "status": "no-eligible-commit",
+      "scannedCommits": 200,
+      "rejectionCounts": {
+        "non-behavioral-subject": 199,
+        "file-count-outside-range": 1
+      },
+      "selectedTarget": null
+    },
+    {
+      "name": "cobra",
+      "url": "https://github.com/spf13/cobra.git",
+      "pinnedHead": "adbc8813901bba65827259daa8e22ff94ec1f30e",
+      "status": "selected",
+      "scannedCommits": 3,
+      "rejectionCounts": {
+        "contains-non-source-extension": 2
+      },
+      "selectedTarget": {
+        "name": "cobra",
+        "language": "Go fallback parser",
+        "url": "https://github.com/spf13/cobra.git",
+        "pinnedHead": "adbc8813901bba65827259daa8e22ff94ec1f30e",
+        "routeCommit": "f2878bab8c96afd6e36968af96343b35dbb82a82",
+        "groundTruthCommit": "746ef07158728502482cea9f880a6f4b21ef29a9",
+        "task": "fix: prevent completions from mutating os.Args via append side effect (#2356)",
+        "changedFiles": [
+          "completions.go",
+          "completions_test.go"
+        ],
+        "implementationFiles": [
+          "completions.go"
+        ],
+        "testFiles": [
+          "completions_test.go"
+        ],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 60,
+        "additions": 59,
+        "deletions": 1
+      }
+    },
+    {
+      "name": "marked",
+      "url": "https://github.com/markedjs/marked.git",
+      "pinnedHead": "1d3229a4cc423dbfef9dc2d1e325f7a9231ad60b",
+      "status": "selected",
+      "scannedCommits": 39,
+      "rejectionCounts": {
+        "non-behavioral-subject": 27,
+        "contains-non-modified-file": 10,
+        "file-count-outside-range": 1
+      },
+      "selectedTarget": {
+        "name": "marked",
+        "language": "JavaScript and TypeScript",
+        "url": "https://github.com/markedjs/marked.git",
+        "pinnedHead": "1d3229a4cc423dbfef9dc2d1e325f7a9231ad60b",
+        "routeCommit": "a37983f188d697fe98d350554dc95c49eaac6edd",
+        "groundTruthCommit": "11adb697eeee2b0fa6da3a38d5146626347592dc",
+        "task": "fix: fix cli not reading stdin (#3967)",
+        "changedFiles": [
+          "bin/main.js",
+          "test/unit/bin.test.js"
+        ],
+        "implementationFiles": [
+          "bin/main.js"
+        ],
+        "testFiles": [
+          "test/unit/bin.test.js"
+        ],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 74,
+        "additions": 63,
+        "deletions": 11
+      }
+    }
+  ],
+  "targets": [
+    {
+      "name": "fastify",
+      "language": "JavaScript",
+      "url": "https://github.com/fastify/fastify.git",
+      "pinnedHead": "ada0623dce9ed776306f2ccaa095b8ee01a492ba",
+      "routeCommit": "ab9b96eb2f93373949c253933eddb46f6772bbf4",
+      "groundTruthCommit": "6682c4f9a76cbb60c372ba5cad9dd2fc6e2fdb51",
+      "task": "fix: normalize method in findRoute (#6838)",
+      "changedFiles": [
+        "lib/route.js",
+        "test/find-route.test.js"
+      ],
+      "implementationFiles": [
+        "lib/route.js"
+      ],
+      "testFiles": [
+        "test/find-route.test.js"
+      ],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 37,
+      "additions": 36,
+      "deletions": 1
+    },
+    {
+      "name": "click",
+      "language": "Python",
+      "url": "https://github.com/pallets/click.git",
+      "pinnedHead": "cfa01eeb7894a408af70b29d28c0b24f8680f9fb",
+      "routeCommit": "e0d1678ebc10cc663f2bc1973e0399b31415f8db",
+      "groundTruthCommit": "d15f3c23a177e80c324e1ee9681c9449c31ac965",
+      "task": "fix: Skip flaky pager test on macOS with free-threaded Python 3.14t",
+      "changedFiles": [
+        "src/click/_compat.py",
+        "tests/test_utils.py"
+      ],
+      "implementationFiles": [
+        "src/click/_compat.py"
+      ],
+      "testFiles": [
+        "tests/test_utils.py"
+      ],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 6,
+      "additions": 6,
+      "deletions": 0
+    },
+    {
+      "name": "cobra",
+      "language": "Go fallback parser",
+      "url": "https://github.com/spf13/cobra.git",
+      "pinnedHead": "adbc8813901bba65827259daa8e22ff94ec1f30e",
+      "routeCommit": "f2878bab8c96afd6e36968af96343b35dbb82a82",
+      "groundTruthCommit": "746ef07158728502482cea9f880a6f4b21ef29a9",
+      "task": "fix: prevent completions from mutating os.Args via append side effect (#2356)",
+      "changedFiles": [
+        "completions.go",
+        "completions_test.go"
+      ],
+      "implementationFiles": [
+        "completions.go"
+      ],
+      "testFiles": [
+        "completions_test.go"
+      ],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 60,
+      "additions": 59,
+      "deletions": 1
+    },
+    {
+      "name": "marked",
+      "language": "JavaScript and TypeScript",
+      "url": "https://github.com/markedjs/marked.git",
+      "pinnedHead": "1d3229a4cc423dbfef9dc2d1e325f7a9231ad60b",
+      "routeCommit": "a37983f188d697fe98d350554dc95c49eaac6edd",
+      "groundTruthCommit": "11adb697eeee2b0fa6da3a38d5146626347592dc",
+      "task": "fix: fix cli not reading stdin (#3967)",
+      "changedFiles": [
+        "bin/main.js",
+        "test/unit/bin.test.js"
+      ],
+      "implementationFiles": [
+        "bin/main.js"
+      ],
+      "testFiles": [
+        "test/unit/bin.test.js"
+      ],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 74,
+      "additions": 63,
+      "deletions": 11
+    }
+  ]
+}
