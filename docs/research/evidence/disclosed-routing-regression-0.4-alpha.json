@@ -1,0 +1,442 @@
+{
+  "schemaVersion": 1,
+  "studyId": "disclosed-routing-regression-0.4-alpha",
+  "generatedAt": "2026-07-22T20:30:28.313Z",
+  "status": "passed",
+  "failures": [],
+  "heldOutAgainstCandidate": false,
+  "evidenceClass": "seen-development-regression",
+  "claimBoundary": "Post-failure regression evidence on four disclosed repositories used during repair. This can show that known failures were corrected, but cannot establish held-out generalization or end-to-end Agent token/time gains.",
+  "candidate": {
+    "productCommit": "0ef19a7bbef1901d813b81389405f87482db47c5",
+    "validationHarnessCommit": "0ef19a7bbef1901d813b81389405f87482db47c5",
+    "cliPath": "dist/palace.cjs",
+    "trackedWorktreeCleanBeforeMeasurement": true
+  },
+  "sources": {
+    "targetManifest": {
+      "path": "docs/research/evidence/held-out-routing-target-manifest-0.4-alpha.json",
+      "sha256": "5B071471BCF1B049B9BF1A2C70F536F138557A83AC6BCCDAA9AB9A82906A84C6"
+    },
+    "originalHeldOutFailure": {
+      "path": "docs/research/evidence/held-out-cross-repository-routing-0.4-alpha.json",
+      "sha256": "B466582D48A1E2B70ED679BA4ADD7AB5192EF0F3E6A875CB70B7C0C336396606",
+      "status": "failed",
+      "completedTrials": 6
+    },
+    "repositoryMaterialization": "verified-provided-copies"
+  },
+  "protocol": {
+    "repetitions": 2,
+    "budget": 6000,
+    "routeLimit": 9,
+    "maxDrawers": 4,
+    "gates": {
+      "changedFileCoverage": 1,
+      "minimumRouteFocus": 0.75,
+      "minimumRoutePrecision": 0.75,
+      "deterministicRoutes": true,
+      "overconfidentTrials": 0,
+      "contextWithinBudget": true,
+      "selectedExcludedOverlap": 0
+    }
+  },
+  "aggregate": {
+    "targetCount": 4,
+    "passedTargets": 4,
+    "failedTargets": 0,
+    "completedTrials": 8,
+    "macroChangedFileCoverage": 1,
+    "macroRouteFocus": 1,
+    "macroRoutePrecision": 1,
+    "overconfidentTrials": 0,
+    "maximumContextEstimatedTokens": 5992,
+    "setupFailures": 0
+  },
+  "targets": [
+    {
+      "name": "fastify",
+      "language": "JavaScript",
+      "url": "https://github.com/fastify/fastify.git",
+      "routeCommit": "ab9b96eb2f93373949c253933eddb46f6772bbf4",
+      "groundTruthCommit": "6682c4f9a76cbb60c372ba5cad9dd2fc6e2fdb51",
+      "task": "fix: normalize method in findRoute (#6838)",
+      "changedFiles": [
+        "lib/route.js",
+        "test/find-route.test.js"
+      ],
+      "implementationFiles": [
+        "lib/route.js"
+      ],
+      "testFiles": [
+        "test/find-route.test.js"
+      ],
+      "status": "passed",
+      "failures": [],
+      "deterministicRoutes": true,
+      "statusAfterExplicitIndex": {
+        "root": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-dev-regressions\\fastify",
+        "palaceRoot": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-dev-regressions\\fastify\\.palace",
+        "initialized": true,
+        "indexed": true,
+        "stale": false,
+        "nodeCount": 2669,
+        "edgeCount": 12578,
+        "roomCount": 214,
+        "lastIndexedAt": "2026-07-22T20:29:27.990Z",
+        "configPath": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-dev-regressions\\fastify\\.palace\\palace.yml"
+      },
+      "trackedWorktreeClean": true,
+      "trials": [
+        {
+          "trial": 1,
+          "status": "completed",
+          "taskType": "bugfix",
+          "evaluationCacheState": "warm-index-after-explicit-index",
+          "contextCacheState": "warm-index-after-evaluation",
+          "evaluationElapsedMs": 4415,
+          "contextElapsedMs": 2215,
+          "mode": "full-palace",
+          "evidenceStatus": null,
+          "routeFiles": [
+            "lib/route.js",
+            "test/find-route.test.js"
+          ],
+          "routeFileCount": 2,
+          "changedFileCoverage": 1,
+          "routeFocus": 1,
+          "routePrecision": 1,
+          "routeConfidence": 0.9,
+          "calibration": {
+            "status": "well-calibrated",
+            "predictedConfidence": 0.9,
+            "observedCoverage": 1,
+            "error": 0.1
+          },
+          "contextEstimatedTokens": 5992,
+          "contextBytes": 23968,
+          "contextMetricSource": "reported",
+          "selectedExcludedOverlap": []
+        },
+        {
+          "trial": 2,
+          "status": "completed",
+          "taskType": "bugfix",
+          "evaluationCacheState": "warm-index",
+          "contextCacheState": "warm-index-after-evaluation",
+          "evaluationElapsedMs": 4156,
+          "contextElapsedMs": 2596,
+          "mode": "full-palace",
+          "evidenceStatus": null,
+          "routeFiles": [
+            "lib/route.js",
+            "test/find-route.test.js"
+          ],
+          "routeFileCount": 2,
+          "changedFileCoverage": 1,
+          "routeFocus": 1,
+          "routePrecision": 1,
+          "routeConfidence": 0.9,
+          "calibration": {
+            "status": "well-calibrated",
+            "predictedConfidence": 0.9,
+            "observedCoverage": 1,
+            "error": 0.1
+          },
+          "contextEstimatedTokens": 5992,
+          "contextBytes": 23968,
+          "contextMetricSource": "reported",
+          "selectedExcludedOverlap": []
+        }
+      ]
+    },
+    {
+      "name": "click",
+      "language": "Python",
+      "url": "https://github.com/pallets/click.git",
+      "routeCommit": "e0d1678ebc10cc663f2bc1973e0399b31415f8db",
+      "groundTruthCommit": "d15f3c23a177e80c324e1ee9681c9449c31ac965",
+      "task": "fix: Skip flaky pager test on macOS with free-threaded Python 3.14t",
+      "changedFiles": [
+        "src/click/_compat.py",
+        "tests/test_utils.py"
+      ],
+      "implementationFiles": [
+        "src/click/_compat.py"
+      ],
+      "testFiles": [
+        "tests/test_utils.py"
+      ],
+      "status": "passed",
+      "failures": [],
+      "deterministicRoutes": true,
+      "statusAfterExplicitIndex": {
+        "root": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-dev-regressions\\click",
+        "palaceRoot": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-dev-regressions\\click\\.palace",
+        "initialized": true,
+        "indexed": true,
+        "stale": false,
+        "nodeCount": 2229,
+        "edgeCount": 8498,
+        "roomCount": 53,
+        "lastIndexedAt": "2026-07-22T20:29:49.752Z",
+        "configPath": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-dev-regressions\\click\\.palace\\palace.yml"
+      },
+      "trackedWorktreeClean": true,
+      "trials": [
+        {
+          "trial": 1,
+          "status": "completed",
+          "taskType": "bugfix",
+          "evaluationCacheState": "warm-index-after-explicit-index",
+          "contextCacheState": "warm-index-after-evaluation",
+          "evaluationElapsedMs": 2363,
+          "contextElapsedMs": 1582,
+          "mode": "full-palace",
+          "evidenceStatus": null,
+          "routeFiles": [
+            "src/click/_compat.py",
+            "tests/test_utils.py"
+          ],
+          "routeFileCount": 2,
+          "changedFileCoverage": 1,
+          "routeFocus": 1,
+          "routePrecision": 1,
+          "routeConfidence": 0.66,
+          "calibration": {
+            "status": "underconfident",
+            "predictedConfidence": 0.66,
+            "observedCoverage": 1,
+            "error": 0.34
+          },
+          "contextEstimatedTokens": 1885,
+          "contextBytes": 7538,
+          "contextMetricSource": "reported",
+          "selectedExcludedOverlap": []
+        },
+        {
+          "trial": 2,
+          "status": "completed",
+          "taskType": "bugfix",
+          "evaluationCacheState": "warm-index",
+          "contextCacheState": "warm-index-after-evaluation",
+          "evaluationElapsedMs": 2515,
+          "contextElapsedMs": 1590,
+          "mode": "full-palace",
+          "evidenceStatus": null,
+          "routeFiles": [
+            "src/click/_compat.py",
+            "tests/test_utils.py"
+          ],
+          "routeFileCount": 2,
+          "changedFileCoverage": 1,
+          "routeFocus": 1,
+          "routePrecision": 1,
+          "routeConfidence": 0.66,
+          "calibration": {
+            "status": "underconfident",
+            "predictedConfidence": 0.66,
+            "observedCoverage": 1,
+            "error": 0.34
+          },
+          "contextEstimatedTokens": 1885,
+          "contextBytes": 7538,
+          "contextMetricSource": "reported",
+          "selectedExcludedOverlap": []
+        }
+      ]
+    },
+    {
+      "name": "cobra",
+      "language": "Go fallback parser",
+      "url": "https://github.com/spf13/cobra.git",
+      "routeCommit": "f2878bab8c96afd6e36968af96343b35dbb82a82",
+      "groundTruthCommit": "746ef07158728502482cea9f880a6f4b21ef29a9",
+      "task": "fix: prevent completions from mutating os.Args via append side effect (#2356)",
+      "changedFiles": [
+        "completions.go",
+        "completions_test.go"
+      ],
+      "implementationFiles": [
+        "completions.go"
+      ],
+      "testFiles": [
+        "completions_test.go"
+      ],
+      "status": "passed",
+      "failures": [],
+      "deterministicRoutes": true,
+      "statusAfterExplicitIndex": {
+        "root": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-dev-regressions\\cobra",
+        "palaceRoot": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-dev-regressions\\cobra\\.palace",
+        "initialized": true,
+        "indexed": true,
+        "stale": false,
+        "nodeCount": 303,
+        "edgeCount": 1538,
+        "roomCount": 42,
+        "lastIndexedAt": "2026-07-22T20:30:02.954Z",
+        "configPath": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-dev-regressions\\cobra\\.palace\\palace.yml"
+      },
+      "trackedWorktreeClean": true,
+      "trials": [
+        {
+          "trial": 1,
+          "status": "completed",
+          "taskType": "bugfix",
+          "evaluationCacheState": "warm-index-after-explicit-index",
+          "contextCacheState": "warm-index-after-evaluation",
+          "evaluationElapsedMs": 1374,
+          "contextElapsedMs": 863,
+          "mode": "route-lite",
+          "evidenceStatus": null,
+          "routeFiles": [
+            "completions.go",
+            "completions_test.go"
+          ],
+          "routeFileCount": 2,
+          "changedFileCoverage": 1,
+          "routeFocus": 1,
+          "routePrecision": 1,
+          "routeConfidence": 0.71,
+          "calibration": {
+            "status": "underconfident",
+            "predictedConfidence": 0.71,
+            "observedCoverage": 1,
+            "error": 0.29
+          },
+          "contextEstimatedTokens": 1494,
+          "contextBytes": 5973,
+          "contextMetricSource": "reported",
+          "selectedExcludedOverlap": []
+        },
+        {
+          "trial": 2,
+          "status": "completed",
+          "taskType": "bugfix",
+          "evaluationCacheState": "warm-index",
+          "contextCacheState": "warm-index-after-evaluation",
+          "evaluationElapsedMs": 1214,
+          "contextElapsedMs": 877,
+          "mode": "route-lite",
+          "evidenceStatus": null,
+          "routeFiles": [
+            "completions.go",
+            "completions_test.go"
+          ],
+          "routeFileCount": 2,
+          "changedFileCoverage": 1,
+          "routeFocus": 1,
+          "routePrecision": 1,
+          "routeConfidence": 0.71,
+          "calibration": {
+            "status": "underconfident",
+            "predictedConfidence": 0.71,
+            "observedCoverage": 1,
+            "error": 0.29
+          },
+          "contextEstimatedTokens": 1494,
+          "contextBytes": 5973,
+          "contextMetricSource": "reported",
+          "selectedExcludedOverlap": []
+        }
+      ]
+    },
+    {
+      "name": "marked",
+      "language": "JavaScript and TypeScript",
+      "url": "https://github.com/markedjs/marked.git",
+      "routeCommit": "a37983f188d697fe98d350554dc95c49eaac6edd",
+      "groundTruthCommit": "11adb697eeee2b0fa6da3a38d5146626347592dc",
+      "task": "fix: fix cli not reading stdin (#3967)",
+      "changedFiles": [
+        "bin/main.js",
+        "test/unit/bin.test.js"
+      ],
+      "implementationFiles": [
+        "bin/main.js"
+      ],
+      "testFiles": [
+        "test/unit/bin.test.js"
+      ],
+      "status": "passed",
+      "failures": [],
+      "deterministicRoutes": true,
+      "statusAfterExplicitIndex": {
+        "root": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-dev-regressions\\marked",
+        "palaceRoot": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-dev-regressions\\marked\\.palace",
+        "initialized": true,
+        "indexed": true,
+        "stale": false,
+        "nodeCount": 891,
+        "edgeCount": 3713,
+        "roomCount": 53,
+        "lastIndexedAt": "2026-07-22T20:30:15.764Z",
+        "configPath": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-dev-regressions\\marked\\.palace\\palace.yml"
+      },
+      "trackedWorktreeClean": true,
+      "trials": [
+        {
+          "trial": 1,
+          "status": "completed",
+          "taskType": "bugfix",
+          "evaluationCacheState": "warm-index-after-explicit-index",
+          "contextCacheState": "warm-index-after-evaluation",
+          "evaluationElapsedMs": 4320,
+          "contextElapsedMs": 1337,
+          "mode": "full-palace",
+          "evidenceStatus": null,
+          "routeFiles": [
+            "bin/main.js",
+            "test/unit/bin.test.js"
+          ],
+          "routeFileCount": 2,
+          "changedFileCoverage": 1,
+          "routeFocus": 1,
+          "routePrecision": 1,
+          "routeConfidence": 0.61,
+          "calibration": {
+            "status": "underconfident",
+            "predictedConfidence": 0.61,
+            "observedCoverage": 1,
+            "error": 0.39
+          },
+          "contextEstimatedTokens": 3205,
+          "contextBytes": 12818,
+          "contextMetricSource": "reported",
+          "selectedExcludedOverlap": []
+        },
+        {
+          "trial": 2,
+          "status": "completed",
+          "taskType": "bugfix",
+          "evaluationCacheState": "warm-index",
+          "contextCacheState": "warm-index-after-evaluation",
+          "evaluationElapsedMs": 2290,
+          "contextElapsedMs": 2284,
+          "mode": "full-palace",
+          "evidenceStatus": null,
+          "routeFiles": [
+            "bin/main.js",
+            "test/unit/bin.test.js"
+          ],
+          "routeFileCount": 2,
+          "changedFileCoverage": 1,
+          "routeFocus": 1,
+          "routePrecision": 1,
+          "routeConfidence": 0.61,
+          "calibration": {
+            "status": "underconfident",
+            "predictedConfidence": 0.61,
+            "observedCoverage": 1,
+            "error": 0.39
+          },
+          "contextEstimatedTokens": 3205,
+          "contextBytes": 12818,
+          "contextMetricSource": "reported",
+          "selectedExcludedOverlap": []
+        }
+      ]
+    }
+  ]
+}
