@@ -4,6 +4,7 @@ import type { ScoredNode } from "./route-scorer";
 export type RouteExpansionOptions = {
   limit?: number;
   focused?: boolean;
+  bounded?: boolean;
   preferVerificationRelations?: boolean;
   minSeedScoreRatio?: number;
   minRelationScoreRatio?: number;
@@ -28,9 +29,13 @@ export function expandRoute(
   const bestScoredBySource = bestBySource(scored);
   const selected = new Map<string, ScoredNode>();
   const selectedSources = new Set<string>();
-  const seedLimit = Math.min(limit, Math.max(3, Math.ceil(limit * 0.5)));
+  const seedLimit = options.focused
+    ? 1
+    : options.bounded
+      ? Math.min(limit, Math.max(2, Math.ceil(limit * 0.33)))
+      : Math.min(limit, Math.max(3, Math.ceil(limit * 0.5)));
 
-  const seeds = diverseSeed(scored, seedLimit, options.focused ? options.minSeedScoreRatio : 0);
+  const seeds = diverseSeed(scored, seedLimit, options.focused || options.bounded ? options.minSeedScoreRatio : 0);
   const focusedAnchorId = options.focused ? seeds[0]?.node.id : undefined;
   for (const item of seeds) {
     selected.set(item.node.id, item);
@@ -67,9 +72,16 @@ export function expandRoute(
       selectedSources
     );
     const bestRelationScore = candidates[0]?.score ?? 0;
-    relationGroups.push(candidates.filter(
-      (candidate) => !options.focused || candidate.score >= bestRelationScore * options.minRelationScoreRatio
-    ));
+    const strongCandidates = options.focused || options.bounded
+      ? candidates.filter((candidate) => candidate.score >= bestRelationScore * options.minRelationScoreRatio)
+      : candidates;
+    relationGroups.push(
+      options.focused
+        ? strongCandidates.slice(0, 2)
+        : options.bounded
+          ? strongCandidates.slice(0, 1)
+          : strongCandidates
+    );
   }
 
   const relationOffsets = relationGroups.map(() => 0);
@@ -92,7 +104,7 @@ export function expandRoute(
     }
   }
 
-  if (!options.focused) {
+  if (!options.focused && !options.bounded) {
     for (const item of scored) {
       if (selected.size >= limit) break;
       if (selected.has(item.node.id) || selectedSources.has(item.node.sourcePath)) continue;
@@ -114,6 +126,7 @@ function normalizeOptions(input: number | RouteExpansionOptions): Required<Route
     return {
       limit: input,
       focused: false,
+      bounded: false,
       preferVerificationRelations: false,
       minSeedScoreRatio: 0.84,
       minRelationScoreRatio: 0.8
@@ -122,6 +135,7 @@ function normalizeOptions(input: number | RouteExpansionOptions): Required<Route
   return {
     limit: input.limit ?? 12,
     focused: input.focused ?? false,
+    bounded: input.bounded ?? false,
     preferVerificationRelations: input.preferVerificationRelations ?? false,
     minSeedScoreRatio: input.minSeedScoreRatio ?? 0.84,
     minRelationScoreRatio: input.minRelationScoreRatio ?? 0.8
@@ -143,7 +157,9 @@ function relationCandidates(
     if (!anchorId) continue;
     const neighbor = neighborFor(edge, anchorId, byId);
     if (!neighbor || neighbor.kind === "directory" || selectedSources.has(neighbor.sourcePath)) continue;
-    const direct = scoredById.get(neighbor.id) ?? bestScoredBySource.get(neighbor.sourcePath);
+    const exact = scoredById.get(neighbor.id);
+    const bestForSource = bestScoredBySource.get(neighbor.sourcePath);
+    const direct = !exact || (bestForSource?.score ?? -Infinity) > exact.score ? bestForSource : exact;
     const relationScore = anchor.score * edge.weight * 0.5;
     const score = direct ? direct.score * 0.55 + relationScore * 0.45 : relationScore * 0.45;
     const candidate: ScoredNode = {

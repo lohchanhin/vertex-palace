@@ -6,6 +6,7 @@ import { readIndex } from "../storage/read-palace";
 import { getPalaceStatus } from "../storage/status";
 import { appendRoute } from "../storage/write-palace";
 import { hashText } from "../scanner/file-hash";
+import { tokenizeLexical } from "../utils/lexical-tokens";
 import { analyzeTask } from "./analyze-task";
 import { classifyTask } from "./classify-task";
 import { locateEntry } from "./locate-entry";
@@ -13,6 +14,7 @@ import {
   isTypeDeclarationIntent,
   matchesRouteSurface,
   requestedRouteSurfaces,
+  routePathTaskAffinity,
   scoreNodes,
   type RouteSurface,
   type ScoredNode
@@ -43,21 +45,25 @@ export async function routePalace(root: string, task: string, options: number | 
     : undefined;
   const top = implementationAnchor ?? scored[0];
   const crossStack = analysis.wingHints.includes("frontend") && analysis.wingHints.includes("backend");
-  const focused = typeDeclarationTask || (
+  const boundedBugfix = typeDeclarationTask || (
     taskType === "bugfix"
-    && Boolean(top?.node.startLine)
-    && (top?.matchedKeywordCount ?? 0) >= 4
+    && (
+      (Boolean(top?.node.startLine) && (top?.matchedKeywordCount ?? 0) >= 4)
+      || (implementationAnchor ? routePathTaskAffinity(implementationAnchor.node.sourcePath, analysis) >= 1.5 : false)
+    )
     && requestedSurfaces.length <= 1
     && !crossStack
   );
-  const expansionCandidates = focused && implementationAnchor
+  const focused = boundedBugfix && analysis.roomHints.length <= 1;
+  const expansionCandidates = boundedBugfix && implementationAnchor
     ? [implementationAnchor, ...scored.filter((item) => item.node.id !== implementationAnchor.node.id)]
     : scored;
   const initialRoute = expandRoute(expansionCandidates, index.edges, index.nodes, {
     limit: routeLimit,
     focused,
-    preferVerificationRelations: focused,
-    minSeedScoreRatio: focused ? 0.75 : undefined
+    bounded: boundedBugfix,
+    preferVerificationRelations: boundedBugfix,
+    minSeedScoreRatio: boundedBugfix ? 0.75 : undefined
   });
   const expanded =
     taskType === "evaluation"
@@ -67,7 +73,7 @@ export async function routePalace(root: string, task: string, options: number | 
         : taskType === "bugfix"
           ? typeDeclarationTask
             ? ensureTypeDeclarationCoverage(initialRoute, scored, requestedSurfaces, routeLimit)
-            : ensureBugfixVerificationCoverage(initialRoute, scored, requestedSurfaces, implementationAnchor, analysis, routeLimit)
+            : ensureBugfixVerificationCoverage(initialRoute, scored, requestedSurfaces, implementationAnchor, analysis, routeLimit, focused)
           : ensureGeneralSurfaceCoverage(initialRoute, scored, requestedSurfaces, analysis, routeLimit);
   const now = new Date().toISOString();
 
@@ -119,12 +125,27 @@ function ensureBugfixVerificationCoverage(
   requested: RouteSurface[],
   implementationAnchor: ScoredNode | undefined,
   analysis: ReturnType<typeof analyzeTask>,
-  limit: number
+  limit: number,
+  focused: boolean
 ): ScoredNode[] {
   if (requested.includes("implementation") && requested.length >= 3) {
     return ensureGeneralSurfaceCoverage(selected, scored, requested, analysis, limit, false);
   }
   const requiredSurfaces = requested.filter((surface) => ["test", "config", "docs", "shared"].includes(surface));
+  const focusedTestCompanion = focused
+    ? [...scored]
+      .filter(isDirectTestCandidate)
+      .sort(
+        (left, right) => focusedTestCompanionPriority(right, implementationAnchor, analysis, selected)
+          - focusedTestCompanionPriority(left, implementationAnchor, analysis, selected)
+          || right.score - left.score
+          || left.node.sourcePath.localeCompare(right.node.sourcePath)
+      )
+      .find(
+        (item) => focusedTestCompanionPriority(item, implementationAnchor, analysis, selected) >= 500
+      )
+    : undefined;
+  if (focusedTestCompanion && !requiredSurfaces.includes("test")) requiredSurfaces.unshift("test");
   if (!requiredSurfaces.length) return selected;
 
   const result: ScoredNode[] = [];
@@ -136,17 +157,30 @@ function ensureBugfixVerificationCoverage(
   };
 
   append(implementationAnchor ?? selected[0]);
+  append(focusedTestCompanion);
   for (const surface of requiredSurfaces) {
     const matchesSurface = (item: ScoredNode): boolean => surface === "test"
       ? isDirectTestCandidate(item)
       : matchesRouteSurface(item.node, surface);
+    if (result.some(matchesSurface)) continue;
     const existing = selected.find(matchesSurface);
     const companion = existing ?? scored.find(
       (item) => matchesSurface(item) && item.matchedKeywordCount > 0
     );
     append(companion);
   }
-  for (const item of selected) append(item);
+  if (
+    focused
+    && analysis.roomHints.length <= 1
+    && requiredSurfaces.every((surface) => surface === "test")
+    && result.some(isDirectTestCandidate)
+  ) {
+    return result;
+  }
+  for (const item of selected) {
+    if (focused && isDirectTestCandidate(item)) continue;
+    append(item);
+  }
 
   return result.sort((a, b) => {
     if (a.node.id === implementationAnchor?.node.id) return -1;
@@ -155,10 +189,34 @@ function ensureBugfixVerificationCoverage(
   });
 }
 
+function focusedTestCompanionPriority(
+  item: ScoredNode,
+  implementationAnchor: ScoredNode | undefined,
+  analysis: ReturnType<typeof analyzeTask>,
+  selected: ScoredNode[]
+): number {
+  const taskAffinity = routePathTaskAffinity(item.node.sourcePath, analysis);
+  const testTokens = tokenizeLexical(path.posix.basename(item.node.sourcePath));
+  const implementationTokens = implementationAnchor
+    ? tokenizeLexical(path.posix.basename(implementationAnchor.node.sourcePath))
+    : new Set<string>();
+  const pairAffinity = [...testTokens].filter(
+    (token) => !["test", "spec"].includes(token) && implementationTokens.has(token)
+  ).length;
+  const relationEvidence = selected.some(
+    (candidate) => candidate.node.sourcePath === item.node.sourcePath
+      && candidate.reasons.some((reason) => reason.startsWith("expanded through"))
+  ) ? 800 : 0;
+  const semanticEvidence = item.matchedKeywordCount ** 2 * 160;
+  return taskAffinity ** 2 * 250 + relationEvidence + semanticEvidence + pairAffinity * 80 + item.score;
+}
+
 function isDirectTestCandidate(item: ScoredNode): boolean {
   const sourcePath = item.node.sourcePath.toLowerCase();
   return item.node.kind === "test"
-    || /(^|\/)(?:test|tests|spec|__tests__)(\/|$)|\.(?:test|spec)\.[^.]+$/.test(sourcePath);
+    || /(^|\/)(?:test|tests|spec|__tests__)(\/|$)|\.(?:test|spec)\.[^.]+$/.test(sourcePath)
+    || /(^|\/)(?:test_[^/]+|[^/]+_(?:test|spec))\.[a-z0-9]+$/.test(sourcePath)
+    || /(^|\/)[^/]+tests?\.(?:cs|java|kt)$/.test(sourcePath);
 }
 
 function ensureTypeDeclarationCoverage(
@@ -345,7 +403,7 @@ function generalSurfacePriority(
     else if (/(^|\/)packages\/mcp\/src\//.test(sourcePath)) priority += 200;
   }
   if (surface === "implementation") {
-    priority += implementationTaskAffinity(sourcePath, analysis.raw) * 60;
+    priority += routePathTaskAffinity(sourcePath, analysis) * 60;
     if (/(?:^|\/)analyze-task\.[^.]+$/.test(sourcePath) && hasTaskAnalysisIntent(analysis.raw)) priority += 260;
     if (/(?:^|\/)classify-task\.[^.]+$/.test(sourcePath) && hasTaskClassificationIntent(analysis.raw)) priority += 260;
     if (/(?:^|\/)publication-intent\.[^.]+$/.test(sourcePath) && hasPublicationIntentIntent(analysis.raw)) priority += 260;
@@ -389,7 +447,7 @@ function generalSurfacePriority(
 }
 
 function routePathConcept(sourcePath: string, analysis: ReturnType<typeof analyzeTask>): string | undefined {
-  const normalizedPath = sourcePath.toLowerCase().replace(/[^a-z0-9]+/g, " ");
+  const pathTokens = tokenizeLexical(sourcePath);
   return analysis.keywords.find(
     (keyword) => keyword.length > 3
       && ![
@@ -405,16 +463,19 @@ function routePathConcept(sourcePath: string, analysis: ReturnType<typeof analyz
         "routing",
         "shared",
         "generated",
-        "artifact"
+        "artifact",
+        "release",
+        "publish",
+        "changelog"
       ].includes(keyword)
-      && new RegExp(`(?:^| )${escapeRegExp(keyword)}(?: |$)`).test(normalizedPath)
+      && pathTokens.has(keyword)
   );
 }
 
 function implementationPathConcept(sourcePath: string, analysis: ReturnType<typeof analyzeTask>): string | undefined {
-  const basename = path.posix.basename(sourcePath).toLowerCase().replace(/\.[^.]+$/, "");
-  const pathTokens = new Set(basename.match(/[a-z0-9]+/g) ?? []);
-  const rawTokens = analysis.raw.toLowerCase().match(/[a-z0-9]+/g) ?? [];
+  const basename = path.posix.basename(sourcePath).replace(/\.[^.]+$/, "");
+  const pathTokens = tokenizeLexical(basename);
+  const rawTokens = [...tokenizeLexical(analysis.raw)];
   if (pathTokens.has("analyze") && pathTokens.has("task") && hasTaskAnalysisIntent(analysis.raw)) {
     return "task-analysis";
   }
@@ -452,17 +513,6 @@ function implementationPathConcept(sourcePath: string, analysis: ReturnType<type
     "tests"
   ]);
   return rawTokens.find((token) => token.length > 3 && !ignored.has(token) && pathTokens.has(token));
-}
-
-function implementationTaskAffinity(sourcePath: string, task: string): number {
-  const basenameTokens = new Set(path.posix.basename(sourcePath).toLowerCase().match(/[a-z0-9]+/g) ?? []);
-  const taskTokens = new Set(task.toLowerCase().match(/[a-z0-9]+/g) ?? []);
-  let matches = [...basenameTokens].filter((token) => taskTokens.has(token)).length;
-  if (
-    [...basenameTokens].some((token) => ["route", "router", "routing"].includes(token))
-    && [...taskTokens].some((token) => ["route", "router", "routing"].includes(token))
-  ) matches += 1;
-  return matches;
 }
 
 function hasRoutePlanningIntent(task: string): boolean {
@@ -543,14 +593,24 @@ function testRouteConcept(item: ScoredNode, analysis: ReturnType<typeof analyzeT
 }
 
 function explicitTestConceptAffinity(sourcePath: string, task: string): number {
-  const basenameTokens = path.posix.basename(sourcePath).toLowerCase().match(/[a-z0-9]+/g) ?? [];
-  const concepts = basenameTokens.filter((token) => !["test", "tests", "spec", "ts", "js", "tsx", "jsx"].includes(token));
-  return concepts.reduce((score, concept) => {
+  const basenameTokens = [...tokenizeLexical(path.posix.basename(sourcePath))].map(canonicalRouteConceptToken);
+  const concepts = basenameTokens.filter(
+    (token) => !["test", "tests", "spec", "ts", "js", "tsx", "jsx", "release", "publish", "changelog"].includes(token)
+  );
+  const taskTokens = new Set([...tokenizeLexical(task)].map(canonicalRouteConceptToken));
+  const lexicalTask = [...taskTokens].join(" ");
+  let hasDirectMatch = false;
+  for (const concept of concepts) {
     const escaped = escapeRegExp(concept);
-    const nearTest = new RegExp(`\\b${escaped}\\b.{0,32}\\b(?:regressions?|tests?|specs?)\\b|\\b(?:regressions?|tests?|specs?)\\b.{0,32}\\b${escaped}\\b`, "i");
-    if (nearTest.test(task)) return score + 2;
-    return score + (new RegExp(`\\b${escaped}\\b`, "i").test(task) ? 1 : 0);
-  }, 0);
+    const nearTest = new RegExp(`\\b${escaped}\\b.{0,48}\\b(?:regressions?|tests?|specs?)\\b|\\b(?:regressions?|tests?|specs?)\\b.{0,48}\\b${escaped}\\b`, "i");
+    if (nearTest.test(lexicalTask)) return 2;
+    if (taskTokens.has(concept)) hasDirectMatch = true;
+  }
+  return hasDirectMatch ? 1 : 0;
+}
+
+function canonicalRouteConceptToken(token: string): string {
+  return ["router", "routing"].includes(token) ? "route" : token;
 }
 
 function selectGeneralDocumentRepresentatives(
@@ -702,8 +762,8 @@ function verificationScriptRole(sourcePath: string): string {
 
 function taskPathAffinity(sourcePath: string, task: string): number {
   const ignored = new Set(["script", "scripts", "verify", "verification", "test", "tests"]);
-  const taskTokens = new Set((task.toLowerCase().match(/[a-z0-9]+/g) ?? []).filter((token) => !ignored.has(token)));
-  const pathTokens = new Set((sourcePath.toLowerCase().match(/[a-z0-9]+/g) ?? []).filter((token) => !ignored.has(token)));
+  const taskTokens = new Set([...tokenizeLexical(task)].filter((token) => !ignored.has(token)));
+  const pathTokens = new Set([...tokenizeLexical(sourcePath)].filter((token) => !ignored.has(token)));
   return [...pathTokens].filter((token) => taskTokens.has(token)).length;
 }
 
@@ -840,7 +900,63 @@ function confidence(selected: ScoredNode[], analysis: ReturnType<typeof analyzeT
   const artifactFamilyCap = artifactFamilyCoverage === undefined
     ? 0.98
     : 0.15 + artifactFamilyCoverage * 0.75;
-  return Number(Math.max(0.1, Math.min(taskCap, artifactFamilyCap, value)).toFixed(2));
+  const directEvidenceCap = directBugfixEvidenceCap(top, analysis, taskType);
+  const compoundBugfixCap = taskType === "bugfix" && requestedSurfaceCount >= 3 && keywords.length >= 12
+    ? 0.4
+    : 0.98;
+  return Number(Math.max(0.1, Math.min(taskCap, artifactFamilyCap, directEvidenceCap, compoundBugfixCap, value)).toFixed(2));
+}
+
+const DIRECT_EVIDENCE_NOISE = new Set([
+  "allow",
+  "cli",
+  "data",
+  "file",
+  "fix",
+  "flaky",
+  "go",
+  "input",
+  "javascript",
+  "mac",
+  "method",
+  "option",
+  "os",
+  "output",
+  "preserve",
+  "python",
+  "result",
+  "rust",
+  "skip",
+  "test",
+  "typescript",
+  "value"
+]);
+
+function directBugfixEvidenceCap(
+  items: ScoredNode[],
+  analysis: ReturnType<typeof analyzeTask>,
+  taskType: TaskType
+): number {
+  if (taskType !== "bugfix") return 0.98;
+  const taskTokens = new Set(
+    analysis.keywords.filter((keyword) => keyword.length > 2 && !DIRECT_EVIDENCE_NOISE.has(keyword))
+  );
+  let strongestConceptMatches = 0;
+  let strongestPathAffinity = 0;
+  for (const item of items.filter((candidate) => isImplementationCandidate(candidate.node))) {
+    const nodeTokens = tokenizeLexical(nodeHaystack(item));
+    strongestConceptMatches = Math.max(
+      strongestConceptMatches,
+      [...taskTokens].filter((token) => nodeTokens.has(token)).length
+    );
+    strongestPathAffinity = Math.max(
+      strongestPathAffinity,
+      routePathTaskAffinity(item.node.sourcePath, analysis)
+    );
+  }
+  if (strongestConceptMatches === 0 && strongestPathAffinity === 0) return 0.15;
+  if (strongestConceptMatches < 2 && strongestPathAffinity < 1.25) return 0.4;
+  return 0.98;
 }
 
 function requestedSurfaceEvidence(
@@ -1341,6 +1457,10 @@ function releaseSurfacePriority(
   }
   if (surface === "cli") {
     if (/(^|\/)packages\/cli\/src\//.test(sourcePath)) return 300;
+    return 100;
+  }
+  if (surface === "package") {
+    if (sourcePath === "package.json") return 500;
     return 100;
   }
   if (surface !== "plugin") return 0;

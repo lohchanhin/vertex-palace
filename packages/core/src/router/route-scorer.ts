@@ -64,6 +64,12 @@ export function scoreNodes(nodes: PalaceNode[], edges: PalaceEdge[], analysis: T
         }
       }
 
+      const pathAffinity = routePathTaskAffinity(node.sourcePath, analysis);
+      if (pathAffinity > 0) {
+        score += pathAffinity * 18;
+        reasons.push("source path is specific to the task concepts");
+      }
+
       if (isImplementationNode(node) && taskType !== "test" && matchedKeywords.size >= 2) {
         score += 35;
         reasons.push("implementation covers multiple task concepts");
@@ -205,11 +211,16 @@ const LOW_SIGNAL_SEMANTIC_KEYWORDS = new Set([
   "input",
   "option",
   "options",
+  "os",
   "output",
   "preserve",
   "result",
   "results",
   "select",
+  "python",
+  "javascript",
+  "typescript",
+  "rust",
   "value",
   "values"
 ]);
@@ -422,7 +433,7 @@ export function matchesRouteSurface(node: PalaceNode, surface: RouteSurface): bo
   const sourcePath = node.sourcePath.toLowerCase();
   switch (surface) {
     case "cli":
-      return /(^|\/)packages\/cli(\/|$)|(^|\/)cli(\/|$)/.test(sourcePath);
+      return /(^|\/)packages\/cli(\/|$)|(^|\/)(?:cli|bin)(\/|$)/.test(sourcePath);
     case "mcp":
       return /(^|\/)packages\/mcp(\/|$)|(^|\/)mcp(\/|$)|(^|\/)scripts\/[^/]*mcp[^/]*$/.test(sourcePath);
     case "shared":
@@ -430,6 +441,8 @@ export function matchesRouteSurface(node: PalaceNode, surface: RouteSurface): bo
     case "test":
       return node.kind === "test"
         || /(^|\/)(test|tests|spec|__tests__)(\/|$)|\.(test|spec)\.[^.]+$/.test(sourcePath)
+        || /(^|\/)(?:test_[^/]+|[^/]+_(?:test|spec))\.[a-z0-9]+$/.test(sourcePath)
+        || /(^|\/)[^/]+tests?\.(?:cs|java|kt)$/.test(sourcePath)
         || /(^|\/)scripts\/[^/]*(?:verify|smoke|benchmark)[^/]*$/.test(sourcePath);
     case "config":
       return node.kind === "config"
@@ -445,7 +458,10 @@ export function matchesRouteSurface(node: PalaceNode, surface: RouteSurface): bo
     case "plugin":
       return /(^|\/)\.agents\/plugins\/marketplace\.json$|(^|\/)plugins\/[^/]+\//.test(sourcePath);
     case "implementation":
-      return /(^|\/)src\//.test(sourcePath)
+      return (
+        /(^|\/)(?:src|lib|app|bin)\//.test(sourcePath)
+        || (!sourcePath.includes("/") && /\.(?:[cm]?[jt]sx?|py|go|rs|java|rb|php|cs)$/.test(sourcePath))
+      )
         && node.kind !== "test"
         && !["config", "doc", "runtime-log"].includes(node.kind);
   }
@@ -487,6 +503,41 @@ function compact(value: string): string {
 
 function hasAny(values: Set<string>, candidates: string[]): boolean {
   return candidates.some((candidate) => values.has(candidate));
+}
+
+const ROUTE_PATH_NOISE = new Set([
+  "app",
+  "file",
+  "index",
+  "javascript",
+  "js",
+  "jsx",
+  "lib",
+  "main",
+  "package",
+  "packages",
+  "py",
+  "python",
+  "spec",
+  "src",
+  "test",
+  "tests",
+  "ts",
+  "tsx",
+  "unit"
+]);
+
+export function routePathTaskAffinity(sourcePath: string, analysis: TaskAnalysis): number {
+  const taskTokens = new Set(analysis.keywords.map(normalizeLexicalToken));
+  const pathTokens = new Set(
+    [...tokenizeLexical(sourcePath)]
+      .map((token) => token === "bin" ? "cli" : token)
+      .filter((token) => !ROUTE_PATH_NOISE.has(token))
+  );
+  if (!pathTokens.size) return 0;
+  const matched = [...pathTokens].filter((token) => taskTokens.has(token)).length;
+  if (!matched) return 0;
+  return matched + matched / pathTokens.size;
 }
 
 function tokenize(value: string): Set<string> {

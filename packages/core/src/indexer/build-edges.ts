@@ -208,7 +208,13 @@ function resolveImport(
   candidates: string[],
   workspacePackages: WorkspacePackage[]
 ): string | undefined {
-  if (!importPath.startsWith(".")) return resolveWorkspaceImport(importPath, candidates, workspacePackages);
+  if (!importPath.startsWith(".")) {
+    if (sourcePath.endsWith(".py")) {
+      const pythonTarget = resolveAbsolutePythonImport(importPath, candidates);
+      if (pythonTarget) return pythonTarget;
+    }
+    return resolveWorkspaceImport(importPath, candidates, workspacePackages);
+  }
   if (sourcePath.endsWith(".py")) return resolvePythonImport(sourcePath, importPath, candidates);
   const base = normalizeRelativePath(path.posix.join(path.posix.dirname(sourcePath), importPath));
   const withoutRuntimeExtension = base.replace(/\.(?:mjs|cjs|js|jsx)$/, "");
@@ -221,6 +227,23 @@ function resolveImport(
     `${withoutRuntimeExtension}.cts`
   ];
   return possible.find((candidate) => candidates.includes(candidate));
+}
+
+function resolveAbsolutePythonImport(importPath: string, candidates: string[]): string | undefined {
+  const modulePath = importPath.replace(/\./g, "/");
+  const endings = [`${modulePath}.py`, `${modulePath}/__init__.py`];
+  return candidates
+    .filter((candidate) => endings.some((ending) => candidate === ending || candidate.endsWith(`/${ending}`)))
+    .sort((left, right) => pythonSourcePriority(left) - pythonSourcePriority(right)
+      || left.split("/").length - right.split("/").length
+      || left.localeCompare(right))[0];
+}
+
+function pythonSourcePriority(sourcePath: string): number {
+  if (sourcePath.startsWith("src/")) return 0;
+  if (!sourcePath.includes("/")) return 1;
+  if (sourcePath.startsWith("lib/")) return 2;
+  return 3;
 }
 
 function resolveWorkspaceImport(

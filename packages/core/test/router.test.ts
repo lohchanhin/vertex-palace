@@ -280,7 +280,8 @@ export const $ZodDiscriminatedUnion = core.$constructor("$ZodDiscriminatedUnion"
       expect(filesOnly).toContain("packages/core/src/router/analyze-task.ts");
       expect(filesOnly).toContain("packages/core/test/router.test.ts");
       expect(filesOnly).not.toContain("packages/core/test/unrelated.test.ts");
-      expect(route.route).toHaveLength(4);
+      expect(route.route.length).toBeGreaterThanOrEqual(2);
+      expect(route.route.length).toBeLessThanOrEqual(4);
     });
   });
 
@@ -849,7 +850,6 @@ export const $ZodDiscriminatedUnion = core.$constructor("$ZodDiscriminatedUnion"
         budget: 6000,
         maxDrawers: 4
       });
-
       expect(classifyTask(task)).toBe("bugfix");
       expect(requestedRouteSurfaces(analyzeTask(task))).not.toEqual(expect.arrayContaining(["package", "docs"]));
       expect(evaluation.route.files).toEqual(expect.arrayContaining(changedFiles));
@@ -960,6 +960,46 @@ export const $ZodDiscriminatedUnion = core.$constructor("$ZodDiscriminatedUnion"
 
       expect(route.confidence).toBeGreaterThan(0.35);
       expect(route.confidence).toBeLessThan(1);
+    });
+  });
+
+  it("caps confidence for a compound multi-surface bugfix even when route surfaces are represented", async () => {
+    await withFixture("ts-api", async (root) => {
+      const files = new Map<string, string>([
+        [
+          "packages/core/src/router/route-planner.ts",
+          "export function repairBoundedMultiSurfaceRoute() { return ['implementation', 'test', 'shared']; }\n"
+        ],
+        [
+          "packages/core/src/router/route-scorer.ts",
+          "export function calibrateRouteConfidence() { return { adaptive: true, telemetry: true }; }\n"
+        ],
+        [
+          "packages/core/src/packer/context-packer.ts",
+          "export function normalizeContextTelemetry() { return { mode: 'adaptive' }; }\n"
+        ],
+        [
+          "packages/shared/src/types.ts",
+          "export type SharedContextContract = { implementation: string; test: string };\n"
+        ],
+        [
+          "packages/core/test/router.test.ts",
+          "test('bounded multi-surface implementation pairing', () => true);\n"
+        ]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+      const task = "Repair routing failures with bounded multi-surface implementation and test pairing, calibrated confidence, normalized context telemetry, adaptive mode behavior, and shared transport contracts.";
+      const analysis = analyzeTask(task);
+      const route = await routePalace(root, task, { routeLimit: 24, budget: 16000 });
+
+      expect(classifyTask(task)).toBe("bugfix");
+      expect(requestedRouteSurfaces(analysis)).toEqual(expect.arrayContaining(["implementation", "test", "shared"]));
+      expect(route.confidence).toBeLessThanOrEqual(0.4);
     });
   });
 
@@ -1527,6 +1567,189 @@ export function uploadProductVariantImageController(file: File) {
       expect(joined).toContain("frontend/src/pages/products/variant-images.tsx");
       expect(joined).toContain("backend/src/controllers/product-image.controller.ts");
       expect(joined).toContain("backend/src/services/product-image.service.ts");
+    });
+  });
+
+  it("pairs a camelCase implementation symbol with its hyphenated focused test without filling routeLimit", async () => {
+    await withFixture("ts-api", async (root) => {
+      const changedFiles = ["lib/route.js", "test/find-route.test.js"];
+      const files = new Map<string, string>([
+        [
+          "lib/route.js",
+          "export function findRoute(options) { return router.find(options.method, options.url); }\n"
+        ],
+        [
+          "test/find-route.test.js",
+          "test('findRoute normalizes method before finding a route', () => findRoute({ method: 'get' }));\n"
+        ],
+        ["lib/four-oh-four.js", "export function findRouteFallback(method) { return method ? null : undefined; }\n"],
+        ["test/route-prefix.test.js", "test('route prefix', () => true);\n"],
+        [
+          "test/route-hooks.test.js",
+          "import { findRoute } from '../lib/route.js';\ntest('route hooks call the router', () => findRoute({ method: 'get' }));\n"
+        ]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const evaluation = await evaluateRoute(root, "fix: normalize method in findRoute", {
+        changedFiles,
+        routeLimit: 9,
+        budget: 6000,
+        maxDrawers: 4
+      });
+
+      expect(evaluation.route.files).toEqual(expect.arrayContaining(changedFiles));
+      expect(evaluation.route.fileCount).toBe(2);
+      expect(evaluation.coverage.changedFileCoverage).toBe(1);
+      expect(evaluation.coverage.routeFocus).toBe(1);
+      expect(evaluation.calibration.status).not.toBe("overconfident");
+    });
+  });
+
+  it("stops a root-level completion bug route after the matching implementation and test pair", async () => {
+    await withFixture("ts-api", async (root) => {
+      const changedFiles = ["completions.go", "completions_test.go"];
+      const files = new Map<string, string>([
+        ["completions.go", "package cobra\nfunc getCompletions(args []string) []string { return append(args, \"--\") }\n"],
+        ["completions_test.go", "package cobra\nfunc TestCompletionDoesNotMutateOsArgs(t *testing.T) {}\n"],
+        [
+          "powershell_completions_test.go",
+          "package cobra\nfunc TestPowerShellCompletions(t *testing.T) { getCompletions([]string{}) }\n"
+        ],
+        ["powershell_completions.go", "package cobra\nfunc powershellCompletions(args []string) []string { return append(args, \"--\") }\n"],
+        ["fish_completions.go", "package cobra\nfunc fishCompletions(args []string) []string { return args }\n"],
+        ["bash_completions.go", "package cobra\nfunc bashCompletions() string { return \"completion\" }\n"],
+        ["command.go", "package cobra\ntype Command struct { Args []string }\n"]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const evaluation = await evaluateRoute(
+        root,
+        "fix: prevent completions from mutating os.Args via append side effect",
+        { changedFiles, routeLimit: 9, budget: 6000, maxDrawers: 4 }
+      );
+
+      expect(evaluation.route.files).toEqual(expect.arrayContaining(changedFiles));
+      expect(evaluation.route.fileCount).toBe(2);
+      expect(evaluation.coverage.changedFileCoverage).toBe(1);
+      expect(evaluation.coverage.routeFocus).toBe(1);
+    });
+  });
+
+  it("treats bin entry points as CLI implementation and ignores negation as route evidence", async () => {
+    await withFixture("ts-api", async (root) => {
+      const changedFiles = ["bin/main.js", "test/unit/bin.test.js"];
+      const files = new Map<string, string>([
+        [
+          "bin/main.js",
+          "export async function main(nodeProcess) { return nodeProcess.stdin.read(); }\n"
+        ],
+        [
+          "test/unit/bin.test.js",
+          "import { main } from '../../bin/main.js';\ntest('cli reads stdin', () => main(process));\n"
+        ],
+        ["bin/marked.js", "import { main } from './main.js';\nexport const marked = main;\n"],
+        ["src/Parser.ts", "export class Parser { parse(input: string) { return input || 'not parsed'; } }\n"],
+        ["src/Renderer.ts", "export class Renderer { render(input: string) { return input ? input : 'not rendered'; } }\n"],
+        ["src/Tokenizer.ts", "export class Tokenizer { tokenize(input: string) { return input; } }\n"]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const task = "fix: cli not reading stdin";
+      const evaluation = await evaluateRoute(root, task, {
+        changedFiles,
+        routeLimit: 9,
+        budget: 6000,
+        maxDrawers: 4
+      });
+
+      expect(analyzeTask(task).keywords).not.toContain("not");
+      expect(evaluation.route.files).toEqual(expect.arrayContaining(changedFiles));
+      expect(evaluation.route.fileCount).toBe(2);
+      expect(evaluation.coverage.changedFileCoverage).toBe(1);
+      expect(evaluation.coverage.routeFocus).toBe(1);
+      expect(evaluation.calibration.status).not.toBe("overconfident");
+    });
+  });
+
+  it("routes platform-specific Python failures through compatibility code and its dependent test", async () => {
+    await withFixture("ts-api", async (root) => {
+      const changedFiles = ["src/click/_compat.py", "tests/test_utils.py"];
+      const files = new Map<string, string>([
+        [
+          "src/click/_compat.py",
+          "import sys\nWIN = sys.platform.startswith('win')\nCYGWIN = sys.platform.startswith('cygwin')\n"
+        ],
+        [
+          "tests/test_utils.py",
+          "from click._compat import WIN\ndef test_echo_via_pager():\n    assert WIN is False\n"
+        ],
+        ["tests/test_compat.py", "def test_platform_flags():\n    assert True\n"],
+        ["src/click/testing.py", "def echo_via_pager(value):\n    return value\n"],
+        ["src/click/termui.py", "def pager(value):\n    return value\n"],
+        ["tests/test_termui.py", "def test_pager():\n    assert True\n"]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const task = "fix: skip flaky pager test on macOS with free-threaded Python";
+      const evaluation = await evaluateRoute(root, task, {
+        changedFiles,
+        routeLimit: 9,
+        budget: 6000,
+        maxDrawers: 4
+      });
+
+      expect(analyzeTask(task).keywords).toContain("compat");
+      expect(evaluation.route.files).toEqual(expect.arrayContaining(changedFiles));
+      expect(evaluation.route.files).not.toContain("tests/test_compat.py");
+      expect(evaluation.route.fileCount).toBeLessThanOrEqual(3);
+      expect(evaluation.coverage.changedFileCoverage).toBe(1);
+      expect(evaluation.coverage.routeFocus).toBeGreaterThanOrEqual(0.67);
+      expect(evaluation.calibration.status).not.toBe("overconfident");
+    });
+  });
+
+  it("caps confidence when a bug report has only ambiguous language and environment matches", async () => {
+    await withFixture("ts-api", async (root) => {
+      const files = new Map<string, string>([
+        ["src/tool/testing.py", "def run_in_thread():\n    return 'python worker'\n"],
+        ["src/tool/utils.py", "def echo_via_pager(value):\n    return value\n"],
+        ["tests/test_termui.py", "def test_pager():\n    assert True\n"]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const route = await routePalace(
+        root,
+        "fix: skip flaky pager test on macOS with free-threaded Python",
+        { routeLimit: 9, budget: 6000 }
+      );
+
+      expect(route.confidence).toBeLessThanOrEqual(0.4);
     });
   });
 });

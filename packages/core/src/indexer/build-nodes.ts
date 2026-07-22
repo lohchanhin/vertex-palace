@@ -83,7 +83,11 @@ export function buildNodes(scan: ScanRepoOutput, parsedFiles: ParsedFileWithHash
 
 export function inferFloor(sourcePath: string, language: string): PalaceFloor {
   const lower = normalizeRelativePath(sourcePath).toLowerCase();
-  if (/(^|\/)(test|tests|spec|__tests__)(\/|$)|\.(test|spec|e2e)\.[tj]sx?$/.test(lower)) return "05-verification";
+  if (
+    /(^|\/)(test|tests|spec|__tests__)(\/|$)|\.(test|spec|e2e)\.[tj]sx?$/.test(lower)
+    || /(^|\/)(?:test_[^/]+|[^/]+_(?:test|spec))\.[a-z0-9]+$/.test(lower)
+    || /(^|\/)[^/]+tests?\.(?:cs|java|kt)$/.test(lower)
+  ) return "05-verification";
   if (/(migration|migrations|schema|model|models|entity|entities|prisma|database|db)/.test(lower)) return "04-data";
   if (/(controller|controllers|route|routes|api|dto|schema|contract|event|message)/.test(lower)) return "02-interface";
   if (/(log|logs|error|errors|output|stack)/.test(lower)) return "06-runtime";

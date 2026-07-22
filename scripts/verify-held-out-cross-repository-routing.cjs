@@ -4,6 +4,7 @@ const { createHash } = require("node:crypto");
 const { mkdir, mkdtemp, readFile, rm, writeFile } = require("node:fs/promises");
 const os = require("node:os");
 const path = require("node:path");
+const { normalizeContextTelemetry } = require("./lib/context-telemetry.cjs");
 
 const projectRoot = path.resolve(__dirname, "..");
 const cliPath = path.join(projectRoot, "dist", "palace.cjs");
@@ -206,7 +207,7 @@ async function validateTarget(target, root) {
 
       failedPhase = "context";
       const contextStartedAt = performance.now();
-      const context = parseJsonOutput(runNode([
+      const contextResult = runNode([
         cliPath,
         "context",
         target.task,
@@ -219,7 +220,9 @@ async function validateTarget(target, root) {
         String(routeLimit),
         "--max-drawers",
         String(maxDrawers)
-      ], { cwd: root, timeout: 180_000 }).stdout, `${target.name} trial ${trial} context`);
+      ], { cwd: root, timeout: 180_000 });
+      const context = parseJsonOutput(contextResult.stdout, `${target.name} trial ${trial} context`);
+      const contextTelemetry = normalizeContextTelemetry(context, contextResult.stdout);
       const contextElapsedMs = Math.round(performance.now() - contextStartedAt);
 
       const routeFiles = unique(evaluation.route.files.map(stripLocation));
@@ -228,12 +231,12 @@ async function validateTarget(target, root) {
         ? round(routeFiles.filter((file) => changed.has(file)).length / routeFiles.length)
         : 0;
       const selectedFiles = unique([
-        ...context.executionBoundaries.primary,
-        ...context.executionBoundaries.support,
-        ...context.executionBoundaries.deferred
+        ...contextTelemetry.executionBoundaries.primary,
+        ...contextTelemetry.executionBoundaries.support,
+        ...contextTelemetry.executionBoundaries.deferred
       ].map(stripLocation));
       const excludedFiles = unique(
-        context.executionBoundaries.excluded
+        contextTelemetry.executionBoundaries.excluded
           .map((entry) => typeof entry === "string" ? entry : entry?.sourcePath)
           .filter((entry) => typeof entry === "string" && entry.length > 0)
           .map(stripLocation)
@@ -258,8 +261,8 @@ async function validateTarget(target, root) {
         routePrecision,
         routeConfidence: evaluation.route.confidence,
         calibration: evaluation.calibration,
-        contextEstimatedTokens: context.payload.contextEstimatedTokens,
-        contextBytes: context.payload.contextBytes,
+        contextEstimatedTokens: contextTelemetry.payload.contextEstimatedTokens,
+        contextBytes: contextTelemetry.payload.contextBytes,
         selectedExcludedOverlap
       });
     } catch (error) {
@@ -459,4 +462,3 @@ function run(command, args, options = {}) {
   }
   return result;
 }
-

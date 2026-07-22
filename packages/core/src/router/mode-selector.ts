@@ -39,7 +39,7 @@ export function selectPalaceMode(
   const uncertainRoute = route.confidence < 0.45;
   const singleExplicitTarget = explicitFiles.length === 1 && route.confidence >= 0.45;
   const singleImplicitTarget = explicitFiles.length === 0
-    && new Set(primarySteps.map((step) => step.sourcePath)).size === 1
+    && new Set(route.route.map((step) => step.sourcePath.replace(/:\d+(?:-\d+)?$/, ""))).size === 1
     && route.confidence >= 0.5;
   const highConfidenceSingleFile = singleExplicitTarget || singleImplicitTarget;
   const memoryCheckedAndAbsent = options.memoryPreflight

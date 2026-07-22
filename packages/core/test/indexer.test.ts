@@ -104,4 +104,35 @@ describe("indexPalace", () => {
       expect(fileNode("plugins/acme/mcp/server.cjs")?.tags).toContain("generated-artifact");
     });
   });
+
+  it("resolves absolute Python package imports from tests into a src layout", async () => {
+    await withFixture("ts-api", async (root) => {
+      const files = new Map<string, string>([
+        ["src/click/_compat.py", "import sys\nWIN = sys.platform.startswith('win')\n"],
+        [
+          "tests/test_utils.py",
+          "from click._compat import WIN\n\ndef test_echo_via_pager():\n    assert WIN is not None\n"
+        ]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+
+      await indexPalace(root);
+      const index = await readIndex(root);
+      const fileNode = (sourcePath: string) => index.nodes.find(
+        (node) => node.sourcePath === sourcePath && !node.startLine
+      );
+      const source = fileNode("src/click/_compat.py");
+      const test = fileNode("tests/test_utils.py");
+
+      expect(source).toBeDefined();
+      expect(test).toBeDefined();
+      expect(index.edges.some(
+        (edge) => edge.type === "imports" && edge.from === test?.id && edge.to === source?.id
+      )).toBe(true);
+    });
+  });
 });
