@@ -1,0 +1,83 @@
+{
+  "artifacts": {
+    "jsonPath": ".palace/evaluations/evaluation_c4dfe215d01ce085.json",
+    "latestJsonPath": ".palace/evaluations/latest-evaluation.json",
+    "latestMarkdownPath": ".palace/evaluations/latest-evaluation.md",
+    "markdownPath": ".palace/evaluations/evaluation_c4dfe215d01ce085.md"
+  },
+  "assessment": "needs-review",
+  "calibration": {
+    "error": 0.34,
+    "observedCoverage": 0.43,
+    "predictedConfidence": 0.77,
+    "status": "overconfident"
+  },
+  "context": {
+    "packTokens": 3204,
+    "repositoryTextFiles": 206,
+    "repositoryToPackRatio": 81.79,
+    "repositoryTokens": 262042,
+    "savedTokens": 258838,
+    "skippedBinaryFiles": 13,
+    "skippedGeneratedFiles": 2,
+    "tokenReductionPercent": 98.8
+  },
+  "coverage": {
+    "changedFileCoverage": 0.43,
+    "changedFiles": [
+      "packages/core/src/router/analyze-task.ts",
+      "packages/core/src/router/route-planner.ts",
+      "packages/core/src/router/route-scorer.ts",
+      "packages/core/src/storage/status.ts",
+      "packages/core/test/context.test.ts",
+      "packages/core/test/router.test.ts",
+      "plugins/vertex-palace/mcp/server.cjs"
+    ],
+    "matchedFiles": [
+      "packages/core/src/router/analyze-task.ts",
+      "packages/core/src/router/route-planner.ts",
+      "packages/core/src/router/route-scorer.ts"
+    ],
+    "missedFiles": [
+      "packages/core/src/storage/status.ts",
+      "packages/core/test/context.test.ts",
+      "packages/core/test/router.test.ts",
+      "plugins/vertex-palace/mcp/server.cjs"
+    ],
+    "routeFocus": 0.33,
+    "routeOnlyFiles": [
+      "scripts/verify-route-precision-after-self-audit.cjs",
+      "docs/research/evidence/cross-repository-route-precision-0.4-alpha.json",
+      "packages/core/src/packer/context-packer.ts",
+      "packages/core/test/release-routing.test.ts",
+      "packages/core/src/router/route-expander.ts",
+      "packages/mcp/tsconfig.json"
+    ],
+    "status": "measured"
+  },
+  "createdAt": "2026-07-22T17:16:49.644Z",
+  "id": "evaluation_c4dfe215d01ce085",
+  "markdown": "# Vertex Palace Evaluation\n\nTask: Fix the permanently stale index caused by ignored declared generated artifacts and improve compound cross-repository replication routing across test harness, protocol, bilingual result reports, JSON evidence, and the generated MCP bundle; add focused regression tests.\nRoute: route_2aeda7df064ed843\nTask type: bugfix\nAssessment: needs-review\nCreated: 2026-07-22T17:16:49.644Z\n\n## Context Efficiency\n\n- Indexed repository text: 262042 estimated tokens across 206 files\n- Context pack: 3204 estimated tokens\n- Tokens saved: 258838\n- Reduction: 98.8%\n- Repository-to-pack ratio: 81.79x\n- Skipped binary files: 13\n- Skipped generated artifacts: 2\n\n## Route Quality\n\n- Route confidence: 0.77\n- Changed-file coverage: 43%\n- Route focus: 33%\n- Confidence calibration: overconfident (error 0.34)\n\n## Changed Files\n\n- packages/core/src/router/analyze-task.ts\n- packages/core/src/router/route-planner.ts\n- packages/core/src/router/route-scorer.ts\n- packages/core/src/storage/status.ts\n- packages/core/test/context.test.ts\n- packages/core/test/router.test.ts\n- plugins/vertex-palace/mcp/server.cjs\n\n## Missed Changed Files\n\n- packages/core/src/storage/status.ts\n- packages/core/test/context.test.ts\n- packages/core/test/router.test.ts\n- plugins/vertex-palace/mcp/server.cjs\n\n## Route Files\n\n- packages/core/src/router/route-scorer.ts\n- packages/core/src/router/analyze-task.ts\n- packages/core/src/router/route-planner.ts\n- scripts/verify-route-precision-after-self-audit.cjs\n- docs/research/evidence/cross-repository-route-precision-0.4-alpha.json\n- packages/core/src/packer/context-packer.ts\n- packages/core/test/release-routing.test.ts\n- packages/core/src/router/route-expander.ts\n- packages/mcp/tsconfig.json\n\n## Warnings\n\n- Route missed 4 changed file(s).\n- Route confidence is higher than observed changed-file coverage.\n",
+  "route": {
+    "confidence": 0.77,
+    "fileCount": 9,
+    "files": [
+      "packages/core/src/router/route-scorer.ts",
+      "packages/core/src/router/analyze-task.ts",
+      "packages/core/src/router/route-planner.ts",
+      "scripts/verify-route-precision-after-self-audit.cjs",
+      "docs/research/evidence/cross-repository-route-precision-0.4-alpha.json",
+      "packages/core/src/packer/context-packer.ts",
+      "packages/core/test/release-routing.test.ts",
+      "packages/core/src/router/route-expander.ts",
+      "packages/mcp/tsconfig.json"
+    ]
+  },
+  "routeId": "route_2aeda7df064ed843",
+  "task": "Fix the permanently stale index caused by ignored declared generated artifacts and improve compound cross-repository replication routing across test harness, protocol, bilingual result reports, JSON evidence, and the generated MCP bundle; add focused regression tests.",
+  "taskType": "bugfix",
+  "warnings": [
+    "Route missed 4 changed file(s).",
+    "Route confidence is higher than observed changed-file coverage."
+  ]
+}
