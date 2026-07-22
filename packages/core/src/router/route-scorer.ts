@@ -368,18 +368,29 @@ export function requestedRouteSurfaces(analysis: TaskAnalysis): RouteSurface[] {
   if (isMachineEvidenceArtifactRequest(analysis.raw)) requested.push("evidence");
   if (publication.releaseIntent || (isTypeDeclarationIntent(analysis) && requestsTypeTestSetup(analysis))) requested.push("package");
   if (hasAny(keywords, ["plugin", "marketplace"])) requested.push("plugin");
-  const evaluationIntent = hasAny(keywords, ["evaluation", "evaluate", "retrospective"]);
+  const evidenceArtifactEvaluationIntent = publication.releaseArtifactReference
+    && publication.evidenceMaintenance
+    && publication.evidenceSubject
+    && !publication.releaseIntent
+    && !hasExplicitCodeChangeIntent(analysis.raw);
+  const evaluationIntent = hasAny(keywords, ["evaluation", "evaluate", "retrospective"])
+    || evidenceArtifactEvaluationIntent;
   if (
     hasAny(keywords, ["implementation", "source", "generator"])
     || (!evaluationIntent && hasAny(keywords, ["adaptive", "bypass", "mode", "selector", "context", "packer", "route", "router", "score", "scorer", "precision", "recall", "confidence"]))
   ) requested.push("implementation");
-  if (hasAny(keywords, ["release", "changelog"]) && !requested.includes("docs")) requested.push("docs");
+  if ((publication.releaseIntent || keywords.has("changelog")) && !requested.includes("docs")) requested.push("docs");
   if (keywords.has("release") && requested.includes("plugin")) {
     if (!requested.includes("mcp")) requested.push("mcp");
     if (!requested.includes("cli")) requested.push("cli");
     if (!requested.includes("shared")) requested.push("shared");
   }
   return requested;
+}
+
+function hasExplicitCodeChangeIntent(task: string): boolean {
+  return /^\s*(?:add|build|create|debug|enhance|fix|implement|improve|optimi[sz]e|refactor|repair|resolve|support|update)\b/i.test(task)
+    || /^\s*(?:新增|增加|建立|创建|創建|实现|實作|支援|支持|修复|修正|修補|修补|解决|解決|重构|重構|优化|優化|改善|改进|改進|更新)/.test(task);
 }
 
 function isMachineEvidenceArtifactRequest(task: string): boolean {

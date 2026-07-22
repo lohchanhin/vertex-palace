@@ -588,6 +588,197 @@ export const $ZodDiscriminatedUnion = core.$constructor("$ZodDiscriminatedUnion"
     });
   });
 
+  it("keeps a newly named recursive artifact family ahead of an older scope-matching family", async () => {
+    await withFixture("ts-api", async (root) => {
+      const changedFiles = [
+        "scripts/verify-route-precision-after-ember-ledger.cjs",
+        "docs/research/ROUTE_PRECISION_AFTER_EMBER_LEDGER_PROTOCOL_0_4_ALPHA.md",
+        "docs/zh-CN/ROUTE_PRECISION_AFTER_EMBER_LEDGER_PROTOCOL_0_4_ALPHA.md",
+        "docs/research/evidence/route-precision-after-ember-ledger-0.4-alpha.json",
+        "docs/research/ROUTE_PRECISION_AFTER_EMBER_LEDGER_RESULT_0_4_ALPHA.md",
+        "docs/zh-CN/ROUTE_PRECISION_AFTER_EMBER_LEDGER_RESULT_0_4_ALPHA.md"
+      ];
+      const oldFamily = [
+        "scripts/verify-cross-platform-route-precision.cjs",
+        "docs/research/CROSS_PLATFORM_ROUTE_PRECISION_PROTOCOL_0_4_ALPHA.md",
+        "docs/zh-CN/CROSS_PLATFORM_ROUTE_PRECISION_PROTOCOL_0_4_ALPHA.md",
+        "docs/research/evidence/cross-platform-route-precision-0.4-alpha.json",
+        "docs/research/CROSS_PLATFORM_ROUTE_PRECISION_RESULT_0_4_ALPHA.md",
+        "docs/zh-CN/CROSS_PLATFORM_ROUTE_PRECISION_RESULT_0_4_ALPHA.md"
+      ];
+      const sources = new Map<string, string>([
+        [changedFiles[0], "export function verifyEmberLedgerRoutePrecision() { return 'recursive family'; }\n"],
+        [changedFiles[1], "# Route Precision After Ember Ledger Protocol\n\nFreeze the recursive family before observation.\n"],
+        [changedFiles[2], "# Route Precision After Ember Ledger Protocol - Simplified Chinese\n\nFrozen translation.\n"],
+        [changedFiles[3], JSON.stringify({ schemaVersion: 1, family: "ember-ledger", status: "pending" })],
+        [changedFiles[4], "# Route Precision After Ember Ledger Result\n\nReport the recursive observation.\n"],
+        [changedFiles[5], "# Route Precision After Ember Ledger Result - Simplified Chinese\n\nTranslated result.\n"],
+        [oldFamily[0], "export function verifyCrossPlatformRoutePrecision() { return 'older family'; }\n"],
+        [oldFamily[1], "# Cross Platform Route Precision Protocol\n\nFreeze cross-platform routing replication evidence.\n"],
+        [oldFamily[2], "# Cross Platform Route Precision Protocol - Simplified Chinese\n\nOlder translated protocol.\n"],
+        [oldFamily[3], JSON.stringify({ schemaVersion: 1, family: "cross-platform", status: "passed" })],
+        [oldFamily[4], "# Cross Platform Route Precision Result\n\nDense cross-platform replication result and evidence report.\n"],
+        [oldFamily[5], "# Cross Platform Route Precision Result - Simplified Chinese\n\nOlder translated result.\n"],
+        ["packages/core/src/router/route-scorer.ts", "export function scorePostEmberLedgerCrossPlatformConfidence() { return 0.91; }\n"],
+        ["tsconfig.base.json", JSON.stringify({ compilerOptions: { strict: true } })]
+      ]);
+      for (const [relativePath, source] of sources) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const task = "Freeze and execute the post-ember-ledger cross-platform routing regression; preserve the first JSON evidence and write English and Simplified Chinese protocol and result reports.";
+      const evaluation = await evaluateRoute(root, task, {
+        changedFiles,
+        routeLimit: 9,
+        budget: 6000,
+        maxDrawers: 4
+      });
+
+      expect(classifyTask(task)).toBe("evaluation");
+      expect(requestedRouteSurfaces(analyzeTask(task))).not.toContain("implementation");
+      expect(evaluation.route.files).toEqual(expect.arrayContaining(changedFiles));
+      expect(evaluation.route.files).not.toEqual(expect.arrayContaining(oldFamily));
+      expect(evaluation.route.files).not.toContain("packages/core/src/router/route-scorer.ts");
+      expect(evaluation.route.fileCount).toBeLessThanOrEqual(7);
+      expect(evaluation.coverage.changedFileCoverage).toBe(1);
+      expect(evaluation.coverage.routeFocus).toBeGreaterThanOrEqual(0.75);
+      expect(evaluation.calibration.status).not.toBe("overconfident");
+
+      const unresolvedTask = "Freeze and execute the post-cobalt-harbor cross-platform routing regression; preserve the first JSON evidence and write English and Simplified Chinese protocol and result reports.";
+      const unresolved = await evaluateRoute(root, unresolvedTask, {
+        changedFiles: [
+          "scripts/verify-route-precision-after-cobalt-harbor.cjs",
+          "docs/research/ROUTE_PRECISION_AFTER_COBALT_HARBOR_PROTOCOL_0_4_ALPHA.md",
+          "docs/zh-CN/ROUTE_PRECISION_AFTER_COBALT_HARBOR_PROTOCOL_0_4_ALPHA.md",
+          "docs/research/evidence/route-precision-after-cobalt-harbor-0.4-alpha.json",
+          "docs/research/ROUTE_PRECISION_AFTER_COBALT_HARBOR_RESULT_0_4_ALPHA.md",
+          "docs/zh-CN/ROUTE_PRECISION_AFTER_COBALT_HARBOR_RESULT_0_4_ALPHA.md"
+        ],
+        routeLimit: 9,
+        budget: 6000,
+        maxDrawers: 4
+      });
+      expect(unresolved.coverage.changedFileCoverage).toBe(0);
+      expect(unresolved.route.confidence).toBeLessThanOrEqual(0.15);
+      expect(unresolved.calibration.status).not.toBe("overconfident");
+    });
+  });
+
+  it("keeps both implementation concerns, focused tests, and generated MCP bundle in a compound bugfix", async () => {
+    await withFixture("ts-api", async (root) => {
+      const changedFiles = [
+        "packages/core/src/router/analyze-task.ts",
+        "packages/core/src/router/route-planner.ts",
+        "packages/core/src/router/route-scorer.ts",
+        "packages/core/src/storage/status.ts",
+        "packages/core/test/router.test.ts",
+        "packages/core/test/context.test.ts",
+        "plugins/vertex-palace/mcp/server.cjs"
+      ];
+      const sources = new Map<string, string>([
+        [changedFiles[0], "export function analyzeArtifactFamilyTask() { return ['family', 'freshness']; }\n"],
+        [changedFiles[1], "export function planArtifactFamilyRoles() { return ['protocol', 'result', 'evidence']; }\n"],
+        [changedFiles[2], "export function scoreArtifactFamilyConfidence() { return 'calibrated'; }\n"],
+        [changedFiles[3], "export function appendGeneratedArtifactHashes() { return { stale: false }; }\n"],
+        [changedFiles[4], "describe('artifact family route planning and confidence', () => it('keeps roles', () => true));\n"],
+        [changedFiles[5], "describe('generated artifact index freshness', () => it('stays fresh', () => true));\n"],
+        ["packages/mcp/src/server.ts", "export const startMcpServer = () => 'artifact family freshness';\n"],
+        ["tsup.plugin-mcp.config.ts", "import { defineConfig } from 'tsup';\nexport default defineConfig({ entry: { server: 'packages/mcp/src/server.ts' }, outDir: 'plugins/vertex-palace/mcp', outExtension: () => ({ js: '.cjs' }) });\n"],
+        [changedFiles[6], "module.exports = { generated: true, family: 'artifact-routing' };\n"],
+        ["packages/core/src/indexer/index-palace.ts", "export function indexGenericRepository() { return true; }\n"],
+        ["packages/core/src/packer/context-packer.ts", "export function packGenericContext() { return true; }\n"],
+        ["packages/core/test/release-routing.test.ts", "describe('release routing', () => it('publishes packages', () => true));\n"],
+        ["packages/core/test/route-expander.test.ts", "describe('route expansion', () => it('expands graph neighbors', () => true));\n"]
+      ]);
+      for (const [relativePath, source] of sources) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const task = "Fix generated-artifact index freshness in storage status and generalize artifact-family task analysis, route planning, and confidence scoring while preserving mixed feature release coverage; add focused router and context regression tests and rebuild the generated MCP bundle.";
+      const evaluation = await evaluateRoute(root, task, {
+        changedFiles,
+        routeLimit: 9,
+        budget: 6000,
+        maxDrawers: 4
+      });
+
+      expect(classifyTask(task)).toBe("bugfix");
+      expect(requestedRouteSurfaces(analyzeTask(task))).not.toEqual(expect.arrayContaining(["package", "docs"]));
+      expect(evaluation.route.files).toEqual(expect.arrayContaining(changedFiles));
+      expect(evaluation.route.files).not.toEqual(expect.arrayContaining([
+        "packages/mcp/src/server.ts",
+        "packages/core/src/indexer/index-palace.ts",
+        "packages/core/src/packer/context-packer.ts",
+        "packages/core/test/release-routing.test.ts",
+        "packages/core/test/route-expander.test.ts"
+      ]));
+      expect(evaluation.route.fileCount).toBeLessThanOrEqual(7);
+      expect(evaluation.coverage.changedFileCoverage).toBe(1);
+      expect(evaluation.coverage.routeFocus).toBeGreaterThanOrEqual(0.75);
+      expect(evaluation.calibration.status).not.toBe("overconfident");
+    });
+  });
+
+  it("keeps release-vocabulary classification work ahead of adjacent analysis and evaluation modules", async () => {
+    await withFixture("ts-api", async (root) => {
+      const changedFiles = [
+        "packages/core/src/router/classify-task.ts",
+        "packages/core/src/router/publication-intent.ts",
+        "packages/core/src/router/route-planner.ts",
+        "packages/core/src/router/route-scorer.ts",
+        "packages/core/test/router.test.ts",
+        "packages/core/test/release-routing.test.ts",
+        "plugins/vertex-palace/mcp/server.cjs"
+      ];
+      const sources = new Map<string, string>([
+        [changedFiles[0], "export function classifyReleaseVocabularyAction() { return 'bugfix'; }\n"],
+        [changedFiles[1], "export function analyzePublicationIntent() { return { releaseIntent: false }; }\n"],
+        [changedFiles[2], "export function planRecursiveArtifactFamilyRoute() { return ['implementation', 'test', 'mcp']; }\n"],
+        [changedFiles[3], "export function scoreRecursiveArtifactFamilyConfidence() { return 0.8; }\n"],
+        [changedFiles[4], "describe('recursive artifact-family router', () => it('keeps classification concerns', () => true));\n"],
+        [changedFiles[5], "describe('release vocabulary routing', () => it('preserves action intent', () => true));\n"],
+        [changedFiles[6], "module.exports = { generated: true, releaseVocabulary: true };\n"],
+        ["packages/mcp/src/server.ts", "export const startMcpServer = () => 'release vocabulary routing';\n"],
+        ["tsup.plugin-mcp.config.ts", "import { defineConfig } from 'tsup';\nexport default defineConfig({ entry: { server: 'packages/mcp/src/server.ts' }, outDir: 'plugins/vertex-palace/mcp', outExtension: () => ({ js: '.cjs' }) });\n"],
+        ["packages/core/src/router/analyze-task.ts", "export function analyzeArtifactFamilyTask() { return ['route', 'evidence']; }\n"],
+        ["packages/core/src/evaluation/evaluate-route.ts", "export function evaluateArtifactFamilyRoute() { return { coverage: 1 }; }\n"],
+        ["packages/core/test/context.test.ts", "describe('context evaluation', () => it('packs a route', () => true));\n"]
+      ]);
+      for (const [relativePath, source] of sources) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const task = "Fix release-vocabulary action classification and publication intent so a mixed feature release mention does not override recursive artifact-family route planning and confidence scoring; add focused router and release-routing regressions and rebuild the generated MCP bundle.";
+      const evaluation = await evaluateRoute(root, task, {
+        changedFiles,
+        routeLimit: 9,
+        budget: 6000,
+        maxDrawers: 4
+      });
+
+      expect(classifyTask(task)).toBe("bugfix");
+      expect(evaluation.route.files).toEqual(expect.arrayContaining(changedFiles));
+      expect(evaluation.route.files).not.toEqual(expect.arrayContaining([
+        "packages/core/src/router/analyze-task.ts",
+        "packages/core/src/evaluation/evaluate-route.ts",
+        "packages/core/test/context.test.ts"
+      ]));
+      expect(evaluation.route.fileCount).toBeLessThanOrEqual(7);
+      expect(evaluation.coverage.changedFileCoverage).toBe(1);
+      expect(evaluation.coverage.routeFocus).toBe(1);
+      expect(evaluation.calibration.status).not.toBe("overconfident");
+    });
+  });
+
   it("keeps the current bilingual document pair when an older report has denser matching prose", async () => {
     await withFixture("ts-api", async (root) => {
       const sources = new Map<string, string>([

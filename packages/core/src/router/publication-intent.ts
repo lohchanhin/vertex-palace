@@ -29,6 +29,8 @@ export function analyzePublicationIntent(task: string): PublicationIntentAnalysi
     || (!namedReleaseArtifact && /^\s*(?:发布|發佈|发行|發行)/.test(lower))
     || /(?:发布|發佈|发行|發行).{0,60}(?:到|至|npm|registry|套件|插件|市场|市場|市集|版本|tag|标签|標籤)/.test(lower)
     || /(?:建立|创建|創建|推送|打).{0,40}(?:git\s*)?(?:tag|标签|標籤)/.test(lower);
+  const leadingCodeChangeAction = /^\s*(?:add|build|create|debug|enhance|fix|generalize|implement|improve|optimi[sz]e|refactor|repair|resolve|restructure|simplify|support|update)\b/.test(lower)
+    || /^\s*(?:\u65b0\u589e|\u589e\u52a0|\u5efa\u7acb|\u521b\u5efa|\u5275\u5efa|\u5b9e\u73b0|\u5be6\u4f5c|\u652f\u6301|\u652f\u63f4|\u91cd\u6784|\u91cd\u69cb|\u6574\u7406|\u7b80\u5316|\u7c21\u5316|\u4f18\u5316|\u512a\u5316|\u6539\u5584|\u6539\u8fdb|\u6539\u9032|\u4fee\u590d|\u4fee\u6b63|\u89e3\u51b3|\u89e3\u6c7a|\u66f4\u65b0)/.test(lower);
   const releaseArtifactReference = namedReleaseArtifact
     || (evidenceMaintenance && evidenceSubject && evidenceArtifact);
 
@@ -36,7 +38,7 @@ export function analyzePublicationIntent(task: string): PublicationIntentAnalysi
     releaseMention,
     explicitReleaseAction,
     releaseArtifactReference,
-    releaseIntent: releaseMention && (explicitReleaseAction || !releaseArtifactReference),
+    releaseIntent: releaseMention && (explicitReleaseAction || (!releaseArtifactReference && !leadingCodeChangeAction)),
     evidenceMaintenance,
     evidenceSubject,
     evidenceArtifact

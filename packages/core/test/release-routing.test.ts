@@ -254,6 +254,9 @@ describe("release routing matrix", () => {
     expect(classifyTask("Update the release-candidate machine evidence and README")).toBe("evaluation");
     expect(classifyTask("更新 Vertex Palace 发布候选与真实仓库机器证据说明")).toBe("evaluation");
     expect(classifyTask("Fix release-candidate evidence classification")).toBe("bugfix");
+    expect(classifyTask(
+      "Generalize recursive artifact-family routing and confidence calibration while preserving mixed feature release coverage"
+    )).toBe("refactor");
     expect(classifyTask("Publish the verified Vertex Palace package to npm")).toBe("release");
     expect(classifyTask("Deploy the application to production")).toBe("unknown");
 

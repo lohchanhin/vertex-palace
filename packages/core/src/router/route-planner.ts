@@ -67,7 +67,7 @@ export async function routePalace(root: string, task: string, options: number | 
         : taskType === "bugfix"
           ? typeDeclarationTask
             ? ensureTypeDeclarationCoverage(initialRoute, scored, requestedSurfaces, routeLimit)
-            : ensureBugfixVerificationCoverage(initialRoute, scored, requestedSurfaces, implementationAnchor, routeLimit)
+            : ensureBugfixVerificationCoverage(initialRoute, scored, requestedSurfaces, implementationAnchor, analysis, routeLimit)
           : ensureGeneralSurfaceCoverage(initialRoute, scored, requestedSurfaces, analysis, routeLimit);
   const now = new Date().toISOString();
 
@@ -118,8 +118,12 @@ function ensureBugfixVerificationCoverage(
   scored: ScoredNode[],
   requested: RouteSurface[],
   implementationAnchor: ScoredNode | undefined,
+  analysis: ReturnType<typeof analyzeTask>,
   limit: number
 ): ScoredNode[] {
+  if (requested.includes("implementation") && requested.length >= 3) {
+    return ensureGeneralSurfaceCoverage(selected, scored, requested, analysis, limit);
+  }
   const requiredSurfaces = requested.filter((surface) => ["test", "config", "docs", "shared"].includes(surface));
   if (!requiredSurfaces.length) return selected;
 
@@ -218,7 +222,8 @@ function ensureGeneralSurfaceCoverage(
     }
   }
 
-  const supplementalLimit = Math.min(2, Math.max(0, limit - result.length));
+  const roleCoverageIsDense = result.length >= Math.ceil(limit * 0.75);
+  const supplementalLimit = roleCoverageIsDense ? 0 : Math.min(2, Math.max(0, limit - result.length));
   let supplementalCount = 0;
   for (const item of selected) {
     if (supplementalCount >= supplementalLimit) break;
@@ -252,11 +257,13 @@ function selectGeneralSurfaceRepresentatives(
       (item) => matchesRouteSurface(item.node, surface)
         && !(surface === "docs" && matchesRouteSurface(item.node, "evidence"))
     )
+    .map((item) => ({ item, priority: generalSurfacePriority(item, surface, analysis) }))
     .sort(
-      (a, b) => generalSurfacePriority(b, surface, analysis) - generalSurfacePriority(a, surface, analysis)
-        || b.score - a.score
-        || a.node.sourcePath.localeCompare(b.node.sourcePath)
+      (a, b) => b.priority - a.priority
+        || b.item.score - a.item.score
+        || a.item.node.sourcePath.localeCompare(b.item.node.sourcePath)
     )
+    .map(({ item }) => item)
     .filter((item, index, items) => items.findIndex((candidate) => candidate.node.sourcePath === item.node.sourcePath) === index);
   if (surface === "docs" && quota > 1) {
     return selectGeneralDocumentRepresentatives(ranked, analysis, quota);
@@ -298,16 +305,27 @@ function generalSurfaceQuota(
         .map((item) => implementationPathConcept(item.node.sourcePath, analysis))
         .filter((concept): concept is string => Boolean(concept))
     );
-    return Math.max(1, Math.min(3, concepts.size));
+    return Math.max(1, Math.min(4, concepts.size));
   }
   if (surface !== "test" || !requested.includes("implementation")) return 1;
   const concepts = new Set(
     scored
       .filter((item) => matchesRouteSurface(item.node, "test") && item.node.kind === "test")
-      .map((item) => routePathConcept(item.node.sourcePath, analysis))
+      .map((item) => testRouteConcept(item, analysis))
       .filter((concept): concept is string => Boolean(concept))
   );
-  const directTestQuota = Math.max(1, Math.min(3, concepts.size));
+  const declaredConcerns = new Set<string>();
+  if (hasRoutePlanningIntent(analysis.raw) || hasRouteScoringIntent(analysis.raw) || hasTaskAnalysisIntent(analysis.raw)) {
+    declaredConcerns.add("routing");
+  }
+  if (hasIndexFreshnessIntent(analysis.raw)) declaredConcerns.add("index-freshness");
+  const namedTestCount = scored.filter(
+    (item) => matchesRouteSurface(item.node, "test")
+      && item.node.kind === "test"
+      && explicitTestConceptAffinity(item.node.sourcePath, analysis.raw) >= 2
+  ).length;
+  const requestedConcernCount = Math.max(declaredConcerns.size || concepts.size, namedTestCount);
+  const directTestQuota = Math.max(1, Math.min(3, requestedConcernCount));
   return Math.min(5, directTestQuota + requestedVerificationScriptQuota(analysis));
 }
 
@@ -320,16 +338,21 @@ function generalSurfacePriority(
   const keywords = new Set(analysis.keywords);
   let priority = item.score;
   if (surface === "mcp" && hasAnyKeyword(keywords, ["generated", "artifact", "bundle"])) {
-    if (/generated\s+\w+\s+artifact/i.test(item.node.summary)) priority += 600;
+    if (item.node.tags.includes("generated-artifact") || /generated\s+\w+\s+artifact/i.test(item.node.summary)) priority += 600;
     else if (/(^|\/)packages\/mcp\/src\//.test(sourcePath)) priority += 200;
   }
   if (surface === "implementation") {
     priority += implementationTaskAffinity(sourcePath, analysis.raw) * 60;
+    if (/(?:^|\/)analyze-task\.[^.]+$/.test(sourcePath) && hasTaskAnalysisIntent(analysis.raw)) priority += 260;
+    if (/(?:^|\/)classify-task\.[^.]+$/.test(sourcePath) && hasTaskClassificationIntent(analysis.raw)) priority += 260;
+    if (/(?:^|\/)publication-intent\.[^.]+$/.test(sourcePath) && hasPublicationIntentIntent(analysis.raw)) priority += 260;
+    if (/(?:^|\/)status\.[^.]+$/.test(sourcePath) && hasIndexFreshnessIntent(analysis.raw)) priority += 260;
     if (/(?:^|\/)route-planner\.[^.]+$/.test(sourcePath) && hasRoutePlanningIntent(analysis.raw)) priority += 260;
     if (/(?:^|\/)route-scorer\.[^.]+$/.test(sourcePath) && hasRouteScoringIntent(analysis.raw)) priority += 260;
   }
   if (surface === "test") {
     priority += item.node.kind === "test" ? 100 : -100;
+    if (isDirectTestCandidate(item)) priority += explicitTestConceptAffinity(sourcePath, analysis.raw) * 180;
     if (isVerificationScriptPath(sourcePath)) {
       priority += requestedVerificationScriptQuota(analysis) > 0 ? 220 : -120;
       priority += taskPathAffinity(sourcePath, analysis.raw) * 100;
@@ -378,6 +401,18 @@ function implementationPathConcept(sourcePath: string, analysis: ReturnType<type
   const basename = path.posix.basename(sourcePath).toLowerCase().replace(/\.[^.]+$/, "");
   const pathTokens = new Set(basename.match(/[a-z0-9]+/g) ?? []);
   const rawTokens = analysis.raw.toLowerCase().match(/[a-z0-9]+/g) ?? [];
+  if (pathTokens.has("analyze") && pathTokens.has("task") && hasTaskAnalysisIntent(analysis.raw)) {
+    return "task-analysis";
+  }
+  if (pathTokens.has("classify") && pathTokens.has("task") && hasTaskClassificationIntent(analysis.raw)) {
+    return "task-classification";
+  }
+  if (pathTokens.has("publication") && pathTokens.has("intent") && hasPublicationIntentIntent(analysis.raw)) {
+    return "publication-intent";
+  }
+  if (pathTokens.has("status") && hasIndexFreshnessIntent(analysis.raw)) {
+    return "index-freshness";
+  }
   const routeComponent = [...pathTokens].some((token) => ["route", "router", "routing"].includes(token));
   const routeTask = rawTokens.some((token) => ["route", "router", "routing"].includes(token));
   if (routeComponent && routeTask) {
@@ -417,11 +452,27 @@ function implementationTaskAffinity(sourcePath: string, task: string): number {
 }
 
 function hasRoutePlanningIntent(task: string): boolean {
-  return /\b(?:role[-\s]?aware|multi[-\s]?surface|route[-\s]?(?:allocation|limit|focus)|routing\s+(?:precision|recall))\b/i.test(task);
+  return /\b(?:role[-\s]?aware|multi[-\s]?surface|artifact[-\s]?family|route[-\s]?(?:allocation|limit|focus|plan|planning|planner)|routing\s+(?:precision|recall|plan|planning))\b/i.test(task);
 }
 
 function hasRouteScoringIntent(task: string): boolean {
   return /\b(?:score|scorer|scoring|confidence|calibrat(?:e|ed|ion))\b/i.test(task);
+}
+
+function hasTaskAnalysisIntent(task: string): boolean {
+  return /\b(?:task[-\s]?(?:analysis|analyzer)|analy[sz](?:e|ing)\s+(?:the\s+)?task)\b/i.test(task);
+}
+
+function hasTaskClassificationIntent(task: string): boolean {
+  return /\b(?:action[-\s]?classification|classif(?:y|ication)|task[-\s]?type)\b/i.test(task);
+}
+
+function hasPublicationIntentIntent(task: string): boolean {
+  return /\b(?:publication[-\s]?intent|release[-\s]?(?:intent|vocabulary))\b/i.test(task);
+}
+
+function hasIndexFreshnessIntent(task: string): boolean {
+  return /\b(?:index[-\s]?freshness|fresh(?:ness)?|stale|storage[-\s]?status|generated[-\s]?artifact)\b/i.test(task);
 }
 
 function selectGeneralTestRepresentatives(
@@ -434,10 +485,10 @@ function selectGeneralTestRepresentatives(
   const result: ScoredNode[] = [];
   const concepts = new Set<string>();
   const directTests = ranked.filter(isDirectTestCandidate);
-  const conceptualTests = directTests.filter((item) => routePathConcept(item.node.sourcePath, analysis));
+  const conceptualTests = directTests.filter((item) => testRouteConcept(item, analysis));
 
   for (const item of conceptualTests.length ? conceptualTests : directTests) {
-    const concept = routePathConcept(item.node.sourcePath, analysis);
+    const concept = testRouteConcept(item, analysis);
     if (concept && concepts.has(concept)) continue;
     result.push(item);
     if (concept) concepts.add(concept);
@@ -459,6 +510,33 @@ function selectGeneralTestRepresentatives(
     result.push(item);
   }
   return result.slice(0, quota);
+}
+
+function testRouteConcept(item: ScoredNode, analysis: ReturnType<typeof analyzeTask>): string | undefined {
+  const pathConcept = routePathConcept(item.node.sourcePath, analysis);
+  if (pathConcept) return pathConcept;
+  const haystack = nodeHaystack(item);
+  if (hasIndexFreshnessIntent(analysis.raw) && /(?:fresh|stale|status|index|generated[-\s]?artifact)/.test(haystack)) {
+    return "index-freshness";
+  }
+  if (
+    (hasRoutePlanningIntent(analysis.raw) || hasRouteScoringIntent(analysis.raw) || hasTaskAnalysisIntent(analysis.raw))
+    && /(?:route|router|routing|artifact[-\s]?family|confidence|scor|analy)/.test(haystack)
+  ) {
+    return "routing";
+  }
+  return undefined;
+}
+
+function explicitTestConceptAffinity(sourcePath: string, task: string): number {
+  const basenameTokens = path.posix.basename(sourcePath).toLowerCase().match(/[a-z0-9]+/g) ?? [];
+  const concepts = basenameTokens.filter((token) => !["test", "tests", "spec", "ts", "js", "tsx", "jsx"].includes(token));
+  return concepts.reduce((score, concept) => {
+    const escaped = escapeRegExp(concept);
+    const nearTest = new RegExp(`\\b${escaped}\\b.{0,32}\\b(?:regressions?|tests?|specs?)\\b|\\b(?:regressions?|tests?|specs?)\\b.{0,32}\\b${escaped}\\b`, "i");
+    if (nearTest.test(task)) return score + 2;
+    return score + (new RegExp(`\\b${escaped}\\b`, "i").test(task) ? 1 : 0);
+  }, 0);
 }
 
 function selectGeneralDocumentRepresentatives(
@@ -744,7 +822,11 @@ function confidence(selected: ScoredNode[], analysis: ReturnType<typeof analyzeT
       ? 0.65 + breadthEvidence * 0.25
       : 0.98;
   const taskCap = Math.min(taskType === "release" ? 0.65 : 0.98, breadthCap);
-  return Number(Math.max(0.1, Math.min(taskCap, value)).toFixed(2));
+  const artifactFamilyCoverage = leadingArtifactEntityCoverage(top, analysis);
+  const artifactFamilyCap = artifactFamilyCoverage === undefined
+    ? 0.98
+    : 0.15 + artifactFamilyCoverage * 0.75;
+  return Number(Math.max(0.1, Math.min(taskCap, artifactFamilyCap, value)).toFixed(2));
 }
 
 function requestedSurfaceEvidence(
@@ -784,9 +866,10 @@ function ensureRequestedSurfaceCoverage(
 
   const result: ScoredNode[] = [];
   const protectedIds = new Set<string>();
+  const artifactFamilyAnchor = selectEvaluationArtifactFamilyAnchor(scored, requested, analysis);
   const firstAlreadyHasRequestedSurface = selected[0]
     && requested.some((surface) => matchesRouteSurface(selected[0].node, surface));
-  if (!requested.includes("implementation") && selected[0] && !firstAlreadyHasRequestedSurface) {
+  if (!artifactFamilyAnchor && !requested.includes("implementation") && selected[0] && !firstAlreadyHasRequestedSurface) {
     result.push(selected[0]);
     protectedIds.add(selected[0].node.id);
   }
@@ -802,7 +885,8 @@ function ensureRequestedSurfaceCoverage(
       ),
       surface,
       analysis,
-      quota
+      quota,
+      artifactFamilyAnchor
     );
     for (const representative of representatives) {
       if (!result.some((item) => item.node.id === representative.node.id)) result.push(representative);
@@ -853,11 +937,25 @@ function selectEvaluationSurfaceRepresentatives(
   candidates: ScoredNode[],
   surface: RouteSurface,
   analysis: ReturnType<typeof analyzeTask>,
-  quota: number
+  quota: number,
+  artifactFamilyAnchor?: string
 ): ScoredNode[] {
   const ranked = [...candidates]
     .filter((item) => !(surface === "docs" && matchesRouteSurface(item.node, "evidence")))
-    .sort((a, b) => compareEvaluationSurfaceCandidates(a, b, surface, analysis))
+    .map((item) => ({
+      item,
+      cohesion: artifactFamilyCohesion(item.node.sourcePath, artifactFamilyAnchor),
+      familyAffinity: evaluationArtifactFamilyAffinity(item.node.sourcePath, analysis),
+      surfacePriority: evaluationSurfacePriority(item, surface, analysis),
+      versionPriority: evaluationSurfaceVersionPriority(item.node.sourcePath)
+    }))
+    .sort((a, b) => b.cohesion - a.cohesion
+      || b.familyAffinity - a.familyAffinity
+      || b.surfacePriority - a.surfacePriority
+      || b.versionPriority - a.versionPriority
+      || b.item.score - a.item.score
+      || a.item.node.sourcePath.localeCompare(b.item.node.sourcePath))
+    .map(({ item }) => item)
     .filter((item, index, items) => items.findIndex((candidate) => candidate.node.sourcePath === item.node.sourcePath) === index);
   if (surface !== "docs" || quota <= 1) return ranked.slice(0, quota);
 
@@ -903,35 +1001,130 @@ function selectEvaluationSurfaceRepresentatives(
   return selected.slice(0, quota);
 }
 
-function compareEvaluationSurfaceCandidates(
-  a: ScoredNode,
-  b: ScoredNode,
-  surface: RouteSurface,
-  analysis: ReturnType<typeof analyzeTask>
-): number {
-  return evaluationArtifactFamilyAffinity(b.node.sourcePath, analysis) - evaluationArtifactFamilyAffinity(a.node.sourcePath, analysis)
-    || evaluationSurfacePriority(b, surface, analysis) - evaluationSurfacePriority(a, surface, analysis)
-    || evaluationSurfaceVersionPriority(b.node.sourcePath) - evaluationSurfaceVersionPriority(a.node.sourcePath)
-    || b.score - a.score
-    || a.node.sourcePath.localeCompare(b.node.sourcePath);
-}
-
 function evaluationArtifactFamilyAffinity(
   sourcePath: string,
   analysis: ReturnType<typeof analyzeTask>
 ): number {
-  const compactSourcePath = compactRouteValue(sourcePath);
-  const entityMatches = analysis.entities.filter((entity) => {
-    const compactEntity = compactRouteValue(entity);
-    return compactEntity.length > 0 && compactSourcePath.includes(compactEntity);
-  }).length;
+  const sourceTokens = artifactIdentityTokens(sourcePath);
+  const entityScore = analysis.entities.reduce((score, entity, index) => {
+    const entityTokens = artifactIdentityTokens(entity);
+    if (entityTokens.size < 2) return score;
+    const matched = [...entityTokens].filter((token) => sourceTokens.has(token)).length;
+    const coverage = matched / entityTokens.size;
+    const positionWeight = Math.max(180, 540 - index * 180);
+    if (coverage === 1) return score + positionWeight;
+    if (coverage >= 0.67) return score + Math.round(positionWeight * 0.65);
+    return score;
+  }, 0);
   const pathTokens = new Set(sourcePath.toLowerCase().match(/[a-z0-9]+/g) ?? []);
   const keywordMatches = analysis.keywords.filter(
     (keyword) => keyword.length > 2 && pathTokens.has(keyword.toLowerCase())
   ).length;
-  return entityMatches * 500
+  return entityScore
     + documentLeadAffinity(sourcePath, analysis.raw) * 10
     + keywordMatches * 30;
+}
+
+function selectEvaluationArtifactFamilyAnchor(
+  scored: ScoredNode[],
+  requested: RouteSurface[],
+  analysis: ReturnType<typeof analyzeTask>
+): string | undefined {
+  if (!isArtifactFamilyRequest(requested, analysis)) return undefined;
+  const anchor = [...scored]
+    .filter((item) => isEvaluationArtifactPath(item.node.sourcePath))
+    .map((item) => ({ item, affinity: evaluationArtifactFamilyAffinity(item.node.sourcePath, analysis) }))
+    .sort(
+      (a, b) => b.affinity - a.affinity
+        || b.item.score - a.item.score
+        || a.item.node.sourcePath.localeCompare(b.item.node.sourcePath)
+    )[0]?.item;
+  return anchor && artifactIdentityTokens(anchor.node.sourcePath).size >= 2
+    ? anchor.node.sourcePath
+    : undefined;
+}
+
+function isArtifactFamilyRequest(
+  requested: RouteSurface[],
+  analysis: ReturnType<typeof analyzeTask>
+): boolean {
+  const keywords = new Set(analysis.keywords);
+  return requested.includes("docs")
+    && (requested.includes("evidence") || requested.includes("test"))
+    && hasAnyKeyword(keywords, ["evidence", "protocol", "replication", "result", "report", "bilingual"]);
+}
+
+function isEvaluationArtifactPath(sourcePath: string): boolean {
+  const normalized = sourcePath.toLowerCase();
+  return /(^|\/)docs\/research\//.test(normalized)
+    || /(^|\/)scripts\/[^/]*(?:verify|benchmark|replication|route)[^/]*$/.test(normalized);
+}
+
+function artifactFamilyCohesion(sourcePath: string, anchorPath?: string): number {
+  if (!anchorPath) return 0;
+  const sourceTokens = artifactIdentityTokens(sourcePath);
+  const anchorTokens = artifactIdentityTokens(anchorPath);
+  if (!sourceTokens.size || !anchorTokens.size) return 0;
+  const shared = [...sourceTokens].filter((token) => anchorTokens.has(token)).length;
+  const coverage = shared / Math.min(sourceTokens.size, anchorTokens.size);
+  if (shared < 2 || coverage < 0.6) return shared * 10;
+  return Math.round(coverage * 600) + shared * 30;
+}
+
+function leadingArtifactEntityCoverage(
+  items: ScoredNode[],
+  analysis: ReturnType<typeof analyzeTask>
+): number | undefined {
+  const requested = requestedRouteSurfaces(analysis);
+  if (!isArtifactFamilyRequest(requested, analysis)) return undefined;
+  const leadingEntity = analysis.entities
+    .map((entity) => artifactIdentityTokens(entity))
+    .find((tokens) => tokens.size >= 2);
+  if (!leadingEntity) return undefined;
+  return items.reduce((highest, item) => {
+    const sourceTokens = artifactIdentityTokens(item.node.sourcePath);
+    const matched = [...leadingEntity].filter((token) => sourceTokens.has(token)).length;
+    return Math.max(highest, matched / leadingEntity.size);
+  }, 0);
+}
+
+const ARTIFACT_IDENTITY_IGNORED = new Set([
+  "alpha",
+  "cjs",
+  "cn",
+  "docs",
+  "english",
+  "evidence",
+  "json",
+  "markdown",
+  "md",
+  "protocol",
+  "report",
+  "research",
+  "result",
+  "script",
+  "scripts",
+  "simplified",
+  "verify",
+  "verification",
+  "zh"
+]);
+
+function artifactIdentityTokens(value: string): Set<string> {
+  return new Set(
+    (value.toLowerCase().match(/[a-z0-9]+/g) ?? [])
+      .map(normalizeArtifactIdentityToken)
+      .filter((token) => token.length > 2 && !/^\d+$/.test(token) && !ARTIFACT_IDENTITY_IGNORED.has(token))
+  );
+}
+
+function normalizeArtifactIdentityToken(token: string): string {
+  if (["post", "following", "followup"].includes(token)) return "after";
+  if (["routes", "routing"].includes(token)) return "route";
+  if (token === "repositories") return "repository";
+  if (token === "results") return "result";
+  if (token === "reports") return "report";
+  return token;
 }
 
 function evaluationSurfaceVersionPriority(sourcePath: string): number {
