@@ -647,6 +647,21 @@ export const $ZodDiscriminatedUnion = core.$constructor("$ZodDiscriminatedUnion"
       expect(evaluation.coverage.routeFocus).toBeGreaterThanOrEqual(0.75);
       expect(evaluation.calibration.status).not.toBe("overconfident");
 
+      const chineseTask = "冻结并执行 post-ember-ledger 跨平台路由回归，保留首份 JSON 证据，并编写英文和简体中文协议与结果报告。";
+      const chineseEvaluation = await evaluateRoute(root, chineseTask, {
+        changedFiles,
+        routeLimit: 9,
+        budget: 6000,
+        maxDrawers: 4
+      });
+      expect(classifyTask(chineseTask)).toBe("evaluation");
+      expect(chineseEvaluation.route.files).toEqual(expect.arrayContaining(changedFiles));
+      expect(chineseEvaluation.route.files).not.toEqual(expect.arrayContaining(oldFamily));
+      expect(chineseEvaluation.route.fileCount).toBeLessThanOrEqual(7);
+      expect(chineseEvaluation.coverage.changedFileCoverage).toBe(1);
+      expect(chineseEvaluation.coverage.routeFocus).toBeGreaterThanOrEqual(0.75);
+      expect(chineseEvaluation.calibration.status).not.toBe("overconfident");
+
       const unresolvedTask = "Freeze and execute the post-cobalt-harbor cross-platform routing regression; preserve the first JSON evidence and write English and Simplified Chinese protocol and result reports.";
       const unresolved = await evaluateRoute(root, unresolvedTask, {
         changedFiles: [
@@ -664,6 +679,133 @@ export const $ZodDiscriminatedUnion = core.$constructor("$ZodDiscriminatedUnion"
       expect(unresolved.coverage.changedFileCoverage).toBe(0);
       expect(unresolved.route.confidence).toBeLessThanOrEqual(0.15);
       expect(unresolved.calibration.status).not.toBe("overconfident");
+
+      const unresolvedChineseTask = "冻结并执行 post-cobalt-harbor 跨平台路由回归，保留首份 JSON 证据，并编写英文和简体中文协议与结果报告。";
+      const unresolvedChinese = await evaluateRoute(root, unresolvedChineseTask, {
+        changedFiles: unresolved.coverage.changedFiles,
+        routeLimit: 9,
+        budget: 6000,
+        maxDrawers: 4
+      });
+      expect(unresolvedChinese.coverage.changedFileCoverage).toBe(0);
+      expect(unresolvedChinese.route.confidence).toBeLessThanOrEqual(0.15);
+      expect(unresolvedChinese.calibration.status).not.toBe("overconfident");
+    });
+  });
+
+  it("keeps an explicit Latin artifact identity ahead of a Chinese-derived scope entity", async () => {
+    await withFixture("ts-api", async (root) => {
+      const changedFiles = [
+        "scripts/verify-route-precision-after-self-audit.cjs",
+        "docs/research/ROUTE_PRECISION_AFTER_SELF_AUDIT_PROTOCOL_0_4_ALPHA.md",
+        "docs/zh-CN/ROUTE_PRECISION_AFTER_SELF_AUDIT_PROTOCOL_0_4_ALPHA.md",
+        "docs/research/evidence/route-precision-after-self-audit-0.4-alpha.json",
+        "docs/research/ROUTE_PRECISION_AFTER_SELF_AUDIT_RESULT_0_4_ALPHA.md",
+        "docs/zh-CN/ROUTE_PRECISION_AFTER_SELF_AUDIT_RESULT_0_4_ALPHA.md"
+      ];
+      const oldFamily = [
+        "scripts/verify-route-precision-cross-repositories.cjs",
+        "docs/research/CROSS_REPOSITORY_ROUTE_PRECISION_PROTOCOL_0_4_ALPHA.md",
+        "docs/zh-CN/CROSS_REPOSITORY_ROUTE_PRECISION_PROTOCOL_0_4_ALPHA.md",
+        "docs/research/evidence/cross-repository-route-precision-0.4-alpha.json",
+        "docs/research/CROSS_REPOSITORY_ROUTE_PRECISION_RESULT_0_4_ALPHA.md",
+        "docs/zh-CN/CROSS_REPOSITORY_ROUTE_PRECISION_RESULT_0_4_ALPHA.md"
+      ];
+      const sources = new Map<string, string>();
+      for (const relativePath of changedFiles) {
+        sources.set(relativePath, `post-self-audit recursive artifact family: ${relativePath}\n`);
+      }
+      for (const relativePath of oldFamily) {
+        sources.set(relativePath, `cross-repository route precision artifact family: ${relativePath}\n`);
+      }
+      sources.set("tsconfig.base.json", JSON.stringify({ compilerOptions: { strict: true } }));
+      for (const [relativePath, source] of sources) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const task = "冻结并执行 post-self-audit 跨仓库路由回归，保留首份 JSON 证据，并编写英文和简体中文协议与结果报告。";
+      const evaluation = await evaluateRoute(root, task, {
+        changedFiles,
+        routeLimit: 9,
+        budget: 6000,
+        maxDrawers: 4
+      });
+
+      expect(classifyTask(task)).toBe("evaluation");
+      expect(evaluation.route.files).toEqual(expect.arrayContaining(changedFiles));
+      expect(evaluation.route.files).not.toEqual(expect.arrayContaining(oldFamily));
+      expect(evaluation.route.fileCount).toBeLessThanOrEqual(7);
+      expect(evaluation.coverage.changedFileCoverage).toBe(1);
+      expect(evaluation.coverage.routeFocus).toBeGreaterThanOrEqual(0.75);
+      expect(evaluation.calibration.status).not.toBe("overconfident");
+
+      const unresolvedTask = "冻结并执行 post-cobalt-harbor 跨仓库路由回归，保留首份 JSON 证据，并编写英文和简体中文协议与结果报告。";
+      const unresolved = await evaluateRoute(root, unresolvedTask, {
+        changedFiles: changedFiles.map((relativePath) => relativePath.replaceAll("SELF_AUDIT", "COBALT_HARBOR").replaceAll("self-audit", "cobalt-harbor")),
+        routeLimit: 9,
+        budget: 6000,
+        maxDrawers: 4
+      });
+      expect(unresolved.coverage.changedFileCoverage).toBe(0);
+      expect(unresolved.route.confidence).toBeLessThanOrEqual(0.15);
+      expect(unresolved.calibration.status).not.toBe("overconfident");
+    });
+  });
+
+  it("keeps a product repair about a named artifact family on implementation, focused test, and generated bundle", async () => {
+    await withFixture("ts-api", async (root) => {
+      const changedFiles = [
+        "packages/core/src/router/route-planner.ts",
+        "packages/core/test/router.test.ts",
+        "plugins/vertex-palace/mcp/server.cjs"
+      ];
+      const sources = new Map<string, string>([
+        [changedFiles[0], "export function prioritizeExplicitArtifactIdentity() { return 'post-self-audit'; }\n"],
+        [changedFiles[1], "describe('Chinese recursive artifact-family router', () => it('keeps explicit identity priority and confidence caps', () => true));\n"],
+        [changedFiles[2], "module.exports = { generated: true, artifactIdentityPriority: true };\n"],
+        ["packages/mcp/src/server.ts", "export const startMcpServer = () => 'artifact identity routing';\n"],
+        ["tsup.plugin-mcp.config.ts", "import { defineConfig } from 'tsup';\nexport default defineConfig({ entry: { server: 'packages/mcp/src/server.ts' }, outDir: 'plugins/vertex-palace/mcp', outExtension: () => ({ js: '.cjs' }) });\n"],
+        ["packages/core/src/router/route-scorer.ts", "export function scoreGenericRouteConfidence() { return 0.8; }\n"],
+        ["packages/core/src/router/route-expander.ts", "export function expandGenericRoute() { return []; }\n"],
+        ["packages/core/src/packer/context-packer.ts", "export function packGenericContext() { return {}; }\n"],
+        ["packages/core/test/route-expander.test.ts", "describe('route expansion', () => it('expands graph neighbors', () => true));\n"],
+        ["docs/research/ROUTE_PRECISION_AFTER_SELF_AUDIT_RESULT_0_4_ALPHA.md", "# Historical post-self-audit result\n"],
+        ["docs/zh-CN/ROUTE_PRECISION_AFTER_SELF_AUDIT_RESULT_0_4_ALPHA.md", "# Historical post-self-audit result in Simplified Chinese\n"]
+      ]);
+      for (const [relativePath, source] of sources) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const task = "Fix the Simplified Chinese recursive artifact-family route so the explicit post-self-audit identity outranks a derived cross-repository scope entity, cap confidence for a missing Chinese family, preserve English and product regressions, and rebuild the generated MCP bundle.";
+      const analysis = analyzeTask(task);
+      const evaluation = await evaluateRoute(root, task, {
+        changedFiles,
+        routeLimit: 9,
+        budget: 6000,
+        maxDrawers: 4
+      });
+
+      expect(classifyTask(task)).toBe("bugfix");
+      expect(requestedRouteSurfaces(analysis)).toEqual(expect.arrayContaining(["implementation", "test", "mcp"]));
+      expect(requestedRouteSurfaces(analysis)).not.toContain("docs");
+      expect(evaluation.route.files).toEqual(expect.arrayContaining(changedFiles));
+      expect(evaluation.route.files).not.toEqual(expect.arrayContaining([
+        "packages/core/src/router/route-expander.ts",
+        "packages/core/src/packer/context-packer.ts",
+        "packages/core/test/route-expander.test.ts",
+        "docs/research/ROUTE_PRECISION_AFTER_SELF_AUDIT_RESULT_0_4_ALPHA.md",
+        "docs/zh-CN/ROUTE_PRECISION_AFTER_SELF_AUDIT_RESULT_0_4_ALPHA.md"
+      ]));
+      expect(evaluation.route.fileCount).toBeLessThanOrEqual(4);
+      expect(evaluation.coverage.changedFileCoverage).toBe(1);
+      expect(evaluation.coverage.routeFocus).toBeGreaterThanOrEqual(0.75);
+      expect(evaluation.calibration.status).not.toBe("overconfident");
     });
   });
 

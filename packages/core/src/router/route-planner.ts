@@ -122,7 +122,7 @@ function ensureBugfixVerificationCoverage(
   limit: number
 ): ScoredNode[] {
   if (requested.includes("implementation") && requested.length >= 3) {
-    return ensureGeneralSurfaceCoverage(selected, scored, requested, analysis, limit);
+    return ensureGeneralSurfaceCoverage(selected, scored, requested, analysis, limit, false);
   }
   const requiredSurfaces = requested.filter((surface) => ["test", "config", "docs", "shared"].includes(surface));
   if (!requiredSurfaces.length) return selected;
@@ -200,7 +200,8 @@ function ensureGeneralSurfaceCoverage(
   scored: ScoredNode[],
   requested: RouteSurface[],
   analysis: ReturnType<typeof analyzeTask>,
-  limit: number
+  limit: number,
+  includeSupplemental = true
 ): ScoredNode[] {
   if (requested.length < 2) return selected;
   const result: ScoredNode[] = [];
@@ -223,7 +224,9 @@ function ensureGeneralSurfaceCoverage(
   }
 
   const roleCoverageIsDense = result.length >= Math.ceil(limit * 0.75);
-  const supplementalLimit = roleCoverageIsDense ? 0 : Math.min(2, Math.max(0, limit - result.length));
+  const supplementalLimit = !includeSupplemental || roleCoverageIsDense
+    ? 0
+    : Math.min(2, Math.max(0, limit - result.length));
   let supplementalCount = 0;
   for (const item of selected) {
     if (supplementalCount >= supplementalLimit) break;
@@ -353,6 +356,17 @@ function generalSurfacePriority(
   if (surface === "test") {
     priority += item.node.kind === "test" ? 100 : -100;
     if (isDirectTestCandidate(item)) priority += explicitTestConceptAffinity(sourcePath, analysis.raw) * 180;
+    const routingTestMatchesIntent = (
+      /(?:^|\/)router\.(?:test|spec)\./.test(sourcePath)
+      && (hasRoutePlanningIntent(analysis.raw) || hasRouteScoringIntent(analysis.raw) || hasTaskAnalysisIntent(analysis.raw))
+    ) || (
+      /(?:^|\/)route-planner\.(?:test|spec)\./.test(sourcePath)
+      && hasRoutePlanningIntent(analysis.raw)
+    ) || (
+      /(?:^|\/)route-scorer\.(?:test|spec)\./.test(sourcePath)
+      && hasRouteScoringIntent(analysis.raw)
+    );
+    if (routingTestMatchesIntent) priority += 260;
     if (isVerificationScriptPath(sourcePath)) {
       priority += requestedVerificationScriptQuota(analysis) > 0 ? 220 : -120;
       priority += taskPathAffinity(sourcePath, analysis.raw) * 100;
@@ -940,12 +954,13 @@ function selectEvaluationSurfaceRepresentatives(
   quota: number,
   artifactFamilyAnchor?: string
 ): ScoredNode[] {
+  const artifactEntities = orderedArtifactIdentityEntities(analysis);
   const ranked = [...candidates]
     .filter((item) => !(surface === "docs" && matchesRouteSurface(item.node, "evidence")))
     .map((item) => ({
       item,
       cohesion: artifactFamilyCohesion(item.node.sourcePath, artifactFamilyAnchor),
-      familyAffinity: evaluationArtifactFamilyAffinity(item.node.sourcePath, analysis),
+      familyAffinity: evaluationArtifactFamilyAffinity(item.node.sourcePath, analysis, artifactEntities),
       surfacePriority: evaluationSurfacePriority(item, surface, analysis),
       versionPriority: evaluationSurfaceVersionPriority(item.node.sourcePath)
     }))
@@ -1003,14 +1018,13 @@ function selectEvaluationSurfaceRepresentatives(
 
 function evaluationArtifactFamilyAffinity(
   sourcePath: string,
-  analysis: ReturnType<typeof analyzeTask>
+  analysis: ReturnType<typeof analyzeTask>,
+  artifactEntities = orderedArtifactIdentityEntities(analysis)
 ): number {
   const sourceTokens = artifactIdentityTokens(sourcePath);
-  const entityScore = analysis.entities.reduce((score, entity, index) => {
-    const entityTokens = artifactIdentityTokens(entity);
-    if (entityTokens.size < 2) return score;
-    const matched = [...entityTokens].filter((token) => sourceTokens.has(token)).length;
-    const coverage = matched / entityTokens.size;
+  const entityScore = artifactEntities.reduce((score, entity, index) => {
+    const matched = [...entity.tokens].filter((token) => sourceTokens.has(token)).length;
+    const coverage = matched / entity.tokens.size;
     const positionWeight = Math.max(180, 540 - index * 180);
     if (coverage === 1) return score + positionWeight;
     if (coverage >= 0.67) return score + Math.round(positionWeight * 0.65);
@@ -1031,9 +1045,13 @@ function selectEvaluationArtifactFamilyAnchor(
   analysis: ReturnType<typeof analyzeTask>
 ): string | undefined {
   if (!isArtifactFamilyRequest(requested, analysis)) return undefined;
+  const artifactEntities = orderedArtifactIdentityEntities(analysis);
   const anchor = [...scored]
     .filter((item) => isEvaluationArtifactPath(item.node.sourcePath))
-    .map((item) => ({ item, affinity: evaluationArtifactFamilyAffinity(item.node.sourcePath, analysis) }))
+    .map((item) => ({
+      item,
+      affinity: evaluationArtifactFamilyAffinity(item.node.sourcePath, analysis, artifactEntities)
+    }))
     .sort(
       (a, b) => b.affinity - a.affinity
         || b.item.score - a.item.score
@@ -1077,9 +1095,7 @@ function leadingArtifactEntityCoverage(
 ): number | undefined {
   const requested = requestedRouteSurfaces(analysis);
   if (!isArtifactFamilyRequest(requested, analysis)) return undefined;
-  const leadingEntity = analysis.entities
-    .map((entity) => artifactIdentityTokens(entity))
-    .find((tokens) => tokens.size >= 2);
+  const leadingEntity = orderedArtifactIdentityEntities(analysis)[0]?.tokens;
   if (!leadingEntity) return undefined;
   return items.reduce((highest, item) => {
     const sourceTokens = artifactIdentityTokens(item.node.sourcePath);
@@ -1109,6 +1125,34 @@ const ARTIFACT_IDENTITY_IGNORED = new Set([
   "verification",
   "zh"
 ]);
+
+type ArtifactIdentityEntity = {
+  explicitIndex: number;
+  originalIndex: number;
+  tokens: Set<string>;
+};
+
+function orderedArtifactIdentityEntities(
+  analysis: ReturnType<typeof analyzeTask>
+): ArtifactIdentityEntity[] {
+  const raw = analysis.raw.toLowerCase();
+  return analysis.entities
+    .map((entity, originalIndex) => ({
+      explicitIndex: raw.indexOf(entity.toLowerCase()),
+      originalIndex,
+      tokens: artifactIdentityTokens(entity)
+    }))
+    .filter((entity) => entity.tokens.size >= 2)
+    .sort((a, b) => {
+      const aExplicit = a.explicitIndex >= 0;
+      const bExplicit = b.explicitIndex >= 0;
+      if (aExplicit !== bExplicit) return aExplicit ? -1 : 1;
+      if (aExplicit && bExplicit && a.explicitIndex !== b.explicitIndex) {
+        return a.explicitIndex - b.explicitIndex;
+      }
+      return b.tokens.size - a.tokens.size || a.originalIndex - b.originalIndex;
+    });
+}
 
 function artifactIdentityTokens(value: string): Set<string> {
   return new Set(

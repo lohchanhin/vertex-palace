@@ -363,7 +363,10 @@ export function requestedRouteSurfaces(analysis: TaskAnalysis): RouteSurface[] {
     && hasAny(keywords, ["config", "plan", "protocol", "frozen"]);
   if (explicitVerification || evidencePinVerification || empiricalReplication) requested.push("test");
   if (hasAny(keywords, ["config", "configuration", "migration", "migrate", "migrated", "plan", "protocol", "frozen"])) requested.push("config");
-  if (hasAny(keywords, ["doc", "docs", "documentation", "readme", "report", "reports", "bilingual", "localization", "migration", "migrate", "migrated"])) requested.push("docs");
+  if (
+    hasDocumentationSurfaceIntent(analysis.raw)
+    || hasAny(keywords, ["migration", "migrate", "migrated"])
+  ) requested.push("docs");
   if (hasAny(keywords, ["ci", "workflow", "workflows", "actions"])) requested.push("ci");
   if (isMachineEvidenceArtifactRequest(analysis.raw)) requested.push("evidence");
   if (publication.releaseIntent || (isTypeDeclarationIntent(analysis) && requestsTypeTestSetup(analysis))) requested.push("package");
@@ -391,6 +394,13 @@ export function requestedRouteSurfaces(analysis: TaskAnalysis): RouteSurface[] {
 function hasExplicitCodeChangeIntent(task: string): boolean {
   return /^\s*(?:add|build|create|debug|enhance|fix|implement|improve|optimi[sz]e|refactor|repair|resolve|support|update)\b/i.test(task)
     || /^\s*(?:新增|增加|建立|创建|創建|实现|實作|支援|支持|修复|修正|修補|修补|解决|解決|重构|重構|优化|優化|改善|改进|改進|更新)/.test(task);
+}
+
+function hasDocumentationSurfaceIntent(task: string): boolean {
+  const english = /\b(?:documentation|docs?|readme|reports?|research\s+(?:records?|reports?|evidence))\b/i;
+  const bilingualArtifact = /\bbilingual\b.{0,80}\b(?:documentation|docs?|records?|reports?|evidence|instructions?|guides?)\b/i;
+  const chinese = /(?:说明|說明|文档|文檔|报告|報告|研究记录|研究記錄)/;
+  return english.test(task) || bilingualArtifact.test(task) || chinese.test(task);
 }
 
 function isMachineEvidenceArtifactRequest(task: string): boolean {
