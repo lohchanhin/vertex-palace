@@ -1,0 +1,1180 @@
+{
+  "schemaVersion": 1,
+  "studyId": "recursive-route-generalization-regression-0.4-alpha",
+  "generatedAt": "2026-07-22T18:19:10.309Z",
+  "claimBoundary": "Preregistered seen-target static routing regression and candidate self-audit only; not held-out and not an end-to-end Agent performance benchmark.",
+  "status": "failed",
+  "failures": [
+    "candidate-audit: recursive-artifact-family-zh-cn: changed-file coverage differed from 1.00",
+    "candidate-audit: recursive-artifact-family-zh-cn: accepted-route precision fell below 1.00",
+    "candidate-audit: recursive-artifact-family-zh-cn: route focus fell below 0.85",
+    "candidate-audit: recursive-artifact-family-zh-cn: route was overconfident against observed coverage"
+  ],
+  "candidate": {
+    "productCommit": "716a6c4e2abb6432d59a17db14a940e90918fe2b",
+    "validationHarnessCommit": "ef4fb01c0ecc1352d72a49466a777d6f0c691acc",
+    "cliPath": "dist/palace.cjs",
+    "frozenPaths": [
+      "packages",
+      "plugins/vertex-palace/mcp",
+      "package.json",
+      "pnpm-lock.yaml",
+      "pnpm-workspace.yaml",
+      "tsconfig.base.json",
+      "tsconfig.json",
+      "tsup.package-cli.config.ts",
+      "tsup.plugin-mcp.config.ts",
+      "scripts/trim-generated.cjs"
+    ]
+  },
+  "environment": {
+    "platform": "win32",
+    "arch": "x64",
+    "node": "v24.13.1",
+    "npm": "11.8.0",
+    "git": "git version 2.53.0.windows.1"
+  },
+  "protocol": {
+    "externalRepositorySet": "previously used replication targets",
+    "candidateTargetSet": "previously observed artifact families, compound repairs, and one negative control",
+    "heldOut": false,
+    "selectionLockedBeforeFirstFormalRun": true,
+    "outputCreateOnly": true,
+    "budget": 6000,
+    "routeLimit": 9,
+    "maxDrawers": 4,
+    "repetitions": 2,
+    "gates": {
+      "deterministicRoutes": true,
+      "expectedChangedFileCoverage": true,
+      "acceptedRoutePrecisionAtLeast": 1,
+      "overconfidentRoutes": 0,
+      "contextWithinBudget": true,
+      "trackedWorktreeClean": true,
+      "candidateFreshAfterExplicitIndex": true,
+      "artifactFamilyFocusAtLeast": 0.85,
+      "productRouteFocus": 1,
+      "missingFamilyConfidenceAtMost": 0.15
+    }
+  },
+  "externalAggregate": {
+    "targets": 3,
+    "trials": 6,
+    "completedTrials": 6,
+    "passedTargets": 3,
+    "macroChangedFileCoverage": 1,
+    "macroRouteFocus": 0.89,
+    "macroAcceptedRoutePrecision": 1,
+    "overconfidentTrials": 0,
+    "maxContextEstimatedTokens": 2277
+  },
+  "repositories": [
+    {
+      "name": "zod",
+      "kind": "external-seen-regression",
+      "language": "TypeScript",
+      "url": "https://github.com/colinhacks/zod.git",
+      "routeCommit": "912f0f51b0ced654d0069741e7160834dca742ee",
+      "groundTruthCommit": null,
+      "oracleSource": "previously frozen target-file replication",
+      "task": "A codec-backed discriminated union decodes correctly but fails when encoding because input and output discriminator values differ. Preserve fast decoding while allowing backward encoding to select the right option, and update the focused regression tests.",
+      "changedFiles": [
+        "packages/zod/src/v4/core/schemas.ts",
+        "packages/zod/src/v4/classic/tests/discriminated-unions.test.ts"
+      ],
+      "historyChangedFiles": null,
+      "acceptedRouteFiles": [
+        "packages/zod/src/v4/core/schemas.ts",
+        "packages/zod/src/v4/classic/tests/discriminated-unions.test.ts"
+      ],
+      "gates": {
+        "expectedTaskType": null,
+        "expectedCoverage": 1,
+        "minimumRouteFocus": null,
+        "maximumRouteFiles": null,
+        "minimumAcceptedRoutePrecision": 1,
+        "maximumConfidence": null
+      },
+      "status": "passed",
+      "failures": [],
+      "deterministicRoutes": true,
+      "trackedWorktreeClean": true,
+      "trials": [
+        {
+          "trial": 1,
+          "status": "completed",
+          "evaluationCacheState": "cold-or-explicitly-indexed",
+          "contextCacheState": "warm-index-after-evaluation",
+          "evaluationElapsedMs": 7615,
+          "contextElapsedMs": 1820,
+          "mode": "full-palace",
+          "taskType": "bugfix",
+          "routeFiles": [
+            "packages/zod/src/v4/core/schemas.ts",
+            "packages/zod/src/v4/classic/tests/discriminated-unions.test.ts"
+          ],
+          "routeFileCount": 2,
+          "changedFileCoverage": 1,
+          "routeFocus": 1,
+          "routeConfidence": 0.87,
+          "calibration": {
+            "status": "well-calibrated",
+            "predictedConfidence": 0.87,
+            "observedCoverage": 1,
+            "error": 0.13
+          },
+          "acceptedRoutePrecision": 1,
+          "unexpectedRouteFiles": [],
+          "contextEstimatedTokens": 2277,
+          "contextBytes": 9108,
+          "selectedExcludedOverlap": []
+        },
+        {
+          "trial": 2,
+          "status": "completed",
+          "evaluationCacheState": "warm-index",
+          "contextCacheState": "warm-index-after-evaluation",
+          "evaluationElapsedMs": 2480,
+          "contextElapsedMs": 1812,
+          "mode": "full-palace",
+          "taskType": "bugfix",
+          "routeFiles": [
+            "packages/zod/src/v4/core/schemas.ts",
+            "packages/zod/src/v4/classic/tests/discriminated-unions.test.ts"
+          ],
+          "routeFileCount": 2,
+          "changedFileCoverage": 1,
+          "routeFocus": 1,
+          "routeConfidence": 0.87,
+          "calibration": {
+            "status": "well-calibrated",
+            "predictedConfidence": 0.87,
+            "observedCoverage": 1,
+            "error": 0.13
+          },
+          "acceptedRoutePrecision": 1,
+          "unexpectedRouteFiles": [],
+          "contextEstimatedTokens": 2277,
+          "contextBytes": 9108,
+          "selectedExcludedOverlap": []
+        }
+      ]
+    },
+    {
+      "name": "requests",
+      "kind": "external-seen-regression",
+      "language": "Python",
+      "url": "https://github.com/psf/requests.git",
+      "routeCommit": "f361ead047be5cb873174218582f7d8b9fcd9f49",
+      "groundTruthCommit": null,
+      "oracleSource": "previously frozen target-file replication",
+      "task": "Fix redirect authorization handling so credentials are preserved for same-host default-port redirects and HTTP-to-HTTPS upgrades, but stripped on host, downgrade, or nonstandard port changes. Update the focused regression tests.",
+      "changedFiles": [
+        "src/requests/sessions.py",
+        "tests/test_requests.py"
+      ],
+      "historyChangedFiles": null,
+      "acceptedRouteFiles": [
+        "src/requests/sessions.py",
+        "tests/test_requests.py"
+      ],
+      "gates": {
+        "expectedTaskType": null,
+        "expectedCoverage": 1,
+        "minimumRouteFocus": null,
+        "maximumRouteFiles": null,
+        "minimumAcceptedRoutePrecision": 1,
+        "maximumConfidence": null
+      },
+      "status": "passed",
+      "failures": [],
+      "deterministicRoutes": true,
+      "trackedWorktreeClean": true,
+      "trials": [
+        {
+          "trial": 1,
+          "status": "completed",
+          "evaluationCacheState": "cold-or-explicitly-indexed",
+          "contextCacheState": "warm-index-after-evaluation",
+          "evaluationElapsedMs": 1385,
+          "contextElapsedMs": 671,
+          "mode": "full-palace",
+          "taskType": "bugfix",
+          "routeFiles": [
+            "src/requests/sessions.py",
+            "tests/test_requests.py"
+          ],
+          "routeFileCount": 2,
+          "changedFileCoverage": 1,
+          "routeFocus": 1,
+          "routeConfidence": 0.72,
+          "calibration": {
+            "status": "underconfident",
+            "predictedConfidence": 0.72,
+            "observedCoverage": 1,
+            "error": 0.28
+          },
+          "acceptedRoutePrecision": 1,
+          "unexpectedRouteFiles": [],
+          "contextEstimatedTokens": 1958,
+          "contextBytes": 7832,
+          "selectedExcludedOverlap": []
+        },
+        {
+          "trial": 2,
+          "status": "completed",
+          "evaluationCacheState": "warm-index",
+          "contextCacheState": "warm-index-after-evaluation",
+          "evaluationElapsedMs": 807,
+          "contextElapsedMs": 676,
+          "mode": "full-palace",
+          "taskType": "bugfix",
+          "routeFiles": [
+            "src/requests/sessions.py",
+            "tests/test_requests.py"
+          ],
+          "routeFileCount": 2,
+          "changedFileCoverage": 1,
+          "routeFocus": 1,
+          "routeConfidence": 0.72,
+          "calibration": {
+            "status": "underconfident",
+            "predictedConfidence": 0.72,
+            "observedCoverage": 1,
+            "error": 0.28
+          },
+          "acceptedRoutePrecision": 1,
+          "unexpectedRouteFiles": [],
+          "contextEstimatedTokens": 1958,
+          "contextBytes": 7832,
+          "selectedExcludedOverlap": []
+        }
+      ]
+    },
+    {
+      "name": "p-limit",
+      "kind": "external-seen-regression",
+      "language": "JavaScript with TypeScript declarations",
+      "url": "https://github.com/sindresorhus/p-limit.git",
+      "routeCommit": "c944e4a4363ff41a7202d5dec346cc174c3ecf49",
+      "groundTruthCommit": "ccb80b2721a6a4a27ce5ad7721fe939162a35b31",
+      "oracleSource": "real Git-history diff",
+      "task": "Fix the overly permissive public limitFunction type. It currently accepts synchronous functions even though limiting synchronous execution has no effect. Restrict it to asynchronous functions, preserve inferred argument and return types, and add focused compile-time regression coverage using the repository's existing type-test setup.",
+      "changedFiles": [
+        "index.d.ts",
+        "index.test-d.ts"
+      ],
+      "historyChangedFiles": [
+        "index.d.ts",
+        "index.test-d.ts"
+      ],
+      "acceptedRouteFiles": [
+        "index.d.ts",
+        "index.test-d.ts",
+        "package.json"
+      ],
+      "gates": {
+        "expectedTaskType": null,
+        "expectedCoverage": 1,
+        "minimumRouteFocus": null,
+        "maximumRouteFiles": null,
+        "minimumAcceptedRoutePrecision": 1,
+        "maximumConfidence": null
+      },
+      "status": "passed",
+      "failures": [],
+      "deterministicRoutes": true,
+      "trackedWorktreeClean": true,
+      "trials": [
+        {
+          "trial": 1,
+          "status": "completed",
+          "evaluationCacheState": "cold-or-explicitly-indexed",
+          "contextCacheState": "warm-index-after-evaluation",
+          "evaluationElapsedMs": 643,
+          "contextElapsedMs": 444,
+          "mode": "full-palace",
+          "taskType": "bugfix",
+          "routeFiles": [
+            "index.d.ts",
+            "index.test-d.ts",
+            "package.json"
+          ],
+          "routeFileCount": 3,
+          "changedFileCoverage": 1,
+          "routeFocus": 0.67,
+          "routeConfidence": 0.55,
+          "calibration": {
+            "status": "underconfident",
+            "predictedConfidence": 0.55,
+            "observedCoverage": 1,
+            "error": 0.45
+          },
+          "acceptedRoutePrecision": 1,
+          "unexpectedRouteFiles": [],
+          "contextEstimatedTokens": 2159,
+          "contextBytes": 8633,
+          "selectedExcludedOverlap": []
+        },
+        {
+          "trial": 2,
+          "status": "completed",
+          "evaluationCacheState": "warm-index",
+          "contextCacheState": "warm-index-after-evaluation",
+          "evaluationElapsedMs": 500,
+          "contextElapsedMs": 440,
+          "mode": "full-palace",
+          "taskType": "bugfix",
+          "routeFiles": [
+            "index.d.ts",
+            "index.test-d.ts",
+            "package.json"
+          ],
+          "routeFileCount": 3,
+          "changedFileCoverage": 1,
+          "routeFocus": 0.67,
+          "routeConfidence": 0.55,
+          "calibration": {
+            "status": "underconfident",
+            "predictedConfidence": 0.55,
+            "observedCoverage": 1,
+            "error": 0.45
+          },
+          "acceptedRoutePrecision": 1,
+          "unexpectedRouteFiles": [],
+          "contextEstimatedTokens": 2159,
+          "contextBytes": 8633,
+          "selectedExcludedOverlap": []
+        }
+      ]
+    }
+  ],
+  "candidateAudit": {
+    "repositoryCommit": "716a6c4e2abb6432d59a17db14a940e90918fe2b",
+    "status": "failed",
+    "failures": [
+      "recursive-artifact-family-zh-cn: changed-file coverage differed from 1.00",
+      "recursive-artifact-family-zh-cn: accepted-route precision fell below 1.00",
+      "recursive-artifact-family-zh-cn: route focus fell below 0.85",
+      "recursive-artifact-family-zh-cn: route was overconfident against observed coverage"
+    ],
+    "statusAfterExplicitIndex": {
+      "root": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-recursive-route-generalization-qt8VPq\\vertex-palace-candidate",
+      "palaceRoot": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-recursive-route-generalization-qt8VPq\\vertex-palace-candidate\\.palace",
+      "initialized": true,
+      "indexed": true,
+      "stale": false,
+      "nodeCount": 1780,
+      "edgeCount": 5990,
+      "roomCount": 41,
+      "lastIndexedAt": "2026-07-22T18:18:31.355Z",
+      "configPath": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-recursive-route-generalization-qt8VPq\\vertex-palace-candidate\\.palace\\palace.yml"
+    },
+    "generatedArtifactFixture": "dist/palace.cjs copied from the frozen candidate build",
+    "trackedWorktreeClean": true,
+    "aggregate": {
+      "targets": 7,
+      "trials": 14,
+      "completedTrials": 14,
+      "passedTargets": 6,
+      "macroChangedFileCoverage": 0.714,
+      "macroRouteFocus": 0.654,
+      "macroAcceptedRoutePrecision": 0.878,
+      "overconfidentTrials": 2,
+      "maxContextEstimatedTokens": 5481
+    },
+    "targets": [
+      {
+        "name": "old-artifact-family-en",
+        "kind": "candidate-self-audit",
+        "language": "English",
+        "url": "local frozen candidate worktree",
+        "routeCommit": "716a6c4e2abb6432d59a17db14a940e90918fe2b",
+        "groundTruthCommit": null,
+        "oracleSource": "frozen original cross-repository artifact family",
+        "task": "Freeze and execute a cross-repository route precision replication across Zod, Requests, and p-limit; preserve the first JSON evidence and write English and Simplified Chinese result reports.",
+        "changedFiles": [
+          "scripts/verify-route-precision-cross-repositories.cjs",
+          "docs/research/CROSS_REPOSITORY_ROUTE_PRECISION_PROTOCOL_0_4_ALPHA.md",
+          "docs/zh-CN/CROSS_REPOSITORY_ROUTE_PRECISION_PROTOCOL_0_4_ALPHA.md",
+          "docs/research/evidence/cross-repository-route-precision-0.4-alpha.json",
+          "docs/research/CROSS_REPOSITORY_ROUTE_PRECISION_RESULT_0_4_ALPHA.md",
+          "docs/zh-CN/CROSS_REPOSITORY_ROUTE_PRECISION_RESULT_0_4_ALPHA.md"
+        ],
+        "historyChangedFiles": null,
+        "acceptedRouteFiles": [
+          "scripts/verify-route-precision-cross-repositories.cjs",
+          "docs/research/CROSS_REPOSITORY_ROUTE_PRECISION_PROTOCOL_0_4_ALPHA.md",
+          "docs/zh-CN/CROSS_REPOSITORY_ROUTE_PRECISION_PROTOCOL_0_4_ALPHA.md",
+          "docs/research/evidence/cross-repository-route-precision-0.4-alpha.json",
+          "docs/research/CROSS_REPOSITORY_ROUTE_PRECISION_RESULT_0_4_ALPHA.md",
+          "docs/zh-CN/CROSS_REPOSITORY_ROUTE_PRECISION_RESULT_0_4_ALPHA.md",
+          "tsconfig.base.json"
+        ],
+        "gates": {
+          "expectedTaskType": "evaluation",
+          "expectedCoverage": 1,
+          "minimumRouteFocus": 0.85,
+          "maximumRouteFiles": 7,
+          "minimumAcceptedRoutePrecision": 1,
+          "maximumConfidence": null
+        },
+        "status": "passed",
+        "failures": [],
+        "deterministicRoutes": true,
+        "trackedWorktreeClean": true,
+        "trials": [
+          {
+            "trial": 1,
+            "status": "completed",
+            "evaluationCacheState": "cold-or-explicitly-indexed",
+            "contextCacheState": "warm-index-after-evaluation",
+            "evaluationElapsedMs": 1767,
+            "contextElapsedMs": 1156,
+            "mode": "full-palace",
+            "taskType": "evaluation",
+            "routeFiles": [
+              "docs/research/evidence/cross-repository-route-precision-0.4-alpha.json",
+              "docs/research/CROSS_REPOSITORY_ROUTE_PRECISION_RESULT_0_4_ALPHA.md",
+              "docs/research/CROSS_REPOSITORY_ROUTE_PRECISION_PROTOCOL_0_4_ALPHA.md",
+              "docs/zh-CN/CROSS_REPOSITORY_ROUTE_PRECISION_PROTOCOL_0_4_ALPHA.md",
+              "docs/zh-CN/CROSS_REPOSITORY_ROUTE_PRECISION_RESULT_0_4_ALPHA.md",
+              "scripts/verify-route-precision-cross-repositories.cjs",
+              "tsconfig.base.json"
+            ],
+            "routeFileCount": 7,
+            "changedFileCoverage": 1,
+            "routeFocus": 0.86,
+            "routeConfidence": 0.75,
+            "calibration": {
+              "status": "underconfident",
+              "predictedConfidence": 0.75,
+              "observedCoverage": 1,
+              "error": 0.25
+            },
+            "acceptedRoutePrecision": 1,
+            "unexpectedRouteFiles": [],
+            "contextEstimatedTokens": 4828,
+            "contextBytes": 19309,
+            "selectedExcludedOverlap": []
+          },
+          {
+            "trial": 2,
+            "status": "completed",
+            "evaluationCacheState": "warm-index",
+            "contextCacheState": "warm-index-after-evaluation",
+            "evaluationElapsedMs": 1513,
+            "contextElapsedMs": 1277,
+            "mode": "full-palace",
+            "taskType": "evaluation",
+            "routeFiles": [
+              "docs/research/evidence/cross-repository-route-precision-0.4-alpha.json",
+              "docs/research/CROSS_REPOSITORY_ROUTE_PRECISION_RESULT_0_4_ALPHA.md",
+              "docs/research/CROSS_REPOSITORY_ROUTE_PRECISION_PROTOCOL_0_4_ALPHA.md",
+              "docs/zh-CN/CROSS_REPOSITORY_ROUTE_PRECISION_PROTOCOL_0_4_ALPHA.md",
+              "docs/zh-CN/CROSS_REPOSITORY_ROUTE_PRECISION_RESULT_0_4_ALPHA.md",
+              "scripts/verify-route-precision-cross-repositories.cjs",
+              "tsconfig.base.json"
+            ],
+            "routeFileCount": 7,
+            "changedFileCoverage": 1,
+            "routeFocus": 0.86,
+            "routeConfidence": 0.75,
+            "calibration": {
+              "status": "underconfident",
+              "predictedConfidence": 0.75,
+              "observedCoverage": 1,
+              "error": 0.25
+            },
+            "acceptedRoutePrecision": 1,
+            "unexpectedRouteFiles": [],
+            "contextEstimatedTokens": 4828,
+            "contextBytes": 19309,
+            "selectedExcludedOverlap": []
+          }
+        ]
+      },
+      {
+        "name": "old-artifact-family-zh-cn",
+        "kind": "candidate-self-audit",
+        "language": "Simplified Chinese",
+        "url": "local frozen candidate worktree",
+        "routeCommit": "716a6c4e2abb6432d59a17db14a940e90918fe2b",
+        "groundTruthCommit": null,
+        "oracleSource": "frozen original cross-repository artifact family",
+        "task": "冻结并执行 Zod、Requests、p-limit 跨仓库路由精度复现实验，保留首份 JSON 证据，并编写英文和简体中文结果报告。",
+        "changedFiles": [
+          "scripts/verify-route-precision-cross-repositories.cjs",
+          "docs/research/CROSS_REPOSITORY_ROUTE_PRECISION_PROTOCOL_0_4_ALPHA.md",
+          "docs/zh-CN/CROSS_REPOSITORY_ROUTE_PRECISION_PROTOCOL_0_4_ALPHA.md",
+          "docs/research/evidence/cross-repository-route-precision-0.4-alpha.json",
+          "docs/research/CROSS_REPOSITORY_ROUTE_PRECISION_RESULT_0_4_ALPHA.md",
+          "docs/zh-CN/CROSS_REPOSITORY_ROUTE_PRECISION_RESULT_0_4_ALPHA.md"
+        ],
+        "historyChangedFiles": null,
+        "acceptedRouteFiles": [
+          "scripts/verify-route-precision-cross-repositories.cjs",
+          "docs/research/CROSS_REPOSITORY_ROUTE_PRECISION_PROTOCOL_0_4_ALPHA.md",
+          "docs/zh-CN/CROSS_REPOSITORY_ROUTE_PRECISION_PROTOCOL_0_4_ALPHA.md",
+          "docs/research/evidence/cross-repository-route-precision-0.4-alpha.json",
+          "docs/research/CROSS_REPOSITORY_ROUTE_PRECISION_RESULT_0_4_ALPHA.md",
+          "docs/zh-CN/CROSS_REPOSITORY_ROUTE_PRECISION_RESULT_0_4_ALPHA.md",
+          "tsconfig.base.json"
+        ],
+        "gates": {
+          "expectedTaskType": "evaluation",
+          "expectedCoverage": 1,
+          "minimumRouteFocus": 0.85,
+          "maximumRouteFiles": 7,
+          "minimumAcceptedRoutePrecision": 1,
+          "maximumConfidence": null
+        },
+        "status": "passed",
+        "failures": [],
+        "deterministicRoutes": true,
+        "trackedWorktreeClean": true,
+        "trials": [
+          {
+            "trial": 1,
+            "status": "completed",
+            "evaluationCacheState": "cold-or-explicitly-indexed",
+            "contextCacheState": "warm-index-after-evaluation",
+            "evaluationElapsedMs": 1557,
+            "contextElapsedMs": 1130,
+            "mode": "full-palace",
+            "taskType": "evaluation",
+            "routeFiles": [
+              "docs/research/evidence/cross-repository-route-precision-0.4-alpha.json",
+              "docs/research/CROSS_REPOSITORY_ROUTE_PRECISION_RESULT_0_4_ALPHA.md",
+              "docs/zh-CN/CROSS_REPOSITORY_ROUTE_PRECISION_PROTOCOL_0_4_ALPHA.md",
+              "docs/research/CROSS_REPOSITORY_ROUTE_PRECISION_PROTOCOL_0_4_ALPHA.md",
+              "docs/zh-CN/CROSS_REPOSITORY_ROUTE_PRECISION_RESULT_0_4_ALPHA.md",
+              "scripts/verify-route-precision-cross-repositories.cjs",
+              "tsconfig.base.json"
+            ],
+            "routeFileCount": 7,
+            "changedFileCoverage": 1,
+            "routeFocus": 0.86,
+            "routeConfidence": 0.75,
+            "calibration": {
+              "status": "underconfident",
+              "predictedConfidence": 0.75,
+              "observedCoverage": 1,
+              "error": 0.25
+            },
+            "acceptedRoutePrecision": 1,
+            "unexpectedRouteFiles": [],
+            "contextEstimatedTokens": 4796,
+            "contextBytes": 19264,
+            "selectedExcludedOverlap": []
+          },
+          {
+            "trial": 2,
+            "status": "completed",
+            "evaluationCacheState": "warm-index",
+            "contextCacheState": "warm-index-after-evaluation",
+            "evaluationElapsedMs": 1563,
+            "contextElapsedMs": 1146,
+            "mode": "full-palace",
+            "taskType": "evaluation",
+            "routeFiles": [
+              "docs/research/evidence/cross-repository-route-precision-0.4-alpha.json",
+              "docs/research/CROSS_REPOSITORY_ROUTE_PRECISION_RESULT_0_4_ALPHA.md",
+              "docs/zh-CN/CROSS_REPOSITORY_ROUTE_PRECISION_PROTOCOL_0_4_ALPHA.md",
+              "docs/research/CROSS_REPOSITORY_ROUTE_PRECISION_PROTOCOL_0_4_ALPHA.md",
+              "docs/zh-CN/CROSS_REPOSITORY_ROUTE_PRECISION_RESULT_0_4_ALPHA.md",
+              "scripts/verify-route-precision-cross-repositories.cjs",
+              "tsconfig.base.json"
+            ],
+            "routeFileCount": 7,
+            "changedFileCoverage": 1,
+            "routeFocus": 0.86,
+            "routeConfidence": 0.75,
+            "calibration": {
+              "status": "underconfident",
+              "predictedConfidence": 0.75,
+              "observedCoverage": 1,
+              "error": 0.25
+            },
+            "acceptedRoutePrecision": 1,
+            "unexpectedRouteFiles": [],
+            "contextEstimatedTokens": 4796,
+            "contextBytes": 19264,
+            "selectedExcludedOverlap": []
+          }
+        ]
+      },
+      {
+        "name": "recursive-artifact-family-en",
+        "kind": "candidate-self-audit",
+        "language": "English",
+        "url": "local frozen candidate worktree",
+        "routeCommit": "716a6c4e2abb6432d59a17db14a940e90918fe2b",
+        "groundTruthCommit": null,
+        "oracleSource": "frozen post-self-audit recursive artifact family",
+        "task": "Freeze and execute the post-self-audit cross-repository routing regression, preserve the first JSON evidence, and write English and Simplified Chinese protocol and result reports.",
+        "changedFiles": [
+          "scripts/verify-route-precision-after-self-audit.cjs",
+          "docs/research/ROUTE_PRECISION_AFTER_SELF_AUDIT_PROTOCOL_0_4_ALPHA.md",
+          "docs/zh-CN/ROUTE_PRECISION_AFTER_SELF_AUDIT_PROTOCOL_0_4_ALPHA.md",
+          "docs/research/evidence/route-precision-after-self-audit-0.4-alpha.json",
+          "docs/research/ROUTE_PRECISION_AFTER_SELF_AUDIT_RESULT_0_4_ALPHA.md",
+          "docs/zh-CN/ROUTE_PRECISION_AFTER_SELF_AUDIT_RESULT_0_4_ALPHA.md"
+        ],
+        "historyChangedFiles": null,
+        "acceptedRouteFiles": [
+          "scripts/verify-route-precision-after-self-audit.cjs",
+          "docs/research/ROUTE_PRECISION_AFTER_SELF_AUDIT_PROTOCOL_0_4_ALPHA.md",
+          "docs/zh-CN/ROUTE_PRECISION_AFTER_SELF_AUDIT_PROTOCOL_0_4_ALPHA.md",
+          "docs/research/evidence/route-precision-after-self-audit-0.4-alpha.json",
+          "docs/research/ROUTE_PRECISION_AFTER_SELF_AUDIT_RESULT_0_4_ALPHA.md",
+          "docs/zh-CN/ROUTE_PRECISION_AFTER_SELF_AUDIT_RESULT_0_4_ALPHA.md",
+          "tsconfig.base.json"
+        ],
+        "gates": {
+          "expectedTaskType": "evaluation",
+          "expectedCoverage": 1,
+          "minimumRouteFocus": 0.85,
+          "maximumRouteFiles": 7,
+          "minimumAcceptedRoutePrecision": 1,
+          "maximumConfidence": null
+        },
+        "status": "passed",
+        "failures": [],
+        "deterministicRoutes": true,
+        "trackedWorktreeClean": true,
+        "trials": [
+          {
+            "trial": 1,
+            "status": "completed",
+            "evaluationCacheState": "cold-or-explicitly-indexed",
+            "contextCacheState": "warm-index-after-evaluation",
+            "evaluationElapsedMs": 1678,
+            "contextElapsedMs": 1276,
+            "mode": "full-palace",
+            "taskType": "evaluation",
+            "routeFiles": [
+              "docs/research/ROUTE_PRECISION_AFTER_SELF_AUDIT_PROTOCOL_0_4_ALPHA.md",
+              "scripts/verify-route-precision-after-self-audit.cjs",
+              "docs/research/ROUTE_PRECISION_AFTER_SELF_AUDIT_RESULT_0_4_ALPHA.md",
+              "docs/research/evidence/route-precision-after-self-audit-0.4-alpha.json",
+              "docs/zh-CN/ROUTE_PRECISION_AFTER_SELF_AUDIT_PROTOCOL_0_4_ALPHA.md",
+              "docs/zh-CN/ROUTE_PRECISION_AFTER_SELF_AUDIT_RESULT_0_4_ALPHA.md",
+              "tsconfig.base.json"
+            ],
+            "routeFileCount": 7,
+            "changedFileCoverage": 1,
+            "routeFocus": 0.86,
+            "routeConfidence": 0.83,
+            "calibration": {
+              "status": "underconfident",
+              "predictedConfidence": 0.83,
+              "observedCoverage": 1,
+              "error": 0.17
+            },
+            "acceptedRoutePrecision": 1,
+            "unexpectedRouteFiles": [],
+            "contextEstimatedTokens": 5481,
+            "contextBytes": 21999,
+            "selectedExcludedOverlap": []
+          },
+          {
+            "trial": 2,
+            "status": "completed",
+            "evaluationCacheState": "warm-index",
+            "contextCacheState": "warm-index-after-evaluation",
+            "evaluationElapsedMs": 1516,
+            "contextElapsedMs": 1110,
+            "mode": "full-palace",
+            "taskType": "evaluation",
+            "routeFiles": [
+              "docs/research/ROUTE_PRECISION_AFTER_SELF_AUDIT_PROTOCOL_0_4_ALPHA.md",
+              "scripts/verify-route-precision-after-self-audit.cjs",
+              "docs/research/ROUTE_PRECISION_AFTER_SELF_AUDIT_RESULT_0_4_ALPHA.md",
+              "docs/research/evidence/route-precision-after-self-audit-0.4-alpha.json",
+              "docs/zh-CN/ROUTE_PRECISION_AFTER_SELF_AUDIT_PROTOCOL_0_4_ALPHA.md",
+              "docs/zh-CN/ROUTE_PRECISION_AFTER_SELF_AUDIT_RESULT_0_4_ALPHA.md",
+              "tsconfig.base.json"
+            ],
+            "routeFileCount": 7,
+            "changedFileCoverage": 1,
+            "routeFocus": 0.86,
+            "routeConfidence": 0.83,
+            "calibration": {
+              "status": "underconfident",
+              "predictedConfidence": 0.83,
+              "observedCoverage": 1,
+              "error": 0.17
+            },
+            "acceptedRoutePrecision": 1,
+            "unexpectedRouteFiles": [],
+            "contextEstimatedTokens": 5481,
+            "contextBytes": 21999,
+            "selectedExcludedOverlap": []
+          }
+        ]
+      },
+      {
+        "name": "recursive-artifact-family-zh-cn",
+        "kind": "candidate-self-audit",
+        "language": "Simplified Chinese",
+        "url": "local frozen candidate worktree",
+        "routeCommit": "716a6c4e2abb6432d59a17db14a940e90918fe2b",
+        "groundTruthCommit": null,
+        "oracleSource": "frozen post-self-audit recursive artifact family",
+        "task": "冻结并执行 post-self-audit 跨仓库路由回归，保留首份 JSON 证据，并编写英文和简体中文协议与结果报告。",
+        "changedFiles": [
+          "scripts/verify-route-precision-after-self-audit.cjs",
+          "docs/research/ROUTE_PRECISION_AFTER_SELF_AUDIT_PROTOCOL_0_4_ALPHA.md",
+          "docs/zh-CN/ROUTE_PRECISION_AFTER_SELF_AUDIT_PROTOCOL_0_4_ALPHA.md",
+          "docs/research/evidence/route-precision-after-self-audit-0.4-alpha.json",
+          "docs/research/ROUTE_PRECISION_AFTER_SELF_AUDIT_RESULT_0_4_ALPHA.md",
+          "docs/zh-CN/ROUTE_PRECISION_AFTER_SELF_AUDIT_RESULT_0_4_ALPHA.md"
+        ],
+        "historyChangedFiles": null,
+        "acceptedRouteFiles": [
+          "scripts/verify-route-precision-after-self-audit.cjs",
+          "docs/research/ROUTE_PRECISION_AFTER_SELF_AUDIT_PROTOCOL_0_4_ALPHA.md",
+          "docs/zh-CN/ROUTE_PRECISION_AFTER_SELF_AUDIT_PROTOCOL_0_4_ALPHA.md",
+          "docs/research/evidence/route-precision-after-self-audit-0.4-alpha.json",
+          "docs/research/ROUTE_PRECISION_AFTER_SELF_AUDIT_RESULT_0_4_ALPHA.md",
+          "docs/zh-CN/ROUTE_PRECISION_AFTER_SELF_AUDIT_RESULT_0_4_ALPHA.md",
+          "tsconfig.base.json"
+        ],
+        "gates": {
+          "expectedTaskType": "evaluation",
+          "expectedCoverage": 1,
+          "minimumRouteFocus": 0.85,
+          "maximumRouteFiles": 7,
+          "minimumAcceptedRoutePrecision": 1,
+          "maximumConfidence": null
+        },
+        "status": "failed",
+        "failures": [
+          "changed-file coverage differed from 1.00",
+          "accepted-route precision fell below 1.00",
+          "route focus fell below 0.85",
+          "route was overconfident against observed coverage"
+        ],
+        "deterministicRoutes": true,
+        "trackedWorktreeClean": true,
+        "trials": [
+          {
+            "trial": 1,
+            "status": "completed",
+            "evaluationCacheState": "cold-or-explicitly-indexed",
+            "contextCacheState": "warm-index-after-evaluation",
+            "evaluationElapsedMs": 1444,
+            "contextElapsedMs": 1084,
+            "mode": "full-palace",
+            "taskType": "evaluation",
+            "routeFiles": [
+              "docs/research/CROSS_REPOSITORY_ROUTE_PRECISION_RESULT_0_4_ALPHA.md",
+              "docs/research/evidence/cross-repository-route-precision-0.4-alpha.json",
+              "docs/zh-CN/CROSS_REPOSITORY_ROUTE_PRECISION_PROTOCOL_0_4_ALPHA.md",
+              "docs/research/CROSS_REPOSITORY_ROUTE_PRECISION_PROTOCOL_0_4_ALPHA.md",
+              "docs/zh-CN/CROSS_REPOSITORY_ROUTE_PRECISION_RESULT_0_4_ALPHA.md",
+              "scripts/verify-route-precision-cross-repositories.cjs",
+              "tsconfig.base.json"
+            ],
+            "routeFileCount": 7,
+            "changedFileCoverage": 0,
+            "routeFocus": 0,
+            "routeConfidence": 0.77,
+            "calibration": {
+              "status": "overconfident",
+              "predictedConfidence": 0.77,
+              "observedCoverage": 0,
+              "error": 0.77
+            },
+            "acceptedRoutePrecision": 0.143,
+            "unexpectedRouteFiles": [
+              "docs/research/CROSS_REPOSITORY_ROUTE_PRECISION_RESULT_0_4_ALPHA.md",
+              "docs/research/evidence/cross-repository-route-precision-0.4-alpha.json",
+              "docs/zh-CN/CROSS_REPOSITORY_ROUTE_PRECISION_PROTOCOL_0_4_ALPHA.md",
+              "docs/research/CROSS_REPOSITORY_ROUTE_PRECISION_PROTOCOL_0_4_ALPHA.md",
+              "docs/zh-CN/CROSS_REPOSITORY_ROUTE_PRECISION_RESULT_0_4_ALPHA.md",
+              "scripts/verify-route-precision-cross-repositories.cjs"
+            ],
+            "contextEstimatedTokens": 3313,
+            "contextBytes": 13328,
+            "selectedExcludedOverlap": []
+          },
+          {
+            "trial": 2,
+            "status": "completed",
+            "evaluationCacheState": "warm-index",
+            "contextCacheState": "warm-index-after-evaluation",
+            "evaluationElapsedMs": 1624,
+            "contextElapsedMs": 1095,
+            "mode": "full-palace",
+            "taskType": "evaluation",
+            "routeFiles": [
+              "docs/research/CROSS_REPOSITORY_ROUTE_PRECISION_RESULT_0_4_ALPHA.md",
+              "docs/research/evidence/cross-repository-route-precision-0.4-alpha.json",
+              "docs/zh-CN/CROSS_REPOSITORY_ROUTE_PRECISION_PROTOCOL_0_4_ALPHA.md",
+              "docs/research/CROSS_REPOSITORY_ROUTE_PRECISION_PROTOCOL_0_4_ALPHA.md",
+              "docs/zh-CN/CROSS_REPOSITORY_ROUTE_PRECISION_RESULT_0_4_ALPHA.md",
+              "scripts/verify-route-precision-cross-repositories.cjs",
+              "tsconfig.base.json"
+            ],
+            "routeFileCount": 7,
+            "changedFileCoverage": 0,
+            "routeFocus": 0,
+            "routeConfidence": 0.77,
+            "calibration": {
+              "status": "overconfident",
+              "predictedConfidence": 0.77,
+              "observedCoverage": 0,
+              "error": 0.77
+            },
+            "acceptedRoutePrecision": 0.143,
+            "unexpectedRouteFiles": [
+              "docs/research/CROSS_REPOSITORY_ROUTE_PRECISION_RESULT_0_4_ALPHA.md",
+              "docs/research/evidence/cross-repository-route-precision-0.4-alpha.json",
+              "docs/zh-CN/CROSS_REPOSITORY_ROUTE_PRECISION_PROTOCOL_0_4_ALPHA.md",
+              "docs/research/CROSS_REPOSITORY_ROUTE_PRECISION_PROTOCOL_0_4_ALPHA.md",
+              "docs/zh-CN/CROSS_REPOSITORY_ROUTE_PRECISION_RESULT_0_4_ALPHA.md",
+              "scripts/verify-route-precision-cross-repositories.cjs"
+            ],
+            "contextEstimatedTokens": 3313,
+            "contextBytes": 13328,
+            "selectedExcludedOverlap": []
+          }
+        ]
+      },
+      {
+        "name": "compound-product-route",
+        "kind": "candidate-self-audit",
+        "language": "English",
+        "url": "local frozen candidate worktree",
+        "routeCommit": "716a6c4e2abb6432d59a17db14a940e90918fe2b",
+        "groundTruthCommit": null,
+        "oracleSource": "frozen seven-file compound product repair",
+        "task": "Fix generated-artifact index freshness in storage status and generalize artifact-family task analysis, route planning, and confidence scoring while preserving mixed feature release coverage; add focused router and context regression tests and rebuild the generated MCP bundle.",
+        "changedFiles": [
+          "packages/core/src/router/analyze-task.ts",
+          "packages/core/src/router/route-planner.ts",
+          "packages/core/src/router/route-scorer.ts",
+          "packages/core/src/storage/status.ts",
+          "packages/core/test/router.test.ts",
+          "packages/core/test/context.test.ts",
+          "plugins/vertex-palace/mcp/server.cjs"
+        ],
+        "historyChangedFiles": null,
+        "acceptedRouteFiles": [
+          "packages/core/src/router/analyze-task.ts",
+          "packages/core/src/router/route-planner.ts",
+          "packages/core/src/router/route-scorer.ts",
+          "packages/core/src/storage/status.ts",
+          "packages/core/test/router.test.ts",
+          "packages/core/test/context.test.ts",
+          "plugins/vertex-palace/mcp/server.cjs"
+        ],
+        "gates": {
+          "expectedTaskType": "bugfix",
+          "expectedCoverage": 1,
+          "minimumRouteFocus": 1,
+          "maximumRouteFiles": 7,
+          "minimumAcceptedRoutePrecision": 1,
+          "maximumConfidence": null
+        },
+        "status": "passed",
+        "failures": [],
+        "deterministicRoutes": true,
+        "trackedWorktreeClean": true,
+        "trials": [
+          {
+            "trial": 1,
+            "status": "completed",
+            "evaluationCacheState": "cold-or-explicitly-indexed",
+            "contextCacheState": "warm-index-after-evaluation",
+            "evaluationElapsedMs": 1689,
+            "contextElapsedMs": 1002,
+            "mode": "full-palace",
+            "taskType": "bugfix",
+            "routeFiles": [
+              "packages/core/src/router/route-planner.ts",
+              "packages/core/src/router/route-scorer.ts",
+              "packages/core/src/router/analyze-task.ts",
+              "packages/core/src/storage/status.ts",
+              "packages/core/test/router.test.ts",
+              "plugins/vertex-palace/mcp/server.cjs",
+              "packages/core/test/context.test.ts"
+            ],
+            "routeFileCount": 7,
+            "changedFileCoverage": 1,
+            "routeFocus": 1,
+            "routeConfidence": 0.86,
+            "calibration": {
+              "status": "well-calibrated",
+              "predictedConfidence": 0.86,
+              "observedCoverage": 1,
+              "error": 0.14
+            },
+            "acceptedRoutePrecision": 1,
+            "unexpectedRouteFiles": [],
+            "contextEstimatedTokens": 3492,
+            "contextBytes": 14794,
+            "selectedExcludedOverlap": []
+          },
+          {
+            "trial": 2,
+            "status": "completed",
+            "evaluationCacheState": "warm-index",
+            "contextCacheState": "warm-index-after-evaluation",
+            "evaluationElapsedMs": 1297,
+            "contextElapsedMs": 951,
+            "mode": "full-palace",
+            "taskType": "bugfix",
+            "routeFiles": [
+              "packages/core/src/router/route-planner.ts",
+              "packages/core/src/router/route-scorer.ts",
+              "packages/core/src/router/analyze-task.ts",
+              "packages/core/src/storage/status.ts",
+              "packages/core/test/router.test.ts",
+              "plugins/vertex-palace/mcp/server.cjs",
+              "packages/core/test/context.test.ts"
+            ],
+            "routeFileCount": 7,
+            "changedFileCoverage": 1,
+            "routeFocus": 1,
+            "routeConfidence": 0.86,
+            "calibration": {
+              "status": "well-calibrated",
+              "predictedConfidence": 0.86,
+              "observedCoverage": 1,
+              "error": 0.14
+            },
+            "acceptedRoutePrecision": 1,
+            "unexpectedRouteFiles": [],
+            "contextEstimatedTokens": 3492,
+            "contextBytes": 14794,
+            "selectedExcludedOverlap": []
+          }
+        ]
+      },
+      {
+        "name": "release-vocabulary-product-route",
+        "kind": "candidate-self-audit",
+        "language": "English",
+        "url": "local frozen candidate worktree",
+        "routeCommit": "716a6c4e2abb6432d59a17db14a940e90918fe2b",
+        "groundTruthCommit": null,
+        "oracleSource": "frozen seven-file release-vocabulary product repair",
+        "task": "Fix release-vocabulary action classification and publication intent so a mixed feature release mention does not override recursive artifact-family route planning and confidence scoring; add focused router and release-routing regressions and rebuild the generated MCP bundle.",
+        "changedFiles": [
+          "packages/core/src/router/classify-task.ts",
+          "packages/core/src/router/publication-intent.ts",
+          "packages/core/src/router/route-planner.ts",
+          "packages/core/src/router/route-scorer.ts",
+          "packages/core/test/router.test.ts",
+          "packages/core/test/release-routing.test.ts",
+          "plugins/vertex-palace/mcp/server.cjs"
+        ],
+        "historyChangedFiles": null,
+        "acceptedRouteFiles": [
+          "packages/core/src/router/classify-task.ts",
+          "packages/core/src/router/publication-intent.ts",
+          "packages/core/src/router/route-planner.ts",
+          "packages/core/src/router/route-scorer.ts",
+          "packages/core/test/router.test.ts",
+          "packages/core/test/release-routing.test.ts",
+          "plugins/vertex-palace/mcp/server.cjs"
+        ],
+        "gates": {
+          "expectedTaskType": "bugfix",
+          "expectedCoverage": 1,
+          "minimumRouteFocus": 1,
+          "maximumRouteFiles": 7,
+          "minimumAcceptedRoutePrecision": 1,
+          "maximumConfidence": null
+        },
+        "status": "passed",
+        "failures": [],
+        "deterministicRoutes": true,
+        "trackedWorktreeClean": true,
+        "trials": [
+          {
+            "trial": 1,
+            "status": "completed",
+            "evaluationCacheState": "cold-or-explicitly-indexed",
+            "contextCacheState": "warm-index-after-evaluation",
+            "evaluationElapsedMs": 1360,
+            "contextElapsedMs": 1021,
+            "mode": "full-palace",
+            "taskType": "bugfix",
+            "routeFiles": [
+              "packages/core/src/router/classify-task.ts",
+              "packages/core/src/router/route-scorer.ts",
+              "packages/core/src/router/publication-intent.ts",
+              "packages/core/test/release-routing.test.ts",
+              "packages/core/src/router/route-planner.ts",
+              "packages/core/test/router.test.ts",
+              "plugins/vertex-palace/mcp/server.cjs"
+            ],
+            "routeFileCount": 7,
+            "changedFileCoverage": 1,
+            "routeFocus": 1,
+            "routeConfidence": 0.84,
+            "calibration": {
+              "status": "underconfident",
+              "predictedConfidence": 0.84,
+              "observedCoverage": 1,
+              "error": 0.16
+            },
+            "acceptedRoutePrecision": 1,
+            "unexpectedRouteFiles": [],
+            "contextEstimatedTokens": 4629,
+            "contextBytes": 19710,
+            "selectedExcludedOverlap": []
+          },
+          {
+            "trial": 2,
+            "status": "completed",
+            "evaluationCacheState": "warm-index",
+            "contextCacheState": "warm-index-after-evaluation",
+            "evaluationElapsedMs": 1284,
+            "contextElapsedMs": 1198,
+            "mode": "full-palace",
+            "taskType": "bugfix",
+            "routeFiles": [
+              "packages/core/src/router/classify-task.ts",
+              "packages/core/src/router/route-scorer.ts",
+              "packages/core/src/router/publication-intent.ts",
+              "packages/core/test/release-routing.test.ts",
+              "packages/core/src/router/route-planner.ts",
+              "packages/core/test/router.test.ts",
+              "plugins/vertex-palace/mcp/server.cjs"
+            ],
+            "routeFileCount": 7,
+            "changedFileCoverage": 1,
+            "routeFocus": 1,
+            "routeConfidence": 0.84,
+            "calibration": {
+              "status": "underconfident",
+              "predictedConfidence": 0.84,
+              "observedCoverage": 1,
+              "error": 0.16
+            },
+            "acceptedRoutePrecision": 1,
+            "unexpectedRouteFiles": [],
+            "contextEstimatedTokens": 4629,
+            "contextBytes": 19710,
+            "selectedExcludedOverlap": []
+          }
+        ]
+      },
+      {
+        "name": "missing-artifact-family-confidence-cap",
+        "kind": "negative-control",
+        "language": "English",
+        "url": "local frozen candidate worktree",
+        "routeCommit": "716a6c4e2abb6432d59a17db14a940e90918fe2b",
+        "groundTruthCommit": null,
+        "oracleSource": "synthetic nonexistent artifact family negative control",
+        "task": "Freeze and execute the post-cobalt-harbor cross-platform routing regression; preserve the first JSON evidence and write English and Simplified Chinese protocol and result reports.",
+        "changedFiles": [
+          "scripts/verify-route-precision-after-cobalt-harbor.cjs",
+          "docs/research/ROUTE_PRECISION_AFTER_COBALT_HARBOR_PROTOCOL_0_4_ALPHA.md",
+          "docs/zh-CN/ROUTE_PRECISION_AFTER_COBALT_HARBOR_PROTOCOL_0_4_ALPHA.md",
+          "docs/research/evidence/route-precision-after-cobalt-harbor-0.4-alpha.json",
+          "docs/research/ROUTE_PRECISION_AFTER_COBALT_HARBOR_RESULT_0_4_ALPHA.md",
+          "docs/zh-CN/ROUTE_PRECISION_AFTER_COBALT_HARBOR_RESULT_0_4_ALPHA.md"
+        ],
+        "historyChangedFiles": null,
+        "acceptedRouteFiles": [
+          "scripts/verify-route-precision-cross-repositories.cjs",
+          "docs/research/CROSS_REPOSITORY_ROUTE_PRECISION_PROTOCOL_0_4_ALPHA.md",
+          "docs/zh-CN/CROSS_REPOSITORY_ROUTE_PRECISION_PROTOCOL_0_4_ALPHA.md",
+          "docs/research/evidence/cross-repository-route-precision-0.4-alpha.json",
+          "docs/research/CROSS_REPOSITORY_ROUTE_PRECISION_RESULT_0_4_ALPHA.md",
+          "docs/zh-CN/CROSS_REPOSITORY_ROUTE_PRECISION_RESULT_0_4_ALPHA.md",
+          "tsconfig.base.json"
+        ],
+        "gates": {
+          "expectedTaskType": "evaluation",
+          "expectedCoverage": 0,
+          "minimumRouteFocus": null,
+          "maximumRouteFiles": 7,
+          "minimumAcceptedRoutePrecision": 1,
+          "maximumConfidence": 0.15
+        },
+        "status": "passed",
+        "failures": [],
+        "deterministicRoutes": true,
+        "trackedWorktreeClean": true,
+        "trials": [
+          {
+            "trial": 1,
+            "status": "completed",
+            "evaluationCacheState": "cold-or-explicitly-indexed",
+            "contextCacheState": "warm-index-after-evaluation",
+            "evaluationElapsedMs": 1471,
+            "contextElapsedMs": 1158,
+            "mode": "full-palace",
+            "taskType": "evaluation",
+            "routeFiles": [
+              "docs/research/CROSS_REPOSITORY_ROUTE_PRECISION_RESULT_0_4_ALPHA.md",
+              "docs/research/evidence/cross-repository-route-precision-0.4-alpha.json",
+              "scripts/verify-route-precision-cross-repositories.cjs",
+              "docs/research/CROSS_REPOSITORY_ROUTE_PRECISION_PROTOCOL_0_4_ALPHA.md",
+              "docs/zh-CN/CROSS_REPOSITORY_ROUTE_PRECISION_PROTOCOL_0_4_ALPHA.md",
+              "docs/zh-CN/CROSS_REPOSITORY_ROUTE_PRECISION_RESULT_0_4_ALPHA.md",
+              "tsconfig.base.json"
+            ],
+            "routeFileCount": 7,
+            "changedFileCoverage": 0,
+            "routeFocus": 0,
+            "routeConfidence": 0.15,
+            "calibration": {
+              "status": "well-calibrated",
+              "predictedConfidence": 0.15,
+              "observedCoverage": 0,
+              "error": 0.15
+            },
+            "acceptedRoutePrecision": 1,
+            "unexpectedRouteFiles": [],
+            "contextEstimatedTokens": 3349,
+            "contextBytes": 13396,
+            "selectedExcludedOverlap": []
+          },
+          {
+            "trial": 2,
+            "status": "completed",
+            "evaluationCacheState": "warm-index",
+            "contextCacheState": "warm-index-after-evaluation",
+            "evaluationElapsedMs": 1413,
+            "contextElapsedMs": 1257,
+            "mode": "full-palace",
+            "taskType": "evaluation",
+            "routeFiles": [
+              "docs/research/CROSS_REPOSITORY_ROUTE_PRECISION_RESULT_0_4_ALPHA.md",
+              "docs/research/evidence/cross-repository-route-precision-0.4-alpha.json",
+              "scripts/verify-route-precision-cross-repositories.cjs",
+              "docs/research/CROSS_REPOSITORY_ROUTE_PRECISION_PROTOCOL_0_4_ALPHA.md",
+              "docs/zh-CN/CROSS_REPOSITORY_ROUTE_PRECISION_PROTOCOL_0_4_ALPHA.md",
+              "docs/zh-CN/CROSS_REPOSITORY_ROUTE_PRECISION_RESULT_0_4_ALPHA.md",
+              "tsconfig.base.json"
+            ],
+            "routeFileCount": 7,
+            "changedFileCoverage": 0,
+            "routeFocus": 0,
+            "routeConfidence": 0.15,
+            "calibration": {
+              "status": "well-calibrated",
+              "predictedConfidence": 0.15,
+              "observedCoverage": 0,
+              "error": 0.15
+            },
+            "acceptedRoutePrecision": 1,
+            "unexpectedRouteFiles": [],
+            "contextEstimatedTokens": 3349,
+            "contextBytes": 13396,
+            "selectedExcludedOverlap": []
+          }
+        ]
+      }
+    ]
+  }
+}
