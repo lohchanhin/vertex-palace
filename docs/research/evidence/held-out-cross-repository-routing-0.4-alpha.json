@@ -1,0 +1,527 @@
+{
+  "schemaVersion": 1,
+  "studyId": "held-out-cross-repository-routing-0.4-alpha",
+  "generatedAt": "2026-07-22T19:06:32.184Z",
+  "status": "failed",
+  "failures": [
+    "fastify: changed-file coverage differed from 1.00",
+    "fastify: route focus fell below 0.75",
+    "fastify: route precision fell below 0.75",
+    "click: trial 1 context execution failed",
+    "click: trial 2 context execution failed",
+    "click: not all preregistered trials completed",
+    "click: route files differed across repetitions",
+    "cobra: route focus fell below 0.75",
+    "cobra: route precision fell below 0.75",
+    "marked: changed-file coverage differed from 1.00",
+    "marked: route focus fell below 0.75",
+    "marked: route precision fell below 0.75",
+    "marked: route was overconfident against observed coverage"
+  ],
+  "claimBoundary": "First static routing observation on mechanically selected repositories and Git-history tasks unseen during candidate development; not an end-to-end Agent performance benchmark.",
+  "heldOutAgainstCandidate": true,
+  "candidate": {
+    "productCommit": "0b6a0fd92f43a74c983663cd32f937087e3ec923",
+    "validationHarnessCommit": "1fc5caee4b5c60a95246699071c9d5502d8d9e9f",
+    "cliPath": "dist/palace.cjs",
+    "frozenPaths": [
+      "packages",
+      "plugins/vertex-palace/mcp",
+      "package.json",
+      "pnpm-lock.yaml",
+      "pnpm-workspace.yaml",
+      "tsconfig.base.json",
+      "tsconfig.json",
+      "tsup.package-cli.config.ts",
+      "tsup.plugin-mcp.config.ts",
+      "scripts/trim-generated.cjs"
+    ]
+  },
+  "targetSelection": {
+    "manifestPath": "docs/research/evidence/held-out-routing-target-manifest-0.4-alpha.json",
+    "manifestCommit": "b91dbd14a69f92fa84fa9f4175b1c3c33bd6d342",
+    "manifestSha256": "5B071471BCF1B049B9BF1A2C70F536F138557A83AC6BCCDAA9AB9A82906A84C6",
+    "selectorCommit": "2be2dc11673fbdf23112a420048af3a2a27914fb",
+    "palaceCallsDuringSelection": 0,
+    "targetCount": 4
+  },
+  "environment": {
+    "platform": "win32",
+    "arch": "x64",
+    "node": "v24.13.1",
+    "npm": "11.8.0",
+    "git": "git version 2.53.0.windows.1"
+  },
+  "protocol": {
+    "repetitions": 2,
+    "sequential": true,
+    "budget": 6000,
+    "routeLimit": 9,
+    "maxDrawers": 4,
+    "outputCreateOnly": true,
+    "gates": {
+      "changedFileCoverage": 1,
+      "minimumRouteFocus": 0.75,
+      "minimumRoutePrecision": 0.75,
+      "deterministicRoutes": true,
+      "overconfidentTrials": 0,
+      "contextWithinBudget": true,
+      "selectedExcludedOverlap": 0,
+      "trackedWorktreeClean": true,
+      "freshAfterExplicitIndex": true
+    }
+  },
+  "aggregate": {
+    "targets": 4,
+    "passedTargets": 0,
+    "trials": 8,
+    "completedTrials": 6,
+    "macroChangedFileCoverage": 0.5,
+    "macroRouteFocus": 0.11,
+    "macroRoutePrecision": 0.111,
+    "overconfidentTrials": 2,
+    "maxContextEstimatedTokens": 2986,
+    "setupFailures": 0
+  },
+  "targets": [
+    {
+      "name": "fastify",
+      "language": "JavaScript",
+      "url": "https://github.com/fastify/fastify.git",
+      "pinnedHead": "ada0623dce9ed776306f2ccaa095b8ee01a492ba",
+      "routeCommit": "ab9b96eb2f93373949c253933eddb46f6772bbf4",
+      "groundTruthCommit": "6682c4f9a76cbb60c372ba5cad9dd2fc6e2fdb51",
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "task": "fix: normalize method in findRoute (#6838)",
+      "changedFiles": [
+        "lib/route.js",
+        "test/find-route.test.js"
+      ],
+      "implementationFiles": [
+        "lib/route.js"
+      ],
+      "testFiles": [
+        "test/find-route.test.js"
+      ],
+      "status": "failed",
+      "failureCategory": "product-or-contract",
+      "failures": [
+        "changed-file coverage differed from 1.00",
+        "route focus fell below 0.75",
+        "route precision fell below 0.75"
+      ],
+      "deterministicRoutes": true,
+      "statusAfterExplicitIndex": {
+        "root": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-held-out-routing-XGKaxh\\fastify",
+        "palaceRoot": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-held-out-routing-XGKaxh\\fastify\\.palace",
+        "initialized": true,
+        "indexed": true,
+        "stale": false,
+        "nodeCount": 2669,
+        "edgeCount": 12578,
+        "roomCount": 214,
+        "lastIndexedAt": "2026-07-22T19:05:59.993Z",
+        "configPath": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-held-out-routing-XGKaxh\\fastify\\.palace\\palace.yml"
+      },
+      "trackedWorktreeClean": true,
+      "trials": [
+        {
+          "trial": 1,
+          "status": "completed",
+          "evaluationCacheState": "warm-index-after-explicit-index",
+          "contextCacheState": "warm-index-after-evaluation",
+          "evaluationElapsedMs": 1409,
+          "contextElapsedMs": 942,
+          "mode": "full-palace",
+          "taskType": "bugfix",
+          "routeFiles": [
+            "lib/route.js",
+            "lib/four-oh-four.js",
+            "fastify.js",
+            "test/route-prefix.test.js",
+            "test/has-route.test.js",
+            "test/route-hooks.test.js",
+            "test/types/serverFactory.tst.ts",
+            "test/router-options.test.js",
+            "test/internals/handle-request.test.js"
+          ],
+          "routeFileCount": 9,
+          "changedFileCoverage": 0.5,
+          "routeFocus": 0.11,
+          "routePrecision": 0.111,
+          "routeConfidence": 0.57,
+          "calibration": {
+            "status": "well-calibrated",
+            "predictedConfidence": 0.57,
+            "observedCoverage": 0.5,
+            "error": 0.07
+          },
+          "contextEstimatedTokens": 2068,
+          "contextBytes": 8270,
+          "selectedExcludedOverlap": []
+        },
+        {
+          "trial": 2,
+          "status": "completed",
+          "evaluationCacheState": "warm-index",
+          "contextCacheState": "warm-index-after-evaluation",
+          "evaluationElapsedMs": 1375,
+          "contextElapsedMs": 973,
+          "mode": "full-palace",
+          "taskType": "bugfix",
+          "routeFiles": [
+            "lib/route.js",
+            "lib/four-oh-four.js",
+            "fastify.js",
+            "test/route-prefix.test.js",
+            "test/has-route.test.js",
+            "test/route-hooks.test.js",
+            "test/types/serverFactory.tst.ts",
+            "test/router-options.test.js",
+            "test/internals/handle-request.test.js"
+          ],
+          "routeFileCount": 9,
+          "changedFileCoverage": 0.5,
+          "routeFocus": 0.11,
+          "routePrecision": 0.111,
+          "routeConfidence": 0.57,
+          "calibration": {
+            "status": "well-calibrated",
+            "predictedConfidence": 0.57,
+            "observedCoverage": 0.5,
+            "error": 0.07
+          },
+          "contextEstimatedTokens": 2068,
+          "contextBytes": 8270,
+          "selectedExcludedOverlap": []
+        }
+      ]
+    },
+    {
+      "name": "click",
+      "language": "Python",
+      "url": "https://github.com/pallets/click.git",
+      "pinnedHead": "cfa01eeb7894a408af70b29d28c0b24f8680f9fb",
+      "routeCommit": "e0d1678ebc10cc663f2bc1973e0399b31415f8db",
+      "groundTruthCommit": "d15f3c23a177e80c324e1ee9681c9449c31ac965",
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "task": "fix: Skip flaky pager test on macOS with free-threaded Python 3.14t",
+      "changedFiles": [
+        "src/click/_compat.py",
+        "tests/test_utils.py"
+      ],
+      "implementationFiles": [
+        "src/click/_compat.py"
+      ],
+      "testFiles": [
+        "tests/test_utils.py"
+      ],
+      "status": "failed",
+      "failureCategory": "product-or-contract",
+      "failures": [
+        "trial 1 context execution failed",
+        "trial 2 context execution failed",
+        "not all preregistered trials completed",
+        "route files differed across repetitions"
+      ],
+      "deterministicRoutes": false,
+      "statusAfterExplicitIndex": {
+        "root": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-held-out-routing-XGKaxh\\click",
+        "palaceRoot": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-held-out-routing-XGKaxh\\click\\.palace",
+        "initialized": true,
+        "indexed": true,
+        "stale": false,
+        "nodeCount": 2229,
+        "edgeCount": 8425,
+        "roomCount": 53,
+        "lastIndexedAt": "2026-07-22T19:06:12.398Z",
+        "configPath": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-held-out-routing-XGKaxh\\click\\.palace\\palace.yml"
+      },
+      "trackedWorktreeClean": true,
+      "trials": [
+        {
+          "trial": 1,
+          "status": "execution-error",
+          "failedPhase": "context",
+          "taskType": "bugfix",
+          "routeFiles": [
+            "src/click/testing.py",
+            "tests/test_termui.py",
+            "src/click/utils.py",
+            "src/click/types.py",
+            "tests/test_testing.py",
+            "tests/test_utils.py",
+            "src/click/termui.py",
+            "tests/test_types.py",
+            "docs/testing.md"
+          ],
+          "routeFileCount": 9,
+          "changedFileCoverage": 0.5,
+          "routeFocus": 0.11,
+          "routeConfidence": 0.64,
+          "calibration": {
+            "status": "well-calibrated",
+            "predictedConfidence": 0.64,
+            "observedCoverage": 0.5,
+            "error": 0.14
+          },
+          "error": "TypeError: Cannot read properties of undefined (reading 'primary')\n    at validateTarget (D:\\工作资料\\codex palace\\scripts\\verify-held-out-cross-repository-routing.cjs:231:40)\n    at main (D:\\工作资料\\codex palace\\scripts\\verify-held-out-cross-repository-routing.cjs:59:28)"
+        },
+        {
+          "trial": 2,
+          "status": "execution-error",
+          "failedPhase": "context",
+          "taskType": "bugfix",
+          "routeFiles": [
+            "src/click/testing.py",
+            "tests/test_termui.py",
+            "src/click/utils.py",
+            "src/click/types.py",
+            "tests/test_testing.py",
+            "tests/test_utils.py",
+            "src/click/termui.py",
+            "tests/test_types.py",
+            "docs/testing.md"
+          ],
+          "routeFileCount": 9,
+          "changedFileCoverage": 0.5,
+          "routeFocus": 0.11,
+          "routeConfidence": 0.64,
+          "calibration": {
+            "status": "well-calibrated",
+            "predictedConfidence": 0.64,
+            "observedCoverage": 0.5,
+            "error": 0.14
+          },
+          "error": "TypeError: Cannot read properties of undefined (reading 'primary')\n    at validateTarget (D:\\工作资料\\codex palace\\scripts\\verify-held-out-cross-repository-routing.cjs:231:40)\n    at main (D:\\工作资料\\codex palace\\scripts\\verify-held-out-cross-repository-routing.cjs:59:28)"
+        }
+      ]
+    },
+    {
+      "name": "cobra",
+      "language": "Go fallback parser",
+      "url": "https://github.com/spf13/cobra.git",
+      "pinnedHead": "adbc8813901bba65827259daa8e22ff94ec1f30e",
+      "routeCommit": "f2878bab8c96afd6e36968af96343b35dbb82a82",
+      "groundTruthCommit": "746ef07158728502482cea9f880a6f4b21ef29a9",
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "task": "fix: prevent completions from mutating os.Args via append side effect (#2356)",
+      "changedFiles": [
+        "completions.go",
+        "completions_test.go"
+      ],
+      "implementationFiles": [
+        "completions.go"
+      ],
+      "testFiles": [
+        "completions_test.go"
+      ],
+      "status": "failed",
+      "failureCategory": "product-or-contract",
+      "failures": [
+        "route focus fell below 0.75",
+        "route precision fell below 0.75"
+      ],
+      "deterministicRoutes": true,
+      "statusAfterExplicitIndex": {
+        "root": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-held-out-routing-XGKaxh\\cobra",
+        "palaceRoot": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-held-out-routing-XGKaxh\\cobra\\.palace",
+        "initialized": true,
+        "indexed": true,
+        "stale": false,
+        "nodeCount": 303,
+        "edgeCount": 1554,
+        "roomCount": 41,
+        "lastIndexedAt": "2026-07-22T19:06:20.281Z",
+        "configPath": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-held-out-routing-XGKaxh\\cobra\\.palace\\palace.yml"
+      },
+      "trackedWorktreeClean": true,
+      "trials": [
+        {
+          "trial": 1,
+          "status": "completed",
+          "evaluationCacheState": "warm-index-after-explicit-index",
+          "contextCacheState": "warm-index-after-evaluation",
+          "evaluationElapsedMs": 577,
+          "contextElapsedMs": 473,
+          "mode": "route-lite",
+          "taskType": "bugfix",
+          "routeFiles": [
+            "powershell_completions.go",
+            "completions.go",
+            "fish_completions.go",
+            "completions_test.go",
+            "bash_completionsV2.go",
+            "command.go",
+            "active_help.go",
+            "bash_completions_test.go",
+            "bash_completions.go"
+          ],
+          "routeFileCount": 9,
+          "changedFileCoverage": 1,
+          "routeFocus": 0.22,
+          "routePrecision": 0.222,
+          "routeConfidence": 0.6,
+          "calibration": {
+            "status": "underconfident",
+            "predictedConfidence": 0.6,
+            "observedCoverage": 1,
+            "error": 0.4
+          },
+          "contextEstimatedTokens": 1897,
+          "contextBytes": 7586,
+          "selectedExcludedOverlap": []
+        },
+        {
+          "trial": 2,
+          "status": "completed",
+          "evaluationCacheState": "warm-index",
+          "contextCacheState": "warm-index-after-evaluation",
+          "evaluationElapsedMs": 536,
+          "contextElapsedMs": 439,
+          "mode": "route-lite",
+          "taskType": "bugfix",
+          "routeFiles": [
+            "powershell_completions.go",
+            "completions.go",
+            "fish_completions.go",
+            "completions_test.go",
+            "bash_completionsV2.go",
+            "command.go",
+            "active_help.go",
+            "bash_completions_test.go",
+            "bash_completions.go"
+          ],
+          "routeFileCount": 9,
+          "changedFileCoverage": 1,
+          "routeFocus": 0.22,
+          "routePrecision": 0.222,
+          "routeConfidence": 0.6,
+          "calibration": {
+            "status": "underconfident",
+            "predictedConfidence": 0.6,
+            "observedCoverage": 1,
+            "error": 0.4
+          },
+          "contextEstimatedTokens": 1897,
+          "contextBytes": 7586,
+          "selectedExcludedOverlap": []
+        }
+      ]
+    },
+    {
+      "name": "marked",
+      "language": "JavaScript and TypeScript",
+      "url": "https://github.com/markedjs/marked.git",
+      "pinnedHead": "1d3229a4cc423dbfef9dc2d1e325f7a9231ad60b",
+      "routeCommit": "a37983f188d697fe98d350554dc95c49eaac6edd",
+      "groundTruthCommit": "11adb697eeee2b0fa6da3a38d5146626347592dc",
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "task": "fix: fix cli not reading stdin (#3967)",
+      "changedFiles": [
+        "bin/main.js",
+        "test/unit/bin.test.js"
+      ],
+      "implementationFiles": [
+        "bin/main.js"
+      ],
+      "testFiles": [
+        "test/unit/bin.test.js"
+      ],
+      "status": "failed",
+      "failureCategory": "product-or-contract",
+      "failures": [
+        "changed-file coverage differed from 1.00",
+        "route focus fell below 0.75",
+        "route precision fell below 0.75",
+        "route was overconfident against observed coverage"
+      ],
+      "deterministicRoutes": true,
+      "statusAfterExplicitIndex": {
+        "root": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-held-out-routing-XGKaxh\\marked",
+        "palaceRoot": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-held-out-routing-XGKaxh\\marked\\.palace",
+        "initialized": true,
+        "indexed": true,
+        "stale": false,
+        "nodeCount": 891,
+        "edgeCount": 3713,
+        "roomCount": 53,
+        "lastIndexedAt": "2026-07-22T19:06:27.770Z",
+        "configPath": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-held-out-routing-XGKaxh\\marked\\.palace\\palace.yml"
+      },
+      "trackedWorktreeClean": true,
+      "trials": [
+        {
+          "trial": 1,
+          "status": "completed",
+          "evaluationCacheState": "warm-index-after-explicit-index",
+          "contextCacheState": "warm-index-after-evaluation",
+          "evaluationElapsedMs": 1052,
+          "contextElapsedMs": 807,
+          "mode": "full-palace",
+          "taskType": "bugfix",
+          "routeFiles": [
+            "src/Renderer.ts",
+            "src/rules.ts",
+            "src/Parser.ts",
+            "src/Hooks.ts",
+            "src/Instance.ts",
+            "src/Tokenizer.ts",
+            "src/MarkedOptions.ts",
+            "test/rules.js",
+            "src/defaults.ts"
+          ],
+          "routeFileCount": 9,
+          "changedFileCoverage": 0,
+          "routeFocus": 0,
+          "routePrecision": 0,
+          "routeConfidence": 0.34,
+          "calibration": {
+            "status": "overconfident",
+            "predictedConfidence": 0.34,
+            "observedCoverage": 0,
+            "error": 0.34
+          },
+          "contextEstimatedTokens": 2986,
+          "contextBytes": 11943,
+          "selectedExcludedOverlap": []
+        },
+        {
+          "trial": 2,
+          "status": "completed",
+          "evaluationCacheState": "warm-index",
+          "contextCacheState": "warm-index-after-evaluation",
+          "evaluationElapsedMs": 1035,
+          "contextElapsedMs": 781,
+          "mode": "full-palace",
+          "taskType": "bugfix",
+          "routeFiles": [
+            "src/Renderer.ts",
+            "src/rules.ts",
+            "src/Parser.ts",
+            "src/Hooks.ts",
+            "src/Instance.ts",
+            "src/Tokenizer.ts",
+            "src/MarkedOptions.ts",
+            "test/rules.js",
+            "src/defaults.ts"
+          ],
+          "routeFileCount": 9,
+          "changedFileCoverage": 0,
+          "routeFocus": 0,
+          "routePrecision": 0,
+          "routeConfidence": 0.34,
+          "calibration": {
+            "status": "overconfident",
+            "predictedConfidence": 0.34,
+            "observedCoverage": 0,
+            "error": 0.34
+          },
+          "contextEstimatedTokens": 2986,
+          "contextBytes": 11943,
+          "selectedExcludedOverlap": []
+        }
+      ]
+    }
+  ]
+}
