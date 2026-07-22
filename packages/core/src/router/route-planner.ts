@@ -211,7 +211,11 @@ function ensureGeneralSurfaceCoverage(
   for (const surface of requested) {
     const quota = generalSurfaceQuota(scored, surface, requested, analysis);
     for (const representative of selectGeneralSurfaceRepresentatives(scored, surface, analysis, quota)) {
-      append(representative);
+      const related = selected.find(
+        (item) => item.node.sourcePath === representative.node.sourcePath
+          && item.reasons.some((reason) => reason.startsWith("expanded through"))
+      );
+      append(related ?? representative);
     }
   }
   for (const item of selected) append(item);
@@ -233,13 +237,19 @@ function selectGeneralSurfaceRepresentatives(
         || a.node.sourcePath.localeCompare(b.node.sourcePath)
     )
     .filter((item, index, items) => items.findIndex((candidate) => candidate.node.sourcePath === item.node.sourcePath) === index);
-  if (surface !== "test" || quota <= 1) return ranked.slice(0, quota);
+  if (surface === "docs" && quota > 1) {
+    return selectGeneralDocumentRepresentatives(ranked, analysis, quota);
+  }
+  if (surface === "test") {
+    return selectGeneralTestRepresentatives(ranked, analysis, quota);
+  }
+  if (surface !== "implementation") return ranked.slice(0, quota);
 
   const result: ScoredNode[] = [];
   const concepts = new Set<string>();
-  for (const item of ranked) {
-    const concept = testPathConcept(item.node.sourcePath, analysis);
-    if (!concept && result.length > 0) continue;
+  const conceptual = ranked.filter((item) => routePathConcept(item.node.sourcePath, analysis));
+  for (const item of conceptual.length ? conceptual : ranked) {
+    const concept = routePathConcept(item.node.sourcePath, analysis);
     if (concept && concepts.has(concept)) continue;
     result.push(item);
     if (concept) concepts.add(concept);
@@ -254,14 +264,27 @@ function generalSurfaceQuota(
   requested: RouteSurface[],
   analysis: ReturnType<typeof analyzeTask>
 ): number {
+  if (surface === "docs") {
+    return hasAnyKeyword(new Set(analysis.keywords), ["bilingual", "localization"]) ? 2 : 1;
+  }
+  if (surface === "implementation") {
+    const concepts = new Set(
+      scored
+        .filter((item) => matchesRouteSurface(item.node, "implementation"))
+        .map((item) => routePathConcept(item.node.sourcePath, analysis))
+        .filter((concept): concept is string => Boolean(concept))
+    );
+    return Math.max(1, Math.min(3, concepts.size));
+  }
   if (surface !== "test" || !requested.includes("implementation")) return 1;
   const concepts = new Set(
     scored
       .filter((item) => matchesRouteSurface(item.node, "test") && item.node.kind === "test")
-      .map((item) => testPathConcept(item.node.sourcePath, analysis))
+      .map((item) => routePathConcept(item.node.sourcePath, analysis))
       .filter((concept): concept is string => Boolean(concept))
   );
-  return Math.max(1, Math.min(3, concepts.size));
+  const directTestQuota = Math.max(1, Math.min(3, concepts.size));
+  return Math.min(5, directTestQuota + requestedVerificationScriptQuota(analysis));
 }
 
 function generalSurfacePriority(
@@ -278,27 +301,190 @@ function generalSurfacePriority(
   }
   if (surface === "test") {
     priority += item.node.kind === "test" ? 100 : -100;
-    if (isVerificationScriptPath(sourcePath)) priority -= 120;
+    if (isVerificationScriptPath(sourcePath)) {
+      priority += requestedVerificationScriptQuota(analysis) > 0 ? 220 : -120;
+      priority += taskPathAffinity(sourcePath, analysis.raw) * 100;
+    }
     if (/(?:^|[-_/])(?:release|publish)(?:[-_.\/]|$)/.test(sourcePath) && !hasAnyKeyword(keywords, ["release", "publish"])) {
       priority -= 100;
     }
-    const concept = testPathConcept(sourcePath, analysis);
+    const concept = routePathConcept(sourcePath, analysis);
     if (concept) {
       priority += 30;
       if (new RegExp(`(?:^|/)${escapeRegExp(concept)}\\.(?:test|spec)\\.`).test(sourcePath)) priority += 40;
     }
   }
+  if (surface === "config" && hasAnyKeyword(keywords, ["test", "verification", "regression"])) {
+    if (/(^|\/)(?:vitest|jest|playwright|cypress|pytest|tox|ava|mocha)(?:\.|-|\/)/.test(sourcePath)) priority += 500;
+    if (/(?:tsup|rollup|webpack|vite)\./.test(sourcePath) && !/(?:vitest|test)/.test(sourcePath)) priority -= 100;
+  }
   if (surface === "evidence" && /evaluation/.test(sourcePath)) priority += 500;
   return priority;
 }
 
-function testPathConcept(sourcePath: string, analysis: ReturnType<typeof analyzeTask>): string | undefined {
+function routePathConcept(sourcePath: string, analysis: ReturnType<typeof analyzeTask>): string | undefined {
   const normalizedPath = sourcePath.toLowerCase().replace(/[^a-z0-9]+/g, " ");
   return analysis.keywords.find(
     (keyword) => keyword.length > 3
-      && !["test", "tests", "spec", "regression", "verification", "focused"].includes(keyword)
+      && ![
+        "test",
+        "tests",
+        "spec",
+        "regression",
+        "verification",
+        "focused",
+        "implementation",
+        "route",
+        "router",
+        "routing",
+        "shared",
+        "generated",
+        "artifact"
+      ].includes(keyword)
       && new RegExp(`(?:^| )${escapeRegExp(keyword)}(?: |$)`).test(normalizedPath)
   );
+}
+
+function selectGeneralTestRepresentatives(
+  ranked: ScoredNode[],
+  analysis: ReturnType<typeof analyzeTask>,
+  quota: number
+): ScoredNode[] {
+  const scriptQuota = Math.min(requestedVerificationScriptQuota(analysis), quota);
+  const directQuota = Math.max(0, quota - scriptQuota);
+  const result: ScoredNode[] = [];
+  const concepts = new Set<string>();
+  const directTests = ranked.filter(isDirectTestCandidate);
+  const conceptualTests = directTests.filter((item) => routePathConcept(item.node.sourcePath, analysis));
+
+  for (const item of conceptualTests.length ? conceptualTests : directTests) {
+    const concept = routePathConcept(item.node.sourcePath, analysis);
+    if (concept && concepts.has(concept)) continue;
+    result.push(item);
+    if (concept) concepts.add(concept);
+    if (result.length >= directQuota) break;
+  }
+
+  const scriptRoles = new Set<string>();
+  for (const item of ranked.filter((candidate) => isVerificationScriptPath(candidate.node.sourcePath))) {
+    const role = verificationScriptRole(item.node.sourcePath);
+    if (scriptRoles.has(role)) continue;
+    result.push(item);
+    scriptRoles.add(role);
+    if (scriptRoles.size >= scriptQuota) break;
+  }
+
+  for (const item of ranked) {
+    if (result.length >= quota) break;
+    if (result.some((selected) => selected.node.sourcePath === item.node.sourcePath)) continue;
+    result.push(item);
+  }
+  return result.slice(0, quota);
+}
+
+function selectGeneralDocumentRepresentatives(
+  ranked: ScoredNode[],
+  analysis: ReturnType<typeof analyzeTask>,
+  quota: number
+): ScoredNode[] {
+  const result: ScoredNode[] = [];
+  const selectedPaths = new Set<string>();
+  const localized = (sourcePath: string): boolean => /(^|\/)(?:zh-cn|zh-hans|zh_cn)(\/|$)/.test(sourcePath.toLowerCase());
+  const append = (item: ScoredNode | undefined): void => {
+    if (!item || selectedPaths.has(item.node.sourcePath) || result.length >= quota) return;
+    result.push(item);
+    selectedPaths.add(item.node.sourcePath);
+  };
+
+  const requestedVersion = documentVersionPriority(analysis.raw);
+  const groups = new Map<string, ScoredNode[]>();
+  for (const item of ranked) {
+    const fileName = path.posix.basename(item.node.sourcePath).toLowerCase();
+    groups.set(fileName, [...(groups.get(fileName) ?? []), item]);
+  }
+  const bestGroup = [...groups.values()].sort((left, right) => {
+    const leftPath = left[0]?.node.sourcePath ?? "";
+    const rightPath = right[0]?.node.sourcePath ?? "";
+    const leftVersion = documentVersionPriority(leftPath);
+    const rightVersion = documentVersionPriority(rightPath);
+    const leftVersionMatch = requestedVersion > 0 && leftVersion === requestedVersion ? 1 : 0;
+    const rightVersionMatch = requestedVersion > 0 && rightVersion === requestedVersion ? 1 : 0;
+    const leftComplete = Number(left.some((item) => localized(item.node.sourcePath)) && left.some((item) => !localized(item.node.sourcePath)));
+    const rightComplete = Number(right.some((item) => localized(item.node.sourcePath)) && right.some((item) => !localized(item.node.sourcePath)));
+    const leftScore = Math.max(...left.map((item) => item.score));
+    const rightScore = Math.max(...right.map((item) => item.score));
+    return rightVersionMatch - leftVersionMatch
+      || documentTaskAffinity(rightPath, analysis.raw) - documentTaskAffinity(leftPath, analysis.raw)
+      || rightComplete - leftComplete
+      || (requestedVersion === 0 ? rightVersion - leftVersion : 0)
+      || rightScore - leftScore
+      || leftPath.localeCompare(rightPath);
+  })[0] ?? [];
+
+  append(bestGroup.find((item) => !localized(item.node.sourcePath)));
+  append(bestGroup.find((item) => localized(item.node.sourcePath)));
+  append(ranked.find((item) => localized(item.node.sourcePath)));
+  for (const item of ranked) append(item);
+  return result;
+}
+
+function documentTaskAffinity(sourcePath: string, task: string): number {
+  const ignored = new Set([
+    "doc",
+    "docs",
+    "documentation",
+    "evidence",
+    "machine",
+    "readable",
+    "record",
+    "records",
+    "report",
+    "research"
+  ]);
+  const taskTokens = new Set(
+    (task.toLowerCase().match(/[a-z0-9]+/g) ?? [])
+      .filter((token) => !ignored.has(token) && !/^\d+$/.test(token))
+  );
+  const pathTokens = new Set(
+    (sourcePath.toLowerCase().match(/[a-z0-9]+/g) ?? [])
+      .filter((token) => !ignored.has(token) && !/^\d+$/.test(token))
+  );
+  return [...pathTokens].filter((token) => taskTokens.has(token)).length;
+}
+
+function documentVersionPriority(value: string): number {
+  const versions = [...value.toLowerCase().matchAll(/(?:^|[^a-z0-9])v?(\d+)[._-](\d+)(?:[._-](\d+))?/g)];
+  return versions.reduce((highest, match) => {
+    const major = Number(match[1] ?? 0);
+    const minor = Number(match[2] ?? 0);
+    const patch = Number(match[3] ?? 0);
+    return Math.max(highest, major * 1_000_000 + minor * 1_000 + patch);
+  }, 0);
+}
+
+function requestedVerificationScriptQuota(analysis: ReturnType<typeof analyzeTask>): number {
+  const raw = analysis.raw.toLowerCase();
+  const plural = /\b(?:release[-\s]?verification|verification|verify|smoke)\b.{0,48}\bscripts\b|\bscripts\b.{0,48}\b(?:release[-\s]?verification|verification|verify|smoke)\b/.test(raw);
+  if (plural) return 2;
+  const chineseMatches = raw.match(/(?:验证|驗證|冒烟|冒煙|检查|檢查).{0,16}(?:脚本|腳本)|(?:脚本|腳本).{0,16}(?:验证|驗證|冒烟|冒煙|检查|檢查)/g) ?? [];
+  if (chineseMatches.length > 1 || /(?:验证|驗證).{0,8}(?:与|和|及|、).{0,8}(?:冒烟|冒煙).{0,8}(?:脚本|腳本)/.test(raw)) return 2;
+  if (chineseMatches.length === 1) return 1;
+  const singular = /\b(?:release[-\s]?verification|verification|verify|smoke)\b.{0,48}\bscript\b|\bscript\b.{0,48}\b(?:release[-\s]?verification|verification|verify|smoke)\b/.test(raw);
+  return singular ? 1 : 0;
+}
+
+function verificationScriptRole(sourcePath: string): string {
+  const normalized = sourcePath.toLowerCase();
+  if (/(^|[-_/])smoke([-_.\/]|$)/.test(normalized)) return "smoke";
+  if (/(^|[-_/])benchmark([-_.\/]|$)/.test(normalized)) return "benchmark";
+  return "verify";
+}
+
+function taskPathAffinity(sourcePath: string, task: string): number {
+  const ignored = new Set(["script", "scripts", "verify", "verification", "test", "tests"]);
+  const taskTokens = new Set((task.toLowerCase().match(/[a-z0-9]+/g) ?? []).filter((token) => !ignored.has(token)));
+  const pathTokens = new Set((sourcePath.toLowerCase().match(/[a-z0-9]+/g) ?? []).filter((token) => !ignored.has(token)));
+  return [...pathTokens].filter((token) => taskTokens.has(token)).length;
 }
 
 function escapeRegExp(value: string): string {

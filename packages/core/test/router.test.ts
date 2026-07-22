@@ -60,6 +60,8 @@ describe("routePalace", () => {
     expect(classifyTask("Fix npm publish authentication failure E401")).toBe("bugfix");
     expect(classifyTask("修复 npm 发布失败 E401")).toBe("bugfix");
     expect(classifyTask("Deploy the application to production")).toBe("unknown");
+    expect(classifyTask("Improve release verification script routing")).toBe("refactor");
+    expect(classifyTask("优化发布验证脚本路由")).toBe("refactor");
     expect(analysis.keywords).toEqual(expect.arrayContaining([
       "release",
       "package",
@@ -340,6 +342,114 @@ export const $ZodDiscriminatedUnion = core.$constructor("$ZodDiscriminatedUnion"
       ]));
       expect(route.route.some((step) => step.reason.includes("changed_with"))).toBe(true);
       expect(route.route.find((step) => step.sourcePath === "plugins/vertex-palace/mcp/server.cjs")?.loadLevel).toBe("summary");
+    });
+  });
+
+  it("allocates a bounded route across coordinated implementation, verification, docs, config, and generated artifacts", async () => {
+    await withFixture("ts-api", async (root) => {
+      const changedFiles = [
+        "packages/core/src/router/mode-selector.ts",
+        "packages/core/src/packer/context-packer.ts",
+        "packages/shared/src/types.ts",
+        "packages/core/test/mode-selector.test.ts",
+        "packages/core/test/context.test.ts",
+        "packages/core/vitest.config.ts",
+        "scripts/verify-release-candidate.cjs",
+        "scripts/smoke-mcp.cjs",
+        "docs/research/ADVISORY_SAFETY_CONTRACT_0_4_ALPHA.md",
+        "docs/zh-CN/ADVISORY_SAFETY_CONTRACT_0_4_ALPHA.md",
+        "plugins/vertex-palace/mcp/server.cjs"
+      ];
+      const sources = new Map<string, string>([
+        ["packages/core/src/router/mode-selector.ts", "export function selectAdvisoryMode() { return { evidenceStatus: 'insufficient', interventionPolicy: 'advisory' }; }\n"],
+        ["packages/core/src/packer/context-packer.ts", "export function packAdvisoryBoundaries() { return { stopEnforced: false }; }\n"],
+        ["packages/shared/src/types.ts", "export type AdvisorySafetyContract = { evidenceStatus: 'sufficient' | 'insufficient'; interventionPolicy: 'advisory' | 'bounded' };\n"],
+        ["packages/core/test/mode-selector.test.ts", "describe('advisory mode selector', () => it('requires sufficient evidence for bounded intervention', () => true));\n"],
+        ["packages/core/test/context.test.ts", "describe('advisory context packer', () => it('does not enforce an early stop', () => true));\n"],
+        ["packages/core/vitest.config.ts", "export default { test: { pool: 'forks', fileParallelism: false } };\n"],
+        ["scripts/verify-release-candidate.cjs", "module.exports = () => 'verify advisory safety contract in a clean tarball';\n"],
+        ["scripts/smoke-mcp.cjs", "module.exports = () => 'smoke generated MCP advisory payload';\n"],
+        ["docs/research/ADVISORY_SAFETY_CONTRACT_0_4_ALPHA.md", "# Advisory Safety Contract 0.4 Alpha\n\nEvidence status and intervention authority remain separate.\n"],
+        ["docs/zh-CN/ADVISORY_SAFETY_CONTRACT_0_4_ALPHA.md", "# Advisory Safety Contract 0.4 Alpha - Simplified Chinese\n\nBilingual evidence status and intervention authority.\n"],
+        ["packages/mcp/src/server.ts", "export const startMcpServer = () => 'advisory payload';\n"],
+        ["tsup.plugin-mcp.config.ts", "import { defineConfig } from 'tsup';\nexport default defineConfig({ entry: { server: 'packages/mcp/src/server.ts' }, outDir: 'plugins/vertex-palace/mcp', outExtension: () => ({ js: '.cjs' }) });\n"],
+        ["plugins/vertex-palace/mcp/server.cjs", "module.exports = { generated: true, interventionPolicy: 'advisory' };\n"],
+        ["packages/core/test/router.test.ts", "describe('unrelated route scoring', () => it('keeps old behavior', () => true));\n"],
+        ["packages/core/vitest.integration.config.ts", "export default { test: { include: ['integration/**'] } };\n"],
+        ["scripts/verify-publish-registry.cjs", "module.exports = () => 'verify npm registry publication';\n"],
+        ["scripts/smoke-cli.cjs", "module.exports = () => 'smoke unrelated CLI';\n"],
+        ["docs/research/ADAPTIVE_MEMORY_FIX_0_3_0.md", "# Historic Adaptive Memory Fix\n\nOld release verification evidence.\n"],
+        ["docs/zh-CN/ADAPTIVE_MEMORY_FIX_0_3_0.md", "# Historic Adaptive Memory Fix - Simplified Chinese\n\nOld bilingual release evidence.\n"]
+      ]);
+      for (const [relativePath, source] of sources) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const task = "Improve advisory-safety routing across mode selection and context packing; update the shared contract, focused tests, bilingual research docs, release verification scripts, test configuration, and generated MCP artifact.";
+      const analysis = analyzeTask(task);
+      const evaluation = await evaluateRoute(root, task, {
+        changedFiles,
+        routeLimit: 12,
+        budget: 6000,
+        maxDrawers: 4
+      });
+
+      if (process.env.MULTI_SURFACE_ROUTING_REPORT === "1") {
+        process.stdout.write(`${JSON.stringify({
+          name: "advisory-multi-surface-0.4-alpha",
+          taskType: evaluation.taskType,
+          routeFiles: evaluation.route.files,
+          changedFiles,
+          changedFileCoverage: evaluation.coverage.changedFileCoverage,
+          routeFocus: evaluation.coverage.routeFocus,
+          confidence: evaluation.route.confidence,
+          calibration: evaluation.calibration
+        })}\n`);
+      }
+
+      expect(classifyTask(task)).toBe("refactor");
+      expect(requestedRouteSurfaces(analysis)).toEqual(expect.arrayContaining([
+        "implementation",
+        "shared",
+        "test",
+        "config",
+        "docs",
+        "mcp"
+      ]));
+      expect(evaluation.route.files).toEqual(expect.arrayContaining(changedFiles));
+      expect(evaluation.route.fileCount).toBeLessThanOrEqual(12);
+      expect(evaluation.coverage.changedFileCoverage).toBe(1);
+      expect(evaluation.coverage.routeFocus).toBeGreaterThanOrEqual(0.9);
+    });
+  });
+
+  it("keeps the current bilingual document pair when an older report has denser matching prose", async () => {
+    await withFixture("ts-api", async (root) => {
+      const sources = new Map<string, string>([
+        ["docs/research/MULTI_SURFACE_ROUTING_0_4_ALPHA.md", "# Multi-Surface Routing 0.4 Alpha\n\nCurrent advisory-safety routing research.\n"],
+        ["docs/zh-CN/MULTI_SURFACE_ROUTING_0_4_ALPHA.md", "# 0.4 Alpha Multi-Surface Routing\n\nCurrent bilingual advisory-safety research.\n"],
+        ["docs/research/MULTI_SURFACE_EVIDENCE_ROUTING_0_3_0.md", "# Multi-Surface Evidence Routing 0.3.0\n\nHistoric bilingual multi-surface routing research with advisory-safety machine evidence behavior, implementation details, focused regression tests, and generated MCP verification.\n"],
+        ["docs/zh-CN/MULTI_SURFACE_EVIDENCE_ROUTING_0_3_0.md", "# 0.3.0 Multi-Surface Evidence Routing\n\nHistoric bilingual advisory-safety machine evidence and routing research.\n"]
+      ]);
+      for (const [relativePath, source] of sources) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const task = "Improve bilingual multi-surface routing research docs while preserving advisory-safety machine evidence behavior.";
+      const route = await routePalace(root, task, { routeLimit: 4, budget: 6000 });
+      const routed = route.route.map((step) => step.sourcePath.replace(/:\d+(?:-\d+)?$/, ""));
+
+      expect(classifyTask(task)).toBe("refactor");
+      expect(routed).toEqual(expect.arrayContaining([
+        "docs/research/MULTI_SURFACE_ROUTING_0_4_ALPHA.md",
+        "docs/zh-CN/MULTI_SURFACE_ROUTING_0_4_ALPHA.md"
+      ]));
     });
   });
 

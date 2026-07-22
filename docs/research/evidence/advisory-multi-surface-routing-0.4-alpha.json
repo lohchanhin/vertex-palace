@@ -1,0 +1,163 @@
+{
+  "schemaVersion": 1,
+  "name": "advisory-multi-surface-routing-0.4-alpha",
+  "recordedAt": "2026-07-22",
+  "baselineProductSource": "72d1ffe3deaa2f2847d669b93e01e87ee6337453",
+  "claimBoundary": "Synthetic fixed-oracle routing evaluation only. This does not measure end-to-end Agent correctness, reported tokens, wall time, or tool calls.",
+  "task": "Improve advisory-safety routing across mode selection and context packing; update the shared contract, focused tests, bilingual research docs, release verification scripts, test configuration, and generated MCP artifact.",
+  "settings": {
+    "routeLimit": 12,
+    "budget": 6000,
+    "maxDrawers": 4
+  },
+  "oracle": [
+    "packages/core/src/router/mode-selector.ts",
+    "packages/core/src/packer/context-packer.ts",
+    "packages/shared/src/types.ts",
+    "packages/core/test/mode-selector.test.ts",
+    "packages/core/test/context.test.ts",
+    "packages/core/vitest.config.ts",
+    "scripts/verify-release-candidate.cjs",
+    "scripts/smoke-mcp.cjs",
+    "docs/research/ADVISORY_SAFETY_CONTRACT_0_4_ALPHA.md",
+    "docs/zh-CN/ADVISORY_SAFETY_CONTRACT_0_4_ALPHA.md",
+    "plugins/vertex-palace/mcp/server.cjs"
+  ],
+  "baseline": {
+    "source": "First failing regression run before the route-allocation change",
+    "routeFiles": [
+      "docs/research/ADVISORY_SAFETY_CONTRACT_0_4_ALPHA.md",
+      "docs/zh-CN/ADVISORY_SAFETY_CONTRACT_0_4_ALPHA.md",
+      "packages/shared/src/types.ts",
+      "packages/core/src/packer/context-packer.ts",
+      "packages/core/src/router/mode-selector.ts",
+      "plugins/vertex-palace/mcp/server.cjs",
+      "scripts/smoke-mcp.cjs",
+      "docs/research/ADAPTIVE_MEMORY_FIX_0_3_0.md",
+      "tsup.plugin-mcp.config.ts",
+      "packages/core/test/context.test.ts",
+      "packages/core/test/mode-selector.test.ts",
+      "packages/core/test/router.test.ts"
+    ],
+    "missedFiles": [
+      "packages/core/vitest.config.ts",
+      "scripts/verify-release-candidate.cjs"
+    ],
+    "routeOnlyFiles": [
+      "docs/research/ADAPTIVE_MEMORY_FIX_0_3_0.md",
+      "tsup.plugin-mcp.config.ts",
+      "packages/core/test/router.test.ts"
+    ],
+    "metrics": {
+      "matchedFiles": 9,
+      "oracleFiles": 11,
+      "routeFiles": 12,
+      "changedFileCoverage": 0.8182,
+      "routeFocus": 0.75,
+      "confidence": null
+    }
+  },
+  "final": {
+    "source": "MULTI_SURFACE_ROUTING_REPORT=1 focused regression run",
+    "taskType": "refactor",
+    "routeFiles": [
+      "docs/research/ADVISORY_SAFETY_CONTRACT_0_4_ALPHA.md",
+      "docs/zh-CN/ADVISORY_SAFETY_CONTRACT_0_4_ALPHA.md",
+      "packages/shared/src/types.ts",
+      "packages/core/src/packer/context-packer.ts",
+      "packages/core/src/router/mode-selector.ts",
+      "plugins/vertex-palace/mcp/server.cjs",
+      "scripts/smoke-mcp.cjs",
+      "docs/research/ADAPTIVE_MEMORY_FIX_0_3_0.md",
+      "scripts/verify-release-candidate.cjs",
+      "packages/core/test/context.test.ts",
+      "packages/core/test/mode-selector.test.ts",
+      "packages/core/vitest.config.ts"
+    ],
+    "missedFiles": [],
+    "routeOnlyFiles": [
+      "docs/research/ADAPTIVE_MEMORY_FIX_0_3_0.md"
+    ],
+    "metrics": {
+      "matchedFiles": 11,
+      "oracleFiles": 11,
+      "routeFiles": 12,
+      "changedFileCoverage": 1,
+      "routeFocus": 0.9167,
+      "confidence": 0.35,
+      "calibration": "underconfident"
+    }
+  },
+  "realRepositorySelfEvaluation": {
+    "task": "Improve multi-surface routing and release-verification artifact intent; add role-aware implementation and focused regression tests, bilingual research records, record machine-readable evidence, and rebuild the generated MCP bundle.",
+    "triggerFromPreviousStage": {
+      "matchedFiles": 2,
+      "changedFiles": 18,
+      "changedFileCoverage": 0.1111,
+      "confidence": 0.35,
+      "calibration": "overconfident"
+    },
+    "iterations": [
+      {
+        "stage": "role allocation",
+        "matchedFiles": 6,
+        "changedFiles": 7,
+        "routeFiles": 12,
+        "changedFileCoverage": 0.8571,
+        "routeFocus": 0.5,
+        "confidence": 0.35,
+        "missedFiles": [
+          "docs/research/MULTI_SURFACE_ROUTING_0_4_ALPHA.md"
+        ]
+      },
+      {
+        "stage": "current bilingual document pairing",
+        "matchedFiles": 6,
+        "changedFiles": 7,
+        "routeFiles": 12,
+        "changedFileCoverage": 0.8571,
+        "routeFocus": 0.5,
+        "confidence": 0.35,
+        "missedFiles": [
+          "packages/core/src/router/publication-intent.ts"
+        ]
+      },
+      {
+        "stage": "explicit implementation concept preference",
+        "matchedFiles": 7,
+        "changedFiles": 7,
+        "routeFiles": 12,
+        "changedFileCoverage": 1,
+        "routeFocus": 0.5833,
+        "confidence": 0.35,
+        "calibration": "underconfident",
+        "missedFiles": [],
+        "routeOnlyFiles": [
+          "docs/research/MULTI_SURFACE_EVIDENCE_ROUTING_0_3_0.md",
+          "docs/research/evidence/multi-surface-evidence-routing-0.3.0.json",
+          "packages/core/src/router/route-scorer.ts",
+          "packages/core/src/router/analyze-task.ts",
+          "packages/core/src/packer/context-packer.ts"
+        ]
+      }
+    ],
+    "finalStaticContext": {
+      "indexedRepositoryEstimatedTokens": 227958,
+      "contextPackEstimatedTokens": 3804,
+      "reduction": 0.983,
+      "repositoryToPackRatio": 59.93,
+      "claimBoundary": "Static scanner and pack estimates only; not Agent usage or billing."
+    }
+  },
+  "verification": {
+    "focusedCommand": "MULTI_SURFACE_ROUTING_REPORT=1 pnpm --filter @vertex-palace/core exec vitest run test/router.test.ts --reporter=verbose",
+    "focusedTests": 30,
+    "workspaceCommand": "pnpm test",
+    "workspaceTests": 109,
+    "workspaceStatus": "passed",
+    "lintAndTypeCheck": "passed",
+    "build": "passed",
+    "mcpSmokeTools": 10,
+    "releaseCandidate": "passed"
+  }
+}
