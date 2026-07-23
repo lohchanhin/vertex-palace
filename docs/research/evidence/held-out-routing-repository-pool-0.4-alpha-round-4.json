@@ -1,0 +1,157 @@
+{
+  "schemaVersion": 1,
+  "studyId": "held-out-cross-repository-routing-round-4-0.4-alpha",
+  "status": "preregistered",
+  "claimBoundary": "Candidate-held-out repository pool only. No commit history, diff, subject, task, or Palace route was inspected while fixing this order and these HEAD commits. This does not claim that the repositories are unseen by the underlying model.",
+  "candidate": {
+    "productCommit": "efd53274e42fb8123745f2b8bb09a24e4fa384b7",
+    "cliPath": "dist/palace.cjs",
+    "cliSha256": "E0A2F54C826E742DF03BA0BC965C89AF834B3BBA199C1E135E63E21B291011D0"
+  },
+  "rules": {
+    "desiredTargets": 8,
+    "requiredLanguageFamilies": [
+      "javascript-typescript",
+      "python",
+      "go",
+      "rust"
+    ],
+    "targetsPerLanguageFamily": 2,
+    "repositoriesPerLanguageFamily": 3,
+    "repositoryOrderIsBinding": true,
+    "firstEligibleRepositoriesPerFamilyWin": true,
+    "thirdRepositoryPerFamilyIsFallback": true,
+    "pinnedHeadsObtainedWithGitLsRemoteHeadOnly": true,
+    "commitHistoryInspectedBeforePoolFreeze": false,
+    "palaceCallsOnCandidateTasksBeforePoolFreeze": 0
+  },
+  "previouslyObservedRepositories": [
+    "https://github.com/colinhacks/zod.git",
+    "https://github.com/psf/requests.git",
+    "https://github.com/sindresorhus/p-limit.git",
+    "https://github.com/fastify/fastify.git",
+    "https://github.com/pallets/click.git",
+    "https://github.com/date-fns/date-fns.git",
+    "https://github.com/BurntSushi/ripgrep.git",
+    "https://github.com/spf13/cobra.git",
+    "https://github.com/markedjs/marked.git",
+    "https://github.com/expressjs/express.git",
+    "https://github.com/encode/httpx.git",
+    "https://github.com/urfave/cli.git",
+    "https://github.com/clap-rs/clap.git",
+    "https://github.com/tj/commander.js.git",
+    "https://github.com/pytest-dev/pytest.git",
+    "https://github.com/go-chi/chi.git",
+    "https://github.com/tokio-rs/axum.git",
+    "https://github.com/koajs/koa.git",
+    "https://github.com/encode/starlette.git",
+    "https://github.com/gin-gonic/gin.git",
+    "https://github.com/tower-rs/tower.git",
+    "https://github.com/axios/axios.git",
+    "https://github.com/pallets/flask.git",
+    "https://github.com/labstack/echo.git",
+    "https://github.com/serde-rs/json.git",
+    "https://github.com/honojs/hono.git",
+    "https://github.com/pydantic/pydantic.git",
+    "https://github.com/gofiber/fiber.git",
+    "https://github.com/hyperium/hyper.git"
+  ],
+  "repositoryPool": [
+    {
+      "name": "undici",
+      "language": "JavaScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/nodejs/undici.git",
+      "pinnedHead": "9f09b49accd391cca818409447f2fb8bc93229b3",
+      "extensions": [".cjs", ".js", ".jsx", ".mjs", ".ts", ".tsx"]
+    },
+    {
+      "name": "aiohttp",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/aio-libs/aiohttp.git",
+      "pinnedHead": "7ffc8aeb6cd644fb3b2b41ae3b4d787d4b8217d4",
+      "extensions": [".py"]
+    },
+    {
+      "name": "validator",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/go-playground/validator.git",
+      "pinnedHead": "fd8bd3c9d513cd1d29e495974fa07dba7a2b5936",
+      "extensions": [".go"]
+    },
+    {
+      "name": "tracing",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/tokio-rs/tracing.git",
+      "pinnedHead": "d9d4c542de10f5d3a711b7a45ffe450fd0666437",
+      "extensions": [".rs"]
+    },
+    {
+      "name": "msw",
+      "language": "TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/mswjs/msw.git",
+      "pinnedHead": "49d9d47f613b072f8d20e1a025feaee7c5382b2b",
+      "extensions": [".cjs", ".js", ".jsx", ".mjs", ".ts", ".tsx"]
+    },
+    {
+      "name": "uvicorn",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/encode/uvicorn.git",
+      "pinnedHead": "d26c85c27bb8ea66237ff43f90ca23b774a3c1ce",
+      "extensions": [".py"]
+    },
+    {
+      "name": "gorm",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/go-gorm/gorm.git",
+      "pinnedHead": "1d6ce99528060be18a42be09aca8d39efcb47f28",
+      "extensions": [".go"]
+    },
+    {
+      "name": "reqwest",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/seanmonstar/reqwest.git",
+      "pinnedHead": "221abe9ec921e22fe1bafaed47b51b03bed4b7c3",
+      "extensions": [".rs"]
+    },
+    {
+      "name": "vite",
+      "language": "TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/vitejs/vite.git",
+      "pinnedHead": "791843e1591ec2d65a401560bc1fc0a85b32ee32",
+      "extensions": [".cjs", ".js", ".jsx", ".mjs", ".ts", ".tsx"]
+    },
+    {
+      "name": "poetry",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/python-poetry/poetry.git",
+      "pinnedHead": "f46702336862f30050d5c641d5ed6f7568ded793",
+      "extensions": [".py"]
+    },
+    {
+      "name": "go-redis",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/redis/go-redis.git",
+      "pinnedHead": "5c82f57a47e097b32509ac2abd3d7c9d57f5100b",
+      "extensions": [".go"]
+    },
+    {
+      "name": "rayon",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/rayon-rs/rayon.git",
+      "pinnedHead": "1f9bb2538e50f1e6d1bc2e3d06a361ba2af0b632",
+      "extensions": [".rs"]
+    }
+  ]
+}
