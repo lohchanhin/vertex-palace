@@ -1,0 +1,467 @@
+{
+  "schemaVersion": 2,
+  "studyId": "held-out-cross-repository-routing-round-3-0.4-alpha",
+  "generatedAt": "2026-07-23T03:01:09.393Z",
+  "status": "failed",
+  "failures": [
+    "koa: implementation or test surface coverage was incomplete",
+    "koa: route focus fell below 0.50",
+    "koa: route precision fell below 0.50",
+    "koa: route was overconfident against observed coverage",
+    "starlette: target materialization failed",
+    "gin: target materialization failed",
+    "tower: target materialization failed",
+    "axios: target materialization failed",
+    "echo: target materialization failed",
+    "serde-json: target materialization failed",
+    "pydantic: target materialization failed",
+    "aggregate: not all preregistered trials completed",
+    "aggregate: task type mapping was incomplete",
+    "aggregate: implementation/test coverage was incomplete",
+    "aggregate: changed-file coverage fell below 0.90",
+    "aggregate: route focus fell below 0.75",
+    "aggregate: route precision fell below 0.75",
+    "aggregate: a target route focus fell below 0.50",
+    "aggregate: a target route precision fell below 0.50",
+    "aggregate: overconfident trials were observed"
+  ],
+  "claimBoundary": "First static routing observation on eight mechanically selected repositories and Git-history tasks unseen during candidate development. This is not an end-to-end Agent performance benchmark and cannot support Token or wall-time claims.",
+  "heldOutAgainstCandidate": true,
+  "evidenceClass": "preregistered-held-out-static-routing",
+  "candidate": {
+    "productCommit": "6060e0c6aa2aea64d0145c1e55bccdc4669e4b48",
+    "validationHarnessCommit": "2cfc712bfa100277635f13e970ded9d05cf120e2",
+    "cliPath": "dist/palace.cjs",
+    "frozenPaths": [
+      "packages",
+      "plugins/vertex-palace/mcp",
+      "package.json",
+      "pnpm-lock.yaml",
+      "pnpm-workspace.yaml",
+      "tsconfig.base.json",
+      "tsconfig.json",
+      "tsup.package-cli.config.ts",
+      "tsup.plugin-mcp.config.ts",
+      "scripts/trim-generated.cjs"
+    ],
+    "trackedWorktreeCleanBeforeMeasurement": true
+  },
+  "targetSelection": {
+    "manifestPath": "docs/research/evidence/held-out-routing-target-manifest-0.4-alpha-round-3.json",
+    "manifestCommit": "d35ff810c79c3374ce5b37d780138def50d3c52d",
+    "manifestSha256": "16D62D36341E22864DED89CB7A8C2CC6C5D765C0C4F8B6AE237CFC4D5F0E1DC2",
+    "selectorCommit": "a9f5ff2e22a7cd41ed6f019f75c9759500ecce09",
+    "palaceCallsOnCandidateTasksDuringSelection": 0,
+    "targetCount": 8,
+    "languageFamilies": [
+      "javascript-typescript",
+      "python",
+      "go",
+      "rust"
+    ],
+    "targetsPerLanguageFamily": 2
+  },
+  "taskTypeOracle": {
+    "timing": "Derived mechanically during target selection and frozen in the manifest before any Palace call.",
+    "rule": "Scoped or unscoped fix maps to bugfix; scoped or unscoped feat and subjects beginning with Add, Allow, Implement, or Support map to feature.",
+    "replacementRule": "No target may be removed, replaced, or rerouted after observation."
+  },
+  "environment": {
+    "platform": "win32",
+    "arch": "x64",
+    "node": "v24.13.1",
+    "npm": "11.8.0",
+    "git": "git version 2.53.0.windows.1"
+  },
+  "protocol": {
+    "repetitions": 2,
+    "sequential": true,
+    "budget": 6000,
+    "routeLimit": 9,
+    "maxDrawers": 4,
+    "outputCreateOnly": true,
+    "gates": {
+      "completedTargets": 8,
+      "completedTrials": 16,
+      "coreImplementationAndTestCoveragePerTarget": 1,
+      "minimumMacroCoverage": 0.9,
+      "minimumMacroFocus": 0.75,
+      "minimumMacroPrecision": 0.75,
+      "minimumTargetFocus": 0.5,
+      "minimumTargetPrecision": 0.5,
+      "deterministicRoutes": true,
+      "overconfidentTrials": 0,
+      "contextWithinBudget": true,
+      "selectedExcludedOverlap": 0,
+      "trackedWorktreeClean": true,
+      "freshAfterExplicitIndex": true
+    }
+  },
+  "aggregate": {
+    "targetCount": 8,
+    "passedTargets": 0,
+    "failedTargets": 8,
+    "trialCount": 2,
+    "completedTrials": 2,
+    "taskTypeMatchedTargets": 1,
+    "coreSurfaceCompleteTargets": 0,
+    "macroChangedFileCoverage": 0,
+    "macroRouteFocus": 0,
+    "macroRoutePrecision": 0,
+    "minimumTargetRouteFocus": 0,
+    "minimumTargetRoutePrecision": 0,
+    "overconfidentTrials": 2,
+    "maxContextEstimatedTokens": 2082,
+    "environmentOrSetupFailures": 7,
+    "harnessContractFailures": 0,
+    "productOrContractFailures": 1
+  },
+  "targets": [
+    {
+      "name": "koa",
+      "language": "JavaScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/koajs/koa.git",
+      "pinnedHead": "52d5e8ff5ac79f2479463b53df2999900ae95115",
+      "routeCommit": "4b12945e2e5dac698b6d3835e1a81415aed7ab26",
+      "groundTruthCommit": "480a4f064a4e8edb9e09be39355b3228ae4f4f9e",
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "task": "fix: response content-type value amount as one with testcase (#1899)",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "__tests__/application/response.test.js",
+        "lib/response.js"
+      ],
+      "implementationFiles": [
+        "lib/response.js"
+      ],
+      "testFiles": [
+        "__tests__/application/response.test.js"
+      ],
+      "status": "failed",
+      "failureCategory": "product-or-contract",
+      "failures": [
+        "implementation or test surface coverage was incomplete",
+        "route focus fell below 0.50",
+        "route precision fell below 0.50",
+        "route was overconfident against observed coverage"
+      ],
+      "deterministicRoutes": true,
+      "statusAfterExplicitIndex": {
+        "root": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-held-out-routing-round-3-cZKi8A\\koa",
+        "palaceRoot": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-held-out-routing-round-3-cZKi8A\\koa\\.palace",
+        "initialized": true,
+        "indexed": true,
+        "stale": false,
+        "nodeCount": 636,
+        "edgeCount": 2472,
+        "roomCount": 22,
+        "lastIndexedAt": "2026-07-23T02:59:17.656Z",
+        "configPath": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-held-out-routing-round-3-cZKi8A\\koa\\.palace\\palace.yml"
+      },
+      "trackedWorktreeClean": true,
+      "trials": [
+        {
+          "trial": 1,
+          "status": "completed",
+          "expectedTaskType": "bugfix",
+          "taskType": "bugfix",
+          "evaluationCacheState": "warm-index-after-explicit-index",
+          "contextCacheState": "warm-index-after-evaluation",
+          "evaluationElapsedMs": 1252,
+          "contextElapsedMs": 1009,
+          "mode": "full-palace",
+          "evidenceStatus": null,
+          "routeFiles": [
+            "lib/request.js",
+            "__tests__/response/type.test.js"
+          ],
+          "routeFileCount": 2,
+          "changedFileCoverage": 0,
+          "coreSurfaceCoverage": 0,
+          "missingImplementationFiles": [
+            "lib/response.js"
+          ],
+          "missingTestFiles": [
+            "__tests__/application/response.test.js"
+          ],
+          "routeFocus": 0,
+          "routePrecision": 0,
+          "routeConfidence": 0.47,
+          "calibration": {
+            "status": "overconfident",
+            "predictedConfidence": 0.47,
+            "observedCoverage": 0,
+            "error": 0.47
+          },
+          "contextEstimatedTokens": 2082,
+          "contextBytes": 8327,
+          "contextMetricSource": "reported",
+          "selectedExcludedOverlap": []
+        },
+        {
+          "trial": 2,
+          "status": "completed",
+          "expectedTaskType": "bugfix",
+          "taskType": "bugfix",
+          "evaluationCacheState": "warm-index",
+          "contextCacheState": "warm-index-after-evaluation",
+          "evaluationElapsedMs": 1171,
+          "contextElapsedMs": 1005,
+          "mode": "full-palace",
+          "evidenceStatus": null,
+          "routeFiles": [
+            "lib/request.js",
+            "__tests__/response/type.test.js"
+          ],
+          "routeFileCount": 2,
+          "changedFileCoverage": 0,
+          "coreSurfaceCoverage": 0,
+          "missingImplementationFiles": [
+            "lib/response.js"
+          ],
+          "missingTestFiles": [
+            "__tests__/application/response.test.js"
+          ],
+          "routeFocus": 0,
+          "routePrecision": 0,
+          "routeConfidence": 0.47,
+          "calibration": {
+            "status": "overconfident",
+            "predictedConfidence": 0.47,
+            "observedCoverage": 0,
+            "error": 0.47
+          },
+          "contextEstimatedTokens": 2082,
+          "contextBytes": 8327,
+          "contextMetricSource": "reported",
+          "selectedExcludedOverlap": []
+        }
+      ]
+    },
+    {
+      "name": "starlette",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/encode/starlette.git",
+      "pinnedHead": "5174d4c8358a6f06aa8056bafd14c2272dab8dd1",
+      "routeCommit": "f617177ab955f7e79e0d863a7c28adb6200b4acc",
+      "groundTruthCommit": "7f78881448d06ac2b296fc3533abbb0148fb9402",
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "task": "Support multiple cookie headers in `Request.cookies` (#3029)",
+      "expectedTaskType": "feature",
+      "changedFiles": [
+        "starlette/requests.py",
+        "tests/test_requests.py"
+      ],
+      "implementationFiles": [
+        "starlette/requests.py"
+      ],
+      "testFiles": [
+        "tests/test_requests.py"
+      ],
+      "status": "failed",
+      "failureCategory": "environment-or-setup",
+      "failures": [
+        "target materialization failed"
+      ],
+      "executionError": "Error: Command failed (128): git fetch --quiet --depth=2 origin 7f78881448d06ac2b296fc3533abbb0148fb9402\nerror: RPC failed; curl 56 Recv failure: Connection was reset\nerror: 7421 bytes of body are still expected\nfetch-pack: unexpected disconnect while reading sideband packet\nfatal: protocol error: bad pack header\n    at run (D:\\工作资料\\codex palace\\scripts\\verify-held-out-cross-repository-routing-round-3.cjs:572:11)\n    at clonePinnedTarget (D:\\工作资料\\codex palace\\scripts\\verify-held-out-cross-repository-routing-round-3.cjs:208:3)\n    at async main (D:\\工作资料\\codex palace\\scripts\\verify-held-out-cross-repository-routing-round-3.cjs:67:9)",
+      "deterministicRoutes": false,
+      "statusAfterExplicitIndex": null,
+      "trackedWorktreeClean": null,
+      "trials": []
+    },
+    {
+      "name": "gin",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/gin-gonic/gin.git",
+      "pinnedHead": "34dac209ffb6ef85cc78c5d217bbb7ad001d68fd",
+      "routeCommit": "da1e108614ecbbadfa5736b1b297b16121d23b9b",
+      "groundTruthCommit": "d9307dbcbbe796a64d9e0ef23452da888dd7f904",
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "task": "fix(context): skip chmod on pre-existing dirs in SaveUploadedFile (#4702)",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "context.go",
+        "context_test.go"
+      ],
+      "implementationFiles": [
+        "context.go"
+      ],
+      "testFiles": [
+        "context_test.go"
+      ],
+      "status": "failed",
+      "failureCategory": "environment-or-setup",
+      "failures": [
+        "target materialization failed"
+      ],
+      "executionError": "Error: Command failed (128): git fetch --quiet --depth=2 origin d9307dbcbbe796a64d9e0ef23452da888dd7f904\nfatal: unable to access 'https://github.com/gin-gonic/gin.git/': Could not resolve host: github.com\n    at run (D:\\工作资料\\codex palace\\scripts\\verify-held-out-cross-repository-routing-round-3.cjs:572:11)\n    at clonePinnedTarget (D:\\工作资料\\codex palace\\scripts\\verify-held-out-cross-repository-routing-round-3.cjs:208:3)\n    at async main (D:\\工作资料\\codex palace\\scripts\\verify-held-out-cross-repository-routing-round-3.cjs:67:9)",
+      "deterministicRoutes": false,
+      "statusAfterExplicitIndex": null,
+      "trackedWorktreeClean": null,
+      "trials": []
+    },
+    {
+      "name": "tower",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/tower-rs/tower.git",
+      "pinnedHead": "df06d70dbea345facbffb5881fe8647f53bf424d",
+      "routeCommit": "251296dc54a044383dffd16d2179b443e2615672",
+      "groundTruthCommit": "df06d70dbea345facbffb5881fe8647f53bf424d",
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "task": "fix(balance): clear cached P2C ready index after a discovery removal (#874)",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "tower/src/balance/p2c/service.rs",
+        "tower/src/balance/p2c/test.rs"
+      ],
+      "implementationFiles": [
+        "tower/src/balance/p2c/service.rs"
+      ],
+      "testFiles": [
+        "tower/src/balance/p2c/test.rs"
+      ],
+      "status": "failed",
+      "failureCategory": "environment-or-setup",
+      "failures": [
+        "target materialization failed"
+      ],
+      "executionError": "Error: Command failed (128): git fetch --quiet --depth=2 origin df06d70dbea345facbffb5881fe8647f53bf424d\nfatal: unable to access 'https://github.com/tower-rs/tower.git/': Could not resolve host: github.com\n    at run (D:\\工作资料\\codex palace\\scripts\\verify-held-out-cross-repository-routing-round-3.cjs:572:11)\n    at clonePinnedTarget (D:\\工作资料\\codex palace\\scripts\\verify-held-out-cross-repository-routing-round-3.cjs:208:3)\n    at async main (D:\\工作资料\\codex palace\\scripts\\verify-held-out-cross-repository-routing-round-3.cjs:67:9)",
+      "deterministicRoutes": false,
+      "statusAfterExplicitIndex": null,
+      "trackedWorktreeClean": null,
+      "trials": []
+    },
+    {
+      "name": "axios",
+      "language": "JavaScript and TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/axios/axios.git",
+      "pinnedHead": "311fcc5c8d989b7248f05d390bb83bfbfb009977",
+      "routeCommit": "02c2c4f891d76b15712a9edd149a2d9f7978774f",
+      "groundTruthCommit": "3d253b4f17a5107e6f274ee5b2e96e03508dceb2",
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "task": "fix: clamp negative progress values (#11039)",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "lib/helpers/progressEventReducer.js",
+        "tests/unit/helpers/progressEventReducer.test.js"
+      ],
+      "implementationFiles": [
+        "lib/helpers/progressEventReducer.js"
+      ],
+      "testFiles": [
+        "tests/unit/helpers/progressEventReducer.test.js"
+      ],
+      "status": "failed",
+      "failureCategory": "environment-or-setup",
+      "failures": [
+        "target materialization failed"
+      ],
+      "executionError": "Error: Command failed (128): git fetch --quiet --depth=2 origin 3d253b4f17a5107e6f274ee5b2e96e03508dceb2\nfatal: unable to access 'https://github.com/axios/axios.git/': Could not resolve host: github.com\n    at run (D:\\工作资料\\codex palace\\scripts\\verify-held-out-cross-repository-routing-round-3.cjs:572:11)\n    at clonePinnedTarget (D:\\工作资料\\codex palace\\scripts\\verify-held-out-cross-repository-routing-round-3.cjs:208:3)\n    at async main (D:\\工作资料\\codex palace\\scripts\\verify-held-out-cross-repository-routing-round-3.cjs:67:9)",
+      "deterministicRoutes": false,
+      "statusAfterExplicitIndex": null,
+      "trackedWorktreeClean": null,
+      "trials": []
+    },
+    {
+      "name": "echo",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/labstack/echo.git",
+      "pinnedHead": "ed8bbe4b6cbf519766c99e492b9cc427404b3719",
+      "routeCommit": "34f3f425100f94b500ced2e8799470e32bba877e",
+      "groundTruthCommit": "48128ab391f2ec9ea9679d59a472a97edaa08160",
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "task": "fix(static): preserve matched handler 404s",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "middleware/static.go",
+        "middleware/static_test.go"
+      ],
+      "implementationFiles": [
+        "middleware/static.go"
+      ],
+      "testFiles": [
+        "middleware/static_test.go"
+      ],
+      "status": "failed",
+      "failureCategory": "environment-or-setup",
+      "failures": [
+        "target materialization failed"
+      ],
+      "executionError": "Error: Command failed (128): git fetch --quiet --depth=2 origin 48128ab391f2ec9ea9679d59a472a97edaa08160\nfatal: unable to access 'https://github.com/labstack/echo.git/': Could not resolve host: github.com\n    at run (D:\\工作资料\\codex palace\\scripts\\verify-held-out-cross-repository-routing-round-3.cjs:572:11)\n    at clonePinnedTarget (D:\\工作资料\\codex palace\\scripts\\verify-held-out-cross-repository-routing-round-3.cjs:208:3)\n    at async main (D:\\工作资料\\codex palace\\scripts\\verify-held-out-cross-repository-routing-round-3.cjs:67:9)",
+      "deterministicRoutes": false,
+      "statusAfterExplicitIndex": null,
+      "trackedWorktreeClean": null,
+      "trials": []
+    },
+    {
+      "name": "serde-json",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/serde-rs/json.git",
+      "pinnedHead": "de8500740cdcabffb9734f503e4889def823cf10",
+      "routeCommit": "827a315bf2198558f0325b07bcc1e2cd973aba2f",
+      "groundTruthCommit": "cf16f75d81e28c723323bfc60a68fc02d2994fff",
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "task": "Add RawValue::from_string_unchecked",
+      "expectedTaskType": "feature",
+      "changedFiles": [
+        "src/raw.rs",
+        "tests/test.rs"
+      ],
+      "implementationFiles": [
+        "src/raw.rs"
+      ],
+      "testFiles": [
+        "tests/test.rs"
+      ],
+      "status": "failed",
+      "failureCategory": "environment-or-setup",
+      "failures": [
+        "target materialization failed"
+      ],
+      "executionError": "Error: Command failed (128): git fetch --quiet --depth=2 origin cf16f75d81e28c723323bfc60a68fc02d2994fff\nfatal: unable to access 'https://github.com/serde-rs/json.git/': Could not resolve host: github.com\n    at run (D:\\工作资料\\codex palace\\scripts\\verify-held-out-cross-repository-routing-round-3.cjs:572:11)\n    at clonePinnedTarget (D:\\工作资料\\codex palace\\scripts\\verify-held-out-cross-repository-routing-round-3.cjs:208:3)\n    at async main (D:\\工作资料\\codex palace\\scripts\\verify-held-out-cross-repository-routing-round-3.cjs:67:9)",
+      "deterministicRoutes": false,
+      "statusAfterExplicitIndex": null,
+      "trackedWorktreeClean": null,
+      "trials": []
+    },
+    {
+      "name": "pydantic",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/pydantic/pydantic.git",
+      "pinnedHead": "7b3dd4cf4ba551c33c963f22627cdc566402d8f6",
+      "routeCommit": "92208bf84df18f606df8c69f7043b4cc0673e34c",
+      "groundTruthCommit": "be3e4d174d2a429a31a36ba79530f299c367590f",
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "task": "Allow periods in unquoted `NameEmail` display names (#13206)",
+      "expectedTaskType": "feature",
+      "changedFiles": [
+        "pydantic/networks.py",
+        "tests/test_networks.py"
+      ],
+      "implementationFiles": [
+        "pydantic/networks.py"
+      ],
+      "testFiles": [
+        "tests/test_networks.py"
+      ],
+      "status": "failed",
+      "failureCategory": "environment-or-setup",
+      "failures": [
+        "target materialization failed"
+      ],
+      "executionError": "Error: Command failed (128): git fetch --quiet --depth=2 origin be3e4d174d2a429a31a36ba79530f299c367590f\nfatal: unable to access 'https://github.com/pydantic/pydantic.git/': Could not resolve host: github.com\n    at run (D:\\工作资料\\codex palace\\scripts\\verify-held-out-cross-repository-routing-round-3.cjs:572:11)\n    at clonePinnedTarget (D:\\工作资料\\codex palace\\scripts\\verify-held-out-cross-repository-routing-round-3.cjs:208:3)\n    at async main (D:\\工作资料\\codex palace\\scripts\\verify-held-out-cross-repository-routing-round-3.cjs:67:9)",
+      "deterministicRoutes": false,
+      "statusAfterExplicitIndex": null,
+      "trackedWorktreeClean": null,
+      "trials": []
+    }
+  ]
+}
