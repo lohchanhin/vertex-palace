@@ -1,0 +1,577 @@
+const assert = require("node:assert/strict");
+const { spawnSync } = require("node:child_process");
+const { createHash } = require("node:crypto");
+const { mkdir, mkdtemp, readFile, rm, writeFile } = require("node:fs/promises");
+const os = require("node:os");
+const path = require("node:path");
+const { normalizeContextTelemetry } = require("./lib/context-telemetry.cjs");
+
+const projectRoot = path.resolve(__dirname, "..");
+const cliPath = path.join(projectRoot, "dist", "palace.cjs");
+const manifestRelativePath = "docs/research/evidence/held-out-routing-target-manifest-0.4-alpha-round-2.json";
+const baselineRelativePath = "docs/research/evidence/held-out-cross-repository-routing-0.4-alpha-round-2.json";
+const manifestPath = path.join(projectRoot, manifestRelativePath);
+const baselinePath = path.join(projectRoot, baselineRelativePath);
+const outputPath = outputArgument(process.argv.slice(2));
+const studyId = "disclosed-routing-regression-round-2-after-real-index-repair-0.4-alpha";
+const candidateCommit = "83d7da56b4f04ffd2051a733992f43f5a42a13c3";
+const manifestSha256 = "694BF80DDB45A381F19FCA993674A71EA5BA78EB963258E3A2675C416D3B09A8";
+const baselineSha256 = "F6F31375C3C300F32C25063AFC493DD536CDC1A96748199C557772A5275DE438";
+const targetCount = 6;
+const budget = 6_000;
+const routeLimit = 9;
+const maxDrawers = 4;
+const repetitions = 2;
+const minimumMacroCoverage = 0.90;
+const minimumMacroFocus = 0.75;
+const minimumMacroPrecision = 0.75;
+const minimumTargetFocus = 0.50;
+const minimumTargetPrecision = 0.50;
+
+const frozenCandidatePaths = [
+  "packages",
+  "plugins/vertex-palace/mcp",
+  "package.json",
+  "pnpm-lock.yaml",
+  "pnpm-workspace.yaml",
+  "tsconfig.base.json",
+  "tsconfig.json",
+  "tsup.package-cli.config.ts",
+  "tsup.plugin-mcp.config.ts",
+  "scripts/trim-generated.cjs"
+];
+
+main().catch((error) => {
+  process.stderr.write(`${error instanceof Error ? error.stack : String(error)}\n`);
+  process.exitCode = 1;
+});
+
+async function main() {
+  const { manifest, baseline, manifestBytes, baselineBytes } = await assertFrozenInputs();
+  assertCleanTrackedCandidate("before build");
+  runNpm(["run", "build"], { cwd: projectRoot, timeout: 180_000 });
+  await assertFrozenInputs();
+  assertCleanTrackedCandidate("after build");
+
+  const temporaryRoot = await mkdtemp(path.join(os.tmpdir(), "vertex-palace-disclosed-routing-round-2-after-repair-"));
+  assert.ok(
+    path.resolve(temporaryRoot).startsWith(`${path.resolve(os.tmpdir())}${path.sep}`),
+    "Temporary validation root must stay inside the OS temporary directory."
+  );
+
+  let report;
+  try {
+    const targets = [];
+    for (const target of manifest.targets) {
+      const targetRoot = path.join(temporaryRoot, target.name);
+      try {
+        await clonePinnedTarget(target, targetRoot);
+      } catch (error) {
+        targets.push(targetExecutionFailure(target, "environment-or-setup", "target materialization failed", error));
+        continue;
+      }
+      try {
+        verifyPinnedTarget(target, targetRoot);
+      } catch (error) {
+        targets.push(targetExecutionFailure(target, "harness-contract", "manifest or Git oracle verification failed", error));
+        continue;
+      }
+      try {
+        targets.push(await validateTarget(target, targetRoot));
+      } catch (error) {
+        targets.push(targetExecutionFailure(target, "product-or-contract", "target validation execution failed", error));
+      }
+    }
+
+    const aggregateResult = aggregate(targets);
+    const failures = targets.flatMap((target) =>
+      target.failures.map((failure) => `${target.name}: ${failure}`)
+    );
+    appendAggregateFailures(failures, aggregateResult);
+
+    report = {
+      schemaVersion: 2,
+      studyId,
+      generatedAt: new Date().toISOString(),
+      status: failures.length ? "failed" : "passed",
+      failures,
+      claimBoundary: "Post-failure static routing regression on six disclosed repositories used during candidate repair. This can show whether known failures were corrected, but cannot establish held-out generalization or end-to-end Agent Token, wall-time, or correctness gains.",
+      heldOutAgainstCandidate: false,
+      evidenceClass: "seen-development-regression",
+      candidate: {
+        productCommit: candidateCommit,
+        validationHarnessCommit: run("git", ["rev-parse", "HEAD"], { cwd: projectRoot }).stdout.trim(),
+        cliPath: "dist/palace.cjs",
+        frozenPaths: frozenCandidatePaths,
+        trackedWorktreeCleanBeforeMeasurement: true
+      },
+      sources: {
+        targetManifest: {
+          path: manifestRelativePath,
+          sha256: sha256(manifestBytes),
+          originalEvidenceClass: "preregistered-held-out-target-manifest"
+        },
+        originalHeldOutFailure: {
+          path: baselineRelativePath,
+          sha256: sha256(baselineBytes),
+          studyId: baseline.studyId,
+          status: baseline.status,
+          heldOutAgainstOriginalCandidate: baseline.heldOutAgainstCandidate,
+          completedTrials: baseline.aggregate?.completedTrials ?? null
+        },
+        repositoryMaterialization: "fresh-pinned-clones"
+      },
+      environment: {
+        platform: process.platform,
+        arch: process.arch,
+        node: process.version,
+        npm: runNpm(["--version"], { cwd: projectRoot }).stdout.trim(),
+        git: run("git", ["--version"], { cwd: projectRoot }).stdout.trim()
+      },
+      protocol: {
+        repetitions,
+        sequential: true,
+        budget,
+        routeLimit,
+        maxDrawers,
+        outputCreateOnly: true,
+        gates: {
+          completedTargets: targetCount,
+          completedTrials: targetCount * repetitions,
+          coreImplementationAndTestCoveragePerTarget: 1,
+          minimumMacroCoverage,
+          minimumMacroFocus,
+          minimumMacroPrecision,
+          minimumTargetFocus,
+          minimumTargetPrecision,
+          deterministicRoutes: true,
+          overconfidentTrials: 0,
+          contextWithinBudget: true,
+          selectedExcludedOverlap: 0,
+          trackedWorktreeClean: true,
+          freshAfterExplicitIndex: true
+        }
+      },
+      aggregate: aggregateResult,
+      targets
+    };
+
+    await mkdir(path.dirname(outputPath), { recursive: true });
+    await writeFile(outputPath, `${JSON.stringify(report, null, 2)}\n`, { encoding: "utf8", flag: "wx" });
+    process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);
+  } finally {
+    if (process.env.KEEP_DISCLOSED_ROUTING_ROUND_2_TEMP === "1") {
+      process.stderr.write(`Kept round-2 disclosed regression data at ${temporaryRoot}\n`);
+    } else {
+      await rm(temporaryRoot, { recursive: true, force: true });
+    }
+  }
+
+  if (report?.status !== "passed") process.exitCode = 1;
+}
+
+async function assertFrozenInputs() {
+  run("git", ["cat-file", "-e", `${candidateCommit}^{commit}`], { cwd: projectRoot });
+  run("git", ["diff", "--quiet", candidateCommit, "--", ...frozenCandidatePaths], { cwd: projectRoot });
+
+  const manifestBytes = await readFile(manifestPath);
+  const baselineBytes = await readFile(baselinePath);
+  assert.equal(sha256(manifestBytes), manifestSha256);
+  assert.equal(sha256(baselineBytes), baselineSha256);
+
+  const manifest = JSON.parse(manifestBytes.toString("utf8"));
+  const baseline = JSON.parse(baselineBytes.toString("utf8"));
+  assert.equal(manifest.status, "selected");
+  assert.equal(manifest.targets.length, targetCount);
+  assert.equal(baseline.status, "failed");
+  assert.equal(baseline.heldOutAgainstCandidate, true);
+  for (const target of manifest.targets) expectedTaskType(target.task);
+  return { manifest, baseline, manifestBytes, baselineBytes };
+}
+
+function assertCleanTrackedCandidate(phase) {
+  assert.equal(
+    run("git", ["status", "--short", "--untracked-files=no"], { cwd: projectRoot }).stdout.trim(),
+    "",
+    `Tracked candidate worktree must be clean ${phase}.`
+  );
+}
+
+async function clonePinnedTarget(target, root) {
+  await mkdir(root, { recursive: true });
+  run("git", ["init", "--quiet"], { cwd: root });
+  run("git", ["remote", "add", "origin", target.url], { cwd: root });
+  run("git", ["fetch", "--quiet", "--depth=2", "origin", target.groundTruthCommit], {
+    cwd: root,
+    timeout: 300_000
+  });
+  run("git", ["fetch", "--quiet", "--depth=1", "origin", target.routeCommit], {
+    cwd: root,
+    timeout: 300_000
+  });
+  run("git", ["-c", "advice.detachedHead=false", "checkout", "--detach", target.routeCommit], { cwd: root });
+}
+
+function verifyPinnedTarget(target, root) {
+  assert.equal(run("git", ["rev-parse", "HEAD"], { cwd: root }).stdout.trim(), target.routeCommit);
+  assert.equal(run("git", ["rev-parse", `${target.groundTruthCommit}^`], { cwd: root }).stdout.trim(), target.routeCommit);
+  assert.equal(
+    run("git", ["show", "-s", "--format=%s", target.groundTruthCommit], { cwd: root }).stdout.trim(),
+    target.task
+  );
+  assert.deepEqual(
+    lines(run("git", ["diff", "--name-only", target.routeCommit, target.groundTruthCommit, "--"], { cwd: root }).stdout).sort(),
+    [...target.changedFiles].sort()
+  );
+  assert.equal(run("git", ["status", "--short", "--untracked-files=no"], { cwd: root }).stdout.trim(), "");
+}
+
+async function validateTarget(target, root) {
+  runNode([cliPath, "init"], { cwd: root, timeout: 180_000 });
+  runNode([cliPath, "index"], { cwd: root, timeout: 240_000 });
+  const statusAfterExplicitIndex = parseJsonOutput(
+    runNode([cliPath, "status"], { cwd: root, timeout: 180_000 }).stdout,
+    `${target.name} status after explicit index`
+  );
+
+  const expectedType = expectedTaskType(target.task);
+  const trials = [];
+  const failures = [];
+  for (let trial = 1; trial <= repetitions; trial += 1) {
+    let evaluation;
+    let failedPhase = "evaluate";
+    try {
+      const evaluationStartedAt = performance.now();
+      evaluation = parseJsonOutput(runNode([
+        cliPath,
+        "evaluate",
+        target.task,
+        ...target.changedFiles.flatMap((file) => ["--changed-file", file]),
+        "--budget", String(budget),
+        "--route-limit", String(routeLimit),
+        "--max-drawers", String(maxDrawers),
+        "--json"
+      ], { cwd: root, timeout: 240_000 }).stdout, `${target.name} trial ${trial} evaluate`);
+      const evaluationElapsedMs = Math.round(performance.now() - evaluationStartedAt);
+
+      failedPhase = "context";
+      const contextStartedAt = performance.now();
+      const contextResult = runNode([
+        cliPath,
+        "context",
+        target.task,
+        "--auto",
+        "--format", "json",
+        "--budget", String(budget),
+        "--route-limit", String(routeLimit),
+        "--max-drawers", String(maxDrawers)
+      ], { cwd: root, timeout: 240_000 });
+      const context = parseJsonOutput(contextResult.stdout, `${target.name} trial ${trial} context`);
+      const telemetry = normalizeContextTelemetry(context, contextResult.stdout);
+      const contextElapsedMs = Math.round(performance.now() - contextStartedAt);
+
+      const routeFiles = unique(evaluation.route.files.map(stripLocation));
+      const routeFileSet = new Set(routeFiles);
+      const changedFileSet = new Set(target.changedFiles);
+      const missingImplementationFiles = target.implementationFiles.filter((file) => !routeFileSet.has(file));
+      const missingTestFiles = target.testFiles.filter((file) => !routeFileSet.has(file));
+      const routePrecision = routeFiles.length
+        ? round(routeFiles.filter((file) => changedFileSet.has(file)).length / routeFiles.length)
+        : 0;
+      const coreFileCount = target.implementationFiles.length + target.testFiles.length;
+      const coreSurfaceCoverage = round(
+        (coreFileCount - missingImplementationFiles.length - missingTestFiles.length) / coreFileCount
+      );
+      const selectedFiles = unique([
+        ...telemetry.executionBoundaries.primary,
+        ...telemetry.executionBoundaries.support,
+        ...telemetry.executionBoundaries.deferred
+      ].map(stripLocation));
+      const excludedFiles = unique(telemetry.executionBoundaries.excluded
+        .map((entry) => typeof entry === "string" ? entry : entry?.sourcePath)
+        .filter((entry) => typeof entry === "string" && entry.length > 0)
+        .map(stripLocation));
+
+      trials.push({
+        trial,
+        status: "completed",
+        expectedTaskType: expectedType,
+        taskType: evaluation.taskType,
+        evaluationCacheState: trial === 1 ? "warm-index-after-explicit-index" : "warm-index",
+        contextCacheState: "warm-index-after-evaluation",
+        evaluationElapsedMs,
+        contextElapsedMs,
+        mode: telemetry.mode,
+        evidenceStatus: telemetry.evidenceStatus,
+        routeFiles,
+        routeFileCount: routeFiles.length,
+        changedFileCoverage: evaluation.coverage.changedFileCoverage,
+        coreSurfaceCoverage,
+        missingImplementationFiles,
+        missingTestFiles,
+        routeFocus: evaluation.coverage.routeFocus,
+        routePrecision,
+        routeConfidence: evaluation.route.confidence,
+        calibration: evaluation.calibration,
+        contextEstimatedTokens: telemetry.payload.contextEstimatedTokens,
+        contextBytes: telemetry.payload.contextBytes,
+        contextMetricSource: telemetry.payload.source,
+        selectedExcludedOverlap: selectedFiles.filter((selected) =>
+          excludedFiles.some((excluded) => pathsOverlap(selected, excluded))
+        )
+      });
+    } catch (error) {
+      trials.push({
+        trial,
+        status: "execution-error",
+        failedPhase,
+        expectedTaskType: expectedType,
+        taskType: evaluation?.taskType ?? null,
+        routeFiles: unique(evaluation?.route?.files?.map(stripLocation) ?? []),
+        routeFileCount: evaluation?.route?.files?.length ?? 0,
+        changedFileCoverage: evaluation?.coverage?.changedFileCoverage ?? null,
+        routeFocus: evaluation?.coverage?.routeFocus ?? null,
+        routeConfidence: evaluation?.route?.confidence ?? null,
+        calibration: evaluation?.calibration ?? null,
+        error: summarizeError(error)
+      });
+      failures.push(`trial ${trial} ${failedPhase} execution failed`);
+    }
+  }
+
+  const completed = trials.filter((trial) => trial.status === "completed");
+  const deterministicRoutes = completed.length === repetitions
+    && completed.every((trial) => sameValues(trial.routeFiles, completed[0].routeFiles));
+  if (completed.length !== repetitions) failures.push("not all preregistered trials completed");
+  if (!deterministicRoutes) failures.push("route files differed across repetitions");
+  if (completed.some((trial) => trial.taskType !== expectedType)) failures.push(`task type differed from ${expectedType}`);
+  if (completed.some((trial) => trial.coreSurfaceCoverage !== 1)) failures.push("implementation or test surface coverage was incomplete");
+  if (completed.some((trial) => trial.routeFocus < minimumTargetFocus)) failures.push(`route focus fell below ${minimumTargetFocus.toFixed(2)}`);
+  if (completed.some((trial) => trial.routePrecision < minimumTargetPrecision)) failures.push(`route precision fell below ${minimumTargetPrecision.toFixed(2)}`);
+  if (completed.some((trial) => trial.calibration.status === "overconfident")) failures.push("route was overconfident against observed coverage");
+  if (completed.some((trial) => trial.contextEstimatedTokens > budget)) failures.push("context payload exceeded the 6000-token ceiling");
+  if (completed.some((trial) => trial.selectedExcludedOverlap.length)) failures.push("selected and excluded boundaries overlapped");
+  if (statusAfterExplicitIndex.stale !== false) failures.push("status was stale immediately after explicit indexing");
+  const trackedStatus = run("git", ["status", "--short", "--untracked-files=no"], { cwd: root }).stdout.trim();
+  if (trackedStatus) failures.push("Palace modified tracked repository files");
+
+  return {
+    name: target.name,
+    language: target.language,
+    languageFamily: target.languageFamily,
+    url: target.url,
+    pinnedHead: target.pinnedHead,
+    routeCommit: target.routeCommit,
+    groundTruthCommit: target.groundTruthCommit,
+    oracleSource: target.oracleSource,
+    task: target.task,
+    expectedTaskType: expectedType,
+    changedFiles: target.changedFiles,
+    implementationFiles: target.implementationFiles,
+    testFiles: target.testFiles,
+    status: failures.length ? "failed" : "passed",
+    failureCategory: failures.length ? "product-or-contract" : null,
+    failures,
+    deterministicRoutes,
+    statusAfterExplicitIndex,
+    trackedWorktreeClean: trackedStatus === "",
+    trials
+  };
+}
+
+function aggregate(targets) {
+  const trials = targets.flatMap((target) => target.trials);
+  const completed = trials.filter((trial) => trial.status === "completed");
+  const changedFileCoverage = completed.map((trial) => trial.changedFileCoverage);
+  const routeFocus = completed.map((trial) => trial.routeFocus);
+  const routePrecision = completed.map((trial) => trial.routePrecision);
+  return {
+    targetCount: targets.length,
+    passedTargets: targets.filter((target) => target.status === "passed").length,
+    failedTargets: targets.filter((target) => target.status === "failed").length,
+    trialCount: trials.length,
+    completedTrials: completed.length,
+    taskTypeMatchedTargets: targets.filter((target) =>
+      target.trials.filter((trial) => trial.status === "completed").every((trial) => trial.taskType === target.expectedTaskType)
+      && target.trials.filter((trial) => trial.status === "completed").length === repetitions
+    ).length,
+    coreSurfaceCompleteTargets: targets.filter((target) =>
+      target.trials.filter((trial) => trial.status === "completed").every((trial) => trial.coreSurfaceCoverage === 1)
+      && target.trials.filter((trial) => trial.status === "completed").length === repetitions
+    ).length,
+    macroChangedFileCoverage: averageOrNull(changedFileCoverage),
+    macroRouteFocus: averageOrNull(routeFocus),
+    macroRoutePrecision: averageOrNull(routePrecision),
+    minimumTargetRouteFocus: routeFocus.length ? Math.min(...routeFocus) : null,
+    minimumTargetRoutePrecision: routePrecision.length ? Math.min(...routePrecision) : null,
+    overconfidentTrials: completed.filter((trial) => trial.calibration.status === "overconfident").length,
+    maxContextEstimatedTokens: completed.length
+      ? Math.max(...completed.map((trial) => trial.contextEstimatedTokens))
+      : null,
+    environmentOrSetupFailures: targets.filter((target) => target.failureCategory === "environment-or-setup").length,
+    harnessContractFailures: targets.filter((target) => target.failureCategory === "harness-contract").length,
+    productOrContractFailures: targets.filter((target) => target.failureCategory === "product-or-contract").length
+  };
+}
+
+function appendAggregateFailures(failures, result) {
+  if (result.targetCount !== targetCount) failures.push(`aggregate: target count differed from ${targetCount}`);
+  if (result.completedTrials !== targetCount * repetitions) failures.push("aggregate: not all preregistered trials completed");
+  if (result.taskTypeMatchedTargets !== targetCount) failures.push("aggregate: task type mapping was incomplete");
+  if (result.coreSurfaceCompleteTargets !== targetCount) failures.push("aggregate: implementation/test coverage was incomplete");
+  if (result.macroChangedFileCoverage === null || result.macroChangedFileCoverage < minimumMacroCoverage) {
+    failures.push(`aggregate: changed-file coverage fell below ${minimumMacroCoverage.toFixed(2)}`);
+  }
+  if (result.macroRouteFocus === null || result.macroRouteFocus < minimumMacroFocus) {
+    failures.push(`aggregate: route focus fell below ${minimumMacroFocus.toFixed(2)}`);
+  }
+  if (result.macroRoutePrecision === null || result.macroRoutePrecision < minimumMacroPrecision) {
+    failures.push(`aggregate: route precision fell below ${minimumMacroPrecision.toFixed(2)}`);
+  }
+  if (result.minimumTargetRouteFocus === null || result.minimumTargetRouteFocus < minimumTargetFocus) {
+    failures.push(`aggregate: a target route focus fell below ${minimumTargetFocus.toFixed(2)}`);
+  }
+  if (result.minimumTargetRoutePrecision === null || result.minimumTargetRoutePrecision < minimumTargetPrecision) {
+    failures.push(`aggregate: a target route precision fell below ${minimumTargetPrecision.toFixed(2)}`);
+  }
+  if (result.overconfidentTrials !== 0) failures.push("aggregate: overconfident trials were observed");
+}
+
+function targetExecutionFailure(target, category, message, error) {
+  return {
+    name: target.name,
+    language: target.language,
+    languageFamily: target.languageFamily,
+    url: target.url,
+    pinnedHead: target.pinnedHead,
+    routeCommit: target.routeCommit,
+    groundTruthCommit: target.groundTruthCommit,
+    oracleSource: target.oracleSource,
+    task: target.task,
+    expectedTaskType: expectedTaskTypeOrNull(target.task),
+    changedFiles: target.changedFiles,
+    implementationFiles: target.implementationFiles,
+    testFiles: target.testFiles,
+    status: "failed",
+    failureCategory: category,
+    failures: [message],
+    executionError: summarizeError(error),
+    deterministicRoutes: false,
+    statusAfterExplicitIndex: null,
+    trackedWorktreeClean: null,
+    trials: []
+  };
+}
+
+function expectedTaskType(subject) {
+  if (/^fix(?:\([^)]*\))?!?:/i.test(subject)) return "bugfix";
+  if (/^(?:feat(?:\([^)]*\))?!?:|add\b)/i.test(subject)) return "feature";
+  throw new Error(`No disclosed task-type mapping for subject: ${subject}`);
+}
+
+function expectedTaskTypeOrNull(subject) {
+  try {
+    return expectedTaskType(subject);
+  } catch {
+    return null;
+  }
+}
+
+function outputArgument(args) {
+  const index = args.indexOf("--out");
+  assert.ok(index >= 0, "--out is required so regression evidence cannot be lost.");
+  assert.ok(args[index + 1], "--out requires a repository-relative path.");
+  const resolved = path.resolve(projectRoot, args[index + 1]);
+  assert.ok(resolved.startsWith(`${projectRoot}${path.sep}`), "Output must stay inside the Vertex Palace repository.");
+  return resolved;
+}
+
+function stripLocation(sourcePath) {
+  return sourcePath.replace(/:\d+(?:-\d+)?$/, "");
+}
+
+function pathsOverlap(left, right) {
+  const normalizedLeft = left.replaceAll("\\", "/").replace(/^\.\//, "").replace(/\/$/, "").toLowerCase();
+  const normalizedRight = right.replaceAll("\\", "/").replace(/^\.\//, "").replace(/\/$/, "").toLowerCase();
+  return normalizedLeft === normalizedRight
+    || normalizedLeft.startsWith(`${normalizedRight}/`)
+    || normalizedRight.startsWith(`${normalizedLeft}/`);
+}
+
+function lines(value) {
+  return value.split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
+}
+
+function sameValues(left, right) {
+  return JSON.stringify([...left].sort()) === JSON.stringify([...right].sort());
+}
+
+function unique(values) {
+  return [...new Set(values)];
+}
+
+function averageOrNull(values) {
+  return values.length ? round(values.reduce((sum, value) => sum + value, 0) / values.length) : null;
+}
+
+function round(value) {
+  return Number(value.toFixed(3));
+}
+
+function sha256(value) {
+  return createHash("sha256").update(value).digest("hex").toUpperCase();
+}
+
+function parseJsonOutput(value, label) {
+  try {
+    return JSON.parse(value);
+  } catch (error) {
+    throw new Error(`${label} returned invalid JSON.\nstdout:\n${truncate(value)}`, { cause: error });
+  }
+}
+
+function summarizeError(error) {
+  return truncate(error instanceof Error ? error.stack ?? error.message : String(error));
+}
+
+function truncate(value, limit = 12_000) {
+  const text = String(value);
+  return text.length <= limit ? text : `${text.slice(0, limit)}\n...[truncated ${text.length - limit} characters]`;
+}
+
+function runNpm(args, options) {
+  if (process.platform === "win32") {
+    const commandLine = `npm ${args.map(quoteCmdArgument).join(" ")}`;
+    return run(process.env.ComSpec || "cmd.exe", ["/d", "/s", "/c", commandLine], options);
+  }
+  return run("npm", args, options);
+}
+
+function runNode(args, options) {
+  return run(process.execPath, args, options);
+}
+
+function quoteCmdArgument(value) {
+  const text = String(value);
+  assert.ok(!text.includes('"'), "Command arguments must not contain quotes.");
+  return /\s/.test(text) ? `"${text}"` : text;
+}
+
+function run(command, args, options = {}) {
+  const result = spawnSync(command, args, {
+    cwd: options.cwd,
+    encoding: "utf8",
+    env: process.env,
+    maxBuffer: 32 * 1024 * 1024,
+    timeout: options.timeout ?? 120_000
+  });
+  if (result.error) throw result.error;
+  if (result.status !== 0) {
+    throw new Error([
+      `Command failed (${result.status}): ${command} ${args.join(" ")}`,
+      result.stdout?.trim(),
+      result.stderr?.trim()
+    ].filter(Boolean).join("\n"));
+  }
+  return result;
+}
