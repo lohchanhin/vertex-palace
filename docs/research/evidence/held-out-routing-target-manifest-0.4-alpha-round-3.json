@@ -1,0 +1,736 @@
+{
+  "schemaVersion": 2,
+  "studyId": "held-out-cross-repository-routing-round-3-0.4-alpha",
+  "generatedAt": "2026-07-23T02:54:29.627Z",
+  "status": "selected",
+  "claimBoundary": "Mechanical target selection only. The frozen Vertex Palace candidate has not routed or evaluated any selected task.",
+  "candidateCommit": "6060e0c6aa2aea64d0145c1e55bccdc4669e4b48",
+  "selectorCommit": "a9f5ff2e22a7cd41ed6f019f75c9759500ecce09",
+  "selectorPath": "scripts/select-held-out-routing-targets-round-3.cjs",
+  "previouslyObservedRepositories": [
+    "https://github.com/colinhacks/zod.git",
+    "https://github.com/psf/requests.git",
+    "https://github.com/sindresorhus/p-limit.git",
+    "https://github.com/fastify/fastify.git",
+    "https://github.com/pallets/click.git",
+    "https://github.com/date-fns/date-fns.git",
+    "https://github.com/BurntSushi/ripgrep.git",
+    "https://github.com/spf13/cobra.git",
+    "https://github.com/markedjs/marked.git",
+    "https://github.com/expressjs/express.git",
+    "https://github.com/encode/httpx.git",
+    "https://github.com/urfave/cli.git",
+    "https://github.com/clap-rs/clap.git",
+    "https://github.com/tj/commander.js.git",
+    "https://github.com/pytest-dev/pytest.git",
+    "https://github.com/go-chi/chi.git",
+    "https://github.com/tokio-rs/axum.git"
+  ],
+  "rules": {
+    "desiredTargets": 8,
+    "requiredLanguageFamilies": [
+      "javascript-typescript",
+      "python",
+      "go",
+      "rust"
+    ],
+    "targetsPerLanguageFamily": 2,
+    "languageDiversitySatisfied": true,
+    "selectedPerLanguageFamily": {
+      "javascript-typescript": 2,
+      "python": 2,
+      "go": 2,
+      "rust": 2
+    },
+    "repositoryOrderIsBinding": true,
+    "firstEligibleRepositoriesPerFamilyWin": true,
+    "fallbackOnlyAfterNoEligibleCommitOrSetupFailureInThatFamily": true,
+    "fetchDepth": 400,
+    "scanLimit": 300,
+    "nonMergeSingleParent": true,
+    "newestEligibleCommitWins": true,
+    "minimumFiles": 2,
+    "maximumFiles": 6,
+    "allFilesMustBeModifiedSourceFiles": true,
+    "requiresImplementationAndFocusedTest": true,
+    "maximumChangedLines": 400,
+    "behavioralCommitSubjectRequired": true,
+    "expectedTaskTypeDerivedBeforeRouting": true,
+    "palaceCallsOnCandidateTasksDuringSelection": 0,
+    "outputCreateOnly": true
+  },
+  "repositoryPool": [
+    {
+      "name": "koa",
+      "language": "JavaScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/koajs/koa.git",
+      "pinnedHead": "52d5e8ff5ac79f2479463b53df2999900ae95115",
+      "extensions": [
+        ".cjs",
+        ".js",
+        ".mjs",
+        ".ts"
+      ]
+    },
+    {
+      "name": "starlette",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/encode/starlette.git",
+      "pinnedHead": "5174d4c8358a6f06aa8056bafd14c2272dab8dd1",
+      "extensions": [
+        ".py"
+      ]
+    },
+    {
+      "name": "gin",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/gin-gonic/gin.git",
+      "pinnedHead": "34dac209ffb6ef85cc78c5d217bbb7ad001d68fd",
+      "extensions": [
+        ".go"
+      ]
+    },
+    {
+      "name": "tower",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/tower-rs/tower.git",
+      "pinnedHead": "df06d70dbea345facbffb5881fe8647f53bf424d",
+      "extensions": [
+        ".rs"
+      ]
+    },
+    {
+      "name": "axios",
+      "language": "JavaScript and TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/axios/axios.git",
+      "pinnedHead": "311fcc5c8d989b7248f05d390bb83bfbfb009977",
+      "extensions": [
+        ".cjs",
+        ".js",
+        ".mjs",
+        ".ts"
+      ]
+    },
+    {
+      "name": "flask",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/pallets/flask.git",
+      "pinnedHead": "36e4a824f340fdee7ed50937ba8e7f6bc7d17f81",
+      "extensions": [
+        ".py"
+      ]
+    },
+    {
+      "name": "echo",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/labstack/echo.git",
+      "pinnedHead": "ed8bbe4b6cbf519766c99e492b9cc427404b3719",
+      "extensions": [
+        ".go"
+      ]
+    },
+    {
+      "name": "serde-json",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/serde-rs/json.git",
+      "pinnedHead": "de8500740cdcabffb9734f503e4889def823cf10",
+      "extensions": [
+        ".rs"
+      ]
+    },
+    {
+      "name": "hono",
+      "language": "TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/honojs/hono.git",
+      "pinnedHead": "44f884321a1d52e98d45a85634da9d5f4751a43a",
+      "extensions": [
+        ".cjs",
+        ".js",
+        ".mjs",
+        ".ts"
+      ]
+    },
+    {
+      "name": "pydantic",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/pydantic/pydantic.git",
+      "pinnedHead": "7b3dd4cf4ba551c33c963f22627cdc566402d8f6",
+      "extensions": [
+        ".py"
+      ]
+    },
+    {
+      "name": "fiber",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/gofiber/fiber.git",
+      "pinnedHead": "23c4f5957f31120b3afd82d223d773fe41957a06",
+      "extensions": [
+        ".go"
+      ]
+    },
+    {
+      "name": "hyper",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/hyperium/hyper.git",
+      "pinnedHead": "67ace6484db5d4a15367013847768f5f94f4b97d",
+      "extensions": [
+        ".rs"
+      ]
+    }
+  ],
+  "repositoryReports": [
+    {
+      "name": "koa",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/koajs/koa.git",
+      "pinnedHead": "52d5e8ff5ac79f2479463b53df2999900ae95115",
+      "status": "selected",
+      "scannedCommits": 3,
+      "rejectionCounts": {
+        "non-behavioral-or-ambiguous-subject": 2
+      },
+      "selectedTarget": {
+        "name": "koa",
+        "language": "JavaScript",
+        "languageFamily": "javascript-typescript",
+        "url": "https://github.com/koajs/koa.git",
+        "pinnedHead": "52d5e8ff5ac79f2479463b53df2999900ae95115",
+        "routeCommit": "4b12945e2e5dac698b6d3835e1a81415aed7ab26",
+        "groundTruthCommit": "480a4f064a4e8edb9e09be39355b3228ae4f4f9e",
+        "task": "fix: response content-type value amount as one with testcase (#1899)",
+        "expectedTaskType": "bugfix",
+        "changedFiles": [
+          "__tests__/application/response.test.js",
+          "lib/response.js"
+        ],
+        "implementationFiles": [
+          "lib/response.js"
+        ],
+        "testFiles": [
+          "__tests__/application/response.test.js"
+        ],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 17,
+        "additions": 17,
+        "deletions": 0
+      }
+    },
+    {
+      "name": "starlette",
+      "languageFamily": "python",
+      "url": "https://github.com/encode/starlette.git",
+      "pinnedHead": "5174d4c8358a6f06aa8056bafd14c2272dab8dd1",
+      "status": "selected",
+      "scannedCommits": 142,
+      "rejectionCounts": {
+        "non-behavioral-or-ambiguous-subject": 129,
+        "contains-excluded-path": 5,
+        "contains-non-modified-file": 1,
+        "file-count-outside-range": 5,
+        "contains-non-source-extension": 1
+      },
+      "selectedTarget": {
+        "name": "starlette",
+        "language": "Python",
+        "languageFamily": "python",
+        "url": "https://github.com/encode/starlette.git",
+        "pinnedHead": "5174d4c8358a6f06aa8056bafd14c2272dab8dd1",
+        "routeCommit": "f617177ab955f7e79e0d863a7c28adb6200b4acc",
+        "groundTruthCommit": "7f78881448d06ac2b296fc3533abbb0148fb9402",
+        "task": "Support multiple cookie headers in `Request.cookies` (#3029)",
+        "expectedTaskType": "feature",
+        "changedFiles": [
+          "starlette/requests.py",
+          "tests/test_requests.py"
+        ],
+        "implementationFiles": [
+          "starlette/requests.py"
+        ],
+        "testFiles": [
+          "tests/test_requests.py"
+        ],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 20,
+        "additions": 17,
+        "deletions": 3
+      }
+    },
+    {
+      "name": "gin",
+      "languageFamily": "go",
+      "url": "https://github.com/gin-gonic/gin.git",
+      "pinnedHead": "34dac209ffb6ef85cc78c5d217bbb7ad001d68fd",
+      "status": "selected",
+      "scannedCommits": 3,
+      "rejectionCounts": {
+        "non-behavioral-or-ambiguous-subject": 2
+      },
+      "selectedTarget": {
+        "name": "gin",
+        "language": "Go fallback parser",
+        "languageFamily": "go",
+        "url": "https://github.com/gin-gonic/gin.git",
+        "pinnedHead": "34dac209ffb6ef85cc78c5d217bbb7ad001d68fd",
+        "routeCommit": "da1e108614ecbbadfa5736b1b297b16121d23b9b",
+        "groundTruthCommit": "d9307dbcbbe796a64d9e0ef23452da888dd7f904",
+        "task": "fix(context): skip chmod on pre-existing dirs in SaveUploadedFile (#4702)",
+        "expectedTaskType": "bugfix",
+        "changedFiles": [
+          "context.go",
+          "context_test.go"
+        ],
+        "implementationFiles": [
+          "context.go"
+        ],
+        "testFiles": [
+          "context_test.go"
+        ],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 61,
+        "additions": 59,
+        "deletions": 2
+      }
+    },
+    {
+      "name": "tower",
+      "languageFamily": "rust",
+      "url": "https://github.com/tower-rs/tower.git",
+      "pinnedHead": "df06d70dbea345facbffb5881fe8647f53bf424d",
+      "status": "selected",
+      "scannedCommits": 1,
+      "rejectionCounts": {},
+      "selectedTarget": {
+        "name": "tower",
+        "language": "Rust fallback parser",
+        "languageFamily": "rust",
+        "url": "https://github.com/tower-rs/tower.git",
+        "pinnedHead": "df06d70dbea345facbffb5881fe8647f53bf424d",
+        "routeCommit": "251296dc54a044383dffd16d2179b443e2615672",
+        "groundTruthCommit": "df06d70dbea345facbffb5881fe8647f53bf424d",
+        "task": "fix(balance): clear cached P2C ready index after a discovery removal (#874)",
+        "expectedTaskType": "bugfix",
+        "changedFiles": [
+          "tower/src/balance/p2c/service.rs",
+          "tower/src/balance/p2c/test.rs"
+        ],
+        "implementationFiles": [
+          "tower/src/balance/p2c/service.rs"
+        ],
+        "testFiles": [
+          "tower/src/balance/p2c/test.rs"
+        ],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 114,
+        "additions": 112,
+        "deletions": 2
+      }
+    },
+    {
+      "name": "axios",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/axios/axios.git",
+      "pinnedHead": "311fcc5c8d989b7248f05d390bb83bfbfb009977",
+      "status": "selected",
+      "scannedCommits": 24,
+      "rejectionCounts": {
+        "non-behavioral-or-ambiguous-subject": 12,
+        "file-count-outside-range": 4,
+        "contains-non-source-extension": 7
+      },
+      "selectedTarget": {
+        "name": "axios",
+        "language": "JavaScript and TypeScript",
+        "languageFamily": "javascript-typescript",
+        "url": "https://github.com/axios/axios.git",
+        "pinnedHead": "311fcc5c8d989b7248f05d390bb83bfbfb009977",
+        "routeCommit": "02c2c4f891d76b15712a9edd149a2d9f7978774f",
+        "groundTruthCommit": "3d253b4f17a5107e6f274ee5b2e96e03508dceb2",
+        "task": "fix: clamp negative progress values (#11039)",
+        "expectedTaskType": "bugfix",
+        "changedFiles": [
+          "lib/helpers/progressEventReducer.js",
+          "tests/unit/helpers/progressEventReducer.test.js"
+        ],
+        "implementationFiles": [
+          "lib/helpers/progressEventReducer.js"
+        ],
+        "testFiles": [
+          "tests/unit/helpers/progressEventReducer.test.js"
+        ],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 32,
+        "additions": 31,
+        "deletions": 1
+      }
+    },
+    {
+      "name": "flask",
+      "languageFamily": "python",
+      "url": "https://github.com/pallets/flask.git",
+      "pinnedHead": "36e4a824f340fdee7ed50937ba8e7f6bc7d17f81",
+      "status": "no-eligible-commit",
+      "scannedCommits": 300,
+      "rejectionCounts": {
+        "non-behavioral-or-ambiguous-subject": 287,
+        "contains-non-modified-file": 1,
+        "file-count-outside-range": 7,
+        "contains-excluded-path": 4,
+        "missing-implementation-or-test": 1
+      },
+      "selectedTarget": null
+    },
+    {
+      "name": "echo",
+      "languageFamily": "go",
+      "url": "https://github.com/labstack/echo.git",
+      "pinnedHead": "ed8bbe4b6cbf519766c99e492b9cc427404b3719",
+      "status": "selected",
+      "scannedCommits": 10,
+      "rejectionCounts": {
+        "non-behavioral-or-ambiguous-subject": 9
+      },
+      "selectedTarget": {
+        "name": "echo",
+        "language": "Go fallback parser",
+        "languageFamily": "go",
+        "url": "https://github.com/labstack/echo.git",
+        "pinnedHead": "ed8bbe4b6cbf519766c99e492b9cc427404b3719",
+        "routeCommit": "34f3f425100f94b500ced2e8799470e32bba877e",
+        "groundTruthCommit": "48128ab391f2ec9ea9679d59a472a97edaa08160",
+        "task": "fix(static): preserve matched handler 404s",
+        "expectedTaskType": "bugfix",
+        "changedFiles": [
+          "middleware/static.go",
+          "middleware/static_test.go"
+        ],
+        "implementationFiles": [
+          "middleware/static.go"
+        ],
+        "testFiles": [
+          "middleware/static_test.go"
+        ],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 36,
+        "additions": 34,
+        "deletions": 2
+      }
+    },
+    {
+      "name": "serde-json",
+      "languageFamily": "rust",
+      "url": "https://github.com/serde-rs/json.git",
+      "pinnedHead": "de8500740cdcabffb9734f503e4889def823cf10",
+      "status": "selected",
+      "scannedCommits": 3,
+      "rejectionCounts": {
+        "non-behavioral-or-ambiguous-subject": 2
+      },
+      "selectedTarget": {
+        "name": "serde-json",
+        "language": "Rust fallback parser",
+        "languageFamily": "rust",
+        "url": "https://github.com/serde-rs/json.git",
+        "pinnedHead": "de8500740cdcabffb9734f503e4889def823cf10",
+        "routeCommit": "827a315bf2198558f0325b07bcc1e2cd973aba2f",
+        "groundTruthCommit": "cf16f75d81e28c723323bfc60a68fc02d2994fff",
+        "task": "Add RawValue::from_string_unchecked",
+        "expectedTaskType": "feature",
+        "changedFiles": [
+          "src/raw.rs",
+          "tests/test.rs"
+        ],
+        "implementationFiles": [
+          "src/raw.rs"
+        ],
+        "testFiles": [
+          "tests/test.rs"
+        ],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 67,
+        "additions": 67,
+        "deletions": 0
+      }
+    },
+    {
+      "name": "hono",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/honojs/hono.git",
+      "pinnedHead": "44f884321a1d52e98d45a85634da9d5f4751a43a",
+      "status": "family-quota-filled-not-inspected",
+      "scannedCommits": 0,
+      "rejectionCounts": {},
+      "selectedTarget": null
+    },
+    {
+      "name": "pydantic",
+      "languageFamily": "python",
+      "url": "https://github.com/pydantic/pydantic.git",
+      "pinnedHead": "7b3dd4cf4ba551c33c963f22627cdc566402d8f6",
+      "status": "selected",
+      "scannedCommits": 48,
+      "rejectionCounts": {
+        "non-behavioral-or-ambiguous-subject": 46,
+        "file-count-outside-range": 1
+      },
+      "selectedTarget": {
+        "name": "pydantic",
+        "language": "Python",
+        "languageFamily": "python",
+        "url": "https://github.com/pydantic/pydantic.git",
+        "pinnedHead": "7b3dd4cf4ba551c33c963f22627cdc566402d8f6",
+        "routeCommit": "92208bf84df18f606df8c69f7043b4cc0673e34c",
+        "groundTruthCommit": "be3e4d174d2a429a31a36ba79530f299c367590f",
+        "task": "Allow periods in unquoted `NameEmail` display names (#13206)",
+        "expectedTaskType": "feature",
+        "changedFiles": [
+          "pydantic/networks.py",
+          "tests/test_networks.py"
+        ],
+        "implementationFiles": [
+          "pydantic/networks.py"
+        ],
+        "testFiles": [
+          "tests/test_networks.py"
+        ],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 11,
+        "additions": 9,
+        "deletions": 2
+      }
+    },
+    {
+      "name": "fiber",
+      "languageFamily": "go",
+      "url": "https://github.com/gofiber/fiber.git",
+      "pinnedHead": "23c4f5957f31120b3afd82d223d773fe41957a06",
+      "status": "reserved-fallback-not-inspected",
+      "scannedCommits": 0,
+      "rejectionCounts": {},
+      "selectedTarget": null
+    },
+    {
+      "name": "hyper",
+      "languageFamily": "rust",
+      "url": "https://github.com/hyperium/hyper.git",
+      "pinnedHead": "67ace6484db5d4a15367013847768f5f94f4b97d",
+      "status": "reserved-fallback-not-inspected",
+      "scannedCommits": 0,
+      "rejectionCounts": {},
+      "selectedTarget": null
+    }
+  ],
+  "targets": [
+    {
+      "name": "koa",
+      "language": "JavaScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/koajs/koa.git",
+      "pinnedHead": "52d5e8ff5ac79f2479463b53df2999900ae95115",
+      "routeCommit": "4b12945e2e5dac698b6d3835e1a81415aed7ab26",
+      "groundTruthCommit": "480a4f064a4e8edb9e09be39355b3228ae4f4f9e",
+      "task": "fix: response content-type value amount as one with testcase (#1899)",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "__tests__/application/response.test.js",
+        "lib/response.js"
+      ],
+      "implementationFiles": [
+        "lib/response.js"
+      ],
+      "testFiles": [
+        "__tests__/application/response.test.js"
+      ],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 17,
+      "additions": 17,
+      "deletions": 0
+    },
+    {
+      "name": "starlette",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/encode/starlette.git",
+      "pinnedHead": "5174d4c8358a6f06aa8056bafd14c2272dab8dd1",
+      "routeCommit": "f617177ab955f7e79e0d863a7c28adb6200b4acc",
+      "groundTruthCommit": "7f78881448d06ac2b296fc3533abbb0148fb9402",
+      "task": "Support multiple cookie headers in `Request.cookies` (#3029)",
+      "expectedTaskType": "feature",
+      "changedFiles": [
+        "starlette/requests.py",
+        "tests/test_requests.py"
+      ],
+      "implementationFiles": [
+        "starlette/requests.py"
+      ],
+      "testFiles": [
+        "tests/test_requests.py"
+      ],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 20,
+      "additions": 17,
+      "deletions": 3
+    },
+    {
+      "name": "gin",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/gin-gonic/gin.git",
+      "pinnedHead": "34dac209ffb6ef85cc78c5d217bbb7ad001d68fd",
+      "routeCommit": "da1e108614ecbbadfa5736b1b297b16121d23b9b",
+      "groundTruthCommit": "d9307dbcbbe796a64d9e0ef23452da888dd7f904",
+      "task": "fix(context): skip chmod on pre-existing dirs in SaveUploadedFile (#4702)",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "context.go",
+        "context_test.go"
+      ],
+      "implementationFiles": [
+        "context.go"
+      ],
+      "testFiles": [
+        "context_test.go"
+      ],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 61,
+      "additions": 59,
+      "deletions": 2
+    },
+    {
+      "name": "tower",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/tower-rs/tower.git",
+      "pinnedHead": "df06d70dbea345facbffb5881fe8647f53bf424d",
+      "routeCommit": "251296dc54a044383dffd16d2179b443e2615672",
+      "groundTruthCommit": "df06d70dbea345facbffb5881fe8647f53bf424d",
+      "task": "fix(balance): clear cached P2C ready index after a discovery removal (#874)",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "tower/src/balance/p2c/service.rs",
+        "tower/src/balance/p2c/test.rs"
+      ],
+      "implementationFiles": [
+        "tower/src/balance/p2c/service.rs"
+      ],
+      "testFiles": [
+        "tower/src/balance/p2c/test.rs"
+      ],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 114,
+      "additions": 112,
+      "deletions": 2
+    },
+    {
+      "name": "axios",
+      "language": "JavaScript and TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/axios/axios.git",
+      "pinnedHead": "311fcc5c8d989b7248f05d390bb83bfbfb009977",
+      "routeCommit": "02c2c4f891d76b15712a9edd149a2d9f7978774f",
+      "groundTruthCommit": "3d253b4f17a5107e6f274ee5b2e96e03508dceb2",
+      "task": "fix: clamp negative progress values (#11039)",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "lib/helpers/progressEventReducer.js",
+        "tests/unit/helpers/progressEventReducer.test.js"
+      ],
+      "implementationFiles": [
+        "lib/helpers/progressEventReducer.js"
+      ],
+      "testFiles": [
+        "tests/unit/helpers/progressEventReducer.test.js"
+      ],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 32,
+      "additions": 31,
+      "deletions": 1
+    },
+    {
+      "name": "echo",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/labstack/echo.git",
+      "pinnedHead": "ed8bbe4b6cbf519766c99e492b9cc427404b3719",
+      "routeCommit": "34f3f425100f94b500ced2e8799470e32bba877e",
+      "groundTruthCommit": "48128ab391f2ec9ea9679d59a472a97edaa08160",
+      "task": "fix(static): preserve matched handler 404s",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "middleware/static.go",
+        "middleware/static_test.go"
+      ],
+      "implementationFiles": [
+        "middleware/static.go"
+      ],
+      "testFiles": [
+        "middleware/static_test.go"
+      ],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 36,
+      "additions": 34,
+      "deletions": 2
+    },
+    {
+      "name": "serde-json",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/serde-rs/json.git",
+      "pinnedHead": "de8500740cdcabffb9734f503e4889def823cf10",
+      "routeCommit": "827a315bf2198558f0325b07bcc1e2cd973aba2f",
+      "groundTruthCommit": "cf16f75d81e28c723323bfc60a68fc02d2994fff",
+      "task": "Add RawValue::from_string_unchecked",
+      "expectedTaskType": "feature",
+      "changedFiles": [
+        "src/raw.rs",
+        "tests/test.rs"
+      ],
+      "implementationFiles": [
+        "src/raw.rs"
+      ],
+      "testFiles": [
+        "tests/test.rs"
+      ],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 67,
+      "additions": 67,
+      "deletions": 0
+    },
+    {
+      "name": "pydantic",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/pydantic/pydantic.git",
+      "pinnedHead": "7b3dd4cf4ba551c33c963f22627cdc566402d8f6",
+      "routeCommit": "92208bf84df18f606df8c69f7043b4cc0673e34c",
+      "groundTruthCommit": "be3e4d174d2a429a31a36ba79530f299c367590f",
+      "task": "Allow periods in unquoted `NameEmail` display names (#13206)",
+      "expectedTaskType": "feature",
+      "changedFiles": [
+        "pydantic/networks.py",
+        "tests/test_networks.py"
+      ],
+      "implementationFiles": [
+        "pydantic/networks.py"
+      ],
+      "testFiles": [
+        "tests/test_networks.py"
+      ],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 11,
+      "additions": 9,
+      "deletions": 2
+    }
+  ]
+}

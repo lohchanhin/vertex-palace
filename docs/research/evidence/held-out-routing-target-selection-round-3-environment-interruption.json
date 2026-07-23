@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "studyId": "held-out-cross-repository-routing-round-3-0.4-alpha",
+  "attempt": 1,
+  "status": "environment-interrupted-no-manifest",
+  "startedAt": "2026-07-23T01:13:23.4049539Z",
+  "lastObservedAt": "2026-07-23T01:15:10.4085434Z",
+  "candidateCommit": "6060e0c6aa2aea64d0145c1e55bccdc4669e4b48",
+  "selectorCommit": "a9f5ff2e22a7cd41ed6f019f75c9759500ecce09",
+  "command": "node scripts/select-held-out-routing-targets-round-3.cjs --out docs/research/evidence/held-out-routing-target-manifest-0.4-alpha-round-3.json",
+  "observations": {
+    "reportedExitCode": 1,
+    "reportedElapsedSeconds": 113.6,
+    "stdoutWasEmpty": true,
+    "stderrWasEmpty": true,
+    "manifestCreated": false,
+    "temporaryRootCleanupCompleted": false,
+    "temporaryRootBasename": "vertex-palace-held-out-round-3-selection-bIwGCM",
+    "repositoryDirectoriesCreated": [
+      "koa",
+      "starlette",
+      "gin",
+      "tower"
+    ],
+    "candidateTaskSubjectsManuallyInspected": 0,
+    "palaceCallsOnCandidateTasks": 0
+  },
+  "interpretation": "The foreground process ended before the selector produced any result or completed its finally cleanup. The retained temporary root and absent stderr are consistent with execution-host interruption, but do not identify a definitive cause. This is not a selected or failed target manifest.",
+  "recovery": "Rerun the identical committed selector, candidate, pinned repository pool, and create-only output command in a background process. Do not change or replace any repository, rule, task, or product path."
+}
