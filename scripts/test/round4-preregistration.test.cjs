@@ -1,4 +1,5 @@
 const assert = require("node:assert/strict");
+const { createHash } = require("node:crypto");
 const { readFileSync } = require("node:fs");
 const path = require("node:path");
 const { test } = require("node:test");
@@ -22,6 +23,18 @@ const selectorPath = path.join(
   projectRoot,
   "scripts",
   "select-held-out-routing-targets-round-4.cjs"
+);
+const manifestPath = path.join(
+  projectRoot,
+  "docs",
+  "research",
+  "evidence",
+  "held-out-routing-target-manifest-0.4-alpha-round-4.json"
+);
+const validatorPath = path.join(
+  projectRoot,
+  "scripts",
+  "verify-held-out-cross-repository-routing-round-4.cjs"
 );
 
 test("freezes a balanced Round 4 pool outside the complete Round 3 boundary", () => {
@@ -72,10 +85,71 @@ test("keeps Round 4 selection create-only and unable to invoke Palace", () => {
   assert.doesNotMatch(source, /\b(?:context|evaluate|index|init|pack|route)\b.*--root/);
 });
 
+test("freezes eight mechanically selected Round 4 targets before validation", () => {
+  const bytes = readFileSync(manifestPath);
+  assert.equal(
+    createHash("sha256").update(bytes).digest("hex").toUpperCase(),
+    "D6A1DDCDA3BD704D1F809279229153F72B4CF6162F1C1231C40D36F18626F5C0"
+  );
+  const manifest = JSON.parse(bytes.toString("utf8"));
+  assert.equal(manifest.status, "selected");
+  assert.equal(manifest.heldOutAgainstCandidate, true);
+  assert.equal(manifest.selector.commit, "96af578295484831e4a14511baf0e88cb69cc081");
+  assert.equal(
+    manifest.repositoryPool.sha256,
+    "DF36C82D51AF4B91DF6E67E9848AD54EBB5FE99E9F4DF03498BC1A0FFD6E1A0A"
+  );
+  assert.equal(manifest.rules.palaceCallsOnCandidateTasksDuringSelection, 0);
+  assert.equal(manifest.targets.length, 8);
+  for (const family of manifest.rules.requiredLanguageFamilies) {
+    assert.equal(manifest.rules.selectedPerLanguageFamily[family], 2, family);
+  }
+  for (const target of manifest.targets) {
+    assert.equal(target.expectedTaskType, expectedTaskType(target.task), target.name);
+    assert.ok(target.implementationFiles.length > 0, target.name);
+    assert.ok(target.testFiles.length > 0, target.name);
+    assert.deepEqual(
+      [...target.implementationFiles, ...target.testFiles].sort(),
+      [...target.changedFiles].sort(),
+      target.name
+    );
+    assert.ok(target.changedFiles.length >= 2 && target.changedFiles.length <= 6, target.name);
+  }
+  assert.deepEqual(
+    manifest.repositoryReports.slice(8).map(({ name, status }) => ({ name, status })),
+    [
+      { name: "vite", status: "reserved-fallback-not-inspected" },
+      { name: "poetry", status: "reserved-fallback-not-inspected" },
+      { name: "go-redis", status: "reserved-fallback-not-inspected" },
+      { name: "rayon", status: "reserved-fallback-not-inspected" }
+    ]
+  );
+});
+
+test("freezes the Round 4 validator without build or formal-trial retries", () => {
+  const source = readFileSync(validatorPath, "utf8");
+  assert.match(source, /flag:\s*"wx"/);
+  assert.match(source, /manifestCommit = "7ccf0c7d668f4a9790186ba4659a76fd4a30813d"/);
+  assert.match(source, /freshIndexAttempts = 2/);
+  assert.match(source, /new Set\(\["EAGAIN", "ENOMEM", "ETIMEDOUT"\]\)/);
+  assert.match(source, /evaluateAndContextRetries:\s*0/);
+  assert.match(source, /rebuiltBeforeMeasurement:\s*false/);
+  assert.doesNotMatch(source, /runNpm\(\["run", "build"\]/);
+});
+
 function readJson(filePath) {
   return JSON.parse(readFileSync(filePath, "utf8"));
 }
 
 function normalizeUrl(value) {
   return value.toLowerCase().replace(/\.git$/, "").replace(/\/$/, "");
+}
+
+function expectedTaskType(subject) {
+  const conventional = subject.match(/^\s*(fix|feat)(?:\([^)]*\))?!?:/i);
+  if (conventional?.[1].toLowerCase() === "fix") return "bugfix";
+  if (conventional?.[1].toLowerCase() === "feat") return "feature";
+  if (/^\s*(?:add|allow|create|implement|support)\b/i.test(subject)) return "feature";
+  if (/^\s*(?:fix|debug|repair|correct|resolve)\b/i.test(subject)) return "bugfix";
+  return null;
 }
