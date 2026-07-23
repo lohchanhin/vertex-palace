@@ -30,6 +30,7 @@ const STOP_WORDS = new Set([
   "with",
   "before",
   "after",
+  "allow",
   "fix",
   "bug",
   "issue",
@@ -129,6 +130,7 @@ const RELEASE_ROUTE_KEYWORDS = ["release", "publish", "package", "manifest", "ve
 const RELEASE_REFERENCE_ONLY_KEYWORDS = new Set(["release", "publish", "package", "version", "npm", "registry", "tag"]);
 const CAPITALIZED_ENTITY_STOP_WORDS = new Set([
   "add",
+  "allow",
   "api",
   "build",
   "create",
@@ -243,7 +245,7 @@ function phraseKeywords(task: string): string[] {
 }
 
 function entityKeywords(task: string): string[] {
-  const candidates = (task.match(/[A-Za-z0-9]+(?:[-_][A-Za-z0-9]+)+|[A-Z][a-z0-9]+(?:[A-Z][a-z0-9]+)+/g) ?? [])
+  const candidates = (task.match(/[A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*)+|[A-Za-z0-9]+(?:[-_][A-Za-z0-9]+)+|[A-Z][a-z0-9]+(?:[A-Z][a-z0-9]+)+/g) ?? [])
     .filter((candidate) => !isMorphologicalHyphenWord(candidate));
   const capitalizedIdentifiers = (task.match(/\b[A-Z][A-Za-z0-9]{2,}\b/g) ?? [])
     .filter((candidate) => !CAPITALIZED_ENTITY_STOP_WORDS.has(candidate.toLowerCase()));

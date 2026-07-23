@@ -54,6 +54,20 @@ describe("routePalace", () => {
     expect(classifyTask("fix(router)!: preserve exact route identity")).toBe("bugfix");
   });
 
+  it("classifies bounded Allow and Support tasks while preserving dotted code identity", () => {
+    const requestTask = "Support multiple cookie headers in `Request.cookies` (#3029)";
+    const nameEmailTask = "Allow periods in unquoted `NameEmail` display names (#13206)";
+
+    expect(classifyTask(requestTask)).toBe("feature");
+    expect(classifyTask(nameEmailTask)).toBe("feature");
+    expect(analyzeTask(requestTask).entities).toEqual(
+      expect.arrayContaining(["request-cookies", "requestcookies"])
+    );
+    expect(analyzeTask(nameEmailTask).entities).toContain("nameemail");
+    expect(analyzeTask(nameEmailTask).entities).not.toContain("allow");
+    expect(analyzeTask(nameEmailTask).keywords).not.toContain("allow");
+  });
+
   it("distinguishes release work from publish failures and application deployment", () => {
     const analysis = analyzeTask(RELEASE_TASK);
 
@@ -2035,6 +2049,264 @@ export function uploadProductVariantImageController(file: File) {
       expect(evaluation.route.fileCount).toBe(2);
       expect(evaluation.coverage.changedFileCoverage).toBe(1);
       expect(evaluation.coverage.routeFocus).toBeGreaterThanOrEqual(0.5);
+      expect(evaluation.calibration.status).not.toBe("overconfident");
+    });
+  });
+
+  it("uses an explicit response module identity to reject a request-side implementation and nested test", async () => {
+    await withFixture("ts-api", async (root) => {
+      const changedFiles = ["lib/response.js", "__tests__/application/response.test.js"];
+      const files = new Map<string, string>([
+        [
+          changedFiles[0],
+          "export function setResponseType(ctx, value) { if (Array.isArray(value)) throw new TypeError('one content-type value'); ctx.type = value; }\n"
+        ],
+        [
+          changedFiles[1],
+          "import { setResponseType } from '../../lib/response.js';\ntest('should not assign multiple content-type values for a response header', () => setResponseType({}, ['json']));\n"
+        ],
+        [
+          "lib/request.js",
+          "export function getRequestType(request) { return request.headers['content-type']; }\n"
+        ],
+        [
+          "__tests__/response/type.test.js",
+          "test('request content-type accepts multiple header values', () => true);\n"
+        ],
+        [
+          "__tests__/request/type.test.js",
+          "test('request type reads the content-type header', () => true);\n"
+        ],
+        [
+          "docs/api/response.md",
+          "# Response API\n\n## response.type\n\nSet the response content-type value.\n"
+        ]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const evaluation = await evaluateRoute(
+        root,
+        "fix: response content-type value amount as one with testcase (#1899)",
+        { changedFiles, routeLimit: 9, budget: 6000, maxDrawers: 4 }
+      );
+
+      expect(evaluation.route.files).toEqual(changedFiles);
+      expect(evaluation.coverage.changedFileCoverage).toBe(1);
+      expect(evaluation.coverage.routeFocus).toBe(1);
+      expect(evaluation.calibration.status).not.toBe("overconfident");
+    });
+  });
+
+  it("uses a dotted request receiver to pair request implementation and tests", async () => {
+    await withFixture("ts-api", async (root) => {
+      const changedFiles = ["starlette/requests.py", "tests/test_requests.py"];
+      const files = new Map<string, string>([
+        [
+          changedFiles[0],
+          "class Request:\n    @property\n    def cookies(self):\n        return [value for key, value in self.headers if key == 'cookie']\n"
+        ],
+        [
+          changedFiles[1],
+          "from starlette.requests import Request\ndef test_request_cookies_support_multiple_headers():\n    assert Request().cookies == []\n"
+        ],
+        [
+          "starlette/responses.py",
+          "class Response:\n    def set_cookie(self, value):\n        self.raw_headers.append(('set-cookie', value))\n"
+        ],
+        [
+          "tests/test_responses.py",
+          "from starlette.responses import Response\ndef test_response_multiple_cookie_headers():\n    assert Response()\n"
+        ],
+        [
+          "tests/test_applications.py",
+          "def test_application_cookie_header_roundtrip():\n    assert True\n"
+        ]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const evaluation = await evaluateRoute(
+        root,
+        "Support multiple cookie headers in `Request.cookies` (#3029)",
+        { changedFiles, routeLimit: 9, budget: 6000, maxDrawers: 4 }
+      );
+
+      expect(evaluation.taskType).toBe("feature");
+      expect(evaluation.route.files).toEqual(changedFiles);
+      expect(evaluation.coverage.changedFileCoverage).toBe(1);
+      expect(evaluation.coverage.routeFocus).toBe(1);
+    });
+  });
+
+  it("prefers a colocated generic module test over broad integration tests", async () => {
+    await withFixture("ts-api", async (root) => {
+      const changedFiles = [
+        "tower/src/balance/p2c/service.rs",
+        "tower/src/balance/p2c/test.rs"
+      ];
+      const files = new Map<string, string>([
+        [
+          changedFiles[0],
+          "pub struct Balance { cached_ready_index: Option<usize> }\nimpl Balance { fn clear_cached_ready_index_after_discovery_removal(&mut self) { self.cached_ready_index = None; } }\n"
+        ],
+        [
+          changedFiles[1],
+          "use super::service::Balance;\n#[test]\nfn discovery_removal_clears_cached_ready_index() { assert!(true); }\n"
+        ],
+        [
+          "tower/tests/balance/main.rs",
+          "#[test]\nfn balance_services_after_discovery_change() { assert!(true); }\n"
+        ],
+        [
+          "tower/tests/ready_cache/main.rs",
+          "#[test]\nfn ready_cache_tracks_index() { assert!(true); }\n"
+        ],
+        [
+          "tower/src/balance/p2c/worker.rs",
+          "pub fn discover_ready_service() -> usize { 0 }\n"
+        ]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const evaluation = await evaluateRoute(
+        root,
+        "fix(balance): clear cached P2C ready index after a discovery removal (#874)",
+        { changedFiles, routeLimit: 9, budget: 6000, maxDrawers: 4 }
+      );
+
+      expect(evaluation.route.files).toEqual(changedFiles);
+      expect(evaluation.coverage.changedFileCoverage).toBe(1);
+      expect(evaluation.coverage.routeFocus).toBe(1);
+      expect(evaluation.calibration.status).not.toBe("overconfident");
+    });
+  });
+
+  it("stops an Allow feature after the NameEmail implementation and focused test", async () => {
+    await withFixture("ts-api", async (root) => {
+      const changedFiles = ["pydantic/networks.py", "tests/test_networks.py"];
+      const files = new Map<string, string>([
+        [
+          changedFiles[0],
+          "class NameEmail:\n    def parse(self, value):\n        return value.rsplit(' <', 1)\n"
+        ],
+        [
+          changedFiles[1],
+          "from pydantic.networks import NameEmail\ndef test_name_email_allows_periods_in_unquoted_display_name():\n    assert NameEmail().parse('A. Person <a@example.com>')\n"
+        ],
+        [
+          "pydantic/v1/networks.py",
+          "class NameEmail:\n    def parse(self, value):\n        return value.split('<', 1)\n"
+        ],
+        [
+          "tests/v1/test_networks.py",
+          "from pydantic.v1.networks import NameEmail\ndef test_legacy_name_email_display_name():\n    assert NameEmail()\n"
+        ],
+        [
+          "pydantic/fields.py",
+          "class FieldInfo:\n    display_name = 'field'\n"
+        ],
+        [
+          "tests/test_aliases.py",
+          "def test_field_display_name_alias():\n    assert True\n"
+        ]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const task = "Allow periods in unquoted `NameEmail` display names (#13206)";
+      const evaluation = await evaluateRoute(root, task, {
+        changedFiles,
+        routeLimit: 9,
+        budget: 6000,
+        maxDrawers: 4
+      });
+
+      expect(evaluation.taskType).toBe("feature");
+      expect(evaluation.route.files).toEqual(changedFiles);
+      expect(evaluation.coverage.changedFileCoverage).toBe(1);
+      expect(evaluation.coverage.routeFocus).toBe(1);
+      expect(evaluation.calibration.status).not.toBe("overconfident");
+
+      const versionedEvaluation = await evaluateRoute(
+        root,
+        "Allow periods in unquoted v1 `NameEmail` display names",
+        {
+          changedFiles: ["pydantic/v1/networks.py", "tests/v1/test_networks.py"],
+          routeLimit: 9,
+          budget: 6000,
+          maxDrawers: 4
+        }
+      );
+
+      expect(versionedEvaluation.route.files).toEqual([
+        "pydantic/v1/networks.py",
+        "tests/v1/test_networks.py"
+      ]);
+      expect(versionedEvaluation.coverage.changedFileCoverage).toBe(1);
+      expect(versionedEvaluation.coverage.routeFocus).toBe(1);
+    });
+  });
+
+  it("stops after an explicitly named type and its generic integration test", async () => {
+    await withFixture("ts-api", async (root) => {
+      const changedFiles = ["src/raw.rs", "tests/test.rs"];
+      const files = new Map<string, string>([
+        [
+          changedFiles[0],
+          "pub struct RawValue;\nimpl RawValue { pub unsafe fn from_string_unchecked(value: String) -> Self { RawValue } }\n"
+        ],
+        [
+          changedFiles[1],
+          "use serde_json::value::RawValue;\n#[test]\nfn raw_value_from_string_unchecked_preserves_json() { assert!(true); }\n"
+        ],
+        [
+          "src/number.rs",
+          "pub struct Number;\nimpl Number { pub fn from_string_unchecked(value: String) -> Self { Number } }\n"
+        ],
+        [
+          "tests/regression/issue845.rs",
+          "#[test]\nfn deserialize_integer_or_string() { assert!(true); }\n"
+        ],
+        [
+          "src/value/mod.rs",
+          "pub enum Value { String(String), Number(i64) }\n"
+        ]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const evaluation = await evaluateRoute(
+        root,
+        "Add RawValue::from_string_unchecked",
+        { changedFiles, routeLimit: 9, budget: 6000, maxDrawers: 4 }
+      );
+
+      expect(evaluation.taskType).toBe("feature");
+      expect(evaluation.route.files).toEqual(changedFiles);
+      expect(evaluation.coverage.changedFileCoverage).toBe(1);
+      expect(evaluation.coverage.routeFocus).toBe(1);
       expect(evaluation.calibration.status).not.toBe("overconfident");
     });
   });

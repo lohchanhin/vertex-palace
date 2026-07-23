@@ -9,7 +9,7 @@ export function classifyTask(task: string): TaskType {
   if (conventionalCommit?.[1] === "feat") return "feature";
   const codeSubject = /\b(parser|indexer|router|scorer|expander|module|function|class|source|code|schema|types?|contracts?|tests?|regressions?|bundle|estimator|metadata|api|cli|mcp)\b/.test(lower)
     || /(解析器|索引器|路由器|模组|模組|函数|函式|类别|類別|源码|源碼|代码|代碼|测试|測試|回归|回歸|类型|類型|契约|契約|元数据|中繼資料)/.test(lower);
-  if (!publication.releaseIntent && codeSubject && /^\s*(?:add|create|implement|support)\b/.test(lower)) return "feature";
+  if (!publication.releaseIntent && codeSubject && /^\s*(?:add|allow|create|implement|support)\b/.test(lower)) return "feature";
   if (!publication.releaseIntent && codeSubject && /^\s*(?:generalize|refactor|restructure|simplify|optimi[sz]e|improve|enhance)\b/.test(lower)) return "refactor";
   if (!publication.releaseIntent && codeSubject && /^\s*(?:fix|debug|repair|correct|resolve)\b/.test(lower)) return "bugfix";
   if (!publication.releaseIntent && codeSubject && /^\s*(?:新增|增加|建立|创建|創建|实现|實作|支援|支持)/.test(lower)) return "feature";
@@ -48,7 +48,7 @@ export function classifyTask(task: string): TaskType {
   if (/(解释|解釋|说明|說明|为什么|為什麼|如何|怎么|怎麼|总结|總結|差异|差異)/.test(lower)) return "explain";
   if (/(审核|審核|检查|檢查|审查|審查|风险|風險|安全|review|audit)/.test(lower)) return "review";
   if (/\b(fix|error|fail|fails|failed|failing|failure|bug|exception|stack|crash|broken)\b/.test(lower)) return "bugfix";
-  if (/\b(add|create|implement|build|support|new)\b/.test(lower)) return "feature";
+  if (/\b(add|allow|create|implement|build|support|new)\b/.test(lower)) return "feature";
   if (/\b(generalize|refactor|cleanup|restructure|simplify|rename|optimize|optimise|improve|enhance|reduce|control|tune)\b/.test(lower)) return "refactor";
   if (/\b(test|spec|coverage|fixture)\b/.test(lower)) return "test";
   if (/\b(explain|how|why|what|describe|summarize)\b/.test(lower)) return "explain";
