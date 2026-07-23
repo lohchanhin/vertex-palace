@@ -36,6 +36,13 @@ const validatorPath = path.join(
   "scripts",
   "verify-held-out-cross-repository-routing-round-4.cjs"
 );
+const formalEvidencePath = path.join(
+  projectRoot,
+  "docs",
+  "research",
+  "evidence",
+  "held-out-cross-repository-routing-0.4-alpha-round-4.json"
+);
 
 test("freezes a balanced Round 4 pool outside the complete Round 3 boundary", () => {
   const pool = readJson(poolPath);
@@ -135,6 +142,59 @@ test("freezes the Round 4 validator without build or formal-trial retries", () =
   assert.match(source, /evaluateAndContextRetries:\s*0/);
   assert.match(source, /rebuiltBeforeMeasurement:\s*false/);
   assert.doesNotMatch(source, /runNpm\(\["run", "build"\]/);
+});
+
+test("preserves the failed first Round 4 observation without environment censoring", () => {
+  const bytes = readFileSync(formalEvidencePath);
+  assert.equal(
+    createHash("sha256").update(bytes).digest("hex").toUpperCase(),
+    "7B8E3833A71D60645DF134D8B87ADF49EAA5557EE59A6AB6D64A537C8A3BB5D3"
+  );
+  const result = JSON.parse(bytes.toString("utf8"));
+  assert.equal(result.status, "failed");
+  assert.equal(result.heldOutAgainstCandidate, true);
+  assert.equal(result.evidenceClass, "preregistered-candidate-held-out-static-routing");
+  assert.match(result.claimBoundary, /cannot support Agent correctness/);
+  assert.deepEqual(result.aggregate, {
+    targetCount: 8,
+    passedTargets: 2,
+    failedTargets: 6,
+    trialCount: 16,
+    completedTrials: 16,
+    passedTrials: 4,
+    taskTypeMatchedTargets: 8,
+    coreSurfaceCompleteTargets: 3,
+    exactOracleTargets: 1,
+    deterministicTargets: 8,
+    oracleFileTotal: 24,
+    routeFileTotal: 34,
+    macroChangedFileCoverage: 0.521,
+    macroRouteFocus: 0.375,
+    macroRoutePrecision: 0.375,
+    minimumTargetRouteFocus: 0,
+    minimumTargetRoutePrecision: 0,
+    overconfidentTrials: 6,
+    maxContextEstimatedTokens: 5891,
+    transientMaterializationAttempts: 0,
+    transientFreshIndexAttempts: 0,
+    environmentOrSetupFailures: 0,
+    harnessContractFailures: 0,
+    productOrContractFailures: 6
+  });
+  assert.deepEqual(
+    result.targets.filter((target) => target.status === "passed").map((target) => target.name),
+    ["undici", "uvicorn"]
+  );
+  for (const target of result.targets) {
+    assert.equal(target.trials.length, 2, target.name);
+    assert.equal(target.deterministicRoutes, true, target.name);
+    assert.deepEqual(target.trials[0].routeFiles, target.trials[1].routeFiles, target.name);
+    assert.deepEqual(
+      target.freshIndexAttempts.map(({ status, errorCode }) => ({ status, errorCode })),
+      [{ status: "completed", errorCode: null }],
+      target.name
+    );
+  }
 });
 
 function readJson(filePath) {
