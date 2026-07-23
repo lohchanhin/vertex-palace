@@ -147,6 +147,7 @@ const CAPITALIZED_ENTITY_STOP_WORDS = new Set([
   "update",
   "windows"
 ]);
+const MORPHOLOGICAL_HYPHEN_PREFIXES = new Set(["de", "non", "post", "pre", "re", "self", "un"]);
 
 const PHRASE_KEYWORDS: Array<[RegExp, string[]]> = [
   [/\b(?:macos|os\s*x|windows|linux|posix|free[-\s]?threaded|no[-\s]?gil|nogil)\b/i, ["compat", "platform"]],
@@ -165,7 +166,7 @@ const PHRASE_KEYWORDS: Array<[RegExp, string[]]> = [
   [/benchmark|evaluate route|evaluation report|changed[-\s]?file coverage|confidence calibration|token reduction|context savings?/i, ["evaluation", "evaluate", "route", "confidence", "pack", "token"]],
   [/scanner|scanning|scan repo|ignore rules?|exclude|worktree|nested repo/i, ["scanner", "ignore"]],
   [/context pack|packing|packer|pack output/i, ["pack", "packer"]],
-  [/pitfall|dedup|deduplicate|memory ledger/i, ["memory", "pitfall"]],
+  [/pitfall|memory ledger/i, ["memory", "pitfall"]],
   [/前后端|前後端|全栈|全棧|全端|full[-\s]?stack/i, ["frontend", "backend"]],
   [/前端|頁面|页面|界面|畫面|画面|组件|組件|表单|表單|按钮|按鈕|\bfooter\b|\bui\b/i, ["frontend", "page", "component"]],
   [/后端|後端|服务端|服務端|服务器|伺服器|\bservice\b|\bserver\b/i, ["backend", "server", "service"]],
@@ -175,7 +176,7 @@ const PHRASE_KEYWORDS: Array<[RegExp, string[]]> = [
   [/准确|準確|完整度|相关度|相關度|\b(?:score|scorer|scoring|relevance)\b/i, ["score", "scorer", "route"]],
   [/依赖|依賴|导入|導入|引用|import|dependency|dependencies/i, ["import", "dependency", "edge"]],
   [/unknown|未识别|未識別|任务判断|任務判斷|任务分类|任務分類|任务类型|任務類型|classify|classification|task type/i, ["classify", "analyze", "task"]],
-  [/索引|新鲜度|新鮮度|过期|過期|刷新|stale|fresh|freshness|index/i, ["index", "stale", "fresh"]],
+  [/索引|新鲜度|新鮮度|过期|過期|刷新|\b(?:stale|fresh|freshness|index)\b/i, ["index", "stale", "fresh"]],
   [/\b(?:evaluation|evaluate|assessment|score|rating|grade)\b|评估|評估|评价|評價|评分|評分|打分/i, ["evaluation", "evaluate", "route", "confidence"]],
   [/retrospective|postmortem|feedback|lessons|回顾|回顧|复盘|復盤|总结|總結|结论|結論/i, ["evaluation", "retrospective", "memory"]],
   [/商品|产品|產品|product/i, ["product"]],
@@ -241,7 +242,8 @@ function phraseKeywords(task: string): string[] {
 }
 
 function entityKeywords(task: string): string[] {
-  const candidates = task.match(/[A-Za-z0-9]+(?:[-_][A-Za-z0-9]+)+|[A-Z][a-z0-9]+(?:[A-Z][a-z0-9]+)+/g) ?? [];
+  const candidates = (task.match(/[A-Za-z0-9]+(?:[-_][A-Za-z0-9]+)+|[A-Z][a-z0-9]+(?:[A-Z][a-z0-9]+)+/g) ?? [])
+    .filter((candidate) => !isMorphologicalHyphenWord(candidate));
   const capitalizedIdentifiers = (task.match(/\b[A-Z][A-Za-z0-9]{2,}\b/g) ?? [])
     .filter((candidate) => !CAPITALIZED_ENTITY_STOP_WORDS.has(candidate.toLowerCase()));
   const namedPhrases = [
@@ -260,4 +262,12 @@ function entityKeywords(task: string): string[] {
       ]
     )
   ];
+}
+
+function isMorphologicalHyphenWord(candidate: string): boolean {
+  const parts = candidate.toLowerCase().split("-");
+  return !candidate.includes("_")
+    && parts.length === 2
+    && MORPHOLOGICAL_HYPHEN_PREFIXES.has(parts[0])
+    && /^[a-z]+$/.test(parts[1]);
 }

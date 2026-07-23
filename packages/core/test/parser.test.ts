@@ -24,6 +24,27 @@ describe("parseFile", () => {
     });
   });
 
+  it("includes JavaScript test and suite titles in the file summary", async () => {
+    await withFixture("ts-api", async (root) => {
+      const target = path.join(root, "tests", "command.executableSubcommand.test.js");
+      await writeFile(
+        target,
+        `describeOrSkipOnWindows("subcommand search on Windows", () => {
+  test("missing executable uses a custom message", () => true);
+  helper("not a test title", () => true);
+});
+`,
+        "utf8"
+      );
+
+      const parsed = await parseFile(root, "tests/command.executableSubcommand.test.js", "javascript");
+
+      expect(parsed.summarySeed).toContain("subcommand search on window");
+      expect(parsed.summarySeed).toContain("missing executable uses custom message");
+      expect(parsed.summarySeed).not.toContain("not test title");
+    });
+  });
+
   it("extracts Python classes, qualified methods, async functions, and complete symbol ranges", async () => {
     await withFixture("ts-api", async (root) => {
       const target = path.join(root, "src", "sessions.py");

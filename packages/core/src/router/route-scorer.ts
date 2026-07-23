@@ -535,6 +535,7 @@ const ROUTE_PATH_LOW_SIGNAL = new Set([
   "command",
   "fixture",
   "method",
+  "node",
   "request",
   "value"
 ]);

@@ -53,6 +53,7 @@ export function parseTsJs(sourcePath: string, content: string, language: string)
   }
 
   const generatedArtifacts = extractTsupArtifacts(sourceFile);
+  const testCaseTerms = extractTestCaseTerms(sourceFile);
 
   return {
     sourcePath,
@@ -61,10 +62,29 @@ export function parseTsJs(sourcePath: string, content: string, language: string)
     exports,
     symbols: dedupeSymbols(symbols),
     ...(generatedArtifacts.length ? { generatedArtifacts } : {}),
-    summarySeed: [imports.length ? `Imports: ${imports.join(", ")}` : "", symbols.length ? `Symbols: ${symbols.map((s) => s.name).join(", ")}` : ""]
+    summarySeed: [
+      imports.length ? `Imports: ${imports.join(", ")}` : "",
+      symbols.length ? `Symbols: ${symbols.map((s) => s.name).join(", ")}` : "",
+      testCaseTerms ? `Test cases: ${testCaseTerms}` : ""
+    ]
       .filter(Boolean)
       .join(". ")
   };
+}
+
+function extractTestCaseTerms(sourceFile: SourceFile): string {
+  const titles = sourceFile.getDescendantsOfKind(SyntaxKind.CallExpression).flatMap((call) => {
+    const expression = call.getExpression().getText().replace(/\s+/g, "");
+    if (!isTestCaseCall(expression)) return [];
+    const title = literalString(call.getArguments()[0]);
+    return title ? [title] : [];
+  });
+  return extractSearchTerms([...new Set(titles)].join(" "), 240);
+}
+
+function isTestCaseCall(expression: string): boolean {
+  return /^(?:test|it|describe|suite|specify|context)(?:$|\.|[A-Z_])/.test(expression)
+    || /(?:^|\.)(?:test|it|describe|suite|specify|context)(?:$|\.)/.test(expression);
 }
 
 function extractTsupArtifacts(sourceFile: SourceFile): NonNullable<ParsedFile["generatedArtifacts"]> {

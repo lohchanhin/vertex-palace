@@ -1504,11 +1504,19 @@ export function buildReportService() {
   it("routes login refresh token bugs to auth, token, and verification context", async () => {
     await withFixture("ts-api", async (root) => {
       await indexPalace(root);
-      const route = await routePalace(root, "fix login refresh token bug");
+      const task = "fix login refresh token bug";
+      const analysis = analyzeTask(task);
+      const route = await routePalace(root, task);
       const joined = route.route.map((step) => step.sourcePath).join("\n");
+      const sourcePaths = route.route.map((step) => step.sourcePath.split(":")[0]);
 
       expect(route.taskType).toBe("bugfix");
-      expect(joined).toMatch(/auth\.controller|token\.service|auth\.e2e/);
+      expect(analysis.keywords).not.toEqual(expect.arrayContaining(["index", "stale", "fresh"]));
+      expect(new Set(sourcePaths)).toEqual(new Set([
+        "src/controllers/auth.controller.ts",
+        "src/services/token.service.ts",
+        "tests/auth.e2e.test.ts"
+      ]));
       expect(route.route.every((step) => step.reason.length > 0)).toBe(true);
       expect(route.route.every((step) => step.loadLevel)).toBe(true);
       expect(route.excluded.some((item) => /payment|admin/.test(item.sourcePath))).toBe(true);
@@ -1802,7 +1810,8 @@ export function uploadProductVariantImageController(file: File) {
       const changedFiles = ["lib/request.js", "test/req.acceptsCharsets.js"];
       const files = new Map<string, string>([
         ["lib/request.js", "export function acceptsCharsets(request, values) { return request.acceptsCharsets(values); }\n"],
-        ["test/req.acceptsCharsets.js", "import { acceptsCharsets } from '../lib/request.js';\ntest('req acceptsCharsets handles values', () => acceptsCharsets(req, ['utf-8']));\n"],
+        ["lib/utils.js", "export function acceptParams(value) { return value; }\n"],
+        ["test/req.acceptsCharsets.js", "test('req acceptsCharsets handles values', () => true);\n"],
         ["test/req.accepts.js", "test('req accepts media types', () => true);\n"],
         ["test/req.acceptsEncodings.js", "test('req accepts encodings', () => true);\n"],
         ["test/req.acceptsLanguages.js", "test('req accepts languages', () => true);\n"],
@@ -1939,8 +1948,11 @@ export function uploadProductVariantImageController(file: File) {
       ];
       const files = new Map<string, string>([
         [changedFiles[0], "export function findExecutableSubcommand(name) { return process.platform === 'win32' ? `${name}.exe` : name; }\n"],
-        [changedFiles[1], "import { findExecutableSubcommand } from '../lib/command.js';\ntest('missing executable subcommand mock', () => findExecutableSubcommand('missing'));\n"],
+        [changedFiles[1], "import { findExecutableSubcommand } from '../lib/command.js';\ntest('missing executable custom message mock', () => findExecutableSubcommand('missing'));\n"],
         [changedFiles[2], "import { findExecutableSubcommand } from '../lib/command.js';\ntest('search missing executable on Windows', () => findExecutableSubcommand('missing'));\n"],
+        ["tests/command.executableSubcommand.inspect.test.js", "import { findExecutableSubcommand } from '../lib/command.js';\ntest('inspect executable subcommand', () => findExecutableSubcommand('inspect'));\n"],
+        ["tests/command.executableSubcommand.signals.test.js", "import { findExecutableSubcommand } from '../lib/command.js';\ntest('forward executable signals', () => findExecutableSubcommand('signals'));\n"],
+        ["tests/command.executableSubcommand.lookup.test.js", "import { findExecutableSubcommand } from '../lib/command.js';\ntest('lookup executable subcommand', () => findExecutableSubcommand('lookup'));\n"],
         ["tests/command.addHelpText.test.js", "test('command add help text', () => true);\n"],
         ["tests/command.addCommand.test.js", "test('command add command', () => true);\n"],
         ["typings/index.d.ts", "export declare class Command {}\n"],
@@ -1970,14 +1982,30 @@ export function uploadProductVariantImageController(file: File) {
     await withFixture("ts-api", async (root) => {
       const changedFiles = ["src/_pytest/main.py", "testing/test_conftest.py"];
       const files = new Map<string, string>([
-        [changedFiles[0], "class Directory:\n    def recollect(self, fixture_identity):\n        return fixture_identity\n"],
-        [changedFiles[1], "from _pytest.main import Directory\ndef test_directory_recollection_preserves_fixture_identity():\n    assert Directory().recollect(object())\n"],
-        ["src/_pytest/hookspec.py", "def pytest_collection(session): return session\n"],
+        [
+          changedFiles[0],
+          "class Directory:\n    pass\n\nclass Session:\n    def _collect_one_node(self, node, handle_dupes):\n        return self.collection_cache.get(node) if not handle_dupes else node\n\n    def collect(self, directory):\n        return self._collect_one_node(directory, handle_dupes=False)\n\ndef pytest_collect_directory(path):\n    return Directory()\n"
+        ],
+        [
+          changedFiles[1],
+          "from _pytest.main import Session\ndef test_conftest_fixture_order_survives_directory_recollection():\n    fixture_identity = object()\n    assert Session().collect(fixture_identity) is fixture_identity\n"
+        ],
+        ["src/_pytest/hookspec.py", "def pytest_collect_directory(path):\n    return 'fixture directory collection protocol'\n"],
         ["src/_pytest/junitxml.py", "def record_fixture_identity(value): return value\n"],
-        ["src/_pytest/fixtures.py", "class FixtureManager: pass\n"],
-        ["src/_pytest/python.py", "class PythonCollector: pass\n"],
-        ["testing/python/fixtures.py", "def test_fixture_identity(): assert True\n"],
-        ["testing/python/collect.py", "def test_directory_collection(): assert True\n"]
+        [
+          "src/_pytest/fixtures.py",
+          "def deduplicate_names(values):\n    return tuple(dict.fromkeys(values))\n\nclass FixtureManager:\n    def pytest_collection_finish(self, directory):\n        return directory\n"
+        ],
+        ["src/_pytest/python.py", "def pytest_collect_directory(path):\n    return 'python fixture directory'\n"],
+        [
+          "testing/python/fixtures.py",
+          "def test_deduplicate_names():\n    assert True\n\ndef test_fixture_directory_collection():\n    assert True\n"
+        ],
+        ["testing/python/collect.py", "def test_keep_duplicates_for_directory_collection():\n    assert True\n"],
+        [
+          "testing/test_collection.py",
+          "def test_collect_directory_hook():\n    assert True\n\ndef test_duplicate_directory_fixture_collection():\n    assert True\n"
+        ]
       ]);
       for (const [relativePath, source] of files) {
         const target = path.join(root, relativePath);
@@ -1993,8 +2021,14 @@ export function uploadProductVariantImageController(file: File) {
       );
 
       expect(analyzeTask("fix: deduplicate Directory nodes").entities).toContain("directory");
-      expect(evaluation.route.files).toEqual(expect.arrayContaining(changedFiles));
-      expect(evaluation.route.fileCount).toBeLessThanOrEqual(4);
+      expect(analyzeTask("fix: deduplicate Directory nodes on re-collection").entities).not.toEqual(
+        expect.arrayContaining(["re-collection", "recollection"])
+      );
+      expect(analyzeTask("fix: deduplicate Directory nodes").keywords).not.toEqual(
+        expect.arrayContaining(["memory", "pitfall"])
+      );
+      expect(evaluation.route.files).toEqual(changedFiles);
+      expect(evaluation.route.fileCount).toBe(2);
       expect(evaluation.coverage.changedFileCoverage).toBe(1);
       expect(evaluation.coverage.routeFocus).toBeGreaterThanOrEqual(0.5);
       expect(evaluation.calibration.status).not.toBe("overconfident");
