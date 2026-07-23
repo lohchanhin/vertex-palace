@@ -177,6 +177,10 @@ export function scoreNodes(nodes: PalaceNode[], edges: PalaceEdge[], analysis: T
         score -= 90;
         reasons.push("benchmark code is secondary for this task");
       }
+      if (isOperationalMetadataPath(node.sourcePath) && !requestedSurfaces.includes("ci")) {
+        score -= 420;
+        reasons.push("operational metadata is secondary for a code task");
+      }
       if (isBinaryLikePath(node.sourcePath, node.language) && !wantsMediaAsset(analysis)) {
         score -= 120;
         reasons.push("binary/media asset is secondary for non-asset task");
@@ -241,6 +245,10 @@ function isFixtureLikePath(sourcePath: string): boolean {
 
 function isBenchmarkLikePath(sourcePath: string): boolean {
   return /(^|\/)(?:bench(?:mark(?:er|s)?)?|benches|perf)(?:[._/-]|$)/i.test(sourcePath);
+}
+
+function isOperationalMetadataPath(sourcePath: string): boolean {
+  return /(^|\/)(?:\.circleci|\.github|\.gitlab)(\/|$)|(^|\/)(?:azure-pipelines|bitbucket-pipelines)\.ya?ml$/i.test(sourcePath);
 }
 
 export function isTypeDeclarationIntent(analysis: TaskAnalysis): boolean {

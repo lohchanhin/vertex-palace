@@ -2310,4 +2310,315 @@ export function uploadProductVariantImageController(file: File) {
       expect(evaluation.calibration.status).not.toBe("overconfident");
     });
   });
+
+  it("uses a requested locale path segment to select the matching translation pair", async () => {
+    await withFixture("ts-api", async (root) => {
+      const changedFiles = [
+        "translations/en/messages.go",
+        "translations/en/messages_test.go"
+      ];
+      const files = new Map<string, string>([
+        [
+          changedFiles[0],
+          "package en\nfunc registerPrefixValidator() string { return \"prefix\" }\nfunc registerSuffixValidator() string { return \"suffix\" }\n"
+        ],
+        [
+          changedFiles[1],
+          "package en\nfunc TestPrefixAndSuffixValidatorMessages(t *testing.T) {}\n"
+        ],
+        [
+          "translations/de/messages.go",
+          "package de\nfunc registerPrefixValidator() string { return \"prefix\" }\nfunc registerSuffixValidator() string { return \"suffix\" }\n"
+        ],
+        [
+          "translations/de/messages_test.go",
+          "package de\nfunc TestPrefixAndSuffixValidatorMessages(t *testing.T) {}\n"
+        ],
+        [
+          "translations.go",
+          "package validator\nfunc registerTranslations() string { return \"all validator translations\" }\n"
+        ]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const evaluation = await evaluateRoute(
+        root,
+        "Add English translations for prefix and suffix validators",
+        { changedFiles, routeLimit: 9, budget: 6000, maxDrawers: 4 }
+      );
+
+      expect(evaluation.route.files).toEqual(changedFiles);
+      expect(evaluation.coverage.changedFileCoverage).toBe(1);
+      expect(evaluation.coverage.routeFocus).toBe(1);
+      expect(evaluation.calibration.status).not.toBe("overconfident");
+    });
+  });
+
+  it("keeps an attribute-macro task inside one workspace crate and its causal siblings", async () => {
+    await withFixture("ts-api", async (root) => {
+      const changedFiles = [
+        "telemetry-derive/src/attr.rs",
+        "telemetry-derive/src/expand.rs",
+        "telemetry-derive/src/lib.rs",
+        "telemetry-derive/tests/fields.rs"
+      ];
+      const files = new Map<string, string>([
+        [
+          changedFiles[0],
+          "pub fn parse_instrument_fields(input: TokenStream) { constant_expression_field_name(input); }\n"
+        ],
+        [
+          changedFiles[1],
+          "use crate::attr::parse_instrument_fields;\npub fn expand_instrument_fields(input: TokenStream) { parse_instrument_fields(input); }\n"
+        ],
+        [
+          changedFiles[2],
+          "mod attr;\nmod expand;\npub fn instrument_attribute(input: TokenStream) { expand::expand_instrument_fields(input); }\n"
+        ],
+        [
+          changedFiles[3],
+          "use telemetry_derive::instrument;\n#[test]\nfn constant_expression_is_an_instrument_field_name() { assert!(true); }\n"
+        ],
+        [
+          "telemetry/src/lib.rs",
+          "pub fn instrument_field_name(value: &str) -> &str { value }\n"
+        ],
+        [
+          "telemetry/tests/fields.rs",
+          "#[test]\nfn constant_instrument_field_name_is_recorded() { assert!(true); }\n"
+        ],
+        [
+          "telemetry-subscriber/src/fields.rs",
+          "pub fn record_instrument_fields() {}\n"
+        ]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const evaluation = await evaluateRoute(
+        root,
+        "Support constant expressions as instrument field names",
+        { changedFiles, routeLimit: 9, budget: 6000, maxDrawers: 4 }
+      );
+
+      expect(evaluation.route.files).toEqual(changedFiles);
+      expect(evaluation.coverage.changedFileCoverage).toBe(1);
+      expect(evaluation.coverage.routeFocus).toBe(1);
+      expect(evaluation.calibration.status).not.toBe("overconfident");
+    });
+  });
+
+  it("expands a response-use bug through all causally related implementation siblings", async () => {
+    await withFixture("ts-api", async (root) => {
+      const changedFiles = [
+        "src/handlers/ResultHandler.ts",
+        "src/utils/ResultEnvelope/decorators.ts",
+        "src/utils/request/storeResultCookies.ts",
+        "test/browser/request/result-cookies.mocks.ts"
+      ];
+      const files = new Map<string, string>([
+        [
+          changedFiles[0],
+          "export class ResultHandler { public markUsed(response: Response) { return response; } }\n"
+        ],
+        [
+          changedFiles[1],
+          "import { ResultHandler } from '../../handlers/ResultHandler';\nimport { storeResultCookies } from '../request/storeResultCookies';\nexport function decorateResult(response: Response, handler: ResultHandler) { handler.markUsed(response); return storeResultCookies(response); }\n"
+        ],
+        [
+          changedFiles[2],
+          "import type { ResultHandler } from '../../handlers/ResultHandler';\nexport function storeResultCookies(response: Response) { return response.headers.get('set-cookie'); }\n"
+        ],
+        [
+          changedFiles[3],
+          "import { decorateResult } from '../../../src/utils/ResultEnvelope/decorators';\nexport const usedResponseWithCookies = () => decorateResult(new Response(), new ResultHandler());\n"
+        ],
+        [
+          "src/ResultEnvelope.ts",
+          "export class ResultEnvelope { static json(value: unknown) { return value; } }\n"
+        ],
+        [
+          "src/ResultEnvelope.test.ts",
+          "test('ResultEnvelope serializes response cookies', () => true);\n"
+        ],
+        [
+          "test/browser/response/result-cookies.test.ts",
+          "test('response forwards all cookies', () => true);\n"
+        ]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const evaluation = await evaluateRoute(
+        root,
+        "fix(ResultEnvelope): forward cookies only when response is used",
+        { changedFiles, routeLimit: 9, budget: 6000, maxDrawers: 4 }
+      );
+
+      expect(evaluation.route.files).toEqual(expect.arrayContaining(changedFiles));
+      expect(evaluation.route.fileCount).toBe(changedFiles.length);
+      expect(evaluation.coverage.changedFileCoverage).toBe(1);
+      expect(evaluation.coverage.routeFocus).toBe(1);
+      expect(evaluation.calibration.status).not.toBe("overconfident");
+    });
+  });
+
+  it("excludes operational metadata while retaining a multi-file row-lifecycle fix", async () => {
+    await withFixture("ts-api", async (root) => {
+      const changedFiles = [
+        "lifecycle/remove.go",
+        "lifecycle/save.go",
+        "result_api.go",
+        "tests/result_test.go"
+      ];
+      const files = new Map<string, string>([
+        [
+          changedFiles[0],
+          "package lifecycle\nfunc removeRowsOnPanic(rows Rows) { defer rows.Close() }\n"
+        ],
+        [
+          changedFiles[1],
+          "package lifecycle\nfunc saveRowsOnPanic(rows Rows) { defer rows.Close() }\n"
+        ],
+        [
+          changedFiles[2],
+          "package data\nfunc finishRowsOnPanic(rows Rows) { defer rows.Close() }\n"
+        ],
+        [
+          changedFiles[3],
+          "package tests\nfunc TestRowsCloseAfterQueryPanic(t *testing.T) {}\n"
+        ],
+        [
+          ".github/workflows/panic-rows.yml",
+          "name: close leaked rows after panic\non: issues\njobs:\n  classify:\n    name: defer rows Close query panic\n"
+        ],
+        [
+          "query/group_by.go",
+          "package query\nfunc groupRows(rows Rows) { rows.Close() }\n"
+        ],
+        [
+          "query/group_by_test.go",
+          "package query\nfunc TestGroupRows(t *testing.T) {}\n"
+        ]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const evaluation = await evaluateRoute(
+        root,
+        "Fix potential rows leak on panic by deferring rows.Close()",
+        { changedFiles, routeLimit: 9, budget: 6000, maxDrawers: 4 }
+      );
+
+      expect(evaluation.route.files).toEqual(expect.arrayContaining(changedFiles));
+      expect(evaluation.route.files).not.toContain(".github/workflows/panic-rows.yml");
+      expect(evaluation.route.fileCount).toBe(changedFiles.length);
+      expect(evaluation.coverage.changedFileCoverage).toBe(1);
+      expect(evaluation.coverage.routeFocus).toBe(1);
+      expect(evaluation.calibration.status).not.toBe("overconfident");
+    });
+  });
+
+  it("stops after an exact function implementation and its focused test", async () => {
+    await withFixture("ts-api", async (root) => {
+      const changedFiles = ["protocol/helpers.py", "tests/test_helpers.py"];
+      const files = new Map<string, string>([
+        [
+          changedFiles[0],
+          "def parse_content_type(value):\n    return {part.strip(): True for part in value.split(';') if part.strip()}\n"
+        ],
+        [
+          changedFiles[1],
+          "from protocol.helpers import parse_content_type\ndef test_parse_content_type_ignores_whitespace_only_parameters():\n    assert parse_content_type('text/plain;   ') == {}\n"
+        ],
+        [
+          "protocol/client_request.py",
+          "from protocol.helpers import parse_content_type\ndef parse_content_type_for_request(value):\n    return parse_content_type(value)\n"
+        ],
+        [
+          "protocol/http_parser.py",
+          "from protocol.helpers import parse_content_type\ndef parse_content_type_header(value):\n    return parse_content_type(value)\n"
+        ],
+        [
+          "tests/test_cookie_helpers.py",
+          "from protocol.helpers import parse_content_type\ndef test_content_type_cookie_parameters():\n    assert parse_content_type('text/plain; cookie=value')\n"
+        ],
+        [
+          "tests/test_client_auth.py",
+          "from protocol.client_request import parse_content_type_for_request\ndef test_client_content_type_auth_parameters():\n    assert parse_content_type_for_request('text/plain; auth=value')\n"
+        ]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const evaluation = await evaluateRoute(
+        root,
+        "Fix parse_content_type producing an empty parameter for whitespace-only segments after semicolons",
+        { changedFiles, routeLimit: 9, budget: 6000, maxDrawers: 4 }
+      );
+
+      expect(evaluation.route.files).toEqual(changedFiles);
+      expect(evaluation.coverage.changedFileCoverage).toBe(1);
+      expect(evaluation.coverage.routeFocus).toBe(1);
+      expect(evaluation.calibration.status).not.toBe("overconfident");
+    });
+  });
+
+  it("caps confidence when identical implementation pairs leave workspace ownership unresolved", async () => {
+    await withFixture("ts-api", async (root) => {
+      const files = new Map<string, string>([
+        [
+          "alpha-runtime/src/fields.rs",
+          "pub fn normalize_constant_field(value: &str) -> &str { value }\n"
+        ],
+        [
+          "alpha-runtime/tests/fields.rs",
+          "#[test]\nfn constant_field_is_normalized() { assert!(true); }\n"
+        ],
+        [
+          "beta-runtime/src/fields.rs",
+          "pub fn normalize_constant_field(value: &str) -> &str { value }\n"
+        ],
+        [
+          "beta-runtime/tests/fields.rs",
+          "#[test]\nfn constant_field_is_normalized() { assert!(true); }\n"
+        ]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const route = await routePalace(
+        root,
+        "Fix constant field normalization",
+        { routeLimit: 9, budget: 6000 }
+      );
+
+      expect(route.confidence).toBeLessThanOrEqual(0.15);
+    });
+  });
 });
