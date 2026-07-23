@@ -1,0 +1,866 @@
+{
+  "schemaVersion": 3,
+  "studyId": "held-out-cross-repository-routing-round-4-0.4-alpha",
+  "generatedAt": "2026-07-23T13:52:20.204Z",
+  "status": "selected",
+  "claimBoundary": "Mechanical candidate-held-out target selection only. The frozen Vertex Palace candidate has not initialized, indexed, routed, packed, contextualized, or evaluated any selected task.",
+  "heldOutAgainstCandidate": true,
+  "candidate": {
+    "productCommit": "efd53274e42fb8123745f2b8bb09a24e4fa384b7",
+    "cliPath": "dist/palace.cjs",
+    "cliSha256": "E0A2F54C826E742DF03BA0BC965C89AF834B3BBA199C1E135E63E21B291011D0",
+    "frozenPaths": [
+      "packages",
+      "plugins/vertex-palace/mcp/server.cjs"
+    ]
+  },
+  "selector": {
+    "commit": "96af578295484831e4a14511baf0e88cb69cc081",
+    "path": "scripts/select-held-out-routing-targets-round-4.cjs"
+  },
+  "repositoryPool": {
+    "path": "docs/research/evidence/held-out-routing-repository-pool-0.4-alpha-round-4.json",
+    "commit": "96af578295484831e4a14511baf0e88cb69cc081",
+    "sha256": "DF36C82D51AF4B91DF6E67E9848AD54EBB5FE99E9F4DF03498BC1A0FFD6E1A0A",
+    "previouslyObservedRepositories": [
+      "https://github.com/colinhacks/zod.git",
+      "https://github.com/psf/requests.git",
+      "https://github.com/sindresorhus/p-limit.git",
+      "https://github.com/fastify/fastify.git",
+      "https://github.com/pallets/click.git",
+      "https://github.com/date-fns/date-fns.git",
+      "https://github.com/BurntSushi/ripgrep.git",
+      "https://github.com/spf13/cobra.git",
+      "https://github.com/markedjs/marked.git",
+      "https://github.com/expressjs/express.git",
+      "https://github.com/encode/httpx.git",
+      "https://github.com/urfave/cli.git",
+      "https://github.com/clap-rs/clap.git",
+      "https://github.com/tj/commander.js.git",
+      "https://github.com/pytest-dev/pytest.git",
+      "https://github.com/go-chi/chi.git",
+      "https://github.com/tokio-rs/axum.git",
+      "https://github.com/koajs/koa.git",
+      "https://github.com/encode/starlette.git",
+      "https://github.com/gin-gonic/gin.git",
+      "https://github.com/tower-rs/tower.git",
+      "https://github.com/axios/axios.git",
+      "https://github.com/pallets/flask.git",
+      "https://github.com/labstack/echo.git",
+      "https://github.com/serde-rs/json.git",
+      "https://github.com/honojs/hono.git",
+      "https://github.com/pydantic/pydantic.git",
+      "https://github.com/gofiber/fiber.git",
+      "https://github.com/hyperium/hyper.git"
+    ],
+    "repositories": [
+      {
+        "name": "undici",
+        "language": "JavaScript",
+        "languageFamily": "javascript-typescript",
+        "url": "https://github.com/nodejs/undici.git",
+        "pinnedHead": "9f09b49accd391cca818409447f2fb8bc93229b3",
+        "extensions": [
+          ".cjs",
+          ".js",
+          ".jsx",
+          ".mjs",
+          ".ts",
+          ".tsx"
+        ]
+      },
+      {
+        "name": "aiohttp",
+        "language": "Python",
+        "languageFamily": "python",
+        "url": "https://github.com/aio-libs/aiohttp.git",
+        "pinnedHead": "7ffc8aeb6cd644fb3b2b41ae3b4d787d4b8217d4",
+        "extensions": [
+          ".py"
+        ]
+      },
+      {
+        "name": "validator",
+        "language": "Go fallback parser",
+        "languageFamily": "go",
+        "url": "https://github.com/go-playground/validator.git",
+        "pinnedHead": "fd8bd3c9d513cd1d29e495974fa07dba7a2b5936",
+        "extensions": [
+          ".go"
+        ]
+      },
+      {
+        "name": "tracing",
+        "language": "Rust fallback parser",
+        "languageFamily": "rust",
+        "url": "https://github.com/tokio-rs/tracing.git",
+        "pinnedHead": "d9d4c542de10f5d3a711b7a45ffe450fd0666437",
+        "extensions": [
+          ".rs"
+        ]
+      },
+      {
+        "name": "msw",
+        "language": "TypeScript",
+        "languageFamily": "javascript-typescript",
+        "url": "https://github.com/mswjs/msw.git",
+        "pinnedHead": "49d9d47f613b072f8d20e1a025feaee7c5382b2b",
+        "extensions": [
+          ".cjs",
+          ".js",
+          ".jsx",
+          ".mjs",
+          ".ts",
+          ".tsx"
+        ]
+      },
+      {
+        "name": "uvicorn",
+        "language": "Python",
+        "languageFamily": "python",
+        "url": "https://github.com/encode/uvicorn.git",
+        "pinnedHead": "d26c85c27bb8ea66237ff43f90ca23b774a3c1ce",
+        "extensions": [
+          ".py"
+        ]
+      },
+      {
+        "name": "gorm",
+        "language": "Go fallback parser",
+        "languageFamily": "go",
+        "url": "https://github.com/go-gorm/gorm.git",
+        "pinnedHead": "1d6ce99528060be18a42be09aca8d39efcb47f28",
+        "extensions": [
+          ".go"
+        ]
+      },
+      {
+        "name": "reqwest",
+        "language": "Rust fallback parser",
+        "languageFamily": "rust",
+        "url": "https://github.com/seanmonstar/reqwest.git",
+        "pinnedHead": "221abe9ec921e22fe1bafaed47b51b03bed4b7c3",
+        "extensions": [
+          ".rs"
+        ]
+      },
+      {
+        "name": "vite",
+        "language": "TypeScript",
+        "languageFamily": "javascript-typescript",
+        "url": "https://github.com/vitejs/vite.git",
+        "pinnedHead": "791843e1591ec2d65a401560bc1fc0a85b32ee32",
+        "extensions": [
+          ".cjs",
+          ".js",
+          ".jsx",
+          ".mjs",
+          ".ts",
+          ".tsx"
+        ]
+      },
+      {
+        "name": "poetry",
+        "language": "Python",
+        "languageFamily": "python",
+        "url": "https://github.com/python-poetry/poetry.git",
+        "pinnedHead": "f46702336862f30050d5c641d5ed6f7568ded793",
+        "extensions": [
+          ".py"
+        ]
+      },
+      {
+        "name": "go-redis",
+        "language": "Go fallback parser",
+        "languageFamily": "go",
+        "url": "https://github.com/redis/go-redis.git",
+        "pinnedHead": "5c82f57a47e097b32509ac2abd3d7c9d57f5100b",
+        "extensions": [
+          ".go"
+        ]
+      },
+      {
+        "name": "rayon",
+        "language": "Rust fallback parser",
+        "languageFamily": "rust",
+        "url": "https://github.com/rayon-rs/rayon.git",
+        "pinnedHead": "1f9bb2538e50f1e6d1bc2e3d06a361ba2af0b632",
+        "extensions": [
+          ".rs"
+        ]
+      }
+    ]
+  },
+  "rules": {
+    "desiredTargets": 8,
+    "requiredLanguageFamilies": [
+      "javascript-typescript",
+      "python",
+      "go",
+      "rust"
+    ],
+    "targetsPerLanguageFamily": 2,
+    "languageDiversitySatisfied": true,
+    "selectedPerLanguageFamily": {
+      "javascript-typescript": 2,
+      "python": 2,
+      "go": 2,
+      "rust": 2
+    },
+    "repositoryOrderIsBinding": true,
+    "firstEligibleRepositoriesPerFamilyWin": true,
+    "fallbackOnlyAfterNoEligibleCommitOrSetupFailureInThatFamily": true,
+    "fetchDepth": 400,
+    "scanLimit": 300,
+    "nonMergeSingleParent": true,
+    "newestEligibleCommitWins": true,
+    "minimumFiles": 2,
+    "maximumFiles": 6,
+    "allFilesMustBeModifiedSourceFiles": true,
+    "requiresImplementationAndFocusedTest": true,
+    "maximumChangedLines": 400,
+    "behavioralCommitSubjectRequired": true,
+    "expectedTaskTypeDerivedBeforeRouting": true,
+    "materializationAttempts": 3,
+    "retryDelayMs": 5000,
+    "palaceCallsOnCandidateTasksDuringSelection": 0,
+    "outputCreateOnly": true
+  },
+  "repositoryReports": [
+    {
+      "name": "undici",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/nodejs/undici.git",
+      "pinnedHead": "9f09b49accd391cca818409447f2fb8bc93229b3",
+      "status": "selected",
+      "scannedCommits": 2,
+      "rejectionCounts": {
+        "non-behavioral-or-ambiguous-subject": 1
+      },
+      "selectedTarget": {
+        "name": "undici",
+        "language": "JavaScript",
+        "languageFamily": "javascript-typescript",
+        "url": "https://github.com/nodejs/undici.git",
+        "pinnedHead": "9f09b49accd391cca818409447f2fb8bc93229b3",
+        "routeCommit": "10d93fc332f2c8c161982dec3833201de29891b5",
+        "groundTruthCommit": "4fe5bc5fefe5ac81a200fc8e1cf84b8bf8464451",
+        "task": "fix: handle empty qualified private cache directive",
+        "expectedTaskType": "bugfix",
+        "changedFiles": [
+          "lib/util/cache.js",
+          "test/cache-interceptor/utils.js",
+          "test/interceptors/cache.js"
+        ],
+        "implementationFiles": [
+          "lib/util/cache.js"
+        ],
+        "testFiles": [
+          "test/cache-interceptor/utils.js",
+          "test/interceptors/cache.js"
+        ],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 112,
+        "additions": 95,
+        "deletions": 17
+      },
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "errorCode": null,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "aiohttp",
+      "languageFamily": "python",
+      "url": "https://github.com/aio-libs/aiohttp.git",
+      "pinnedHead": "7ffc8aeb6cd644fb3b2b41ae3b4d787d4b8217d4",
+      "status": "selected",
+      "scannedCommits": 101,
+      "rejectionCounts": {
+        "non-behavioral-or-ambiguous-subject": 87,
+        "contains-non-modified-file": 8,
+        "file-count-outside-range": 5
+      },
+      "selectedTarget": {
+        "name": "aiohttp",
+        "language": "Python",
+        "languageFamily": "python",
+        "url": "https://github.com/aio-libs/aiohttp.git",
+        "pinnedHead": "7ffc8aeb6cd644fb3b2b41ae3b4d787d4b8217d4",
+        "routeCommit": "fe353185eb5c6eb87cb3cca92213c7098aa42437",
+        "groundTruthCommit": "9e00085c958fbcd40de37867e773bf7cd3bbee0c",
+        "task": "Fix parse_mimetype producing spurious empty-key parameter for whitespace-only segments after semicolons (#13010)",
+        "expectedTaskType": "bugfix",
+        "changedFiles": [
+          "aiohttp/helpers.py",
+          "tests/test_helpers.py"
+        ],
+        "implementationFiles": [
+          "aiohttp/helpers.py"
+        ],
+        "testFiles": [
+          "tests/test_helpers.py"
+        ],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 23,
+        "additions": 22,
+        "deletions": 1
+      },
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "errorCode": null,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "validator",
+      "languageFamily": "go",
+      "url": "https://github.com/go-playground/validator.git",
+      "pinnedHead": "fd8bd3c9d513cd1d29e495974fa07dba7a2b5936",
+      "status": "selected",
+      "scannedCommits": 8,
+      "rejectionCounts": {
+        "non-behavioral-or-ambiguous-subject": 6,
+        "contains-excluded-path": 1
+      },
+      "selectedTarget": {
+        "name": "validator",
+        "language": "Go fallback parser",
+        "languageFamily": "go",
+        "url": "https://github.com/go-playground/validator.git",
+        "pinnedHead": "fd8bd3c9d513cd1d29e495974fa07dba7a2b5936",
+        "routeCommit": "ac4c1bab0d4aa957466faa1948af28130767e43a",
+        "groundTruthCommit": "3f6cc52a951afde5b7375bba2b2826fa1c6f31d0",
+        "task": "Add English translations for prefix and suffix validators (#1583)",
+        "expectedTaskType": "feature",
+        "changedFiles": [
+          "translations/en/en.go",
+          "translations/en/en_test.go"
+        ],
+        "implementationFiles": [
+          "translations/en/en.go"
+        ],
+        "testFiles": [
+          "translations/en/en_test.go"
+        ],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 80,
+        "additions": 80,
+        "deletions": 0
+      },
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "errorCode": null,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "tracing",
+      "languageFamily": "rust",
+      "url": "https://github.com/tokio-rs/tracing.git",
+      "pinnedHead": "d9d4c542de10f5d3a711b7a45ffe450fd0666437",
+      "status": "selected",
+      "scannedCommits": 53,
+      "rejectionCounts": {
+        "non-behavioral-or-ambiguous-subject": 51,
+        "contains-non-modified-file": 1
+      },
+      "selectedTarget": {
+        "name": "tracing",
+        "language": "Rust fallback parser",
+        "languageFamily": "rust",
+        "url": "https://github.com/tokio-rs/tracing.git",
+        "pinnedHead": "d9d4c542de10f5d3a711b7a45ffe450fd0666437",
+        "routeCommit": "5a036547227d60e152faa401db1b78c0c5c95190",
+        "groundTruthCommit": "ee0713d73c314885a2e9bb215a91685b29100b8e",
+        "task": "Support constant expressions as instrument field names (#3158)",
+        "expectedTaskType": "feature",
+        "changedFiles": [
+          "tracing-attributes/src/attr.rs",
+          "tracing-attributes/src/expand.rs",
+          "tracing-attributes/src/lib.rs",
+          "tracing-attributes/tests/fields.rs"
+        ],
+        "implementationFiles": [
+          "tracing-attributes/src/attr.rs",
+          "tracing-attributes/src/expand.rs",
+          "tracing-attributes/src/lib.rs"
+        ],
+        "testFiles": [
+          "tracing-attributes/tests/fields.rs"
+        ],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 150,
+        "additions": 138,
+        "deletions": 12
+      },
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "errorCode": null,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "msw",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/mswjs/msw.git",
+      "pinnedHead": "49d9d47f613b072f8d20e1a025feaee7c5382b2b",
+      "status": "selected",
+      "scannedCommits": 29,
+      "rejectionCounts": {
+        "non-behavioral-or-ambiguous-subject": 18,
+        "file-count-outside-range": 6,
+        "contains-non-modified-file": 2,
+        "missing-implementation-or-test": 2
+      },
+      "selectedTarget": {
+        "name": "msw",
+        "language": "TypeScript",
+        "languageFamily": "javascript-typescript",
+        "url": "https://github.com/mswjs/msw.git",
+        "pinnedHead": "49d9d47f613b072f8d20e1a025feaee7c5382b2b",
+        "routeCommit": "a680221df7bbd5834fa0089161f1f3028c9b18ee",
+        "groundTruthCommit": "30668e68f403535636bfb8dc12c64299d9c1c6e6",
+        "task": "fix(HttpResponse): forward cookies only when response is used (#2728)",
+        "expectedTaskType": "bugfix",
+        "changedFiles": [
+          "src/core/handlers/RequestHandler.ts",
+          "src/core/utils/HttpResponse/decorators.ts",
+          "src/core/utils/request/storeResponseCookies.ts",
+          "test/browser/rest-api/request/request-cookies.mocks.ts"
+        ],
+        "implementationFiles": [
+          "src/core/handlers/RequestHandler.ts",
+          "src/core/utils/HttpResponse/decorators.ts",
+          "src/core/utils/request/storeResponseCookies.ts"
+        ],
+        "testFiles": [
+          "test/browser/rest-api/request/request-cookies.mocks.ts"
+        ],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 76,
+        "additions": 50,
+        "deletions": 26
+      },
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "errorCode": null,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "uvicorn",
+      "languageFamily": "python",
+      "url": "https://github.com/encode/uvicorn.git",
+      "pinnedHead": "d26c85c27bb8ea66237ff43f90ca23b774a3c1ce",
+      "status": "selected",
+      "scannedCommits": 107,
+      "rejectionCounts": {
+        "non-behavioral-or-ambiguous-subject": 87,
+        "file-count-outside-range": 10,
+        "contains-excluded-path": 7,
+        "contains-non-modified-file": 2
+      },
+      "selectedTarget": {
+        "name": "uvicorn",
+        "language": "Python",
+        "languageFamily": "python",
+        "url": "https://github.com/encode/uvicorn.git",
+        "pinnedHead": "d26c85c27bb8ea66237ff43f90ca23b774a3c1ce",
+        "routeCommit": "9ff60042a53cd1bbfd5580ab0a91ea2d1d8f2f8c",
+        "groundTruthCommit": "ae56d07af7cec7d5faad28d1716099a1007524c9",
+        "task": "Fix typo: error_occured -> error_occurred (#2776)",
+        "expectedTaskType": "bugfix",
+        "changedFiles": [
+          "tests/test_lifespan.py",
+          "uvicorn/lifespan/on.py"
+        ],
+        "implementationFiles": [
+          "uvicorn/lifespan/on.py"
+        ],
+        "testFiles": [
+          "tests/test_lifespan.py"
+        ],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 20,
+        "additions": 10,
+        "deletions": 10
+      },
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "errorCode": null,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "gorm",
+      "languageFamily": "go",
+      "url": "https://github.com/go-gorm/gorm.git",
+      "pinnedHead": "1d6ce99528060be18a42be09aca8d39efcb47f28",
+      "status": "selected",
+      "scannedCommits": 1,
+      "rejectionCounts": {},
+      "selectedTarget": {
+        "name": "gorm",
+        "language": "Go fallback parser",
+        "languageFamily": "go",
+        "url": "https://github.com/go-gorm/gorm.git",
+        "pinnedHead": "1d6ce99528060be18a42be09aca8d39efcb47f28",
+        "routeCommit": "f648834d22f67c1b682d3e44ac2eb252c31b3f1a",
+        "groundTruthCommit": "1d6ce99528060be18a42be09aca8d39efcb47f28",
+        "task": "Fix potential rows leak on panic by deferring rows.Close() (#7798)",
+        "expectedTaskType": "bugfix",
+        "changedFiles": [
+          "callbacks/delete.go",
+          "callbacks/update.go",
+          "finisher_api.go",
+          "tests/query_test.go"
+        ],
+        "implementationFiles": [
+          "callbacks/delete.go",
+          "callbacks/update.go",
+          "finisher_api.go"
+        ],
+        "testFiles": [
+          "tests/query_test.go"
+        ],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 24,
+        "additions": 19,
+        "deletions": 5
+      },
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "errorCode": null,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "reqwest",
+      "languageFamily": "rust",
+      "url": "https://github.com/seanmonstar/reqwest.git",
+      "pinnedHead": "221abe9ec921e22fe1bafaed47b51b03bed4b7c3",
+      "status": "selected",
+      "scannedCommits": 3,
+      "rejectionCounts": {
+        "non-behavioral-or-ambiguous-subject": 1,
+        "file-count-outside-range": 1
+      },
+      "selectedTarget": {
+        "name": "reqwest",
+        "language": "Rust fallback parser",
+        "languageFamily": "rust",
+        "url": "https://github.com/seanmonstar/reqwest.git",
+        "pinnedHead": "221abe9ec921e22fe1bafaed47b51b03bed4b7c3",
+        "routeCommit": "26394b4c839a8657b695d8addc6ca170752875cb",
+        "groundTruthCommit": "fc99bd5b15c72c65f615848d7b048df94aeadcd9",
+        "task": "feat: expose the negotiated TLS version via `TlsInfo` (#3067)",
+        "expectedTaskType": "feature",
+        "changedFiles": [
+          "src/connect.rs",
+          "src/tls.rs",
+          "tests/client.rs"
+        ],
+        "implementationFiles": [
+          "src/connect.rs",
+          "src/tls.rs"
+        ],
+        "testFiles": [
+          "tests/client.rs"
+        ],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 166,
+        "additions": 135,
+        "deletions": 31
+      },
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "errorCode": null,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "vite",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/vitejs/vite.git",
+      "pinnedHead": "791843e1591ec2d65a401560bc1fc0a85b32ee32",
+      "status": "reserved-fallback-not-inspected",
+      "scannedCommits": 0,
+      "rejectionCounts": {},
+      "selectedTarget": null
+    },
+    {
+      "name": "poetry",
+      "languageFamily": "python",
+      "url": "https://github.com/python-poetry/poetry.git",
+      "pinnedHead": "f46702336862f30050d5c641d5ed6f7568ded793",
+      "status": "reserved-fallback-not-inspected",
+      "scannedCommits": 0,
+      "rejectionCounts": {},
+      "selectedTarget": null
+    },
+    {
+      "name": "go-redis",
+      "languageFamily": "go",
+      "url": "https://github.com/redis/go-redis.git",
+      "pinnedHead": "5c82f57a47e097b32509ac2abd3d7c9d57f5100b",
+      "status": "reserved-fallback-not-inspected",
+      "scannedCommits": 0,
+      "rejectionCounts": {},
+      "selectedTarget": null
+    },
+    {
+      "name": "rayon",
+      "languageFamily": "rust",
+      "url": "https://github.com/rayon-rs/rayon.git",
+      "pinnedHead": "1f9bb2538e50f1e6d1bc2e3d06a361ba2af0b632",
+      "status": "reserved-fallback-not-inspected",
+      "scannedCommits": 0,
+      "rejectionCounts": {},
+      "selectedTarget": null
+    }
+  ],
+  "targets": [
+    {
+      "name": "undici",
+      "language": "JavaScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/nodejs/undici.git",
+      "pinnedHead": "9f09b49accd391cca818409447f2fb8bc93229b3",
+      "routeCommit": "10d93fc332f2c8c161982dec3833201de29891b5",
+      "groundTruthCommit": "4fe5bc5fefe5ac81a200fc8e1cf84b8bf8464451",
+      "task": "fix: handle empty qualified private cache directive",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "lib/util/cache.js",
+        "test/cache-interceptor/utils.js",
+        "test/interceptors/cache.js"
+      ],
+      "implementationFiles": [
+        "lib/util/cache.js"
+      ],
+      "testFiles": [
+        "test/cache-interceptor/utils.js",
+        "test/interceptors/cache.js"
+      ],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 112,
+      "additions": 95,
+      "deletions": 17
+    },
+    {
+      "name": "aiohttp",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/aio-libs/aiohttp.git",
+      "pinnedHead": "7ffc8aeb6cd644fb3b2b41ae3b4d787d4b8217d4",
+      "routeCommit": "fe353185eb5c6eb87cb3cca92213c7098aa42437",
+      "groundTruthCommit": "9e00085c958fbcd40de37867e773bf7cd3bbee0c",
+      "task": "Fix parse_mimetype producing spurious empty-key parameter for whitespace-only segments after semicolons (#13010)",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "aiohttp/helpers.py",
+        "tests/test_helpers.py"
+      ],
+      "implementationFiles": [
+        "aiohttp/helpers.py"
+      ],
+      "testFiles": [
+        "tests/test_helpers.py"
+      ],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 23,
+      "additions": 22,
+      "deletions": 1
+    },
+    {
+      "name": "validator",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/go-playground/validator.git",
+      "pinnedHead": "fd8bd3c9d513cd1d29e495974fa07dba7a2b5936",
+      "routeCommit": "ac4c1bab0d4aa957466faa1948af28130767e43a",
+      "groundTruthCommit": "3f6cc52a951afde5b7375bba2b2826fa1c6f31d0",
+      "task": "Add English translations for prefix and suffix validators (#1583)",
+      "expectedTaskType": "feature",
+      "changedFiles": [
+        "translations/en/en.go",
+        "translations/en/en_test.go"
+      ],
+      "implementationFiles": [
+        "translations/en/en.go"
+      ],
+      "testFiles": [
+        "translations/en/en_test.go"
+      ],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 80,
+      "additions": 80,
+      "deletions": 0
+    },
+    {
+      "name": "tracing",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/tokio-rs/tracing.git",
+      "pinnedHead": "d9d4c542de10f5d3a711b7a45ffe450fd0666437",
+      "routeCommit": "5a036547227d60e152faa401db1b78c0c5c95190",
+      "groundTruthCommit": "ee0713d73c314885a2e9bb215a91685b29100b8e",
+      "task": "Support constant expressions as instrument field names (#3158)",
+      "expectedTaskType": "feature",
+      "changedFiles": [
+        "tracing-attributes/src/attr.rs",
+        "tracing-attributes/src/expand.rs",
+        "tracing-attributes/src/lib.rs",
+        "tracing-attributes/tests/fields.rs"
+      ],
+      "implementationFiles": [
+        "tracing-attributes/src/attr.rs",
+        "tracing-attributes/src/expand.rs",
+        "tracing-attributes/src/lib.rs"
+      ],
+      "testFiles": [
+        "tracing-attributes/tests/fields.rs"
+      ],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 150,
+      "additions": 138,
+      "deletions": 12
+    },
+    {
+      "name": "msw",
+      "language": "TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/mswjs/msw.git",
+      "pinnedHead": "49d9d47f613b072f8d20e1a025feaee7c5382b2b",
+      "routeCommit": "a680221df7bbd5834fa0089161f1f3028c9b18ee",
+      "groundTruthCommit": "30668e68f403535636bfb8dc12c64299d9c1c6e6",
+      "task": "fix(HttpResponse): forward cookies only when response is used (#2728)",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "src/core/handlers/RequestHandler.ts",
+        "src/core/utils/HttpResponse/decorators.ts",
+        "src/core/utils/request/storeResponseCookies.ts",
+        "test/browser/rest-api/request/request-cookies.mocks.ts"
+      ],
+      "implementationFiles": [
+        "src/core/handlers/RequestHandler.ts",
+        "src/core/utils/HttpResponse/decorators.ts",
+        "src/core/utils/request/storeResponseCookies.ts"
+      ],
+      "testFiles": [
+        "test/browser/rest-api/request/request-cookies.mocks.ts"
+      ],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 76,
+      "additions": 50,
+      "deletions": 26
+    },
+    {
+      "name": "uvicorn",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/encode/uvicorn.git",
+      "pinnedHead": "d26c85c27bb8ea66237ff43f90ca23b774a3c1ce",
+      "routeCommit": "9ff60042a53cd1bbfd5580ab0a91ea2d1d8f2f8c",
+      "groundTruthCommit": "ae56d07af7cec7d5faad28d1716099a1007524c9",
+      "task": "Fix typo: error_occured -> error_occurred (#2776)",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "tests/test_lifespan.py",
+        "uvicorn/lifespan/on.py"
+      ],
+      "implementationFiles": [
+        "uvicorn/lifespan/on.py"
+      ],
+      "testFiles": [
+        "tests/test_lifespan.py"
+      ],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 20,
+      "additions": 10,
+      "deletions": 10
+    },
+    {
+      "name": "gorm",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/go-gorm/gorm.git",
+      "pinnedHead": "1d6ce99528060be18a42be09aca8d39efcb47f28",
+      "routeCommit": "f648834d22f67c1b682d3e44ac2eb252c31b3f1a",
+      "groundTruthCommit": "1d6ce99528060be18a42be09aca8d39efcb47f28",
+      "task": "Fix potential rows leak on panic by deferring rows.Close() (#7798)",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "callbacks/delete.go",
+        "callbacks/update.go",
+        "finisher_api.go",
+        "tests/query_test.go"
+      ],
+      "implementationFiles": [
+        "callbacks/delete.go",
+        "callbacks/update.go",
+        "finisher_api.go"
+      ],
+      "testFiles": [
+        "tests/query_test.go"
+      ],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 24,
+      "additions": 19,
+      "deletions": 5
+    },
+    {
+      "name": "reqwest",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/seanmonstar/reqwest.git",
+      "pinnedHead": "221abe9ec921e22fe1bafaed47b51b03bed4b7c3",
+      "routeCommit": "26394b4c839a8657b695d8addc6ca170752875cb",
+      "groundTruthCommit": "fc99bd5b15c72c65f615848d7b048df94aeadcd9",
+      "task": "feat: expose the negotiated TLS version via `TlsInfo` (#3067)",
+      "expectedTaskType": "feature",
+      "changedFiles": [
+        "src/connect.rs",
+        "src/tls.rs",
+        "tests/client.rs"
+      ],
+      "implementationFiles": [
+        "src/connect.rs",
+        "src/tls.rs"
+      ],
+      "testFiles": [
+        "tests/client.rs"
+      ],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 166,
+      "additions": 135,
+      "deletions": 31
+    }
+  ]
+}
