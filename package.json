@@ -45,7 +45,7 @@
     "build": "pnpm -r build && pnpm build:plugin-mcp && pnpm build:package-cli",
     "build:plugin-mcp": "tsup --config tsup.plugin-mcp.config.ts && node scripts/trim-generated.cjs",
     "build:package-cli": "tsup --config tsup.package-cli.config.ts && node scripts/trim-generated.cjs",
-    "test": "pnpm -r test && node --test scripts/test/context-telemetry.test.cjs scripts/test/disclosed-round3-regression.test.cjs scripts/test/round4-preregistration.test.cjs",
+    "test": "pnpm -r test && node --test scripts/test/*.test.cjs",
     "test:mcp-smoke": "node scripts/smoke-mcp.cjs",
     "test:release-candidate": "node scripts/verify-release-candidate.cjs",
     "test:real-repositories": "pnpm build && node scripts/verify-real-repositories.cjs",
