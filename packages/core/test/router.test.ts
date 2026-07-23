@@ -1843,9 +1843,9 @@ export function uploadProductVariantImageController(file: File) {
     await withFixture("ts-api", async (root) => {
       const changedFiles = ["httpx/_auth.py", "tests/test_auth.py"];
       const files = new Map<string, string>([
-        ["httpx/_auth.py", "class DigestAuth:\n    def auth_flow(self, request):\n        request.cookies.set('retry', '1')\n        return request\n"],
-        ["tests/test_auth.py", "from httpx._auth import DigestAuth\ndef test_digest_auth_retried_request_cookies():\n    assert DigestAuth()\n"],
-        ["tests/client/test_auth.py", "def test_client_auth_configuration():\n    assert True\n"],
+        ["httpx/_auth.py", "class DigestAuth:\n    def auth_flow(self, request):\n        response = yield request\n        yield request\n"],
+        ["tests/test_auth.py", "import httpx\ndef test_digest_auth_with_401():\n    flow = httpx.DigestAuth().sync_auth_flow(request)\n    flow.send(response)\n"],
+        ["tests/client/test_auth.py", "def test_digest_auth_retried_request():\n    request = client.get('/auth')\n    assert request.headers['Authorization'].startswith('Digest')\n"],
         ["httpx/_client.py", "class Client:\n    def send(self, request): return request\n"],
         ["httpx/_api.py", "def request(method, url): return (method, url)\n"],
         ["httpx/_main.py", "def main(): return 'httpx'\n"]
@@ -1864,8 +1864,8 @@ export function uploadProductVariantImageController(file: File) {
       );
 
       expect(evaluation.taskType).toBe("feature");
-      expect(evaluation.route.files).toEqual(expect.arrayContaining(changedFiles));
-      expect(evaluation.route.fileCount).toBeLessThanOrEqual(3);
+      expect(evaluation.route.files).toEqual(changedFiles);
+      expect(evaluation.route.fileCount).toBe(2);
       expect(evaluation.coverage.changedFileCoverage).toBe(1);
       expect(evaluation.coverage.routeFocus).toBeGreaterThanOrEqual(0.67);
     });
@@ -1910,9 +1910,9 @@ export function uploadProductVariantImageController(file: File) {
         "clap_complete/tests/testsuite/engine.rs"
       ];
       const files = new Map<string, string>([
-        [changedFiles[0], "pub fn complete_index(value: &str, index: usize) -> String { value.to_string() }\n"],
-        [changedFiles[1], "pub struct ValueCompleter;\nimpl ValueCompleter { pub fn complete(&self, index: usize) {} }\n"],
-        [changedFiles[2], "#[test]\nfn value_completer_is_index_aware() { assert!(true); }\n"],
+        [changedFiles[0], "use super::ArgValueCompleter;\npub fn complete_arg_value(completer: ArgValueCompleter, value: &str) { completer.complete(value); }\n"],
+        [changedFiles[1], "pub struct ArgValueCompleter;\npub trait ValueCompleter { fn complete(&self, current: &str); }\nimpl ArgValueCompleter { pub fn complete(&self, current: &str) {} }\n"],
+        [changedFiles[2], "#[test]\nfn suggest_custom_arg_completer_at_index() { let completer: ValueCompleter; assert!(true); }\n"],
         ["clap_complete/src/env/shells.rs", "pub fn complete_shell() {}\n"],
         ["clap_builder/src/builder/value_parser.rs", "pub struct ValueParser;\n"],
         ["tests/builder/multiple_values.rs", "#[test]\nfn multiple_values() {}\n"]
@@ -1924,7 +1924,9 @@ export function uploadProductVariantImageController(file: File) {
       }
       await indexPalace(root);
 
-      const evaluation = await evaluateRoute(root, "feat(complete): Index-aware ValueCompleter", {
+      const task = "feat(complete): Index-aware ValueCompleter";
+      const analysis = analyzeTask(task);
+      const evaluation = await evaluateRoute(root, task, {
         changedFiles,
         routeLimit: 9,
         budget: 6000,
@@ -1932,8 +1934,10 @@ export function uploadProductVariantImageController(file: File) {
       });
 
       expect(evaluation.taskType).toBe("feature");
-      expect(evaluation.route.files).toEqual(expect.arrayContaining(changedFiles));
-      expect(evaluation.route.fileCount).toBeLessThanOrEqual(5);
+      expect(analysis.keywords).toContain("index");
+      expect(analysis.keywords).not.toEqual(expect.arrayContaining(["stale", "fresh"]));
+      expect(evaluation.route.files).toEqual(changedFiles);
+      expect(evaluation.route.fileCount).toBe(3);
       expect(evaluation.coverage.changedFileCoverage).toBe(1);
       expect(evaluation.coverage.routeFocus).toBeGreaterThanOrEqual(0.6);
     });
