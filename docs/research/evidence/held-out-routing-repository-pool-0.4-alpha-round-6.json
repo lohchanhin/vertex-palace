@@ -1,0 +1,182 @@
+{
+  "schemaVersion": 1,
+  "studyId": "held-out-cross-repository-routing-round-6-0.4-alpha",
+  "status": "preregistered",
+  "claimBoundary": "Candidate-held-out repository pool only. No commit history, diff, subject, task, or Palace route was inspected while fixing this order and these HEAD commits. This does not claim that the repositories are unseen by the underlying model.",
+  "candidate": {
+    "productCommit": "f61207688badbe07818470a42441a3a966a8bdf0",
+    "cliPath": "dist/palace.cjs",
+    "cliSha256": "72E18636847227AD81D07132CCC47F1F0E62C279366221F1D2DF5CB04F2D0CFC"
+  },
+  "rules": {
+    "desiredTargets": 8,
+    "requiredLanguageFamilies": [
+      "javascript-typescript",
+      "python",
+      "go",
+      "rust"
+    ],
+    "targetsPerLanguageFamily": 2,
+    "repositoriesPerLanguageFamily": 3,
+    "repositoryOrderIsBinding": true,
+    "firstEligibleRepositoriesPerFamilyWin": true,
+    "thirdRepositoryPerFamilyIsFallback": true,
+    "taskClassifier": "inflected-behavioral-subject-v1",
+    "pinnedHeadsObtainedWithGitLsRemoteHeadOnly": true,
+    "commitHistoryInspectedBeforePoolFreeze": false,
+    "palaceCallsOnCandidateTasksBeforePoolFreeze": 0
+  },
+  "previouslyObservedRepositories": [
+    "https://github.com/colinhacks/zod.git",
+    "https://github.com/psf/requests.git",
+    "https://github.com/sindresorhus/p-limit.git",
+    "https://github.com/fastify/fastify.git",
+    "https://github.com/pallets/click.git",
+    "https://github.com/date-fns/date-fns.git",
+    "https://github.com/BurntSushi/ripgrep.git",
+    "https://github.com/spf13/cobra.git",
+    "https://github.com/markedjs/marked.git",
+    "https://github.com/expressjs/express.git",
+    "https://github.com/encode/httpx.git",
+    "https://github.com/urfave/cli.git",
+    "https://github.com/clap-rs/clap.git",
+    "https://github.com/tj/commander.js.git",
+    "https://github.com/pytest-dev/pytest.git",
+    "https://github.com/go-chi/chi.git",
+    "https://github.com/tokio-rs/axum.git",
+    "https://github.com/koajs/koa.git",
+    "https://github.com/encode/starlette.git",
+    "https://github.com/gin-gonic/gin.git",
+    "https://github.com/tower-rs/tower.git",
+    "https://github.com/axios/axios.git",
+    "https://github.com/pallets/flask.git",
+    "https://github.com/labstack/echo.git",
+    "https://github.com/serde-rs/json.git",
+    "https://github.com/honojs/hono.git",
+    "https://github.com/pydantic/pydantic.git",
+    "https://github.com/gofiber/fiber.git",
+    "https://github.com/hyperium/hyper.git",
+    "https://github.com/nodejs/undici.git",
+    "https://github.com/aio-libs/aiohttp.git",
+    "https://github.com/go-playground/validator.git",
+    "https://github.com/tokio-rs/tracing.git",
+    "https://github.com/mswjs/msw.git",
+    "https://github.com/encode/uvicorn.git",
+    "https://github.com/go-gorm/gorm.git",
+    "https://github.com/seanmonstar/reqwest.git",
+    "https://github.com/vitejs/vite.git",
+    "https://github.com/python-poetry/poetry.git",
+    "https://github.com/redis/go-redis.git",
+    "https://github.com/rayon-rs/rayon.git",
+    "https://github.com/sindresorhus/got.git",
+    "https://github.com/django/django.git",
+    "https://github.com/stretchr/testify.git",
+    "https://github.com/tokio-rs/tokio.git",
+    "https://github.com/vitest-dev/vitest.git",
+    "https://github.com/python-trio/trio.git",
+    "https://github.com/go-resty/resty.git",
+    "https://github.com/serde-rs/serde.git",
+    "https://github.com/TanStack/query.git",
+    "https://github.com/agronholm/anyio.git",
+    "https://github.com/rs/zerolog.git",
+    "https://github.com/tower-rs/tower-http.git"
+  ],
+  "repositoryPool": [
+    {
+      "name": "ky",
+      "language": "TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/sindresorhus/ky.git",
+      "pinnedHead": "3419113b48e034fdcf8fa6bd3be3da7b3d0d758f",
+      "extensions": [".cjs", ".js", ".jsx", ".mjs", ".ts", ".tsx"]
+    },
+    {
+      "name": "werkzeug",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/pallets/werkzeug.git",
+      "pinnedHead": "1b00618e787f40dfb21eba29caf8f8be7c8e1d93",
+      "extensions": [".py"]
+    },
+    {
+      "name": "golang-jwt",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/golang-jwt/jwt.git",
+      "pinnedHead": "1a11d3724e63105d751decf9adbdc90165137b45",
+      "extensions": [".go"]
+    },
+    {
+      "name": "anyhow",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/dtolnay/anyhow.git",
+      "pinnedHead": "1dbe1862aae650423e3361fbd20b7d17c5109cc3",
+      "extensions": [".rs"]
+    },
+    {
+      "name": "chalk",
+      "language": "JavaScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/chalk/chalk.git",
+      "pinnedHead": "e91293130c7d642c7b91152c3c942743a3b910a7",
+      "extensions": [".cjs", ".js", ".jsx", ".mjs", ".ts", ".tsx"]
+    },
+    {
+      "name": "black",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/psf/black.git",
+      "pinnedHead": "db2e3e7b317b40685ba4618235a8388c7c6ea5e2",
+      "extensions": [".py"]
+    },
+    {
+      "name": "semver-go",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/Masterminds/semver.git",
+      "pinnedHead": "8b89c86cb53c57cfd5d07c13de12bc4d78954e99",
+      "extensions": [".go"]
+    },
+    {
+      "name": "bytes",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/tokio-rs/bytes.git",
+      "pinnedHead": "d5c8ad3227afe459c09f1d0d85455abf00f0381a",
+      "extensions": [".rs"]
+    },
+    {
+      "name": "node-semver",
+      "language": "JavaScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/npm/node-semver.git",
+      "pinnedHead": "6e05b7637396ac66522cff8731f07cfe0ef49a29",
+      "extensions": [".cjs", ".js", ".jsx", ".mjs", ".ts", ".tsx"]
+    },
+    {
+      "name": "attrs",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/python-attrs/attrs.git",
+      "pinnedHead": "f06ceaafbe5bdbdafad8a0c01a2daabb89386a42",
+      "extensions": [".py"]
+    },
+    {
+      "name": "chi-render",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/go-chi/render.git",
+      "pinnedHead": "14f1cb3d5c2969d6e462632a205eacb6421eb4dc",
+      "extensions": [".go"]
+    },
+    {
+      "name": "bstr",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/BurntSushi/bstr.git",
+      "pinnedHead": "08a77375dfa8e3cf5473f8afd22f2552988a10cf",
+      "extensions": [".rs"]
+    }
+  ]
+}
