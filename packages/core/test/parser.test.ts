@@ -15,6 +15,27 @@ describe("parseFile", () => {
     });
   });
 
+  it("extracts static CommonJS require targets", async () => {
+    await withFixture("ts-api", async (root) => {
+      const target = path.join(root, "tests", "directive-utils.test.js");
+      await writeFile(
+        target,
+        `const { parseDirective } = require("../src/directives")
+const dynamicTarget = "../src/other"
+require(dynamicTarget)
+
+test("parses a directive", () => parseDirective("private"))
+`,
+        "utf8"
+      );
+
+      const parsed = await parseFile(root, "tests/directive-utils.test.js", "javascript");
+
+      expect(parsed.imports).toContain("../src/directives");
+      expect(parsed.imports).not.toContain("../src/other");
+    });
+  });
+
   it("falls back without crashing", async () => {
     await withFixture("ts-api", async (root) => {
       const target = path.join(root, "src", "broken.custom");

@@ -7,7 +7,10 @@ import { normalizeRelativePath } from "../utils/path-utils";
 export function parseTsJs(sourcePath: string, content: string, language: string): ParsedFile {
   const project = new Project({ useInMemoryFileSystem: true, compilerOptions: { allowJs: true, jsx: 4 } });
   const sourceFile = project.createSourceFile(sourcePath, content, { overwrite: true });
-  const imports = sourceFile.getImportDeclarations().map((item) => item.getModuleSpecifierValue());
+  const imports = [...new Set([
+    ...sourceFile.getImportDeclarations().map((item) => item.getModuleSpecifierValue()),
+    ...extractCommonJsImports(sourceFile)
+  ])];
   const exports = [
     ...sourceFile.getExportDeclarations().map((item) => item.getModuleSpecifierValue() ?? item.getText().slice(0, 120)),
     ...sourceFile.getExportAssignments().map((item) => item.getText().slice(0, 120))
@@ -80,6 +83,14 @@ function extractTestCaseTerms(sourceFile: SourceFile): string {
     return title ? [title] : [];
   });
   return extractSearchTerms([...new Set(titles)].join(" "), 240);
+}
+
+function extractCommonJsImports(sourceFile: SourceFile): string[] {
+  return sourceFile.getDescendantsOfKind(SyntaxKind.CallExpression).flatMap((call) => {
+    if (call.getExpression().getText() !== "require") return [];
+    const modulePath = literalString(call.getArguments()[0]);
+    return modulePath ? [modulePath] : [];
+  });
 }
 
 function isTestCaseCall(expression: string): boolean {

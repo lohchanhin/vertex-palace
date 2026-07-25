@@ -266,4 +266,46 @@ def test_parse_set_cookie_headers_with_attributes():
       expect(hasDirectTestEdge(setCookie?.id, nestedNameTest?.id)).toBe(false);
     });
   });
+
+  it("links extensionless CommonJS requires to local JavaScript files", async () => {
+    await withFixture("ts-api", async (root) => {
+      const sourcePath = "lib/util/directives.js";
+      const testPath = "tests/directive-utils.test.js";
+      const files = new Map<string, string>([
+        [
+          sourcePath,
+          `function parseDirective(value) { return value.trim() }
+module.exports = { parseDirective }
+`
+        ],
+        [
+          testPath,
+          `const { parseDirective } = require('../lib/util/directives')
+test('parses an empty directive', () => parseDirective(''))
+`
+        ]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+
+      await indexPalace(root);
+      const index = await readIndex(root);
+      const source = index.nodes.find(
+        (node) => node.sourcePath === sourcePath && node.kind === "file"
+      );
+      const test = index.nodes.find(
+        (node) => node.sourcePath === testPath && node.kind === "test"
+      );
+
+      expect(index.edges).toContainEqual(expect.objectContaining({
+        from: test?.id,
+        to: source?.id,
+        type: "imports",
+        weight: 0.8
+      }));
+    });
+  });
 });

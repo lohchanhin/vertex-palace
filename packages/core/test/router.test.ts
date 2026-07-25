@@ -2418,6 +2418,63 @@ def test_parse_cookie_header_empty_key_whitespace_semicolon():
     });
   });
 
+  it("keeps direct utility and integration tests for one CommonJS implementation", async () => {
+    await withFixture("ts-api", async (root) => {
+      const changedFiles = [
+        "lib/util/cache.js",
+        "test/cache-interceptor/utils.js",
+        "test/interceptors/cache.js"
+      ];
+      const files = new Map<string, string>([
+        [
+          changedFiles[0],
+          `function parseCacheControlHeader(value) { return value.split(',') }
+function makeCacheKey(value) { return value }
+module.exports = { parseCacheControlHeader, makeCacheKey }
+`
+        ],
+        [
+          changedFiles[1],
+          `const { parseCacheControlHeader } = require('../../lib/util/cache')
+describe('parseCacheControlHeader', () => {
+  test('handles empty qualified private cache directive', () => {
+    parseCacheControlHeader('private=""')
+  })
+})
+`
+        ],
+        [
+          changedFiles[2],
+          `const { makeCacheKey } = require('../../lib/util/cache')
+describe('cache interceptor', () => {
+  test('does not cache an empty qualified private response', () => {
+    makeCacheKey('private')
+  })
+})
+`
+        ]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const evaluation = await evaluateRoute(
+        root,
+        "fix: handle empty qualified private cache directive",
+        { changedFiles, routeLimit: 9, budget: 6000, maxDrawers: 4 }
+      );
+
+      expect([...evaluation.route.files].sort()).toEqual([...changedFiles].sort());
+      expect(evaluation.route.files).toHaveLength(changedFiles.length);
+      expect(evaluation.coverage.changedFileCoverage).toBe(1);
+      expect(evaluation.coverage.routeFocus).toBe(1);
+      expect(evaluation.calibration.status).not.toBe("overconfident");
+    });
+  });
+
   it("keeps an attribute-macro task inside one workspace crate and its causal siblings", async () => {
     await withFixture("ts-api", async (root) => {
       const changedFiles = [
