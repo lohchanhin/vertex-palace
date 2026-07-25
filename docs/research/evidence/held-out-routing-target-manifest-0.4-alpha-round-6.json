@@ -1,0 +1,841 @@
+{
+  "schemaVersion": 3,
+  "studyId": "held-out-cross-repository-routing-round-6-0.4-alpha",
+  "generatedAt": "2026-07-25T23:33:34.776Z",
+  "status": "selection-failed",
+  "claimBoundary": "Mechanical candidate-held-out target selection only. The frozen Vertex Palace candidate has not initialized, indexed, routed, packed, contextualized, or evaluated any selected task.",
+  "heldOutAgainstCandidate": true,
+  "candidate": {
+    "productCommit": "f61207688badbe07818470a42441a3a966a8bdf0",
+    "cliPath": "dist/palace.cjs",
+    "cliSha256": "72E18636847227AD81D07132CCC47F1F0E62C279366221F1D2DF5CB04F2D0CFC",
+    "frozenPaths": [
+      "packages",
+      "plugins/vertex-palace/mcp/server.cjs"
+    ]
+  },
+  "selector": {
+    "commit": "3c68859e1887df1f0e526c9593139d2d872b53b5",
+    "path": "scripts/select-held-out-routing-targets-round-6.cjs"
+  },
+  "repositoryPool": {
+    "path": "docs/research/evidence/held-out-routing-repository-pool-0.4-alpha-round-6.json",
+    "commit": "3c68859e1887df1f0e526c9593139d2d872b53b5",
+    "sha256": "18AC4C806A7EDB9829C33AE93C5B1FABE73C2AC2716EADCE5EDDD7FC2E9576EE",
+    "previouslyObservedRepositories": [
+      "https://github.com/colinhacks/zod.git",
+      "https://github.com/psf/requests.git",
+      "https://github.com/sindresorhus/p-limit.git",
+      "https://github.com/fastify/fastify.git",
+      "https://github.com/pallets/click.git",
+      "https://github.com/date-fns/date-fns.git",
+      "https://github.com/BurntSushi/ripgrep.git",
+      "https://github.com/spf13/cobra.git",
+      "https://github.com/markedjs/marked.git",
+      "https://github.com/expressjs/express.git",
+      "https://github.com/encode/httpx.git",
+      "https://github.com/urfave/cli.git",
+      "https://github.com/clap-rs/clap.git",
+      "https://github.com/tj/commander.js.git",
+      "https://github.com/pytest-dev/pytest.git",
+      "https://github.com/go-chi/chi.git",
+      "https://github.com/tokio-rs/axum.git",
+      "https://github.com/koajs/koa.git",
+      "https://github.com/encode/starlette.git",
+      "https://github.com/gin-gonic/gin.git",
+      "https://github.com/tower-rs/tower.git",
+      "https://github.com/axios/axios.git",
+      "https://github.com/pallets/flask.git",
+      "https://github.com/labstack/echo.git",
+      "https://github.com/serde-rs/json.git",
+      "https://github.com/honojs/hono.git",
+      "https://github.com/pydantic/pydantic.git",
+      "https://github.com/gofiber/fiber.git",
+      "https://github.com/hyperium/hyper.git",
+      "https://github.com/nodejs/undici.git",
+      "https://github.com/aio-libs/aiohttp.git",
+      "https://github.com/go-playground/validator.git",
+      "https://github.com/tokio-rs/tracing.git",
+      "https://github.com/mswjs/msw.git",
+      "https://github.com/encode/uvicorn.git",
+      "https://github.com/go-gorm/gorm.git",
+      "https://github.com/seanmonstar/reqwest.git",
+      "https://github.com/vitejs/vite.git",
+      "https://github.com/python-poetry/poetry.git",
+      "https://github.com/redis/go-redis.git",
+      "https://github.com/rayon-rs/rayon.git",
+      "https://github.com/sindresorhus/got.git",
+      "https://github.com/django/django.git",
+      "https://github.com/stretchr/testify.git",
+      "https://github.com/tokio-rs/tokio.git",
+      "https://github.com/vitest-dev/vitest.git",
+      "https://github.com/python-trio/trio.git",
+      "https://github.com/go-resty/resty.git",
+      "https://github.com/serde-rs/serde.git",
+      "https://github.com/TanStack/query.git",
+      "https://github.com/agronholm/anyio.git",
+      "https://github.com/rs/zerolog.git",
+      "https://github.com/tower-rs/tower-http.git"
+    ],
+    "repositories": [
+      {
+        "name": "ky",
+        "language": "TypeScript",
+        "languageFamily": "javascript-typescript",
+        "url": "https://github.com/sindresorhus/ky.git",
+        "pinnedHead": "3419113b48e034fdcf8fa6bd3be3da7b3d0d758f",
+        "extensions": [
+          ".cjs",
+          ".js",
+          ".jsx",
+          ".mjs",
+          ".ts",
+          ".tsx"
+        ]
+      },
+      {
+        "name": "werkzeug",
+        "language": "Python",
+        "languageFamily": "python",
+        "url": "https://github.com/pallets/werkzeug.git",
+        "pinnedHead": "1b00618e787f40dfb21eba29caf8f8be7c8e1d93",
+        "extensions": [
+          ".py"
+        ]
+      },
+      {
+        "name": "golang-jwt",
+        "language": "Go fallback parser",
+        "languageFamily": "go",
+        "url": "https://github.com/golang-jwt/jwt.git",
+        "pinnedHead": "1a11d3724e63105d751decf9adbdc90165137b45",
+        "extensions": [
+          ".go"
+        ]
+      },
+      {
+        "name": "anyhow",
+        "language": "Rust fallback parser",
+        "languageFamily": "rust",
+        "url": "https://github.com/dtolnay/anyhow.git",
+        "pinnedHead": "1dbe1862aae650423e3361fbd20b7d17c5109cc3",
+        "extensions": [
+          ".rs"
+        ]
+      },
+      {
+        "name": "chalk",
+        "language": "JavaScript",
+        "languageFamily": "javascript-typescript",
+        "url": "https://github.com/chalk/chalk.git",
+        "pinnedHead": "e91293130c7d642c7b91152c3c942743a3b910a7",
+        "extensions": [
+          ".cjs",
+          ".js",
+          ".jsx",
+          ".mjs",
+          ".ts",
+          ".tsx"
+        ]
+      },
+      {
+        "name": "black",
+        "language": "Python",
+        "languageFamily": "python",
+        "url": "https://github.com/psf/black.git",
+        "pinnedHead": "db2e3e7b317b40685ba4618235a8388c7c6ea5e2",
+        "extensions": [
+          ".py"
+        ]
+      },
+      {
+        "name": "semver-go",
+        "language": "Go fallback parser",
+        "languageFamily": "go",
+        "url": "https://github.com/Masterminds/semver.git",
+        "pinnedHead": "8b89c86cb53c57cfd5d07c13de12bc4d78954e99",
+        "extensions": [
+          ".go"
+        ]
+      },
+      {
+        "name": "bytes",
+        "language": "Rust fallback parser",
+        "languageFamily": "rust",
+        "url": "https://github.com/tokio-rs/bytes.git",
+        "pinnedHead": "d5c8ad3227afe459c09f1d0d85455abf00f0381a",
+        "extensions": [
+          ".rs"
+        ]
+      },
+      {
+        "name": "node-semver",
+        "language": "JavaScript",
+        "languageFamily": "javascript-typescript",
+        "url": "https://github.com/npm/node-semver.git",
+        "pinnedHead": "6e05b7637396ac66522cff8731f07cfe0ef49a29",
+        "extensions": [
+          ".cjs",
+          ".js",
+          ".jsx",
+          ".mjs",
+          ".ts",
+          ".tsx"
+        ]
+      },
+      {
+        "name": "attrs",
+        "language": "Python",
+        "languageFamily": "python",
+        "url": "https://github.com/python-attrs/attrs.git",
+        "pinnedHead": "f06ceaafbe5bdbdafad8a0c01a2daabb89386a42",
+        "extensions": [
+          ".py"
+        ]
+      },
+      {
+        "name": "chi-render",
+        "language": "Go fallback parser",
+        "languageFamily": "go",
+        "url": "https://github.com/go-chi/render.git",
+        "pinnedHead": "14f1cb3d5c2969d6e462632a205eacb6421eb4dc",
+        "extensions": [
+          ".go"
+        ]
+      },
+      {
+        "name": "bstr",
+        "language": "Rust fallback parser",
+        "languageFamily": "rust",
+        "url": "https://github.com/BurntSushi/bstr.git",
+        "pinnedHead": "08a77375dfa8e3cf5473f8afd22f2552988a10cf",
+        "extensions": [
+          ".rs"
+        ]
+      }
+    ]
+  },
+  "rules": {
+    "desiredTargets": 8,
+    "requiredLanguageFamilies": [
+      "javascript-typescript",
+      "python",
+      "go",
+      "rust"
+    ],
+    "targetsPerLanguageFamily": 2,
+    "languageDiversitySatisfied": false,
+    "selectedPerLanguageFamily": {
+      "javascript-typescript": 2,
+      "python": 1,
+      "go": 2,
+      "rust": 2
+    },
+    "repositoryOrderIsBinding": true,
+    "firstEligibleRepositoriesPerFamilyWin": true,
+    "fallbackOnlyAfterNoEligibleCommitOrSetupFailureInThatFamily": true,
+    "fetchDepth": 400,
+    "scanLimit": 300,
+    "nonMergeSingleParent": true,
+    "newestEligibleCommitWins": true,
+    "minimumFiles": 2,
+    "maximumFiles": 6,
+    "allFilesMustBeModifiedSourceFiles": true,
+    "requiresImplementationAndFocusedTest": true,
+    "maximumChangedLines": 400,
+    "behavioralCommitSubjectRequired": true,
+    "taskClassifier": "inflected-behavioral-subject-v1",
+    "expectedTaskTypeDerivedBeforeRouting": true,
+    "materializationAttempts": 3,
+    "retryDelayMs": 5000,
+    "palaceCallsOnCandidateTasksDuringSelection": 0,
+    "outputCreateOnly": true
+  },
+  "repositoryReports": [
+    {
+      "name": "ky",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/sindresorhus/ky.git",
+      "pinnedHead": "3419113b48e034fdcf8fa6bd3be3da7b3d0d758f",
+      "status": "selected",
+      "scannedCommits": 2,
+      "rejectionCounts": {
+        "non-behavioral-or-ambiguous-subject": 1
+      },
+      "selectedTarget": {
+        "name": "ky",
+        "language": "TypeScript",
+        "languageFamily": "javascript-typescript",
+        "url": "https://github.com/sindresorhus/ky.git",
+        "pinnedHead": "3419113b48e034fdcf8fa6bd3be3da7b3d0d758f",
+        "routeCommit": "6edddd986f2f6a9c7d91e851d9b9a48df439d328",
+        "groundTruthCommit": "06375efbacfc1bdc96f7a4de7560684b765e1274",
+        "task": "Fix `extend()` dropping numeric `retry` limit when merging with an object (#867)",
+        "expectedTaskType": "bugfix",
+        "changedFiles": [
+          "source/utils/merge.ts",
+          "test/retry.ts"
+        ],
+        "implementationFiles": [
+          "source/utils/merge.ts"
+        ],
+        "testFiles": [
+          "test/retry.ts"
+        ],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 49,
+        "additions": 47,
+        "deletions": 2
+      },
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "errorCode": null,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "werkzeug",
+      "languageFamily": "python",
+      "url": "https://github.com/pallets/werkzeug.git",
+      "pinnedHead": "1b00618e787f40dfb21eba29caf8f8be7c8e1d93",
+      "status": "no-eligible-commit",
+      "scannedCommits": 300,
+      "rejectionCounts": {
+        "non-behavioral-or-ambiguous-subject": 264,
+        "contains-excluded-path": 18,
+        "contains-non-modified-file": 2,
+        "file-count-outside-range": 13,
+        "missing-implementation-or-test": 3
+      },
+      "selectedTarget": null,
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "errorCode": null,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "golang-jwt",
+      "languageFamily": "go",
+      "url": "https://github.com/golang-jwt/jwt.git",
+      "pinnedHead": "1a11d3724e63105d751decf9adbdc90165137b45",
+      "status": "selected",
+      "scannedCommits": 1,
+      "rejectionCounts": {},
+      "selectedTarget": {
+        "name": "golang-jwt",
+        "language": "Go fallback parser",
+        "languageFamily": "go",
+        "url": "https://github.com/golang-jwt/jwt.git",
+        "pinnedHead": "1a11d3724e63105d751decf9adbdc90165137b45",
+        "routeCommit": "0c0d48702ccdf7c3c8b1c3a11dd5a3939d8ec69a",
+        "groundTruthCommit": "1a11d3724e63105d751decf9adbdc90165137b45",
+        "task": "fix: return ErrInvalidType for an invalid aud claim type in MapClaims (#511)",
+        "expectedTaskType": "bugfix",
+        "changedFiles": [
+          "map_claims.go",
+          "map_claims_test.go"
+        ],
+        "implementationFiles": [
+          "map_claims.go"
+        ],
+        "testFiles": [
+          "map_claims_test.go"
+        ],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 47,
+        "additions": 47,
+        "deletions": 0
+      },
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "errorCode": null,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "anyhow",
+      "languageFamily": "rust",
+      "url": "https://github.com/dtolnay/anyhow.git",
+      "pinnedHead": "1dbe1862aae650423e3361fbd20b7d17c5109cc3",
+      "status": "selected",
+      "scannedCommits": 27,
+      "rejectionCounts": {
+        "non-behavioral-or-ambiguous-subject": 24,
+        "file-count-outside-range": 2
+      },
+      "selectedTarget": {
+        "name": "anyhow",
+        "language": "Rust fallback parser",
+        "languageFamily": "rust",
+        "url": "https://github.com/dtolnay/anyhow.git",
+        "pinnedHead": "1dbe1862aae650423e3361fbd20b7d17c5109cc3",
+        "routeCommit": "a14e2cab928459a006a9e13089e0d76e68e9d886",
+        "groundTruthCommit": "148c7ac5155c624c6230154ee90b022461cbcfa4",
+        "task": "Resolve ptr_cast_constness pedantic clippy lint",
+        "expectedTaskType": "bugfix",
+        "changedFiles": [
+          "src/error.rs",
+          "src/ptr.rs",
+          "tests/test_ensure.rs"
+        ],
+        "implementationFiles": [
+          "src/error.rs",
+          "src/ptr.rs"
+        ],
+        "testFiles": [
+          "tests/test_ensure.rs"
+        ],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 7,
+        "additions": 4,
+        "deletions": 3
+      },
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "errorCode": null,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "chalk",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/chalk/chalk.git",
+      "pinnedHead": "e91293130c7d642c7b91152c3c942743a3b910a7",
+      "status": "selected",
+      "scannedCommits": 97,
+      "rejectionCounts": {
+        "contains-non-modified-file": 2,
+        "non-behavioral-or-ambiguous-subject": 81,
+        "contains-excluded-path": 3,
+        "file-count-outside-range": 10
+      },
+      "selectedTarget": {
+        "name": "chalk",
+        "language": "JavaScript",
+        "languageFamily": "javascript-typescript",
+        "url": "https://github.com/chalk/chalk.git",
+        "pinnedHead": "e91293130c7d642c7b91152c3c942743a3b910a7",
+        "routeCommit": "2a53389d72cf46dbb9d73ab730d99e15cb230c7f",
+        "groundTruthCommit": "4e65299e7bc54949d00ec0c963daf08635d83bc0",
+        "task": "Fix const enum for TypeScript (#364)",
+        "expectedTaskType": "bugfix",
+        "changedFiles": [
+          "source/index.js",
+          "test/level.js"
+        ],
+        "implementationFiles": [
+          "source/index.js"
+        ],
+        "testFiles": [
+          "test/level.js"
+        ],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 24,
+        "additions": 24,
+        "deletions": 0
+      },
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "errorCode": null,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "black",
+      "languageFamily": "python",
+      "url": "https://github.com/psf/black.git",
+      "pinnedHead": "db2e3e7b317b40685ba4618235a8388c7c6ea5e2",
+      "status": "no-eligible-commit",
+      "scannedCommits": 300,
+      "rejectionCounts": {
+        "non-behavioral-or-ambiguous-subject": 190,
+        "contains-non-modified-file": 21,
+        "contains-excluded-path": 45,
+        "file-count-outside-range": 42,
+        "contains-non-source-extension": 2
+      },
+      "selectedTarget": null,
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "errorCode": null,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "semver-go",
+      "languageFamily": "go",
+      "url": "https://github.com/Masterminds/semver.git",
+      "pinnedHead": "8b89c86cb53c57cfd5d07c13de12bc4d78954e99",
+      "status": "selected",
+      "scannedCommits": 1,
+      "rejectionCounts": {},
+      "selectedTarget": {
+        "name": "semver-go",
+        "language": "Go fallback parser",
+        "languageFamily": "go",
+        "url": "https://github.com/Masterminds/semver.git",
+        "pinnedHead": "8b89c86cb53c57cfd5d07c13de12bc4d78954e99",
+        "routeCommit": "87f651dbe2f616342d6408b997ad7116ba72ddf3",
+        "groundTruthCommit": "29d51d0ea4bffe39173673685d0dd312447d74a7",
+        "task": "Fixing some quality issues",
+        "expectedTaskType": "bugfix",
+        "changedFiles": [
+          "constraints.go",
+          "constraints_test.go",
+          "version.go",
+          "version_test.go"
+        ],
+        "implementationFiles": [
+          "constraints.go",
+          "version.go"
+        ],
+        "testFiles": [
+          "constraints_test.go",
+          "version_test.go"
+        ],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 81,
+        "additions": 71,
+        "deletions": 10
+      },
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "errorCode": null,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "bytes",
+      "languageFamily": "rust",
+      "url": "https://github.com/tokio-rs/bytes.git",
+      "pinnedHead": "d5c8ad3227afe459c09f1d0d85455abf00f0381a",
+      "status": "selected",
+      "scannedCommits": 8,
+      "rejectionCounts": {
+        "non-behavioral-or-ambiguous-subject": 7
+      },
+      "selectedTarget": {
+        "name": "bytes",
+        "language": "Rust fallback parser",
+        "languageFamily": "rust",
+        "url": "https://github.com/tokio-rs/bytes.git",
+        "pinnedHead": "d5c8ad3227afe459c09f1d0d85455abf00f0381a",
+        "routeCommit": "5b79d316c92b88b836449f8956dc8430c370108b",
+        "groundTruthCommit": "00cc5ff2bd861f7b62603a268ec477c3cead5f1e",
+        "task": "Implement `BytesMut::extend_from_within` (#818)",
+        "expectedTaskType": "feature",
+        "changedFiles": [
+          "src/bytes.rs",
+          "src/bytes_mut.rs",
+          "src/lib.rs",
+          "tests/test_bytes.rs"
+        ],
+        "implementationFiles": [
+          "src/bytes.rs",
+          "src/bytes_mut.rs",
+          "src/lib.rs"
+        ],
+        "testFiles": [
+          "tests/test_bytes.rs"
+        ],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 118,
+        "additions": 90,
+        "deletions": 28
+      },
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "errorCode": null,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "node-semver",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/npm/node-semver.git",
+      "pinnedHead": "6e05b7637396ac66522cff8731f07cfe0ef49a29",
+      "status": "family-quota-filled-not-inspected",
+      "scannedCommits": 0,
+      "rejectionCounts": {},
+      "selectedTarget": null
+    },
+    {
+      "name": "attrs",
+      "languageFamily": "python",
+      "url": "https://github.com/python-attrs/attrs.git",
+      "pinnedHead": "f06ceaafbe5bdbdafad8a0c01a2daabb89386a42",
+      "status": "selected",
+      "scannedCommits": 36,
+      "rejectionCounts": {
+        "non-behavioral-or-ambiguous-subject": 31,
+        "file-count-outside-range": 1,
+        "contains-non-modified-file": 3
+      },
+      "selectedTarget": {
+        "name": "attrs",
+        "language": "Python",
+        "languageFamily": "python",
+        "url": "https://github.com/python-attrs/attrs.git",
+        "pinnedHead": "f06ceaafbe5bdbdafad8a0c01a2daabb89386a42",
+        "routeCommit": "eccd966d80aff5196efc959316961cfa780439f9",
+        "groundTruthCommit": "ce89f5d11feb0805da9ed10bb165238cc959f1bb",
+        "task": "Fix message passing in frozen errors",
+        "expectedTaskType": "bugfix",
+        "changedFiles": [
+          "src/attr/exceptions.py",
+          "tests/test_functional.py"
+        ],
+        "implementationFiles": [
+          "src/attr/exceptions.py"
+        ],
+        "testFiles": [
+          "tests/test_functional.py"
+        ],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 21,
+        "additions": 14,
+        "deletions": 7
+      },
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "errorCode": null,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "chi-render",
+      "languageFamily": "go",
+      "url": "https://github.com/go-chi/render.git",
+      "pinnedHead": "14f1cb3d5c2969d6e462632a205eacb6421eb4dc",
+      "status": "family-quota-filled-not-inspected",
+      "scannedCommits": 0,
+      "rejectionCounts": {},
+      "selectedTarget": null
+    },
+    {
+      "name": "bstr",
+      "languageFamily": "rust",
+      "url": "https://github.com/BurntSushi/bstr.git",
+      "pinnedHead": "08a77375dfa8e3cf5473f8afd22f2552988a10cf",
+      "status": "family-quota-filled-not-inspected",
+      "scannedCommits": 0,
+      "rejectionCounts": {},
+      "selectedTarget": null
+    }
+  ],
+  "targets": [
+    {
+      "name": "ky",
+      "language": "TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/sindresorhus/ky.git",
+      "pinnedHead": "3419113b48e034fdcf8fa6bd3be3da7b3d0d758f",
+      "routeCommit": "6edddd986f2f6a9c7d91e851d9b9a48df439d328",
+      "groundTruthCommit": "06375efbacfc1bdc96f7a4de7560684b765e1274",
+      "task": "Fix `extend()` dropping numeric `retry` limit when merging with an object (#867)",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "source/utils/merge.ts",
+        "test/retry.ts"
+      ],
+      "implementationFiles": [
+        "source/utils/merge.ts"
+      ],
+      "testFiles": [
+        "test/retry.ts"
+      ],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 49,
+      "additions": 47,
+      "deletions": 2
+    },
+    {
+      "name": "golang-jwt",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/golang-jwt/jwt.git",
+      "pinnedHead": "1a11d3724e63105d751decf9adbdc90165137b45",
+      "routeCommit": "0c0d48702ccdf7c3c8b1c3a11dd5a3939d8ec69a",
+      "groundTruthCommit": "1a11d3724e63105d751decf9adbdc90165137b45",
+      "task": "fix: return ErrInvalidType for an invalid aud claim type in MapClaims (#511)",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "map_claims.go",
+        "map_claims_test.go"
+      ],
+      "implementationFiles": [
+        "map_claims.go"
+      ],
+      "testFiles": [
+        "map_claims_test.go"
+      ],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 47,
+      "additions": 47,
+      "deletions": 0
+    },
+    {
+      "name": "anyhow",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/dtolnay/anyhow.git",
+      "pinnedHead": "1dbe1862aae650423e3361fbd20b7d17c5109cc3",
+      "routeCommit": "a14e2cab928459a006a9e13089e0d76e68e9d886",
+      "groundTruthCommit": "148c7ac5155c624c6230154ee90b022461cbcfa4",
+      "task": "Resolve ptr_cast_constness pedantic clippy lint",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "src/error.rs",
+        "src/ptr.rs",
+        "tests/test_ensure.rs"
+      ],
+      "implementationFiles": [
+        "src/error.rs",
+        "src/ptr.rs"
+      ],
+      "testFiles": [
+        "tests/test_ensure.rs"
+      ],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 7,
+      "additions": 4,
+      "deletions": 3
+    },
+    {
+      "name": "chalk",
+      "language": "JavaScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/chalk/chalk.git",
+      "pinnedHead": "e91293130c7d642c7b91152c3c942743a3b910a7",
+      "routeCommit": "2a53389d72cf46dbb9d73ab730d99e15cb230c7f",
+      "groundTruthCommit": "4e65299e7bc54949d00ec0c963daf08635d83bc0",
+      "task": "Fix const enum for TypeScript (#364)",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "source/index.js",
+        "test/level.js"
+      ],
+      "implementationFiles": [
+        "source/index.js"
+      ],
+      "testFiles": [
+        "test/level.js"
+      ],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 24,
+      "additions": 24,
+      "deletions": 0
+    },
+    {
+      "name": "semver-go",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/Masterminds/semver.git",
+      "pinnedHead": "8b89c86cb53c57cfd5d07c13de12bc4d78954e99",
+      "routeCommit": "87f651dbe2f616342d6408b997ad7116ba72ddf3",
+      "groundTruthCommit": "29d51d0ea4bffe39173673685d0dd312447d74a7",
+      "task": "Fixing some quality issues",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "constraints.go",
+        "constraints_test.go",
+        "version.go",
+        "version_test.go"
+      ],
+      "implementationFiles": [
+        "constraints.go",
+        "version.go"
+      ],
+      "testFiles": [
+        "constraints_test.go",
+        "version_test.go"
+      ],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 81,
+      "additions": 71,
+      "deletions": 10
+    },
+    {
+      "name": "bytes",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/tokio-rs/bytes.git",
+      "pinnedHead": "d5c8ad3227afe459c09f1d0d85455abf00f0381a",
+      "routeCommit": "5b79d316c92b88b836449f8956dc8430c370108b",
+      "groundTruthCommit": "00cc5ff2bd861f7b62603a268ec477c3cead5f1e",
+      "task": "Implement `BytesMut::extend_from_within` (#818)",
+      "expectedTaskType": "feature",
+      "changedFiles": [
+        "src/bytes.rs",
+        "src/bytes_mut.rs",
+        "src/lib.rs",
+        "tests/test_bytes.rs"
+      ],
+      "implementationFiles": [
+        "src/bytes.rs",
+        "src/bytes_mut.rs",
+        "src/lib.rs"
+      ],
+      "testFiles": [
+        "tests/test_bytes.rs"
+      ],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 118,
+      "additions": 90,
+      "deletions": 28
+    },
+    {
+      "name": "attrs",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/python-attrs/attrs.git",
+      "pinnedHead": "f06ceaafbe5bdbdafad8a0c01a2daabb89386a42",
+      "routeCommit": "eccd966d80aff5196efc959316961cfa780439f9",
+      "groundTruthCommit": "ce89f5d11feb0805da9ed10bb165238cc959f1bb",
+      "task": "Fix message passing in frozen errors",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "src/attr/exceptions.py",
+        "tests/test_functional.py"
+      ],
+      "implementationFiles": [
+        "src/attr/exceptions.py"
+      ],
+      "testFiles": [
+        "tests/test_functional.py"
+      ],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 21,
+      "additions": 14,
+      "deletions": 7
+    }
+  ]
+}
