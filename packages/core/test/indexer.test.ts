@@ -135,4 +135,73 @@ describe("indexPalace", () => {
       )).toBe(true);
     });
   });
+
+  it("resolves Rust crate modules and use paths into source relations", async () => {
+    await withFixture("ts-api", async (root) => {
+      const files = new Map<string, string>([
+        [
+          "telemetry-derive/src/lib.rs",
+          "mod attr;\nmod expand;\npub fn instrument() { expand::gen_block(attr::parse_args()); }\n"
+        ],
+        [
+          "telemetry-derive/src/attr.rs",
+          "pub struct Fields;\npub fn parse_args() -> Fields { Fields }\n"
+        ],
+        [
+          "telemetry-derive/src/expand.rs",
+          "use crate::attr::{Fields, parse_args};\npub fn gen_block(_: Fields) { parse_args(); }\n"
+        ]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+
+      await indexPalace(root);
+      const index = await readIndex(root);
+      const fileNode = (sourcePath: string) => index.nodes.find(
+        (node) => node.sourcePath === sourcePath && !node.startLine
+      );
+      const hasImport = (fromPath: string, toPath: string) => {
+        const from = fileNode(fromPath);
+        const to = fileNode(toPath);
+        return Boolean(from && to && index.edges.some(
+          (edge) => edge.type === "imports" && edge.from === from.id && edge.to === to.id
+        ));
+      };
+
+      expect(hasImport("telemetry-derive/src/lib.rs", "telemetry-derive/src/attr.rs")).toBe(true);
+      expect(hasImport("telemetry-derive/src/lib.rs", "telemetry-derive/src/expand.rs")).toBe(true);
+      expect(hasImport("telemetry-derive/src/expand.rs", "telemetry-derive/src/attr.rs")).toBe(true);
+    });
+  });
+
+  it("links qualified Rust references and uniquely declared cross-file types", async () => {
+    await withFixture("ts-api", async (root) => {
+      const files = new Map<string, string>([
+        ["src/tls.rs", "pub struct TlsInfo { version: Option<String> }\n"],
+        [
+          "src/connect.rs",
+          "pub fn connection_info() -> crate::tls::TlsInfo { crate::tls::TlsInfo { version: None } }\n"
+        ]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+
+      await indexPalace(root);
+      const index = await readIndex(root);
+      const from = index.nodes.find((node) => node.sourcePath === "src/connect.rs" && !node.startLine);
+      const to = index.nodes.find((node) => node.sourcePath === "src/tls.rs" && !node.startLine);
+      expect(index.edges.some(
+        (edge) => edge.type === "depends_on" && edge.from === from?.id && edge.to === to?.id
+      )).toBe(true);
+      expect(index.edges.some(
+        (edge) => edge.type === "imports" && edge.from === from?.id && edge.to === to?.id
+      )).toBe(true);
+    });
+  });
 });

@@ -24,6 +24,99 @@ describe("parseFile", () => {
     });
   });
 
+  it("extracts Rust types, module imports, and complete function bodies", async () => {
+    await withFixture("ts-api", async (root) => {
+      const target = path.join(root, "src", "tls.rs");
+      await writeFile(
+        target,
+        `use crate::attr::{Field, Fields};
+mod expand;
+
+pub struct TlsInfo {
+    version: Option<Version>,
+}
+
+pub fn build_tls_info(rows: Rows) -> TlsInfo {
+    if rows.next() {
+        inspect_peer_certificate();
+        inspect_protocol_version();
+    }
+    rows.Close();
+    TlsInfo { version: None }
+}
+`,
+        "utf8"
+      );
+
+      const parsed = await parseFile(root, "src/tls.rs", "rs");
+      const fn = parsed.symbols.find((symbol) => symbol.name === "build_tls_info");
+
+      expect(parsed.imports).toEqual(expect.arrayContaining(["crate::attr", "self::expand"]));
+      expect(parsed.symbols).toEqual(expect.arrayContaining([
+        expect.objectContaining({ name: "TlsInfo", kind: "type" })
+      ]));
+      expect(fn).toMatchObject({ startLine: 8, endLine: 15 });
+      expect(fn?.searchText).toContain("row");
+      expect(fn?.searchText).toContain("close");
+      expect(fn?.searchText).toContain("protocol version");
+    });
+  });
+
+  it("extracts Go receiver methods and member references from the full body", async () => {
+    await withFixture("ts-api", async (root) => {
+      const target = path.join(root, "finisher_api.go");
+      await writeFile(
+        target,
+        `package data
+
+func (db *DB) Scan(dest interface{}) (tx *DB) {
+    tx = db.getInstance()
+    if rows, err := tx.Rows(); err == nil {
+        if rows.Next() {
+            tx.ScanRows(rows, dest)
+        } else {
+            tx.AddError(rows.Err())
+        }
+        tx.AddError(rows.Close())
+    }
+    return
+}
+`,
+        "utf8"
+      );
+
+      const parsed = await parseFile(root, "finisher_api.go", "go");
+      const method = parsed.symbols.find((symbol) => symbol.name === "DB.Scan");
+
+      expect(method).toMatchObject({ kind: "method", startLine: 3, endLine: 14 });
+      expect(method?.searchText).toContain("row close");
+      expect(method?.searchText).toContain("scan row");
+    });
+  });
+
+  it("does not treat Rust lifetimes as unterminated character literals", async () => {
+    await withFixture("ts-api", async (root) => {
+      const target = path.join(root, "src", "borrowed.rs");
+      await writeFile(
+        target,
+        `pub fn borrowed_value<'a>(value: &'a str) -> &'a str {
+    if value.is_empty() {
+        return "fallback";
+    }
+    value
+}
+`,
+        "utf8"
+      );
+
+      const parsed = await parseFile(root, "src/borrowed.rs", "rs");
+      expect(parsed.symbols.find((symbol) => symbol.name === "borrowed_value")).toMatchObject({
+        startLine: 1,
+        endLine: 6
+      });
+    });
+  });
+
   it("includes JavaScript test and suite titles in the file summary", async () => {
     await withFixture("ts-api", async (root) => {
       const target = path.join(root, "tests", "command.executableSubcommand.test.js");

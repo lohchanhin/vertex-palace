@@ -46,6 +46,7 @@ export function buildEdges(nodes: PalaceNode[], parsedFiles: ParsedFile[], now: 
     }
   }
   addLocalCoConsumerEdges(edges, importersByTarget, fileNodeByPath, now);
+  addUniqueSymbolReferenceEdges(edges, parsedFiles, fileNodeByPath, now);
   addGeneratedArtifactEdges(edges, parsedFiles, fileNodeByPath, now);
 
   const tests = fileNodes.filter((node) => node.kind === "test");
@@ -202,12 +203,66 @@ function addGeneratedArtifactEdges(
   }
 }
 
+function addUniqueSymbolReferenceEdges(
+  edges: PalaceEdge[],
+  parsedFiles: ParsedFile[],
+  fileNodeByPath: Map<string, PalaceNode>,
+  now: string
+): void {
+  const declarations = parsedFiles.flatMap((parsed) =>
+    ["rs", "rust", "go"].includes(parsed.language) ? parsed.symbols
+      .filter((symbol) => ["class", "interface", "type"].includes(symbol.kind))
+      .map((symbol) => ({
+        sourcePath: parsed.sourcePath,
+        name: symbol.name.split(".").at(-1) ?? symbol.name,
+        phrase: [...tokenizeLexical(symbol.name.split(".").at(-1) ?? symbol.name)].join(" ")
+      }))
+      .filter((declaration) => declaration.phrase.length >= 6) : []
+  );
+  const declarationCounts = new Map<string, number>();
+  for (const declaration of declarations) {
+    declarationCounts.set(
+      declaration.phrase,
+      (declarationCounts.get(declaration.phrase) ?? 0) + 1
+    );
+  }
+
+  for (const parsed of parsedFiles) {
+    const from = fileNodeByPath.get(parsed.sourcePath);
+    if (!from) continue;
+    const searchTexts = parsed.symbols
+      .map((symbol) => symbol.searchText ?? "")
+      .filter(Boolean);
+    for (const declaration of declarations) {
+      if (
+        declaration.sourcePath === parsed.sourcePath
+        || declarationCounts.get(declaration.phrase) !== 1
+        || !searchTexts.some((searchText) => searchText.includes(declaration.phrase))
+      ) continue;
+      const to = fileNodeByPath.get(declaration.sourcePath);
+      if (!to) continue;
+      edges.push(makeEdge(
+        from.id,
+        to.id,
+        "depends_on",
+        0.6,
+        `${parsed.sourcePath} references uniquely declared ${declaration.name} in ${declaration.sourcePath}`,
+        now
+      ));
+    }
+  }
+}
+
 function resolveImport(
   sourcePath: string,
   importPath: string,
   candidates: string[],
   workspacePackages: WorkspacePackage[]
 ): string | undefined {
+  if (sourcePath.endsWith(".rs")) {
+    const rustTarget = resolveRustImport(sourcePath, importPath, candidates);
+    if (rustTarget) return rustTarget;
+  }
   if (!importPath.startsWith(".")) {
     if (sourcePath.endsWith(".py")) {
       const pythonTarget = resolveAbsolutePythonImport(importPath, candidates);
@@ -277,11 +332,63 @@ function sourceCandidates(base: string): string[] {
     `${base}.mjs`,
     `${base}.cjs`,
     `${base}.json`,
+    `${base}.rs`,
+    `${base}/mod.rs`,
+    `${base}/lib.rs`,
     `${base}/index.ts`,
     `${base}/index.tsx`,
     `${base}/index.js`,
     `${base}/index.mjs`
   ];
+}
+
+function resolveRustImport(sourcePath: string, importPath: string, candidates: string[]): string | undefined {
+  const parts = importPath.split("::").filter(Boolean);
+  if (!parts.length) return undefined;
+  const sourceDirectory = normalizeRelativePath(path.posix.dirname(sourcePath));
+  const sourceParts = sourcePath.split("/");
+  const srcIndex = sourceParts.lastIndexOf("src");
+  const crateSourceRoot = normalizeRelativePath(
+    srcIndex >= 0 ? sourceParts.slice(0, srcIndex + 1).join("/") : sourceDirectory
+  );
+  let minimumParts = 0;
+  let base: string;
+
+  if (parts[0] === "crate") {
+    base = normalizeRelativePath(path.posix.join(crateSourceRoot, ...parts.slice(1)));
+    minimumParts = crateSourceRoot.split("/").filter(Boolean).length;
+  } else if (parts[0] === "self") {
+    base = normalizeRelativePath(path.posix.join(sourceDirectory, ...parts.slice(1)));
+    minimumParts = sourceDirectory.split("/").filter(Boolean).length;
+  } else if (parts[0] === "super") {
+    let directory = sourceDirectory;
+    let offset = 0;
+    while (parts[offset] === "super") {
+      if (offset > 0) directory = normalizeRelativePath(path.posix.dirname(directory));
+      offset += 1;
+    }
+    base = normalizeRelativePath(path.posix.join(directory, ...parts.slice(offset)));
+    minimumParts = directory.split("/").filter(Boolean).length;
+  } else {
+    const workspaceRoot = parts[0].replaceAll("_", "-");
+    base = normalizeRelativePath(path.posix.join(workspaceRoot, "src", ...parts.slice(1)));
+    minimumParts = 2;
+  }
+
+  const baseParts = base.split("/").filter(Boolean);
+  for (let length = baseParts.length; length >= minimumParts; length -= 1) {
+    const candidateBase = baseParts.slice(0, length).join("/");
+    const possible = [
+      candidateBase,
+      `${candidateBase}.rs`,
+      `${candidateBase}/mod.rs`,
+      `${candidateBase}/lib.rs`,
+      `${candidateBase}/main.rs`
+    ];
+    const match = possible.find((candidate) => candidates.includes(candidate));
+    if (match && match !== sourcePath) return match;
+  }
+  return undefined;
 }
 
 function resolvePythonImport(sourcePath: string, importPath: string, candidates: string[]): string | undefined {

@@ -25,6 +25,7 @@ const TOKEN_ALIASES = new Map<string, string>([
   ["redirecting", "redirect"],
   ["redirects", "redirect"],
   ["req", "request"],
+  ["rows", "row"],
   ["stripped", "strip"],
   ["stripping", "strip"],
   ["upgraded", "upgrade"],
