@@ -57,6 +57,11 @@ test("keeps Round 7 selection create-only, bounded, and unable to invoke Palace"
   assert.match(source, /select-held-out-routing-targets-round-7\.cjs/);
   assert.match(source, /maximumAuxiliaryFiles = 2/);
   assert.match(source, /maximumFiles = 8/);
+  assert.match(
+    source,
+    /requiredLanguageFamilies\.length \* pool\.rules\.repositoriesPerLanguageFamily/
+  );
+  assert.doesNotMatch(source, /repositoryPool\.length, 12/);
   assert.match(source, /require\("\.\/lib\/held-out-file-surfaces\.cjs"\)/);
   assert.doesNotMatch(source, /\brunPalace\b/);
   assert.doesNotMatch(source, /\brunNode\b/);

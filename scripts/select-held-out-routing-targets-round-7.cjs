@@ -202,7 +202,10 @@ function validatePool(pool) {
   assert.equal(pool.rules.taskClassifier, "inflected-behavioral-subject-v1");
   assert.equal(pool.rules.commitHistoryInspectedBeforePoolFreeze, false);
   assert.equal(pool.rules.palaceCallsOnCandidateTasksBeforePoolFreeze, 0);
-  assert.equal(pool.repositoryPool.length, 12);
+  assert.equal(
+    pool.repositoryPool.length,
+    pool.rules.requiredLanguageFamilies.length * pool.rules.repositoriesPerLanguageFamily
+  );
 
   const observed = new Set(pool.previouslyObservedRepositories.map(normalizeRepositoryUrl));
   const poolUrls = pool.repositoryPool.map((repository) => normalizeRepositoryUrl(repository.url));
