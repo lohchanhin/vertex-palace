@@ -1,0 +1,241 @@
+{
+  "schemaVersion": 1,
+  "studyId": "held-out-cross-repository-routing-round-7-0.4-alpha",
+  "status": "preregistered",
+  "claimBoundary": "Candidate-held-out repository pool only. No commit history, diff, subject, task, or Palace route was inspected while fixing this order and these HEAD commits. This does not claim that the repositories are unseen by the underlying model.",
+  "candidate": {
+    "productCommit": "f61207688badbe07818470a42441a3a966a8bdf0",
+    "cliPath": "dist/palace.cjs",
+    "cliSha256": "72E18636847227AD81D07132CCC47F1F0E62C279366221F1D2DF5CB04F2D0CFC"
+  },
+  "rules": {
+    "desiredTargets": 8,
+    "requiredLanguageFamilies": [
+      "javascript-typescript",
+      "python",
+      "go",
+      "rust"
+    ],
+    "targetsPerLanguageFamily": 2,
+    "repositoriesPerLanguageFamily": 4,
+    "repositoryOrderIsBinding": true,
+    "firstEligibleRepositoriesPerFamilyWin": true,
+    "remainingRepositoriesPerFamilyAreFallbacks": true,
+    "taskClassifier": "inflected-behavioral-subject-v1",
+    "maximumFiles": 8,
+    "maximumAuxiliaryFiles": 2,
+    "allowedAuxiliaryExtensions": [
+      ".cfg",
+      ".conf",
+      ".ini",
+      ".json",
+      ".md",
+      ".mdx",
+      ".rst",
+      ".toml",
+      ".txt",
+      ".yaml",
+      ".yml"
+    ],
+    "pinnedHeadsObtainedWithGitLsRemoteHeadOnly": true,
+    "commitHistoryInspectedBeforePoolFreeze": false,
+    "palaceCallsOnCandidateTasksBeforePoolFreeze": 0
+  },
+  "previouslyObservedRepositories": [
+    "https://github.com/colinhacks/zod.git",
+    "https://github.com/psf/requests.git",
+    "https://github.com/sindresorhus/p-limit.git",
+    "https://github.com/fastify/fastify.git",
+    "https://github.com/pallets/click.git",
+    "https://github.com/date-fns/date-fns.git",
+    "https://github.com/BurntSushi/ripgrep.git",
+    "https://github.com/spf13/cobra.git",
+    "https://github.com/markedjs/marked.git",
+    "https://github.com/expressjs/express.git",
+    "https://github.com/encode/httpx.git",
+    "https://github.com/urfave/cli.git",
+    "https://github.com/clap-rs/clap.git",
+    "https://github.com/tj/commander.js.git",
+    "https://github.com/pytest-dev/pytest.git",
+    "https://github.com/go-chi/chi.git",
+    "https://github.com/tokio-rs/axum.git",
+    "https://github.com/koajs/koa.git",
+    "https://github.com/encode/starlette.git",
+    "https://github.com/gin-gonic/gin.git",
+    "https://github.com/tower-rs/tower.git",
+    "https://github.com/axios/axios.git",
+    "https://github.com/pallets/flask.git",
+    "https://github.com/labstack/echo.git",
+    "https://github.com/serde-rs/json.git",
+    "https://github.com/honojs/hono.git",
+    "https://github.com/pydantic/pydantic.git",
+    "https://github.com/gofiber/fiber.git",
+    "https://github.com/hyperium/hyper.git",
+    "https://github.com/nodejs/undici.git",
+    "https://github.com/aio-libs/aiohttp.git",
+    "https://github.com/go-playground/validator.git",
+    "https://github.com/tokio-rs/tracing.git",
+    "https://github.com/mswjs/msw.git",
+    "https://github.com/encode/uvicorn.git",
+    "https://github.com/go-gorm/gorm.git",
+    "https://github.com/seanmonstar/reqwest.git",
+    "https://github.com/vitejs/vite.git",
+    "https://github.com/python-poetry/poetry.git",
+    "https://github.com/redis/go-redis.git",
+    "https://github.com/rayon-rs/rayon.git",
+    "https://github.com/sindresorhus/got.git",
+    "https://github.com/django/django.git",
+    "https://github.com/stretchr/testify.git",
+    "https://github.com/tokio-rs/tokio.git",
+    "https://github.com/vitest-dev/vitest.git",
+    "https://github.com/python-trio/trio.git",
+    "https://github.com/go-resty/resty.git",
+    "https://github.com/serde-rs/serde.git",
+    "https://github.com/TanStack/query.git",
+    "https://github.com/agronholm/anyio.git",
+    "https://github.com/rs/zerolog.git",
+    "https://github.com/tower-rs/tower-http.git",
+    "https://github.com/sindresorhus/ky.git",
+    "https://github.com/pallets/werkzeug.git",
+    "https://github.com/golang-jwt/jwt.git",
+    "https://github.com/dtolnay/anyhow.git",
+    "https://github.com/chalk/chalk.git",
+    "https://github.com/psf/black.git",
+    "https://github.com/Masterminds/semver.git",
+    "https://github.com/tokio-rs/bytes.git",
+    "https://github.com/npm/node-semver.git",
+    "https://github.com/python-attrs/attrs.git",
+    "https://github.com/go-chi/render.git",
+    "https://github.com/BurntSushi/bstr.git"
+  ],
+  "repositoryPool": [
+    {
+      "name": "execa",
+      "language": "TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/sindresorhus/execa.git",
+      "pinnedHead": "499fe800361e6b383b0085f635a69fd27e6cf447",
+      "extensions": [".cjs", ".js", ".jsx", ".mjs", ".ts", ".tsx"]
+    },
+    {
+      "name": "jinja",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/pallets/jinja.git",
+      "pinnedHead": "5ef70112a1ff19c05324ff889dd30405b1002044",
+      "extensions": [".py"]
+    },
+    {
+      "name": "go-multierror",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/hashicorp/go-multierror.git",
+      "pinnedHead": "6d4d48630db25c3c83fa83ecd41dd8438b82963c",
+      "extensions": [".go"]
+    },
+    {
+      "name": "thiserror",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/dtolnay/thiserror.git",
+      "pinnedHead": "aa9d91f75302025e0c1d4c535d84a5bfdad62508",
+      "extensions": [".rs"]
+    },
+    {
+      "name": "node-glob",
+      "language": "TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/isaacs/node-glob.git",
+      "pinnedHead": "9f70854bd1d0bc7e715622a6df987f34d180248e",
+      "extensions": [".cjs", ".js", ".jsx", ".mjs", ".ts", ".tsx"]
+    },
+    {
+      "name": "httpcore",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/encode/httpcore.git",
+      "pinnedHead": "10a658221deb38a4c5b16db55ab554b0bf731707",
+      "extensions": [".py"]
+    },
+    {
+      "name": "httprouter",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/julienschmidt/httprouter.git",
+      "pinnedHead": "484018016424d215c0b87c42f4c9b57d980fbd00",
+      "extensions": [".go"]
+    },
+    {
+      "name": "mio",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/tokio-rs/mio.git",
+      "pinnedHead": "7654f571f2474a1774a4f6e1004a4c17c50f64c7",
+      "extensions": [".rs"]
+    },
+    {
+      "name": "floating-ui",
+      "language": "TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/floating-ui/floating-ui.git",
+      "pinnedHead": "12d94738472e922e1b3fa31b02b2b61b9ed77e6a",
+      "extensions": [".cjs", ".js", ".jsx", ".mjs", ".ts", ".tsx"]
+    },
+    {
+      "name": "tox",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/tox-dev/tox.git",
+      "pinnedHead": "ccb12fc2e1bb9df0da860be4af175e9b97949fbc",
+      "extensions": [".py"]
+    },
+    {
+      "name": "cors",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/rs/cors.git",
+      "pinnedHead": "2f30c9cf7731f7b5e0e372678d05acb22f2c2b4a",
+      "extensions": [".go"]
+    },
+    {
+      "name": "rustls",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/rustls/rustls.git",
+      "pinnedHead": "bd9f7f59aa790da07010961188209e68384febe5",
+      "extensions": [".rs"]
+    },
+    {
+      "name": "redux-toolkit",
+      "language": "TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/reduxjs/redux-toolkit.git",
+      "pinnedHead": "58bb0e04c1e957f07b732b25473e13a0f975302a",
+      "extensions": [".cjs", ".js", ".jsx", ".mjs", ".ts", ".tsx"]
+    },
+    {
+      "name": "h11",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/python-hyper/h11.git",
+      "pinnedHead": "62c5068c971579d61fa1b55373390e12f25fd856",
+      "extensions": [".py"]
+    },
+    {
+      "name": "universal-translator",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/go-playground/universal-translator.git",
+      "pinnedHead": "f83cd526536e253181a13835b00cd107f627c505",
+      "extensions": [".go"]
+    },
+    {
+      "name": "indexmap",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/indexmap-rs/indexmap.git",
+      "pinnedHead": "571943c5b3ec56eb2710e4bcbdda25557f7b3e49",
+      "extensions": [".rs"]
+    }
+  ]
+}
