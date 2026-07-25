@@ -1,0 +1,837 @@
+{
+  "schemaVersion": 3,
+  "studyId": "held-out-cross-repository-routing-round-5-0.4-alpha",
+  "generatedAt": "2026-07-25T23:16:46.521Z",
+  "status": "selection-failed",
+  "claimBoundary": "Mechanical candidate-held-out target selection only. The frozen Vertex Palace candidate has not initialized, indexed, routed, packed, contextualized, or evaluated any selected task.",
+  "heldOutAgainstCandidate": true,
+  "candidate": {
+    "productCommit": "f61207688badbe07818470a42441a3a966a8bdf0",
+    "cliPath": "dist/palace.cjs",
+    "cliSha256": "72E18636847227AD81D07132CCC47F1F0E62C279366221F1D2DF5CB04F2D0CFC",
+    "frozenPaths": [
+      "packages",
+      "plugins/vertex-palace/mcp/server.cjs"
+    ]
+  },
+  "selector": {
+    "commit": "172f8801af025a571192a1bcfbfa38709a2d4644",
+    "path": "scripts/select-held-out-routing-targets-round-5.cjs"
+  },
+  "repositoryPool": {
+    "path": "docs/research/evidence/held-out-routing-repository-pool-0.4-alpha-round-5.json",
+    "commit": "172f8801af025a571192a1bcfbfa38709a2d4644",
+    "sha256": "72F11A5A1DBBC72994E3E29C0C7B508092E69E2A59666B8FA4DD09FB5910BC1E",
+    "previouslyObservedRepositories": [
+      "https://github.com/colinhacks/zod.git",
+      "https://github.com/psf/requests.git",
+      "https://github.com/sindresorhus/p-limit.git",
+      "https://github.com/fastify/fastify.git",
+      "https://github.com/pallets/click.git",
+      "https://github.com/date-fns/date-fns.git",
+      "https://github.com/BurntSushi/ripgrep.git",
+      "https://github.com/spf13/cobra.git",
+      "https://github.com/markedjs/marked.git",
+      "https://github.com/expressjs/express.git",
+      "https://github.com/encode/httpx.git",
+      "https://github.com/urfave/cli.git",
+      "https://github.com/clap-rs/clap.git",
+      "https://github.com/tj/commander.js.git",
+      "https://github.com/pytest-dev/pytest.git",
+      "https://github.com/go-chi/chi.git",
+      "https://github.com/tokio-rs/axum.git",
+      "https://github.com/koajs/koa.git",
+      "https://github.com/encode/starlette.git",
+      "https://github.com/gin-gonic/gin.git",
+      "https://github.com/tower-rs/tower.git",
+      "https://github.com/axios/axios.git",
+      "https://github.com/pallets/flask.git",
+      "https://github.com/labstack/echo.git",
+      "https://github.com/serde-rs/json.git",
+      "https://github.com/honojs/hono.git",
+      "https://github.com/pydantic/pydantic.git",
+      "https://github.com/gofiber/fiber.git",
+      "https://github.com/hyperium/hyper.git",
+      "https://github.com/nodejs/undici.git",
+      "https://github.com/aio-libs/aiohttp.git",
+      "https://github.com/go-playground/validator.git",
+      "https://github.com/tokio-rs/tracing.git",
+      "https://github.com/mswjs/msw.git",
+      "https://github.com/encode/uvicorn.git",
+      "https://github.com/go-gorm/gorm.git",
+      "https://github.com/seanmonstar/reqwest.git",
+      "https://github.com/vitejs/vite.git",
+      "https://github.com/python-poetry/poetry.git",
+      "https://github.com/redis/go-redis.git",
+      "https://github.com/rayon-rs/rayon.git"
+    ],
+    "repositories": [
+      {
+        "name": "got",
+        "language": "TypeScript",
+        "languageFamily": "javascript-typescript",
+        "url": "https://github.com/sindresorhus/got.git",
+        "pinnedHead": "e3924aa1e53a6ca3eb93a43618ce532442a89b40",
+        "extensions": [
+          ".cjs",
+          ".js",
+          ".jsx",
+          ".mjs",
+          ".ts",
+          ".tsx"
+        ]
+      },
+      {
+        "name": "django",
+        "language": "Python",
+        "languageFamily": "python",
+        "url": "https://github.com/django/django.git",
+        "pinnedHead": "957d0cee7167757ae221ffde59d2cf0a322e89c7",
+        "extensions": [
+          ".py"
+        ]
+      },
+      {
+        "name": "testify",
+        "language": "Go fallback parser",
+        "languageFamily": "go",
+        "url": "https://github.com/stretchr/testify.git",
+        "pinnedHead": "001eb7946baf451879253643e4ce4b38eaa0d4a7",
+        "extensions": [
+          ".go"
+        ]
+      },
+      {
+        "name": "tokio",
+        "language": "Rust fallback parser",
+        "languageFamily": "rust",
+        "url": "https://github.com/tokio-rs/tokio.git",
+        "pinnedHead": "818e2dd866e0d6b0e25ebad8508722efa3a2f8fb",
+        "extensions": [
+          ".rs"
+        ]
+      },
+      {
+        "name": "vitest",
+        "language": "TypeScript",
+        "languageFamily": "javascript-typescript",
+        "url": "https://github.com/vitest-dev/vitest.git",
+        "pinnedHead": "a31f86af738b2979905f6a61eb5d8848d489eed7",
+        "extensions": [
+          ".cjs",
+          ".js",
+          ".jsx",
+          ".mjs",
+          ".ts",
+          ".tsx"
+        ]
+      },
+      {
+        "name": "trio",
+        "language": "Python",
+        "languageFamily": "python",
+        "url": "https://github.com/python-trio/trio.git",
+        "pinnedHead": "d0e762f56c80c2f6ca3603dc66a2595b3237e8c6",
+        "extensions": [
+          ".py"
+        ]
+      },
+      {
+        "name": "resty",
+        "language": "Go fallback parser",
+        "languageFamily": "go",
+        "url": "https://github.com/go-resty/resty.git",
+        "pinnedHead": "29010be3b22dde872740e1e39e50cf8c0eba189c",
+        "extensions": [
+          ".go"
+        ]
+      },
+      {
+        "name": "serde",
+        "language": "Rust fallback parser",
+        "languageFamily": "rust",
+        "url": "https://github.com/serde-rs/serde.git",
+        "pinnedHead": "747814f7d5fbab872df3b02f070c165b91bde062",
+        "extensions": [
+          ".rs"
+        ]
+      },
+      {
+        "name": "tanstack-query",
+        "language": "TypeScript",
+        "languageFamily": "javascript-typescript",
+        "url": "https://github.com/TanStack/query.git",
+        "pinnedHead": "fd50fa14d283c7d6664a796f758498d1ad5bfce7",
+        "extensions": [
+          ".cjs",
+          ".js",
+          ".jsx",
+          ".mjs",
+          ".ts",
+          ".tsx"
+        ]
+      },
+      {
+        "name": "anyio",
+        "language": "Python",
+        "languageFamily": "python",
+        "url": "https://github.com/agronholm/anyio.git",
+        "pinnedHead": "caca0e076d4052fca751f1a6b5e248bb4901f6cd",
+        "extensions": [
+          ".py"
+        ]
+      },
+      {
+        "name": "zerolog",
+        "language": "Go fallback parser",
+        "languageFamily": "go",
+        "url": "https://github.com/rs/zerolog.git",
+        "pinnedHead": "9c53f4ea79c89f42478eb1e0c0414e4d68594506",
+        "extensions": [
+          ".go"
+        ]
+      },
+      {
+        "name": "tower-http",
+        "language": "Rust fallback parser",
+        "languageFamily": "rust",
+        "url": "https://github.com/tower-rs/tower-http.git",
+        "pinnedHead": "44bed484bf03f70782b1011b6cb527abb83e675c",
+        "extensions": [
+          ".rs"
+        ]
+      }
+    ]
+  },
+  "rules": {
+    "desiredTargets": 8,
+    "requiredLanguageFamilies": [
+      "javascript-typescript",
+      "python",
+      "go",
+      "rust"
+    ],
+    "targetsPerLanguageFamily": 2,
+    "languageDiversitySatisfied": false,
+    "selectedPerLanguageFamily": {
+      "javascript-typescript": 2,
+      "python": 1,
+      "go": 2,
+      "rust": 2
+    },
+    "repositoryOrderIsBinding": true,
+    "firstEligibleRepositoriesPerFamilyWin": true,
+    "fallbackOnlyAfterNoEligibleCommitOrSetupFailureInThatFamily": true,
+    "fetchDepth": 400,
+    "scanLimit": 300,
+    "nonMergeSingleParent": true,
+    "newestEligibleCommitWins": true,
+    "minimumFiles": 2,
+    "maximumFiles": 6,
+    "allFilesMustBeModifiedSourceFiles": true,
+    "requiresImplementationAndFocusedTest": true,
+    "maximumChangedLines": 400,
+    "behavioralCommitSubjectRequired": true,
+    "expectedTaskTypeDerivedBeforeRouting": true,
+    "materializationAttempts": 3,
+    "retryDelayMs": 5000,
+    "palaceCallsOnCandidateTasksDuringSelection": 0,
+    "outputCreateOnly": true
+  },
+  "repositoryReports": [
+    {
+      "name": "got",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/sindresorhus/got.git",
+      "pinnedHead": "e3924aa1e53a6ca3eb93a43618ce532442a89b40",
+      "status": "selected",
+      "scannedCommits": 11,
+      "rejectionCounts": {
+        "file-count-outside-range": 2,
+        "non-behavioral-or-ambiguous-subject": 6,
+        "contains-non-source-extension": 2
+      },
+      "selectedTarget": {
+        "name": "got",
+        "language": "TypeScript",
+        "languageFamily": "javascript-typescript",
+        "url": "https://github.com/sindresorhus/got.git",
+        "pinnedHead": "e3924aa1e53a6ca3eb93a43618ce532442a89b40",
+        "routeCommit": "a5b76bffb33d5fa8b0d1393cce410b88e7c2b848",
+        "groundTruthCommit": "5772bf24dc7dd69db52fc26f8274039f52063fd2",
+        "task": "Fix `searchParams` setter dropping the value when a URL is set (#2454)",
+        "expectedTaskType": "bugfix",
+        "changedFiles": [
+          "source/core/options.ts",
+          "test/hooks.ts",
+          "test/normalize-arguments.ts"
+        ],
+        "implementationFiles": [
+          "source/core/options.ts"
+        ],
+        "testFiles": [
+          "test/hooks.ts",
+          "test/normalize-arguments.ts"
+        ],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 58,
+        "additions": 55,
+        "deletions": 3
+      },
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "errorCode": null,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "django",
+      "languageFamily": "python",
+      "url": "https://github.com/django/django.git",
+      "pinnedHead": "957d0cee7167757ae221ffde59d2cf0a322e89c7",
+      "status": "no-eligible-commit",
+      "scannedCommits": 300,
+      "rejectionCounts": {
+        "non-behavioral-or-ambiguous-subject": 300
+      },
+      "selectedTarget": null,
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "errorCode": null,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "testify",
+      "languageFamily": "go",
+      "url": "https://github.com/stretchr/testify.git",
+      "pinnedHead": "001eb7946baf451879253643e4ce4b38eaa0d4a7",
+      "status": "selected",
+      "scannedCommits": 33,
+      "rejectionCounts": {
+        "non-behavioral-or-ambiguous-subject": 29,
+        "missing-implementation-or-test": 3
+      },
+      "selectedTarget": {
+        "name": "testify",
+        "language": "Go fallback parser",
+        "languageFamily": "go",
+        "url": "https://github.com/stretchr/testify.git",
+        "pinnedHead": "001eb7946baf451879253643e4ce4b38eaa0d4a7",
+        "routeCommit": "f03d03715242289ff4c47cdba086399d9d3a29e8",
+        "groundTruthCommit": "392c0bcd569e83015dedee1e6a6fed62ce1c94e0",
+        "task": "add type to error message of assert.Same",
+        "expectedTaskType": "feature",
+        "changedFiles": [
+          "assert/assertions.go",
+          "assert/assertions_test.go"
+        ],
+        "implementationFiles": [
+          "assert/assertions.go"
+        ],
+        "testFiles": [
+          "assert/assertions_test.go"
+        ],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 22,
+        "additions": 19,
+        "deletions": 3
+      },
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "errorCode": null,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "tokio",
+      "languageFamily": "rust",
+      "url": "https://github.com/tokio-rs/tokio.git",
+      "pinnedHead": "818e2dd866e0d6b0e25ebad8508722efa3a2f8fb",
+      "status": "no-eligible-commit",
+      "scannedCommits": 300,
+      "rejectionCounts": {
+        "non-behavioral-or-ambiguous-subject": 300
+      },
+      "selectedTarget": null,
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "errorCode": null,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "vitest",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/vitest-dev/vitest.git",
+      "pinnedHead": "a31f86af738b2979905f6a61eb5d8848d489eed7",
+      "status": "selected",
+      "scannedCommits": 23,
+      "rejectionCounts": {
+        "contains-non-modified-file": 3,
+        "non-behavioral-or-ambiguous-subject": 13,
+        "contains-excluded-path": 2,
+        "file-count-outside-range": 4
+      },
+      "selectedTarget": {
+        "name": "vitest",
+        "language": "TypeScript",
+        "languageFamily": "javascript-typescript",
+        "url": "https://github.com/vitest-dev/vitest.git",
+        "pinnedHead": "a31f86af738b2979905f6a61eb5d8848d489eed7",
+        "routeCommit": "63dd3de8740aec133f44949a79f58f26b98ea175",
+        "groundTruthCommit": "51acd5778fa1e47b41ed7e4c0e9675880274626d",
+        "task": "fix(browser): inlined awaited import should not trigger syntax error after transform (#10784)",
+        "expectedTaskType": "bugfix",
+        "changedFiles": [
+          "packages/mocker/src/node/dynamicImportPlugin.ts",
+          "test/unit/test/injector-esm.test.ts"
+        ],
+        "implementationFiles": [
+          "packages/mocker/src/node/dynamicImportPlugin.ts"
+        ],
+        "testFiles": [
+          "test/unit/test/injector-esm.test.ts"
+        ],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 11,
+        "additions": 9,
+        "deletions": 2
+      },
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "errorCode": null,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "trio",
+      "languageFamily": "python",
+      "url": "https://github.com/python-trio/trio.git",
+      "pinnedHead": "d0e762f56c80c2f6ca3603dc66a2595b3237e8c6",
+      "status": "selected",
+      "scannedCommits": 130,
+      "rejectionCounts": {
+        "non-behavioral-or-ambiguous-subject": 113,
+        "file-count-outside-range": 7,
+        "missing-implementation-or-test": 3,
+        "contains-non-modified-file": 3,
+        "contains-non-source-extension": 3
+      },
+      "selectedTarget": {
+        "name": "trio",
+        "language": "Python",
+        "languageFamily": "python",
+        "url": "https://github.com/python-trio/trio.git",
+        "pinnedHead": "d0e762f56c80c2f6ca3603dc66a2595b3237e8c6",
+        "routeCommit": "14e16fea4b9e47f69fec48ca2081bbe1c7d5bd32",
+        "groundTruthCommit": "3b14df291c3cfb3ab6c8b32b221da92cd4491492",
+        "task": "Add `if not TYPE_CHECKING`",
+        "expectedTaskType": "feature",
+        "changedFiles": [
+          "src/trio/_sync.py",
+          "src/trio/_tests/test_sync.py"
+        ],
+        "implementationFiles": [
+          "src/trio/_sync.py"
+        ],
+        "testFiles": [
+          "src/trio/_tests/test_sync.py"
+        ],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 22,
+        "additions": 12,
+        "deletions": 10
+      },
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "errorCode": null,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "resty",
+      "languageFamily": "go",
+      "url": "https://github.com/go-resty/resty.git",
+      "pinnedHead": "29010be3b22dde872740e1e39e50cf8c0eba189c",
+      "status": "selected",
+      "scannedCommits": 5,
+      "rejectionCounts": {
+        "contains-non-modified-file": 1,
+        "non-behavioral-or-ambiguous-subject": 3
+      },
+      "selectedTarget": {
+        "name": "resty",
+        "language": "Go fallback parser",
+        "languageFamily": "go",
+        "url": "https://github.com/go-resty/resty.git",
+        "pinnedHead": "29010be3b22dde872740e1e39e50cf8c0eba189c",
+        "routeCommit": "5a344527c864ac171d072a71d41b0c8f2524d558",
+        "groundTruthCommit": "3f320513cff687b413f837ea96bb866819fe1fac",
+        "task": "fix(retry): protect parseRetryAfterHeader from integer and time duration overflow (#1178)",
+        "expectedTaskType": "bugfix",
+        "changedFiles": [
+          "retry.go",
+          "retry_test.go"
+        ],
+        "implementationFiles": [
+          "retry.go"
+        ],
+        "testFiles": [
+          "retry_test.go"
+        ],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 40,
+        "additions": 36,
+        "deletions": 4
+      },
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "errorCode": null,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "serde",
+      "languageFamily": "rust",
+      "url": "https://github.com/serde-rs/serde.git",
+      "pinnedHead": "747814f7d5fbab872df3b02f070c165b91bde062",
+      "status": "selected",
+      "scannedCommits": 169,
+      "rejectionCounts": {
+        "non-behavioral-or-ambiguous-subject": 149,
+        "file-count-outside-range": 15,
+        "missing-implementation-or-test": 2,
+        "contains-non-source-extension": 1,
+        "contains-non-modified-file": 1
+      },
+      "selectedTarget": {
+        "name": "serde",
+        "language": "Rust fallback parser",
+        "languageFamily": "rust",
+        "url": "https://github.com/serde-rs/serde.git",
+        "pinnedHead": "747814f7d5fbab872df3b02f070c165b91bde062",
+        "routeCommit": "b6f339ca3676584e1c26028b4040c337b0105e34",
+        "groundTruthCommit": "cb6eaea151b831db36457fff17f16a195702dad4",
+        "task": "Fix roundtrip inconsistency:",
+        "expectedTaskType": "bugfix",
+        "changedFiles": [
+          "serde/src/private/ser.rs",
+          "test_suite/tests/test_annotations.rs"
+        ],
+        "implementationFiles": [
+          "serde/src/private/ser.rs"
+        ],
+        "testFiles": [
+          "test_suite/tests/test_annotations.rs"
+        ],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 41,
+        "additions": 39,
+        "deletions": 2
+      },
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "errorCode": null,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "tanstack-query",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/TanStack/query.git",
+      "pinnedHead": "fd50fa14d283c7d6664a796f758498d1ad5bfce7",
+      "status": "family-quota-filled-not-inspected",
+      "scannedCommits": 0,
+      "rejectionCounts": {},
+      "selectedTarget": null
+    },
+    {
+      "name": "anyio",
+      "languageFamily": "python",
+      "url": "https://github.com/agronholm/anyio.git",
+      "pinnedHead": "caca0e076d4052fca751f1a6b5e248bb4901f6cd",
+      "status": "no-eligible-commit",
+      "scannedCommits": 300,
+      "rejectionCounts": {
+        "non-behavioral-or-ambiguous-subject": 283,
+        "contains-excluded-path": 11,
+        "file-count-outside-range": 5,
+        "missing-implementation-or-test": 1
+      },
+      "selectedTarget": null,
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "errorCode": null,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "zerolog",
+      "languageFamily": "go",
+      "url": "https://github.com/rs/zerolog.git",
+      "pinnedHead": "9c53f4ea79c89f42478eb1e0c0414e4d68594506",
+      "status": "family-quota-filled-not-inspected",
+      "scannedCommits": 0,
+      "rejectionCounts": {},
+      "selectedTarget": null
+    },
+    {
+      "name": "tower-http",
+      "languageFamily": "rust",
+      "url": "https://github.com/tower-rs/tower-http.git",
+      "pinnedHead": "44bed484bf03f70782b1011b6cb527abb83e675c",
+      "status": "selected",
+      "scannedCommits": 8,
+      "rejectionCounts": {
+        "non-behavioral-or-ambiguous-subject": 3,
+        "missing-implementation-or-test": 1,
+        "contains-excluded-path": 2,
+        "file-count-outside-range": 1
+      },
+      "selectedTarget": {
+        "name": "tower-http",
+        "language": "Rust fallback parser",
+        "languageFamily": "rust",
+        "url": "https://github.com/tower-rs/tower-http.git",
+        "pinnedHead": "44bed484bf03f70782b1011b6cb527abb83e675c",
+        "routeCommit": "56327b27f4e9cdb863599ee3a35bc7aa7fca634a",
+        "groundTruthCommit": "8508716431a4a90d1c47993618afd72b34c92b87",
+        "task": "Add `redirect_path_prefix` option (#486)",
+        "expectedTaskType": "feature",
+        "changedFiles": [
+          "tower-http/src/services/fs/serve_dir/mod.rs",
+          "tower-http/src/services/fs/serve_dir/open_file.rs",
+          "tower-http/src/services/fs/serve_dir/tests.rs"
+        ],
+        "implementationFiles": [
+          "tower-http/src/services/fs/serve_dir/mod.rs",
+          "tower-http/src/services/fs/serve_dir/open_file.rs"
+        ],
+        "testFiles": [
+          "tower-http/src/services/fs/serve_dir/tests.rs"
+        ],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 106,
+        "additions": 94,
+        "deletions": 12
+      },
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "errorCode": null,
+          "error": null
+        }
+      ]
+    }
+  ],
+  "targets": [
+    {
+      "name": "got",
+      "language": "TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/sindresorhus/got.git",
+      "pinnedHead": "e3924aa1e53a6ca3eb93a43618ce532442a89b40",
+      "routeCommit": "a5b76bffb33d5fa8b0d1393cce410b88e7c2b848",
+      "groundTruthCommit": "5772bf24dc7dd69db52fc26f8274039f52063fd2",
+      "task": "Fix `searchParams` setter dropping the value when a URL is set (#2454)",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "source/core/options.ts",
+        "test/hooks.ts",
+        "test/normalize-arguments.ts"
+      ],
+      "implementationFiles": [
+        "source/core/options.ts"
+      ],
+      "testFiles": [
+        "test/hooks.ts",
+        "test/normalize-arguments.ts"
+      ],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 58,
+      "additions": 55,
+      "deletions": 3
+    },
+    {
+      "name": "testify",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/stretchr/testify.git",
+      "pinnedHead": "001eb7946baf451879253643e4ce4b38eaa0d4a7",
+      "routeCommit": "f03d03715242289ff4c47cdba086399d9d3a29e8",
+      "groundTruthCommit": "392c0bcd569e83015dedee1e6a6fed62ce1c94e0",
+      "task": "add type to error message of assert.Same",
+      "expectedTaskType": "feature",
+      "changedFiles": [
+        "assert/assertions.go",
+        "assert/assertions_test.go"
+      ],
+      "implementationFiles": [
+        "assert/assertions.go"
+      ],
+      "testFiles": [
+        "assert/assertions_test.go"
+      ],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 22,
+      "additions": 19,
+      "deletions": 3
+    },
+    {
+      "name": "vitest",
+      "language": "TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/vitest-dev/vitest.git",
+      "pinnedHead": "a31f86af738b2979905f6a61eb5d8848d489eed7",
+      "routeCommit": "63dd3de8740aec133f44949a79f58f26b98ea175",
+      "groundTruthCommit": "51acd5778fa1e47b41ed7e4c0e9675880274626d",
+      "task": "fix(browser): inlined awaited import should not trigger syntax error after transform (#10784)",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "packages/mocker/src/node/dynamicImportPlugin.ts",
+        "test/unit/test/injector-esm.test.ts"
+      ],
+      "implementationFiles": [
+        "packages/mocker/src/node/dynamicImportPlugin.ts"
+      ],
+      "testFiles": [
+        "test/unit/test/injector-esm.test.ts"
+      ],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 11,
+      "additions": 9,
+      "deletions": 2
+    },
+    {
+      "name": "trio",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/python-trio/trio.git",
+      "pinnedHead": "d0e762f56c80c2f6ca3603dc66a2595b3237e8c6",
+      "routeCommit": "14e16fea4b9e47f69fec48ca2081bbe1c7d5bd32",
+      "groundTruthCommit": "3b14df291c3cfb3ab6c8b32b221da92cd4491492",
+      "task": "Add `if not TYPE_CHECKING`",
+      "expectedTaskType": "feature",
+      "changedFiles": [
+        "src/trio/_sync.py",
+        "src/trio/_tests/test_sync.py"
+      ],
+      "implementationFiles": [
+        "src/trio/_sync.py"
+      ],
+      "testFiles": [
+        "src/trio/_tests/test_sync.py"
+      ],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 22,
+      "additions": 12,
+      "deletions": 10
+    },
+    {
+      "name": "resty",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/go-resty/resty.git",
+      "pinnedHead": "29010be3b22dde872740e1e39e50cf8c0eba189c",
+      "routeCommit": "5a344527c864ac171d072a71d41b0c8f2524d558",
+      "groundTruthCommit": "3f320513cff687b413f837ea96bb866819fe1fac",
+      "task": "fix(retry): protect parseRetryAfterHeader from integer and time duration overflow (#1178)",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "retry.go",
+        "retry_test.go"
+      ],
+      "implementationFiles": [
+        "retry.go"
+      ],
+      "testFiles": [
+        "retry_test.go"
+      ],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 40,
+      "additions": 36,
+      "deletions": 4
+    },
+    {
+      "name": "serde",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/serde-rs/serde.git",
+      "pinnedHead": "747814f7d5fbab872df3b02f070c165b91bde062",
+      "routeCommit": "b6f339ca3676584e1c26028b4040c337b0105e34",
+      "groundTruthCommit": "cb6eaea151b831db36457fff17f16a195702dad4",
+      "task": "Fix roundtrip inconsistency:",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "serde/src/private/ser.rs",
+        "test_suite/tests/test_annotations.rs"
+      ],
+      "implementationFiles": [
+        "serde/src/private/ser.rs"
+      ],
+      "testFiles": [
+        "test_suite/tests/test_annotations.rs"
+      ],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 41,
+      "additions": 39,
+      "deletions": 2
+    },
+    {
+      "name": "tower-http",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/tower-rs/tower-http.git",
+      "pinnedHead": "44bed484bf03f70782b1011b6cb527abb83e675c",
+      "routeCommit": "56327b27f4e9cdb863599ee3a35bc7aa7fca634a",
+      "groundTruthCommit": "8508716431a4a90d1c47993618afd72b34c92b87",
+      "task": "Add `redirect_path_prefix` option (#486)",
+      "expectedTaskType": "feature",
+      "changedFiles": [
+        "tower-http/src/services/fs/serve_dir/mod.rs",
+        "tower-http/src/services/fs/serve_dir/open_file.rs",
+        "tower-http/src/services/fs/serve_dir/tests.rs"
+      ],
+      "implementationFiles": [
+        "tower-http/src/services/fs/serve_dir/mod.rs",
+        "tower-http/src/services/fs/serve_dir/open_file.rs"
+      ],
+      "testFiles": [
+        "tower-http/src/services/fs/serve_dir/tests.rs"
+      ],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 106,
+      "additions": 94,
+      "deletions": 12
+    }
+  ]
+}
