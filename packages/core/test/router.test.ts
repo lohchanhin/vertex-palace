@@ -2359,6 +2359,65 @@ export function uploadProductVariantImageController(file: File) {
     });
   });
 
+  it("keeps a Python symbol pair focused when the same files have unrelated test edges", async () => {
+    await withFixture("ts-api", async (root) => {
+      const changedFiles = ["aiohttp/helpers.py", "tests/test_helpers.py"];
+      const files = new Map<string, string>([
+        [
+          changedFiles[0],
+          `def parse_mimetype(value: str):
+    parts = value.split(";")
+    parameters = {item: "" for item in parts[1:] if item}
+    return parts[0], parameters
+
+def quoted_string(value: str):
+    return value.strip('"')
+
+class CookieMixin:
+    def set_cookie(self, name: str, value: str):
+        return name, value
+`
+        ],
+        [
+          changedFiles[1],
+          `from aiohttp.helpers import parse_mimetype
+
+def test_parse_mimetype():
+    assert parse_mimetype("text/plain; charset=utf-8")
+`
+        ],
+        [
+          "tests/test_cookie_helpers.py",
+          `from aiohttp.helpers import quoted_string
+
+def test_unquote_quoted_strings():
+    assert quoted_string('"value"') == "value"
+
+def test_parse_cookie_header_empty_key_whitespace_semicolon():
+    assert True
+`
+        ]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const evaluation = await evaluateRoute(
+        root,
+        "Fix parse_mimetype producing spurious empty-key parameter for whitespace-only segments after semicolons",
+        { changedFiles, routeLimit: 9, budget: 6000, maxDrawers: 4 }
+      );
+
+      expect(evaluation.route.files).toEqual(changedFiles);
+      expect(evaluation.coverage.changedFileCoverage).toBe(1);
+      expect(evaluation.coverage.routeFocus).toBe(1);
+      expect(evaluation.calibration.status).not.toBe("overconfident");
+    });
+  });
+
   it("keeps an attribute-macro task inside one workspace crate and its causal siblings", async () => {
     await withFixture("ts-api", async (root) => {
       const changedFiles = [
@@ -2425,6 +2484,30 @@ pub fn record_instrument_field_name(value: &str) -> &str { value }
           "pub fn record_instrument_fields() {}\n"
         ]
       ]);
+      files.set(
+        "telemetry-subscriber/src/filter/mod.rs",
+        `${Array.from({ length: 12 }, (_, index) => `mod field_${index};`).join("\n")}\n`
+      );
+      for (let index = 0; index < 12; index += 1) {
+        const functionName = index === 0
+          ? "parse_field_expression"
+          : `filter_field_name_${index}`;
+        files.set(
+          `telemetry-subscriber/src/filter/field_${index}.rs`,
+          `use crate::filter::field_${(index + 1) % 12};
+pub fn ${functionName}() {}
+`
+        );
+      }
+      for (let index = 0; index < 5; index += 1) {
+        files.set(
+          `telemetry-subscriber/tests/field_filter_${index}.rs`,
+          `use telemetry_subscriber::filter::field_${index};
+#[test]
+fn field_filter_event_${index}() { assert!(true); }
+`
+        );
+      }
       for (const [relativePath, source] of files) {
         const target = path.join(root, relativePath);
         await mkdir(path.dirname(target), { recursive: true });
@@ -2451,15 +2534,17 @@ pub fn record_instrument_field_name(value: &str) -> &str { value }
         "src/core/handlers/ResultHandler.ts",
         "src/core/utils/ResultEnvelope/decorators.ts",
         "src/core/utils/request/storeResultCookies.ts",
-        "test/browser/request/result-cookies.mocks.ts"
+        "test/browser/rest-api/request/request-cookies.mocks.ts"
       ];
       const files = new Map<string, string>([
         [
           changedFiles[0],
           `import type { ResultEnvelope } from '../ResultEnvelope';
 export abstract class ResultHandler {
+  public isUsed = false;
   public async run(resolver: () => Promise<ResultEnvelope | undefined>) {
     const mockedResponse = await resolver();
+    if (mockedResponse) this.isUsed = true;
     return this.createExecutionResult({ response: mockedResponse });
   }
   protected abstract createExecutionResult(args: { response?: ResultEnvelope }): unknown;
@@ -2480,8 +2565,9 @@ export function decorateResult(response: Response, init: ResultEnvelopeInit) {
         [
           changedFiles[2],
           `import { kSetCookie } from '../ResultEnvelope/decorators';
+import { cookieStore } from '../cookieStore';
 export function storeResultCookies(response: Response) {
-  return Reflect.get(response, kSetCookie);
+  return cookieStore.set(Reflect.get(response, kSetCookie));
 }
 `
         ],
@@ -2524,6 +2610,56 @@ export class ResultEnvelope extends Response {
           "test('response forwards all cookies', () => true);\n"
         ]
       ]);
+      files.set(
+        "src/core/http.ts",
+        "export function createHttpResponse() { return new Response(); }\n"
+      );
+      files.set(
+        "src/core/experimental/frames/http-frame.ts",
+        `import { ResultEnvelope } from '../../ResultEnvelope';
+export function resolveHttpFrame(response: ResultEnvelope) {
+  return { response, cookies: response.headers.get('set-cookie'), used: true };
+}
+`
+      );
+      files.set(
+        "src/core/handlers/HttpHandler.ts",
+        `import type { ResultEnvelope } from '../ResultEnvelope';
+import { getRequestCookies } from '../utils/request/getRequestCookies';
+import { ResultHandler } from './ResultHandler';
+export class HttpHandler extends ResultHandler {
+  public handleHttpResponse(response: ResultEnvelope) {
+    return [response, getRequestCookies(new Request('https://example.test'))];
+  }
+}
+`
+      );
+      files.set(
+        "src/core/utils/cookieStore.ts",
+        "export const cookieStore = { get: () => ({}), set: (value: unknown) => value };\n"
+      );
+      files.set(
+        "src/core/utils/request/getRequestCookies.ts",
+        `import { cookieStore } from '../cookieStore';
+export function getRequestCookies(request: Request) {
+  return { request, cookies: cookieStore.get() };
+}
+`
+      );
+      files.set(
+        "test/browser/rest-api/response/result-cookies.mocks.ts",
+        `import { result, ResultEnvelope } from 'mock-service';
+export const worker = result.get('/response-cookies', () => {
+  return new ResultEnvelope(null, { headers: { 'Set-Cookie': 'direct=yes' } });
+});
+`
+      );
+      for (let index = 0; index < 36; index += 1) {
+        files.set(
+          `test/browser/response/response-cookies-${index}.test.ts`,
+          `test('http response cookies are forwarded ${index}', () => true);\n`
+        );
+      }
       for (const [relativePath, source] of files) {
         const target = path.join(root, relativePath);
         await mkdir(path.dirname(target), { recursive: true });
@@ -2567,6 +2703,9 @@ func Delete(rows Rows) {
           changedFiles[1],
           `package lifecycle
 func Update(rows Rows) {
+    if shouldResetAssignments() {
+        defer delete(statementClauses, "SET")
+    }
     mutateDestination()
     scanRows(rows)
     restoreDestination()

@@ -85,7 +85,9 @@ export function buildEdges(nodes: PalaceNode[], parsedFiles: ParsedFile[], now: 
       }))
       .filter(
         ({ sourceTokens }) =>
-          sourceTokens.size >= 2 && [...sourceTokens].every((token) => testTokens.has(token))
+          sourceTokens.size >= 2
+          && sourceTokens.size / Math.max(testTokens.size, 1) >= 0.6
+          && [...sourceTokens].every((token) => testTokens.has(token))
       )
       .sort(
         (a, b) =>

@@ -204,4 +204,66 @@ describe("indexPalace", () => {
       )).toBe(true);
     });
   });
+
+  it("does not create direct symbol-test edges from a short nested name", async () => {
+    await withFixture("ts-api", async (root) => {
+      const files = new Map<string, string>([
+        [
+          "aiohttp/helpers.py",
+          `def parse_mimetype(value: str):
+    return value
+
+class CookieMixin:
+    def set_cookie(self, name: str, value: str):
+        return name, value
+`
+        ],
+        [
+          "tests/test_helpers.py",
+          `from aiohttp.helpers import parse_mimetype
+
+def test_parse_mimetype():
+    assert parse_mimetype("text/plain") == "text/plain"
+`
+        ],
+        [
+          "tests/test_cookie_helpers.py",
+          `def test_parse_set_cookie_headers_simple():
+    assert True
+
+def test_parse_set_cookie_headers_with_attributes():
+    assert True
+`
+        ]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+
+      await indexPalace(root);
+      const index = await readIndex(root);
+      const symbol = (sourcePath: string, title: string) => index.nodes.find(
+        (node) => node.sourcePath === sourcePath && node.title === title
+      );
+      const parseMimetype = symbol("aiohttp/helpers.py", "parse_mimetype");
+      const exactTest = symbol("tests/test_helpers.py", "test_parse_mimetype");
+      const setCookie = symbol("aiohttp/helpers.py", "CookieMixin.set_cookie");
+      const nestedNameTest = symbol(
+        "tests/test_cookie_helpers.py",
+        "test_parse_set_cookie_headers_simple"
+      );
+      const hasDirectTestEdge = (leftId?: string, rightId?: string) => Boolean(
+        leftId && rightId && index.edges.some(
+          (edge) => edge.weight === 0.99
+            && ["tests", "tested_by"].includes(edge.type)
+            && ((edge.from === leftId && edge.to === rightId) || (edge.from === rightId && edge.to === leftId))
+        )
+      );
+
+      expect(hasDirectTestEdge(parseMimetype?.id, exactTest?.id)).toBe(true);
+      expect(hasDirectTestEdge(setCookie?.id, nestedNameTest?.id)).toBe(false);
+    });
+  });
 });
