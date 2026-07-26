@@ -1,0 +1,1800 @@
+{
+  "schemaVersion": 1,
+  "studyId": "round-8-confidence-calibration-combined-analysis-0.4-alpha",
+  "generatedAt": "2026-07-26T03:14:05.031Z",
+  "status": "completed",
+  "claimBoundary": "Mechanical descriptive combination of seven paired targets from the immutable disclosed condition-repair result and the separately preregistered immutable SQLAlchemy environment completion. It evaluates static routes, confidence calibration, mode selection, and delivered context estimates only. It does not execute target tests or an Agent and cannot support Agent correctness, reported Token, tool-call, wall-time, or efficiency claims.",
+  "evidenceClass": "disclosed-frozen-eight-target-paired-static-calibration-analysis",
+  "sources": [
+    {
+      "path": "docs/research/evidence/disclosed-round-8-after-condition-repository-repair-0.4-alpha.json",
+      "commit": "9eb29b4cdb639ccbb8db11df070fedb6498c49e6",
+      "sha256": "E6216E3F6F43BFC3CD42A2B5E640777349B1977250BB43A159AC5155FFF3A23D",
+      "status": "invalid-with-seven-completed-pairs-and-one-shared-environment-timeout",
+      "preservedWithoutModification": true
+    },
+    {
+      "path": "docs/research/evidence/disclosed-round-8-sqlalchemy-timeout-completion-0.4-alpha.json",
+      "commit": "22f022239716c1402b3fc59fc9686fef787e64f3",
+      "sha256": "97EAA94336880CF6309A565E06DA7C9B5E3E33203709259061F5589598DA475F",
+      "status": "completed-sqlalchemy-only-environment-completion",
+      "preservedWithoutModification": true
+    }
+  ],
+  "combination": {
+    "rule": "Preserve the original eight-target manifest order; take the seven completed target pairs from the condition-repair result and SQLAlchemy from the separately preregistered completion. Use repetition 1 for target-level inference and both repetitions only for determinism and descriptive trial totals.",
+    "originalTargetOrder": [
+      "yargs",
+      "sqlalchemy",
+      "zap",
+      "sinon",
+      "rich",
+      "viper",
+      "crossbeam",
+      "http"
+    ],
+    "targetCount": 8,
+    "repetitionsPerTargetAndCondition": 2,
+    "pairedTargetObservations": 8,
+    "pairedTrialObservations": 16,
+    "overlappingCompletedTargetsBetweenSources": 0,
+    "missingTargetsAfterCombination": 0,
+    "sequentialSourceRuns": true,
+    "concurrentSourceRuns": false
+  },
+  "frozenProducts": {
+    "baseline": {
+      "commit": "228c3bde47f6930023496fdd0a54d43dba10091f",
+      "cliSha256": "E81774B89C3A6FAED83788335688EFCBC8B4D17DEA25CA002097FF1F9125318F"
+    },
+    "candidate": {
+      "commit": "1a02d89269acb36473db3ad39badab9fe338a4a3",
+      "cliSha256": "49F44D09551222A2CB8D3BEEDBDA4E374A507C30DCA681D4D9CC0E57C6DB7747"
+    }
+  },
+  "thresholds": {
+    "calibrationTolerance": 0.15,
+    "minimumMacroCoverage": 0.9,
+    "minimumMacroFocus": 0.75,
+    "minimumMacroPrecision": 0.75,
+    "contextEstimatedTokenCeiling": 6000
+  },
+  "aggregate": {
+    "baseline": {
+      "condition": "baseline",
+      "targetCount": 8,
+      "passedTargets": 3,
+      "failedTargets": 5,
+      "completedTrials": 16,
+      "deterministicTargets": 8,
+      "taskTypeMatchedTargets": 8,
+      "coreSurfaceCompleteTargets": 4,
+      "exactOracleTargets": 2,
+      "oracleFileTotal": 20,
+      "routeFileTotal": 33,
+      "targetMacroChangedFileCoverage": 0.719,
+      "targetMacroRouteFocus": 0.625,
+      "targetMacroRoutePrecision": 0.625,
+      "minimumTargetRouteFocus": 0,
+      "minimumTargetRoutePrecision": 0,
+      "targetCalibrationMeanAbsoluteError": 0.284,
+      "calibrationMeanAbsoluteError": 0.284,
+      "overconfidentTargets": 0,
+      "underconfidentTargets": 4,
+      "wellCalibratedTargets": 4,
+      "overconfidentTrials": 0,
+      "underconfidentTrials": 8,
+      "wellCalibratedTrials": 8,
+      "unsafeNarrowModeTargets": 1,
+      "unsafeNarrowModeTrials": 2,
+      "targetModeCounts": {
+        "full-palace": 6,
+        "route-lite": 2
+      },
+      "contextEstimatedTokensTotal": 38874,
+      "contextEstimatedTokensMean": 2429.625,
+      "contextEstimatedTokensMedian": 1960.5,
+      "targetContextEstimatedTokensMean": 2429.625,
+      "targetContextEstimatedTokensMedian": 1960.5,
+      "maxContextEstimatedTokens": 5045,
+      "environmentOrSetupFailures": 0,
+      "harnessContractFailures": 0,
+      "staticRoutingGateStatus": "failed",
+      "staticRoutingGateFailures": [
+        "changed-file coverage below 0.90",
+        "route focus below 0.75",
+        "route precision below 0.75"
+      ]
+    },
+    "candidate": {
+      "condition": "candidate",
+      "targetCount": 8,
+      "passedTargets": 3,
+      "failedTargets": 5,
+      "completedTrials": 16,
+      "deterministicTargets": 8,
+      "taskTypeMatchedTargets": 8,
+      "coreSurfaceCompleteTargets": 4,
+      "exactOracleTargets": 2,
+      "oracleFileTotal": 20,
+      "routeFileTotal": 33,
+      "targetMacroChangedFileCoverage": 0.719,
+      "targetMacroRouteFocus": 0.625,
+      "targetMacroRoutePrecision": 0.625,
+      "minimumTargetRouteFocus": 0,
+      "minimumTargetRoutePrecision": 0,
+      "targetCalibrationMeanAbsoluteError": 0.465,
+      "calibrationMeanAbsoluteError": 0.465,
+      "overconfidentTargets": 0,
+      "underconfidentTargets": 5,
+      "wellCalibratedTargets": 3,
+      "overconfidentTrials": 0,
+      "underconfidentTrials": 10,
+      "wellCalibratedTrials": 6,
+      "unsafeNarrowModeTargets": 0,
+      "unsafeNarrowModeTrials": 0,
+      "targetModeCounts": {
+        "full-palace": 8
+      },
+      "contextEstimatedTokensTotal": 39666,
+      "contextEstimatedTokensMean": 2479.125,
+      "contextEstimatedTokensMedian": 2034,
+      "targetContextEstimatedTokensMean": 2479.125,
+      "targetContextEstimatedTokensMedian": 2034,
+      "maxContextEstimatedTokens": 5045,
+      "environmentOrSetupFailures": 0,
+      "harnessContractFailures": 0,
+      "staticRoutingGateStatus": "failed",
+      "staticRoutingGateFailures": [
+        "changed-file coverage below 0.90",
+        "route focus below 0.75",
+        "route precision below 0.75"
+      ]
+    }
+  },
+  "comparison": {
+    "completedPairedTargets": 8,
+    "completedPairedTrials": 16,
+    "repetitionsUsedForInference": 1,
+    "routeChangedTargets": 0,
+    "modeChangedTargets": 2,
+    "confidenceLoweredTargets": 3,
+    "confidenceRaisedTargets": 0,
+    "confidenceUnchangedTargets": 5,
+    "baselineOverconfidentTargets": 0,
+    "candidateOverconfidentTargets": 0,
+    "baselineUnderconfidentTargets": 4,
+    "candidateUnderconfidentTargets": 5,
+    "baselineCalibrationMeanAbsoluteError": 0.284,
+    "candidateCalibrationMeanAbsoluteError": 0.465,
+    "baselineUnsafeNarrowTargets": 1,
+    "candidateUnsafeNarrowTargets": 0,
+    "calibrationFinding": "regression",
+    "routingFinding": "unchanged",
+    "narrowModeSafetyFinding": "non-inferior",
+    "contextCostFinding": "candidate-higher-mean",
+    "contextEstimatedTokenDeltaTotal": 792,
+    "contextEstimatedTokenDeltaMean": 49.5,
+    "contextEstimatedTokenDeltaMedian": 0,
+    "targetContextEstimatedTokenDeltaMean": 49.5,
+    "targetContextEstimatedTokenDeltaMedian": 0,
+    "aggregateDelta": {
+      "changedFileCoverage": 0,
+      "routeFocus": 0,
+      "routePrecision": 0,
+      "calibrationMeanAbsoluteError": 0.181,
+      "overconfidentTargets": 0,
+      "underconfidentTargets": 1,
+      "unsafeNarrowTargets": -1
+    },
+    "modeShifts": {
+      "route-lite->full-palace": 2
+    },
+    "targetPairs": [
+      {
+        "target": "yargs",
+        "routeChanged": false,
+        "modeChanged": false,
+        "baseline": {
+          "routeFiles": [
+            "lib/utils/apply-extends.ts",
+            "test/helpers.mjs"
+          ],
+          "routeFileCount": 2,
+          "routeConfidence": 0.4,
+          "changedFileCoverage": 1,
+          "coreSurfaceCoverage": 1,
+          "routeFocus": 1,
+          "routePrecision": 1,
+          "calibrationStatus": "underconfident",
+          "calibrationAbsoluteError": 0.6,
+          "mode": "full-palace",
+          "unsafeNarrowMode": false,
+          "contextEstimatedTokens": 1908
+        },
+        "candidate": {
+          "routeFiles": [
+            "lib/utils/apply-extends.ts",
+            "test/helpers.mjs"
+          ],
+          "routeFileCount": 2,
+          "routeConfidence": 0.4,
+          "changedFileCoverage": 1,
+          "coreSurfaceCoverage": 1,
+          "routeFocus": 1,
+          "routePrecision": 1,
+          "calibrationStatus": "underconfident",
+          "calibrationAbsoluteError": 0.6,
+          "mode": "full-palace",
+          "unsafeNarrowMode": false,
+          "contextEstimatedTokens": 1908
+        },
+        "delta": {
+          "confidence": 0,
+          "changedFileCoverage": 0,
+          "routeFocus": 0,
+          "routePrecision": 0,
+          "contextEstimatedTokens": 0
+        }
+      },
+      {
+        "target": "sqlalchemy",
+        "routeChanged": false,
+        "modeChanged": false,
+        "baseline": {
+          "routeFiles": [
+            "lib/sqlalchemy/orm/session.py",
+            "test/orm/test_session.py"
+          ],
+          "routeFileCount": 2,
+          "routeConfidence": 0.4,
+          "changedFileCoverage": 0.33,
+          "coreSurfaceCoverage": 0.333,
+          "routeFocus": 0.5,
+          "routePrecision": 0.5,
+          "calibrationStatus": "well-calibrated",
+          "calibrationAbsoluteError": 0.07,
+          "mode": "full-palace",
+          "unsafeNarrowMode": false,
+          "contextEstimatedTokens": 2013
+        },
+        "candidate": {
+          "routeFiles": [
+            "lib/sqlalchemy/orm/session.py",
+            "test/orm/test_session.py"
+          ],
+          "routeFileCount": 2,
+          "routeConfidence": 0.4,
+          "changedFileCoverage": 0.33,
+          "coreSurfaceCoverage": 0.333,
+          "routeFocus": 0.5,
+          "routePrecision": 0.5,
+          "calibrationStatus": "well-calibrated",
+          "calibrationAbsoluteError": 0.07,
+          "mode": "full-palace",
+          "unsafeNarrowMode": false,
+          "contextEstimatedTokens": 2013
+        },
+        "delta": {
+          "confidence": 0,
+          "changedFileCoverage": 0,
+          "routeFocus": 0,
+          "routePrecision": 0,
+          "contextEstimatedTokens": 0
+        }
+      },
+      {
+        "target": "zap",
+        "routeChanged": false,
+        "modeChanged": false,
+        "baseline": {
+          "routeFiles": [
+            "zapcore/lazy_with.go",
+            "zapcore/lazy_with_test.go"
+          ],
+          "routeFileCount": 2,
+          "routeConfidence": 0.56,
+          "changedFileCoverage": 1,
+          "coreSurfaceCoverage": 1,
+          "routeFocus": 1,
+          "routePrecision": 1,
+          "calibrationStatus": "underconfident",
+          "calibrationAbsoluteError": 0.44,
+          "mode": "full-palace",
+          "unsafeNarrowMode": false,
+          "contextEstimatedTokens": 1540
+        },
+        "candidate": {
+          "routeFiles": [
+            "zapcore/lazy_with.go",
+            "zapcore/lazy_with_test.go"
+          ],
+          "routeFileCount": 2,
+          "routeConfidence": 0.15,
+          "changedFileCoverage": 1,
+          "coreSurfaceCoverage": 1,
+          "routeFocus": 1,
+          "routePrecision": 1,
+          "calibrationStatus": "underconfident",
+          "calibrationAbsoluteError": 0.85,
+          "mode": "full-palace",
+          "unsafeNarrowMode": false,
+          "contextEstimatedTokens": 1555
+        },
+        "delta": {
+          "confidence": -0.41,
+          "changedFileCoverage": 0,
+          "routeFocus": 0,
+          "routePrecision": 0,
+          "contextEstimatedTokens": 15
+        }
+      },
+      {
+        "target": "sinon",
+        "routeChanged": false,
+        "modeChanged": false,
+        "baseline": {
+          "routeFiles": [
+            "docs/concepts/stubs/api/returns-arg.md",
+            "docs/tests/docs/stubs/api/returns-arg.test.js",
+            "docs/tests/docs/stubs/api/returns-this.test.js",
+            "docs/tests/docs/stubs/api/throws-arg.test.js",
+            "docs/concepts/stubs/api/call-arg.md",
+            "docs/tests/docs/stubs/api/calls-arg.test.js",
+            "docs/concepts/stubs/api/returns-this.md",
+            "docs/concepts/stubs/api/throws-arg.md",
+            "docs/.gitignore"
+          ],
+          "routeFileCount": 9,
+          "routeConfidence": 0.15,
+          "changedFileCoverage": 0,
+          "coreSurfaceCoverage": 0,
+          "routeFocus": 0,
+          "routePrecision": 0,
+          "calibrationStatus": "well-calibrated",
+          "calibrationAbsoluteError": 0.15,
+          "mode": "full-palace",
+          "unsafeNarrowMode": false,
+          "contextEstimatedTokens": 2549
+        },
+        "candidate": {
+          "routeFiles": [
+            "docs/concepts/stubs/api/returns-arg.md",
+            "docs/tests/docs/stubs/api/returns-arg.test.js",
+            "docs/tests/docs/stubs/api/returns-this.test.js",
+            "docs/tests/docs/stubs/api/throws-arg.test.js",
+            "docs/concepts/stubs/api/call-arg.md",
+            "docs/tests/docs/stubs/api/calls-arg.test.js",
+            "docs/concepts/stubs/api/returns-this.md",
+            "docs/concepts/stubs/api/throws-arg.md",
+            "docs/.gitignore"
+          ],
+          "routeFileCount": 9,
+          "routeConfidence": 0.15,
+          "changedFileCoverage": 0,
+          "coreSurfaceCoverage": 0,
+          "routeFocus": 0,
+          "routePrecision": 0,
+          "calibrationStatus": "well-calibrated",
+          "calibrationAbsoluteError": 0.15,
+          "mode": "full-palace",
+          "unsafeNarrowMode": false,
+          "contextEstimatedTokens": 2549
+        },
+        "delta": {
+          "confidence": 0,
+          "changedFileCoverage": 0,
+          "routeFocus": 0,
+          "routePrecision": 0,
+          "contextEstimatedTokens": 0
+        }
+      },
+      {
+        "target": "rich",
+        "routeChanged": false,
+        "modeChanged": false,
+        "baseline": {
+          "routeFiles": [
+            "rich/cells.py",
+            "rich/markdown.py",
+            "rich/console.py",
+            "rich/table.py",
+            "rich/tree.py",
+            "tests/test_cells.py",
+            "tests/test_markdown.py",
+            "tests/test_table.py"
+          ],
+          "routeFileCount": 8,
+          "routeConfidence": 0.4,
+          "changedFileCoverage": 1,
+          "coreSurfaceCoverage": 1,
+          "routeFocus": 0.25,
+          "routePrecision": 0.25,
+          "calibrationStatus": "underconfident",
+          "calibrationAbsoluteError": 0.6,
+          "mode": "full-palace",
+          "unsafeNarrowMode": false,
+          "contextEstimatedTokens": 3119
+        },
+        "candidate": {
+          "routeFiles": [
+            "rich/cells.py",
+            "rich/markdown.py",
+            "rich/console.py",
+            "rich/table.py",
+            "rich/tree.py",
+            "tests/test_cells.py",
+            "tests/test_markdown.py",
+            "tests/test_table.py"
+          ],
+          "routeFileCount": 8,
+          "routeConfidence": 0.4,
+          "changedFileCoverage": 1,
+          "coreSurfaceCoverage": 1,
+          "routeFocus": 0.25,
+          "routePrecision": 0.25,
+          "calibrationStatus": "underconfident",
+          "calibrationAbsoluteError": 0.6,
+          "mode": "full-palace",
+          "unsafeNarrowMode": false,
+          "contextEstimatedTokens": 3119
+        },
+        "delta": {
+          "confidence": 0,
+          "changedFileCoverage": 0,
+          "routeFocus": 0,
+          "routePrecision": 0,
+          "contextEstimatedTokens": 0
+        }
+      },
+      {
+        "target": "viper",
+        "routeChanged": false,
+        "modeChanged": true,
+        "baseline": {
+          "routeFiles": [
+            "viper.go",
+            "viper_test.go"
+          ],
+          "routeFileCount": 2,
+          "routeConfidence": 0.54,
+          "changedFileCoverage": 0.67,
+          "coreSurfaceCoverage": 0.667,
+          "routeFocus": 1,
+          "routePrecision": 1,
+          "calibrationStatus": "well-calibrated",
+          "calibrationAbsoluteError": 0.13,
+          "mode": "route-lite",
+          "unsafeNarrowMode": true,
+          "contextEstimatedTokens": 1394
+        },
+        "candidate": {
+          "routeFiles": [
+            "viper.go",
+            "viper_test.go"
+          ],
+          "routeFileCount": 2,
+          "routeConfidence": 0.15,
+          "changedFileCoverage": 0.67,
+          "coreSurfaceCoverage": 0.667,
+          "routeFocus": 1,
+          "routePrecision": 1,
+          "calibrationStatus": "underconfident",
+          "calibrationAbsoluteError": 0.52,
+          "mode": "full-palace",
+          "unsafeNarrowMode": false,
+          "contextEstimatedTokens": 1589
+        },
+        "delta": {
+          "confidence": -0.39,
+          "changedFileCoverage": 0,
+          "routeFocus": 0,
+          "routePrecision": 0,
+          "contextEstimatedTokens": 195
+        }
+      },
+      {
+        "target": "crossbeam",
+        "routeChanged": false,
+        "modeChanged": false,
+        "baseline": {
+          "routeFiles": [
+            "crossbeam-channel/src/select_macro.rs",
+            "crossbeam-channel/src/lib.rs",
+            "crossbeam-channel/src/select.rs",
+            "crossbeam-channel/tests/select_macro.rs"
+          ],
+          "routeFileCount": 4,
+          "routeConfidence": 0.83,
+          "changedFileCoverage": 0.75,
+          "coreSurfaceCoverage": 0.75,
+          "routeFocus": 0.75,
+          "routePrecision": 0.75,
+          "calibrationStatus": "well-calibrated",
+          "calibrationAbsoluteError": 0.08,
+          "mode": "full-palace",
+          "unsafeNarrowMode": false,
+          "contextEstimatedTokens": 5045
+        },
+        "candidate": {
+          "routeFiles": [
+            "crossbeam-channel/src/select_macro.rs",
+            "crossbeam-channel/src/lib.rs",
+            "crossbeam-channel/src/select.rs",
+            "crossbeam-channel/tests/select_macro.rs"
+          ],
+          "routeFileCount": 4,
+          "routeConfidence": 0.83,
+          "changedFileCoverage": 0.75,
+          "coreSurfaceCoverage": 0.75,
+          "routeFocus": 0.75,
+          "routePrecision": 0.75,
+          "calibrationStatus": "well-calibrated",
+          "calibrationAbsoluteError": 0.08,
+          "mode": "full-palace",
+          "unsafeNarrowMode": false,
+          "contextEstimatedTokens": 5045
+        },
+        "delta": {
+          "confidence": 0,
+          "changedFileCoverage": 0,
+          "routeFocus": 0,
+          "routePrecision": 0,
+          "contextEstimatedTokens": 0
+        }
+      },
+      {
+        "target": "http",
+        "routeChanged": false,
+        "modeChanged": true,
+        "baseline": {
+          "routeFiles": [
+            "src/header/map.rs",
+            "src/header/name.rs",
+            "src/header/value.rs",
+            "tests/header_map.rs"
+          ],
+          "routeFileCount": 4,
+          "routeConfidence": 0.8,
+          "changedFileCoverage": 1,
+          "coreSurfaceCoverage": 1,
+          "routeFocus": 0.5,
+          "routePrecision": 0.5,
+          "calibrationStatus": "underconfident",
+          "calibrationAbsoluteError": 0.2,
+          "mode": "route-lite",
+          "unsafeNarrowMode": false,
+          "contextEstimatedTokens": 1869
+        },
+        "candidate": {
+          "routeFiles": [
+            "src/header/map.rs",
+            "src/header/name.rs",
+            "src/header/value.rs",
+            "tests/header_map.rs"
+          ],
+          "routeFileCount": 4,
+          "routeConfidence": 0.15,
+          "changedFileCoverage": 1,
+          "coreSurfaceCoverage": 1,
+          "routeFocus": 0.5,
+          "routePrecision": 0.5,
+          "calibrationStatus": "underconfident",
+          "calibrationAbsoluteError": 0.85,
+          "mode": "full-palace",
+          "unsafeNarrowMode": false,
+          "contextEstimatedTokens": 2055
+        },
+        "delta": {
+          "confidence": -0.65,
+          "changedFileCoverage": 0,
+          "routeFocus": 0,
+          "routePrecision": 0,
+          "contextEstimatedTokens": 186
+        }
+      }
+    ],
+    "trialPairs": [
+      {
+        "target": "yargs",
+        "routeChanged": false,
+        "modeChanged": false,
+        "baseline": {
+          "routeFiles": [
+            "lib/utils/apply-extends.ts",
+            "test/helpers.mjs"
+          ],
+          "routeFileCount": 2,
+          "routeConfidence": 0.4,
+          "changedFileCoverage": 1,
+          "coreSurfaceCoverage": 1,
+          "routeFocus": 1,
+          "routePrecision": 1,
+          "calibrationStatus": "underconfident",
+          "calibrationAbsoluteError": 0.6,
+          "mode": "full-palace",
+          "unsafeNarrowMode": false,
+          "contextEstimatedTokens": 1908
+        },
+        "candidate": {
+          "routeFiles": [
+            "lib/utils/apply-extends.ts",
+            "test/helpers.mjs"
+          ],
+          "routeFileCount": 2,
+          "routeConfidence": 0.4,
+          "changedFileCoverage": 1,
+          "coreSurfaceCoverage": 1,
+          "routeFocus": 1,
+          "routePrecision": 1,
+          "calibrationStatus": "underconfident",
+          "calibrationAbsoluteError": 0.6,
+          "mode": "full-palace",
+          "unsafeNarrowMode": false,
+          "contextEstimatedTokens": 1908
+        },
+        "delta": {
+          "confidence": 0,
+          "changedFileCoverage": 0,
+          "routeFocus": 0,
+          "routePrecision": 0,
+          "contextEstimatedTokens": 0
+        }
+      },
+      {
+        "target": "yargs",
+        "routeChanged": false,
+        "modeChanged": false,
+        "baseline": {
+          "routeFiles": [
+            "lib/utils/apply-extends.ts",
+            "test/helpers.mjs"
+          ],
+          "routeFileCount": 2,
+          "routeConfidence": 0.4,
+          "changedFileCoverage": 1,
+          "coreSurfaceCoverage": 1,
+          "routeFocus": 1,
+          "routePrecision": 1,
+          "calibrationStatus": "underconfident",
+          "calibrationAbsoluteError": 0.6,
+          "mode": "full-palace",
+          "unsafeNarrowMode": false,
+          "contextEstimatedTokens": 1908
+        },
+        "candidate": {
+          "routeFiles": [
+            "lib/utils/apply-extends.ts",
+            "test/helpers.mjs"
+          ],
+          "routeFileCount": 2,
+          "routeConfidence": 0.4,
+          "changedFileCoverage": 1,
+          "coreSurfaceCoverage": 1,
+          "routeFocus": 1,
+          "routePrecision": 1,
+          "calibrationStatus": "underconfident",
+          "calibrationAbsoluteError": 0.6,
+          "mode": "full-palace",
+          "unsafeNarrowMode": false,
+          "contextEstimatedTokens": 1908
+        },
+        "delta": {
+          "confidence": 0,
+          "changedFileCoverage": 0,
+          "routeFocus": 0,
+          "routePrecision": 0,
+          "contextEstimatedTokens": 0
+        }
+      },
+      {
+        "target": "sqlalchemy",
+        "routeChanged": false,
+        "modeChanged": false,
+        "baseline": {
+          "routeFiles": [
+            "lib/sqlalchemy/orm/session.py",
+            "test/orm/test_session.py"
+          ],
+          "routeFileCount": 2,
+          "routeConfidence": 0.4,
+          "changedFileCoverage": 0.33,
+          "coreSurfaceCoverage": 0.333,
+          "routeFocus": 0.5,
+          "routePrecision": 0.5,
+          "calibrationStatus": "well-calibrated",
+          "calibrationAbsoluteError": 0.07,
+          "mode": "full-palace",
+          "unsafeNarrowMode": false,
+          "contextEstimatedTokens": 2013
+        },
+        "candidate": {
+          "routeFiles": [
+            "lib/sqlalchemy/orm/session.py",
+            "test/orm/test_session.py"
+          ],
+          "routeFileCount": 2,
+          "routeConfidence": 0.4,
+          "changedFileCoverage": 0.33,
+          "coreSurfaceCoverage": 0.333,
+          "routeFocus": 0.5,
+          "routePrecision": 0.5,
+          "calibrationStatus": "well-calibrated",
+          "calibrationAbsoluteError": 0.07,
+          "mode": "full-palace",
+          "unsafeNarrowMode": false,
+          "contextEstimatedTokens": 2013
+        },
+        "delta": {
+          "confidence": 0,
+          "changedFileCoverage": 0,
+          "routeFocus": 0,
+          "routePrecision": 0,
+          "contextEstimatedTokens": 0
+        }
+      },
+      {
+        "target": "sqlalchemy",
+        "routeChanged": false,
+        "modeChanged": false,
+        "baseline": {
+          "routeFiles": [
+            "lib/sqlalchemy/orm/session.py",
+            "test/orm/test_session.py"
+          ],
+          "routeFileCount": 2,
+          "routeConfidence": 0.4,
+          "changedFileCoverage": 0.33,
+          "coreSurfaceCoverage": 0.333,
+          "routeFocus": 0.5,
+          "routePrecision": 0.5,
+          "calibrationStatus": "well-calibrated",
+          "calibrationAbsoluteError": 0.07,
+          "mode": "full-palace",
+          "unsafeNarrowMode": false,
+          "contextEstimatedTokens": 2013
+        },
+        "candidate": {
+          "routeFiles": [
+            "lib/sqlalchemy/orm/session.py",
+            "test/orm/test_session.py"
+          ],
+          "routeFileCount": 2,
+          "routeConfidence": 0.4,
+          "changedFileCoverage": 0.33,
+          "coreSurfaceCoverage": 0.333,
+          "routeFocus": 0.5,
+          "routePrecision": 0.5,
+          "calibrationStatus": "well-calibrated",
+          "calibrationAbsoluteError": 0.07,
+          "mode": "full-palace",
+          "unsafeNarrowMode": false,
+          "contextEstimatedTokens": 2013
+        },
+        "delta": {
+          "confidence": 0,
+          "changedFileCoverage": 0,
+          "routeFocus": 0,
+          "routePrecision": 0,
+          "contextEstimatedTokens": 0
+        }
+      },
+      {
+        "target": "zap",
+        "routeChanged": false,
+        "modeChanged": false,
+        "baseline": {
+          "routeFiles": [
+            "zapcore/lazy_with.go",
+            "zapcore/lazy_with_test.go"
+          ],
+          "routeFileCount": 2,
+          "routeConfidence": 0.56,
+          "changedFileCoverage": 1,
+          "coreSurfaceCoverage": 1,
+          "routeFocus": 1,
+          "routePrecision": 1,
+          "calibrationStatus": "underconfident",
+          "calibrationAbsoluteError": 0.44,
+          "mode": "full-palace",
+          "unsafeNarrowMode": false,
+          "contextEstimatedTokens": 1540
+        },
+        "candidate": {
+          "routeFiles": [
+            "zapcore/lazy_with.go",
+            "zapcore/lazy_with_test.go"
+          ],
+          "routeFileCount": 2,
+          "routeConfidence": 0.15,
+          "changedFileCoverage": 1,
+          "coreSurfaceCoverage": 1,
+          "routeFocus": 1,
+          "routePrecision": 1,
+          "calibrationStatus": "underconfident",
+          "calibrationAbsoluteError": 0.85,
+          "mode": "full-palace",
+          "unsafeNarrowMode": false,
+          "contextEstimatedTokens": 1555
+        },
+        "delta": {
+          "confidence": -0.41,
+          "changedFileCoverage": 0,
+          "routeFocus": 0,
+          "routePrecision": 0,
+          "contextEstimatedTokens": 15
+        }
+      },
+      {
+        "target": "zap",
+        "routeChanged": false,
+        "modeChanged": false,
+        "baseline": {
+          "routeFiles": [
+            "zapcore/lazy_with.go",
+            "zapcore/lazy_with_test.go"
+          ],
+          "routeFileCount": 2,
+          "routeConfidence": 0.56,
+          "changedFileCoverage": 1,
+          "coreSurfaceCoverage": 1,
+          "routeFocus": 1,
+          "routePrecision": 1,
+          "calibrationStatus": "underconfident",
+          "calibrationAbsoluteError": 0.44,
+          "mode": "full-palace",
+          "unsafeNarrowMode": false,
+          "contextEstimatedTokens": 1540
+        },
+        "candidate": {
+          "routeFiles": [
+            "zapcore/lazy_with.go",
+            "zapcore/lazy_with_test.go"
+          ],
+          "routeFileCount": 2,
+          "routeConfidence": 0.15,
+          "changedFileCoverage": 1,
+          "coreSurfaceCoverage": 1,
+          "routeFocus": 1,
+          "routePrecision": 1,
+          "calibrationStatus": "underconfident",
+          "calibrationAbsoluteError": 0.85,
+          "mode": "full-palace",
+          "unsafeNarrowMode": false,
+          "contextEstimatedTokens": 1555
+        },
+        "delta": {
+          "confidence": -0.41,
+          "changedFileCoverage": 0,
+          "routeFocus": 0,
+          "routePrecision": 0,
+          "contextEstimatedTokens": 15
+        }
+      },
+      {
+        "target": "sinon",
+        "routeChanged": false,
+        "modeChanged": false,
+        "baseline": {
+          "routeFiles": [
+            "docs/concepts/stubs/api/returns-arg.md",
+            "docs/tests/docs/stubs/api/returns-arg.test.js",
+            "docs/tests/docs/stubs/api/returns-this.test.js",
+            "docs/tests/docs/stubs/api/throws-arg.test.js",
+            "docs/concepts/stubs/api/call-arg.md",
+            "docs/tests/docs/stubs/api/calls-arg.test.js",
+            "docs/concepts/stubs/api/returns-this.md",
+            "docs/concepts/stubs/api/throws-arg.md",
+            "docs/.gitignore"
+          ],
+          "routeFileCount": 9,
+          "routeConfidence": 0.15,
+          "changedFileCoverage": 0,
+          "coreSurfaceCoverage": 0,
+          "routeFocus": 0,
+          "routePrecision": 0,
+          "calibrationStatus": "well-calibrated",
+          "calibrationAbsoluteError": 0.15,
+          "mode": "full-palace",
+          "unsafeNarrowMode": false,
+          "contextEstimatedTokens": 2549
+        },
+        "candidate": {
+          "routeFiles": [
+            "docs/concepts/stubs/api/returns-arg.md",
+            "docs/tests/docs/stubs/api/returns-arg.test.js",
+            "docs/tests/docs/stubs/api/returns-this.test.js",
+            "docs/tests/docs/stubs/api/throws-arg.test.js",
+            "docs/concepts/stubs/api/call-arg.md",
+            "docs/tests/docs/stubs/api/calls-arg.test.js",
+            "docs/concepts/stubs/api/returns-this.md",
+            "docs/concepts/stubs/api/throws-arg.md",
+            "docs/.gitignore"
+          ],
+          "routeFileCount": 9,
+          "routeConfidence": 0.15,
+          "changedFileCoverage": 0,
+          "coreSurfaceCoverage": 0,
+          "routeFocus": 0,
+          "routePrecision": 0,
+          "calibrationStatus": "well-calibrated",
+          "calibrationAbsoluteError": 0.15,
+          "mode": "full-palace",
+          "unsafeNarrowMode": false,
+          "contextEstimatedTokens": 2549
+        },
+        "delta": {
+          "confidence": 0,
+          "changedFileCoverage": 0,
+          "routeFocus": 0,
+          "routePrecision": 0,
+          "contextEstimatedTokens": 0
+        }
+      },
+      {
+        "target": "sinon",
+        "routeChanged": false,
+        "modeChanged": false,
+        "baseline": {
+          "routeFiles": [
+            "docs/concepts/stubs/api/returns-arg.md",
+            "docs/tests/docs/stubs/api/returns-arg.test.js",
+            "docs/tests/docs/stubs/api/returns-this.test.js",
+            "docs/tests/docs/stubs/api/throws-arg.test.js",
+            "docs/concepts/stubs/api/call-arg.md",
+            "docs/tests/docs/stubs/api/calls-arg.test.js",
+            "docs/concepts/stubs/api/returns-this.md",
+            "docs/concepts/stubs/api/throws-arg.md",
+            "docs/.gitignore"
+          ],
+          "routeFileCount": 9,
+          "routeConfidence": 0.15,
+          "changedFileCoverage": 0,
+          "coreSurfaceCoverage": 0,
+          "routeFocus": 0,
+          "routePrecision": 0,
+          "calibrationStatus": "well-calibrated",
+          "calibrationAbsoluteError": 0.15,
+          "mode": "full-palace",
+          "unsafeNarrowMode": false,
+          "contextEstimatedTokens": 2549
+        },
+        "candidate": {
+          "routeFiles": [
+            "docs/concepts/stubs/api/returns-arg.md",
+            "docs/tests/docs/stubs/api/returns-arg.test.js",
+            "docs/tests/docs/stubs/api/returns-this.test.js",
+            "docs/tests/docs/stubs/api/throws-arg.test.js",
+            "docs/concepts/stubs/api/call-arg.md",
+            "docs/tests/docs/stubs/api/calls-arg.test.js",
+            "docs/concepts/stubs/api/returns-this.md",
+            "docs/concepts/stubs/api/throws-arg.md",
+            "docs/.gitignore"
+          ],
+          "routeFileCount": 9,
+          "routeConfidence": 0.15,
+          "changedFileCoverage": 0,
+          "coreSurfaceCoverage": 0,
+          "routeFocus": 0,
+          "routePrecision": 0,
+          "calibrationStatus": "well-calibrated",
+          "calibrationAbsoluteError": 0.15,
+          "mode": "full-palace",
+          "unsafeNarrowMode": false,
+          "contextEstimatedTokens": 2549
+        },
+        "delta": {
+          "confidence": 0,
+          "changedFileCoverage": 0,
+          "routeFocus": 0,
+          "routePrecision": 0,
+          "contextEstimatedTokens": 0
+        }
+      },
+      {
+        "target": "rich",
+        "routeChanged": false,
+        "modeChanged": false,
+        "baseline": {
+          "routeFiles": [
+            "rich/cells.py",
+            "rich/markdown.py",
+            "rich/console.py",
+            "rich/table.py",
+            "rich/tree.py",
+            "tests/test_cells.py",
+            "tests/test_markdown.py",
+            "tests/test_table.py"
+          ],
+          "routeFileCount": 8,
+          "routeConfidence": 0.4,
+          "changedFileCoverage": 1,
+          "coreSurfaceCoverage": 1,
+          "routeFocus": 0.25,
+          "routePrecision": 0.25,
+          "calibrationStatus": "underconfident",
+          "calibrationAbsoluteError": 0.6,
+          "mode": "full-palace",
+          "unsafeNarrowMode": false,
+          "contextEstimatedTokens": 3119
+        },
+        "candidate": {
+          "routeFiles": [
+            "rich/cells.py",
+            "rich/markdown.py",
+            "rich/console.py",
+            "rich/table.py",
+            "rich/tree.py",
+            "tests/test_cells.py",
+            "tests/test_markdown.py",
+            "tests/test_table.py"
+          ],
+          "routeFileCount": 8,
+          "routeConfidence": 0.4,
+          "changedFileCoverage": 1,
+          "coreSurfaceCoverage": 1,
+          "routeFocus": 0.25,
+          "routePrecision": 0.25,
+          "calibrationStatus": "underconfident",
+          "calibrationAbsoluteError": 0.6,
+          "mode": "full-palace",
+          "unsafeNarrowMode": false,
+          "contextEstimatedTokens": 3119
+        },
+        "delta": {
+          "confidence": 0,
+          "changedFileCoverage": 0,
+          "routeFocus": 0,
+          "routePrecision": 0,
+          "contextEstimatedTokens": 0
+        }
+      },
+      {
+        "target": "rich",
+        "routeChanged": false,
+        "modeChanged": false,
+        "baseline": {
+          "routeFiles": [
+            "rich/cells.py",
+            "rich/markdown.py",
+            "rich/console.py",
+            "rich/table.py",
+            "rich/tree.py",
+            "tests/test_cells.py",
+            "tests/test_markdown.py",
+            "tests/test_table.py"
+          ],
+          "routeFileCount": 8,
+          "routeConfidence": 0.4,
+          "changedFileCoverage": 1,
+          "coreSurfaceCoverage": 1,
+          "routeFocus": 0.25,
+          "routePrecision": 0.25,
+          "calibrationStatus": "underconfident",
+          "calibrationAbsoluteError": 0.6,
+          "mode": "full-palace",
+          "unsafeNarrowMode": false,
+          "contextEstimatedTokens": 3119
+        },
+        "candidate": {
+          "routeFiles": [
+            "rich/cells.py",
+            "rich/markdown.py",
+            "rich/console.py",
+            "rich/table.py",
+            "rich/tree.py",
+            "tests/test_cells.py",
+            "tests/test_markdown.py",
+            "tests/test_table.py"
+          ],
+          "routeFileCount": 8,
+          "routeConfidence": 0.4,
+          "changedFileCoverage": 1,
+          "coreSurfaceCoverage": 1,
+          "routeFocus": 0.25,
+          "routePrecision": 0.25,
+          "calibrationStatus": "underconfident",
+          "calibrationAbsoluteError": 0.6,
+          "mode": "full-palace",
+          "unsafeNarrowMode": false,
+          "contextEstimatedTokens": 3119
+        },
+        "delta": {
+          "confidence": 0,
+          "changedFileCoverage": 0,
+          "routeFocus": 0,
+          "routePrecision": 0,
+          "contextEstimatedTokens": 0
+        }
+      },
+      {
+        "target": "viper",
+        "routeChanged": false,
+        "modeChanged": true,
+        "baseline": {
+          "routeFiles": [
+            "viper.go",
+            "viper_test.go"
+          ],
+          "routeFileCount": 2,
+          "routeConfidence": 0.54,
+          "changedFileCoverage": 0.67,
+          "coreSurfaceCoverage": 0.667,
+          "routeFocus": 1,
+          "routePrecision": 1,
+          "calibrationStatus": "well-calibrated",
+          "calibrationAbsoluteError": 0.13,
+          "mode": "route-lite",
+          "unsafeNarrowMode": true,
+          "contextEstimatedTokens": 1394
+        },
+        "candidate": {
+          "routeFiles": [
+            "viper.go",
+            "viper_test.go"
+          ],
+          "routeFileCount": 2,
+          "routeConfidence": 0.15,
+          "changedFileCoverage": 0.67,
+          "coreSurfaceCoverage": 0.667,
+          "routeFocus": 1,
+          "routePrecision": 1,
+          "calibrationStatus": "underconfident",
+          "calibrationAbsoluteError": 0.52,
+          "mode": "full-palace",
+          "unsafeNarrowMode": false,
+          "contextEstimatedTokens": 1589
+        },
+        "delta": {
+          "confidence": -0.39,
+          "changedFileCoverage": 0,
+          "routeFocus": 0,
+          "routePrecision": 0,
+          "contextEstimatedTokens": 195
+        }
+      },
+      {
+        "target": "viper",
+        "routeChanged": false,
+        "modeChanged": true,
+        "baseline": {
+          "routeFiles": [
+            "viper.go",
+            "viper_test.go"
+          ],
+          "routeFileCount": 2,
+          "routeConfidence": 0.54,
+          "changedFileCoverage": 0.67,
+          "coreSurfaceCoverage": 0.667,
+          "routeFocus": 1,
+          "routePrecision": 1,
+          "calibrationStatus": "well-calibrated",
+          "calibrationAbsoluteError": 0.13,
+          "mode": "route-lite",
+          "unsafeNarrowMode": true,
+          "contextEstimatedTokens": 1394
+        },
+        "candidate": {
+          "routeFiles": [
+            "viper.go",
+            "viper_test.go"
+          ],
+          "routeFileCount": 2,
+          "routeConfidence": 0.15,
+          "changedFileCoverage": 0.67,
+          "coreSurfaceCoverage": 0.667,
+          "routeFocus": 1,
+          "routePrecision": 1,
+          "calibrationStatus": "underconfident",
+          "calibrationAbsoluteError": 0.52,
+          "mode": "full-palace",
+          "unsafeNarrowMode": false,
+          "contextEstimatedTokens": 1589
+        },
+        "delta": {
+          "confidence": -0.39,
+          "changedFileCoverage": 0,
+          "routeFocus": 0,
+          "routePrecision": 0,
+          "contextEstimatedTokens": 195
+        }
+      },
+      {
+        "target": "crossbeam",
+        "routeChanged": false,
+        "modeChanged": false,
+        "baseline": {
+          "routeFiles": [
+            "crossbeam-channel/src/select_macro.rs",
+            "crossbeam-channel/src/lib.rs",
+            "crossbeam-channel/src/select.rs",
+            "crossbeam-channel/tests/select_macro.rs"
+          ],
+          "routeFileCount": 4,
+          "routeConfidence": 0.83,
+          "changedFileCoverage": 0.75,
+          "coreSurfaceCoverage": 0.75,
+          "routeFocus": 0.75,
+          "routePrecision": 0.75,
+          "calibrationStatus": "well-calibrated",
+          "calibrationAbsoluteError": 0.08,
+          "mode": "full-palace",
+          "unsafeNarrowMode": false,
+          "contextEstimatedTokens": 5045
+        },
+        "candidate": {
+          "routeFiles": [
+            "crossbeam-channel/src/select_macro.rs",
+            "crossbeam-channel/src/lib.rs",
+            "crossbeam-channel/src/select.rs",
+            "crossbeam-channel/tests/select_macro.rs"
+          ],
+          "routeFileCount": 4,
+          "routeConfidence": 0.83,
+          "changedFileCoverage": 0.75,
+          "coreSurfaceCoverage": 0.75,
+          "routeFocus": 0.75,
+          "routePrecision": 0.75,
+          "calibrationStatus": "well-calibrated",
+          "calibrationAbsoluteError": 0.08,
+          "mode": "full-palace",
+          "unsafeNarrowMode": false,
+          "contextEstimatedTokens": 5045
+        },
+        "delta": {
+          "confidence": 0,
+          "changedFileCoverage": 0,
+          "routeFocus": 0,
+          "routePrecision": 0,
+          "contextEstimatedTokens": 0
+        }
+      },
+      {
+        "target": "crossbeam",
+        "routeChanged": false,
+        "modeChanged": false,
+        "baseline": {
+          "routeFiles": [
+            "crossbeam-channel/src/select_macro.rs",
+            "crossbeam-channel/src/lib.rs",
+            "crossbeam-channel/src/select.rs",
+            "crossbeam-channel/tests/select_macro.rs"
+          ],
+          "routeFileCount": 4,
+          "routeConfidence": 0.83,
+          "changedFileCoverage": 0.75,
+          "coreSurfaceCoverage": 0.75,
+          "routeFocus": 0.75,
+          "routePrecision": 0.75,
+          "calibrationStatus": "well-calibrated",
+          "calibrationAbsoluteError": 0.08,
+          "mode": "full-palace",
+          "unsafeNarrowMode": false,
+          "contextEstimatedTokens": 5045
+        },
+        "candidate": {
+          "routeFiles": [
+            "crossbeam-channel/src/select_macro.rs",
+            "crossbeam-channel/src/lib.rs",
+            "crossbeam-channel/src/select.rs",
+            "crossbeam-channel/tests/select_macro.rs"
+          ],
+          "routeFileCount": 4,
+          "routeConfidence": 0.83,
+          "changedFileCoverage": 0.75,
+          "coreSurfaceCoverage": 0.75,
+          "routeFocus": 0.75,
+          "routePrecision": 0.75,
+          "calibrationStatus": "well-calibrated",
+          "calibrationAbsoluteError": 0.08,
+          "mode": "full-palace",
+          "unsafeNarrowMode": false,
+          "contextEstimatedTokens": 5045
+        },
+        "delta": {
+          "confidence": 0,
+          "changedFileCoverage": 0,
+          "routeFocus": 0,
+          "routePrecision": 0,
+          "contextEstimatedTokens": 0
+        }
+      },
+      {
+        "target": "http",
+        "routeChanged": false,
+        "modeChanged": true,
+        "baseline": {
+          "routeFiles": [
+            "src/header/map.rs",
+            "src/header/name.rs",
+            "src/header/value.rs",
+            "tests/header_map.rs"
+          ],
+          "routeFileCount": 4,
+          "routeConfidence": 0.8,
+          "changedFileCoverage": 1,
+          "coreSurfaceCoverage": 1,
+          "routeFocus": 0.5,
+          "routePrecision": 0.5,
+          "calibrationStatus": "underconfident",
+          "calibrationAbsoluteError": 0.2,
+          "mode": "route-lite",
+          "unsafeNarrowMode": false,
+          "contextEstimatedTokens": 1869
+        },
+        "candidate": {
+          "routeFiles": [
+            "src/header/map.rs",
+            "src/header/name.rs",
+            "src/header/value.rs",
+            "tests/header_map.rs"
+          ],
+          "routeFileCount": 4,
+          "routeConfidence": 0.15,
+          "changedFileCoverage": 1,
+          "coreSurfaceCoverage": 1,
+          "routeFocus": 0.5,
+          "routePrecision": 0.5,
+          "calibrationStatus": "underconfident",
+          "calibrationAbsoluteError": 0.85,
+          "mode": "full-palace",
+          "unsafeNarrowMode": false,
+          "contextEstimatedTokens": 2055
+        },
+        "delta": {
+          "confidence": -0.65,
+          "changedFileCoverage": 0,
+          "routeFocus": 0,
+          "routePrecision": 0,
+          "contextEstimatedTokens": 186
+        }
+      },
+      {
+        "target": "http",
+        "routeChanged": false,
+        "modeChanged": true,
+        "baseline": {
+          "routeFiles": [
+            "src/header/map.rs",
+            "src/header/name.rs",
+            "src/header/value.rs",
+            "tests/header_map.rs"
+          ],
+          "routeFileCount": 4,
+          "routeConfidence": 0.8,
+          "changedFileCoverage": 1,
+          "coreSurfaceCoverage": 1,
+          "routeFocus": 0.5,
+          "routePrecision": 0.5,
+          "calibrationStatus": "underconfident",
+          "calibrationAbsoluteError": 0.2,
+          "mode": "route-lite",
+          "unsafeNarrowMode": false,
+          "contextEstimatedTokens": 1869
+        },
+        "candidate": {
+          "routeFiles": [
+            "src/header/map.rs",
+            "src/header/name.rs",
+            "src/header/value.rs",
+            "tests/header_map.rs"
+          ],
+          "routeFileCount": 4,
+          "routeConfidence": 0.15,
+          "changedFileCoverage": 1,
+          "coreSurfaceCoverage": 1,
+          "routeFocus": 0.5,
+          "routePrecision": 0.5,
+          "calibrationStatus": "underconfident",
+          "calibrationAbsoluteError": 0.85,
+          "mode": "full-palace",
+          "unsafeNarrowMode": false,
+          "contextEstimatedTokens": 2055
+        },
+        "delta": {
+          "confidence": -0.65,
+          "changedFileCoverage": 0,
+          "routeFocus": 0,
+          "routePrecision": 0,
+          "contextEstimatedTokens": 186
+        }
+      }
+    ]
+  },
+  "decision": {
+    "hardConfidenceScoreCap": "revert",
+    "safetyIntent": "retain-with-separate-evidence-sufficiency-and-narrow-mode-authorization",
+    "rationale": [
+      "The candidate changed no route on all eight frozen targets.",
+      "Overconfident targets remained 0, so the hard cap produced no held-out false-high reduction.",
+      "Underconfident targets increased from 4 to 5 and target calibration MAE increased from 0.284 to 0.465.",
+      "The cap removed one unsafe narrow-mode target but increased delivered context by 792 estimated tokens across 16 paired trial observations."
+    ],
+    "implementationConstraint": "Do not restore unsafe narrow-context authorization. Decouple displayed route confidence from the independent-anchor safety check so unsupported routes remain advisory/full-context without forcing the calibrated score to 0.15.",
+    "efficiencyClaimAllowed": false
+  },
+  "targets": [
+    {
+      "name": "yargs",
+      "languageFamily": "javascript-typescript",
+      "task": "fix: prototype pollution vulnerability in apply-extends (#2498)",
+      "oracleFiles": [
+        "lib/utils/apply-extends.ts",
+        "test/helpers.mjs"
+      ],
+      "baseline": {
+        "routeFiles": [
+          "lib/utils/apply-extends.ts",
+          "test/helpers.mjs"
+        ],
+        "routeFileCount": 2,
+        "routeConfidence": 0.4,
+        "changedFileCoverage": 1,
+        "coreSurfaceCoverage": 1,
+        "routeFocus": 1,
+        "routePrecision": 1,
+        "calibrationStatus": "underconfident",
+        "calibrationAbsoluteError": 0.6,
+        "mode": "full-palace",
+        "unsafeNarrowMode": false,
+        "contextEstimatedTokens": 1908
+      },
+      "candidate": {
+        "routeFiles": [
+          "lib/utils/apply-extends.ts",
+          "test/helpers.mjs"
+        ],
+        "routeFileCount": 2,
+        "routeConfidence": 0.4,
+        "changedFileCoverage": 1,
+        "coreSurfaceCoverage": 1,
+        "routeFocus": 1,
+        "routePrecision": 1,
+        "calibrationStatus": "underconfident",
+        "calibrationAbsoluteError": 0.6,
+        "mode": "full-palace",
+        "unsafeNarrowMode": false,
+        "contextEstimatedTokens": 1908
+      }
+    },
+    {
+      "name": "sqlalchemy",
+      "languageFamily": "python",
+      "task": "Fix Session bulk mappings typing for mapped classes",
+      "oracleFiles": [
+        "lib/sqlalchemy/orm/scoping.py",
+        "lib/sqlalchemy/orm/session.py",
+        "test/typing/plain_files/orm/session.py"
+      ],
+      "baseline": {
+        "routeFiles": [
+          "lib/sqlalchemy/orm/session.py",
+          "test/orm/test_session.py"
+        ],
+        "routeFileCount": 2,
+        "routeConfidence": 0.4,
+        "changedFileCoverage": 0.33,
+        "coreSurfaceCoverage": 0.333,
+        "routeFocus": 0.5,
+        "routePrecision": 0.5,
+        "calibrationStatus": "well-calibrated",
+        "calibrationAbsoluteError": 0.07,
+        "mode": "full-palace",
+        "unsafeNarrowMode": false,
+        "contextEstimatedTokens": 2013
+      },
+      "candidate": {
+        "routeFiles": [
+          "lib/sqlalchemy/orm/session.py",
+          "test/orm/test_session.py"
+        ],
+        "routeFileCount": 2,
+        "routeConfidence": 0.4,
+        "changedFileCoverage": 0.33,
+        "coreSurfaceCoverage": 0.333,
+        "routeFocus": 0.5,
+        "routePrecision": 0.5,
+        "calibrationStatus": "well-calibrated",
+        "calibrationAbsoluteError": 0.07,
+        "mode": "full-palace",
+        "unsafeNarrowMode": false,
+        "contextEstimatedTokens": 2013
+      }
+    },
+    {
+      "name": "zap",
+      "languageFamily": "go",
+      "task": "Fix race condition in WithLazy implementation (#1426) (#1511)",
+      "oracleFiles": [
+        "zapcore/lazy_with.go",
+        "zapcore/lazy_with_test.go"
+      ],
+      "baseline": {
+        "routeFiles": [
+          "zapcore/lazy_with.go",
+          "zapcore/lazy_with_test.go"
+        ],
+        "routeFileCount": 2,
+        "routeConfidence": 0.56,
+        "changedFileCoverage": 1,
+        "coreSurfaceCoverage": 1,
+        "routeFocus": 1,
+        "routePrecision": 1,
+        "calibrationStatus": "underconfident",
+        "calibrationAbsoluteError": 0.44,
+        "mode": "full-palace",
+        "unsafeNarrowMode": false,
+        "contextEstimatedTokens": 1540
+      },
+      "candidate": {
+        "routeFiles": [
+          "zapcore/lazy_with.go",
+          "zapcore/lazy_with_test.go"
+        ],
+        "routeFileCount": 2,
+        "routeConfidence": 0.15,
+        "changedFileCoverage": 1,
+        "coreSurfaceCoverage": 1,
+        "routeFocus": 1,
+        "routePrecision": 1,
+        "calibrationStatus": "underconfident",
+        "calibrationAbsoluteError": 0.85,
+        "mode": "full-palace",
+        "unsafeNarrowMode": false,
+        "contextEstimatedTokens": 1555
+      }
+    },
+    {
+      "name": "sinon",
+      "languageFamily": "javascript-typescript",
+      "task": "fix: let returns override returnsArg",
+      "oracleFiles": [
+        "src/sinon/default-behaviors.js",
+        "test/src/stub-test.js"
+      ],
+      "baseline": {
+        "routeFiles": [
+          "docs/concepts/stubs/api/returns-arg.md",
+          "docs/tests/docs/stubs/api/returns-arg.test.js",
+          "docs/tests/docs/stubs/api/returns-this.test.js",
+          "docs/tests/docs/stubs/api/throws-arg.test.js",
+          "docs/concepts/stubs/api/call-arg.md",
+          "docs/tests/docs/stubs/api/calls-arg.test.js",
+          "docs/concepts/stubs/api/returns-this.md",
+          "docs/concepts/stubs/api/throws-arg.md",
+          "docs/.gitignore"
+        ],
+        "routeFileCount": 9,
+        "routeConfidence": 0.15,
+        "changedFileCoverage": 0,
+        "coreSurfaceCoverage": 0,
+        "routeFocus": 0,
+        "routePrecision": 0,
+        "calibrationStatus": "well-calibrated",
+        "calibrationAbsoluteError": 0.15,
+        "mode": "full-palace",
+        "unsafeNarrowMode": false,
+        "contextEstimatedTokens": 2549
+      },
+      "candidate": {
+        "routeFiles": [
+          "docs/concepts/stubs/api/returns-arg.md",
+          "docs/tests/docs/stubs/api/returns-arg.test.js",
+          "docs/tests/docs/stubs/api/returns-this.test.js",
+          "docs/tests/docs/stubs/api/throws-arg.test.js",
+          "docs/concepts/stubs/api/call-arg.md",
+          "docs/tests/docs/stubs/api/calls-arg.test.js",
+          "docs/concepts/stubs/api/returns-this.md",
+          "docs/concepts/stubs/api/throws-arg.md",
+          "docs/.gitignore"
+        ],
+        "routeFileCount": 9,
+        "routeConfidence": 0.15,
+        "changedFileCoverage": 0,
+        "coreSurfaceCoverage": 0,
+        "routeFocus": 0,
+        "routePrecision": 0,
+        "calibrationStatus": "well-calibrated",
+        "calibrationAbsoluteError": 0.15,
+        "mode": "full-palace",
+        "unsafeNarrowMode": false,
+        "contextEstimatedTokens": 2549
+      }
+    },
+    {
+      "name": "rich",
+      "languageFamily": "python",
+      "task": "fix inline code in table cells",
+      "oracleFiles": [
+        "rich/markdown.py",
+        "tests/test_markdown.py"
+      ],
+      "baseline": {
+        "routeFiles": [
+          "rich/cells.py",
+          "rich/markdown.py",
+          "rich/console.py",
+          "rich/table.py",
+          "rich/tree.py",
+          "tests/test_cells.py",
+          "tests/test_markdown.py",
+          "tests/test_table.py"
+        ],
+        "routeFileCount": 8,
+        "routeConfidence": 0.4,
+        "changedFileCoverage": 1,
+        "coreSurfaceCoverage": 1,
+        "routeFocus": 0.25,
+        "routePrecision": 0.25,
+        "calibrationStatus": "underconfident",
+        "calibrationAbsoluteError": 0.6,
+        "mode": "full-palace",
+        "unsafeNarrowMode": false,
+        "contextEstimatedTokens": 3119
+      },
+      "candidate": {
+        "routeFiles": [
+          "rich/cells.py",
+          "rich/markdown.py",
+          "rich/console.py",
+          "rich/table.py",
+          "rich/tree.py",
+          "tests/test_cells.py",
+          "tests/test_markdown.py",
+          "tests/test_table.py"
+        ],
+        "routeFileCount": 8,
+        "routeConfidence": 0.4,
+        "changedFileCoverage": 1,
+        "coreSurfaceCoverage": 1,
+        "routeFocus": 0.25,
+        "routePrecision": 0.25,
+        "calibrationStatus": "underconfident",
+        "calibrationAbsoluteError": 0.6,
+        "mode": "full-palace",
+        "unsafeNarrowMode": false,
+        "contextEstimatedTokens": 3119
+      }
+    },
+    {
+      "name": "viper",
+      "languageFamily": "go",
+      "task": "fix: return not found error if setting config",
+      "oracleFiles": [
+        "file.go",
+        "viper.go",
+        "viper_test.go"
+      ],
+      "baseline": {
+        "routeFiles": [
+          "viper.go",
+          "viper_test.go"
+        ],
+        "routeFileCount": 2,
+        "routeConfidence": 0.54,
+        "changedFileCoverage": 0.67,
+        "coreSurfaceCoverage": 0.667,
+        "routeFocus": 1,
+        "routePrecision": 1,
+        "calibrationStatus": "well-calibrated",
+        "calibrationAbsoluteError": 0.13,
+        "mode": "route-lite",
+        "unsafeNarrowMode": true,
+        "contextEstimatedTokens": 1394
+      },
+      "candidate": {
+        "routeFiles": [
+          "viper.go",
+          "viper_test.go"
+        ],
+        "routeFileCount": 2,
+        "routeConfidence": 0.15,
+        "changedFileCoverage": 0.67,
+        "coreSurfaceCoverage": 0.667,
+        "routeFocus": 1,
+        "routePrecision": 1,
+        "calibrationStatus": "underconfident",
+        "calibrationAbsoluteError": 0.52,
+        "mode": "full-palace",
+        "unsafeNarrowMode": false,
+        "contextEstimatedTokens": 1589
+      }
+    },
+    {
+      "name": "crossbeam",
+      "languageFamily": "rust",
+      "task": "Add select_biased! macro (#1040)",
+      "oracleFiles": [
+        "crossbeam-channel/src/select.rs",
+        "crossbeam-channel/src/select_macro.rs",
+        "crossbeam-channel/tests/mpsc.rs",
+        "crossbeam-channel/tests/select_macro.rs"
+      ],
+      "baseline": {
+        "routeFiles": [
+          "crossbeam-channel/src/select_macro.rs",
+          "crossbeam-channel/src/lib.rs",
+          "crossbeam-channel/src/select.rs",
+          "crossbeam-channel/tests/select_macro.rs"
+        ],
+        "routeFileCount": 4,
+        "routeConfidence": 0.83,
+        "changedFileCoverage": 0.75,
+        "coreSurfaceCoverage": 0.75,
+        "routeFocus": 0.75,
+        "routePrecision": 0.75,
+        "calibrationStatus": "well-calibrated",
+        "calibrationAbsoluteError": 0.08,
+        "mode": "full-palace",
+        "unsafeNarrowMode": false,
+        "contextEstimatedTokens": 5045
+      },
+      "candidate": {
+        "routeFiles": [
+          "crossbeam-channel/src/select_macro.rs",
+          "crossbeam-channel/src/lib.rs",
+          "crossbeam-channel/src/select.rs",
+          "crossbeam-channel/tests/select_macro.rs"
+        ],
+        "routeFileCount": 4,
+        "routeConfidence": 0.83,
+        "changedFileCoverage": 0.75,
+        "coreSurfaceCoverage": 0.75,
+        "routeFocus": 0.75,
+        "routePrecision": 0.75,
+        "calibrationStatus": "well-calibrated",
+        "calibrationAbsoluteError": 0.08,
+        "mode": "full-palace",
+        "unsafeNarrowMode": false,
+        "contextEstimatedTokens": 5045
+      }
+    },
+    {
+      "name": "http",
+      "languageFamily": "rust",
+      "task": "fix(header): use a set_len guard in IntoIter drop (#838)",
+      "oracleFiles": [
+        "src/header/map.rs",
+        "tests/header_map.rs"
+      ],
+      "baseline": {
+        "routeFiles": [
+          "src/header/map.rs",
+          "src/header/name.rs",
+          "src/header/value.rs",
+          "tests/header_map.rs"
+        ],
+        "routeFileCount": 4,
+        "routeConfidence": 0.8,
+        "changedFileCoverage": 1,
+        "coreSurfaceCoverage": 1,
+        "routeFocus": 0.5,
+        "routePrecision": 0.5,
+        "calibrationStatus": "underconfident",
+        "calibrationAbsoluteError": 0.2,
+        "mode": "route-lite",
+        "unsafeNarrowMode": false,
+        "contextEstimatedTokens": 1869
+      },
+      "candidate": {
+        "routeFiles": [
+          "src/header/map.rs",
+          "src/header/name.rs",
+          "src/header/value.rs",
+          "tests/header_map.rs"
+        ],
+        "routeFileCount": 4,
+        "routeConfidence": 0.15,
+        "changedFileCoverage": 1,
+        "coreSurfaceCoverage": 1,
+        "routeFocus": 0.5,
+        "routePrecision": 0.5,
+        "calibrationStatus": "underconfident",
+        "calibrationAbsoluteError": 0.85,
+        "mode": "full-palace",
+        "unsafeNarrowMode": false,
+        "contextEstimatedTokens": 2055
+      }
+    }
+  ]
+}
