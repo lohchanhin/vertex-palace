@@ -2669,6 +2669,12 @@ function confidence(
     ? 0.98
     : 0.15 + artifactFamilyCoverage * 0.75;
   const directEvidenceCap = coreEvidenceCap ?? directCodeEvidenceCap(top, analysis, taskType);
+  const independentAnchorCap = independentImplementationAnchorCap(
+    top,
+    analysis,
+    taskType,
+    coreEvidenceCap
+  );
   const workspaceAmbiguityCap = unresolvedWorkspaceScopeCap(top, analysis, taskType);
   const compoundBugfixCap = taskType === "bugfix" && requestedSurfaceCount >= 3 && keywords.length >= 12
     ? 0.4
@@ -2679,11 +2685,79 @@ function confidence(
       taskCap,
       artifactFamilyCap,
       directEvidenceCap,
+      independentAnchorCap,
       workspaceAmbiguityCap,
       compoundBugfixCap,
       value
     )
   ).toFixed(2));
+}
+
+function independentImplementationAnchorCap(
+  items: ScoredNode[],
+  analysis: ReturnType<typeof analyzeTask>,
+  taskType: TaskType,
+  coreEvidenceCap?: number
+): number {
+  if (taskType !== "bugfix" || coreEvidenceCap === undefined || coreEvidenceCap <= 0.4) return 0.98;
+  const anchors = leadingBugfixAnchorTokens(analysis.raw);
+  if (anchors.length < 2) return 0.98;
+  const implementations = items.filter(
+    (item) => isImplementationCandidate(item.node) && !isDirectTestCandidate(item)
+  );
+  const independentlyAnchored = implementations.some((item) => {
+    const tokens = new Set([
+      ...corePathTokens(item.node.sourcePath),
+      ...corePathScopeTokens(item.node.sourcePath),
+      ...coreNodeTokens(item.node.title),
+      ...coreNodeTokens(item.node.summary)
+    ]);
+    return anchors.every((anchor) => [...tokens].some((token) => anchorTokensMatch(anchor, token)));
+  });
+  return independentlyAnchored ? 0.98 : 0.15;
+}
+
+function leadingBugfixAnchorTokens(task: string): string[] {
+  const conventional = task.match(/^\s*fix(?:\([^)]*\))?!?:\s*([\s\S]+)$/i)?.[1];
+  const behavioral = task.match(
+    /^\s*(?:fix(?:e[sd]?|ing)?|debug(?:ged|ging|s)?|repair(?:ed|ing|s)?|correct(?:ed|ing|s)?|resolve(?:d|s|ing)?|prevent(?:ed|ing|s)?|avoid(?:ed|ing|s)?)\s+([\s\S]+)$/i
+  )?.[1];
+  const remainder = conventional ?? behavioral;
+  if (!remainder) return [];
+  const leading = remainder
+    .split(/\b(?:after|before|because|for|if|in|into|on|to|unless|when|where|while|with|within)\b/i, 1)[0]
+    ?.replace(/\s*\([^)]*\)\s*$/, "") ?? "";
+  const ignored = new Set([
+    ...CORE_EVIDENCE_NOISE,
+    ...CORE_EVIDENCE_LOW_SIGNAL,
+    "incorrect",
+    "incorrectly",
+    "issue",
+    "problem",
+    "sometimes",
+    "unexpected",
+    "unexpectedly"
+  ]);
+  return [...tokenizeLexical(leading)]
+    .filter((token) => token.length > 2 && !/^\d+$/.test(token) && !ignored.has(token))
+    .slice(0, 2);
+}
+
+function anchorTokensMatch(left: string, right: string): boolean {
+  if (left === right) return true;
+  const leftStem = anchorTokenStem(left);
+  const rightStem = anchorTokenStem(right);
+  return Math.min(leftStem.length, rightStem.length) >= 4
+    && (leftStem.startsWith(rightStem) || rightStem.startsWith(leftStem));
+}
+
+function anchorTokenStem(token: string): string {
+  for (const suffix of ["ization", "isation", "ating", "ation", "tion", "ing", "ed"]) {
+    if (token.length - suffix.length >= 4 && token.endsWith(suffix)) {
+      return token.slice(0, -suffix.length);
+    }
+  }
+  return token;
 }
 
 function directCodeEvidenceCap(

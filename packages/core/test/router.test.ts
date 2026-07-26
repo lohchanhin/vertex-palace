@@ -1866,6 +1866,39 @@ export function uploadProductVariantImageController(file: File) {
     });
   });
 
+  it("caps confidence when a structural pair misses an independent leading task anchor", async () => {
+    await withFixture("ts-api", async (root) => {
+      const files = new Map<string, string>([
+        [
+          "src/payload/escape.ts",
+          "export function quotePayload(value: string) { return value.replaceAll('\\n', '\\\\n'); }\n"
+        ],
+        [
+          "test/payload/escape.test.ts",
+          "import { quotePayload } from '../../src/payload/escape';\ntest('escaped payload newlines', () => quotePayload('a\\nb'));\n"
+        ]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const route = await routePalace(
+        root,
+        "Fixes payload parsing for escaped newlines",
+        { routeLimit: 9, budget: 6000 }
+      );
+
+      expect(route.route.map((step) => step.sourcePath.split(":")[0])).toEqual([
+        "src/payload/escape.ts",
+        "test/payload/escape.test.ts"
+      ]);
+      expect(route.confidence).toBeLessThanOrEqual(0.15);
+    });
+  });
+
   it("stops a specific request-method bug after its implementation and exact test", async () => {
     await withFixture("ts-api", async (root) => {
       const changedFiles = ["lib/request.js", "test/req.acceptsCharsets.js"];
