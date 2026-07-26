@@ -1,0 +1,1055 @@
+{
+  "schemaVersion": 3,
+  "studyId": "held-out-confidence-calibration-round-8-0.4-alpha",
+  "generatedAt": "2026-07-26T01:30:46.835Z",
+  "status": "selected",
+  "claimBoundary": "Mechanical candidate-held-out target selection only. The frozen Vertex Palace candidate has not initialized, indexed, routed, packed, contextualized, or evaluated any selected task.",
+  "heldOutAgainstCandidate": true,
+  "candidate": {
+    "productCommit": "1a02d89269acb36473db3ad39badab9fe338a4a3",
+    "cliPath": "dist/palace.cjs",
+    "cliSha256": "49F44D09551222A2CB8D3BEEDBDA4E374A507C30DCA681D4D9CC0E57C6DB7747",
+    "frozenPaths": [
+      "packages",
+      "plugins/vertex-palace/mcp/server.cjs"
+    ]
+  },
+  "comparisonBaseline": {
+    "productCommit": "228c3bde47f6930023496fdd0a54d43dba10091f",
+    "cliPath": "dist/palace.cjs",
+    "cliSha256": "E81774B89C3A6FAED83788335688EFCBC8B4D17DEA25CA002097FF1F9125318F",
+    "role": "pre-independent-anchor-confidence-cap"
+  },
+  "selector": {
+    "commit": "56c006f36b1b83f1b5756d071ce6f0f3dcdd57e5",
+    "path": "scripts/select-held-out-routing-targets-round-8.cjs"
+  },
+  "repositoryPool": {
+    "path": "docs/research/evidence/held-out-routing-repository-pool-0.4-alpha-round-8.json",
+    "commit": "56c006f36b1b83f1b5756d071ce6f0f3dcdd57e5",
+    "sha256": "118644384D9E099E0833E36900ED5A7E10648827FF4C2DE5AF40CE11A0018158",
+    "previouslyObservedRepositories": [
+      "https://github.com/colinhacks/zod.git",
+      "https://github.com/psf/requests.git",
+      "https://github.com/sindresorhus/p-limit.git",
+      "https://github.com/fastify/fastify.git",
+      "https://github.com/pallets/click.git",
+      "https://github.com/date-fns/date-fns.git",
+      "https://github.com/BurntSushi/ripgrep.git",
+      "https://github.com/spf13/cobra.git",
+      "https://github.com/markedjs/marked.git",
+      "https://github.com/expressjs/express.git",
+      "https://github.com/encode/httpx.git",
+      "https://github.com/urfave/cli.git",
+      "https://github.com/clap-rs/clap.git",
+      "https://github.com/tj/commander.js.git",
+      "https://github.com/pytest-dev/pytest.git",
+      "https://github.com/go-chi/chi.git",
+      "https://github.com/tokio-rs/axum.git",
+      "https://github.com/koajs/koa.git",
+      "https://github.com/encode/starlette.git",
+      "https://github.com/gin-gonic/gin.git",
+      "https://github.com/tower-rs/tower.git",
+      "https://github.com/axios/axios.git",
+      "https://github.com/pallets/flask.git",
+      "https://github.com/labstack/echo.git",
+      "https://github.com/serde-rs/json.git",
+      "https://github.com/honojs/hono.git",
+      "https://github.com/pydantic/pydantic.git",
+      "https://github.com/gofiber/fiber.git",
+      "https://github.com/hyperium/hyper.git",
+      "https://github.com/nodejs/undici.git",
+      "https://github.com/aio-libs/aiohttp.git",
+      "https://github.com/go-playground/validator.git",
+      "https://github.com/tokio-rs/tracing.git",
+      "https://github.com/mswjs/msw.git",
+      "https://github.com/encode/uvicorn.git",
+      "https://github.com/go-gorm/gorm.git",
+      "https://github.com/seanmonstar/reqwest.git",
+      "https://github.com/vitejs/vite.git",
+      "https://github.com/python-poetry/poetry.git",
+      "https://github.com/redis/go-redis.git",
+      "https://github.com/rayon-rs/rayon.git",
+      "https://github.com/sindresorhus/got.git",
+      "https://github.com/django/django.git",
+      "https://github.com/stretchr/testify.git",
+      "https://github.com/tokio-rs/tokio.git",
+      "https://github.com/vitest-dev/vitest.git",
+      "https://github.com/python-trio/trio.git",
+      "https://github.com/go-resty/resty.git",
+      "https://github.com/serde-rs/serde.git",
+      "https://github.com/TanStack/query.git",
+      "https://github.com/agronholm/anyio.git",
+      "https://github.com/rs/zerolog.git",
+      "https://github.com/tower-rs/tower-http.git",
+      "https://github.com/sindresorhus/ky.git",
+      "https://github.com/pallets/werkzeug.git",
+      "https://github.com/golang-jwt/jwt.git",
+      "https://github.com/dtolnay/anyhow.git",
+      "https://github.com/chalk/chalk.git",
+      "https://github.com/psf/black.git",
+      "https://github.com/Masterminds/semver.git",
+      "https://github.com/tokio-rs/bytes.git",
+      "https://github.com/npm/node-semver.git",
+      "https://github.com/python-attrs/attrs.git",
+      "https://github.com/go-chi/render.git",
+      "https://github.com/BurntSushi/bstr.git",
+      "https://github.com/sindresorhus/execa.git",
+      "https://github.com/pallets/jinja.git",
+      "https://github.com/hashicorp/go-multierror.git",
+      "https://github.com/dtolnay/thiserror.git",
+      "https://github.com/isaacs/node-glob.git",
+      "https://github.com/encode/httpcore.git",
+      "https://github.com/julienschmidt/httprouter.git",
+      "https://github.com/tokio-rs/mio.git",
+      "https://github.com/floating-ui/floating-ui.git",
+      "https://github.com/tox-dev/tox.git",
+      "https://github.com/rs/cors.git",
+      "https://github.com/rustls/rustls.git",
+      "https://github.com/reduxjs/redux-toolkit.git",
+      "https://github.com/python-hyper/h11.git",
+      "https://github.com/go-playground/universal-translator.git",
+      "https://github.com/indexmap-rs/indexmap.git"
+    ],
+    "repositories": [
+      {
+        "name": "yargs",
+        "language": "JavaScript",
+        "languageFamily": "javascript-typescript",
+        "url": "https://github.com/yargs/yargs.git",
+        "pinnedHead": "db916b4154271e4cbbd2c60618fab90bdc1dbac2",
+        "extensions": [
+          ".cjs",
+          ".js",
+          ".jsx",
+          ".mjs",
+          ".ts",
+          ".tsx"
+        ]
+      },
+      {
+        "name": "sqlalchemy",
+        "language": "Python",
+        "languageFamily": "python",
+        "url": "https://github.com/sqlalchemy/sqlalchemy.git",
+        "pinnedHead": "aa1a5575358d3aa14953b04dced02f4763fed2e7",
+        "extensions": [
+          ".py"
+        ]
+      },
+      {
+        "name": "zap",
+        "language": "Go fallback parser",
+        "languageFamily": "go",
+        "url": "https://github.com/uber-go/zap.git",
+        "pinnedHead": "5b81b37b81b8e2ed447a6f57991e372ee4fa5c8f",
+        "extensions": [
+          ".go"
+        ]
+      },
+      {
+        "name": "regex",
+        "language": "Rust fallback parser",
+        "languageFamily": "rust",
+        "url": "https://github.com/rust-lang/regex.git",
+        "pinnedHead": "2b527599eb9eea0dcc288c704584f242f26a5c61",
+        "extensions": [
+          ".rs"
+        ]
+      },
+      {
+        "name": "sinon",
+        "language": "JavaScript",
+        "languageFamily": "javascript-typescript",
+        "url": "https://github.com/sinonjs/sinon.git",
+        "pinnedHead": "ab289e92cdd76caf8cec2b0a8c9a391283e6c9df",
+        "extensions": [
+          ".cjs",
+          ".js",
+          ".jsx",
+          ".mjs",
+          ".ts",
+          ".tsx"
+        ]
+      },
+      {
+        "name": "rich",
+        "language": "Python",
+        "languageFamily": "python",
+        "url": "https://github.com/Textualize/rich.git",
+        "pinnedHead": "9d8f9a372cc5916fd4781fec207ced7ddac2f08f",
+        "extensions": [
+          ".py"
+        ]
+      },
+      {
+        "name": "viper",
+        "language": "Go fallback parser",
+        "languageFamily": "go",
+        "url": "https://github.com/spf13/viper.git",
+        "pinnedHead": "528f7416c4b56a4948673984b190bf8713f0c3c4",
+        "extensions": [
+          ".go"
+        ]
+      },
+      {
+        "name": "crossbeam",
+        "language": "Rust fallback parser",
+        "languageFamily": "rust",
+        "url": "https://github.com/crossbeam-rs/crossbeam.git",
+        "pinnedHead": "b23b7e8eca2efdad9bdc1ceb1aee1207a852c03b",
+        "extensions": [
+          ".rs"
+        ]
+      },
+      {
+        "name": "prettier",
+        "language": "JavaScript",
+        "languageFamily": "javascript-typescript",
+        "url": "https://github.com/prettier/prettier.git",
+        "pinnedHead": "8ffc849446ffa4a882197dff4cdc7321f0d88972",
+        "extensions": [
+          ".cjs",
+          ".js",
+          ".jsx",
+          ".mjs",
+          ".ts",
+          ".tsx"
+        ]
+      },
+      {
+        "name": "celery",
+        "language": "Python",
+        "languageFamily": "python",
+        "url": "https://github.com/celery/celery.git",
+        "pinnedHead": "dd7c23862eb08a2cfde7da6926f28410b699c077",
+        "extensions": [
+          ".py"
+        ]
+      },
+      {
+        "name": "mux",
+        "language": "Go fallback parser",
+        "languageFamily": "go",
+        "url": "https://github.com/gorilla/mux.git",
+        "pinnedHead": "db9d1d0073d27a0a2d9a8c1bc52aa0af4374d265",
+        "extensions": [
+          ".go"
+        ]
+      },
+      {
+        "name": "hashbrown",
+        "language": "Rust fallback parser",
+        "languageFamily": "rust",
+        "url": "https://github.com/rust-lang/hashbrown.git",
+        "pinnedHead": "227319c890c9663e953fdae44fd78e1c3a38bac3",
+        "extensions": [
+          ".rs"
+        ]
+      },
+      {
+        "name": "ajv",
+        "language": "TypeScript",
+        "languageFamily": "javascript-typescript",
+        "url": "https://github.com/ajv-validator/ajv.git",
+        "pinnedHead": "f177fe323420ccb23e1a79445fd470cbf80aee7c",
+        "extensions": [
+          ".cjs",
+          ".js",
+          ".jsx",
+          ".mjs",
+          ".ts",
+          ".tsx"
+        ]
+      },
+      {
+        "name": "scrapy",
+        "language": "Python",
+        "languageFamily": "python",
+        "url": "https://github.com/scrapy/scrapy.git",
+        "pinnedHead": "e710b9c18e18f0a3fe104fbfc72d49c221dfe448",
+        "extensions": [
+          ".py"
+        ]
+      },
+      {
+        "name": "uuid",
+        "language": "Go fallback parser",
+        "languageFamily": "go",
+        "url": "https://github.com/google/uuid.git",
+        "pinnedHead": "2d3c2a9cc518326daf99a383f07c4d3c44317e4d",
+        "extensions": [
+          ".go"
+        ]
+      },
+      {
+        "name": "http",
+        "language": "Rust fallback parser",
+        "languageFamily": "rust",
+        "url": "https://github.com/hyperium/http.git",
+        "pinnedHead": "2178e175c4e247a33ba5f6ca3503afb1afbaabba",
+        "extensions": [
+          ".rs"
+        ]
+      }
+    ]
+  },
+  "rules": {
+    "desiredTargets": 8,
+    "requiredLanguageFamilies": [
+      "javascript-typescript",
+      "python",
+      "go",
+      "rust"
+    ],
+    "targetsPerLanguageFamily": 2,
+    "languageDiversitySatisfied": true,
+    "selectedPerLanguageFamily": {
+      "javascript-typescript": 2,
+      "python": 2,
+      "go": 2,
+      "rust": 2
+    },
+    "repositoryOrderIsBinding": true,
+    "firstEligibleRepositoriesPerFamilyWin": true,
+    "fallbackOnlyAfterNoEligibleCommitOrSetupFailureInThatFamily": true,
+    "fetchDepth": 400,
+    "scanLimit": 300,
+    "nonMergeSingleParent": true,
+    "newestEligibleCommitWins": true,
+    "minimumFiles": 2,
+    "maximumFiles": 8,
+    "allFilesMustBeModified": true,
+    "eligibleFileSurfaces": [
+      "primary-language-source",
+      "bounded-documentation-or-configuration"
+    ],
+    "requiresImplementationAndFocusedTest": true,
+    "maximumAuxiliaryFiles": 2,
+    "allowedAuxiliaryExtensions": [
+      ".cfg",
+      ".conf",
+      ".ini",
+      ".json",
+      ".md",
+      ".mdx",
+      ".rst",
+      ".toml",
+      ".txt",
+      ".yaml",
+      ".yml"
+    ],
+    "auxiliaryFilesAreIncludedInOracle": true,
+    "implementationAndTestMustUsePrimaryLanguageExtension": true,
+    "maximumChangedLines": 400,
+    "behavioralCommitSubjectRequired": true,
+    "taskClassifier": "inflected-behavioral-subject-v1",
+    "expectedTaskTypeDerivedBeforeRouting": true,
+    "materializationAttempts": 3,
+    "retryDelayMs": 5000,
+    "palaceCallsOnCandidateTasksDuringSelection": 0,
+    "plannedPairedCalibrationComparison": true,
+    "baselineAndCandidateFrozenBeforeTargetSelection": true,
+    "calibrationTolerance": 0.15,
+    "outputCreateOnly": true
+  },
+  "repositoryReports": [
+    {
+      "name": "yargs",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/yargs/yargs.git",
+      "pinnedHead": "db916b4154271e4cbbd2c60618fab90bdc1dbac2",
+      "status": "selected",
+      "scannedCommits": 13,
+      "rejectionCounts": {
+        "non-behavioral-or-ambiguous-subject": 12
+      },
+      "selectedTarget": {
+        "name": "yargs",
+        "language": "JavaScript",
+        "languageFamily": "javascript-typescript",
+        "url": "https://github.com/yargs/yargs.git",
+        "pinnedHead": "db916b4154271e4cbbd2c60618fab90bdc1dbac2",
+        "routeCommit": "971e351705f0fbc5566c6ed1dfd707fa65e11c0d",
+        "groundTruthCommit": "437f3a4e0f4166e1f1a3ce023b0331159582746d",
+        "task": "fix: prototype pollution vulnerability in apply-extends (#2498)",
+        "expectedTaskType": "bugfix",
+        "changedFiles": [
+          "lib/utils/apply-extends.ts",
+          "test/helpers.mjs"
+        ],
+        "implementationFiles": [
+          "lib/utils/apply-extends.ts"
+        ],
+        "testFiles": [
+          "test/helpers.mjs"
+        ],
+        "auxiliaryFiles": [],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 8,
+        "additions": 8,
+        "deletions": 0
+      },
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "errorCode": null,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "sqlalchemy",
+      "languageFamily": "python",
+      "url": "https://github.com/sqlalchemy/sqlalchemy.git",
+      "pinnedHead": "aa1a5575358d3aa14953b04dced02f4763fed2e7",
+      "status": "selected",
+      "scannedCommits": 77,
+      "rejectionCounts": {
+        "file-count-outside-range": 11,
+        "non-behavioral-or-ambiguous-subject": 50,
+        "contains-non-modified-file": 15
+      },
+      "selectedTarget": {
+        "name": "sqlalchemy",
+        "language": "Python",
+        "languageFamily": "python",
+        "url": "https://github.com/sqlalchemy/sqlalchemy.git",
+        "pinnedHead": "aa1a5575358d3aa14953b04dced02f4763fed2e7",
+        "routeCommit": "092391036ce007d128f2f61c98fc9b31177970bb",
+        "groundTruthCommit": "e00937ec549ecc1d2cae49d4fe84fac3d758b6fb",
+        "task": "Fix Session bulk mappings typing for mapped classes",
+        "expectedTaskType": "bugfix",
+        "changedFiles": [
+          "lib/sqlalchemy/orm/scoping.py",
+          "lib/sqlalchemy/orm/session.py",
+          "test/typing/plain_files/orm/session.py"
+        ],
+        "implementationFiles": [
+          "lib/sqlalchemy/orm/scoping.py",
+          "lib/sqlalchemy/orm/session.py"
+        ],
+        "testFiles": [
+          "test/typing/plain_files/orm/session.py"
+        ],
+        "auxiliaryFiles": [],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 18,
+        "additions": 12,
+        "deletions": 6
+      },
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "errorCode": null,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "zap",
+      "languageFamily": "go",
+      "url": "https://github.com/uber-go/zap.git",
+      "pinnedHead": "5b81b37b81b8e2ed447a6f57991e372ee4fa5c8f",
+      "status": "selected",
+      "scannedCommits": 8,
+      "rejectionCounts": {
+        "non-behavioral-or-ambiguous-subject": 7
+      },
+      "selectedTarget": {
+        "name": "zap",
+        "language": "Go fallback parser",
+        "languageFamily": "go",
+        "url": "https://github.com/uber-go/zap.git",
+        "pinnedHead": "5b81b37b81b8e2ed447a6f57991e372ee4fa5c8f",
+        "routeCommit": "07077a697f639389cc998ff91b8885feb25f520d",
+        "groundTruthCommit": "7c80d7b53df6ed592d333998cbbfcd99ff52f3c2",
+        "task": "Fix race condition in WithLazy implementation (#1426) (#1511)",
+        "expectedTaskType": "bugfix",
+        "changedFiles": [
+          "zapcore/lazy_with.go",
+          "zapcore/lazy_with_test.go"
+        ],
+        "implementationFiles": [
+          "zapcore/lazy_with.go"
+        ],
+        "testFiles": [
+          "zapcore/lazy_with_test.go"
+        ],
+        "auxiliaryFiles": [],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 57,
+        "additions": 52,
+        "deletions": 5
+      },
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "errorCode": null,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "regex",
+      "languageFamily": "rust",
+      "url": "https://github.com/rust-lang/regex.git",
+      "pinnedHead": "2b527599eb9eea0dcc288c704584f242f26a5c61",
+      "status": "no-eligible-commit",
+      "scannedCommits": 300,
+      "rejectionCounts": {
+        "non-behavioral-or-ambiguous-subject": 300
+      },
+      "selectedTarget": null,
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "errorCode": null,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "sinon",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/sinonjs/sinon.git",
+      "pinnedHead": "ab289e92cdd76caf8cec2b0a8c9a391283e6c9df",
+      "status": "selected",
+      "scannedCommits": 4,
+      "rejectionCounts": {
+        "non-behavioral-or-ambiguous-subject": 3
+      },
+      "selectedTarget": {
+        "name": "sinon",
+        "language": "JavaScript",
+        "languageFamily": "javascript-typescript",
+        "url": "https://github.com/sinonjs/sinon.git",
+        "pinnedHead": "ab289e92cdd76caf8cec2b0a8c9a391283e6c9df",
+        "routeCommit": "11db21399208b1ece7834031bbe9f86559cef79d",
+        "groundTruthCommit": "d36e921baf382598cfa9323cb672c87ce85e2ad5",
+        "task": "fix: let returns override returnsArg",
+        "expectedTaskType": "bugfix",
+        "changedFiles": [
+          "src/sinon/default-behaviors.js",
+          "test/src/stub-test.js"
+        ],
+        "implementationFiles": [
+          "src/sinon/default-behaviors.js"
+        ],
+        "testFiles": [
+          "test/src/stub-test.js"
+        ],
+        "auxiliaryFiles": [],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 10,
+        "additions": 10,
+        "deletions": 0
+      },
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "errorCode": null,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "rich",
+      "languageFamily": "python",
+      "url": "https://github.com/Textualize/rich.git",
+      "pinnedHead": "9d8f9a372cc5916fd4781fec207ced7ddac2f08f",
+      "status": "selected",
+      "scannedCommits": 8,
+      "rejectionCounts": {
+        "non-behavioral-or-ambiguous-subject": 7
+      },
+      "selectedTarget": {
+        "name": "rich",
+        "language": "Python",
+        "languageFamily": "python",
+        "url": "https://github.com/Textualize/rich.git",
+        "pinnedHead": "9d8f9a372cc5916fd4781fec207ced7ddac2f08f",
+        "routeCommit": "19c67b9a3479841e9133bea94607c89ee931d3fc",
+        "groundTruthCommit": "7ef2d05ca8aa3cb405dab2fdf3282e69cf8089e3",
+        "task": "fix inline code in table cells",
+        "expectedTaskType": "bugfix",
+        "changedFiles": [
+          "rich/markdown.py",
+          "tests/test_markdown.py"
+        ],
+        "implementationFiles": [
+          "rich/markdown.py"
+        ],
+        "testFiles": [
+          "tests/test_markdown.py"
+        ],
+        "auxiliaryFiles": [],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 26,
+        "additions": 23,
+        "deletions": 3
+      },
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "errorCode": null,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "viper",
+      "languageFamily": "go",
+      "url": "https://github.com/spf13/viper.git",
+      "pinnedHead": "528f7416c4b56a4948673984b190bf8713f0c3c4",
+      "status": "selected",
+      "scannedCommits": 26,
+      "rejectionCounts": {
+        "contains-unsupported-extension": 1,
+        "non-behavioral-or-ambiguous-subject": 23,
+        "file-count-outside-range": 1
+      },
+      "selectedTarget": {
+        "name": "viper",
+        "language": "Go fallback parser",
+        "languageFamily": "go",
+        "url": "https://github.com/spf13/viper.git",
+        "pinnedHead": "528f7416c4b56a4948673984b190bf8713f0c3c4",
+        "routeCommit": "2da50fe98c7e48a260c3f87156473344cb423849",
+        "groundTruthCommit": "0afb0456be931163b9b402905160c3999b929c7f",
+        "task": "fix: return not found error if setting config",
+        "expectedTaskType": "bugfix",
+        "changedFiles": [
+          "file.go",
+          "viper.go",
+          "viper_test.go"
+        ],
+        "implementationFiles": [
+          "file.go",
+          "viper.go"
+        ],
+        "testFiles": [
+          "viper_test.go"
+        ],
+        "auxiliaryFiles": [],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 44,
+        "additions": 37,
+        "deletions": 7
+      },
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "errorCode": null,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "crossbeam",
+      "languageFamily": "rust",
+      "url": "https://github.com/crossbeam-rs/crossbeam.git",
+      "pinnedHead": "b23b7e8eca2efdad9bdc1ceb1aee1207a852c03b",
+      "status": "selected",
+      "scannedCommits": 133,
+      "rejectionCounts": {
+        "non-behavioral-or-ambiguous-subject": 125,
+        "file-count-outside-range": 6,
+        "missing-implementation-or-test": 1
+      },
+      "selectedTarget": {
+        "name": "crossbeam",
+        "language": "Rust fallback parser",
+        "languageFamily": "rust",
+        "url": "https://github.com/crossbeam-rs/crossbeam.git",
+        "pinnedHead": "b23b7e8eca2efdad9bdc1ceb1aee1207a852c03b",
+        "routeCommit": "8cec8ec930cd19e2cf43efab5ddde2a05522929f",
+        "groundTruthCommit": "c9c5b9cef74e198116035716bfeb4cf855680e2d",
+        "task": "Add select_biased! macro (#1040)",
+        "expectedTaskType": "feature",
+        "changedFiles": [
+          "crossbeam-channel/src/select.rs",
+          "crossbeam-channel/src/select_macro.rs",
+          "crossbeam-channel/tests/mpsc.rs",
+          "crossbeam-channel/tests/select_macro.rs"
+        ],
+        "implementationFiles": [
+          "crossbeam-channel/src/select.rs",
+          "crossbeam-channel/src/select_macro.rs"
+        ],
+        "testFiles": [
+          "crossbeam-channel/tests/mpsc.rs",
+          "crossbeam-channel/tests/select_macro.rs"
+        ],
+        "auxiliaryFiles": [],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 201,
+        "additions": 177,
+        "deletions": 24
+      },
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "errorCode": null,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "prettier",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/prettier/prettier.git",
+      "pinnedHead": "8ffc849446ffa4a882197dff4cdc7321f0d88972",
+      "status": "family-quota-filled-not-inspected",
+      "scannedCommits": 0,
+      "rejectionCounts": {},
+      "selectedTarget": null
+    },
+    {
+      "name": "celery",
+      "languageFamily": "python",
+      "url": "https://github.com/celery/celery.git",
+      "pinnedHead": "dd7c23862eb08a2cfde7da6926f28410b699c077",
+      "status": "family-quota-filled-not-inspected",
+      "scannedCommits": 0,
+      "rejectionCounts": {},
+      "selectedTarget": null
+    },
+    {
+      "name": "mux",
+      "languageFamily": "go",
+      "url": "https://github.com/gorilla/mux.git",
+      "pinnedHead": "db9d1d0073d27a0a2d9a8c1bc52aa0af4374d265",
+      "status": "family-quota-filled-not-inspected",
+      "scannedCommits": 0,
+      "rejectionCounts": {},
+      "selectedTarget": null
+    },
+    {
+      "name": "hashbrown",
+      "languageFamily": "rust",
+      "url": "https://github.com/rust-lang/hashbrown.git",
+      "pinnedHead": "227319c890c9663e953fdae44fd78e1c3a38bac3",
+      "status": "no-eligible-commit",
+      "scannedCommits": 300,
+      "rejectionCounts": {
+        "non-behavioral-or-ambiguous-subject": 232,
+        "missing-implementation-or-test": 24,
+        "file-count-outside-range": 38,
+        "contains-non-modified-file": 6
+      },
+      "selectedTarget": null,
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "errorCode": null,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "ajv",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/ajv-validator/ajv.git",
+      "pinnedHead": "f177fe323420ccb23e1a79445fd470cbf80aee7c",
+      "status": "family-quota-filled-not-inspected",
+      "scannedCommits": 0,
+      "rejectionCounts": {},
+      "selectedTarget": null
+    },
+    {
+      "name": "scrapy",
+      "languageFamily": "python",
+      "url": "https://github.com/scrapy/scrapy.git",
+      "pinnedHead": "e710b9c18e18f0a3fe104fbfc72d49c221dfe448",
+      "status": "family-quota-filled-not-inspected",
+      "scannedCommits": 0,
+      "rejectionCounts": {},
+      "selectedTarget": null
+    },
+    {
+      "name": "uuid",
+      "languageFamily": "go",
+      "url": "https://github.com/google/uuid.git",
+      "pinnedHead": "2d3c2a9cc518326daf99a383f07c4d3c44317e4d",
+      "status": "family-quota-filled-not-inspected",
+      "scannedCommits": 0,
+      "rejectionCounts": {},
+      "selectedTarget": null
+    },
+    {
+      "name": "http",
+      "languageFamily": "rust",
+      "url": "https://github.com/hyperium/http.git",
+      "pinnedHead": "2178e175c4e247a33ba5f6ca3503afb1afbaabba",
+      "status": "selected",
+      "scannedCommits": 9,
+      "rejectionCounts": {
+        "non-behavioral-or-ambiguous-subject": 3,
+        "missing-implementation-or-test": 3,
+        "file-count-outside-range": 2
+      },
+      "selectedTarget": {
+        "name": "http",
+        "language": "Rust fallback parser",
+        "languageFamily": "rust",
+        "url": "https://github.com/hyperium/http.git",
+        "pinnedHead": "2178e175c4e247a33ba5f6ca3503afb1afbaabba",
+        "routeCommit": "1b968dc519c49b1922bc546c95f33900e684f4ab",
+        "groundTruthCommit": "bc3b0441be3065fc2653e9b3b1392c0fed873482",
+        "task": "fix(header): use a set_len guard in IntoIter drop (#838)",
+        "expectedTaskType": "bugfix",
+        "changedFiles": [
+          "src/header/map.rs",
+          "tests/header_map.rs"
+        ],
+        "implementationFiles": [
+          "src/header/map.rs"
+        ],
+        "testFiles": [
+          "tests/header_map.rs"
+        ],
+        "auxiliaryFiles": [],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 66,
+        "additions": 61,
+        "deletions": 5
+      },
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "errorCode": null,
+          "error": null
+        }
+      ]
+    }
+  ],
+  "targets": [
+    {
+      "name": "yargs",
+      "language": "JavaScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/yargs/yargs.git",
+      "pinnedHead": "db916b4154271e4cbbd2c60618fab90bdc1dbac2",
+      "routeCommit": "971e351705f0fbc5566c6ed1dfd707fa65e11c0d",
+      "groundTruthCommit": "437f3a4e0f4166e1f1a3ce023b0331159582746d",
+      "task": "fix: prototype pollution vulnerability in apply-extends (#2498)",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "lib/utils/apply-extends.ts",
+        "test/helpers.mjs"
+      ],
+      "implementationFiles": [
+        "lib/utils/apply-extends.ts"
+      ],
+      "testFiles": [
+        "test/helpers.mjs"
+      ],
+      "auxiliaryFiles": [],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 8,
+      "additions": 8,
+      "deletions": 0
+    },
+    {
+      "name": "sqlalchemy",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/sqlalchemy/sqlalchemy.git",
+      "pinnedHead": "aa1a5575358d3aa14953b04dced02f4763fed2e7",
+      "routeCommit": "092391036ce007d128f2f61c98fc9b31177970bb",
+      "groundTruthCommit": "e00937ec549ecc1d2cae49d4fe84fac3d758b6fb",
+      "task": "Fix Session bulk mappings typing for mapped classes",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "lib/sqlalchemy/orm/scoping.py",
+        "lib/sqlalchemy/orm/session.py",
+        "test/typing/plain_files/orm/session.py"
+      ],
+      "implementationFiles": [
+        "lib/sqlalchemy/orm/scoping.py",
+        "lib/sqlalchemy/orm/session.py"
+      ],
+      "testFiles": [
+        "test/typing/plain_files/orm/session.py"
+      ],
+      "auxiliaryFiles": [],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 18,
+      "additions": 12,
+      "deletions": 6
+    },
+    {
+      "name": "zap",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/uber-go/zap.git",
+      "pinnedHead": "5b81b37b81b8e2ed447a6f57991e372ee4fa5c8f",
+      "routeCommit": "07077a697f639389cc998ff91b8885feb25f520d",
+      "groundTruthCommit": "7c80d7b53df6ed592d333998cbbfcd99ff52f3c2",
+      "task": "Fix race condition in WithLazy implementation (#1426) (#1511)",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "zapcore/lazy_with.go",
+        "zapcore/lazy_with_test.go"
+      ],
+      "implementationFiles": [
+        "zapcore/lazy_with.go"
+      ],
+      "testFiles": [
+        "zapcore/lazy_with_test.go"
+      ],
+      "auxiliaryFiles": [],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 57,
+      "additions": 52,
+      "deletions": 5
+    },
+    {
+      "name": "sinon",
+      "language": "JavaScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/sinonjs/sinon.git",
+      "pinnedHead": "ab289e92cdd76caf8cec2b0a8c9a391283e6c9df",
+      "routeCommit": "11db21399208b1ece7834031bbe9f86559cef79d",
+      "groundTruthCommit": "d36e921baf382598cfa9323cb672c87ce85e2ad5",
+      "task": "fix: let returns override returnsArg",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "src/sinon/default-behaviors.js",
+        "test/src/stub-test.js"
+      ],
+      "implementationFiles": [
+        "src/sinon/default-behaviors.js"
+      ],
+      "testFiles": [
+        "test/src/stub-test.js"
+      ],
+      "auxiliaryFiles": [],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 10,
+      "additions": 10,
+      "deletions": 0
+    },
+    {
+      "name": "rich",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/Textualize/rich.git",
+      "pinnedHead": "9d8f9a372cc5916fd4781fec207ced7ddac2f08f",
+      "routeCommit": "19c67b9a3479841e9133bea94607c89ee931d3fc",
+      "groundTruthCommit": "7ef2d05ca8aa3cb405dab2fdf3282e69cf8089e3",
+      "task": "fix inline code in table cells",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "rich/markdown.py",
+        "tests/test_markdown.py"
+      ],
+      "implementationFiles": [
+        "rich/markdown.py"
+      ],
+      "testFiles": [
+        "tests/test_markdown.py"
+      ],
+      "auxiliaryFiles": [],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 26,
+      "additions": 23,
+      "deletions": 3
+    },
+    {
+      "name": "viper",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/spf13/viper.git",
+      "pinnedHead": "528f7416c4b56a4948673984b190bf8713f0c3c4",
+      "routeCommit": "2da50fe98c7e48a260c3f87156473344cb423849",
+      "groundTruthCommit": "0afb0456be931163b9b402905160c3999b929c7f",
+      "task": "fix: return not found error if setting config",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "file.go",
+        "viper.go",
+        "viper_test.go"
+      ],
+      "implementationFiles": [
+        "file.go",
+        "viper.go"
+      ],
+      "testFiles": [
+        "viper_test.go"
+      ],
+      "auxiliaryFiles": [],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 44,
+      "additions": 37,
+      "deletions": 7
+    },
+    {
+      "name": "crossbeam",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/crossbeam-rs/crossbeam.git",
+      "pinnedHead": "b23b7e8eca2efdad9bdc1ceb1aee1207a852c03b",
+      "routeCommit": "8cec8ec930cd19e2cf43efab5ddde2a05522929f",
+      "groundTruthCommit": "c9c5b9cef74e198116035716bfeb4cf855680e2d",
+      "task": "Add select_biased! macro (#1040)",
+      "expectedTaskType": "feature",
+      "changedFiles": [
+        "crossbeam-channel/src/select.rs",
+        "crossbeam-channel/src/select_macro.rs",
+        "crossbeam-channel/tests/mpsc.rs",
+        "crossbeam-channel/tests/select_macro.rs"
+      ],
+      "implementationFiles": [
+        "crossbeam-channel/src/select.rs",
+        "crossbeam-channel/src/select_macro.rs"
+      ],
+      "testFiles": [
+        "crossbeam-channel/tests/mpsc.rs",
+        "crossbeam-channel/tests/select_macro.rs"
+      ],
+      "auxiliaryFiles": [],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 201,
+      "additions": 177,
+      "deletions": 24
+    },
+    {
+      "name": "http",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/hyperium/http.git",
+      "pinnedHead": "2178e175c4e247a33ba5f6ca3503afb1afbaabba",
+      "routeCommit": "1b968dc519c49b1922bc546c95f33900e684f4ab",
+      "groundTruthCommit": "bc3b0441be3065fc2653e9b3b1392c0fed873482",
+      "task": "fix(header): use a set_len guard in IntoIter drop (#838)",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "src/header/map.rs",
+        "tests/header_map.rs"
+      ],
+      "implementationFiles": [
+        "src/header/map.rs"
+      ],
+      "testFiles": [
+        "tests/header_map.rs"
+      ],
+      "auxiliaryFiles": [],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 66,
+      "additions": 61,
+      "deletions": 5
+    }
+  ]
+}
