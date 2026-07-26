@@ -459,7 +459,7 @@ function selectEvidenceSufficientCoreRoute(
     ))
   ).filter(
     (pair) => pair.implementation.directEvidence >= 100
-      && (pair.test.directEvidence >= 100 || pair.structuralEvidence >= 0.75)
+      && (pair.test.directEvidence >= 100 || pair.moduleMirrorEvidence >= 0.75)
       && (
         pair.relationEvidence >= 0.6
         || pair.pairEvidence >= 1
