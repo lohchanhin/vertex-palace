@@ -1723,6 +1723,42 @@ export function uploadProductVariantImageController(file: File) {
     });
   });
 
+  it("prefers a discriminative same-module test over a keyword-heavy sibling test", async () => {
+    await withFixture("ts-api", async (root) => {
+      const changedFiles = ["trie.go", "trie_test.go"];
+      const files = new Map<string, string>([
+        [
+          "trie.go",
+          "package router\ntype trieNode struct { path string; indices string }\n// trailingSlashRedirect handles a wildcard after a named parameter.\nfunc (n *trieNode) trailingSlashRedirect(path string) bool { return n.path == path || n.indices == \"/\" }\n"
+        ],
+        [
+          "trie_test.go",
+          "package router\nfunc TestTrieTrailingSlashRedirect(t *testing.T) { tree := &trieNode{indices: \"/\"}; if !tree.trailingSlashRedirect(\"/vendor/x\") { t.Fatal(\"expected redirect\") } }\n"
+        ],
+        [
+          "router_test.go",
+          "package router\nfunc TestRouterRedirectWhenWildcardFollowsNamedParam(t *testing.T) { t.Log(\"support trailing slash redirect wildcard named param\") }\n"
+        ]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const evaluation = await evaluateRoute(
+        root,
+        "Support TSR when wildcard follows named param",
+        { changedFiles, routeLimit: 9, budget: 6000, maxDrawers: 4 }
+      );
+
+      expect(evaluation.route.files).toEqual(changedFiles);
+      expect(evaluation.coverage.changedFileCoverage).toBe(1);
+      expect(evaluation.coverage.routeFocus).toBe(1);
+    });
+  });
+
   it("treats bin entry points as CLI implementation and ignores negation as route evidence", async () => {
     await withFixture("ts-api", async (root) => {
       const changedFiles = ["bin/main.js", "test/unit/bin.test.js"];

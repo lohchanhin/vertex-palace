@@ -6,6 +6,7 @@ import { readIndex } from "../storage/read-palace";
 import { getPalaceStatus } from "../storage/status";
 import { appendRoute } from "../storage/write-palace";
 import { hashText } from "../scanner/file-hash";
+import { expandedTaskAcronyms } from "../utils/lexical-acronyms";
 import { tokenizeLexical } from "../utils/lexical-tokens";
 import { analyzeTask } from "./analyze-task";
 import { classifyTask } from "./classify-task";
@@ -250,6 +251,7 @@ type CoreEvidencePair = {
   targetIdentityCoverage: number;
   exactImplementationTargetEvidence: number;
   pairEvidence: number;
+  moduleMirrorEvidence: number;
   structuralEvidence: number;
   workspaceEvidence: number;
   sharedLeadingEntityCoverage: Set<string>;
@@ -324,6 +326,24 @@ const CORE_PATH_NOISE = new Set([
   "ts",
   "tsx",
   "unit"
+]);
+
+const CORE_GENERIC_MODULE_STEMS = new Set([
+  "base",
+  "common",
+  "config",
+  "constants",
+  "fixture",
+  "fixtures",
+  "helper",
+  "helpers",
+  "index",
+  "lib",
+  "main",
+  "mod",
+  "types",
+  "util",
+  "utils"
 ]);
 
 const CORE_RELATION_TYPES = new Set([
@@ -439,7 +459,7 @@ function selectEvidenceSufficientCoreRoute(
     ))
   ).filter(
     (pair) => pair.implementation.directEvidence >= 100
-      && pair.test.directEvidence >= 100
+      && (pair.test.directEvidence >= 100 || pair.structuralEvidence >= 0.75)
       && (
         pair.relationEvidence >= 0.6
         || pair.pairEvidence >= 1
@@ -545,6 +565,7 @@ function selectEvidenceSufficientCoreRoute(
     anchor.implementation.item.node.sourcePath,
     anchor.test.item.node.sourcePath
   );
+  const anchorModuleMirrorEvidence = anchor.moduleMirrorEvidence;
   const workspaceRequiresExpansion = anchorWorkspaceScope !== undefined
     && implementationCandidates.some((candidate) =>
       candidate.item.node.sourcePath !== anchor.implementation.item.node.sourcePath
@@ -588,12 +609,18 @@ function selectEvidenceSufficientCoreRoute(
   )) ?? 0;
   const exactPairOverridesExpansion = anchorColocatedTestEvidence >= 1
     || anchor.sharedLeadingEntityCoverage.size > 0;
-  const exactStructuralPair = anchorColocatedTestEvidence >= 1 || anchorDirectRelation >= 0.98;
+  const exactStructuralPair = anchorColocatedTestEvidence >= 1
+    || anchorModuleMirrorEvidence >= 0.75
+    || anchorDirectRelation >= 0.98;
   const overrideExactPair = (Boolean(scopeHypothesis) && !exactPairOverridesExpansion)
     || (denseCausalNeighborhood && !exactPairOverridesExpansion)
     || featureIdentityRequiresExpansion;
+  const strongModuleMirrorPair = anchorModuleMirrorEvidence >= 0.75
+    && anchor.implementation.directEvidence >= 200
+    && anchor.pairEvidence >= 1;
   const stopAtStrongModulePair = (
     anchorColocatedTestEvidence >= 1
+    || strongModuleMirrorPair
     || (
       anchor.structuralEvidence >= 0.75
       && anchorExplicitIdentityCoverage > 0
@@ -608,8 +635,8 @@ function selectEvidenceSufficientCoreRoute(
       && anchor.relationEvidence >= 0.75
     )
   )
-    && anchor.implementation.directEvidence >= 300
-    && anchor.test.directEvidence >= 300
+    && anchor.implementation.directEvidence >= (strongModuleMirrorPair ? 200 : 300)
+    && anchor.test.directEvidence >= (strongModuleMirrorPair ? 0 : 300)
     && (
       (exactStructuralPair && !overrideExactPair)
       || (!workspaceRequiresExpansion
@@ -944,8 +971,23 @@ function buildCoreEvidencePair(
     test.item.node.sourcePath,
     testCandidates
   );
+  const rawDiscriminativeModuleMirrorEvidence = discriminativeTestModuleMirrorEvidence(
+    implementation.item.node.sourcePath,
+    test.item.node.sourcePath
+  );
+  const moduleMirrorTaskAnchored = moduleStemAppearsInTask(
+    implementation.item.node.sourcePath,
+    analysis.raw
+  ) || expandedTaskAcronyms(analysis.raw, test.item.node.title).size > 0;
+  const strongestImplementationEvidence = implementationCandidates[0]?.directEvidence ?? 0;
+  const discriminativeModuleMirrorEvidence = rawDiscriminativeModuleMirrorEvidence > 0
+    && moduleMirrorTaskAnchored
+    && implementation.directEvidence >= Math.max(160, strongestImplementationEvidence * 0.65)
+    ? rawDiscriminativeModuleMirrorEvidence
+    : 0;
   const structuralEvidence = Math.max(
     moduleMirrorEvidence,
+    discriminativeModuleMirrorEvidence,
     explicitTaskModuleMirrorEvidence(
       implementation.item.node.sourcePath,
       test.item.node.sourcePath,
@@ -978,6 +1020,7 @@ function buildCoreEvidencePair(
     + pairEvidence * 40
     + familyEvidence * 100
     + structuralEvidence * 640
+    + discriminativeModuleMirrorEvidence * 800
     + workspaceEvidence * 650
     + sharedLeadingEntityCoverage.size * 700
     + taskCoverage.size * 55
@@ -994,6 +1037,7 @@ function buildCoreEvidencePair(
     targetIdentityCoverage,
     exactImplementationTargetEvidence,
     pairEvidence,
+    moduleMirrorEvidence: discriminativeModuleMirrorEvidence,
     structuralEvidence,
     workspaceEvidence,
     sharedLeadingEntityCoverage,
@@ -1369,6 +1413,8 @@ function coreEvidenceProfile(
   const taskCoverage = new Set(
     [...taskTokens].filter((token) => !CORE_EVIDENCE_LOW_SIGNAL.has(token) && nodeTokens.has(token))
   );
+  const acronymMatches = expandedTaskAcronyms(analysis.raw, item.node.title);
+  addAll(taskCoverage, acronymMatches);
   const entityCoverage = new Set(
     analysis.entities.filter((entity) => {
       const entityTokens = [...coreNodeTokens(entity)].filter((token) => !CORE_EVIDENCE_LOW_SIGNAL.has(token));
@@ -1405,6 +1451,7 @@ function coreEvidenceProfile(
     + (role === "implementation" ? implementationCoverageEvidence : taskCoverage.size * 25)
     + primaryCoverageSynergy
     + outcomePathEvidence
+    + acronymMatches.size * 280
     + (item.node.startLine && titleMatches > 0 ? 20 : 0)
     + localeScopeAdjustment
     - auxiliaryPenalty
@@ -1820,14 +1867,29 @@ function sourceTestModuleMirrorEvidence(implementationPath: string, testPath: st
   const implementationParts = implementationPath.toLowerCase().split("/").slice(0, -1);
   const testParts = testPath.toLowerCase().split("/").slice(0, -1);
   const testRoot = testParts.findIndex((part) => ["__tests__", "spec", "specs", "test", "testing", "tests"].includes(part));
-  if (testRoot < 0) return 0;
+  const explicitTestFilename = /^(?:test|spec)[_.-]|[_.-](?:test|spec)\.[^.]+$/i.test(
+    path.posix.basename(testPath)
+  );
+  if (testRoot < 0 && !explicitTestFilename) return 0;
   const implementationScope = new Set(
     implementationParts.filter((part) => !["lib", "src"].includes(part))
   );
   const unmatchedTestScope = testParts
-    .slice(testRoot + 1)
+    .slice(testRoot < 0 ? testParts.length : testRoot + 1)
     .filter((part) => !implementationScope.has(part));
   return 1 / (1 + unmatchedTestScope.length);
+}
+
+function discriminativeTestModuleMirrorEvidence(implementationPath: string, testPath: string): number {
+  const stem = canonicalModuleStem(implementationPath);
+  if (stem.length < 3 || CORE_GENERIC_MODULE_STEMS.has(stem)) return 0;
+  return sourceTestModuleMirrorEvidence(implementationPath, testPath);
+}
+
+function moduleStemAppearsInTask(sourcePath: string, task: string): boolean {
+  const stemTokens = coreNodeTokens(canonicalModuleStem(sourcePath));
+  const taskTokens = tokenizeLexical(task);
+  return stemTokens.size > 0 && [...stemTokens].every((token) => taskTokens.has(token));
 }
 
 function explicitTaskModuleMirrorEvidence(

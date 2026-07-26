@@ -2,6 +2,7 @@ import type { PalaceEdge, PalaceNode, TaskType } from "@vertex-palace/shared";
 import type { TaskAnalysis } from "./analyze-task";
 import { floorTemplate } from "./locate-entry";
 import { isBinaryLikePath } from "../utils/binary-files";
+import { expandedTaskAcronyms } from "../utils/lexical-acronyms";
 import { normalizeLexicalToken, tokenizeLexical } from "../utils/lexical-tokens";
 import { analyzePublicationIntent } from "./publication-intent";
 
@@ -62,6 +63,13 @@ export function scoreNodes(nodes: PalaceNode[], edges: PalaceEdge[], analysis: T
           reasons.push(`summary or tags match "${keyword}"`);
           matchedKeywords.add(normalizedKeyword);
         }
+      }
+
+      const acronymMatches = expandedTaskAcronyms(analysis.raw, node.title);
+      if (acronymMatches.size > 0) {
+        score += acronymMatches.size * 45;
+        for (const acronym of acronymMatches) matchedKeywords.add(acronym);
+        reasons.push(`symbol title expands task acronym "${[...acronymMatches].join("/")}"`);
       }
 
       const pathAffinity = routePathTaskAffinity(node.sourcePath, analysis);
