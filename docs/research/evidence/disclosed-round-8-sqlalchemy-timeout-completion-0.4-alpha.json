@@ -1,0 +1,792 @@
+{
+  "schemaVersion": 4,
+  "studyId": "disclosed-round-8-sqlalchemy-timeout-completion-0.4-alpha",
+  "generatedAt": "2026-07-26T03:08:30.808Z",
+  "status": "completed",
+  "validityFailures": [],
+  "candidateGateStatus": "failed",
+  "candidateGateFailures": [
+    "condition: implementation/path-derived-test coverage was incomplete",
+    "condition: changed-file coverage fell below 0.90",
+    "condition: route focus fell below 0.75",
+    "condition: route precision fell below 0.75"
+  ],
+  "baselineGateStatus": "failed",
+  "baselineGateFailures": [
+    "condition: implementation/path-derived-test coverage was incomplete",
+    "condition: changed-file coverage fell below 0.90",
+    "condition: route focus fell below 0.75",
+    "condition: route precision fell below 0.75"
+  ],
+  "claimBoundary": "Disclosed SQLAlchemy-only environment completion for the Round 8 paired static-routing and confidence-calibration study. The first invalid result and the seven-pair condition-repair result remain immutable. Only the SQLAlchemy explicit-index ceiling changes from two 300-second attempts to one 900-second attempt; neither product, task, original condition order, oracle, metric, tolerance, nor gate changes, and the seven completed targets are not rerun. This result does not execute target tests or an Agent and cannot support Agent correctness, reported Token, tool-call, or wall-time claims.",
+  "heldOutAgainstCandidate": true,
+  "evidenceClass": "disclosed-environment-completion-candidate-held-out-paired-static-calibration",
+  "originalInvalidResult": {
+    "path": "docs/research/evidence/held-out-confidence-calibration-0.4-alpha-round-8.json",
+    "commit": "ea3504b770b26bae1ceeb684efe835ad72b0c66e",
+    "sha256": "F8779C649DCA4350B4E22FBF3E423047371F74F03F6EFB6E3356C2B81083B733",
+    "status": "invalid",
+    "completedFormalTrials": 0,
+    "palaceCallsOnSelectedTasks": 0,
+    "preservedWithoutModification": true
+  },
+  "priorConditionRepairResult": {
+    "path": "docs/research/evidence/disclosed-round-8-after-condition-repository-repair-0.4-alpha.json",
+    "commit": "9eb29b4cdb639ccbb8db11df070fedb6498c49e6",
+    "sha256": "E6216E3F6F43BFC3CD42A2B5E640777349B1977250BB43A159AC5155FFF3A23D",
+    "status": "invalid",
+    "completedPairedTargets": 7,
+    "baselineCompletedFormalTrials": 14,
+    "candidateCompletedFormalTrials": 14,
+    "missingTarget": "sqlalchemy",
+    "preservedWithoutModification": true
+  },
+  "candidate": {
+    "productCommit": "1a02d89269acb36473db3ad39badab9fe338a4a3",
+    "validationHarnessCommit": "fb61685e409fda4e59ba2330426d77c5760637a3",
+    "cliPath": "dist/palace.cjs",
+    "cliSha256": "49F44D09551222A2CB8D3BEEDBDA4E374A507C30DCA681D4D9CC0E57C6DB7747",
+    "frozenPaths": [
+      "packages",
+      "plugins/vertex-palace/mcp/server.cjs"
+    ],
+    "trackedWorktreeCleanBeforeMeasurement": true,
+    "rebuiltBeforeMeasurement": false
+  },
+  "comparisonBaseline": {
+    "productCommit": "228c3bde47f6930023496fdd0a54d43dba10091f",
+    "role": "pre-independent-anchor-confidence-cap",
+    "cliPath": "temporary detached local clone/dist/palace.cjs",
+    "cliSha256": "E81774B89C3A6FAED83788335688EFCBC8B4D17DEA25CA002097FF1F9125318F",
+    "rebuiltBeforeMeasurement": true,
+    "buildNetworkPolicy": "offline",
+    "build": {
+      "elapsedMs": 25638,
+      "pnpmVersion": "11.9.0",
+      "installArguments": [
+        "--dir",
+        "<temporary-baseline-root>",
+        "install",
+        "--offline",
+        "--frozen-lockfile",
+        "--ignore-scripts"
+      ],
+      "buildArguments": [
+        "--dir",
+        "<temporary-baseline-root>",
+        "build"
+      ],
+      "installLogSha256": "2A361E2766FA50A7397FAEE373398CC9CFCA129997769A52D4582331491EBE85",
+      "buildLogSha256": "AE78197A0305D9C3911B16F171AEA2308D3211E03E1140A18F46EF9DB70943D4",
+      "trackedGeneratedOutputs": [
+        "plugins/vertex-palace/mcp/server.cjs"
+      ],
+      "packagesSourceUnchanged": true,
+      "hashVerified": true
+    }
+  },
+  "targetSelection": {
+    "manifestPath": "docs/research/evidence/held-out-routing-target-manifest-0.4-alpha-round-8.json",
+    "manifestCommit": "93d9ae52ceb68f65dc69ec76cee96e8e752eb84a",
+    "manifestSha256": "6678CE22935F938593C9F950636795E3295D18C9AC57D1C1E7A068B145214466",
+    "selectorCommit": "56c006f36b1b83f1b5756d071ce6f0f3dcdd57e5",
+    "repositoryPoolSha256": "118644384D9E099E0833E36900ED5A7E10648827FF4C2DE5AF40CE11A0018158",
+    "palaceCallsOnCandidateTasksDuringSelection": 0,
+    "originalManifestTargetCount": 8,
+    "completionTargetCount": 1,
+    "completionManifestIndex": 1,
+    "completionTargets": [
+      "sqlalchemy"
+    ],
+    "languageFamilies": [
+      "python"
+    ]
+  },
+  "taskTypeOracle": {
+    "timing": "Derived mechanically during target selection and frozen in the manifest before any Palace call.",
+    "rule": "inflected-behavioral-subject-v1: Conventional fix/feat and tested base or inflected behavioral prefixes map mechanically to bugfix or feature.",
+    "classifierPath": "scripts/lib/commit-task-classifier.cjs",
+    "classifierSha256": "C3D787029C019FD64BFB079913F23B58082C38560448A9B9567954ECA9FE1254",
+    "replacementRule": "No target may be removed, replaced, rewritten, or rerouted after observation."
+  },
+  "oracleLimitations": {
+    "source": "Complete modified-file Git diff selected by the preregistered task, path, source, focused-test, and bounded auxiliary-surface rules.",
+    "focusedTestClassification": "Test roles are derived from paths. A file under a test tree can be a helper, mock, or fixture rather than an assertion file.",
+    "auxiliaryClassification": "Documentation and configuration roles are derived from bounded extensions and exact basenames, not semantic inspection.",
+    "targetTestsExecuted": false
+  },
+  "environment": {
+    "platform": "win32",
+    "arch": "x64",
+    "node": "v24.13.1",
+    "npm": "11.8.0",
+    "pnpm": "11.9.0",
+    "git": "git version 2.53.0.windows.1"
+  },
+  "protocol": {
+    "repairScope": "Only the SQLAlchemy environment timeout is completed. Its explicit-index policy changes from two 300-second attempts per condition to one 900-second attempt per condition. The seven targets with completed paired observations are not rerun; no product or measurement rule changes.",
+    "conditions": [
+      "baseline",
+      "candidate"
+    ],
+    "paired": true,
+    "balancedDeterministicOrder": false,
+    "orderRule": "Preserve original manifest index 1: candidate then baseline.",
+    "freshPalacePerCondition": true,
+    "separateRepositoryClonePerCondition": true,
+    "repetitions": 2,
+    "formalTrialsPerCondition": 2,
+    "totalFormalTrials": 4,
+    "sequential": true,
+    "concurrent": false,
+    "budget": 6000,
+    "routeLimit": 9,
+    "maxDrawers": 4,
+    "materializationAttempts": 3,
+    "freshIndexAttempts": 1,
+    "freshIndexTimeoutMs": 900000,
+    "retryDelayMs": 5000,
+    "transientExecutionCodes": [
+      "EAGAIN",
+      "ENOMEM",
+      "ETIMEDOUT"
+    ],
+    "evaluateAndContextRetries": 0,
+    "calibrationTolerance": 0.15,
+    "repetitionsAreDeterminismChecksNotIndependentSamples": true,
+    "outputCreateOnly": true,
+    "gates": {
+      "completedTargetsPerCondition": 1,
+      "completedTrialsPerCondition": 2,
+      "coreImplementationAndTestCoveragePerTarget": 1,
+      "auxiliarySurfaceCoveragePerApplicableTarget": 1,
+      "minimumMacroCoverage": 0.9,
+      "minimumMacroFocus": 0.75,
+      "minimumMacroPrecision": 0.75,
+      "minimumTargetFocus": 0.5,
+      "minimumTargetPrecision": 0.5,
+      "deterministicRouteOrderAndMembership": true,
+      "overconfidentTrials": 0,
+      "contextWithinBudget": true,
+      "selectedExcludedOverlap": 0,
+      "trackedWorktreeClean": true,
+      "freshAfterExplicitIndex": true
+    }
+  },
+  "aggregate": {
+    "baseline": {
+      "condition": "baseline",
+      "targetCount": 1,
+      "conditionRecordedTargets": 1,
+      "passedTargets": 0,
+      "failedTargets": 1,
+      "trialCount": 2,
+      "completedTrials": 2,
+      "passedTrials": 0,
+      "taskTypeMatchedTargets": 1,
+      "coreSurfaceCompleteTargets": 0,
+      "auxiliarySurfaceTargetCount": 0,
+      "auxiliarySurfaceCompleteTargets": 0,
+      "exactOracleTargets": 0,
+      "deterministicTargets": 1,
+      "oracleFileTotal": 3,
+      "auxiliaryOracleFileTotal": 0,
+      "routeFileTotal": 2,
+      "macroChangedFileCoverage": 0.33,
+      "macroAuxiliarySurfaceCoverage": null,
+      "macroRouteFocus": 0.5,
+      "macroRoutePrecision": 0.5,
+      "targetMacroChangedFileCoverage": 0.33,
+      "targetMacroRouteFocus": 0.5,
+      "targetMacroRoutePrecision": 0.5,
+      "minimumTargetRouteFocus": 0.5,
+      "minimumTargetRoutePrecision": 0.5,
+      "calibrationMeanAbsoluteError": 0.07,
+      "targetCalibrationMeanAbsoluteError": 0.07,
+      "overconfidentTrials": 0,
+      "underconfidentTrials": 0,
+      "wellCalibratedTrials": 2,
+      "miscalibratedTrials": 0,
+      "unsafeNarrowModeTrials": 0,
+      "unsafeNarrowModeTargets": 0,
+      "modeCounts": {
+        "full-palace": 2
+      },
+      "targetModeCounts": {
+        "full-palace": 1
+      },
+      "contextEstimatedTokensTotal": 4026,
+      "contextEstimatedTokensMean": 2013,
+      "contextEstimatedTokensMedian": 2013,
+      "targetContextEstimatedTokensMedian": 2013,
+      "maxContextEstimatedTokens": 2013,
+      "selectedExcludedOverlapTrials": 0,
+      "staleAfterExplicitIndexTargets": 0,
+      "trackedWorktreeModifiedTargets": 0,
+      "transientMaterializationAttempts": 0,
+      "transientFreshIndexAttempts": 0,
+      "environmentOrSetupFailures": 0,
+      "harnessContractFailures": 0,
+      "productOrContractFailures": 1
+    },
+    "candidate": {
+      "condition": "candidate",
+      "targetCount": 1,
+      "conditionRecordedTargets": 1,
+      "passedTargets": 0,
+      "failedTargets": 1,
+      "trialCount": 2,
+      "completedTrials": 2,
+      "passedTrials": 0,
+      "taskTypeMatchedTargets": 1,
+      "coreSurfaceCompleteTargets": 0,
+      "auxiliarySurfaceTargetCount": 0,
+      "auxiliarySurfaceCompleteTargets": 0,
+      "exactOracleTargets": 0,
+      "deterministicTargets": 1,
+      "oracleFileTotal": 3,
+      "auxiliaryOracleFileTotal": 0,
+      "routeFileTotal": 2,
+      "macroChangedFileCoverage": 0.33,
+      "macroAuxiliarySurfaceCoverage": null,
+      "macroRouteFocus": 0.5,
+      "macroRoutePrecision": 0.5,
+      "targetMacroChangedFileCoverage": 0.33,
+      "targetMacroRouteFocus": 0.5,
+      "targetMacroRoutePrecision": 0.5,
+      "minimumTargetRouteFocus": 0.5,
+      "minimumTargetRoutePrecision": 0.5,
+      "calibrationMeanAbsoluteError": 0.07,
+      "targetCalibrationMeanAbsoluteError": 0.07,
+      "overconfidentTrials": 0,
+      "underconfidentTrials": 0,
+      "wellCalibratedTrials": 2,
+      "miscalibratedTrials": 0,
+      "unsafeNarrowModeTrials": 0,
+      "unsafeNarrowModeTargets": 0,
+      "modeCounts": {
+        "full-palace": 2
+      },
+      "targetModeCounts": {
+        "full-palace": 1
+      },
+      "contextEstimatedTokensTotal": 4026,
+      "contextEstimatedTokensMean": 2013,
+      "contextEstimatedTokensMedian": 2013,
+      "targetContextEstimatedTokensMedian": 2013,
+      "maxContextEstimatedTokens": 2013,
+      "selectedExcludedOverlapTrials": 0,
+      "staleAfterExplicitIndexTargets": 0,
+      "trackedWorktreeModifiedTargets": 0,
+      "transientMaterializationAttempts": 0,
+      "transientFreshIndexAttempts": 0,
+      "environmentOrSetupFailures": 0,
+      "harnessContractFailures": 0,
+      "productOrContractFailures": 1
+    }
+  },
+  "comparison": {
+    "completedPairedTrials": 2,
+    "completedPairedTargets": 1,
+    "repetitionsUsedForInference": 1,
+    "calibrationTolerance": 0.15,
+    "calibrationFinding": "no-difference",
+    "routingFinding": "unchanged",
+    "narrowModeSafetyFinding": "non-inferior",
+    "contextCostFinding": "same",
+    "routeChangedTargets": 0,
+    "modeChangedTargets": 0,
+    "confidenceLoweredTargets": 0,
+    "confidenceRaisedTargets": 0,
+    "confidenceUnchangedTargets": 1,
+    "baselineOverconfidentTargets": 0,
+    "candidateOverconfidentTargets": 0,
+    "baselineUnderconfidentTargets": 0,
+    "candidateUnderconfidentTargets": 0,
+    "baselineMiscalibratedTargets": 0,
+    "candidateMiscalibratedTargets": 0,
+    "baselineCalibrationMeanAbsoluteError": 0.07,
+    "candidateCalibrationMeanAbsoluteError": 0.07,
+    "baselineUnsafeNarrowTargets": 0,
+    "candidateUnsafeNarrowTargets": 0,
+    "medianContextEstimatedTokenDelta": 0,
+    "meanContextEstimatedTokenDelta": 0,
+    "aggregateDelta": {
+      "changedFileCoverage": 0,
+      "routeFocus": 0,
+      "routePrecision": 0,
+      "calibrationMeanAbsoluteError": 0,
+      "overconfidentTargets": 0,
+      "underconfidentTargets": 0,
+      "miscalibratedTargets": 0,
+      "unsafeNarrowTargets": 0
+    },
+    "modeShifts": {},
+    "targetPairs": [
+      {
+        "target": "sqlalchemy",
+        "trial": 1,
+        "routeChanged": false,
+        "modeChanged": false,
+        "baseline": {
+          "routeFiles": [
+            "lib/sqlalchemy/orm/session.py",
+            "test/orm/test_session.py"
+          ],
+          "routeConfidence": 0.4,
+          "changedFileCoverage": 0.33,
+          "routeFocus": 0.5,
+          "routePrecision": 0.5,
+          "calibrationStatus": "well-calibrated",
+          "calibrationAbsoluteError": 0.07,
+          "mode": "full-palace",
+          "unsafeNarrowMode": false,
+          "contextEstimatedTokens": 2013,
+          "contextBytes": 8050
+        },
+        "candidate": {
+          "routeFiles": [
+            "lib/sqlalchemy/orm/session.py",
+            "test/orm/test_session.py"
+          ],
+          "routeConfidence": 0.4,
+          "changedFileCoverage": 0.33,
+          "routeFocus": 0.5,
+          "routePrecision": 0.5,
+          "calibrationStatus": "well-calibrated",
+          "calibrationAbsoluteError": 0.07,
+          "mode": "full-palace",
+          "unsafeNarrowMode": false,
+          "contextEstimatedTokens": 2013,
+          "contextBytes": 8050
+        },
+        "delta": {
+          "confidence": 0,
+          "changedFileCoverage": 0,
+          "routeFocus": 0,
+          "routePrecision": 0,
+          "contextEstimatedTokens": 0,
+          "contextBytes": 0
+        }
+      }
+    ],
+    "trialPairs": [
+      {
+        "target": "sqlalchemy",
+        "trial": 1,
+        "routeChanged": false,
+        "modeChanged": false,
+        "baseline": {
+          "routeFiles": [
+            "lib/sqlalchemy/orm/session.py",
+            "test/orm/test_session.py"
+          ],
+          "routeConfidence": 0.4,
+          "changedFileCoverage": 0.33,
+          "routeFocus": 0.5,
+          "routePrecision": 0.5,
+          "calibrationStatus": "well-calibrated",
+          "calibrationAbsoluteError": 0.07,
+          "mode": "full-palace",
+          "unsafeNarrowMode": false,
+          "contextEstimatedTokens": 2013,
+          "contextBytes": 8050
+        },
+        "candidate": {
+          "routeFiles": [
+            "lib/sqlalchemy/orm/session.py",
+            "test/orm/test_session.py"
+          ],
+          "routeConfidence": 0.4,
+          "changedFileCoverage": 0.33,
+          "routeFocus": 0.5,
+          "routePrecision": 0.5,
+          "calibrationStatus": "well-calibrated",
+          "calibrationAbsoluteError": 0.07,
+          "mode": "full-palace",
+          "unsafeNarrowMode": false,
+          "contextEstimatedTokens": 2013,
+          "contextBytes": 8050
+        },
+        "delta": {
+          "confidence": 0,
+          "changedFileCoverage": 0,
+          "routeFocus": 0,
+          "routePrecision": 0,
+          "contextEstimatedTokens": 0,
+          "contextBytes": 0
+        }
+      },
+      {
+        "target": "sqlalchemy",
+        "trial": 2,
+        "routeChanged": false,
+        "modeChanged": false,
+        "baseline": {
+          "routeFiles": [
+            "lib/sqlalchemy/orm/session.py",
+            "test/orm/test_session.py"
+          ],
+          "routeConfidence": 0.4,
+          "changedFileCoverage": 0.33,
+          "routeFocus": 0.5,
+          "routePrecision": 0.5,
+          "calibrationStatus": "well-calibrated",
+          "calibrationAbsoluteError": 0.07,
+          "mode": "full-palace",
+          "unsafeNarrowMode": false,
+          "contextEstimatedTokens": 2013,
+          "contextBytes": 8050
+        },
+        "candidate": {
+          "routeFiles": [
+            "lib/sqlalchemy/orm/session.py",
+            "test/orm/test_session.py"
+          ],
+          "routeConfidence": 0.4,
+          "changedFileCoverage": 0.33,
+          "routeFocus": 0.5,
+          "routePrecision": 0.5,
+          "calibrationStatus": "well-calibrated",
+          "calibrationAbsoluteError": 0.07,
+          "mode": "full-palace",
+          "unsafeNarrowMode": false,
+          "contextEstimatedTokens": 2013,
+          "contextBytes": 8050
+        },
+        "delta": {
+          "confidence": 0,
+          "changedFileCoverage": 0,
+          "routeFocus": 0,
+          "routePrecision": 0,
+          "contextEstimatedTokens": 0,
+          "contextBytes": 0
+        }
+      }
+    ]
+  },
+  "targets": [
+    {
+      "name": "sqlalchemy",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/sqlalchemy/sqlalchemy.git",
+      "pinnedHead": "aa1a5575358d3aa14953b04dced02f4763fed2e7",
+      "routeCommit": "092391036ce007d128f2f61c98fc9b31177970bb",
+      "groundTruthCommit": "e00937ec549ecc1d2cae49d4fe84fac3d758b6fb",
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "task": "Fix Session bulk mappings typing for mapped classes",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "lib/sqlalchemy/orm/scoping.py",
+        "lib/sqlalchemy/orm/session.py",
+        "test/typing/plain_files/orm/session.py"
+      ],
+      "implementationFiles": [
+        "lib/sqlalchemy/orm/scoping.py",
+        "lib/sqlalchemy/orm/session.py"
+      ],
+      "testFiles": [
+        "test/typing/plain_files/orm/session.py"
+      ],
+      "auxiliaryFiles": [],
+      "testRoleDerivedFromPath": true,
+      "conditionOrder": [
+        "candidate",
+        "baseline"
+      ],
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "elapsedMs": 9570,
+          "errorCode": null,
+          "error": null
+        }
+      ],
+      "validityFailures": [],
+      "conditions": {
+        "candidate": {
+          "id": "candidate",
+          "role": "independent-anchor-confidence-cap",
+          "productCommit": "1a02d89269acb36473db3ad39badab9fe338a4a3",
+          "cliSha256": "49F44D09551222A2CB8D3BEEDBDA4E374A507C30DCA681D4D9CC0E57C6DB7747",
+          "status": "failed",
+          "failureCategory": "product-or-contract",
+          "failures": [
+            "implementation or path-derived test surface coverage was incomplete"
+          ],
+          "deterministicRoutes": true,
+          "freshIndexAttempts": [
+            {
+              "attempt": 1,
+              "status": "completed",
+              "elapsedMs": 741906,
+              "errorCode": null,
+              "error": null
+            }
+          ],
+          "statusAfterExplicitIndex": {
+            "root": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-disclosed-sqlalchemy-completion-round-8-UyHhqH\\sqlalchemy\\candidate",
+            "palaceRoot": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-disclosed-sqlalchemy-completion-round-8-UyHhqH\\sqlalchemy\\candidate\\.palace",
+            "initialized": true,
+            "indexed": true,
+            "stale": false,
+            "nodeCount": 40980,
+            "edgeCount": 83185,
+            "roomCount": 99,
+            "lastIndexedAt": "2026-07-26T02:55:09.450Z",
+            "configPath": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-disclosed-sqlalchemy-completion-round-8-UyHhqH\\sqlalchemy\\candidate\\.palace\\palace.yml"
+          },
+          "trackedWorktreeClean": true,
+          "trials": [
+            {
+              "trial": 1,
+              "status": "completed",
+              "expectedTaskType": "bugfix",
+              "taskType": "bugfix",
+              "evaluationCacheState": "warm-index-after-explicit-index",
+              "contextCacheState": "warm-index-after-evaluation",
+              "evaluationElapsedMs": 14397,
+              "contextElapsedMs": 12337,
+              "mode": "full-palace",
+              "evidenceStatus": null,
+              "routeFiles": [
+                "lib/sqlalchemy/orm/session.py",
+                "test/orm/test_session.py"
+              ],
+              "routeFileCount": 2,
+              "routeOnlyFiles": [
+                "test/orm/test_session.py"
+              ],
+              "changedFileCoverage": 0.33,
+              "coreSurfaceCoverage": 0.333,
+              "missingImplementationFiles": [
+                "lib/sqlalchemy/orm/scoping.py"
+              ],
+              "missingTestFiles": [
+                "test/typing/plain_files/orm/session.py"
+              ],
+              "auxiliarySurfaceCoverage": null,
+              "missingAuxiliaryFiles": [],
+              "routeFocus": 0.5,
+              "routePrecision": 0.5,
+              "routeConfidence": 0.4,
+              "calibration": {
+                "predictedConfidence": 0.4,
+                "observedCoverage": 0.33,
+                "tolerance": 0.15,
+                "signedError": 0.07,
+                "absoluteError": 0.07,
+                "status": "well-calibrated"
+              },
+              "reportedCalibration": {
+                "status": "well-calibrated",
+                "predictedConfidence": 0.4,
+                "observedCoverage": 0.33,
+                "error": 0.07
+              },
+              "unsafeNarrowMode": false,
+              "contextEstimatedTokens": 2013,
+              "contextBytes": 8050,
+              "contextMetricSource": "reported",
+              "selectedExcludedOverlap": []
+            },
+            {
+              "trial": 2,
+              "status": "completed",
+              "expectedTaskType": "bugfix",
+              "taskType": "bugfix",
+              "evaluationCacheState": "warm-index",
+              "contextCacheState": "warm-index-after-evaluation",
+              "evaluationElapsedMs": 11805,
+              "contextElapsedMs": 9009,
+              "mode": "full-palace",
+              "evidenceStatus": null,
+              "routeFiles": [
+                "lib/sqlalchemy/orm/session.py",
+                "test/orm/test_session.py"
+              ],
+              "routeFileCount": 2,
+              "routeOnlyFiles": [
+                "test/orm/test_session.py"
+              ],
+              "changedFileCoverage": 0.33,
+              "coreSurfaceCoverage": 0.333,
+              "missingImplementationFiles": [
+                "lib/sqlalchemy/orm/scoping.py"
+              ],
+              "missingTestFiles": [
+                "test/typing/plain_files/orm/session.py"
+              ],
+              "auxiliarySurfaceCoverage": null,
+              "missingAuxiliaryFiles": [],
+              "routeFocus": 0.5,
+              "routePrecision": 0.5,
+              "routeConfidence": 0.4,
+              "calibration": {
+                "predictedConfidence": 0.4,
+                "observedCoverage": 0.33,
+                "tolerance": 0.15,
+                "signedError": 0.07,
+                "absoluteError": 0.07,
+                "status": "well-calibrated"
+              },
+              "reportedCalibration": {
+                "status": "well-calibrated",
+                "predictedConfidence": 0.4,
+                "observedCoverage": 0.33,
+                "error": 0.07
+              },
+              "unsafeNarrowMode": false,
+              "contextEstimatedTokens": 2013,
+              "contextBytes": 8050,
+              "contextMetricSource": "reported",
+              "selectedExcludedOverlap": []
+            }
+          ]
+        },
+        "baseline": {
+          "id": "baseline",
+          "role": "pre-independent-anchor-confidence-cap",
+          "productCommit": "228c3bde47f6930023496fdd0a54d43dba10091f",
+          "cliSha256": "E81774B89C3A6FAED83788335688EFCBC8B4D17DEA25CA002097FF1F9125318F",
+          "status": "failed",
+          "failureCategory": "product-or-contract",
+          "failures": [
+            "implementation or path-derived test surface coverage was incomplete"
+          ],
+          "deterministicRoutes": true,
+          "freshIndexAttempts": [
+            {
+              "attempt": 1,
+              "status": "completed",
+              "elapsedMs": 701166,
+              "errorCode": null,
+              "error": null
+            }
+          ],
+          "statusAfterExplicitIndex": {
+            "root": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-disclosed-sqlalchemy-completion-round-8-UyHhqH\\sqlalchemy\\baseline",
+            "palaceRoot": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-disclosed-sqlalchemy-completion-round-8-UyHhqH\\sqlalchemy\\baseline\\.palace",
+            "initialized": true,
+            "indexed": true,
+            "stale": false,
+            "nodeCount": 40980,
+            "edgeCount": 83185,
+            "roomCount": 99,
+            "lastIndexedAt": "2026-07-26T03:07:46.727Z",
+            "configPath": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-disclosed-sqlalchemy-completion-round-8-UyHhqH\\sqlalchemy\\baseline\\.palace\\palace.yml"
+          },
+          "trackedWorktreeClean": true,
+          "trials": [
+            {
+              "trial": 1,
+              "status": "completed",
+              "expectedTaskType": "bugfix",
+              "taskType": "bugfix",
+              "evaluationCacheState": "warm-index-after-explicit-index",
+              "contextCacheState": "warm-index-after-evaluation",
+              "evaluationElapsedMs": 12134,
+              "contextElapsedMs": 9215,
+              "mode": "full-palace",
+              "evidenceStatus": null,
+              "routeFiles": [
+                "lib/sqlalchemy/orm/session.py",
+                "test/orm/test_session.py"
+              ],
+              "routeFileCount": 2,
+              "routeOnlyFiles": [
+                "test/orm/test_session.py"
+              ],
+              "changedFileCoverage": 0.33,
+              "coreSurfaceCoverage": 0.333,
+              "missingImplementationFiles": [
+                "lib/sqlalchemy/orm/scoping.py"
+              ],
+              "missingTestFiles": [
+                "test/typing/plain_files/orm/session.py"
+              ],
+              "auxiliarySurfaceCoverage": null,
+              "missingAuxiliaryFiles": [],
+              "routeFocus": 0.5,
+              "routePrecision": 0.5,
+              "routeConfidence": 0.4,
+              "calibration": {
+                "predictedConfidence": 0.4,
+                "observedCoverage": 0.33,
+                "tolerance": 0.15,
+                "signedError": 0.07,
+                "absoluteError": 0.07,
+                "status": "well-calibrated"
+              },
+              "reportedCalibration": {
+                "status": "well-calibrated",
+                "predictedConfidence": 0.4,
+                "observedCoverage": 0.33,
+                "error": 0.07
+              },
+              "unsafeNarrowMode": false,
+              "contextEstimatedTokens": 2013,
+              "contextBytes": 8050,
+              "contextMetricSource": "reported",
+              "selectedExcludedOverlap": []
+            },
+            {
+              "trial": 2,
+              "status": "completed",
+              "expectedTaskType": "bugfix",
+              "taskType": "bugfix",
+              "evaluationCacheState": "warm-index",
+              "contextCacheState": "warm-index-after-evaluation",
+              "evaluationElapsedMs": 11472,
+              "contextElapsedMs": 8550,
+              "mode": "full-palace",
+              "evidenceStatus": null,
+              "routeFiles": [
+                "lib/sqlalchemy/orm/session.py",
+                "test/orm/test_session.py"
+              ],
+              "routeFileCount": 2,
+              "routeOnlyFiles": [
+                "test/orm/test_session.py"
+              ],
+              "changedFileCoverage": 0.33,
+              "coreSurfaceCoverage": 0.333,
+              "missingImplementationFiles": [
+                "lib/sqlalchemy/orm/scoping.py"
+              ],
+              "missingTestFiles": [
+                "test/typing/plain_files/orm/session.py"
+              ],
+              "auxiliarySurfaceCoverage": null,
+              "missingAuxiliaryFiles": [],
+              "routeFocus": 0.5,
+              "routePrecision": 0.5,
+              "routeConfidence": 0.4,
+              "calibration": {
+                "predictedConfidence": 0.4,
+                "observedCoverage": 0.33,
+                "tolerance": 0.15,
+                "signedError": 0.07,
+                "absoluteError": 0.07,
+                "status": "well-calibrated"
+              },
+              "reportedCalibration": {
+                "status": "well-calibrated",
+                "predictedConfidence": 0.4,
+                "observedCoverage": 0.33,
+                "error": 0.07
+              },
+              "unsafeNarrowMode": false,
+              "contextEstimatedTokens": 2013,
+              "contextBytes": 8050,
+              "contextMetricSource": "reported",
+              "selectedExcludedOverlap": []
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
