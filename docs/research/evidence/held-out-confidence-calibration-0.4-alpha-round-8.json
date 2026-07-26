@@ -1,0 +1,956 @@
+{
+  "schemaVersion": 4,
+  "studyId": "held-out-confidence-calibration-round-8-0.4-alpha",
+  "generatedAt": "2026-07-26T01:56:54.952Z",
+  "status": "invalid",
+  "validityFailures": [
+    "yargs: baseline: condition-repository-setup failed before formal trials completed",
+    "yargs: candidate: condition-repository-setup failed before formal trials completed",
+    "sqlalchemy: baseline: condition-repository-setup failed before formal trials completed",
+    "sqlalchemy: candidate: condition-repository-setup failed before formal trials completed",
+    "zap: baseline: condition-repository-setup failed before formal trials completed",
+    "zap: candidate: condition-repository-setup failed before formal trials completed",
+    "sinon: baseline: condition-repository-setup failed before formal trials completed",
+    "sinon: candidate: condition-repository-setup failed before formal trials completed",
+    "rich: baseline: condition-repository-setup failed before formal trials completed",
+    "rich: candidate: condition-repository-setup failed before formal trials completed",
+    "viper: baseline: condition-repository-setup failed before formal trials completed",
+    "viper: candidate: condition-repository-setup failed before formal trials completed",
+    "crossbeam: baseline: condition-repository-setup failed before formal trials completed",
+    "crossbeam: candidate: condition-repository-setup failed before formal trials completed",
+    "http: baseline: condition-repository-setup failed before formal trials completed",
+    "http: candidate: condition-repository-setup failed before formal trials completed",
+    "baseline: environment or setup failures were observed",
+    "candidate: environment or setup failures were observed"
+  ],
+  "candidateGateStatus": "failed",
+  "candidateGateFailures": [
+    "condition: not all preregistered trials completed",
+    "condition: task type mapping was incomplete",
+    "condition: implementation/path-derived-test coverage was incomplete",
+    "condition: route order or membership was not deterministic",
+    "condition: changed-file coverage fell below 0.90",
+    "condition: route focus fell below 0.75",
+    "condition: route precision fell below 0.75",
+    "condition: a target route focus fell below 0.50",
+    "condition: a target route precision fell below 0.50",
+    "condition: context payload exceeded the token ceiling",
+    "condition: explicit indexes were not fresh"
+  ],
+  "baselineGateStatus": "failed",
+  "baselineGateFailures": [
+    "condition: not all preregistered trials completed",
+    "condition: task type mapping was incomplete",
+    "condition: implementation/path-derived-test coverage was incomplete",
+    "condition: route order or membership was not deterministic",
+    "condition: changed-file coverage fell below 0.90",
+    "condition: route focus fell below 0.75",
+    "condition: route precision fell below 0.75",
+    "condition: a target route focus fell below 0.50",
+    "condition: a target route precision fell below 0.50",
+    "condition: context payload exceeded the token ceiling",
+    "condition: explicit indexes were not fresh"
+  ],
+  "claimBoundary": "First paired static-routing and confidence-calibration observation for baseline 228c3bd and candidate 1a02d89 on eight mechanically selected Round 8 tasks not used during candidate development. This candidate-held-out sample is not model-unseen evidence, does not execute target tests or an Agent, and cannot support Agent correctness, reported Token, tool-call, or wall-time claims.",
+  "heldOutAgainstCandidate": true,
+  "evidenceClass": "preregistered-candidate-held-out-paired-static-calibration",
+  "candidate": {
+    "productCommit": "1a02d89269acb36473db3ad39badab9fe338a4a3",
+    "validationHarnessCommit": "2d85c8330af4e50bca634aff0115a81dbb979fe5",
+    "cliPath": "dist/palace.cjs",
+    "cliSha256": "49F44D09551222A2CB8D3BEEDBDA4E374A507C30DCA681D4D9CC0E57C6DB7747",
+    "frozenPaths": [
+      "packages",
+      "plugins/vertex-palace/mcp/server.cjs"
+    ],
+    "trackedWorktreeCleanBeforeMeasurement": true,
+    "rebuiltBeforeMeasurement": false
+  },
+  "comparisonBaseline": {
+    "productCommit": "228c3bde47f6930023496fdd0a54d43dba10091f",
+    "role": "pre-independent-anchor-confidence-cap",
+    "cliPath": "temporary detached local clone/dist/palace.cjs",
+    "cliSha256": "E81774B89C3A6FAED83788335688EFCBC8B4D17DEA25CA002097FF1F9125318F",
+    "rebuiltBeforeMeasurement": true,
+    "buildNetworkPolicy": "offline",
+    "build": {
+      "elapsedMs": 26051,
+      "pnpmVersion": "11.9.0",
+      "installArguments": [
+        "--dir",
+        "<temporary-baseline-root>",
+        "install",
+        "--offline",
+        "--frozen-lockfile",
+        "--ignore-scripts"
+      ],
+      "buildArguments": [
+        "--dir",
+        "<temporary-baseline-root>",
+        "build"
+      ],
+      "installLogSha256": "183BA72E561C91709213F4CD4CD6DF6241F4F26899E47D3B9FF36621AA1E285D",
+      "buildLogSha256": "7A8628CE9F4FF0D8E3F01238EF3A2E1FF61E2FAE54554668D488D5BCC54EDBF0",
+      "trackedGeneratedOutputs": [
+        "plugins/vertex-palace/mcp/server.cjs"
+      ],
+      "packagesSourceUnchanged": true,
+      "hashVerified": true
+    }
+  },
+  "targetSelection": {
+    "manifestPath": "docs/research/evidence/held-out-routing-target-manifest-0.4-alpha-round-8.json",
+    "manifestCommit": "93d9ae52ceb68f65dc69ec76cee96e8e752eb84a",
+    "manifestSha256": "6678CE22935F938593C9F950636795E3295D18C9AC57D1C1E7A068B145214466",
+    "selectorCommit": "56c006f36b1b83f1b5756d071ce6f0f3dcdd57e5",
+    "repositoryPoolSha256": "118644384D9E099E0833E36900ED5A7E10648827FF4C2DE5AF40CE11A0018158",
+    "palaceCallsOnCandidateTasksDuringSelection": 0,
+    "targetCount": 8,
+    "languageFamilies": [
+      "javascript-typescript",
+      "python",
+      "go",
+      "rust"
+    ],
+    "targetsPerLanguageFamily": 2
+  },
+  "taskTypeOracle": {
+    "timing": "Derived mechanically during target selection and frozen in the manifest before any Palace call.",
+    "rule": "inflected-behavioral-subject-v1: Conventional fix/feat and tested base or inflected behavioral prefixes map mechanically to bugfix or feature.",
+    "classifierPath": "scripts/lib/commit-task-classifier.cjs",
+    "classifierSha256": "C3D787029C019FD64BFB079913F23B58082C38560448A9B9567954ECA9FE1254",
+    "replacementRule": "No target may be removed, replaced, rewritten, or rerouted after observation."
+  },
+  "oracleLimitations": {
+    "source": "Complete modified-file Git diff selected by the preregistered task, path, source, focused-test, and bounded auxiliary-surface rules.",
+    "focusedTestClassification": "Test roles are derived from paths. A file under a test tree can be a helper, mock, or fixture rather than an assertion file.",
+    "auxiliaryClassification": "Documentation and configuration roles are derived from bounded extensions and exact basenames, not semantic inspection.",
+    "targetTestsExecuted": false
+  },
+  "environment": {
+    "platform": "win32",
+    "arch": "x64",
+    "node": "v24.13.1",
+    "npm": "11.8.0",
+    "pnpm": "11.9.0",
+    "git": "git version 2.53.0.windows.1"
+  },
+  "protocol": {
+    "conditions": [
+      "baseline",
+      "candidate"
+    ],
+    "paired": true,
+    "balancedDeterministicOrder": true,
+    "orderRule": "Even manifest indexes run baseline then candidate; odd indexes run candidate then baseline.",
+    "freshPalacePerCondition": true,
+    "separateRepositoryClonePerCondition": true,
+    "repetitions": 2,
+    "formalTrialsPerCondition": 16,
+    "totalFormalTrials": 32,
+    "sequential": true,
+    "concurrent": false,
+    "budget": 6000,
+    "routeLimit": 9,
+    "maxDrawers": 4,
+    "materializationAttempts": 3,
+    "freshIndexAttempts": 2,
+    "retryDelayMs": 5000,
+    "transientExecutionCodes": [
+      "EAGAIN",
+      "ENOMEM",
+      "ETIMEDOUT"
+    ],
+    "evaluateAndContextRetries": 0,
+    "calibrationTolerance": 0.15,
+    "repetitionsAreDeterminismChecksNotIndependentSamples": true,
+    "outputCreateOnly": true,
+    "gates": {
+      "completedTargetsPerCondition": 8,
+      "completedTrialsPerCondition": 16,
+      "coreImplementationAndTestCoveragePerTarget": 1,
+      "auxiliarySurfaceCoveragePerApplicableTarget": 1,
+      "minimumMacroCoverage": 0.9,
+      "minimumMacroFocus": 0.75,
+      "minimumMacroPrecision": 0.75,
+      "minimumTargetFocus": 0.5,
+      "minimumTargetPrecision": 0.5,
+      "deterministicRouteOrderAndMembership": true,
+      "overconfidentTrials": 0,
+      "contextWithinBudget": true,
+      "selectedExcludedOverlap": 0,
+      "trackedWorktreeClean": true,
+      "freshAfterExplicitIndex": true
+    }
+  },
+  "aggregate": {
+    "baseline": {
+      "condition": "baseline",
+      "targetCount": 8,
+      "conditionRecordedTargets": 8,
+      "passedTargets": 0,
+      "failedTargets": 8,
+      "trialCount": 0,
+      "completedTrials": 0,
+      "passedTrials": 0,
+      "taskTypeMatchedTargets": 0,
+      "coreSurfaceCompleteTargets": 0,
+      "auxiliarySurfaceTargetCount": 0,
+      "auxiliarySurfaceCompleteTargets": 0,
+      "exactOracleTargets": 0,
+      "deterministicTargets": 0,
+      "oracleFileTotal": 20,
+      "auxiliaryOracleFileTotal": 0,
+      "routeFileTotal": 0,
+      "macroChangedFileCoverage": null,
+      "macroAuxiliarySurfaceCoverage": null,
+      "macroRouteFocus": null,
+      "macroRoutePrecision": null,
+      "targetMacroChangedFileCoverage": null,
+      "targetMacroRouteFocus": null,
+      "targetMacroRoutePrecision": null,
+      "minimumTargetRouteFocus": null,
+      "minimumTargetRoutePrecision": null,
+      "calibrationMeanAbsoluteError": null,
+      "targetCalibrationMeanAbsoluteError": null,
+      "overconfidentTrials": 0,
+      "underconfidentTrials": 0,
+      "wellCalibratedTrials": 0,
+      "miscalibratedTrials": 0,
+      "unsafeNarrowModeTrials": 0,
+      "unsafeNarrowModeTargets": 0,
+      "modeCounts": {},
+      "targetModeCounts": {},
+      "contextEstimatedTokensTotal": 0,
+      "contextEstimatedTokensMean": null,
+      "contextEstimatedTokensMedian": null,
+      "targetContextEstimatedTokensMedian": null,
+      "maxContextEstimatedTokens": null,
+      "selectedExcludedOverlapTrials": 0,
+      "staleAfterExplicitIndexTargets": 8,
+      "trackedWorktreeModifiedTargets": 0,
+      "transientMaterializationAttempts": 0,
+      "transientFreshIndexAttempts": 0,
+      "environmentOrSetupFailures": 8,
+      "harnessContractFailures": 0,
+      "productOrContractFailures": 0
+    },
+    "candidate": {
+      "condition": "candidate",
+      "targetCount": 8,
+      "conditionRecordedTargets": 8,
+      "passedTargets": 0,
+      "failedTargets": 8,
+      "trialCount": 0,
+      "completedTrials": 0,
+      "passedTrials": 0,
+      "taskTypeMatchedTargets": 0,
+      "coreSurfaceCompleteTargets": 0,
+      "auxiliarySurfaceTargetCount": 0,
+      "auxiliarySurfaceCompleteTargets": 0,
+      "exactOracleTargets": 0,
+      "deterministicTargets": 0,
+      "oracleFileTotal": 20,
+      "auxiliaryOracleFileTotal": 0,
+      "routeFileTotal": 0,
+      "macroChangedFileCoverage": null,
+      "macroAuxiliarySurfaceCoverage": null,
+      "macroRouteFocus": null,
+      "macroRoutePrecision": null,
+      "targetMacroChangedFileCoverage": null,
+      "targetMacroRouteFocus": null,
+      "targetMacroRoutePrecision": null,
+      "minimumTargetRouteFocus": null,
+      "minimumTargetRoutePrecision": null,
+      "calibrationMeanAbsoluteError": null,
+      "targetCalibrationMeanAbsoluteError": null,
+      "overconfidentTrials": 0,
+      "underconfidentTrials": 0,
+      "wellCalibratedTrials": 0,
+      "miscalibratedTrials": 0,
+      "unsafeNarrowModeTrials": 0,
+      "unsafeNarrowModeTargets": 0,
+      "modeCounts": {},
+      "targetModeCounts": {},
+      "contextEstimatedTokensTotal": 0,
+      "contextEstimatedTokensMean": null,
+      "contextEstimatedTokensMedian": null,
+      "targetContextEstimatedTokensMedian": null,
+      "maxContextEstimatedTokens": null,
+      "selectedExcludedOverlapTrials": 0,
+      "staleAfterExplicitIndexTargets": 8,
+      "trackedWorktreeModifiedTargets": 0,
+      "transientMaterializationAttempts": 0,
+      "transientFreshIndexAttempts": 0,
+      "environmentOrSetupFailures": 8,
+      "harnessContractFailures": 0,
+      "productOrContractFailures": 0
+    }
+  },
+  "comparison": {
+    "completedPairedTrials": 0,
+    "completedPairedTargets": 0,
+    "repetitionsUsedForInference": 1,
+    "calibrationTolerance": 0.15,
+    "calibrationFinding": "incomplete",
+    "routingFinding": "incomplete",
+    "narrowModeSafetyFinding": "incomplete",
+    "contextCostFinding": "incomplete",
+    "routeChangedTargets": 0,
+    "modeChangedTargets": 0,
+    "confidenceLoweredTargets": 0,
+    "confidenceRaisedTargets": 0,
+    "confidenceUnchangedTargets": 0,
+    "baselineOverconfidentTargets": 0,
+    "candidateOverconfidentTargets": 0,
+    "baselineUnderconfidentTargets": 0,
+    "candidateUnderconfidentTargets": 0,
+    "baselineMiscalibratedTargets": 0,
+    "candidateMiscalibratedTargets": 0,
+    "baselineCalibrationMeanAbsoluteError": null,
+    "candidateCalibrationMeanAbsoluteError": null,
+    "baselineUnsafeNarrowTargets": 0,
+    "candidateUnsafeNarrowTargets": 0,
+    "medianContextEstimatedTokenDelta": null,
+    "meanContextEstimatedTokenDelta": null,
+    "aggregateDelta": {
+      "changedFileCoverage": null,
+      "routeFocus": null,
+      "routePrecision": null,
+      "calibrationMeanAbsoluteError": null,
+      "overconfidentTargets": 0,
+      "underconfidentTargets": 0,
+      "miscalibratedTargets": 0,
+      "unsafeNarrowTargets": 0
+    },
+    "modeShifts": {},
+    "targetPairs": [],
+    "trialPairs": []
+  },
+  "targets": [
+    {
+      "name": "yargs",
+      "language": "JavaScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/yargs/yargs.git",
+      "pinnedHead": "db916b4154271e4cbbd2c60618fab90bdc1dbac2",
+      "routeCommit": "971e351705f0fbc5566c6ed1dfd707fa65e11c0d",
+      "groundTruthCommit": "437f3a4e0f4166e1f1a3ce023b0331159582746d",
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "task": "fix: prototype pollution vulnerability in apply-extends (#2498)",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "lib/utils/apply-extends.ts",
+        "test/helpers.mjs"
+      ],
+      "implementationFiles": [
+        "lib/utils/apply-extends.ts"
+      ],
+      "testFiles": [
+        "test/helpers.mjs"
+      ],
+      "auxiliaryFiles": [],
+      "testRoleDerivedFromPath": true,
+      "conditionOrder": [
+        "baseline",
+        "candidate"
+      ],
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "elapsedMs": 3903,
+          "errorCode": null,
+          "error": null
+        }
+      ],
+      "validityFailures": [
+        "baseline: condition-repository-setup failed before formal trials completed",
+        "candidate: condition-repository-setup failed before formal trials completed"
+      ],
+      "conditions": {
+        "baseline": {
+          "id": "baseline",
+          "role": "pre-independent-anchor-confidence-cap",
+          "productCommit": "228c3bde47f6930023496fdd0a54d43dba10091f",
+          "cliSha256": "E81774B89C3A6FAED83788335688EFCBC8B4D17DEA25CA002097FF1F9125318F",
+          "status": "failed",
+          "failureCategory": "environment-or-setup",
+          "failures": [
+            "condition-repository-setup failed before formal trials completed"
+          ],
+          "executionError": "Error: Command failed (128): git rev-parse 437f3a4e0f4166e1f1a3ce023b0331159582746d^\n437f3a4e0f4166e1f1a3ce023b0331159582746d^\nfatal: ambiguous argument '437f3a4e0f4166e1f1a3ce023b0331159582746d^': unknown revision or path not in the working tree.\nUse '--' to separate paths from revisions, like this:\n'git <command> [<revision>...] -- [<file>...]'\n    at run (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:1541:11)\n    at verifyPinnedTarget (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:496:5)\n    at cloneConditionTarget (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:490:3)\n    at async validatePairedTarget (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:545:7)\n    at async main (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:114:22)",
+          "deterministicRoutes": false,
+          "freshIndexAttempts": [],
+          "statusAfterExplicitIndex": null,
+          "trackedWorktreeClean": null,
+          "trials": []
+        },
+        "candidate": {
+          "id": "candidate",
+          "role": "independent-anchor-confidence-cap",
+          "productCommit": "1a02d89269acb36473db3ad39badab9fe338a4a3",
+          "cliSha256": "49F44D09551222A2CB8D3BEEDBDA4E374A507C30DCA681D4D9CC0E57C6DB7747",
+          "status": "failed",
+          "failureCategory": "environment-or-setup",
+          "failures": [
+            "condition-repository-setup failed before formal trials completed"
+          ],
+          "executionError": "Error: Command failed (128): git rev-parse 437f3a4e0f4166e1f1a3ce023b0331159582746d^\n437f3a4e0f4166e1f1a3ce023b0331159582746d^\nfatal: ambiguous argument '437f3a4e0f4166e1f1a3ce023b0331159582746d^': unknown revision or path not in the working tree.\nUse '--' to separate paths from revisions, like this:\n'git <command> [<revision>...] -- [<file>...]'\n    at run (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:1541:11)\n    at verifyPinnedTarget (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:496:5)\n    at cloneConditionTarget (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:490:3)\n    at async validatePairedTarget (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:545:7)\n    at async main (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:114:22)",
+          "deterministicRoutes": false,
+          "freshIndexAttempts": [],
+          "statusAfterExplicitIndex": null,
+          "trackedWorktreeClean": null,
+          "trials": []
+        }
+      }
+    },
+    {
+      "name": "sqlalchemy",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/sqlalchemy/sqlalchemy.git",
+      "pinnedHead": "aa1a5575358d3aa14953b04dced02f4763fed2e7",
+      "routeCommit": "092391036ce007d128f2f61c98fc9b31177970bb",
+      "groundTruthCommit": "e00937ec549ecc1d2cae49d4fe84fac3d758b6fb",
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "task": "Fix Session bulk mappings typing for mapped classes",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "lib/sqlalchemy/orm/scoping.py",
+        "lib/sqlalchemy/orm/session.py",
+        "test/typing/plain_files/orm/session.py"
+      ],
+      "implementationFiles": [
+        "lib/sqlalchemy/orm/scoping.py",
+        "lib/sqlalchemy/orm/session.py"
+      ],
+      "testFiles": [
+        "test/typing/plain_files/orm/session.py"
+      ],
+      "auxiliaryFiles": [],
+      "testRoleDerivedFromPath": true,
+      "conditionOrder": [
+        "candidate",
+        "baseline"
+      ],
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "elapsedMs": 8240,
+          "errorCode": null,
+          "error": null
+        }
+      ],
+      "validityFailures": [
+        "baseline: condition-repository-setup failed before formal trials completed",
+        "candidate: condition-repository-setup failed before formal trials completed"
+      ],
+      "conditions": {
+        "candidate": {
+          "id": "candidate",
+          "role": "independent-anchor-confidence-cap",
+          "productCommit": "1a02d89269acb36473db3ad39badab9fe338a4a3",
+          "cliSha256": "49F44D09551222A2CB8D3BEEDBDA4E374A507C30DCA681D4D9CC0E57C6DB7747",
+          "status": "failed",
+          "failureCategory": "environment-or-setup",
+          "failures": [
+            "condition-repository-setup failed before formal trials completed"
+          ],
+          "executionError": "Error: Command failed (128): git rev-parse e00937ec549ecc1d2cae49d4fe84fac3d758b6fb^\ne00937ec549ecc1d2cae49d4fe84fac3d758b6fb^\nfatal: ambiguous argument 'e00937ec549ecc1d2cae49d4fe84fac3d758b6fb^': unknown revision or path not in the working tree.\nUse '--' to separate paths from revisions, like this:\n'git <command> [<revision>...] -- [<file>...]'\n    at run (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:1541:11)\n    at verifyPinnedTarget (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:496:5)\n    at cloneConditionTarget (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:490:3)\n    at async validatePairedTarget (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:545:7)\n    at async main (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:114:22)",
+          "deterministicRoutes": false,
+          "freshIndexAttempts": [],
+          "statusAfterExplicitIndex": null,
+          "trackedWorktreeClean": null,
+          "trials": []
+        },
+        "baseline": {
+          "id": "baseline",
+          "role": "pre-independent-anchor-confidence-cap",
+          "productCommit": "228c3bde47f6930023496fdd0a54d43dba10091f",
+          "cliSha256": "E81774B89C3A6FAED83788335688EFCBC8B4D17DEA25CA002097FF1F9125318F",
+          "status": "failed",
+          "failureCategory": "environment-or-setup",
+          "failures": [
+            "condition-repository-setup failed before formal trials completed"
+          ],
+          "executionError": "Error: Command failed (128): git rev-parse e00937ec549ecc1d2cae49d4fe84fac3d758b6fb^\ne00937ec549ecc1d2cae49d4fe84fac3d758b6fb^\nfatal: ambiguous argument 'e00937ec549ecc1d2cae49d4fe84fac3d758b6fb^': unknown revision or path not in the working tree.\nUse '--' to separate paths from revisions, like this:\n'git <command> [<revision>...] -- [<file>...]'\n    at run (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:1541:11)\n    at verifyPinnedTarget (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:496:5)\n    at cloneConditionTarget (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:490:3)\n    at async validatePairedTarget (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:545:7)\n    at async main (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:114:22)",
+          "deterministicRoutes": false,
+          "freshIndexAttempts": [],
+          "statusAfterExplicitIndex": null,
+          "trackedWorktreeClean": null,
+          "trials": []
+        }
+      }
+    },
+    {
+      "name": "zap",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/uber-go/zap.git",
+      "pinnedHead": "5b81b37b81b8e2ed447a6f57991e372ee4fa5c8f",
+      "routeCommit": "07077a697f639389cc998ff91b8885feb25f520d",
+      "groundTruthCommit": "7c80d7b53df6ed592d333998cbbfcd99ff52f3c2",
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "task": "Fix race condition in WithLazy implementation (#1426) (#1511)",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "zapcore/lazy_with.go",
+        "zapcore/lazy_with_test.go"
+      ],
+      "implementationFiles": [
+        "zapcore/lazy_with.go"
+      ],
+      "testFiles": [
+        "zapcore/lazy_with_test.go"
+      ],
+      "auxiliaryFiles": [],
+      "testRoleDerivedFromPath": true,
+      "conditionOrder": [
+        "baseline",
+        "candidate"
+      ],
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "elapsedMs": 3741,
+          "errorCode": null,
+          "error": null
+        }
+      ],
+      "validityFailures": [
+        "baseline: condition-repository-setup failed before formal trials completed",
+        "candidate: condition-repository-setup failed before formal trials completed"
+      ],
+      "conditions": {
+        "baseline": {
+          "id": "baseline",
+          "role": "pre-independent-anchor-confidence-cap",
+          "productCommit": "228c3bde47f6930023496fdd0a54d43dba10091f",
+          "cliSha256": "E81774B89C3A6FAED83788335688EFCBC8B4D17DEA25CA002097FF1F9125318F",
+          "status": "failed",
+          "failureCategory": "environment-or-setup",
+          "failures": [
+            "condition-repository-setup failed before formal trials completed"
+          ],
+          "executionError": "Error: Command failed (128): git rev-parse 7c80d7b53df6ed592d333998cbbfcd99ff52f3c2^\n7c80d7b53df6ed592d333998cbbfcd99ff52f3c2^\nfatal: ambiguous argument '7c80d7b53df6ed592d333998cbbfcd99ff52f3c2^': unknown revision or path not in the working tree.\nUse '--' to separate paths from revisions, like this:\n'git <command> [<revision>...] -- [<file>...]'\n    at run (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:1541:11)\n    at verifyPinnedTarget (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:496:5)\n    at cloneConditionTarget (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:490:3)\n    at async validatePairedTarget (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:545:7)\n    at async main (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:114:22)",
+          "deterministicRoutes": false,
+          "freshIndexAttempts": [],
+          "statusAfterExplicitIndex": null,
+          "trackedWorktreeClean": null,
+          "trials": []
+        },
+        "candidate": {
+          "id": "candidate",
+          "role": "independent-anchor-confidence-cap",
+          "productCommit": "1a02d89269acb36473db3ad39badab9fe338a4a3",
+          "cliSha256": "49F44D09551222A2CB8D3BEEDBDA4E374A507C30DCA681D4D9CC0E57C6DB7747",
+          "status": "failed",
+          "failureCategory": "environment-or-setup",
+          "failures": [
+            "condition-repository-setup failed before formal trials completed"
+          ],
+          "executionError": "Error: Command failed (128): git rev-parse 7c80d7b53df6ed592d333998cbbfcd99ff52f3c2^\n7c80d7b53df6ed592d333998cbbfcd99ff52f3c2^\nfatal: ambiguous argument '7c80d7b53df6ed592d333998cbbfcd99ff52f3c2^': unknown revision or path not in the working tree.\nUse '--' to separate paths from revisions, like this:\n'git <command> [<revision>...] -- [<file>...]'\n    at run (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:1541:11)\n    at verifyPinnedTarget (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:496:5)\n    at cloneConditionTarget (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:490:3)\n    at async validatePairedTarget (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:545:7)\n    at async main (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:114:22)",
+          "deterministicRoutes": false,
+          "freshIndexAttempts": [],
+          "statusAfterExplicitIndex": null,
+          "trackedWorktreeClean": null,
+          "trials": []
+        }
+      }
+    },
+    {
+      "name": "sinon",
+      "language": "JavaScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/sinonjs/sinon.git",
+      "pinnedHead": "ab289e92cdd76caf8cec2b0a8c9a391283e6c9df",
+      "routeCommit": "11db21399208b1ece7834031bbe9f86559cef79d",
+      "groundTruthCommit": "d36e921baf382598cfa9323cb672c87ce85e2ad5",
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "task": "fix: let returns override returnsArg",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "src/sinon/default-behaviors.js",
+        "test/src/stub-test.js"
+      ],
+      "implementationFiles": [
+        "src/sinon/default-behaviors.js"
+      ],
+      "testFiles": [
+        "test/src/stub-test.js"
+      ],
+      "auxiliaryFiles": [],
+      "testRoleDerivedFromPath": true,
+      "conditionOrder": [
+        "candidate",
+        "baseline"
+      ],
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "elapsedMs": 3751,
+          "errorCode": null,
+          "error": null
+        }
+      ],
+      "validityFailures": [
+        "baseline: condition-repository-setup failed before formal trials completed",
+        "candidate: condition-repository-setup failed before formal trials completed"
+      ],
+      "conditions": {
+        "candidate": {
+          "id": "candidate",
+          "role": "independent-anchor-confidence-cap",
+          "productCommit": "1a02d89269acb36473db3ad39badab9fe338a4a3",
+          "cliSha256": "49F44D09551222A2CB8D3BEEDBDA4E374A507C30DCA681D4D9CC0E57C6DB7747",
+          "status": "failed",
+          "failureCategory": "environment-or-setup",
+          "failures": [
+            "condition-repository-setup failed before formal trials completed"
+          ],
+          "executionError": "Error: Command failed (128): git rev-parse d36e921baf382598cfa9323cb672c87ce85e2ad5^\nd36e921baf382598cfa9323cb672c87ce85e2ad5^\nfatal: ambiguous argument 'd36e921baf382598cfa9323cb672c87ce85e2ad5^': unknown revision or path not in the working tree.\nUse '--' to separate paths from revisions, like this:\n'git <command> [<revision>...] -- [<file>...]'\n    at run (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:1541:11)\n    at verifyPinnedTarget (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:496:5)\n    at cloneConditionTarget (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:490:3)\n    at async validatePairedTarget (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:545:7)\n    at async main (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:114:22)",
+          "deterministicRoutes": false,
+          "freshIndexAttempts": [],
+          "statusAfterExplicitIndex": null,
+          "trackedWorktreeClean": null,
+          "trials": []
+        },
+        "baseline": {
+          "id": "baseline",
+          "role": "pre-independent-anchor-confidence-cap",
+          "productCommit": "228c3bde47f6930023496fdd0a54d43dba10091f",
+          "cliSha256": "E81774B89C3A6FAED83788335688EFCBC8B4D17DEA25CA002097FF1F9125318F",
+          "status": "failed",
+          "failureCategory": "environment-or-setup",
+          "failures": [
+            "condition-repository-setup failed before formal trials completed"
+          ],
+          "executionError": "Error: Command failed (128): git rev-parse d36e921baf382598cfa9323cb672c87ce85e2ad5^\nd36e921baf382598cfa9323cb672c87ce85e2ad5^\nfatal: ambiguous argument 'd36e921baf382598cfa9323cb672c87ce85e2ad5^': unknown revision or path not in the working tree.\nUse '--' to separate paths from revisions, like this:\n'git <command> [<revision>...] -- [<file>...]'\n    at run (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:1541:11)\n    at verifyPinnedTarget (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:496:5)\n    at cloneConditionTarget (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:490:3)\n    at async validatePairedTarget (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:545:7)\n    at async main (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:114:22)",
+          "deterministicRoutes": false,
+          "freshIndexAttempts": [],
+          "statusAfterExplicitIndex": null,
+          "trackedWorktreeClean": null,
+          "trials": []
+        }
+      }
+    },
+    {
+      "name": "rich",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/Textualize/rich.git",
+      "pinnedHead": "9d8f9a372cc5916fd4781fec207ced7ddac2f08f",
+      "routeCommit": "19c67b9a3479841e9133bea94607c89ee931d3fc",
+      "groundTruthCommit": "7ef2d05ca8aa3cb405dab2fdf3282e69cf8089e3",
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "task": "fix inline code in table cells",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "rich/markdown.py",
+        "tests/test_markdown.py"
+      ],
+      "implementationFiles": [
+        "rich/markdown.py"
+      ],
+      "testFiles": [
+        "tests/test_markdown.py"
+      ],
+      "auxiliaryFiles": [],
+      "testRoleDerivedFromPath": true,
+      "conditionOrder": [
+        "baseline",
+        "candidate"
+      ],
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "elapsedMs": 5516,
+          "errorCode": null,
+          "error": null
+        }
+      ],
+      "validityFailures": [
+        "baseline: condition-repository-setup failed before formal trials completed",
+        "candidate: condition-repository-setup failed before formal trials completed"
+      ],
+      "conditions": {
+        "baseline": {
+          "id": "baseline",
+          "role": "pre-independent-anchor-confidence-cap",
+          "productCommit": "228c3bde47f6930023496fdd0a54d43dba10091f",
+          "cliSha256": "E81774B89C3A6FAED83788335688EFCBC8B4D17DEA25CA002097FF1F9125318F",
+          "status": "failed",
+          "failureCategory": "environment-or-setup",
+          "failures": [
+            "condition-repository-setup failed before formal trials completed"
+          ],
+          "executionError": "Error: Command failed (128): git rev-parse 7ef2d05ca8aa3cb405dab2fdf3282e69cf8089e3^\n7ef2d05ca8aa3cb405dab2fdf3282e69cf8089e3^\nfatal: ambiguous argument '7ef2d05ca8aa3cb405dab2fdf3282e69cf8089e3^': unknown revision or path not in the working tree.\nUse '--' to separate paths from revisions, like this:\n'git <command> [<revision>...] -- [<file>...]'\n    at run (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:1541:11)\n    at verifyPinnedTarget (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:496:5)\n    at cloneConditionTarget (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:490:3)\n    at async validatePairedTarget (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:545:7)\n    at async main (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:114:22)",
+          "deterministicRoutes": false,
+          "freshIndexAttempts": [],
+          "statusAfterExplicitIndex": null,
+          "trackedWorktreeClean": null,
+          "trials": []
+        },
+        "candidate": {
+          "id": "candidate",
+          "role": "independent-anchor-confidence-cap",
+          "productCommit": "1a02d89269acb36473db3ad39badab9fe338a4a3",
+          "cliSha256": "49F44D09551222A2CB8D3BEEDBDA4E374A507C30DCA681D4D9CC0E57C6DB7747",
+          "status": "failed",
+          "failureCategory": "environment-or-setup",
+          "failures": [
+            "condition-repository-setup failed before formal trials completed"
+          ],
+          "executionError": "Error: Command failed (128): git rev-parse 7ef2d05ca8aa3cb405dab2fdf3282e69cf8089e3^\n7ef2d05ca8aa3cb405dab2fdf3282e69cf8089e3^\nfatal: ambiguous argument '7ef2d05ca8aa3cb405dab2fdf3282e69cf8089e3^': unknown revision or path not in the working tree.\nUse '--' to separate paths from revisions, like this:\n'git <command> [<revision>...] -- [<file>...]'\n    at run (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:1541:11)\n    at verifyPinnedTarget (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:496:5)\n    at cloneConditionTarget (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:490:3)\n    at async validatePairedTarget (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:545:7)\n    at async main (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:114:22)",
+          "deterministicRoutes": false,
+          "freshIndexAttempts": [],
+          "statusAfterExplicitIndex": null,
+          "trackedWorktreeClean": null,
+          "trials": []
+        }
+      }
+    },
+    {
+      "name": "viper",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/spf13/viper.git",
+      "pinnedHead": "528f7416c4b56a4948673984b190bf8713f0c3c4",
+      "routeCommit": "2da50fe98c7e48a260c3f87156473344cb423849",
+      "groundTruthCommit": "0afb0456be931163b9b402905160c3999b929c7f",
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "task": "fix: return not found error if setting config",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "file.go",
+        "viper.go",
+        "viper_test.go"
+      ],
+      "implementationFiles": [
+        "file.go",
+        "viper.go"
+      ],
+      "testFiles": [
+        "viper_test.go"
+      ],
+      "auxiliaryFiles": [],
+      "testRoleDerivedFromPath": true,
+      "conditionOrder": [
+        "candidate",
+        "baseline"
+      ],
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "elapsedMs": 3594,
+          "errorCode": null,
+          "error": null
+        }
+      ],
+      "validityFailures": [
+        "baseline: condition-repository-setup failed before formal trials completed",
+        "candidate: condition-repository-setup failed before formal trials completed"
+      ],
+      "conditions": {
+        "candidate": {
+          "id": "candidate",
+          "role": "independent-anchor-confidence-cap",
+          "productCommit": "1a02d89269acb36473db3ad39badab9fe338a4a3",
+          "cliSha256": "49F44D09551222A2CB8D3BEEDBDA4E374A507C30DCA681D4D9CC0E57C6DB7747",
+          "status": "failed",
+          "failureCategory": "environment-or-setup",
+          "failures": [
+            "condition-repository-setup failed before formal trials completed"
+          ],
+          "executionError": "Error: Command failed (128): git rev-parse 0afb0456be931163b9b402905160c3999b929c7f^\n0afb0456be931163b9b402905160c3999b929c7f^\nfatal: ambiguous argument '0afb0456be931163b9b402905160c3999b929c7f^': unknown revision or path not in the working tree.\nUse '--' to separate paths from revisions, like this:\n'git <command> [<revision>...] -- [<file>...]'\n    at run (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:1541:11)\n    at verifyPinnedTarget (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:496:5)\n    at cloneConditionTarget (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:490:3)\n    at async validatePairedTarget (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:545:7)\n    at async main (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:114:22)",
+          "deterministicRoutes": false,
+          "freshIndexAttempts": [],
+          "statusAfterExplicitIndex": null,
+          "trackedWorktreeClean": null,
+          "trials": []
+        },
+        "baseline": {
+          "id": "baseline",
+          "role": "pre-independent-anchor-confidence-cap",
+          "productCommit": "228c3bde47f6930023496fdd0a54d43dba10091f",
+          "cliSha256": "E81774B89C3A6FAED83788335688EFCBC8B4D17DEA25CA002097FF1F9125318F",
+          "status": "failed",
+          "failureCategory": "environment-or-setup",
+          "failures": [
+            "condition-repository-setup failed before formal trials completed"
+          ],
+          "executionError": "Error: Command failed (128): git rev-parse 0afb0456be931163b9b402905160c3999b929c7f^\n0afb0456be931163b9b402905160c3999b929c7f^\nfatal: ambiguous argument '0afb0456be931163b9b402905160c3999b929c7f^': unknown revision or path not in the working tree.\nUse '--' to separate paths from revisions, like this:\n'git <command> [<revision>...] -- [<file>...]'\n    at run (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:1541:11)\n    at verifyPinnedTarget (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:496:5)\n    at cloneConditionTarget (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:490:3)\n    at async validatePairedTarget (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:545:7)\n    at async main (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:114:22)",
+          "deterministicRoutes": false,
+          "freshIndexAttempts": [],
+          "statusAfterExplicitIndex": null,
+          "trackedWorktreeClean": null,
+          "trials": []
+        }
+      }
+    },
+    {
+      "name": "crossbeam",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/crossbeam-rs/crossbeam.git",
+      "pinnedHead": "b23b7e8eca2efdad9bdc1ceb1aee1207a852c03b",
+      "routeCommit": "8cec8ec930cd19e2cf43efab5ddde2a05522929f",
+      "groundTruthCommit": "c9c5b9cef74e198116035716bfeb4cf855680e2d",
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "task": "Add select_biased! macro (#1040)",
+      "expectedTaskType": "feature",
+      "changedFiles": [
+        "crossbeam-channel/src/select.rs",
+        "crossbeam-channel/src/select_macro.rs",
+        "crossbeam-channel/tests/mpsc.rs",
+        "crossbeam-channel/tests/select_macro.rs"
+      ],
+      "implementationFiles": [
+        "crossbeam-channel/src/select.rs",
+        "crossbeam-channel/src/select_macro.rs"
+      ],
+      "testFiles": [
+        "crossbeam-channel/tests/mpsc.rs",
+        "crossbeam-channel/tests/select_macro.rs"
+      ],
+      "auxiliaryFiles": [],
+      "testRoleDerivedFromPath": true,
+      "conditionOrder": [
+        "baseline",
+        "candidate"
+      ],
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "elapsedMs": 3803,
+          "errorCode": null,
+          "error": null
+        }
+      ],
+      "validityFailures": [
+        "baseline: condition-repository-setup failed before formal trials completed",
+        "candidate: condition-repository-setup failed before formal trials completed"
+      ],
+      "conditions": {
+        "baseline": {
+          "id": "baseline",
+          "role": "pre-independent-anchor-confidence-cap",
+          "productCommit": "228c3bde47f6930023496fdd0a54d43dba10091f",
+          "cliSha256": "E81774B89C3A6FAED83788335688EFCBC8B4D17DEA25CA002097FF1F9125318F",
+          "status": "failed",
+          "failureCategory": "environment-or-setup",
+          "failures": [
+            "condition-repository-setup failed before formal trials completed"
+          ],
+          "executionError": "Error: Command failed (128): git rev-parse c9c5b9cef74e198116035716bfeb4cf855680e2d^\nc9c5b9cef74e198116035716bfeb4cf855680e2d^\nfatal: ambiguous argument 'c9c5b9cef74e198116035716bfeb4cf855680e2d^': unknown revision or path not in the working tree.\nUse '--' to separate paths from revisions, like this:\n'git <command> [<revision>...] -- [<file>...]'\n    at run (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:1541:11)\n    at verifyPinnedTarget (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:496:5)\n    at cloneConditionTarget (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:490:3)\n    at async validatePairedTarget (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:545:7)\n    at async main (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:114:22)",
+          "deterministicRoutes": false,
+          "freshIndexAttempts": [],
+          "statusAfterExplicitIndex": null,
+          "trackedWorktreeClean": null,
+          "trials": []
+        },
+        "candidate": {
+          "id": "candidate",
+          "role": "independent-anchor-confidence-cap",
+          "productCommit": "1a02d89269acb36473db3ad39badab9fe338a4a3",
+          "cliSha256": "49F44D09551222A2CB8D3BEEDBDA4E374A507C30DCA681D4D9CC0E57C6DB7747",
+          "status": "failed",
+          "failureCategory": "environment-or-setup",
+          "failures": [
+            "condition-repository-setup failed before formal trials completed"
+          ],
+          "executionError": "Error: Command failed (128): git rev-parse c9c5b9cef74e198116035716bfeb4cf855680e2d^\nc9c5b9cef74e198116035716bfeb4cf855680e2d^\nfatal: ambiguous argument 'c9c5b9cef74e198116035716bfeb4cf855680e2d^': unknown revision or path not in the working tree.\nUse '--' to separate paths from revisions, like this:\n'git <command> [<revision>...] -- [<file>...]'\n    at run (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:1541:11)\n    at verifyPinnedTarget (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:496:5)\n    at cloneConditionTarget (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:490:3)\n    at async validatePairedTarget (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:545:7)\n    at async main (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:114:22)",
+          "deterministicRoutes": false,
+          "freshIndexAttempts": [],
+          "statusAfterExplicitIndex": null,
+          "trackedWorktreeClean": null,
+          "trials": []
+        }
+      }
+    },
+    {
+      "name": "http",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/hyperium/http.git",
+      "pinnedHead": "2178e175c4e247a33ba5f6ca3503afb1afbaabba",
+      "routeCommit": "1b968dc519c49b1922bc546c95f33900e684f4ab",
+      "groundTruthCommit": "bc3b0441be3065fc2653e9b3b1392c0fed873482",
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "task": "fix(header): use a set_len guard in IntoIter drop (#838)",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "src/header/map.rs",
+        "tests/header_map.rs"
+      ],
+      "implementationFiles": [
+        "src/header/map.rs"
+      ],
+      "testFiles": [
+        "tests/header_map.rs"
+      ],
+      "auxiliaryFiles": [],
+      "testRoleDerivedFromPath": true,
+      "conditionOrder": [
+        "candidate",
+        "baseline"
+      ],
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "elapsedMs": 3481,
+          "errorCode": null,
+          "error": null
+        }
+      ],
+      "validityFailures": [
+        "baseline: condition-repository-setup failed before formal trials completed",
+        "candidate: condition-repository-setup failed before formal trials completed"
+      ],
+      "conditions": {
+        "candidate": {
+          "id": "candidate",
+          "role": "independent-anchor-confidence-cap",
+          "productCommit": "1a02d89269acb36473db3ad39badab9fe338a4a3",
+          "cliSha256": "49F44D09551222A2CB8D3BEEDBDA4E374A507C30DCA681D4D9CC0E57C6DB7747",
+          "status": "failed",
+          "failureCategory": "environment-or-setup",
+          "failures": [
+            "condition-repository-setup failed before formal trials completed"
+          ],
+          "executionError": "Error: Command failed (128): git rev-parse bc3b0441be3065fc2653e9b3b1392c0fed873482^\nbc3b0441be3065fc2653e9b3b1392c0fed873482^\nfatal: ambiguous argument 'bc3b0441be3065fc2653e9b3b1392c0fed873482^': unknown revision or path not in the working tree.\nUse '--' to separate paths from revisions, like this:\n'git <command> [<revision>...] -- [<file>...]'\n    at run (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:1541:11)\n    at verifyPinnedTarget (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:496:5)\n    at cloneConditionTarget (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:490:3)\n    at async validatePairedTarget (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:545:7)\n    at async main (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:114:22)",
+          "deterministicRoutes": false,
+          "freshIndexAttempts": [],
+          "statusAfterExplicitIndex": null,
+          "trackedWorktreeClean": null,
+          "trials": []
+        },
+        "baseline": {
+          "id": "baseline",
+          "role": "pre-independent-anchor-confidence-cap",
+          "productCommit": "228c3bde47f6930023496fdd0a54d43dba10091f",
+          "cliSha256": "E81774B89C3A6FAED83788335688EFCBC8B4D17DEA25CA002097FF1F9125318F",
+          "status": "failed",
+          "failureCategory": "environment-or-setup",
+          "failures": [
+            "condition-repository-setup failed before formal trials completed"
+          ],
+          "executionError": "Error: Command failed (128): git rev-parse bc3b0441be3065fc2653e9b3b1392c0fed873482^\nbc3b0441be3065fc2653e9b3b1392c0fed873482^\nfatal: ambiguous argument 'bc3b0441be3065fc2653e9b3b1392c0fed873482^': unknown revision or path not in the working tree.\nUse '--' to separate paths from revisions, like this:\n'git <command> [<revision>...] -- [<file>...]'\n    at run (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:1541:11)\n    at verifyPinnedTarget (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:496:5)\n    at cloneConditionTarget (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:490:3)\n    at async validatePairedTarget (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:545:7)\n    at async main (D:\\工作资料\\codex palace\\scripts\\verify-held-out-confidence-calibration-round-8.cjs:114:22)",
+          "deterministicRoutes": false,
+          "freshIndexAttempts": [],
+          "statusAfterExplicitIndex": null,
+          "trackedWorktreeClean": null,
+          "trials": []
+        }
+      }
+    }
+  ]
+}
