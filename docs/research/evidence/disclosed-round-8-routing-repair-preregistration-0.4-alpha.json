@@ -1,0 +1,121 @@
+{
+  "schemaVersion": 1,
+  "studyId": "disclosed-round-8-routing-repair-0.4-alpha",
+  "status": "preregistered",
+  "registeredAt": "2026-07-26T04:20:00.000Z",
+  "claimBoundary": "Iterative disclosed regression repair on five previously observed Round 8 targets. This study may show that known routing failures were repaired, but it is not held-out evidence and cannot support Agent correctness, Token, tool-call, or wall-time claims.",
+  "sourceEvidence": {
+    "manifestPath": "docs/research/evidence/held-out-routing-target-manifest-0.4-alpha-round-8.json",
+    "manifestSha256": "6678CE22935F938593C9F950636795E3295D18C9AC57D1C1E7A068B145214466",
+    "combinedResultPath": "docs/research/evidence/round-8-confidence-calibration-combined-analysis-0.4-alpha.json",
+    "combinedResultSha256": "3653B738A46690BD51B021D0469D5B3B6F9B1A3E6C23A7EF89A7E430F81442A5"
+  },
+  "baseline": {
+    "productCommit": "7496bef84e49264183cddbc48ce08d5e6665f2eb",
+    "cliSha256": "52A1876B00AF4AAA884A6C7EA47AC2E701E88C34FC8FEE65DD1B32BB6513B8AE",
+    "role": "post-confidence-narrowing-separation-before-disclosed-route-repair"
+  },
+  "candidateFreezeRule": "The repair candidate commit and CLI SHA-256 must be frozen in a separate execution preregistration before the preserved real-repository comparison is run.",
+  "developmentPolicy": {
+    "targetsAreDisclosed": true,
+    "iterativeLocalRunsAllowed": true,
+    "allFailedAndPartialAttemptsMustBePreserved": true,
+    "targetRemovalReplacementOrTaskRewriteAllowed": false,
+    "newHeldOutValidationRequiredForGeneralization": true
+  },
+  "execution": {
+    "budget": 6000,
+    "routeLimit": 9,
+    "maxDrawers": 4,
+    "repetitions": 2,
+    "sequentialOnly": true,
+    "separateRepositoryPerCondition": true,
+    "freshIndexPerCondition": true
+  },
+  "gates": {
+    "requiredTargets": 5,
+    "requiredCompletedTrialsPerCondition": 10,
+    "minimumTargetChangedFileCoverage": 1,
+    "minimumMacroChangedFileCoverage": 0.9,
+    "minimumMacroRouteFocus": 0.75,
+    "minimumMacroRoutePrecision": 0.75,
+    "minimumTargetRouteFocus": 0.5,
+    "minimumTargetRoutePrecision": 0.5,
+    "maximumTotalRouteFiles": 18,
+    "maximumRichRouteFiles": 4,
+    "maximumSinonDocumentationFiles": 0,
+    "maximumUnsafeNarrowTargets": 0,
+    "deterministicRoutesRequired": true
+  },
+  "targets": [
+    {
+      "name": "sqlalchemy",
+      "languageFamily": "python",
+      "url": "https://github.com/sqlalchemy/sqlalchemy.git",
+      "routeCommit": "092391036ce007d128f2f61c98fc9b31177970bb",
+      "groundTruthCommit": "e00937ec549ecc1d2cae49d4fe84fac3d758b6fb",
+      "task": "Fix Session bulk mappings typing for mapped classes",
+      "oracleFiles": [
+        "lib/sqlalchemy/orm/scoping.py",
+        "lib/sqlalchemy/orm/session.py",
+        "test/typing/plain_files/orm/session.py"
+      ],
+      "knownFailure": "Only session.py and an unrelated ORM runtime test were routed; scoping.py and the typing test were missed."
+    },
+    {
+      "name": "sinon",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/sinonjs/sinon.git",
+      "routeCommit": "11db21399208b1ece7834031bbe9f86559cef79d",
+      "groundTruthCommit": "d36e921baf382598cfa9323cb672c87ce85e2ad5",
+      "task": "fix: let returns override returnsArg",
+      "oracleFiles": [
+        "src/sinon/default-behaviors.js",
+        "test/src/stub-test.js"
+      ],
+      "knownFailure": "Documentation and documentation tests occupied all nine route positions; both implementation and focused test were missed."
+    },
+    {
+      "name": "rich",
+      "languageFamily": "python",
+      "url": "https://github.com/Textualize/rich.git",
+      "routeCommit": "19c67b9a3479841e9133bea94607c89ee931d3fc",
+      "groundTruthCommit": "7ef2d05ca8aa3cb405dab2fdf3282e69cf8089e3",
+      "task": "fix inline code in table cells",
+      "oracleFiles": [
+        "rich/markdown.py",
+        "tests/test_markdown.py"
+      ],
+      "knownFailure": "Both oracle files were recalled, but six generic cell, console, table, and tree files reduced focus to 0.25."
+    },
+    {
+      "name": "viper",
+      "languageFamily": "go",
+      "url": "https://github.com/spf13/viper.git",
+      "routeCommit": "2da50fe98c7e48a260c3f87156473344cb423849",
+      "groundTruthCommit": "0afb0456be931163b9b402905160c3999b929c7f",
+      "task": "fix: return not found error if setting config",
+      "oracleFiles": [
+        "file.go",
+        "viper.go",
+        "viper_test.go"
+      ],
+      "knownFailure": "viper.go and viper_test.go were routed, but the sibling file.go implementation was missed and route-lite was unsafe."
+    },
+    {
+      "name": "crossbeam",
+      "languageFamily": "rust",
+      "url": "https://github.com/crossbeam-rs/crossbeam.git",
+      "routeCommit": "8cec8ec930cd19e2cf43efab5ddde2a05522929f",
+      "groundTruthCommit": "c9c5b9cef74e198116035716bfeb4cf855680e2d",
+      "task": "Add select_biased! macro (#1040)",
+      "oracleFiles": [
+        "crossbeam-channel/src/select.rs",
+        "crossbeam-channel/src/select_macro.rs",
+        "crossbeam-channel/tests/mpsc.rs",
+        "crossbeam-channel/tests/select_macro.rs"
+      ],
+      "knownFailure": "Three oracle files were routed, but the broader mpsc integration test was replaced by lib.rs."
+    }
+  ]
+}
