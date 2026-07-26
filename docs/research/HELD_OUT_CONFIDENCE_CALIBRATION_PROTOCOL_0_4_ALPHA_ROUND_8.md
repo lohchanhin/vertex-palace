@@ -44,6 +44,22 @@ The baseline is rebuilt once in a temporary local shared clone using
 given to Palace. An unavailable offline package store is an environment/setup
 failure, not a product result.
 
+## Disclosed Preflight Correction
+
+Preflight attempt 1 at harness commit
+`e89378bb151e3566327624e4cb021e9ac8c8aa21` stopped before materializing a
+selected repository or calling Palace on a selected task. The rebuilt baseline
+CLI matched its frozen hash, but `pnpm build` also regenerated the tracked
+`plugins/vertex-palace/mcp/server.cjs`; the validator incorrectly treated that
+known build output as a source modification.
+
+The failed preflight is preserved at
+`docs/research/evidence/held-out-confidence-calibration-round-8-preflight-attempt-1.json`.
+The correction allows exactly that generated bundle modification, verifies that
+`packages/` remains unchanged, and retains the exact baseline CLI hash gate. No
+target, condition order, metric, tolerance, or product artifact changed, and the
+eight tasks remain unexposed to both measured Palace versions.
+
 ## Frozen Targets
 
 The create-only Round 8 manifest selected eight tasks in binding order, exactly

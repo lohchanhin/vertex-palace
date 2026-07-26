@@ -13,6 +13,7 @@ const {
 
 const projectRoot = path.resolve(__dirname, "..", "..");
 const manifestPath = path.join(projectRoot, "docs", "research", "evidence", "held-out-routing-target-manifest-0.4-alpha-round-8.json");
+const preflightPath = path.join(projectRoot, "docs", "research", "evidence", "held-out-confidence-calibration-round-8-preflight-attempt-1.json");
 const validatorPath = path.join(projectRoot, "scripts", "verify-held-out-confidence-calibration-round-8.cjs");
 const englishProtocolPath = path.join(projectRoot, "docs", "research", "HELD_OUT_CONFIDENCE_CALIBRATION_PROTOCOL_0_4_ALPHA_ROUND_8.md");
 const chineseProtocolPath = path.join(projectRoot, "docs", "zh-CN", "HELD_OUT_CONFIDENCE_CALIBRATION_PROTOCOL_0_4_ALPHA_ROUND_8.md");
@@ -94,6 +95,8 @@ test("freezes sequential isolated AB/BA execution and an offline baseline build"
   assert.match(source, /"install",\s*"--offline",\s*"--frozen-lockfile",\s*"--ignore-scripts"/);
   assert.match(source, /rebuiltBeforeMeasurement:\s*true/);
   assert.match(source, /rebuiltBeforeMeasurement:\s*false/);
+  assert.match(source, /\["M plugins\/vertex-palace\/mcp\/server\.cjs"\]/);
+  assert.match(source, /"diff", "--quiet", baselineCommit, "--", "packages"/);
   assert.match(source, /status: validityFailures\.length \? "invalid" : "completed"/);
   assert.match(source, /contextCostFinding/);
   assert.doesNotMatch(source, /Promise\.all/);
@@ -102,6 +105,17 @@ test("freezes sequential isolated AB/BA execution and an offline baseline build"
       < source.indexOf("for (const [targetIndex, target] of manifest.targets.entries()"),
     "Baseline must be hash-verified before any selected task is executed."
   );
+});
+
+test("preserves the failed preflight before any selected task exposure", () => {
+  const preflight = JSON.parse(readFileSync(preflightPath, "utf8"));
+  assert.equal(preflight.status, "preflight-failed-before-target-exposure");
+  assert.equal(preflight.validationHarnessCommit, "e89378bb151e3566327624e4cb021e9ac8c8aa21");
+  assert.equal(preflight.formalResultCreated, false);
+  assert.equal(preflight.selectedTargetRepositoriesMaterialized, 0);
+  assert.equal(preflight.palaceCallsOnSelectedTasks, 0);
+  assert.equal(preflight.selectedTasksRemainCandidateHeldOut, true);
+  assert.match(preflight.error, /plugins\/vertex-palace\/mcp\/server\.cjs/);
 });
 
 test("defines calibration boundaries and balanced condition order independently", () => {
@@ -175,6 +189,8 @@ test("keeps both Round 8 protocols aligned with paired claims and status semanti
     assert.match(document, /regression/);
     assert.match(document, /invalid/);
     assert.match(document, /completed/);
+    assert.match(document, /e89378bb151e3566327624e4cb021e9ac8c8aa21/);
+    assert.match(document, /preflight-attempt-1\.json/);
   }
   assert.match(english, /cannot support claims about Agent correctness/);
   assert.match(english, /never concurrent/);

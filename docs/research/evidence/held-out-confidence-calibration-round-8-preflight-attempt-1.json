@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "studyId": "held-out-confidence-calibration-round-8-0.4-alpha",
+  "attempt": 1,
+  "generatedAt": "2026-07-26T09:52:16.7706319+08:00",
+  "status": "preflight-failed-before-target-exposure",
+  "validationHarnessCommit": "e89378bb151e3566327624e4cb021e9ac8c8aa21",
+  "candidate": {
+    "productCommit": "1a02d89269acb36473db3ad39badab9fe338a4a3",
+    "cliSha256": "49F44D09551222A2CB8D3BEEDBDA4E374A507C30DCA681D4D9CC0E57C6DB7747"
+  },
+  "comparisonBaseline": {
+    "productCommit": "228c3bde47f6930023496fdd0a54d43dba10091f",
+    "cliSha256": "E81774B89C3A6FAED83788335688EFCBC8B4D17DEA25CA002097FF1F9125318F"
+  },
+  "failedPhase": "offline-baseline-build-preflight",
+  "error": "Baseline build modified tracked source files: M plugins/vertex-palace/mcp/server.cjs",
+  "diagnosis": "The baseline build intentionally regenerates the tracked MCP bundle while producing the measured package CLI. The validator incorrectly required the entire temporary baseline build worktree to remain clean even though the measured dist/palace.cjs hash matched the frozen baseline artifact.",
+  "formalResultCreated": false,
+  "selectedTargetRepositoriesMaterialized": 0,
+  "palaceCallsOnSelectedTasks": 0,
+  "selectedTasksRemainCandidateHeldOut": true,
+  "residualTemporaryDirectories": 0,
+  "repairBoundary": "Allow only the known generated MCP bundle modification in the temporary baseline build, continue requiring all packages source to match the baseline commit, and keep the exact baseline CLI hash gate. No target, metric, order, tolerance, or product artifact may change."
+}

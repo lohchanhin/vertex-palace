@@ -38,6 +38,20 @@
 `pnpm build`。任何目标任务交给 Palace 前，基线 CLI 必须匹配冻结哈希。如果本机
 离线 package store 不完整，它属于环境或 setup 失败，不属于产品结果。
 
+## 公开的预检修正
+
+第一次预检在 harness 提交 `e89378bb151e3566327624e4cb021e9ac8c8aa21`
+停止，当时尚未物化任何入选仓库，也没有对入选任务调用 Palace。重建的基线 CLI
+符合冻结哈希，但 `pnpm build` 同时重新生成受追踪的
+`plugins/vertex-palace/mcp/server.cjs`；验证器错误地把这个已知生成输出当成源代码
+修改。
+
+失败预检保存于
+`docs/research/evidence/held-out-confidence-calibration-round-8-preflight-attempt-1.json`。
+修正后只允许这个生成 bundle 发生变化，同时确认 `packages/` 不变，并继续执行
+精确基线 CLI 哈希门槛。目标、条件顺序、指标、容差和产品产物都没有改变，8 个
+任务仍未暴露给两个受测 Palace 版本。
+
 ## 冻结目标
 
 Create-only Round 8 manifest 按绑定顺序选择了 8 个任务，每种语言家族恰好 2 个。

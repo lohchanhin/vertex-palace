@@ -180,6 +180,8 @@ async function main() {
           buildArguments: baselineBuild.buildArguments,
           installLogSha256: baselineBuild.installLogSha256,
           buildLogSha256: baselineBuild.buildLogSha256,
+          trackedGeneratedOutputs: baselineBuild.trackedGeneratedOutputs,
+          packagesSourceUnchanged: baselineBuild.packagesSourceUnchanged,
           hashVerified: true
         }
       },
@@ -383,10 +385,13 @@ async function buildBaselineCli(temporaryRoot) {
   const buildResult = runPnpm(buildArguments, { cwd: projectRoot, timeout: 600_000 });
   const cliPath = path.join(baselineRoot, "dist", "palace.cjs");
   assert.equal(await sha256File(cliPath), baselineCliSha256);
-  assert.equal(
-    run("git", ["status", "--short", "--untracked-files=no"], { cwd: baselineRoot }).stdout.trim(),
-    "",
-    "Baseline build modified tracked source files."
+  run("git", ["diff", "--quiet", baselineCommit, "--", "packages"], { cwd: baselineRoot });
+  assert.deepEqual(
+    lines(run("git", ["status", "--short", "--untracked-files=no"], {
+      cwd: baselineRoot
+    }).stdout),
+    ["M plugins/vertex-palace/mcp/server.cjs"],
+    "Baseline build changed tracked files beyond the known generated MCP bundle."
   );
 
   return {
@@ -398,6 +403,8 @@ async function buildBaselineCli(temporaryRoot) {
       "install", "--offline", "--frozen-lockfile", "--ignore-scripts"
     ],
     buildArguments: ["--dir", "<temporary-baseline-root>", "build"],
+    trackedGeneratedOutputs: ["plugins/vertex-palace/mcp/server.cjs"],
+    packagesSourceUnchanged: true,
     installLogSha256: sha256Text(`${installResult.stdout}\n${installResult.stderr}`),
     buildLogSha256: sha256Text(`${buildResult.stdout}\n${buildResult.stderr}`)
   };
