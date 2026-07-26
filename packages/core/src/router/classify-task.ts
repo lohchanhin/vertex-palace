@@ -1,12 +1,17 @@
 import type { TaskType } from "@vertex-palace/shared";
 import { analyzePublicationIntent } from "./publication-intent";
 
+const FEATURE_TASK_PREFIX = /^\s*(?:add(?:ed|ing|s)?|allow(?:ed|ing|s)?|creat(?:e|ed|ing|es)|implement(?:ed|ing|s)?|introduc(?:e|ed|ing|es)|support(?:ed|ing|s)?|enabl(?:e|ed|ing|es))\b/i;
+const BUGFIX_TASK_PREFIX = /^\s*(?:fix(?:ed|es|ing)?|debug(?:ged|ging|s)?|repair(?:ed|ing|s)?|correct(?:ed|ing|s)?|resolv(?:e|ed|ing|es)|prevent(?:ed|ing|s)?|avoid(?:ed|ing|s)?)\b/i;
+
 export function classifyTask(task: string): TaskType {
   const lower = task.toLowerCase();
   const publication = analyzePublicationIntent(lower);
   const conventionalCommit = lower.match(/^\s*(fix|feat)(?:\([^)]*\))?!?:/);
   if (conventionalCommit?.[1] === "fix") return "bugfix";
   if (conventionalCommit?.[1] === "feat") return "feature";
+  if (!publication.releaseIntent && BUGFIX_TASK_PREFIX.test(lower)) return "bugfix";
+  if (!publication.releaseIntent && FEATURE_TASK_PREFIX.test(lower)) return "feature";
   const codeSubject = /\b(parser|indexer|router|scorer|expander|module|function|class|source|code|schema|types?|contracts?|tests?|regressions?|bundle|estimator|metadata|api|cli|mcp)\b/.test(lower)
     || /(解析器|索引器|路由器|模组|模組|函数|函式|类别|類別|源码|源碼|代码|代碼|测试|測試|回归|回歸|类型|類型|契约|契約|元数据|中繼資料)/.test(lower);
   if (!publication.releaseIntent && codeSubject && /^\s*(?:add|allow|create|implement|support)\b/.test(lower)) return "feature";
@@ -24,7 +29,8 @@ export function classifyTask(task: string): TaskType {
     evidenceSubject,
     evidenceArtifact
   } = publication;
-  const repairIntent = /\b(fix|debug|repair|correct|resolve)\b/.test(lower)
+  const repairIntent = BUGFIX_TASK_PREFIX.test(lower)
+    || /\b(fix|debug|repair|correct|resolve)\b/.test(lower)
     || /(修复|修正|修補|修补|纠正|糾正|解决|解決)/.test(lower);
   if (
     !releaseIntent
@@ -33,7 +39,7 @@ export function classifyTask(task: string): TaskType {
     && ((evidenceSubject && evidenceArtifact) || releaseArtifactReference)
   ) return "evaluation";
   const releaseFailure = releaseIntent
-    && (/\b(fix|debug|investigate|resolve)\b/.test(lower) || /(修复|修正|修補|修补|调查|調查|解决|解決)/.test(lower))
+    && (repairIntent || /\binvestigate\b/.test(lower) || /(修复|修正|修補|修补|调查|調查|解决|解決)/.test(lower))
     && (/\b(error|failed|failing|failure|broken|unauthorized|e401|otp|2fa)\b/.test(lower) || /(?:错误|錯誤|失败|失敗|未授权|未授權)/.test(lower));
   if (releaseFailure) return "bugfix";
   if (releaseIntent && (/^\s*(explain|describe|summarize|how|why|what)\b|\bhow\s+to\b/.test(lower) || /^\s*(解释|解釋|说明|說明|如何|为什么|為什麼)/.test(lower))) return "explain";

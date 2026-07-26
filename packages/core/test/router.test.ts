@@ -68,12 +68,23 @@ describe("routePalace", () => {
     expect(analyzeTask(nameEmailTask).keywords).not.toContain("allow");
   });
 
+  it("classifies inflected leading task actions before incidental intent words", () => {
+    expect(classifyTask("Fixes argument parsing for escaped newlines (#1176)")).toBe("bugfix");
+    expect(classifyTask("Avoid associating #[from] with lint allow")).toBe("bugfix");
+    expect(classifyTask("Prevents stale connections from being reused")).toBe("bugfix");
+    expect(classifyTask("Added structured route diagnostics")).toBe("feature");
+    expect(classifyTask("Implements focused implementation and test pairing")).toBe("feature");
+    expect(classifyTask("Enables deterministic context packing")).toBe("feature");
+    expect(classifyTask("Updated dependency metadata")).toBe("unknown");
+  });
+
   it("distinguishes release work from publish failures and application deployment", () => {
     const analysis = analyzeTask(RELEASE_TASK);
 
     expect(classifyTask(RELEASE_TASK)).toBe("release");
     expect(classifyTask("发布 Vertex Palace 新版本到 npm 并建立 Git tag")).toBe("release");
     expect(classifyTask("Fix npm publish authentication failure E401")).toBe("bugfix");
+    expect(classifyTask("Fixes npm publish authentication failure E401")).toBe("bugfix");
     expect(classifyTask("修复 npm 发布失败 E401")).toBe("bugfix");
     expect(classifyTask("Deploy the application to production")).toBe("unknown");
     expect(classifyTask("Improve release verification script routing")).toBe("refactor");
