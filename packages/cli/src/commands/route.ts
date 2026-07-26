@@ -25,6 +25,12 @@ export function registerRoute(program: Command): void {
         `Task type: ${route.taskType}`,
         `Entry: ${route.entry.floor}${route.entry.wing ? `/${route.entry.wing}` : ""}${route.entry.room ? `/${route.entry.room}` : ""}`,
         `Confidence: ${route.confidence}`,
+        ...(route.narrowingEvidence
+          ? [
+              `Narrowing evidence: ${route.narrowingEvidence.independentImplementationAnchor}`,
+              ...route.narrowingEvidence.reasons.map((reason) => `  ${reason}`)
+            ]
+          : []),
         "",
         "Route:",
         ...route.route.map((step, index) => `${index + 1}. ${step.sourcePath}\n   Reason: ${step.reason}\n   Load: ${step.loadLevel}`),

@@ -87,6 +87,12 @@ export async function routePalace(root: string, task: string, options: number | 
     routeLimit
   );
   const expanded = coreSelection?.route ?? surfaceExpanded;
+  const narrowingEvidence = independentImplementationAnchorEvidence(
+    expanded,
+    analysis,
+    taskType,
+    coreSelection?.confidenceCap
+  );
   const now = new Date().toISOString();
 
   const routeSteps = expanded.map((item, index) => {
@@ -120,6 +126,7 @@ export async function routePalace(root: string, task: string, options: number | 
       reservedOutputTokens: DEFAULT_BUDGET.reservedOutputTokens
     },
     confidence: confidence(expanded, analysis, estimatedTokens, budget, taskType, coreSelection?.confidenceCap),
+    narrowingEvidence,
     createdAt: now
   };
 
@@ -2669,12 +2676,6 @@ function confidence(
     ? 0.98
     : 0.15 + artifactFamilyCoverage * 0.75;
   const directEvidenceCap = coreEvidenceCap ?? directCodeEvidenceCap(top, analysis, taskType);
-  const independentAnchorCap = independentImplementationAnchorCap(
-    top,
-    analysis,
-    taskType,
-    coreEvidenceCap
-  );
   const workspaceAmbiguityCap = unresolvedWorkspaceScopeCap(top, analysis, taskType);
   const compoundBugfixCap = taskType === "bugfix" && requestedSurfaceCount >= 3 && keywords.length >= 12
     ? 0.4
@@ -2685,7 +2686,6 @@ function confidence(
       taskCap,
       artifactFamilyCap,
       directEvidenceCap,
-      independentAnchorCap,
       workspaceAmbiguityCap,
       compoundBugfixCap,
       value
@@ -2693,15 +2693,27 @@ function confidence(
   ).toFixed(2));
 }
 
-function independentImplementationAnchorCap(
+function independentImplementationAnchorEvidence(
   items: ScoredNode[],
   analysis: ReturnType<typeof analyzeTask>,
   taskType: TaskType,
   coreEvidenceCap?: number
-): number {
-  if (taskType !== "bugfix" || coreEvidenceCap === undefined || coreEvidenceCap <= 0.4) return 0.98;
+): NonNullable<PalaceRoute["narrowingEvidence"]> {
+  if (taskType !== "bugfix" || coreEvidenceCap === undefined || coreEvidenceCap <= 0.4) {
+    return {
+      independentImplementationAnchor: "not-required",
+      leadingTaskAnchors: [],
+      reasons: []
+    };
+  }
   const anchors = leadingBugfixAnchorTokens(analysis.raw);
-  if (anchors.length < 2) return 0.98;
+  if (anchors.length < 2) {
+    return {
+      independentImplementationAnchor: "not-required",
+      leadingTaskAnchors: anchors,
+      reasons: []
+    };
+  }
   const implementations = items.filter(
     (item) => isImplementationCandidate(item.node) && !isDirectTestCandidate(item)
   );
@@ -2714,7 +2726,21 @@ function independentImplementationAnchorCap(
     ]);
     return anchors.every((anchor) => [...tokens].some((token) => anchorTokensMatch(anchor, token)));
   });
-  return independentlyAnchored ? 0.98 : 0.15;
+  return independentlyAnchored
+    ? {
+        independentImplementationAnchor: "confirmed",
+        leadingTaskAnchors: anchors,
+        reasons: [
+          `A selected implementation independently covers both leading bugfix anchors: ${anchors.join(", ")}.`
+        ]
+      }
+    : {
+        independentImplementationAnchor: "missing",
+        leadingTaskAnchors: anchors,
+        reasons: [
+          `No selected implementation independently covers both leading bugfix anchors: ${anchors.join(", ")}.`
+        ]
+      };
 }
 
 function leadingBugfixAnchorTokens(task: string): string[] {

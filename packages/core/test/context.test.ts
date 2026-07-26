@@ -543,6 +543,57 @@ describe("palaceContext", () => {
     });
   });
 
+  it("keeps missing independent-anchor evidence visible and advisory without collapsing confidence", async () => {
+    await withFixture("ts-api", async (root) => {
+      await mkdir(path.join(root, "src", "payload"), { recursive: true });
+      await mkdir(path.join(root, "test", "payload"), { recursive: true });
+      await writeFile(
+        path.join(root, "src", "payload", "escape.ts"),
+        "export function quotePayload(value: string) { return value.replaceAll('\\n', '\\\\n'); }\n",
+        "utf8"
+      );
+      await writeFile(
+        path.join(root, "test", "payload", "escape.test.ts"),
+        "import { quotePayload } from '../../src/payload/escape';\ntest('escaped payload newlines', () => quotePayload('a\\nb'));\n",
+        "utf8"
+      );
+
+      const output = await palaceContext({
+        root,
+        task: "Fixes payload parsing for escaped newlines",
+        budget: 6000,
+        routeLimit: 9,
+        maxDrawers: 4,
+        auto: true,
+        format: "json"
+      });
+      const json = output.json as {
+        route: {
+          confidence: number;
+          narrowingEvidence: {
+            independentImplementationAnchor: string;
+            leadingTaskAnchors: string[];
+            reasons: string[];
+          };
+        };
+        executionBoundaries: { stopEnforced: boolean };
+      };
+
+      expect(json.route.confidence).toBeGreaterThan(0.15);
+      expect(json.route.narrowingEvidence).toEqual({
+        independentImplementationAnchor: "missing",
+        leadingTaskAnchors: ["payload", "parsing"],
+        reasons: [
+          "No selected implementation independently covers both leading bugfix anchors: payload, parsing."
+        ]
+      });
+      expect(output.mode).toBe("full-palace");
+      expect(output.modeSelection?.evidenceStatus).toBe("insufficient");
+      expect(output.modeSelection?.interventionPolicy).toBe("advisory");
+      expect(json.executionBoundaries.stopEnforced).toBe(false);
+    });
+  });
+
   it("fails open when routing evidence is insufficient", async () => {
     await withFixture("ts-api", async (root) => {
       const output = await palaceContext({

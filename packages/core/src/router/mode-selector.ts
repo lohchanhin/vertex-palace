@@ -36,6 +36,8 @@ export function selectPalaceMode(
   const memoryEvidenceAvailable = memoryEvidenceCount > 0;
   const primarySteps = route.route.filter((step) => (step.tier ?? inferredTier(step.priority)) === "primary");
   const primaryCount = primarySteps.length;
+  const narrowingEvidenceInsufficient =
+    route.narrowingEvidence?.independentImplementationAnchor === "missing";
   const uncertainRoute = route.confidence < 0.45;
   const singleExplicitTarget = explicitFiles.length === 1 && route.confidence >= 0.45;
   const singleImplicitTarget = explicitFiles.length === 0
@@ -52,6 +54,7 @@ export function selectPalaceMode(
     highConfidenceSingleFile,
     memoryCheckedAndAbsent,
     uncertainRoute,
+    narrowingEvidenceInsufficient,
     riskSignals,
     budget: options.budget
   });
@@ -117,12 +120,14 @@ function selectStructuralMode(input: {
   highConfidenceSingleFile: boolean;
   memoryCheckedAndAbsent: boolean;
   uncertainRoute: boolean;
+  narrowingEvidenceInsufficient: boolean;
   riskSignals: PalaceRiskSignals;
   budget?: number;
 }): BasePalaceModeSelection {
   if (
     input.highConfidenceSingleFile
     && input.memoryCheckedAndAbsent
+    && !input.narrowingEvidenceInsufficient
     && !input.riskSignals.crossStack
     && !input.riskSignals.tenantIsolationRisk
     && !input.riskSignals.publicContractRisk
@@ -140,6 +145,7 @@ function selectStructuralMode(input: {
 
   const boundedTask =
     !input.uncertainRoute
+    && !input.narrowingEvidenceInsufficient
     && !input.riskSignals.crossStack
     && !input.riskSignals.tenantIsolationRisk
     && !input.riskSignals.publicContractRisk
@@ -167,6 +173,9 @@ function selectStructuralMode(input: {
     input.riskSignals.scopeRisk ? "The requested change has repository-wide or multi-file scope." : undefined,
     input.riskSignals.verificationChangeRisk ? "The task explicitly requests verification-file changes." : undefined,
     input.uncertainRoute ? "Route confidence is too low for a narrow context." : undefined,
+    input.narrowingEvidenceInsufficient
+      ? "Independent implementation-anchor evidence is insufficient for narrow context."
+      : undefined,
     input.fileCount > 100 ? `The repository contains ${input.fileCount} indexed files.` : undefined
   ].filter((reason): reason is string => Boolean(reason));
   return buildSelection(
@@ -243,6 +252,9 @@ function withEvidencePolicy(
     evidenceReasons.push(
       `Route confidence ${route.confidence} is below the ${MIN_SUFFICIENT_ROUTE_CONFIDENCE} sufficiency threshold.`
     );
+  }
+  if (route.narrowingEvidence?.independentImplementationAnchor === "missing") {
+    evidenceReasons.push(...route.narrowingEvidence.reasons);
   }
 
   const memoryChecked = Boolean(memoryPreflight) || options.relevantMemoryCount !== undefined;

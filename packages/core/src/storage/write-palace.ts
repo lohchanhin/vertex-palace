@@ -43,6 +43,9 @@ function renderRouteMarkdown(route: PalaceRoute): string {
     `Task: ${route.task}`,
     `Type: ${route.taskType}`,
     `Confidence: ${route.confidence}`,
+    ...(route.narrowingEvidence
+      ? [`Narrowing evidence: ${route.narrowingEvidence.independentImplementationAnchor}`]
+      : []),
     `Created: ${route.createdAt}`,
     `Entry: ${route.entry.floor}/${route.entry.wing ?? "unknown"}/${route.entry.room ?? "general"}`,
     `Entrance pitfall board: .palace/00-entrance/pitfall-board.md`,
@@ -62,6 +65,9 @@ function renderOptimizedRoute(route: PalaceRoute): string {
     `Task: ${route.task}`,
     `Task type: ${route.taskType}`,
     `Confidence: ${route.confidence}`,
+    ...(route.narrowingEvidence
+      ? [`Narrowing evidence: ${route.narrowingEvidence.independentImplementationAnchor}`]
+      : []),
     `Entry: ${route.entry.floor}/${route.entry.wing ?? "unknown"}/${route.entry.room ?? "general"}`,
     `Entrance pitfall board: .palace/00-entrance/pitfall-board.md`,
     "",

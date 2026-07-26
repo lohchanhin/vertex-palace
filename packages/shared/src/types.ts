@@ -319,6 +319,12 @@ export type PalaceRouteStep = {
   evidence?: string[];
 };
 
+export type PalaceRouteNarrowingEvidence = {
+  independentImplementationAnchor: "confirmed" | "missing" | "not-required";
+  leadingTaskAnchors: string[];
+  reasons: string[];
+};
+
 export type PalaceRoute = {
   id: string;
   task: string;
@@ -339,6 +345,7 @@ export type PalaceRoute = {
     reservedOutputTokens: number;
   };
   confidence: number;
+  narrowingEvidence?: PalaceRouteNarrowingEvidence;
   createdAt: string;
 };
 

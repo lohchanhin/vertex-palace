@@ -1866,7 +1866,7 @@ export function uploadProductVariantImageController(file: File) {
     });
   });
 
-  it("caps confidence when a structural pair misses an independent leading task anchor", async () => {
+  it("separates confidence from narrowing authorization when an independent anchor is missing", async () => {
     await withFixture("ts-api", async (root) => {
       const files = new Map<string, string>([
         [
@@ -1895,7 +1895,19 @@ export function uploadProductVariantImageController(file: File) {
         "src/payload/escape.ts",
         "test/payload/escape.test.ts"
       ]);
-      expect(route.confidence).toBeLessThanOrEqual(0.15);
+      expect(route.confidence).toBeGreaterThan(0.15);
+      expect(route.narrowingEvidence).toEqual({
+        independentImplementationAnchor: "missing",
+        leadingTaskAnchors: ["payload", "parsing"],
+        reasons: [
+          "No selected implementation independently covers both leading bugfix anchors: payload, parsing."
+        ]
+      });
+      const optimizedRoute = await readFile(
+        path.join(root, ".palace", "routes", "optimized-route.txt"),
+        "utf8"
+      );
+      expect(optimizedRoute).toContain("Narrowing evidence: missing");
     });
   });
 

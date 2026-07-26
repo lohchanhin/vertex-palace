@@ -546,6 +546,7 @@ function adaptiveJson(
       id: route.id,
       taskType: route.taskType,
       confidence: route.confidence,
+      ...(route.narrowingEvidence ? { narrowingEvidence: route.narrowingEvidence } : {}),
       entry: route.entry,
       primary: unloadedRouteSteps(tiered.primary, drawers).map(compactRouteStep)
     },

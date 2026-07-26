@@ -128,6 +128,30 @@ describe("selectPalaceMode", () => {
     expect(selection.evidenceReasons).toContain("Route confidence 0.35 is below the 0.7 sufficiency threshold.");
   });
 
+  it("keeps a high score advisory and full when independent narrowing evidence is missing", () => {
+    const route = focusedRoute(0.8);
+    route.narrowingEvidence = {
+      independentImplementationAnchor: "missing",
+      leadingTaskAnchors: ["payload", "parsing"],
+      reasons: [
+        "No selected implementation independently covers both leading bugfix anchors: payload, parsing."
+      ]
+    };
+    const selection = selectPalaceMode(
+      smallIndex(),
+      route,
+      "Fixes payload parsing for escaped newlines",
+      { relevantMemoryCount: 0 }
+    );
+
+    expect(selection.mode).toBe("full-palace");
+    expect(selection.evidenceStatus).toBe("insufficient");
+    expect(selection.interventionPolicy).toBe("advisory");
+    expect(selection.evidenceReasons).toContain(
+      "No selected implementation independently covers both leading bugfix anchors: payload, parsing."
+    );
+  });
+
   it("marks unresolved memory evidence as conflicted and advisory", () => {
     const memoryPreflight = {
       decision: "conflict_requires_guard",
