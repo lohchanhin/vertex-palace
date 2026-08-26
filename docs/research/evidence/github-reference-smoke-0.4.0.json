@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-26T16:07:53.030Z",
+  "claimBoundary": "Anonymous public GitHub issue transport, cache, and credential-redaction smoke only; not routing-quality or Agent-performance evidence.",
+  "sourceCommit": "e62bd916915c22c502ebce869959dce7c0163eea",
+  "sourceTreeDirty": false,
+  "productVersion": "0.4.0",
+  "remote": "https://github.com/microsoft/vscode.git",
+  "reference": "https://github.com/microsoft/vscode/issues/1",
+  "credentialsDisabled": true,
+  "firstRequest": {
+    "decision": "route",
+    "groundingStatus": "resolved",
+    "resolutionStatus": "fetched",
+    "contentHash": "3e996dbdf4b6244bbb9ba21cfc5361a3e593c33772f72d57c105d96e075d0011"
+  },
+  "secondRequest": {
+    "decision": "route",
+    "groundingStatus": "resolved",
+    "resolutionStatus": "cache-hit",
+    "contentHash": "3e996dbdf4b6244bbb9ba21cfc5361a3e593c33772f72d57c105d96e075d0011"
+  },
+  "cacheFiles": 1,
+  "credentialLeakDetected": false
+}
