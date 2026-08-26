@@ -6,13 +6,13 @@ Vertex Palace turns a repository into a local palace of floors, rooms, cabinets,
 
 OpenAI Build Week work is documented separately in [BUILD_WEEK.md](./BUILD_WEEK.md), including the pre-existing baseline, submission-period additions, Codex/GPT-5.6 collaboration, and judge verification steps.
 
-**Published stable release:** `0.3.0` remains npm `latest`. Install it with `npm install -g vertex-palace@latest`, or add the plugin marketplace with `codex plugin marketplace add lohchanhin/vertex-palace --ref v0.3.0`.
+**Published stable release:** `0.4.0` is the qualified npm `latest`. Install it with `npm install -g vertex-palace@latest`, or add the plugin marketplace with `codex plugin marketplace add lohchanhin/vertex-palace --ref v0.4.0`.
 
-**Development candidate:** `0.4.0-alpha.3` adds an explicit-evidence contract after the frozen alpha.2 candidate failed Round 22. Paths explicitly named in the task or resolved GitHub metadata now outrank scored expansion, while bare incident numbers cannot establish local grounding. Alpha.3 is not yet published and must pass fresh preregistered rounds before it can replace npm `next`; npm `latest` remains `0.3.0`. Round 21 and [Round 22](./docs/research/LAYERED_ROUTING_VALIDATION_RESULT_0_4_ROUND_22.md) remain immutable negative results. Static routing evidence does not establish a general reduction in end-to-end Agent tokens, wall time, or correctness errors. Read the [0.4 architecture](./docs/research/VERTEX_PALACE_0_4_NON_LOOPING_ARCHITECTURE.md).
+Version `0.4.0` adds structured GitHub-reference grounding and abstention, bounded evidence-gain expansion, layered route evaluation, and an explicit-evidence contract for paths named by the task or resolved metadata. The unchanged alpha.3 artifact passed two fresh preregistered rounds: both reached 1.000 macro core coverage, 0.972 macro route focus, 100% reference grounding and control abstention, and zero wrong forced stops. Round 21 and [Round 22](./docs/research/LAYERED_ROUTING_VALIDATION_RESULT_0_4_ROUND_22.md) remain immutable negative results. These are static-routing release gates, not proof of lower end-to-end Agent tokens or wall time. Read the [Round 24](./docs/research/LAYERED_ROUTING_VALIDATION_RESULT_0_4_ROUND_24.md), [Round 25](./docs/research/LAYERED_ROUTING_VALIDATION_RESULT_0_4_ROUND_25.md), and [0.4 architecture](./docs/research/VERTEX_PALACE_0_4_NON_LOOPING_ARCHITECTURE.md) records.
 
-**已发布稳定版：** `0.3.0` 继续作为 npm `latest`。可运行 `npm install -g vertex-palace@latest`，或执行 `codex plugin marketplace add lohchanhin/vertex-palace --ref v0.3.0` 安装插件。
+**已发布稳定版：** `0.4.0` 是通过资格验证的 npm `latest`。可运行 `npm install -g vertex-palace@latest`，或执行 `codex plugin marketplace add lohchanhin/vertex-palace --ref v0.4.0` 安装插件。
 
-**开发候选版：** 冻结的 alpha.2 candidate 在 Round 22 失败后，`0.4.0-alpha.3` 加入显式证据契约：任务或 GitHub metadata 明确写出的路径优先于评分扩张，裸 incident 数字也不能建立本地 grounding。alpha.3 尚未发布，必须先通过全新预注册研究才可替换 npm `next`；npm `latest` 仍是 `0.3.0`。Round 21 与[第 22 轮](./docs/zh-CN/LAYERED_ROUTING_VALIDATION_RESULT_0_4_ROUND_22.md)都保持为不可改写的负面结果。静态路由证据不能证明 Agent 普遍减少总 Token、缩短时间或降低正确性错误。详见[0.4 架构说明](./docs/zh-CN/VERTEX_PALACE_0_4_NON_LOOPING_ARCHITECTURE.md)。
+`0.4.0` 加入结构化 GitHub 引用补全与拒答、有限证据增益扩张、分层路由评价，以及对任务或已解析 metadata 明确路径的显式证据契约。未改变的 alpha.3 artifact 连续通过两轮全新预注册研究：两轮宏观核心覆盖率均为 1.000、宏观 route focus 均为 0.972、引用补全与控制拒答均为 100%，且零错误强制停止。Round 21 与[第 22 轮](./docs/zh-CN/LAYERED_ROUTING_VALIDATION_RESULT_0_4_ROUND_22.md)继续保留为不可改写的负面结果。这些是静态路由发布门槛，不证明端到端 Agent 更省 Token 或更快。详见[第 24 轮](./docs/zh-CN/LAYERED_ROUTING_VALIDATION_RESULT_0_4_ROUND_24.md)、[第 25 轮](./docs/zh-CN/LAYERED_ROUTING_VALIDATION_RESULT_0_4_ROUND_25.md)与[0.4 架构](./docs/zh-CN/VERTEX_PALACE_0_4_NON_LOOPING_ARCHITECTURE.md)。
 
 Do not install the incomplete `v0.2.4` plugin tag; the npm version it references was never published.
 
@@ -96,23 +96,23 @@ adaptive context (one call) -> inspect Primary -> expand Deferred only when need
 1. Add the marketplace, then install the plugin:
 
 ```bash
-codex plugin marketplace add lohchanhin/vertex-palace --ref v0.3.0
+codex plugin marketplace add lohchanhin/vertex-palace --ref v0.4.0
 codex plugin add vertex-palace@vertex-palace-marketplace
 ```
 
-`v0.3.0` is the competition plugin/CLI pair and contains True Bypass, auditable memory selection, and execution boundaries. Avoid `v0.1.0`, `v0.1.1`, and the incomplete `v0.2.4` plugin tag.
+`v0.4.0` contains structured grounding and abstention, bounded evidence routing, layered evaluation, True Bypass, auditable memory selection, and execution boundaries. Avoid `v0.1.0`, `v0.1.1`, and the incomplete `v0.2.4` plugin tag.
 
 2. Or install the CLI directly from npm:
 
 ```bash
-npm install -g vertex-palace@0.3.0
+npm install -g vertex-palace@0.4.0
 palace status
 ```
 
 For one-off use without a global install:
 
 ```bash
-npx -y -p vertex-palace@0.3.0 palace status
+npx -y -p vertex-palace@0.4.0 palace status
 ```
 
 3. Restart Codex or start a new task so the plugin skills and MCP server reload.
@@ -246,11 +246,11 @@ adaptive context（单次调用）-> 先读 Primary -> 证据需要时再展开 
 1. 加入 marketplace，然后安装插件：
 
 ```bash
-codex plugin marketplace add lohchanhin/vertex-palace --ref v0.3.0
+codex plugin marketplace add lohchanhin/vertex-palace --ref v0.4.0
 codex plugin add vertex-palace@vertex-palace-marketplace
 ```
 
-`v0.3.0` 是比赛使用的插件与 CLI 配对版本，包含 True Bypass、可审计记忆筛选与停止边界。不要使用 `v0.1.0`、`v0.1.1`，也不要使用不完整的 `v0.2.4` 插件标签。
+`v0.4.0` 包含结构化补全与拒答、有限证据路由、分层评价、True Bypass、可审计记忆筛选与停止边界。不要使用 `v0.1.0`、`v0.1.1`，也不要使用不完整的 `v0.2.4` 插件标签。
 
 2. 重新启动 Codex 或开启新对话，让插件 skill 与 MCP server 重新载入；可输入
    `/plugins` 确认 Vertex Palace 已安装。
@@ -308,29 +308,29 @@ cat .palace/memory/task-log.md
 Install the CLI from npm:
 
 ```bash
-npm install -g vertex-palace@0.3.0
+npm install -g vertex-palace@0.4.0
 palace status
 ```
 
 Run it without a global install:
 
 ```bash
-npx -y -p vertex-palace@0.3.0 palace status
+npx -y -p vertex-palace@0.4.0 palace status
 ```
 
 Install the Codex plugin:
 
 ```bash
-codex plugin marketplace add lohchanhin/vertex-palace --ref v0.3.0
+codex plugin marketplace add lohchanhin/vertex-palace --ref v0.4.0
 codex plugin add vertex-palace@vertex-palace-marketplace
 ```
 
-Use the exact `v0.3.0` tag so the plugin MCP pin and npm package stay aligned. Do not use the incomplete `v0.2.4` plugin tag.
+Use the exact `v0.4.0` tag so the plugin MCP pin and npm package stay aligned. Do not use the incomplete `v0.2.4` plugin tag.
 
 The plugin launches its MCP server through npm:
 
 ```bash
-npx -y -p vertex-palace@0.3.0 vertex-palace-mcp-stdio --stdio
+npx -y -p vertex-palace@0.4.0 vertex-palace-mcp-stdio --stdio
 ```
 
 Open Codex:

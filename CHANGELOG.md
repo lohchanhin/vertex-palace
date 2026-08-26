@@ -2,12 +2,27 @@
 
 ## Unreleased
 
-### 0.4.0-alpha.3 candidate
+## 0.4.0 - 2026-08-27
 
-- Treat repository paths explicitly named in the task or resolved GitHub metadata as a mandatory evidence contract after normal scoring and pruning.
-- Keep routes advisory when explicit evidence is absent or cannot fit the bounded route instead of hiding the missing path behind role-level closure.
+### Added
+
+- Structured local, resolved, and unresolved task grounding with bounded GitHub issue/PR metadata fetch, one-hour local caching, credential redaction, and normal structured abstention with zero source drawers.
+- Layered route truth for implementation/focused-test core, explicitly declared auxiliary evidence, and descriptive latent auxiliary files.
+- A general explicit-evidence contract that materializes repository paths named by the task or resolved metadata after scoring and pruning.
+
+### Changed
+
+- Evidence-insufficient local routes remain bounded advisory `route-lite` contexts instead of automatically expanding to `full-palace`.
+- Evidence expansion uses task affinity, relation strength, missing-facet gain, source-degree penalty, and redundancy; high-degree files cannot enter solely because they have many relations.
+- Explicit paths that are absent or cannot fit keep evidence closure insufficient instead of hiding the omission behind role-level closure.
 - Reject bare numeric incident IDs as local code identifiers.
-- Preserve the failed alpha.2 Round 22 result and reset stable qualification; alpha.3 requires fresh unobserved targets.
+
+### Verification And Limits
+
+- The unchanged `0.4.0-alpha.3` artifact passed fresh, preregistered Rounds 24 and 25. Both rounds reached 1.000 macro core coverage, 0.972 macro route focus, 100% reference grounding, 100% control abstention, 100% declared auxiliary coverage, deterministic routes, and zero overconfidence, wrong forced stops, tracked-file pollution, or metric disagreement.
+- The workspace passes 257 core tests, 4 CLI/MCP tests, 242 research tests with 2 protocol-defined skips, lint, build, MCP smoke, and clean temporary-directory package installation.
+- Round 21 and Round 22 remain immutable negative results. The repaired Round 22 replay remains disclosed regression evidence and is not counted toward stable qualification.
+- Static routing qualification does not establish lower end-to-end Agent tokens, wall time, tool calls, or correctness errors. Those claims remain gated by a separate randomized Agent A/B.
 
 ## 0.4.0-alpha.2 - 2026-08-26
 
@@ -30,7 +45,7 @@
 - npm `latest` remains `0.3.0`. Alpha.2 is intended for the `next` dist-tag until two fresh preregistered rounds pass.
 - Static routing and abstention evidence do not establish lower end-to-end Agent tokens, wall time, or tool calls.
 
-## 0.4.0 (unpublished candidate) - 2026-08-26
+## 0.4.0 pre-alpha candidate (not published) - 2026-08-26
 
 ### Changed
 
