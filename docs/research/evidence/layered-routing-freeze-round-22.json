@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "studyId": "layered-routing-round-22-alpha-2",
+  "round": 22,
+  "frozenAt": "2026-08-26T14:58:53.461Z",
+  "sourceCommit": "723b16cb4078859cd3f0c19383f3299573b48b24",
+  "claimBoundary": "Hash freeze created before either condition was run on any selected target. Target tasks, truth layers, gates, runner, and product packages may not change after this point.",
+  "products": {
+    "candidate": {
+      "package": "vertex-palace@0.4.0-alpha.2",
+      "integrity": "sha512-68VPX8oezrhHK31C5Taz5T3wigVEJ6fhJZptb7L4ys0G8IORu/A5btmFkCMGVAmZ1ZuHRJVIkYZLaIyBdvKerw==",
+      "shasum": "e383e5ebc19e2a10ef6efdbde0f5918d94f17a65"
+    },
+    "baseline": {
+      "package": "vertex-palace@0.3.0",
+      "integrity": "sha512-DXALXKH1k/Gj7PoprNDmz/tHlYum2T7QsU32el76mHy/U3u42zY02cshm5P8lwY6yqzkIoZ6h9/6df0QOlJp4Q==",
+      "shasum": "9a04440d7e95c4d34e68e1b7e2cd3f6ecd62e83e"
+    }
+  },
+  "artifacts": {
+    "manifestPath": "docs/research/evidence/layered-routing-targets-round-22.json",
+    "manifestSha256": "a711e6340a6b189b5d6c4a533d42adecf963fac91da268d4d87e36e260748ec5",
+    "runnerPath": "scripts/run-layered-routing-round.cjs",
+    "runnerSha256": "f940b3b1164b37eb83b0af709efb4dbbe832f83a19307bc3b79236f5fb45dc05",
+    "resolvedReferenceMetadataSha256": "555f29536615cf285b6e772db7d90a18a035f1f805eedda6ea90f47458b16694"
+  },
+  "gates": {
+    "referenceGrounding": 1,
+    "controlAbstention": 1,
+    "routableCoreClosure": 1,
+    "macroCoreCoverage": 0.9,
+    "macroRouteFocus": 0.7,
+    "perTargetCoverage": 0.5,
+    "perTargetFocus": 0.4,
+    "declaredAuxiliaryCoverage": 1,
+    "commonNonInferiorityMargin": -0.05,
+    "contextTokenCeiling": 6000
+  }
+}
