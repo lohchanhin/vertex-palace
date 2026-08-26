@@ -1,0 +1,2673 @@
+{
+  "schemaVersion": 1,
+  "studyId": "layered-routing-round-25-alpha-3",
+  "round": 25,
+  "generatedAt": "2026-08-26T15:57:54.095Z",
+  "claimBoundary": "Paired static-routing, abstention, and context-contract evidence only. This does not execute an Agent or establish Token, wall-time, or tool-call improvement.",
+  "sourceCommit": "5f3b17032cdc996a730bda4fe306edd1493a8c37",
+  "sourceTreeDirty": false,
+  "product": {
+    "baseline": {
+      "version": "0.3.0",
+      "cliPath": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-round-25-kCGH7X\\_product-baseline\\node_modules\\vertex-palace\\dist\\palace.cjs",
+      "integrity": "sha512-DXALXKH1k/Gj7PoprNDmz/tHlYum2T7QsU32el76mHy/U3u42zY02cshm5P8lwY6yqzkIoZ6h9/6df0QOlJp4Q=="
+    },
+    "candidate": {
+      "version": "0.4.0-alpha.3",
+      "cliPath": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-round-25-kCGH7X\\_product-candidate\\node_modules\\vertex-palace\\dist\\palace.cjs",
+      "integrity": "sha512-rVwwaZMQNBt8sbJV2Al/vo9RWwPn4NMGMOn159DvHDN8j4CPcVzPjm1M+UpkUGaSMbs5KBPH6RrjrKcnJE9qkA=="
+    }
+  },
+  "protocol": {
+    "repetitionsPerCondition": 2,
+    "routeLimit": 6,
+    "contextBudget": 6000,
+    "orderBalanced": true,
+    "targetCount": 12
+  },
+  "analysis": {
+    "pass": true,
+    "gates": {
+      "referenceGrounding100": true,
+      "controlAbstention100": true,
+      "routableCoreClosure100": true,
+      "macroCoreCoverage90": true,
+      "macroRouteFocus70": true,
+      "perTargetCoverage50": true,
+      "perTargetFocus40": true,
+      "declaredAuxiliary100": true,
+      "commonCoverageNonInferior": true,
+      "commonFocusNonInferior": true,
+      "zeroOverconfidence": true,
+      "zeroWrongForcedStops": true,
+      "zeroTrackedPollution": true,
+      "zeroMetricDisagreement": true,
+      "deterministicRoutes": true,
+      "contextCeiling6000": true
+    },
+    "metrics": {
+      "candidateRoutableRuns": 18,
+      "candidateControlRuns": 6,
+      "macroCoreCoverage": 1,
+      "macroRouteFocus": 0.972,
+      "commonCompletedTargets": [
+        "r25-rust-local-namespace",
+        "r25-ts-local-campaign",
+        "r25-py-local-digest",
+        "r25-py-high-access",
+        "r25-go-high-delivery",
+        "r25-rust-high-snapshot"
+      ],
+      "commonCoverageDelta": 0,
+      "commonFocusDelta": 0.32,
+      "candidateMeanContextTokens": 1721.75,
+      "baselineMeanContextTokens": 816.25
+    }
+  },
+  "observations": [
+    {
+      "targetId": "r25-rust-local-namespace",
+      "language": "rust",
+      "stratum": "local",
+      "condition": "baseline",
+      "version": "0.3.0",
+      "repetition": 1,
+      "elapsedMs": 663,
+      "decision": "route",
+      "grounding": null,
+      "mode": "route-lite",
+      "evidenceStatus": null,
+      "stopEnforced": false,
+      "routeFiles": [
+        "src/namespace.rs",
+        "tests/namespace_test.rs"
+      ],
+      "routeFileCount": 2,
+      "core": {
+        "files": [
+          "src/namespace.rs",
+          "tests/namespace_test.rs"
+        ],
+        "matchedFiles": [
+          "src/namespace.rs",
+          "tests/namespace_test.rs"
+        ],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "declaredAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "latentAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "routeFocus": 1,
+      "contextTokens": 912,
+      "payloadMetricAgreement": true,
+      "trackedFilePollution": "",
+      "confidence": 0.76,
+      "completed": true
+    },
+    {
+      "targetId": "r25-rust-local-namespace",
+      "language": "rust",
+      "stratum": "local",
+      "condition": "candidate",
+      "version": "0.4.0-alpha.3",
+      "repetition": 1,
+      "elapsedMs": 607,
+      "decision": "route",
+      "grounding": {
+        "decision": "route",
+        "reasons": [
+          "The task contains local file, symbol, or product-vocabulary evidence."
+        ],
+        "references": [],
+        "resolutionStatus": "not-needed",
+        "status": "local"
+      },
+      "mode": "route-lite",
+      "evidenceStatus": "sufficient",
+      "stopEnforced": true,
+      "routeFiles": [
+        "src/namespace.rs",
+        "tests/namespace_test.rs"
+      ],
+      "routeFileCount": 2,
+      "core": {
+        "files": [
+          "src/namespace.rs",
+          "tests/namespace_test.rs"
+        ],
+        "matchedFiles": [
+          "src/namespace.rs",
+          "tests/namespace_test.rs"
+        ],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "declaredAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "latentAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "routeFocus": 1,
+      "contextTokens": 1760,
+      "payloadMetricAgreement": true,
+      "trackedFilePollution": "",
+      "confidence": 0.9,
+      "completed": true
+    },
+    {
+      "targetId": "r25-rust-local-namespace",
+      "language": "rust",
+      "stratum": "local",
+      "condition": "candidate",
+      "version": "0.4.0-alpha.3",
+      "repetition": 2,
+      "elapsedMs": 671,
+      "decision": "route",
+      "grounding": {
+        "decision": "route",
+        "reasons": [
+          "The task contains local file, symbol, or product-vocabulary evidence."
+        ],
+        "references": [],
+        "resolutionStatus": "not-needed",
+        "status": "local"
+      },
+      "mode": "route-lite",
+      "evidenceStatus": "sufficient",
+      "stopEnforced": true,
+      "routeFiles": [
+        "src/namespace.rs",
+        "tests/namespace_test.rs"
+      ],
+      "routeFileCount": 2,
+      "core": {
+        "files": [
+          "src/namespace.rs",
+          "tests/namespace_test.rs"
+        ],
+        "matchedFiles": [
+          "src/namespace.rs",
+          "tests/namespace_test.rs"
+        ],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "declaredAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "latentAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "routeFocus": 1,
+      "contextTokens": 1760,
+      "payloadMetricAgreement": true,
+      "trackedFilePollution": "",
+      "confidence": 0.9,
+      "completed": true
+    },
+    {
+      "targetId": "r25-rust-local-namespace",
+      "language": "rust",
+      "stratum": "local",
+      "condition": "baseline",
+      "version": "0.3.0",
+      "repetition": 2,
+      "elapsedMs": 675,
+      "decision": "route",
+      "grounding": null,
+      "mode": "route-lite",
+      "evidenceStatus": null,
+      "stopEnforced": false,
+      "routeFiles": [
+        "src/namespace.rs",
+        "tests/namespace_test.rs"
+      ],
+      "routeFileCount": 2,
+      "core": {
+        "files": [
+          "src/namespace.rs",
+          "tests/namespace_test.rs"
+        ],
+        "matchedFiles": [
+          "src/namespace.rs",
+          "tests/namespace_test.rs"
+        ],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "declaredAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "latentAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "routeFocus": 1,
+      "contextTokens": 912,
+      "payloadMetricAgreement": true,
+      "trackedFilePollution": "",
+      "confidence": 0.76,
+      "completed": true
+    },
+    {
+      "targetId": "r25-ts-local-campaign",
+      "language": "typescript",
+      "stratum": "local",
+      "condition": "candidate",
+      "version": "0.4.0-alpha.3",
+      "repetition": 1,
+      "elapsedMs": 845,
+      "decision": "route",
+      "grounding": {
+        "decision": "route",
+        "reasons": [
+          "The task contains local file, symbol, or product-vocabulary evidence."
+        ],
+        "references": [],
+        "resolutionStatus": "not-needed",
+        "status": "local"
+      },
+      "mode": "route-lite",
+      "evidenceStatus": "sufficient",
+      "stopEnforced": true,
+      "routeFiles": [
+        "src/campaign/normalize-campaign-code.ts",
+        "tests/campaign/normalize-campaign-code.test.ts"
+      ],
+      "routeFileCount": 2,
+      "core": {
+        "files": [
+          "src/campaign/normalize-campaign-code.ts",
+          "tests/campaign/normalize-campaign-code.test.ts"
+        ],
+        "matchedFiles": [
+          "src/campaign/normalize-campaign-code.ts",
+          "tests/campaign/normalize-campaign-code.test.ts"
+        ],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "declaredAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "latentAuxiliary": {
+        "files": [
+          "CHANGELOG.md"
+        ],
+        "matchedFiles": [],
+        "missedFiles": [
+          "CHANGELOG.md"
+        ],
+        "coverage": 0
+      },
+      "routeFocus": 1,
+      "contextTokens": 1843,
+      "payloadMetricAgreement": true,
+      "trackedFilePollution": "",
+      "confidence": 0.9,
+      "completed": true
+    },
+    {
+      "targetId": "r25-ts-local-campaign",
+      "language": "typescript",
+      "stratum": "local",
+      "condition": "baseline",
+      "version": "0.3.0",
+      "repetition": 1,
+      "elapsedMs": 935,
+      "decision": "route",
+      "grounding": null,
+      "mode": "route-lite",
+      "evidenceStatus": null,
+      "stopEnforced": false,
+      "routeFiles": [
+        "CHANGELOG.md",
+        "noise/module-00.ts",
+        "noise/module-01.ts",
+        "noise/module-02.ts",
+        "src/campaign/normalize-campaign-code.ts",
+        "tests/campaign/normalize-campaign-code.test.ts"
+      ],
+      "routeFileCount": 6,
+      "core": {
+        "files": [
+          "src/campaign/normalize-campaign-code.ts",
+          "tests/campaign/normalize-campaign-code.test.ts"
+        ],
+        "matchedFiles": [
+          "src/campaign/normalize-campaign-code.ts",
+          "tests/campaign/normalize-campaign-code.test.ts"
+        ],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "declaredAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "latentAuxiliary": {
+        "files": [
+          "CHANGELOG.md"
+        ],
+        "matchedFiles": [
+          "CHANGELOG.md"
+        ],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "routeFocus": 0.333,
+      "contextTokens": 1060,
+      "payloadMetricAgreement": true,
+      "trackedFilePollution": "",
+      "confidence": 0.9,
+      "completed": true
+    },
+    {
+      "targetId": "r25-ts-local-campaign",
+      "language": "typescript",
+      "stratum": "local",
+      "condition": "baseline",
+      "version": "0.3.0",
+      "repetition": 2,
+      "elapsedMs": 793,
+      "decision": "route",
+      "grounding": null,
+      "mode": "route-lite",
+      "evidenceStatus": null,
+      "stopEnforced": false,
+      "routeFiles": [
+        "CHANGELOG.md",
+        "noise/module-00.ts",
+        "noise/module-01.ts",
+        "noise/module-02.ts",
+        "src/campaign/normalize-campaign-code.ts",
+        "tests/campaign/normalize-campaign-code.test.ts"
+      ],
+      "routeFileCount": 6,
+      "core": {
+        "files": [
+          "src/campaign/normalize-campaign-code.ts",
+          "tests/campaign/normalize-campaign-code.test.ts"
+        ],
+        "matchedFiles": [
+          "src/campaign/normalize-campaign-code.ts",
+          "tests/campaign/normalize-campaign-code.test.ts"
+        ],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "declaredAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "latentAuxiliary": {
+        "files": [
+          "CHANGELOG.md"
+        ],
+        "matchedFiles": [
+          "CHANGELOG.md"
+        ],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "routeFocus": 0.333,
+      "contextTokens": 1060,
+      "payloadMetricAgreement": true,
+      "trackedFilePollution": "",
+      "confidence": 0.9,
+      "completed": true
+    },
+    {
+      "targetId": "r25-ts-local-campaign",
+      "language": "typescript",
+      "stratum": "local",
+      "condition": "candidate",
+      "version": "0.4.0-alpha.3",
+      "repetition": 2,
+      "elapsedMs": 827,
+      "decision": "route",
+      "grounding": {
+        "decision": "route",
+        "reasons": [
+          "The task contains local file, symbol, or product-vocabulary evidence."
+        ],
+        "references": [],
+        "resolutionStatus": "not-needed",
+        "status": "local"
+      },
+      "mode": "route-lite",
+      "evidenceStatus": "sufficient",
+      "stopEnforced": true,
+      "routeFiles": [
+        "src/campaign/normalize-campaign-code.ts",
+        "tests/campaign/normalize-campaign-code.test.ts"
+      ],
+      "routeFileCount": 2,
+      "core": {
+        "files": [
+          "src/campaign/normalize-campaign-code.ts",
+          "tests/campaign/normalize-campaign-code.test.ts"
+        ],
+        "matchedFiles": [
+          "src/campaign/normalize-campaign-code.ts",
+          "tests/campaign/normalize-campaign-code.test.ts"
+        ],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "declaredAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "latentAuxiliary": {
+        "files": [
+          "CHANGELOG.md"
+        ],
+        "matchedFiles": [],
+        "missedFiles": [
+          "CHANGELOG.md"
+        ],
+        "coverage": 0
+      },
+      "routeFocus": 1,
+      "contextTokens": 1843,
+      "payloadMetricAgreement": true,
+      "trackedFilePollution": "",
+      "confidence": 0.9,
+      "completed": true
+    },
+    {
+      "targetId": "r25-py-local-digest",
+      "language": "python",
+      "stratum": "local",
+      "condition": "baseline",
+      "version": "0.3.0",
+      "repetition": 1,
+      "elapsedMs": 542,
+      "decision": "route",
+      "grounding": null,
+      "mode": "route-lite",
+      "evidenceStatus": null,
+      "stopEnforced": false,
+      "routeFiles": [
+        "manifest/digest.py",
+        "tests/test_manifest_digest.py"
+      ],
+      "routeFileCount": 2,
+      "core": {
+        "files": [
+          "manifest/digest.py",
+          "tests/test_manifest_digest.py"
+        ],
+        "matchedFiles": [
+          "manifest/digest.py",
+          "tests/test_manifest_digest.py"
+        ],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "declaredAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "latentAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "routeFocus": 1,
+      "contextTokens": 874,
+      "payloadMetricAgreement": true,
+      "trackedFilePollution": "",
+      "confidence": 0.79,
+      "completed": true
+    },
+    {
+      "targetId": "r25-py-local-digest",
+      "language": "python",
+      "stratum": "local",
+      "condition": "candidate",
+      "version": "0.4.0-alpha.3",
+      "repetition": 1,
+      "elapsedMs": 688,
+      "decision": "route",
+      "grounding": {
+        "decision": "route",
+        "reasons": [
+          "The task contains local file, symbol, or product-vocabulary evidence."
+        ],
+        "references": [],
+        "resolutionStatus": "not-needed",
+        "status": "local"
+      },
+      "mode": "route-lite",
+      "evidenceStatus": "sufficient",
+      "stopEnforced": true,
+      "routeFiles": [
+        "manifest/digest.py",
+        "tests/test_manifest_digest.py"
+      ],
+      "routeFileCount": 2,
+      "core": {
+        "files": [
+          "manifest/digest.py",
+          "tests/test_manifest_digest.py"
+        ],
+        "matchedFiles": [
+          "manifest/digest.py",
+          "tests/test_manifest_digest.py"
+        ],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "declaredAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "latentAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "routeFocus": 1,
+      "contextTokens": 1728,
+      "payloadMetricAgreement": true,
+      "trackedFilePollution": "",
+      "confidence": 0.9,
+      "completed": true
+    },
+    {
+      "targetId": "r25-py-local-digest",
+      "language": "python",
+      "stratum": "local",
+      "condition": "candidate",
+      "version": "0.4.0-alpha.3",
+      "repetition": 2,
+      "elapsedMs": 753,
+      "decision": "route",
+      "grounding": {
+        "decision": "route",
+        "reasons": [
+          "The task contains local file, symbol, or product-vocabulary evidence."
+        ],
+        "references": [],
+        "resolutionStatus": "not-needed",
+        "status": "local"
+      },
+      "mode": "route-lite",
+      "evidenceStatus": "sufficient",
+      "stopEnforced": true,
+      "routeFiles": [
+        "manifest/digest.py",
+        "tests/test_manifest_digest.py"
+      ],
+      "routeFileCount": 2,
+      "core": {
+        "files": [
+          "manifest/digest.py",
+          "tests/test_manifest_digest.py"
+        ],
+        "matchedFiles": [
+          "manifest/digest.py",
+          "tests/test_manifest_digest.py"
+        ],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "declaredAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "latentAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "routeFocus": 1,
+      "contextTokens": 1728,
+      "payloadMetricAgreement": true,
+      "trackedFilePollution": "",
+      "confidence": 0.9,
+      "completed": true
+    },
+    {
+      "targetId": "r25-py-local-digest",
+      "language": "python",
+      "stratum": "local",
+      "condition": "baseline",
+      "version": "0.3.0",
+      "repetition": 2,
+      "elapsedMs": 806,
+      "decision": "route",
+      "grounding": null,
+      "mode": "route-lite",
+      "evidenceStatus": null,
+      "stopEnforced": false,
+      "routeFiles": [
+        "manifest/digest.py",
+        "tests/test_manifest_digest.py"
+      ],
+      "routeFileCount": 2,
+      "core": {
+        "files": [
+          "manifest/digest.py",
+          "tests/test_manifest_digest.py"
+        ],
+        "matchedFiles": [
+          "manifest/digest.py",
+          "tests/test_manifest_digest.py"
+        ],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "declaredAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "latentAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "routeFocus": 1,
+      "contextTokens": 874,
+      "payloadMetricAgreement": true,
+      "trackedFilePollution": "",
+      "confidence": 0.79,
+      "completed": true
+    },
+    {
+      "targetId": "r25-go-reference-window",
+      "language": "go",
+      "stratum": "reference",
+      "condition": "candidate",
+      "version": "0.4.0-alpha.3",
+      "repetition": 1,
+      "elapsedMs": 1013,
+      "decision": "route",
+      "grounding": {
+        "decision": "route",
+        "reasons": [
+          "Resolved 1 GitHub task reference(s) before routing.",
+          "Only normalized issue or pull-request metadata was used; repository source was not sent remotely."
+        ],
+        "references": [
+          {
+            "contentHash": "e6fcc5c45de452f1edee57e96c0859b10dec582b3b3c639ad1f28a6e03705706",
+            "kind": "issue",
+            "number": 2501,
+            "provider": "github",
+            "repository": "vertex-palace-bench/r25-go-reference-window",
+            "resolutionStatus": "cache-hit",
+            "title": "ClampWindowLimit accepts a value below the minimum",
+            "url": "https://github.com/vertex-palace-bench/r25-go-reference-window/issues/2501"
+          }
+        ],
+        "resolutionStatus": "cache-hit",
+        "status": "resolved"
+      },
+      "mode": "route-lite",
+      "evidenceStatus": "insufficient",
+      "stopEnforced": false,
+      "routeFiles": [
+        "window/clamp.go",
+        "window/clamp_test.go"
+      ],
+      "routeFileCount": 2,
+      "core": {
+        "files": [
+          "window/clamp.go",
+          "window/clamp_test.go"
+        ],
+        "matchedFiles": [
+          "window/clamp.go",
+          "window/clamp_test.go"
+        ],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "declaredAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "latentAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "routeFocus": 1,
+      "contextTokens": 2215,
+      "payloadMetricAgreement": true,
+      "trackedFilePollution": "",
+      "confidence": 0.63,
+      "completed": true
+    },
+    {
+      "targetId": "r25-go-reference-window",
+      "language": "go",
+      "stratum": "reference",
+      "condition": "baseline",
+      "version": "0.3.0",
+      "repetition": 1,
+      "elapsedMs": 764,
+      "decision": "route",
+      "grounding": null,
+      "mode": "full-palace",
+      "evidenceStatus": null,
+      "stopEnforced": false,
+      "routeFiles": [],
+      "routeFileCount": 0,
+      "core": {
+        "files": [
+          "window/clamp.go",
+          "window/clamp_test.go"
+        ],
+        "matchedFiles": [],
+        "missedFiles": [
+          "window/clamp.go",
+          "window/clamp_test.go"
+        ],
+        "coverage": 0
+      },
+      "declaredAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "latentAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "routeFocus": 0,
+      "contextTokens": 667,
+      "payloadMetricAgreement": true,
+      "trackedFilePollution": "",
+      "confidence": 0.1,
+      "completed": false
+    },
+    {
+      "targetId": "r25-go-reference-window",
+      "language": "go",
+      "stratum": "reference",
+      "condition": "baseline",
+      "version": "0.3.0",
+      "repetition": 2,
+      "elapsedMs": 932,
+      "decision": "route",
+      "grounding": null,
+      "mode": "full-palace",
+      "evidenceStatus": null,
+      "stopEnforced": false,
+      "routeFiles": [],
+      "routeFileCount": 0,
+      "core": {
+        "files": [
+          "window/clamp.go",
+          "window/clamp_test.go"
+        ],
+        "matchedFiles": [],
+        "missedFiles": [
+          "window/clamp.go",
+          "window/clamp_test.go"
+        ],
+        "coverage": 0
+      },
+      "declaredAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "latentAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "routeFocus": 0,
+      "contextTokens": 667,
+      "payloadMetricAgreement": true,
+      "trackedFilePollution": "",
+      "confidence": 0.1,
+      "completed": false
+    },
+    {
+      "targetId": "r25-go-reference-window",
+      "language": "go",
+      "stratum": "reference",
+      "condition": "candidate",
+      "version": "0.4.0-alpha.3",
+      "repetition": 2,
+      "elapsedMs": 1444,
+      "decision": "route",
+      "grounding": {
+        "decision": "route",
+        "reasons": [
+          "Resolved 1 GitHub task reference(s) before routing.",
+          "Only normalized issue or pull-request metadata was used; repository source was not sent remotely."
+        ],
+        "references": [
+          {
+            "contentHash": "e6fcc5c45de452f1edee57e96c0859b10dec582b3b3c639ad1f28a6e03705706",
+            "kind": "issue",
+            "number": 2501,
+            "provider": "github",
+            "repository": "vertex-palace-bench/r25-go-reference-window",
+            "resolutionStatus": "cache-hit",
+            "title": "ClampWindowLimit accepts a value below the minimum",
+            "url": "https://github.com/vertex-palace-bench/r25-go-reference-window/issues/2501"
+          }
+        ],
+        "resolutionStatus": "cache-hit",
+        "status": "resolved"
+      },
+      "mode": "route-lite",
+      "evidenceStatus": "insufficient",
+      "stopEnforced": false,
+      "routeFiles": [
+        "window/clamp.go",
+        "window/clamp_test.go"
+      ],
+      "routeFileCount": 2,
+      "core": {
+        "files": [
+          "window/clamp.go",
+          "window/clamp_test.go"
+        ],
+        "matchedFiles": [
+          "window/clamp.go",
+          "window/clamp_test.go"
+        ],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "declaredAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "latentAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "routeFocus": 1,
+      "contextTokens": 2215,
+      "payloadMetricAgreement": true,
+      "trackedFilePollution": "",
+      "confidence": 0.63,
+      "completed": true
+    },
+    {
+      "targetId": "r25-rust-reference-epoch",
+      "language": "rust",
+      "stratum": "reference",
+      "condition": "baseline",
+      "version": "0.3.0",
+      "repetition": 1,
+      "elapsedMs": 648,
+      "decision": "route",
+      "grounding": null,
+      "mode": "full-palace",
+      "evidenceStatus": null,
+      "stopEnforced": false,
+      "routeFiles": [],
+      "routeFileCount": 0,
+      "core": {
+        "files": [
+          "src/epoch.rs",
+          "tests/epoch_test.rs"
+        ],
+        "matchedFiles": [],
+        "missedFiles": [
+          "src/epoch.rs",
+          "tests/epoch_test.rs"
+        ],
+        "coverage": 0
+      },
+      "declaredAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "latentAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "routeFocus": 0,
+      "contextTokens": 728,
+      "payloadMetricAgreement": true,
+      "trackedFilePollution": "",
+      "confidence": 0.1,
+      "completed": false
+    },
+    {
+      "targetId": "r25-rust-reference-epoch",
+      "language": "rust",
+      "stratum": "reference",
+      "condition": "candidate",
+      "version": "0.4.0-alpha.3",
+      "repetition": 1,
+      "elapsedMs": 896,
+      "decision": "route",
+      "grounding": {
+        "decision": "route",
+        "reasons": [
+          "Resolved 1 GitHub task reference(s) before routing.",
+          "Only normalized issue or pull-request metadata was used; repository source was not sent remotely."
+        ],
+        "references": [
+          {
+            "contentHash": "dbe6016cfdd7229dae7e269ed83c98cdb25f82f207678fb418a861a14b414917",
+            "kind": "pull",
+            "number": 2502,
+            "provider": "github",
+            "repository": "vertex-palace-bench/r25-rust-reference-epoch",
+            "resolutionStatus": "cache-hit",
+            "title": "rotate_epoch_key may retain the prior generation",
+            "url": "https://github.com/vertex-palace-bench/r25-rust-reference-epoch/pull/2502"
+          }
+        ],
+        "resolutionStatus": "cache-hit",
+        "status": "resolved"
+      },
+      "mode": "route-lite",
+      "evidenceStatus": "insufficient",
+      "stopEnforced": false,
+      "routeFiles": [
+        "src/epoch.rs",
+        "tests/epoch_test.rs"
+      ],
+      "routeFileCount": 2,
+      "core": {
+        "files": [
+          "src/epoch.rs",
+          "tests/epoch_test.rs"
+        ],
+        "matchedFiles": [
+          "src/epoch.rs",
+          "tests/epoch_test.rs"
+        ],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "declaredAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "latentAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "routeFocus": 1,
+      "contextTokens": 2253,
+      "payloadMetricAgreement": true,
+      "trackedFilePollution": "",
+      "confidence": 0.63,
+      "completed": true
+    },
+    {
+      "targetId": "r25-rust-reference-epoch",
+      "language": "rust",
+      "stratum": "reference",
+      "condition": "candidate",
+      "version": "0.4.0-alpha.3",
+      "repetition": 2,
+      "elapsedMs": 983,
+      "decision": "route",
+      "grounding": {
+        "decision": "route",
+        "reasons": [
+          "Resolved 1 GitHub task reference(s) before routing.",
+          "Only normalized issue or pull-request metadata was used; repository source was not sent remotely."
+        ],
+        "references": [
+          {
+            "contentHash": "dbe6016cfdd7229dae7e269ed83c98cdb25f82f207678fb418a861a14b414917",
+            "kind": "pull",
+            "number": 2502,
+            "provider": "github",
+            "repository": "vertex-palace-bench/r25-rust-reference-epoch",
+            "resolutionStatus": "cache-hit",
+            "title": "rotate_epoch_key may retain the prior generation",
+            "url": "https://github.com/vertex-palace-bench/r25-rust-reference-epoch/pull/2502"
+          }
+        ],
+        "resolutionStatus": "cache-hit",
+        "status": "resolved"
+      },
+      "mode": "route-lite",
+      "evidenceStatus": "insufficient",
+      "stopEnforced": false,
+      "routeFiles": [
+        "src/epoch.rs",
+        "tests/epoch_test.rs"
+      ],
+      "routeFileCount": 2,
+      "core": {
+        "files": [
+          "src/epoch.rs",
+          "tests/epoch_test.rs"
+        ],
+        "matchedFiles": [
+          "src/epoch.rs",
+          "tests/epoch_test.rs"
+        ],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "declaredAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "latentAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "routeFocus": 1,
+      "contextTokens": 2253,
+      "payloadMetricAgreement": true,
+      "trackedFilePollution": "",
+      "confidence": 0.63,
+      "completed": true
+    },
+    {
+      "targetId": "r25-rust-reference-epoch",
+      "language": "rust",
+      "stratum": "reference",
+      "condition": "baseline",
+      "version": "0.3.0",
+      "repetition": 2,
+      "elapsedMs": 601,
+      "decision": "route",
+      "grounding": null,
+      "mode": "full-palace",
+      "evidenceStatus": null,
+      "stopEnforced": false,
+      "routeFiles": [],
+      "routeFileCount": 0,
+      "core": {
+        "files": [
+          "src/epoch.rs",
+          "tests/epoch_test.rs"
+        ],
+        "matchedFiles": [],
+        "missedFiles": [
+          "src/epoch.rs",
+          "tests/epoch_test.rs"
+        ],
+        "coverage": 0
+      },
+      "declaredAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "latentAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "routeFocus": 0,
+      "contextTokens": 728,
+      "payloadMetricAgreement": true,
+      "trackedFilePollution": "",
+      "confidence": 0.1,
+      "completed": false
+    },
+    {
+      "targetId": "r25-ts-reference-variant",
+      "language": "typescript",
+      "stratum": "reference",
+      "condition": "candidate",
+      "version": "0.4.0-alpha.3",
+      "repetition": 1,
+      "elapsedMs": 993,
+      "decision": "route",
+      "grounding": {
+        "decision": "route",
+        "reasons": [
+          "Resolved 1 GitHub task reference(s) before routing.",
+          "Only normalized issue or pull-request metadata was used; repository source was not sent remotely."
+        ],
+        "references": [
+          {
+            "contentHash": "7e2aa95b547c3ffa5eb159a8068f59d06f6502320ed4336411293310f3d72816",
+            "kind": "issue",
+            "number": 2503,
+            "provider": "github",
+            "repository": "vertex-palace-bench/r25-ts-reference-variant",
+            "resolutionStatus": "cache-hit",
+            "title": "selectLocaleVariant ignores the regional preference",
+            "url": "https://github.com/vertex-palace-bench/r25-ts-reference-variant/issues/2503"
+          }
+        ],
+        "resolutionStatus": "cache-hit",
+        "status": "resolved"
+      },
+      "mode": "route-lite",
+      "evidenceStatus": "insufficient",
+      "stopEnforced": false,
+      "routeFiles": [
+        "src/variant/select-locale-variant.ts",
+        "tests/variant/select-locale-variant.test.ts"
+      ],
+      "routeFileCount": 2,
+      "core": {
+        "files": [
+          "src/variant/select-locale-variant.ts",
+          "tests/variant/select-locale-variant.test.ts"
+        ],
+        "matchedFiles": [
+          "src/variant/select-locale-variant.ts",
+          "tests/variant/select-locale-variant.test.ts"
+        ],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "declaredAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "latentAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "routeFocus": 1,
+      "contextTokens": 2289,
+      "payloadMetricAgreement": true,
+      "trackedFilePollution": "",
+      "confidence": 0.61,
+      "completed": true
+    },
+    {
+      "targetId": "r25-ts-reference-variant",
+      "language": "typescript",
+      "stratum": "reference",
+      "condition": "baseline",
+      "version": "0.3.0",
+      "repetition": 1,
+      "elapsedMs": 717,
+      "decision": "route",
+      "grounding": null,
+      "mode": "full-palace",
+      "evidenceStatus": null,
+      "stopEnforced": false,
+      "routeFiles": [],
+      "routeFileCount": 0,
+      "core": {
+        "files": [
+          "src/variant/select-locale-variant.ts",
+          "tests/variant/select-locale-variant.test.ts"
+        ],
+        "matchedFiles": [],
+        "missedFiles": [
+          "src/variant/select-locale-variant.ts",
+          "tests/variant/select-locale-variant.test.ts"
+        ],
+        "coverage": 0
+      },
+      "declaredAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "latentAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "routeFocus": 0,
+      "contextTokens": 728,
+      "payloadMetricAgreement": true,
+      "trackedFilePollution": "",
+      "confidence": 0.1,
+      "completed": false
+    },
+    {
+      "targetId": "r25-ts-reference-variant",
+      "language": "typescript",
+      "stratum": "reference",
+      "condition": "baseline",
+      "version": "0.3.0",
+      "repetition": 2,
+      "elapsedMs": 875,
+      "decision": "route",
+      "grounding": null,
+      "mode": "full-palace",
+      "evidenceStatus": null,
+      "stopEnforced": false,
+      "routeFiles": [],
+      "routeFileCount": 0,
+      "core": {
+        "files": [
+          "src/variant/select-locale-variant.ts",
+          "tests/variant/select-locale-variant.test.ts"
+        ],
+        "matchedFiles": [],
+        "missedFiles": [
+          "src/variant/select-locale-variant.ts",
+          "tests/variant/select-locale-variant.test.ts"
+        ],
+        "coverage": 0
+      },
+      "declaredAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "latentAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "routeFocus": 0,
+      "contextTokens": 728,
+      "payloadMetricAgreement": true,
+      "trackedFilePollution": "",
+      "confidence": 0.1,
+      "completed": false
+    },
+    {
+      "targetId": "r25-ts-reference-variant",
+      "language": "typescript",
+      "stratum": "reference",
+      "condition": "candidate",
+      "version": "0.4.0-alpha.3",
+      "repetition": 2,
+      "elapsedMs": 1163,
+      "decision": "route",
+      "grounding": {
+        "decision": "route",
+        "reasons": [
+          "Resolved 1 GitHub task reference(s) before routing.",
+          "Only normalized issue or pull-request metadata was used; repository source was not sent remotely."
+        ],
+        "references": [
+          {
+            "contentHash": "7e2aa95b547c3ffa5eb159a8068f59d06f6502320ed4336411293310f3d72816",
+            "kind": "issue",
+            "number": 2503,
+            "provider": "github",
+            "repository": "vertex-palace-bench/r25-ts-reference-variant",
+            "resolutionStatus": "cache-hit",
+            "title": "selectLocaleVariant ignores the regional preference",
+            "url": "https://github.com/vertex-palace-bench/r25-ts-reference-variant/issues/2503"
+          }
+        ],
+        "resolutionStatus": "cache-hit",
+        "status": "resolved"
+      },
+      "mode": "route-lite",
+      "evidenceStatus": "insufficient",
+      "stopEnforced": false,
+      "routeFiles": [
+        "src/variant/select-locale-variant.ts",
+        "tests/variant/select-locale-variant.test.ts"
+      ],
+      "routeFileCount": 2,
+      "core": {
+        "files": [
+          "src/variant/select-locale-variant.ts",
+          "tests/variant/select-locale-variant.test.ts"
+        ],
+        "matchedFiles": [
+          "src/variant/select-locale-variant.ts",
+          "tests/variant/select-locale-variant.test.ts"
+        ],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "declaredAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "latentAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "routeFocus": 1,
+      "contextTokens": 2289,
+      "payloadMetricAgreement": true,
+      "trackedFilePollution": "",
+      "confidence": 0.61,
+      "completed": true
+    },
+    {
+      "targetId": "r25-py-high-access",
+      "language": "python",
+      "stratum": "high-connectivity",
+      "condition": "baseline",
+      "version": "0.3.0",
+      "repetition": 1,
+      "elapsedMs": 872,
+      "decision": "route",
+      "grounding": null,
+      "mode": "route-lite",
+      "evidenceStatus": null,
+      "stopEnforced": false,
+      "routeFiles": [
+        "auth/scope.py",
+        "auth/scope_contract.py",
+        "noise/module-00.py",
+        "pyproject.toml",
+        "shared/registry.py",
+        "tests/test_auth_scope.py"
+      ],
+      "routeFileCount": 6,
+      "core": {
+        "files": [
+          "auth/scope.py",
+          "tests/test_auth_scope.py"
+        ],
+        "matchedFiles": [
+          "auth/scope.py",
+          "tests/test_auth_scope.py"
+        ],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "declaredAuxiliary": {
+        "files": [
+          "auth/scope_contract.py"
+        ],
+        "matchedFiles": [
+          "auth/scope_contract.py"
+        ],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "latentAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "routeFocus": 0.5,
+      "contextTokens": 1015,
+      "payloadMetricAgreement": true,
+      "trackedFilePollution": "",
+      "confidence": 0.65,
+      "completed": true
+    },
+    {
+      "targetId": "r25-py-high-access",
+      "language": "python",
+      "stratum": "high-connectivity",
+      "condition": "candidate",
+      "version": "0.4.0-alpha.3",
+      "repetition": 1,
+      "elapsedMs": 940,
+      "decision": "route",
+      "grounding": {
+        "decision": "route",
+        "reasons": [
+          "The task contains local file, symbol, or product-vocabulary evidence."
+        ],
+        "references": [],
+        "resolutionStatus": "not-needed",
+        "status": "local"
+      },
+      "mode": "route-lite",
+      "evidenceStatus": "insufficient",
+      "stopEnforced": false,
+      "routeFiles": [
+        "auth/scope.py",
+        "auth/scope_contract.py",
+        "shared/registry.py",
+        "tests/test_auth_scope.py"
+      ],
+      "routeFileCount": 4,
+      "core": {
+        "files": [
+          "auth/scope.py",
+          "tests/test_auth_scope.py"
+        ],
+        "matchedFiles": [
+          "auth/scope.py",
+          "tests/test_auth_scope.py"
+        ],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "declaredAuxiliary": {
+        "files": [
+          "auth/scope_contract.py"
+        ],
+        "matchedFiles": [
+          "auth/scope_contract.py"
+        ],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "latentAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "routeFocus": 0.75,
+      "contextTokens": 1823,
+      "payloadMetricAgreement": true,
+      "trackedFilePollution": "",
+      "confidence": 0.78,
+      "completed": true
+    },
+    {
+      "targetId": "r25-py-high-access",
+      "language": "python",
+      "stratum": "high-connectivity",
+      "condition": "candidate",
+      "version": "0.4.0-alpha.3",
+      "repetition": 2,
+      "elapsedMs": 1068,
+      "decision": "route",
+      "grounding": {
+        "decision": "route",
+        "reasons": [
+          "The task contains local file, symbol, or product-vocabulary evidence."
+        ],
+        "references": [],
+        "resolutionStatus": "not-needed",
+        "status": "local"
+      },
+      "mode": "route-lite",
+      "evidenceStatus": "insufficient",
+      "stopEnforced": false,
+      "routeFiles": [
+        "auth/scope.py",
+        "auth/scope_contract.py",
+        "shared/registry.py",
+        "tests/test_auth_scope.py"
+      ],
+      "routeFileCount": 4,
+      "core": {
+        "files": [
+          "auth/scope.py",
+          "tests/test_auth_scope.py"
+        ],
+        "matchedFiles": [
+          "auth/scope.py",
+          "tests/test_auth_scope.py"
+        ],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "declaredAuxiliary": {
+        "files": [
+          "auth/scope_contract.py"
+        ],
+        "matchedFiles": [
+          "auth/scope_contract.py"
+        ],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "latentAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "routeFocus": 0.75,
+      "contextTokens": 1823,
+      "payloadMetricAgreement": true,
+      "trackedFilePollution": "",
+      "confidence": 0.78,
+      "completed": true
+    },
+    {
+      "targetId": "r25-py-high-access",
+      "language": "python",
+      "stratum": "high-connectivity",
+      "condition": "baseline",
+      "version": "0.3.0",
+      "repetition": 2,
+      "elapsedMs": 840,
+      "decision": "route",
+      "grounding": null,
+      "mode": "route-lite",
+      "evidenceStatus": null,
+      "stopEnforced": false,
+      "routeFiles": [
+        "auth/scope.py",
+        "auth/scope_contract.py",
+        "noise/module-00.py",
+        "pyproject.toml",
+        "shared/registry.py",
+        "tests/test_auth_scope.py"
+      ],
+      "routeFileCount": 6,
+      "core": {
+        "files": [
+          "auth/scope.py",
+          "tests/test_auth_scope.py"
+        ],
+        "matchedFiles": [
+          "auth/scope.py",
+          "tests/test_auth_scope.py"
+        ],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "declaredAuxiliary": {
+        "files": [
+          "auth/scope_contract.py"
+        ],
+        "matchedFiles": [
+          "auth/scope_contract.py"
+        ],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "latentAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "routeFocus": 0.5,
+      "contextTokens": 1015,
+      "payloadMetricAgreement": true,
+      "trackedFilePollution": "",
+      "confidence": 0.65,
+      "completed": true
+    },
+    {
+      "targetId": "r25-go-high-delivery",
+      "language": "go",
+      "stratum": "high-connectivity",
+      "condition": "candidate",
+      "version": "0.4.0-alpha.3",
+      "repetition": 1,
+      "elapsedMs": 918,
+      "decision": "route",
+      "grounding": {
+        "decision": "route",
+        "reasons": [
+          "The task contains local file, symbol, or product-vocabulary evidence."
+        ],
+        "references": [],
+        "resolutionStatus": "not-needed",
+        "status": "local"
+      },
+      "mode": "route-lite",
+      "evidenceStatus": "insufficient",
+      "stopEnforced": false,
+      "routeFiles": [
+        "delivery/contract.go",
+        "delivery/resolve.go",
+        "delivery/resolve_test.go"
+      ],
+      "routeFileCount": 3,
+      "core": {
+        "files": [
+          "delivery/resolve.go",
+          "delivery/resolve_test.go"
+        ],
+        "matchedFiles": [
+          "delivery/resolve.go",
+          "delivery/resolve_test.go"
+        ],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "declaredAuxiliary": {
+        "files": [
+          "delivery/contract.go"
+        ],
+        "matchedFiles": [
+          "delivery/contract.go"
+        ],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "latentAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "routeFocus": 1,
+      "contextTokens": 1806,
+      "payloadMetricAgreement": true,
+      "trackedFilePollution": "",
+      "confidence": 0.82,
+      "completed": true
+    },
+    {
+      "targetId": "r25-go-high-delivery",
+      "language": "go",
+      "stratum": "high-connectivity",
+      "condition": "baseline",
+      "version": "0.3.0",
+      "repetition": 1,
+      "elapsedMs": 854,
+      "decision": "route",
+      "grounding": null,
+      "mode": "route-lite",
+      "evidenceStatus": null,
+      "stopEnforced": false,
+      "routeFiles": [
+        "delivery/contract.go",
+        "delivery/resolve.go",
+        "delivery/resolve_test.go",
+        "go.mod",
+        "noise/module-00.go",
+        "shared/registry.go"
+      ],
+      "routeFileCount": 6,
+      "core": {
+        "files": [
+          "delivery/resolve.go",
+          "delivery/resolve_test.go"
+        ],
+        "matchedFiles": [
+          "delivery/resolve.go",
+          "delivery/resolve_test.go"
+        ],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "declaredAuxiliary": {
+        "files": [
+          "delivery/contract.go"
+        ],
+        "matchedFiles": [
+          "delivery/contract.go"
+        ],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "latentAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "routeFocus": 0.5,
+      "contextTokens": 1135,
+      "payloadMetricAgreement": true,
+      "trackedFilePollution": "",
+      "confidence": 0.64,
+      "completed": true
+    },
+    {
+      "targetId": "r25-go-high-delivery",
+      "language": "go",
+      "stratum": "high-connectivity",
+      "condition": "baseline",
+      "version": "0.3.0",
+      "repetition": 2,
+      "elapsedMs": 844,
+      "decision": "route",
+      "grounding": null,
+      "mode": "route-lite",
+      "evidenceStatus": null,
+      "stopEnforced": false,
+      "routeFiles": [
+        "delivery/contract.go",
+        "delivery/resolve.go",
+        "delivery/resolve_test.go",
+        "go.mod",
+        "noise/module-00.go",
+        "shared/registry.go"
+      ],
+      "routeFileCount": 6,
+      "core": {
+        "files": [
+          "delivery/resolve.go",
+          "delivery/resolve_test.go"
+        ],
+        "matchedFiles": [
+          "delivery/resolve.go",
+          "delivery/resolve_test.go"
+        ],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "declaredAuxiliary": {
+        "files": [
+          "delivery/contract.go"
+        ],
+        "matchedFiles": [
+          "delivery/contract.go"
+        ],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "latentAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "routeFocus": 0.5,
+      "contextTokens": 1135,
+      "payloadMetricAgreement": true,
+      "trackedFilePollution": "",
+      "confidence": 0.64,
+      "completed": true
+    },
+    {
+      "targetId": "r25-go-high-delivery",
+      "language": "go",
+      "stratum": "high-connectivity",
+      "condition": "candidate",
+      "version": "0.4.0-alpha.3",
+      "repetition": 2,
+      "elapsedMs": 1075,
+      "decision": "route",
+      "grounding": {
+        "decision": "route",
+        "reasons": [
+          "The task contains local file, symbol, or product-vocabulary evidence."
+        ],
+        "references": [],
+        "resolutionStatus": "not-needed",
+        "status": "local"
+      },
+      "mode": "route-lite",
+      "evidenceStatus": "insufficient",
+      "stopEnforced": false,
+      "routeFiles": [
+        "delivery/contract.go",
+        "delivery/resolve.go",
+        "delivery/resolve_test.go"
+      ],
+      "routeFileCount": 3,
+      "core": {
+        "files": [
+          "delivery/resolve.go",
+          "delivery/resolve_test.go"
+        ],
+        "matchedFiles": [
+          "delivery/resolve.go",
+          "delivery/resolve_test.go"
+        ],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "declaredAuxiliary": {
+        "files": [
+          "delivery/contract.go"
+        ],
+        "matchedFiles": [
+          "delivery/contract.go"
+        ],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "latentAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "routeFocus": 1,
+      "contextTokens": 1806,
+      "payloadMetricAgreement": true,
+      "trackedFilePollution": "",
+      "confidence": 0.82,
+      "completed": true
+    },
+    {
+      "targetId": "r25-rust-high-snapshot",
+      "language": "rust",
+      "stratum": "high-connectivity",
+      "condition": "baseline",
+      "version": "0.3.0",
+      "repetition": 1,
+      "elapsedMs": 947,
+      "decision": "route",
+      "grounding": null,
+      "mode": "route-lite",
+      "evidenceStatus": null,
+      "stopEnforced": false,
+      "routeFiles": [
+        "noise/module-00.rs",
+        "noise/module-01.rs",
+        "shared/registry.rs",
+        "src/snapshot.rs",
+        "src/snapshot_contract.rs",
+        "tests/snapshot_test.rs"
+      ],
+      "routeFileCount": 6,
+      "core": {
+        "files": [
+          "src/snapshot.rs",
+          "tests/snapshot_test.rs"
+        ],
+        "matchedFiles": [
+          "src/snapshot.rs",
+          "tests/snapshot_test.rs"
+        ],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "declaredAuxiliary": {
+        "files": [
+          "src/snapshot_contract.rs"
+        ],
+        "matchedFiles": [
+          "src/snapshot_contract.rs"
+        ],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "latentAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "routeFocus": 0.5,
+      "contextTokens": 1182,
+      "payloadMetricAgreement": true,
+      "trackedFilePollution": "",
+      "confidence": 0.65,
+      "completed": true
+    },
+    {
+      "targetId": "r25-rust-high-snapshot",
+      "language": "rust",
+      "stratum": "high-connectivity",
+      "condition": "candidate",
+      "version": "0.4.0-alpha.3",
+      "repetition": 1,
+      "elapsedMs": 869,
+      "decision": "route",
+      "grounding": {
+        "decision": "route",
+        "reasons": [
+          "The task contains local file, symbol, or product-vocabulary evidence."
+        ],
+        "references": [],
+        "resolutionStatus": "not-needed",
+        "status": "local"
+      },
+      "mode": "route-lite",
+      "evidenceStatus": "insufficient",
+      "stopEnforced": false,
+      "routeFiles": [
+        "src/snapshot.rs",
+        "src/snapshot_contract.rs",
+        "tests/snapshot_test.rs"
+      ],
+      "routeFileCount": 3,
+      "core": {
+        "files": [
+          "src/snapshot.rs",
+          "tests/snapshot_test.rs"
+        ],
+        "matchedFiles": [
+          "src/snapshot.rs",
+          "tests/snapshot_test.rs"
+        ],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "declaredAuxiliary": {
+        "files": [
+          "src/snapshot_contract.rs"
+        ],
+        "matchedFiles": [
+          "src/snapshot_contract.rs"
+        ],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "latentAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "routeFocus": 1,
+      "contextTokens": 1812,
+      "payloadMetricAgreement": true,
+      "trackedFilePollution": "",
+      "confidence": 0.73,
+      "completed": true
+    },
+    {
+      "targetId": "r25-rust-high-snapshot",
+      "language": "rust",
+      "stratum": "high-connectivity",
+      "condition": "candidate",
+      "version": "0.4.0-alpha.3",
+      "repetition": 2,
+      "elapsedMs": 899,
+      "decision": "route",
+      "grounding": {
+        "decision": "route",
+        "reasons": [
+          "The task contains local file, symbol, or product-vocabulary evidence."
+        ],
+        "references": [],
+        "resolutionStatus": "not-needed",
+        "status": "local"
+      },
+      "mode": "route-lite",
+      "evidenceStatus": "insufficient",
+      "stopEnforced": false,
+      "routeFiles": [
+        "src/snapshot.rs",
+        "src/snapshot_contract.rs",
+        "tests/snapshot_test.rs"
+      ],
+      "routeFileCount": 3,
+      "core": {
+        "files": [
+          "src/snapshot.rs",
+          "tests/snapshot_test.rs"
+        ],
+        "matchedFiles": [
+          "src/snapshot.rs",
+          "tests/snapshot_test.rs"
+        ],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "declaredAuxiliary": {
+        "files": [
+          "src/snapshot_contract.rs"
+        ],
+        "matchedFiles": [
+          "src/snapshot_contract.rs"
+        ],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "latentAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "routeFocus": 1,
+      "contextTokens": 1812,
+      "payloadMetricAgreement": true,
+      "trackedFilePollution": "",
+      "confidence": 0.73,
+      "completed": true
+    },
+    {
+      "targetId": "r25-rust-high-snapshot",
+      "language": "rust",
+      "stratum": "high-connectivity",
+      "condition": "baseline",
+      "version": "0.3.0",
+      "repetition": 2,
+      "elapsedMs": 753,
+      "decision": "route",
+      "grounding": null,
+      "mode": "route-lite",
+      "evidenceStatus": null,
+      "stopEnforced": false,
+      "routeFiles": [
+        "noise/module-00.rs",
+        "noise/module-01.rs",
+        "shared/registry.rs",
+        "src/snapshot.rs",
+        "src/snapshot_contract.rs",
+        "tests/snapshot_test.rs"
+      ],
+      "routeFileCount": 6,
+      "core": {
+        "files": [
+          "src/snapshot.rs",
+          "tests/snapshot_test.rs"
+        ],
+        "matchedFiles": [
+          "src/snapshot.rs",
+          "tests/snapshot_test.rs"
+        ],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "declaredAuxiliary": {
+        "files": [
+          "src/snapshot_contract.rs"
+        ],
+        "matchedFiles": [
+          "src/snapshot_contract.rs"
+        ],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "latentAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "routeFocus": 0.5,
+      "contextTokens": 1182,
+      "payloadMetricAgreement": true,
+      "trackedFilePollution": "",
+      "confidence": 0.65,
+      "completed": true
+    },
+    {
+      "targetId": "r25-ts-control-incident",
+      "language": "typescript",
+      "stratum": "control",
+      "condition": "candidate",
+      "version": "0.4.0-alpha.3",
+      "repetition": 1,
+      "elapsedMs": 1009,
+      "decision": "abstain",
+      "grounding": {
+        "status": "unresolved",
+        "decision": "abstain",
+        "resolutionStatus": "unsupported-remote",
+        "references": [],
+        "reasons": [
+          "The task is not locally identifiable and contains no supported GitHub issue or pull-request reference.",
+          "Provide the issue or pull-request body, expected behavior, a symbol, or a file path before routing."
+        ]
+      },
+      "mode": "route-lite",
+      "evidenceStatus": "insufficient",
+      "stopEnforced": false,
+      "routeFiles": [],
+      "routeFileCount": 0,
+      "core": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "declaredAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "latentAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "routeFocus": 0,
+      "contextTokens": 1076,
+      "payloadMetricAgreement": true,
+      "trackedFilePollution": "",
+      "confidence": 0,
+      "completed": true
+    },
+    {
+      "targetId": "r25-ts-control-incident",
+      "language": "typescript",
+      "stratum": "control",
+      "condition": "baseline",
+      "version": "0.3.0",
+      "repetition": 1,
+      "elapsedMs": 767,
+      "decision": "route",
+      "grounding": null,
+      "mode": "full-palace",
+      "evidenceStatus": null,
+      "stopEnforced": false,
+      "routeFiles": [],
+      "routeFileCount": 0,
+      "core": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "declaredAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "latentAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "routeFocus": 0,
+      "contextTokens": 731,
+      "payloadMetricAgreement": true,
+      "trackedFilePollution": "",
+      "confidence": 0.1,
+      "completed": false
+    },
+    {
+      "targetId": "r25-ts-control-incident",
+      "language": "typescript",
+      "stratum": "control",
+      "condition": "baseline",
+      "version": "0.3.0",
+      "repetition": 2,
+      "elapsedMs": 749,
+      "decision": "route",
+      "grounding": null,
+      "mode": "full-palace",
+      "evidenceStatus": null,
+      "stopEnforced": false,
+      "routeFiles": [],
+      "routeFileCount": 0,
+      "core": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "declaredAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "latentAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "routeFocus": 0,
+      "contextTokens": 731,
+      "payloadMetricAgreement": true,
+      "trackedFilePollution": "",
+      "confidence": 0.1,
+      "completed": false
+    },
+    {
+      "targetId": "r25-ts-control-incident",
+      "language": "typescript",
+      "stratum": "control",
+      "condition": "candidate",
+      "version": "0.4.0-alpha.3",
+      "repetition": 2,
+      "elapsedMs": 1071,
+      "decision": "abstain",
+      "grounding": {
+        "status": "unresolved",
+        "decision": "abstain",
+        "resolutionStatus": "unsupported-remote",
+        "references": [],
+        "reasons": [
+          "The task is not locally identifiable and contains no supported GitHub issue or pull-request reference.",
+          "Provide the issue or pull-request body, expected behavior, a symbol, or a file path before routing."
+        ]
+      },
+      "mode": "route-lite",
+      "evidenceStatus": "insufficient",
+      "stopEnforced": false,
+      "routeFiles": [],
+      "routeFileCount": 0,
+      "core": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "declaredAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "latentAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "routeFocus": 0,
+      "contextTokens": 1076,
+      "payloadMetricAgreement": true,
+      "trackedFilePollution": "",
+      "confidence": 0,
+      "completed": true
+    },
+    {
+      "targetId": "r25-py-control-issue",
+      "language": "python",
+      "stratum": "control",
+      "condition": "baseline",
+      "version": "0.3.0",
+      "repetition": 1,
+      "elapsedMs": 815,
+      "decision": "route",
+      "grounding": null,
+      "mode": "full-palace",
+      "evidenceStatus": null,
+      "stopEnforced": false,
+      "routeFiles": [],
+      "routeFileCount": 0,
+      "core": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "declaredAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "latentAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "routeFocus": 0,
+      "contextTokens": 699,
+      "payloadMetricAgreement": true,
+      "trackedFilePollution": "",
+      "confidence": 0.1,
+      "completed": false
+    },
+    {
+      "targetId": "r25-py-control-issue",
+      "language": "python",
+      "stratum": "control",
+      "condition": "candidate",
+      "version": "0.4.0-alpha.3",
+      "repetition": 1,
+      "elapsedMs": 811,
+      "decision": "abstain",
+      "grounding": {
+        "status": "unresolved",
+        "decision": "abstain",
+        "resolutionStatus": "disabled",
+        "references": [],
+        "reasons": [
+          "Remote task-reference resolution is disabled.",
+          "Provide the issue or pull-request body, expected behavior, a symbol, or a file path before routing."
+        ]
+      },
+      "mode": "route-lite",
+      "evidenceStatus": "insufficient",
+      "stopEnforced": false,
+      "routeFiles": [],
+      "routeFileCount": 0,
+      "core": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "declaredAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "latentAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "routeFocus": 0,
+      "contextTokens": 1028,
+      "payloadMetricAgreement": true,
+      "trackedFilePollution": "",
+      "confidence": 0,
+      "completed": true
+    },
+    {
+      "targetId": "r25-py-control-issue",
+      "language": "python",
+      "stratum": "control",
+      "condition": "candidate",
+      "version": "0.4.0-alpha.3",
+      "repetition": 2,
+      "elapsedMs": 795,
+      "decision": "abstain",
+      "grounding": {
+        "status": "unresolved",
+        "decision": "abstain",
+        "resolutionStatus": "disabled",
+        "references": [],
+        "reasons": [
+          "Remote task-reference resolution is disabled.",
+          "Provide the issue or pull-request body, expected behavior, a symbol, or a file path before routing."
+        ]
+      },
+      "mode": "route-lite",
+      "evidenceStatus": "insufficient",
+      "stopEnforced": false,
+      "routeFiles": [],
+      "routeFileCount": 0,
+      "core": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "declaredAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "latentAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "routeFocus": 0,
+      "contextTokens": 1028,
+      "payloadMetricAgreement": true,
+      "trackedFilePollution": "",
+      "confidence": 0,
+      "completed": true
+    },
+    {
+      "targetId": "r25-py-control-issue",
+      "language": "python",
+      "stratum": "control",
+      "condition": "baseline",
+      "version": "0.3.0",
+      "repetition": 2,
+      "elapsedMs": 819,
+      "decision": "route",
+      "grounding": null,
+      "mode": "full-palace",
+      "evidenceStatus": null,
+      "stopEnforced": false,
+      "routeFiles": [],
+      "routeFileCount": 0,
+      "core": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "declaredAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "latentAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "routeFocus": 0,
+      "contextTokens": 699,
+      "payloadMetricAgreement": true,
+      "trackedFilePollution": "",
+      "confidence": 0.1,
+      "completed": false
+    },
+    {
+      "targetId": "r25-go-control-pr",
+      "language": "go",
+      "stratum": "control",
+      "condition": "candidate",
+      "version": "0.4.0-alpha.3",
+      "repetition": 1,
+      "elapsedMs": 868,
+      "decision": "abstain",
+      "grounding": {
+        "status": "unresolved",
+        "decision": "abstain",
+        "resolutionStatus": "disabled",
+        "references": [],
+        "reasons": [
+          "Remote task-reference resolution is disabled.",
+          "Provide the issue or pull-request body, expected behavior, a symbol, or a file path before routing."
+        ]
+      },
+      "mode": "route-lite",
+      "evidenceStatus": "insufficient",
+      "stopEnforced": false,
+      "routeFiles": [],
+      "routeFileCount": 0,
+      "core": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "declaredAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "latentAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "routeFocus": 0,
+      "contextTokens": 1028,
+      "payloadMetricAgreement": true,
+      "trackedFilePollution": "",
+      "confidence": 0,
+      "completed": true
+    },
+    {
+      "targetId": "r25-go-control-pr",
+      "language": "go",
+      "stratum": "control",
+      "condition": "baseline",
+      "version": "0.3.0",
+      "repetition": 1,
+      "elapsedMs": 904,
+      "decision": "route",
+      "grounding": null,
+      "mode": "bypass",
+      "evidenceStatus": null,
+      "stopEnforced": false,
+      "routeFiles": [
+        "go.mod"
+      ],
+      "routeFileCount": 1,
+      "core": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "declaredAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "latentAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "routeFocus": 0,
+      "contextTokens": 64,
+      "payloadMetricAgreement": true,
+      "trackedFilePollution": "",
+      "confidence": null,
+      "completed": false
+    },
+    {
+      "targetId": "r25-go-control-pr",
+      "language": "go",
+      "stratum": "control",
+      "condition": "baseline",
+      "version": "0.3.0",
+      "repetition": 2,
+      "elapsedMs": 812,
+      "decision": "route",
+      "grounding": null,
+      "mode": "bypass",
+      "evidenceStatus": null,
+      "stopEnforced": false,
+      "routeFiles": [
+        "go.mod"
+      ],
+      "routeFileCount": 1,
+      "core": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "declaredAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "latentAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "routeFocus": 0,
+      "contextTokens": 64,
+      "payloadMetricAgreement": true,
+      "trackedFilePollution": "",
+      "confidence": null,
+      "completed": false
+    },
+    {
+      "targetId": "r25-go-control-pr",
+      "language": "go",
+      "stratum": "control",
+      "condition": "candidate",
+      "version": "0.4.0-alpha.3",
+      "repetition": 2,
+      "elapsedMs": 813,
+      "decision": "abstain",
+      "grounding": {
+        "status": "unresolved",
+        "decision": "abstain",
+        "resolutionStatus": "disabled",
+        "references": [],
+        "reasons": [
+          "Remote task-reference resolution is disabled.",
+          "Provide the issue or pull-request body, expected behavior, a symbol, or a file path before routing."
+        ]
+      },
+      "mode": "route-lite",
+      "evidenceStatus": "insufficient",
+      "stopEnforced": false,
+      "routeFiles": [],
+      "routeFileCount": 0,
+      "core": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "declaredAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "latentAuxiliary": {
+        "files": [],
+        "matchedFiles": [],
+        "missedFiles": [],
+        "coverage": 1
+      },
+      "routeFocus": 0,
+      "contextTokens": 1028,
+      "payloadMetricAgreement": true,
+      "trackedFilePollution": "",
+      "confidence": 0,
+      "completed": true
+    }
+  ]
+}
