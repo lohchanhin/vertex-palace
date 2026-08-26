@@ -1,0 +1,432 @@
+{
+  "schemaVersion": 1,
+  "studyId": "local-blind-routing-round-21-0.4-stable-candidate",
+  "status": "publicly-preregistered-pool",
+  "frozenAt": "2026-08-26T12:51:26.314Z",
+  "publicPreregistration": true,
+  "plan": {
+    "path": "docs/research/evidence/local-blind-routing-repository-plan-0.4-stable-round-21.json",
+    "sha256": "64E15BD4BA5489651DD746890C6C30EFDB493E6ECD16CFB3704C1BA0A4805352"
+  },
+  "claimBoundary": "The publicly committed 48-entry URL-and-HEAD-only roster was queried before any Round 21 history, subject, diff, task, review, oracle, or Palace result was inspected. Definitively missing URLs are preserved and skipped mechanically. The canonical pool contains the first eight reachable repositories per language family in frozen order.",
+  "candidateFreeze": {
+    "path": "docs/research/evidence/local-blind-candidate-freeze-0.4-stable-round-21.json"
+  },
+  "priorExclusionSource": {
+    "path": "docs/research/evidence/local-blind-routing-repository-pool-0.4-stable-round-20.json",
+    "sha256": "D8149E5D2B83FB52D18BF7071EC0DDA79BCD104138E74F5D038E8FC26763FC3A",
+    "includePreviousExclusionChain": true,
+    "includeRound20CanonicalPoolAndPriorChain": true,
+    "includeAdditionalPreviouslyObservedRepositories": true,
+    "expectedUniqueRepositoryCount": 258
+  },
+  "previouslyObservedRepositories": [],
+  "rules": {
+    "desiredTargets": 8,
+    "requiredLanguageFamilies": [
+      "javascript-typescript",
+      "python",
+      "go",
+      "rust"
+    ],
+    "targetsPerLanguageFamily": 2,
+    "repositoriesPerLanguageFamily": 8,
+    "rosterRepositoriesPerLanguageFamily": 12,
+    "repositoryRosterOrderIsBinding": true,
+    "reachableRepositorySelection": "first-eight-reachable-per-family-v1",
+    "definitivelyMissingRepositoryMayBeSkipped": true,
+    "transientNetworkExhaustionAbortsRound": true,
+    "newestCoherentCandidatePerRepositoryWins": true,
+    "remainingRepositoriesPerFamilyAreFallbacks": true,
+    "taskClassifier": "inflected-behavioral-subject-v1",
+    "maximumMechanicalCandidatesPerRepository": 5,
+    "minimumFiles": 2,
+    "maximumFiles": 8,
+    "maximumAuxiliaryFiles": 2,
+    "maximumChangedLines": 400,
+    "allowedAuxiliaryExtensions": [
+      ".cfg",
+      ".conf",
+      ".ini",
+      ".json",
+      ".md",
+      ".mdx",
+      ".rst",
+      ".toml",
+      ".txt",
+      ".yaml",
+      ".yml"
+    ],
+    "taskDiffCoherenceReviewRequired": true,
+    "wholeTargetRejectionForUnrelatedOrUncertainHunk": true,
+    "partialOraclePruningForbidden": true,
+    "maximumGeneratedArtifactTargets": 1,
+    "pinnedHeadsObtainedWithGitLsRemoteHeadOnly": true,
+    "commitHistoryInspectedBeforePoolFreeze": false,
+    "palaceCallsOnCandidateTasksBeforePoolFreeze": 0,
+    "baselineAndCandidateFrozenBeforeTargetSelection": true,
+    "outputCreateOnly": true
+  },
+  "repositoryPool": [
+    {
+      "name": "npm-run-path",
+      "language": "JavaScript/TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/sindresorhus/npm-run-path.git",
+      "extensions": [
+        ".cjs",
+        ".js",
+        ".jsx",
+        ".mjs",
+        ".ts",
+        ".tsx"
+      ],
+      "pinnedHead": "b9128591fc59429d8b0df7047d5283f259dc5e77"
+    },
+    {
+      "name": "cli-truncate",
+      "language": "JavaScript/TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/sindresorhus/cli-truncate.git",
+      "extensions": [
+        ".cjs",
+        ".js",
+        ".jsx",
+        ".mjs",
+        ".ts",
+        ".tsx"
+      ],
+      "pinnedHead": "00818cbd97f5bd6c9b8af39f19c0cd1e42971e54"
+    },
+    {
+      "name": "pretty-ms",
+      "language": "JavaScript/TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/sindresorhus/pretty-ms.git",
+      "extensions": [
+        ".cjs",
+        ".js",
+        ".jsx",
+        ".mjs",
+        ".ts",
+        ".tsx"
+      ],
+      "pinnedHead": "93666b389e1ed07912b6c2466468da21d9f834ce"
+    },
+    {
+      "name": "get-stream",
+      "language": "JavaScript/TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/sindresorhus/get-stream.git",
+      "extensions": [
+        ".cjs",
+        ".js",
+        ".jsx",
+        ".mjs",
+        ".ts",
+        ".tsx"
+      ],
+      "pinnedHead": "cdbd77bebf332f28a2949613fc1534d8a7a04c95"
+    },
+    {
+      "name": "merge-streams",
+      "language": "JavaScript/TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/sindresorhus/merge-streams.git",
+      "extensions": [
+        ".cjs",
+        ".js",
+        ".jsx",
+        ".mjs",
+        ".ts",
+        ".tsx"
+      ],
+      "pinnedHead": "2f7dae33c8aed2e9be92bc8d64a38883695a59de"
+    },
+    {
+      "name": "p-timeout",
+      "language": "JavaScript/TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/sindresorhus/p-timeout.git",
+      "extensions": [
+        ".cjs",
+        ".js",
+        ".jsx",
+        ".mjs",
+        ".ts",
+        ".tsx"
+      ],
+      "pinnedHead": "245066ef7daa5e74024d5b6a188ae599a1b7bfdf"
+    },
+    {
+      "name": "p-retry",
+      "language": "JavaScript/TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/sindresorhus/p-retry.git",
+      "extensions": [
+        ".cjs",
+        ".js",
+        ".jsx",
+        ".mjs",
+        ".ts",
+        ".tsx"
+      ],
+      "pinnedHead": "35681f6c70f8ca2bdcb9542281147679184269fa"
+    },
+    {
+      "name": "p-locate",
+      "language": "JavaScript/TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/sindresorhus/p-locate.git",
+      "extensions": [
+        ".cjs",
+        ".js",
+        ".jsx",
+        ".mjs",
+        ".ts",
+        ".tsx"
+      ],
+      "pinnedHead": "b9ccdaaa83f8d2f53f8acf8ff3c97b7aa21f655b"
+    },
+    {
+      "name": "sniffio",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/python-trio/sniffio.git",
+      "extensions": [
+        ".py"
+      ],
+      "pinnedHead": "6996e05d9b9debe32f42f709c8041e744f850478"
+    },
+    {
+      "name": "outcome",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/python-trio/outcome.git",
+      "extensions": [
+        ".py"
+      ],
+      "pinnedHead": "03ed6218b08001877745bb1a9e180c8c5cf7c903"
+    },
+    {
+      "name": "frozenlist",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/aio-libs/frozenlist.git",
+      "extensions": [
+        ".py"
+      ],
+      "pinnedHead": "381c91e4663b067d5debab4cc19b400d3c459b44"
+    },
+    {
+      "name": "aiosignal",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/aio-libs/aiosignal.git",
+      "extensions": [
+        ".py"
+      ],
+      "pinnedHead": "1c2bdc6dbd222463627638d2b46e9c3864e07597"
+    },
+    {
+      "name": "async-timeout",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/aio-libs/async-timeout.git",
+      "extensions": [
+        ".py"
+      ],
+      "pinnedHead": "7dc0022fb8160e3d7905cefa279e034e37063814"
+    },
+    {
+      "name": "aiohappyeyeballs",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/aio-libs/aiohappyeyeballs.git",
+      "extensions": [
+        ".py"
+      ],
+      "pinnedHead": "d3ba49e5359746f4364fb4732b238c430833cc0b"
+    },
+    {
+      "name": "propcache",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/aio-libs/propcache.git",
+      "extensions": [
+        ".py"
+      ],
+      "pinnedHead": "1ab64c4a5c9b0bbaa94679a546afbdf28e79533f"
+    },
+    {
+      "name": "w3lib",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/scrapy/w3lib.git",
+      "extensions": [
+        ".py"
+      ],
+      "pinnedHead": "ed01dc04608336967356417f472a691b82bcfbe4"
+    },
+    {
+      "name": "go-shellwords",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/mattn/go-shellwords.git",
+      "extensions": [
+        ".go"
+      ],
+      "pinnedHead": "2b31b13123b0c5253ca007689e2e11c1512e9624"
+    },
+    {
+      "name": "go-sqlite3",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/mattn/go-sqlite3.git",
+      "extensions": [
+        ".go"
+      ],
+      "pinnedHead": "58c8e145308ceded07d1df2ac1b65999499e7055"
+    },
+    {
+      "name": "buntdb",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/tidwall/buntdb.git",
+      "extensions": [
+        ".go"
+      ],
+      "pinnedHead": "0dbc8c18459aed4e4179bccbe0322bbd6019733f"
+    },
+    {
+      "name": "redcon",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/tidwall/redcon.git",
+      "extensions": [
+        ".go"
+      ],
+      "pinnedHead": "7e866b48ea78ec2a060fa30cd945052e4bfa5031"
+    },
+    {
+      "name": "tinyqueue",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/tidwall/tinyqueue.git",
+      "extensions": [
+        ".go"
+      ],
+      "pinnedHead": "c2e3d577e1fdb4eefcbf7bf60db76f0b2e256b97"
+    },
+    {
+      "name": "redigo",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/gomodule/redigo.git",
+      "extensions": [
+        ".go"
+      ],
+      "pinnedHead": "57c8b99ccb90c3401bec6e09289081e8b78b3bde"
+    },
+    {
+      "name": "locales",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/go-playground/locales.git",
+      "extensions": [
+        ".go"
+      ],
+      "pinnedHead": "ce315c8672599942003599943a1e64288f55b03f"
+    },
+    {
+      "name": "gorilla-handlers",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/gorilla/handlers.git",
+      "extensions": [
+        ".go"
+      ],
+      "pinnedHead": "9c61bd81e701cf500437e1b516b675cdd3b73ca7"
+    },
+    {
+      "name": "getrandom",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/rust-random/getrandom.git",
+      "extensions": [
+        ".rs"
+      ],
+      "pinnedHead": "eeb6a3d4ade21087c0f7bd560192e4bfb8357670"
+    },
+    {
+      "name": "anstyle",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/rust-cli/anstyle.git",
+      "extensions": [
+        ".rs"
+      ],
+      "pinnedHead": "93bd8ebafd400e660916c03255aed516f723255b"
+    },
+    {
+      "name": "indicatif",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/console-rs/indicatif.git",
+      "extensions": [
+        ".rs"
+      ],
+      "pinnedHead": "e4750d26f43a2802f788cd1ccb4de0f459629e5c"
+    },
+    {
+      "name": "rust-base64",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/marshallpierce/rust-base64.git",
+      "extensions": [
+        ".rs"
+      ],
+      "pinnedHead": "5b98ee180cc7c2a64af6cb12c724b1721550e0d0"
+    },
+    {
+      "name": "env-logger",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/rust-cli/env_logger.git",
+      "extensions": [
+        ".rs"
+      ],
+      "pinnedHead": "9bf61cf0ba45ffc9db40e436f40609c8cc065b88"
+    },
+    {
+      "name": "nom",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/rust-bakery/nom.git",
+      "extensions": [
+        ".rs"
+      ],
+      "pinnedHead": "51c3c4e44fa78a8a09b413419372b97b2cc2a787"
+    },
+    {
+      "name": "cookie-factory",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/rust-bakery/cookie-factory.git",
+      "extensions": [
+        ".rs"
+      ],
+      "pinnedHead": "0aded1fc2033deac11f7c7c3a994baa1f025c4f5"
+    },
+    {
+      "name": "uuid",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/uuid-rs/uuid.git",
+      "extensions": [
+        ".rs"
+      ],
+      "pinnedHead": "162cd208a4521138f1d8ce05b63342ba7ba5c4e6"
+    }
+  ]
+}

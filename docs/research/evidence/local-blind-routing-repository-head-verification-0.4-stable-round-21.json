@@ -1,0 +1,581 @@
+{
+  "schemaVersion": 1,
+  "studyId": "local-blind-routing-round-21-0.4-stable-candidate",
+  "status": "verified",
+  "startedAt": "2026-08-26T12:49:49.041Z",
+  "completedAt": "2026-08-26T12:51:26.314Z",
+  "plan": {
+    "path": "docs/research/evidence/local-blind-routing-repository-plan-0.4-stable-round-21.json",
+    "sha256": "64E15BD4BA5489651DD746890C6C30EFDB493E6ECD16CFB3704C1BA0A4805352"
+  },
+  "priorExclusionSource": {
+    "path": "docs/research/evidence/local-blind-routing-repository-pool-0.4-stable-round-20.json",
+    "sha256": "D8149E5D2B83FB52D18BF7071EC0DDA79BCD104138E74F5D038E8FC26763FC3A",
+    "observedRepositoryCount": 258
+  },
+  "commandContract": "git ls-remote <url> HEAD",
+  "selectionContract": "first-eight-reachable-per-family-v1",
+  "retryPolicy": {
+    "maximumAttemptsPerRepository": 3,
+    "delayMs": 5000,
+    "transientNetworkFailuresOnly": true,
+    "transientNetworkExhaustionAbortsRound": true,
+    "definitivelyMissingRepositoryMayBeSkipped": true,
+    "repositoryPlanChangedAfterFailure": false
+  },
+  "reachabilityCounts": {
+    "javascript-typescript": {
+      "roster": 12,
+      "reachable": 11,
+      "definitivelyMissing": 1
+    },
+    "python": {
+      "roster": 12,
+      "reachable": 12,
+      "definitivelyMissing": 0
+    },
+    "go": {
+      "roster": 12,
+      "reachable": 12,
+      "definitivelyMissing": 0
+    },
+    "rust": {
+      "roster": 12,
+      "reachable": 8,
+      "definitivelyMissing": 4
+    }
+  },
+  "commitHistoryInspected": false,
+  "candidateTaskInspected": false,
+  "palaceCallsOnCandidateTasks": 0,
+  "repositories": [
+    {
+      "repositoryIndex": 0,
+      "name": "human-signals",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/sindresorhus/human-signals.git",
+      "status": "definitively-missing",
+      "observedHead": null,
+      "attempts": 1,
+      "diagnostic": "remote: Repository not found.\nfatal: repository 'https://github.com/sindresorhus/human-signals.git/' not found",
+      "selectedForCanonicalPool": false
+    },
+    {
+      "repositoryIndex": 1,
+      "name": "npm-run-path",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/sindresorhus/npm-run-path.git",
+      "status": "reachable",
+      "observedHead": "b9128591fc59429d8b0df7047d5283f259dc5e77",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 2,
+      "name": "cli-truncate",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/sindresorhus/cli-truncate.git",
+      "status": "reachable",
+      "observedHead": "00818cbd97f5bd6c9b8af39f19c0cd1e42971e54",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 3,
+      "name": "pretty-ms",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/sindresorhus/pretty-ms.git",
+      "status": "reachable",
+      "observedHead": "93666b389e1ed07912b6c2466468da21d9f834ce",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 4,
+      "name": "get-stream",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/sindresorhus/get-stream.git",
+      "status": "reachable",
+      "observedHead": "cdbd77bebf332f28a2949613fc1534d8a7a04c95",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 5,
+      "name": "merge-streams",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/sindresorhus/merge-streams.git",
+      "status": "reachable",
+      "observedHead": "2f7dae33c8aed2e9be92bc8d64a38883695a59de",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 6,
+      "name": "p-timeout",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/sindresorhus/p-timeout.git",
+      "status": "reachable",
+      "observedHead": "245066ef7daa5e74024d5b6a188ae599a1b7bfdf",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 7,
+      "name": "p-retry",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/sindresorhus/p-retry.git",
+      "status": "reachable",
+      "observedHead": "35681f6c70f8ca2bdcb9542281147679184269fa",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 8,
+      "name": "p-locate",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/sindresorhus/p-locate.git",
+      "status": "reachable",
+      "observedHead": "b9ccdaaa83f8d2f53f8acf8ff3c97b7aa21f655b",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 9,
+      "name": "locate-path",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/sindresorhus/locate-path.git",
+      "status": "reachable",
+      "observedHead": "4c4ee027b830c35ff7605421a8ad92208f1b868a",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": false
+    },
+    {
+      "repositoryIndex": 10,
+      "name": "find-up",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/sindresorhus/find-up.git",
+      "status": "reachable",
+      "observedHead": "b210255735947199a69c1482e1bb6d407e8995a4",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": false
+    },
+    {
+      "repositoryIndex": 11,
+      "name": "clsx",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/lukeed/clsx.git",
+      "status": "reachable",
+      "observedHead": "925494cf31bcd97d3337aacd34e659e80cae7fe2",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": false
+    },
+    {
+      "repositoryIndex": 12,
+      "name": "sniffio",
+      "languageFamily": "python",
+      "url": "https://github.com/python-trio/sniffio.git",
+      "status": "reachable",
+      "observedHead": "6996e05d9b9debe32f42f709c8041e744f850478",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 13,
+      "name": "outcome",
+      "languageFamily": "python",
+      "url": "https://github.com/python-trio/outcome.git",
+      "status": "reachable",
+      "observedHead": "03ed6218b08001877745bb1a9e180c8c5cf7c903",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 14,
+      "name": "frozenlist",
+      "languageFamily": "python",
+      "url": "https://github.com/aio-libs/frozenlist.git",
+      "status": "reachable",
+      "observedHead": "381c91e4663b067d5debab4cc19b400d3c459b44",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 15,
+      "name": "aiosignal",
+      "languageFamily": "python",
+      "url": "https://github.com/aio-libs/aiosignal.git",
+      "status": "reachable",
+      "observedHead": "1c2bdc6dbd222463627638d2b46e9c3864e07597",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 16,
+      "name": "async-timeout",
+      "languageFamily": "python",
+      "url": "https://github.com/aio-libs/async-timeout.git",
+      "status": "reachable",
+      "observedHead": "7dc0022fb8160e3d7905cefa279e034e37063814",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 17,
+      "name": "aiohappyeyeballs",
+      "languageFamily": "python",
+      "url": "https://github.com/aio-libs/aiohappyeyeballs.git",
+      "status": "reachable",
+      "observedHead": "d3ba49e5359746f4364fb4732b238c430833cc0b",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 18,
+      "name": "propcache",
+      "languageFamily": "python",
+      "url": "https://github.com/aio-libs/propcache.git",
+      "status": "reachable",
+      "observedHead": "1ab64c4a5c9b0bbaa94679a546afbdf28e79533f",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 19,
+      "name": "w3lib",
+      "languageFamily": "python",
+      "url": "https://github.com/scrapy/w3lib.git",
+      "status": "reachable",
+      "observedHead": "ed01dc04608336967356417f472a691b82bcfbe4",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 20,
+      "name": "parsel",
+      "languageFamily": "python",
+      "url": "https://github.com/scrapy/parsel.git",
+      "status": "reachable",
+      "observedHead": "6b8fc75abf04aea0e05c7365962b00d209933942",
+      "attempts": 2,
+      "diagnostic": null,
+      "selectedForCanonicalPool": false
+    },
+    {
+      "repositoryIndex": 21,
+      "name": "itemadapter",
+      "languageFamily": "python",
+      "url": "https://github.com/scrapy/itemadapter.git",
+      "status": "reachable",
+      "observedHead": "b0530403a11036e8689fdd2a8dc364377936c85d",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": false
+    },
+    {
+      "repositoryIndex": 22,
+      "name": "itemloaders",
+      "languageFamily": "python",
+      "url": "https://github.com/scrapy/itemloaders.git",
+      "status": "reachable",
+      "observedHead": "d233dc704501e39f11a9bb38ba7825ba2badef94",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": false
+    },
+    {
+      "repositoryIndex": 23,
+      "name": "zope-event",
+      "languageFamily": "python",
+      "url": "https://github.com/zopefoundation/zope.event.git",
+      "status": "reachable",
+      "observedHead": "88722ea6df44e57b72d724906d43a11680193637",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": false
+    },
+    {
+      "repositoryIndex": 24,
+      "name": "go-shellwords",
+      "languageFamily": "go",
+      "url": "https://github.com/mattn/go-shellwords.git",
+      "status": "reachable",
+      "observedHead": "2b31b13123b0c5253ca007689e2e11c1512e9624",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 25,
+      "name": "go-sqlite3",
+      "languageFamily": "go",
+      "url": "https://github.com/mattn/go-sqlite3.git",
+      "status": "reachable",
+      "observedHead": "58c8e145308ceded07d1df2ac1b65999499e7055",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 26,
+      "name": "buntdb",
+      "languageFamily": "go",
+      "url": "https://github.com/tidwall/buntdb.git",
+      "status": "reachable",
+      "observedHead": "0dbc8c18459aed4e4179bccbe0322bbd6019733f",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 27,
+      "name": "redcon",
+      "languageFamily": "go",
+      "url": "https://github.com/tidwall/redcon.git",
+      "status": "reachable",
+      "observedHead": "7e866b48ea78ec2a060fa30cd945052e4bfa5031",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 28,
+      "name": "tinyqueue",
+      "languageFamily": "go",
+      "url": "https://github.com/tidwall/tinyqueue.git",
+      "status": "reachable",
+      "observedHead": "c2e3d577e1fdb4eefcbf7bf60db76f0b2e256b97",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 29,
+      "name": "redigo",
+      "languageFamily": "go",
+      "url": "https://github.com/gomodule/redigo.git",
+      "status": "reachable",
+      "observedHead": "57c8b99ccb90c3401bec6e09289081e8b78b3bde",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 30,
+      "name": "locales",
+      "languageFamily": "go",
+      "url": "https://github.com/go-playground/locales.git",
+      "status": "reachable",
+      "observedHead": "ce315c8672599942003599943a1e64288f55b03f",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 31,
+      "name": "gorilla-handlers",
+      "languageFamily": "go",
+      "url": "https://github.com/gorilla/handlers.git",
+      "status": "reachable",
+      "observedHead": "9c61bd81e701cf500437e1b516b675cdd3b73ca7",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 32,
+      "name": "gorilla-sessions",
+      "languageFamily": "go",
+      "url": "https://github.com/gorilla/sessions.git",
+      "status": "reachable",
+      "observedHead": "bb4cd60c952a9ce48ea0dc6cc7b282ff79c38263",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": false
+    },
+    {
+      "repositoryIndex": 33,
+      "name": "burntsushi-toml",
+      "languageFamily": "go",
+      "url": "https://github.com/BurntSushi/toml.git",
+      "status": "reachable",
+      "observedHead": "d733fc535e4a9f3c454e421a87b90ade5d49bf31",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": false
+    },
+    {
+      "repositoryIndex": 34,
+      "name": "sprig",
+      "languageFamily": "go",
+      "url": "https://github.com/Masterminds/sprig.git",
+      "status": "reachable",
+      "observedHead": "989da45d7c082c6ec85cf95f59e23b461cdafe03",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": false
+    },
+    {
+      "repositoryIndex": 35,
+      "name": "avo",
+      "languageFamily": "go",
+      "url": "https://github.com/mmcloughlin/avo.git",
+      "status": "reachable",
+      "observedHead": "1caa704ca8bf9cdefad7551c05b69842eff90a43",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": false
+    },
+    {
+      "repositoryIndex": 36,
+      "name": "getrandom",
+      "languageFamily": "rust",
+      "url": "https://github.com/rust-random/getrandom.git",
+      "status": "reachable",
+      "observedHead": "eeb6a3d4ade21087c0f7bd560192e4bfb8357670",
+      "attempts": 2,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 37,
+      "name": "anstyle",
+      "languageFamily": "rust",
+      "url": "https://github.com/rust-cli/anstyle.git",
+      "status": "reachable",
+      "observedHead": "93bd8ebafd400e660916c03255aed516f723255b",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 38,
+      "name": "anstream",
+      "languageFamily": "rust",
+      "url": "https://github.com/rust-cli/anstream.git",
+      "status": "definitively-missing",
+      "observedHead": null,
+      "attempts": 1,
+      "diagnostic": "remote: Repository not found.\nfatal: repository 'https://github.com/rust-cli/anstream.git/' not found",
+      "selectedForCanonicalPool": false
+    },
+    {
+      "repositoryIndex": 39,
+      "name": "terminal-size",
+      "languageFamily": "rust",
+      "url": "https://github.com/rust-cli/terminal_size.git",
+      "status": "definitively-missing",
+      "observedHead": null,
+      "attempts": 1,
+      "diagnostic": "remote: Repository not found.\nfatal: repository 'https://github.com/rust-cli/terminal_size.git/' not found",
+      "selectedForCanonicalPool": false
+    },
+    {
+      "repositoryIndex": 40,
+      "name": "indicatif",
+      "languageFamily": "rust",
+      "url": "https://github.com/console-rs/indicatif.git",
+      "status": "reachable",
+      "observedHead": "e4750d26f43a2802f788cd1ccb4de0f459629e5c",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 41,
+      "name": "rust-base64",
+      "languageFamily": "rust",
+      "url": "https://github.com/marshallpierce/rust-base64.git",
+      "status": "reachable",
+      "observedHead": "5b98ee180cc7c2a64af6cb12c724b1721550e0d0",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 42,
+      "name": "cfg-aliases",
+      "languageFamily": "rust",
+      "url": "https://github.com/rust-lang/cfg_aliases.git",
+      "status": "definitively-missing",
+      "observedHead": null,
+      "attempts": 1,
+      "diagnostic": "remote: Repository not found.\nfatal: repository 'https://github.com/rust-lang/cfg_aliases.git/' not found",
+      "selectedForCanonicalPool": false
+    },
+    {
+      "repositoryIndex": 43,
+      "name": "env-logger",
+      "languageFamily": "rust",
+      "url": "https://github.com/rust-cli/env_logger.git",
+      "status": "reachable",
+      "observedHead": "9bf61cf0ba45ffc9db40e436f40609c8cc065b88",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 44,
+      "name": "nom",
+      "languageFamily": "rust",
+      "url": "https://github.com/rust-bakery/nom.git",
+      "status": "reachable",
+      "observedHead": "51c3c4e44fa78a8a09b413419372b97b2cc2a787",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 45,
+      "name": "cookie-factory",
+      "languageFamily": "rust",
+      "url": "https://github.com/rust-bakery/cookie-factory.git",
+      "status": "reachable",
+      "observedHead": "0aded1fc2033deac11f7c7c3a994baa1f025c4f5",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 46,
+      "name": "regex-automata",
+      "languageFamily": "rust",
+      "url": "https://github.com/rust-lang/regex-automata.git",
+      "status": "definitively-missing",
+      "observedHead": null,
+      "attempts": 1,
+      "diagnostic": "remote: Repository not found.\nfatal: repository 'https://github.com/rust-lang/regex-automata.git/' not found",
+      "selectedForCanonicalPool": false
+    },
+    {
+      "repositoryIndex": 47,
+      "name": "uuid",
+      "languageFamily": "rust",
+      "url": "https://github.com/uuid-rs/uuid.git",
+      "status": "reachable",
+      "observedHead": "162cd208a4521138f1d8ce05b63342ba7ba5c4e6",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    }
+  ]
+}
