@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "studyId": "local-blind-routing-validation-round-12-attempt-1-0.4-alpha",
+  "recordedAt": "2026-08-10T23:02:50.4919016Z",
+  "status": "invalid-before-palace-observation",
+  "failureCategory": "validator-freeze-version-assertion-harness-error",
+  "claimBoundary": "The first Round 12 formal command failed inside assertFrozenInputs because the validator expected freezeAttempt 2 while the bound validation freeze declared freezeAttempt 1. The failure occurred before temporary target materialization, baseline build, Palace execution, or product command execution. The failed create-only result and its validation freeze remain preserved.",
+  "selectedTaskPalaceCalls": 0,
+  "productCommandsStarted": 0,
+  "productMutation": false,
+  "semanticProtocolChangeRequired": false,
+  "harnessCorrectionRequired": true,
+  "failedValidationFreeze": {
+    "path": "docs/research/evidence/local-blind-routing-validation-freeze-0.4-alpha-round-12.json",
+    "sha256": "8ED802D2589521D4E0E555C96C2B0A1B28465303C80154E1BF0AA36AC9D34AAD",
+    "freezeAttempt": 1,
+    "frozenVerifierSha256": "214BD73C40496685C6C67AA960CE46FD62CDB3C70CE6D4FD9BF08552EA186F45",
+    "frozenGeneratorSha256": "9176DBD23C04E77A5593C7F837D03EC05A9991D3ABEAC449943E3B54EFF07971"
+  },
+  "failedFormalResult": {
+    "path": "docs/research/evidence/local-blind-routing-validation-0.4-alpha-round-12-attempt-1.json",
+    "sha256": "AC7725C8CFD70283D504E699FDE1570411142F1B4B5A68138D3C7F49900379F3",
+    "status": "invalid",
+    "failureCategory": "unexpected-validator-failure"
+  },
+  "candidate": {
+    "freezeSha256": "D3B7BE55E1B80F964490A5E773E11AFCB97323A04E933AB30D131AAE6B48F406",
+    "cliSha256": "3815B78163F3E401A24C9A63F77DB355B2BD2EDEEF42CB029E961A89B49D79C2",
+    "changed": false
+  },
+  "correction": {
+    "description": "Bind a second validation freeze and formal study identifier, preserving all selection inputs and changing only the validator/freeze attempt identity contract.",
+    "allowedChanges": [
+      "validation study ID from attempt-1 to attempt-2",
+      "validation freeze path and freezeAttempt from 1 to 2",
+      "validator assertion and formal result output path",
+      "integrity-test expectations and amendment provenance"
+    ],
+    "forbiddenChanges": [
+      "candidate source or CLI",
+      "target manifest or order",
+      "tasks or oracle files",
+      "budgets, thresholds, repetitions, or condition order",
+      "semantic review decisions"
+    ]
+  }
+}

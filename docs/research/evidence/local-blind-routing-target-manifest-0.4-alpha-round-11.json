@@ -1,0 +1,748 @@
+{
+  "schemaVersion": 1,
+  "studyId": "local-blind-routing-round-11-0.4-alpha",
+  "generatedAt": "2026-08-09T19:46:42.582Z",
+  "status": "selected",
+  "claimBoundary": "Pre-route whole-target semantic selection only. Every selected target is the first coherent candidate in newest-first order for its repository, and the first two accepted repositories in frozen language-family order. This is not a Palace product result or public preregistration.",
+  "evidenceClass": "local-hash-frozen-task-coherent-target-selection",
+  "publicPreregistration": false,
+  "heldOutAgainstCandidate": true,
+  "candidate": {
+    "role": "post-round-10-generic-causal-repair-candidate",
+    "baseCommit": "67c0a2ce8754cece3773d5fd16b89dae4e3af0c1",
+    "sourceState": "uncommitted-local-working-tree-frozen-by-content-hash",
+    "cliPath": "dist/palace.cjs",
+    "cliSha256": "258ABFF9CE05B052C03CD4B772B38310BC7E4AAFD08A3FAEAE79334FB1B4E900",
+    "generatedMcpPath": "plugins/vertex-palace/mcp/server.cjs",
+    "generatedMcpSha256": "453402E9C685FB04DDF8134FA1E48E190D8F0F282D6DA70577EB9DFA4D871AFC",
+    "sourceTree": {
+      "algorithm": "sha256-path-length-bytes-v1",
+      "fileCount": 185,
+      "sha256": "2EC8C8FC66365F7FFF2CF07F9F5449C5BF82BF6361CEC785E8ADD0447A7D684D"
+    },
+    "buildCommand": "pnpm build"
+  },
+  "comparisonBaseline": {
+    "role": "pre-local-evidence-closure-optimization",
+    "productCommit": "67c0a2ce8754cece3773d5fd16b89dae4e3af0c1",
+    "sourceTree": {
+      "algorithm": "sha256-path-length-bytes-v1",
+      "fileCount": 121,
+      "sha256": "73BB3192CE756367031E8B3E1C5FE8332811C5FB333036A5BA6DFB7B2007B5E0"
+    },
+    "cliPath": "dist/palace.cjs",
+    "cliSha256": "52A1876B00AF4AAA884A6C7EA47AC2E701E88C34FC8FEE65DD1B32BB6513B8AE",
+    "rebuild": {
+      "dependencyCommand": "pnpm install --offline --frozen-lockfile --ignore-scripts",
+      "buildCommand": "pnpm build",
+      "networkRequired": false
+    },
+    "provenance": {
+      "path": "docs/research/evidence/local-blind-candidate-freeze-0.4-alpha-round-10.json",
+      "sha256": "F1E7EFE6D15BC279970BD7E9171E930C649941F2B272FA4394F33CC0ED48F984"
+    }
+  },
+  "localFreeze": {
+    "path": "docs/research/evidence/local-blind-candidate-freeze-0.4-alpha-round-11.json",
+    "sha256": "FD201FD0CE6D3A1C8FE3ADF85F87AB7AE9020BCA320E38922F36E3A5807CA440",
+    "frozenAt": "2026-08-09T19:24:54.108Z",
+    "artifactHashesVerified": true
+  },
+  "repositoryPool": {
+    "path": "docs/research/evidence/local-blind-routing-repository-pool-0.4-alpha-round-11.json",
+    "sha256": "29D9BBEEDCD43F05E8AE1A059FFC7F9D4F3CB94F19BFF1C424E7EF962AAC0CCD"
+  },
+  "candidateQueue": {
+    "path": "docs/research/evidence/local-blind-routing-candidate-queue-0.4-alpha-round-11-attempt-1.json",
+    "sha256": "B9A4F20691CE8DEA95AAD674F6F6B960715CA0F4A4B0CF40B2179F835C2256FC",
+    "palaceCallsOnCandidateTasks": 0
+  },
+  "semanticReview": {
+    "path": "docs/research/evidence/local-blind-routing-coherence-reviews-0.4-alpha-round-11.json",
+    "sha256": "C8BA8AC87E8ADB3A335ADAA674B97988F77DE574DB9D51C779644B24FF018F3A",
+    "boundary": "single-developer-delegated-semantic-reviewer",
+    "independent": false,
+    "interRaterAgreementAvailable": false,
+    "palaceCallsOnCandidateTasks": 0
+  },
+  "rules": {
+    "desiredTargets": 8,
+    "requiredLanguageFamilies": [
+      "javascript-typescript",
+      "python",
+      "go",
+      "rust"
+    ],
+    "targetsPerLanguageFamily": 2,
+    "repositoriesPerLanguageFamily": 4,
+    "repositoryOrderIsBinding": true,
+    "newestCoherentCandidatePerRepositoryWins": true,
+    "remainingRepositoriesPerFamilyAreFallbacks": true,
+    "taskClassifier": "inflected-behavioral-subject-v1",
+    "maximumMechanicalCandidatesPerRepository": 5,
+    "minimumFiles": 2,
+    "maximumFiles": 8,
+    "maximumAuxiliaryFiles": 2,
+    "maximumChangedLines": 400,
+    "allowedAuxiliaryExtensions": [
+      ".cfg",
+      ".conf",
+      ".ini",
+      ".json",
+      ".md",
+      ".mdx",
+      ".rst",
+      ".toml",
+      ".txt",
+      ".yaml",
+      ".yml"
+    ],
+    "taskDiffCoherenceReviewRequired": true,
+    "wholeTargetRejectionForUnrelatedOrUncertainHunk": true,
+    "partialOraclePruningForbidden": true,
+    "maximumGeneratedArtifactTargets": 1,
+    "pinnedHeadsObtainedWithGitLsRemoteHeadOnly": true,
+    "commitHistoryInspectedBeforePoolFreeze": false,
+    "palaceCallsOnCandidateTasksBeforePoolFreeze": 0,
+    "baselineAndCandidateFrozenBeforeTargetSelection": true,
+    "outputCreateOnly": true,
+    "familyQuotaStopsLaterReviews": true,
+    "wholeTargetRejection": true,
+    "selectedPerLanguageFamily": {
+      "javascript-typescript": 2,
+      "python": 2,
+      "go": 2,
+      "rust": 2
+    },
+    "languageDiversitySatisfied": true,
+    "generatedArtifactTargets": 0,
+    "palaceCallsOnCandidateTasksBeforeFinalization": 0
+  },
+  "repositoryReports": [
+    {
+      "name": "yup",
+      "languageFamily": "javascript-typescript",
+      "status": "selected-newest-coherent-candidate",
+      "reviewedCandidates": [
+        {
+          "candidateId": "candidate_25ac50f16a627490",
+          "candidateRank": 1,
+          "groundTruthCommit": "ef5303025c38e6e0dc0de53c990e7277cc74164e",
+          "decision": "reject",
+          "reviewedFiles": 4,
+          "reviewedHunks": 12,
+          "unrelatedHunks": 2,
+          "uncertainHunks": 0,
+          "packetSha256": "E4D9C4384AB8609F553E9D920CF6BDB5D7ECE591AA3A0FB5AC2D57814C156C0C",
+          "generatedArtifact": {
+            "isGeneratedArtifactTarget": false,
+            "reason": "No generated artifact relationship appears in this candidate.",
+            "ownerGeneratorPath": null,
+            "generatedOutputPaths": []
+          }
+        },
+        {
+          "candidateId": "candidate_1f61adc8f1c0aa34",
+          "candidateRank": 2,
+          "groundTruthCommit": "c7d7f977e02a7e578950dff192057e0b200999bd",
+          "decision": "accept",
+          "reviewedFiles": 2,
+          "reviewedHunks": 9,
+          "unrelatedHunks": 0,
+          "uncertainHunks": 0,
+          "packetSha256": "9D875E492EC33A8A0FFBBB32D0DF23CD65B825E7596E9C707315225D6DC137B3",
+          "generatedArtifact": {
+            "isGeneratedArtifactTarget": false,
+            "reason": "No generated artifact relationship appears in this candidate.",
+            "ownerGeneratorPath": null,
+            "generatedOutputPaths": []
+          }
+        }
+      ],
+      "selectedCandidateId": "candidate_1f61adc8f1c0aa34"
+    },
+    {
+      "name": "marshmallow",
+      "languageFamily": "python",
+      "status": "selected-newest-coherent-candidate",
+      "reviewedCandidates": [
+        {
+          "candidateId": "candidate_16458512fda4e821",
+          "candidateRank": 1,
+          "groundTruthCommit": "902f99c4151d1f0c4c3b8e8dfbafc7b6a76aeaa6",
+          "decision": "reject",
+          "reviewedFiles": 4,
+          "reviewedHunks": 6,
+          "unrelatedHunks": 1,
+          "uncertainHunks": 0,
+          "packetSha256": "BF09A61C08ABDD0AA812BA6BAEF25601AD90B3E1F8B19A2E7E75D61481DB962C",
+          "generatedArtifact": {
+            "isGeneratedArtifactTarget": false,
+            "reason": "No generated artifact relationship appears in this candidate.",
+            "ownerGeneratorPath": null,
+            "generatedOutputPaths": []
+          }
+        },
+        {
+          "candidateId": "candidate_7e71798aa51d7bbb",
+          "candidateRank": 2,
+          "groundTruthCommit": "f07eadc87dfac25ed505d5cd9d186920f2682733",
+          "decision": "reject",
+          "reviewedFiles": 3,
+          "reviewedHunks": 15,
+          "unrelatedHunks": 1,
+          "uncertainHunks": 0,
+          "packetSha256": "C5358E5CD10F31ABCBE140CEC3975AE5DAA6D13C2439BA4894C0834B34A46202",
+          "generatedArtifact": {
+            "isGeneratedArtifactTarget": false,
+            "reason": "No generated artifact relationship appears in this candidate.",
+            "ownerGeneratorPath": null,
+            "generatedOutputPaths": []
+          }
+        },
+        {
+          "candidateId": "candidate_d9b640e1de3ea73e",
+          "candidateRank": 3,
+          "groundTruthCommit": "c1e727e16bed9851c6e77dde0119ee2d4f1ba08d",
+          "decision": "accept",
+          "reviewedFiles": 3,
+          "reviewedHunks": 6,
+          "unrelatedHunks": 0,
+          "uncertainHunks": 0,
+          "packetSha256": "04CF5D2C5584996E98579A3C2BCC5B595EDFAF9DA915386FDDB61A54EAA52C0A",
+          "generatedArtifact": {
+            "isGeneratedArtifactTarget": false,
+            "reason": "No generated artifact relationship appears in this candidate.",
+            "ownerGeneratorPath": null,
+            "generatedOutputPaths": []
+          }
+        }
+      ],
+      "selectedCandidateId": "candidate_d9b640e1de3ea73e"
+    },
+    {
+      "name": "logr",
+      "languageFamily": "go",
+      "status": "no-mechanical-candidate",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "arrayvec",
+      "languageFamily": "rust",
+      "status": "selected-newest-coherent-candidate",
+      "reviewedCandidates": [
+        {
+          "candidateId": "candidate_f58596cf603371ba",
+          "candidateRank": 1,
+          "groundTruthCommit": "f5acafa0b386cee703c43ce886814c3b03098762",
+          "decision": "reject",
+          "reviewedFiles": 2,
+          "reviewedHunks": 3,
+          "unrelatedHunks": 1,
+          "uncertainHunks": 0,
+          "packetSha256": "D5BFD1B57C58F31FE3D0F36A7A50469C62EF140ACA350BB984DF6956EFC1D08D",
+          "generatedArtifact": {
+            "isGeneratedArtifactTarget": false,
+            "reason": "No generated artifact relationship appears in this candidate.",
+            "ownerGeneratorPath": null,
+            "generatedOutputPaths": []
+          }
+        },
+        {
+          "candidateId": "candidate_6ba7ad1f75777269",
+          "candidateRank": 2,
+          "groundTruthCommit": "b7f3aa9fcec326f7303fd0a84af1eb05e7bf1806",
+          "decision": "accept",
+          "reviewedFiles": 4,
+          "reviewedHunks": 10,
+          "unrelatedHunks": 0,
+          "uncertainHunks": 0,
+          "packetSha256": "B31245F87FEF7D999E4523E80BE9061179BE0B91FABFDCA4B64942CB7CB6CA50",
+          "generatedArtifact": {
+            "isGeneratedArtifactTarget": false,
+            "reason": "No generated artifact relationship appears in this candidate.",
+            "ownerGeneratorPath": null,
+            "generatedOutputPaths": []
+          }
+        }
+      ],
+      "selectedCandidateId": "candidate_6ba7ad1f75777269"
+    },
+    {
+      "name": "node-fetch",
+      "languageFamily": "javascript-typescript",
+      "status": "selected-newest-coherent-candidate",
+      "reviewedCandidates": [
+        {
+          "candidateId": "candidate_17aa3b59108e7e0e",
+          "candidateRank": 1,
+          "groundTruthCommit": "55a4870ae5f805d8ff9a890ea2c652c9977e048e",
+          "decision": "accept",
+          "reviewedFiles": 4,
+          "reviewedHunks": 4,
+          "unrelatedHunks": 0,
+          "uncertainHunks": 0,
+          "packetSha256": "73342FAE33ED5F7D3531E824510CAF7110CF2E42EEEDDF3EFABE86F6FD7161CC",
+          "generatedArtifact": {
+            "isGeneratedArtifactTarget": false,
+            "reason": "No generated artifact relationship appears in this candidate.",
+            "ownerGeneratorPath": null,
+            "generatedOutputPaths": []
+          }
+        }
+      ],
+      "selectedCandidateId": "candidate_17aa3b59108e7e0e"
+    },
+    {
+      "name": "jsonschema",
+      "languageFamily": "python",
+      "status": "selected-newest-coherent-candidate",
+      "reviewedCandidates": [
+        {
+          "candidateId": "candidate_c6ee89789c620ee0",
+          "candidateRank": 1,
+          "groundTruthCommit": "4f7d9e7047da96705b20dca31692cb4fafa7129c",
+          "decision": "accept",
+          "reviewedFiles": 2,
+          "reviewedHunks": 10,
+          "unrelatedHunks": 0,
+          "uncertainHunks": 0,
+          "packetSha256": "95A63EED67A23D0F06749BCFF1E3F805303D9EE1F8BB6FD39A557450A3973178",
+          "generatedArtifact": {
+            "isGeneratedArtifactTarget": false,
+            "reason": "No generated artifact relationship appears in this candidate.",
+            "ownerGeneratorPath": null,
+            "generatedOutputPaths": []
+          }
+        }
+      ],
+      "selectedCandidateId": "candidate_c6ee89789c620ee0"
+    },
+    {
+      "name": "go-sql-driver-mysql",
+      "languageFamily": "go",
+      "status": "selected-newest-coherent-candidate",
+      "reviewedCandidates": [
+        {
+          "candidateId": "candidate_e99f7ef34aabce46",
+          "candidateRank": 1,
+          "groundTruthCommit": "00dc21a6243c02c1a84fc82d08a821c08fde4053",
+          "decision": "accept",
+          "reviewedFiles": 6,
+          "reviewedHunks": 12,
+          "unrelatedHunks": 0,
+          "uncertainHunks": 0,
+          "packetSha256": "205FCF8C9B852926C90F65FA6C504656FBC53D38E0B361F0A7CE61559E11E860",
+          "generatedArtifact": {
+            "isGeneratedArtifactTarget": false,
+            "reason": "No generated artifact relationship appears in this candidate.",
+            "ownerGeneratorPath": null,
+            "generatedOutputPaths": []
+          }
+        }
+      ],
+      "selectedCandidateId": "candidate_e99f7ef34aabce46"
+    },
+    {
+      "name": "itertools",
+      "languageFamily": "rust",
+      "status": "selected-newest-coherent-candidate",
+      "reviewedCandidates": [
+        {
+          "candidateId": "candidate_ddb750077d21b36b",
+          "candidateRank": 1,
+          "groundTruthCommit": "b2a978abca1dc57f929f60e0be16d83e58f9558f",
+          "decision": "accept",
+          "reviewedFiles": 2,
+          "reviewedHunks": 2,
+          "unrelatedHunks": 0,
+          "uncertainHunks": 0,
+          "packetSha256": "108010A09DA064A200D6D5368A1756322037CFA9AD42114C9E13D676E3C329DF",
+          "generatedArtifact": {
+            "isGeneratedArtifactTarget": false,
+            "reason": "No generated artifact relationship appears in this candidate.",
+            "ownerGeneratorPath": null,
+            "generatedOutputPaths": []
+          }
+        }
+      ],
+      "selectedCandidateId": "candidate_ddb750077d21b36b"
+    },
+    {
+      "name": "mocha",
+      "languageFamily": "javascript-typescript",
+      "status": "family-quota-filled-not-reviewed",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "python-prompt-toolkit",
+      "languageFamily": "python",
+      "status": "family-quota-filled-not-reviewed",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "pgx",
+      "languageFamily": "go",
+      "status": "selected-newest-coherent-candidate",
+      "reviewedCandidates": [
+        {
+          "candidateId": "candidate_38e3997f35582093",
+          "candidateRank": 1,
+          "groundTruthCommit": "a5ee883c57e1bb73ee48aa0cac562dbd09ebc931",
+          "decision": "accept",
+          "reviewedFiles": 2,
+          "reviewedHunks": 5,
+          "unrelatedHunks": 0,
+          "uncertainHunks": 0,
+          "packetSha256": "043AAF0F9361BC524001D76C466EF2F1CFD7425EEB4581481C74D33D20C29FCB",
+          "generatedArtifact": {
+            "isGeneratedArtifactTarget": false,
+            "reason": "No generated artifact relationship appears in this candidate.",
+            "ownerGeneratorPath": null,
+            "generatedOutputPaths": []
+          }
+        }
+      ],
+      "selectedCandidateId": "candidate_38e3997f35582093"
+    },
+    {
+      "name": "petgraph",
+      "languageFamily": "rust",
+      "status": "family-quota-filled-not-reviewed",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "dom-testing-library",
+      "languageFamily": "javascript-typescript",
+      "status": "family-quota-filled-not-reviewed",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "tqdm",
+      "languageFamily": "python",
+      "status": "family-quota-filled-not-reviewed",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "lo",
+      "languageFamily": "go",
+      "status": "family-quota-filled-not-reviewed",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "fd",
+      "languageFamily": "rust",
+      "status": "family-quota-filled-not-reviewed",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    }
+  ],
+  "targets": [
+    {
+      "name": "yup",
+      "language": "JavaScript/TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/jquense/yup.git",
+      "pinnedHead": "ff31eee8a2b10c938bb3a22544d9e33957a8cf01",
+      "routeCommit": "f27fa44a4509f84ee2274955de22581d6099ce0d",
+      "groundTruthCommit": "c7d7f977e02a7e578950dff192057e0b200999bd",
+      "task": "fix: lazy validation errors thrown in builders should resolve async like other validations",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "src/Lazy.ts",
+        "test/lazy.ts"
+      ],
+      "implementationFiles": [
+        "src/Lazy.ts"
+      ],
+      "testFiles": [
+        "test/lazy.ts"
+      ],
+      "auxiliaryFiles": [],
+      "oracleSource": "mechanically eligible single-parent real Git-history diff pending whole-target semantic review",
+      "changedLines": 59,
+      "additions": 53,
+      "deletions": 6,
+      "candidateId": "candidate_1f61adc8f1c0aa34",
+      "candidateRank": 2,
+      "coherencePacketSha256": "9D875E492EC33A8A0FFBBB32D0DF23CD65B825E7596E9C707315225D6DC137B3",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "No generated artifact relationship appears in this candidate.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      }
+    },
+    {
+      "name": "marshmallow",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/marshmallow-code/marshmallow.git",
+      "pinnedHead": "c7b559a1fa3aba57ca6dba0ab336841c5038a782",
+      "routeCommit": "28f911b1240f127cc37b0d400a47e3ae5d573faa",
+      "groundTruthCommit": "c1e727e16bed9851c6e77dde0119ee2d4f1ba08d",
+      "task": "Add support for IDNs to validate.URL (#2928)",
+      "expectedTaskType": "feature",
+      "changedFiles": [
+        "CHANGELOG.rst",
+        "src/marshmallow/validate.py",
+        "tests/test_validate.py"
+      ],
+      "implementationFiles": [
+        "src/marshmallow/validate.py"
+      ],
+      "testFiles": [
+        "tests/test_validate.py"
+      ],
+      "auxiliaryFiles": [
+        "CHANGELOG.rst"
+      ],
+      "oracleSource": "mechanically eligible single-parent real Git-history diff pending whole-target semantic review",
+      "changedLines": 65,
+      "additions": 61,
+      "deletions": 4,
+      "candidateId": "candidate_d9b640e1de3ea73e",
+      "candidateRank": 3,
+      "coherencePacketSha256": "04CF5D2C5584996E98579A3C2BCC5B595EDFAF9DA915386FDDB61A54EAA52C0A",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "No generated artifact relationship appears in this candidate.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      }
+    },
+    {
+      "name": "arrayvec",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/bluss/arrayvec.git",
+      "pinnedHead": "8a7c8211a237b9b258275e6ab0d967b7d0cb2704",
+      "routeCommit": "198a4031940fcfd8f63d731aea33da42eed6e898",
+      "groundTruthCommit": "b7f3aa9fcec326f7303fd0a84af1eb05e7bf1806",
+      "task": "FIX: Add new_const() for const construction and revert new to old version",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "src/array_string.rs",
+        "src/arrayvec.rs",
+        "src/lib.rs",
+        "tests/tests.rs"
+      ],
+      "implementationFiles": [
+        "src/array_string.rs",
+        "src/arrayvec.rs",
+        "src/lib.rs"
+      ],
+      "testFiles": [
+        "tests/tests.rs"
+      ],
+      "auxiliaryFiles": [],
+      "oracleSource": "mechanically eligible single-parent real Git-history diff pending whole-target semantic review",
+      "changedLines": 71,
+      "additions": 65,
+      "deletions": 6,
+      "candidateId": "candidate_6ba7ad1f75777269",
+      "candidateRank": 2,
+      "coherencePacketSha256": "B31245F87FEF7D999E4523E80BE9061179BE0B91FABFDCA4B64942CB7CB6CA50",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "No generated artifact relationship appears in this candidate.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      }
+    },
+    {
+      "name": "node-fetch",
+      "language": "JavaScript/TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/node-fetch/node-fetch.git",
+      "pinnedHead": "8b3320d2a7c07bce4afc6b2bf6c3bbddda85b01f",
+      "routeCommit": "c071406e193cce13959999982584ff27198e9e4a",
+      "groundTruthCommit": "55a4870ae5f805d8ff9a890ea2c652c9977e048e",
+      "task": "feat: add static Response.json (#1670)",
+      "expectedTaskType": "feature",
+      "changedFiles": [
+        "@types/index.d.ts",
+        "@types/index.test-d.ts",
+        "src/response.js",
+        "test/main.js"
+      ],
+      "implementationFiles": [
+        "@types/index.d.ts",
+        "@types/index.test-d.ts",
+        "src/response.js"
+      ],
+      "testFiles": [
+        "test/main.js"
+      ],
+      "auxiliaryFiles": [],
+      "oracleSource": "mechanically eligible single-parent real Git-history diff pending whole-target semantic review",
+      "changedLines": 52,
+      "additions": 52,
+      "deletions": 0,
+      "candidateId": "candidate_17aa3b59108e7e0e",
+      "candidateRank": 1,
+      "coherencePacketSha256": "73342FAE33ED5F7D3531E824510CAF7110CF2E42EEEDDF3EFABE86F6FD7161CC",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "No generated artifact relationship appears in this candidate.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      }
+    },
+    {
+      "name": "jsonschema",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/python-jsonschema/jsonschema.git",
+      "pinnedHead": "d39388624a2032df8633503e8bb1951ad1059198",
+      "routeCommit": "bb947f1e2cb4447da0647d79cbcb33f791cddd87",
+      "groundTruthCommit": "4f7d9e7047da96705b20dca31692cb4fafa7129c",
+      "task": "Fix non-format test cases, skipping email ones and tightening UUID ones.",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "jsonschema/_format.py",
+        "jsonschema/tests/test_jsonschema_test_suite.py"
+      ],
+      "implementationFiles": [
+        "jsonschema/_format.py"
+      ],
+      "testFiles": [
+        "jsonschema/tests/test_jsonschema_test_suite.py"
+      ],
+      "auxiliaryFiles": [],
+      "oracleSource": "mechanically eligible single-parent real Git-history diff pending whole-target semantic review",
+      "changedLines": 29,
+      "additions": 22,
+      "deletions": 7,
+      "candidateId": "candidate_c6ee89789c620ee0",
+      "candidateRank": 1,
+      "coherencePacketSha256": "95A63EED67A23D0F06749BCFF1E3F805303D9EE1F8BB6FD39A557450A3973178",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "No generated artifact relationship appears in this candidate.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      }
+    },
+    {
+      "name": "go-sql-driver-mysql",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/go-sql-driver/mysql.git",
+      "pinnedHead": "03d76c7e07908e255ce62d126d07ede3f2365d86",
+      "routeCommit": "2f1527670cb7207fd213f92c7120f9387fe256cf",
+      "groundTruthCommit": "00dc21a6243c02c1a84fc82d08a821c08fde4053",
+      "task": "allow unknown collation name (#1604)",
+      "expectedTaskType": "feature",
+      "changedFiles": [
+        "collations.go",
+        "connection.go",
+        "connector.go",
+        "dsn.go",
+        "dsn_test.go",
+        "packets.go"
+      ],
+      "implementationFiles": [
+        "collations.go",
+        "connection.go",
+        "connector.go",
+        "dsn.go",
+        "packets.go"
+      ],
+      "testFiles": [
+        "dsn_test.go"
+      ],
+      "auxiliaryFiles": [],
+      "oracleSource": "mechanically eligible single-parent real Git-history diff pending whole-target semantic review",
+      "changedLines": 101,
+      "additions": 51,
+      "deletions": 50,
+      "candidateId": "candidate_e99f7ef34aabce46",
+      "candidateRank": 1,
+      "coherencePacketSha256": "205FCF8C9B852926C90F65FA6C504656FBC53D38E0B361F0A7CE61559E11E860",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "No generated artifact relationship appears in this candidate.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      }
+    },
+    {
+      "name": "itertools",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/rust-itertools/itertools.git",
+      "pinnedHead": "cef9a8203ec485b06ec1889550cde0aa989d103a",
+      "routeCommit": "12b6ec6f91eb83eebe4ac150e53aca14365cd894",
+      "groundTruthCommit": "b2a978abca1dc57f929f60e0be16d83e58f9558f",
+      "task": "feat(Itertools): add strip_prefix and strip_prefix_by methods",
+      "expectedTaskType": "feature",
+      "changedFiles": [
+        "src/lib.rs",
+        "tests/quick.rs"
+      ],
+      "implementationFiles": [
+        "src/lib.rs"
+      ],
+      "testFiles": [
+        "tests/quick.rs"
+      ],
+      "auxiliaryFiles": [],
+      "oracleSource": "mechanically eligible single-parent real Git-history diff pending whole-target semantic review",
+      "changedLines": 129,
+      "additions": 129,
+      "deletions": 0,
+      "candidateId": "candidate_ddb750077d21b36b",
+      "candidateRank": 1,
+      "coherencePacketSha256": "108010A09DA064A200D6D5368A1756322037CFA9AD42114C9E13D676E3C329DF",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "No generated artifact relationship appears in this candidate.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      }
+    },
+    {
+      "name": "pgx",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/jackc/pgx.git",
+      "pinnedHead": "ec1a0befd22592cffffdeeb0a50311b506372f4c",
+      "routeCommit": "140be86592d9525b520b254293c9980fd0cc17d2",
+      "groundTruthCommit": "a5ee883c57e1bb73ee48aa0cac562dbd09ebc931",
+      "task": "Fix LoadTypes overwriting box/point codecs with a bogus ArrayCodec",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "derived_types.go",
+        "derived_types_test.go"
+      ],
+      "implementationFiles": [
+        "derived_types.go"
+      ],
+      "testFiles": [
+        "derived_types_test.go"
+      ],
+      "auxiliaryFiles": [],
+      "oracleSource": "mechanically eligible single-parent real Git-history diff pending whole-target semantic review",
+      "changedLines": 54,
+      "additions": 52,
+      "deletions": 2,
+      "candidateId": "candidate_38e3997f35582093",
+      "candidateRank": 1,
+      "coherencePacketSha256": "043AAF0F9361BC524001D76C466EF2F1CFD7425EEB4581481C74D33D20C29FCB",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "No generated artifact relationship appears in this candidate.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      }
+    }
+  ]
+}

@@ -13,7 +13,10 @@ type PythonDefinition = {
 export function parsePython(sourcePath: string, content: string): ParsedFile {
   const lines = content.split(/\r?\n/);
   const definitions = collectDefinitions(lines);
-  const symbols = definitions.map((definition) => toSymbol(definition, definitions, lines));
+  const symbols = [
+    ...definitions.map((definition) => toSymbol(definition, definitions, lines)),
+    ...collectModuleAssignments(lines)
+  ].sort((left, right) => left.startLine - right.startLine || left.name.localeCompare(right.name));
   const imports = lines.flatMap(extractPythonImport).slice(0, 80);
 
   return {
@@ -30,6 +33,67 @@ export function parsePython(sourcePath: string, content: string): ParsedFile {
       .join(". ")
       .slice(0, 1200)
   };
+}
+
+function collectModuleAssignments(lines: string[]): ParsedSymbol[] {
+  const symbols: ParsedSymbol[] = [];
+  for (let index = 0; index < lines.length; index += 1) {
+    const line = lines[index];
+    const match = line.match(/^([A-Za-z_][A-Za-z0-9_]*)\s*(?::[^=]+)?=\s*(.*)$/);
+    if (!match) continue;
+    const endIndex = assignmentEndIndex(lines, index, match[2]);
+    symbols.push({
+      name: match[1],
+      kind: "const",
+      startLine: index + 1,
+      endLine: endIndex + 1,
+      signature: line.trim().slice(0, 240),
+      searchText: extractSearchTerms(lines.slice(index, endIndex + 1).join("\n"))
+    });
+    index = endIndex;
+  }
+  return symbols;
+}
+
+function assignmentEndIndex(lines: string[], startIndex: number, initialValue: string): number {
+  let depth = delimiterDepth(initialValue);
+  let index = startIndex;
+  while (
+    index + 1 < lines.length
+    && (depth > 0 || lines[index].trimEnd().endsWith("\\"))
+  ) {
+    index += 1;
+    depth += delimiterDepth(lines[index]);
+  }
+  return index;
+}
+
+function delimiterDepth(value: string): number {
+  let depth = 0;
+  let quote: "'" | '"' | undefined;
+  let escaped = false;
+  for (const character of value) {
+    if (escaped) {
+      escaped = false;
+      continue;
+    }
+    if (character === "\\") {
+      escaped = true;
+      continue;
+    }
+    if (quote) {
+      if (character === quote) quote = undefined;
+      continue;
+    }
+    if (character === "'" || character === '"') {
+      quote = character;
+      continue;
+    }
+    if (character === "#") break;
+    if (character === "(" || character === "[" || character === "{") depth += 1;
+    if (character === ")" || character === "]" || character === "}") depth -= 1;
+  }
+  return depth;
 }
 
 function collectDefinitions(lines: string[]): PythonDefinition[] {

@@ -1,5 +1,6 @@
 import path from "node:path";
 import type { PalaceEdge, PalaceNode, ParsedFile } from "@vertex-palace/shared";
+import { nodeEvidenceScope, nodeHasEvidenceRole } from "../evidence/evidence-model";
 import { hashText } from "../scanner/file-hash";
 import { normalizeRelativePath } from "../utils/path-utils";
 import { tokenizeLexical } from "../utils/lexical-tokens";
@@ -49,8 +50,12 @@ export function buildEdges(nodes: PalaceNode[], parsedFiles: ParsedFile[], now: 
   addUniqueSymbolReferenceEdges(edges, parsedFiles, fileNodeByPath, now);
   addGeneratedArtifactEdges(edges, parsedFiles, fileNodeByPath, now);
 
-  const tests = fileNodes.filter((node) => node.kind === "test");
-  const sources = fileNodes.filter((node) => !["test", "doc", "config", "runtime-log"].includes(node.kind));
+  const tests = fileNodes.filter(
+    (node) => nodeHasEvidenceRole(node, "verification") && nodeEvidenceScope(node) === "product"
+  );
+  const sources = fileNodes.filter(
+    (node) => nodeHasEvidenceRole(node, "implementation") && nodeEvidenceScope(node) === "product"
+  );
   const parsedByPath = new Map(parsedFiles.map((parsed) => [parsed.sourcePath, parsed]));
   for (const test of tests) {
     const related = sources
@@ -72,9 +77,15 @@ export function buildEdges(nodes: PalaceNode[], parsedFiles: ParsedFile[], now: 
     }
   }
 
-  const testSymbolNodes = nodes.filter((node) => node.floor === "05-verification" && node.startLine && node.kind !== "test");
+  const testSymbolNodes = nodes.filter(
+    (node) => node.startLine
+      && nodeHasEvidenceRole(node, "verification")
+      && nodeEvidenceScope(node) === "product"
+  );
   const sourceSymbolNodes = nodes.filter(
-    (node) => node.floor !== "05-verification" && node.startLine && !["directory", "file", "api", "doc", "config", "runtime-log"].includes(node.kind)
+    (node) => node.startLine
+      && nodeHasEvidenceRole(node, "implementation")
+      && nodeEvidenceScope(node) === "product"
   );
   for (const testSymbol of testSymbolNodes) {
     const testTokens = meaningfulTokens(testSymbol.title.split(".").at(-1) ?? testSymbol.title);
@@ -213,9 +224,15 @@ function addUniqueSymbolReferenceEdges(
 ): void {
   const declarations = parsedFiles.flatMap((parsed) =>
     ["rs", "rust", "go"].includes(parsed.language) ? parsed.symbols
-      .filter((symbol) => ["class", "interface", "type"].includes(symbol.kind))
+      .filter((symbol) => {
+        const declarationKinds = parsed.language === "go"
+          ? ["class", "const", "function", "interface", "method", "type"]
+          : ["class", "const", "interface", "type"];
+        return declarationKinds.includes(symbol.kind);
+      })
       .map((symbol) => ({
         sourcePath: parsed.sourcePath,
+        kind: symbol.kind,
         name: symbol.name.split(".").at(-1) ?? symbol.name,
         phrase: [...tokenizeLexical(symbol.name.split(".").at(-1) ?? symbol.name)].join(" ")
       }))
@@ -247,7 +264,7 @@ function addUniqueSymbolReferenceEdges(
         from.id,
         to.id,
         "depends_on",
-        0.6,
+        ["function", "method"].includes(declaration.kind) ? 0.55 : 0.6,
         `${parsed.sourcePath} references uniquely declared ${declaration.name} in ${declaration.sourcePath}`,
         now
       ));
@@ -274,6 +291,10 @@ function resolveImport(
   }
   if (sourcePath.endsWith(".py")) return resolvePythonImport(sourcePath, importPath, candidates);
   const base = normalizeRelativePath(path.posix.join(path.posix.dirname(sourcePath), importPath));
+  const packageEntry = workspacePackages.find(
+    (workspacePackage) => workspacePackage.root === base
+  )?.entryPath;
+  if (packageEntry) return packageEntry;
   const withoutRuntimeExtension = base.replace(/\.(?:mjs|cjs|js|jsx)$/, "");
   const possible = [
     base,

@@ -1,0 +1,713 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-26T03:55:02.322Z",
+  "sourceAudit": "docs/research/evidence/codex-palace-usage-audit.json",
+  "scope": {
+    "roots": [
+      "C:\\Users\\HIN\\.codex\\sessions",
+      "C:\\Users\\HIN\\.codex\\archived_sessions"
+    ],
+    "sessionFiles": 281,
+    "parsedSessions": 281,
+    "uniqueSessions": 165,
+    "archivedSessions": 31,
+    "parseErrors": 0,
+    "note": "System, developer, and turn-context instructions are excluded from usage detection."
+  },
+  "adoption": {
+    "firstObservedCallAt": "2026-07-08T18:57:29.365Z",
+    "sessionsWithActivitySinceFirstObservedCall": 68,
+    "sessionsWithPalaceCalls": 66,
+    "sessionsWithoutPalaceCalls": 2,
+    "observedUsageRate": 97.06,
+    "caveat": "This is observed local Codex history, not proof that every repository or future task is configured."
+  },
+  "groups": {
+    "all": {
+      "sessions": 66,
+      "calls": 4775,
+      "outcomes": {
+        "counts": {
+          "succeeded": 4183,
+          "failed": 121,
+          "mixed": 410,
+          "unknown": 61
+        },
+        "hardSuccessRate": 87.6,
+        "completedOrMixedRate": 96.19,
+        "hardFailureRate": 2.53
+      },
+      "operations": {
+        "status": 729,
+        "index": 323,
+        "route": 587,
+        "pack": 360,
+        "memory": 1163,
+        "context": 751,
+        "evaluate": 833,
+        "init": 29
+      },
+      "operationOutcomes": {
+        "context": {
+          "succeeded": 587,
+          "mixed": 138,
+          "failed": 18,
+          "unknown": 8
+        },
+        "evaluate": {
+          "succeeded": 750,
+          "mixed": 14,
+          "failed": 61,
+          "unknown": 8
+        },
+        "index": {
+          "succeeded": 308,
+          "mixed": 7,
+          "unknown": 8
+        },
+        "init": {
+          "succeeded": 27,
+          "mixed": 2
+        },
+        "memory": {
+          "succeeded": 1128,
+          "failed": 13,
+          "unknown": 19,
+          "mixed": 3
+        },
+        "pack": {
+          "succeeded": 227,
+          "mixed": 126,
+          "unknown": 2,
+          "failed": 5
+        },
+        "route": {
+          "succeeded": 532,
+          "mixed": 40,
+          "failed": 8,
+          "unknown": 7
+        },
+        "status": {
+          "succeeded": 624,
+          "mixed": 80,
+          "failed": 16,
+          "unknown": 9
+        }
+      },
+      "context": {
+        "calls": 751,
+        "validModeCalls": 671,
+        "modes": {
+          "guarded-memory-palace": 308,
+          "full-palace": 359,
+          "route-lite": 1,
+          "bypass": 3
+        },
+        "unrecognizedOrMissingModes": 80,
+        "evidenceStatus": {
+          "insufficient": 478,
+          "sufficient": 94
+        },
+        "unrecognizedOrMissingEvidenceStatus": 179,
+        "routeConfidence": {
+          "n": 668,
+          "mean": 0.59,
+          "median": 0.65,
+          "min": 0.1,
+          "max": 0.98
+        },
+        "estimatedTokens": {
+          "n": 679,
+          "mean": 3146.53,
+          "median": 3061,
+          "min": 79,
+          "max": 5775
+        },
+        "memoryIncluded": {
+          "n": 658,
+          "mean": 2.12,
+          "median": 3,
+          "min": 0,
+          "max": 3
+        }
+      },
+      "evaluation": {
+        "calls": 833,
+        "assessments": {
+          "unknown": 421,
+          "needs-review": 318,
+          "unverified": 56,
+          "strong": 38
+        },
+        "changedFileCoverage": {
+          "n": 409,
+          "mean": 25.79,
+          "median": 11,
+          "min": 0,
+          "max": 100,
+          "buckets": {
+            "zero": 185,
+            "aboveZeroBelow50": 118,
+            "atLeast50Below80": 64,
+            "atLeast80": 42,
+            "exactly100": 38
+          }
+        },
+        "routeFocus": {
+          "n": 396,
+          "mean": 19.28,
+          "median": 10,
+          "min": 0,
+          "max": 100,
+          "buckets": {
+            "zero": 172,
+            "aboveZeroBelow50": 158,
+            "atLeast50Below80": 52,
+            "atLeast80": 14,
+            "exactly100": 9
+          }
+        },
+        "retrospectiveCalibration": {
+          "pairs": 409,
+          "routeConfidence": {
+            "n": 409,
+            "mean": 0.61,
+            "median": 0.68,
+            "min": 0.1,
+            "max": 0.96
+          },
+          "changedFileCoverage": {
+            "n": 409,
+            "mean": 25.79,
+            "median": 11,
+            "min": 0,
+            "max": 100
+          },
+          "absoluteError": {
+            "n": 409,
+            "mean": 0.44,
+            "median": 0.4,
+            "min": 0,
+            "max": 0.94
+          }
+        },
+        "perSessionWindow": {
+          "evaluableSessions": 29,
+          "medianOfSessionMedianCoverage": 4,
+          "zeroMedianCoverageSessions": 14,
+          "atLeast80MedianCoverageSessions": 0,
+          "privacyBoundary": "Only aggregate counts and distribution statistics are published; session IDs, titles, paths, and per-session rows are omitted."
+        }
+      }
+    },
+    "realProject": {
+      "sessions": 34,
+      "calls": 4097,
+      "outcomes": {
+        "counts": {
+          "succeeded": 3556,
+          "failed": 118,
+          "mixed": 366,
+          "unknown": 57
+        },
+        "hardSuccessRate": 86.8,
+        "completedOrMixedRate": 95.73,
+        "hardFailureRate": 2.88
+      },
+      "operations": {
+        "status": 652,
+        "index": 268,
+        "route": 524,
+        "pack": 323,
+        "memory": 999,
+        "context": 606,
+        "evaluate": 708,
+        "init": 17
+      },
+      "operationOutcomes": {
+        "context": {
+          "succeeded": 470,
+          "mixed": 110,
+          "failed": 18,
+          "unknown": 8
+        },
+        "evaluate": {
+          "succeeded": 627,
+          "mixed": 13,
+          "failed": 60,
+          "unknown": 8
+        },
+        "index": {
+          "succeeded": 254,
+          "mixed": 6,
+          "unknown": 8
+        },
+        "init": {
+          "succeeded": 15,
+          "mixed": 2
+        },
+        "memory": {
+          "succeeded": 967,
+          "failed": 13,
+          "unknown": 17,
+          "mixed": 2
+        },
+        "pack": {
+          "succeeded": 199,
+          "mixed": 117,
+          "unknown": 2,
+          "failed": 5
+        },
+        "route": {
+          "succeeded": 470,
+          "mixed": 39,
+          "failed": 8,
+          "unknown": 7
+        },
+        "status": {
+          "succeeded": 554,
+          "mixed": 77,
+          "failed": 14,
+          "unknown": 7
+        }
+      },
+      "context": {
+        "calls": 606,
+        "validModeCalls": 548,
+        "modes": {
+          "guarded-memory-palace": 255,
+          "full-palace": 290,
+          "route-lite": 1,
+          "bypass": 2
+        },
+        "unrecognizedOrMissingModes": 58,
+        "evidenceStatus": {
+          "insufficient": 434,
+          "sufficient": 94
+        },
+        "unrecognizedOrMissingEvidenceStatus": 78,
+        "routeConfidence": {
+          "n": 550,
+          "mean": 0.6,
+          "median": 0.68,
+          "min": 0.1,
+          "max": 0.98
+        },
+        "estimatedTokens": {
+          "n": 554,
+          "mean": 3222.46,
+          "median": 3245,
+          "min": 180,
+          "max": 5759
+        },
+        "memoryIncluded": {
+          "n": 553,
+          "mean": 2.08,
+          "median": 3,
+          "min": 0,
+          "max": 3
+        }
+      },
+      "evaluation": {
+        "calls": 708,
+        "assessments": {
+          "unknown": 348,
+          "needs-review": 277,
+          "unverified": 47,
+          "strong": 36
+        },
+        "changedFileCoverage": {
+          "n": 345,
+          "mean": 24.97,
+          "median": 7,
+          "min": 0,
+          "max": 100,
+          "buckets": {
+            "zero": 169,
+            "aboveZeroBelow50": 87,
+            "atLeast50Below80": 52,
+            "atLeast80": 37,
+            "exactly100": 33
+          }
+        },
+        "routeFocus": {
+          "n": 332,
+          "mean": 18.98,
+          "median": 10,
+          "min": 0,
+          "max": 100,
+          "buckets": {
+            "zero": 156,
+            "aboveZeroBelow50": 118,
+            "atLeast50Below80": 45,
+            "atLeast80": 13,
+            "exactly100": 8
+          }
+        },
+        "retrospectiveCalibration": {
+          "pairs": 345,
+          "routeConfidence": {
+            "n": 345,
+            "mean": 0.61,
+            "median": 0.68,
+            "min": 0.1,
+            "max": 0.96
+          },
+          "changedFileCoverage": {
+            "n": 345,
+            "mean": 24.97,
+            "median": 7,
+            "min": 0,
+            "max": 100
+          },
+          "absoluteError": {
+            "n": 345,
+            "mean": 0.44,
+            "median": 0.4,
+            "min": 0,
+            "max": 0.94
+          }
+        },
+        "perSessionWindow": {
+          "evaluableSessions": 27,
+          "medianOfSessionMedianCoverage": 4,
+          "zeroMedianCoverageSessions": 13,
+          "atLeast80MedianCoverageSessions": 0,
+          "privacyBoundary": "Only aggregate counts and distribution statistics are published; session IDs, titles, paths, and per-session rows are omitted."
+        }
+      }
+    },
+    "selfDevelopment": {
+      "sessions": 1,
+      "calls": 515,
+      "outcomes": {
+        "counts": {
+          "succeeded": 470,
+          "unknown": 3,
+          "mixed": 40,
+          "failed": 2
+        },
+        "hardSuccessRate": 91.26,
+        "completedOrMixedRate": 99.03,
+        "hardFailureRate": 0.39
+      },
+      "operations": {
+        "memory": 109,
+        "status": 58,
+        "route": 54,
+        "pack": 28,
+        "index": 45,
+        "evaluate": 98,
+        "init": 1,
+        "context": 122
+      },
+      "operationOutcomes": {
+        "context": {
+          "succeeded": 95,
+          "mixed": 27
+        },
+        "evaluate": {
+          "succeeded": 97,
+          "mixed": 1
+        },
+        "index": {
+          "succeeded": 44,
+          "mixed": 1
+        },
+        "init": {
+          "succeeded": 1
+        },
+        "memory": {
+          "succeeded": 106,
+          "mixed": 1,
+          "unknown": 2
+        },
+        "pack": {
+          "succeeded": 22,
+          "mixed": 6
+        },
+        "route": {
+          "succeeded": 53,
+          "mixed": 1
+        },
+        "status": {
+          "unknown": 1,
+          "succeeded": 52,
+          "mixed": 3,
+          "failed": 2
+        }
+      },
+      "context": {
+        "calls": 122,
+        "validModeCalls": 103,
+        "modes": {
+          "full-palace": 49,
+          "guarded-memory-palace": 53,
+          "bypass": 1
+        },
+        "unrecognizedOrMissingModes": 19,
+        "evidenceStatus": {
+          "insufficient": 26
+        },
+        "unrecognizedOrMissingEvidenceStatus": 96,
+        "routeConfidence": {
+          "n": 98,
+          "mean": 0.57,
+          "median": 0.65,
+          "min": 0.35,
+          "max": 0.96
+        },
+        "estimatedTokens": {
+          "n": 105,
+          "mean": 2846.6,
+          "median": 2740,
+          "min": 79,
+          "max": 5775
+        },
+        "memoryIncluded": {
+          "n": 85,
+          "mean": 2.87,
+          "median": 3,
+          "min": 0,
+          "max": 3
+        }
+      },
+      "evaluation": {
+        "calls": 98,
+        "assessments": {
+          "unknown": 55,
+          "unverified": 1,
+          "needs-review": 40,
+          "strong": 2
+        },
+        "changedFileCoverage": {
+          "n": 63,
+          "mean": 30.71,
+          "median": 23,
+          "min": 0,
+          "max": 100,
+          "buckets": {
+            "zero": 15,
+            "aboveZeroBelow50": 31,
+            "atLeast50Below80": 12,
+            "atLeast80": 5,
+            "exactly100": 5
+          }
+        },
+        "routeFocus": {
+          "n": 63,
+          "mean": 21.14,
+          "median": 20,
+          "min": 0,
+          "max": 100,
+          "buckets": {
+            "zero": 15,
+            "aboveZeroBelow50": 40,
+            "atLeast50Below80": 7,
+            "atLeast80": 1,
+            "exactly100": 1
+          }
+        },
+        "retrospectiveCalibration": {
+          "pairs": 63,
+          "routeConfidence": {
+            "n": 63,
+            "mean": 0.62,
+            "median": 0.68,
+            "min": 0.35,
+            "max": 0.85
+          },
+          "changedFileCoverage": {
+            "n": 63,
+            "mean": 30.71,
+            "median": 23,
+            "min": 0,
+            "max": 100
+          },
+          "absoluteError": {
+            "n": 63,
+            "mean": 0.41,
+            "median": 0.45,
+            "min": 0.010000000000000009,
+            "max": 0.84
+          }
+        },
+        "perSessionWindow": {
+          "evaluableSessions": 1,
+          "medianOfSessionMedianCoverage": 23,
+          "zeroMedianCoverageSessions": 0,
+          "atLeast80MedianCoverageSessions": 0,
+          "privacyBoundary": "Only aggregate counts and distribution statistics are published; session IDs, titles, paths, and per-session rows are omitted."
+        }
+      }
+    },
+    "automation": {
+      "sessions": 31,
+      "calls": 163,
+      "outcomes": {
+        "counts": {
+          "unknown": 1,
+          "succeeded": 157,
+          "mixed": 4,
+          "failed": 1
+        },
+        "hardSuccessRate": 96.32,
+        "completedOrMixedRate": 98.77,
+        "hardFailureRate": 0.61
+      },
+      "operations": {
+        "status": 19,
+        "init": 11,
+        "index": 10,
+        "route": 9,
+        "pack": 9,
+        "memory": 55,
+        "context": 23,
+        "evaluate": 27
+      },
+      "operationOutcomes": {
+        "context": {
+          "mixed": 1,
+          "succeeded": 22
+        },
+        "evaluate": {
+          "succeeded": 26,
+          "failed": 1
+        },
+        "index": {
+          "succeeded": 10
+        },
+        "init": {
+          "succeeded": 11
+        },
+        "memory": {
+          "succeeded": 55
+        },
+        "pack": {
+          "mixed": 3,
+          "succeeded": 6
+        },
+        "route": {
+          "succeeded": 9
+        },
+        "status": {
+          "unknown": 1,
+          "succeeded": 18
+        }
+      },
+      "context": {
+        "calls": 23,
+        "validModeCalls": 20,
+        "modes": {
+          "full-palace": 20
+        },
+        "unrecognizedOrMissingModes": 3,
+        "evidenceStatus": {
+          "insufficient": 18
+        },
+        "unrecognizedOrMissingEvidenceStatus": 5,
+        "routeConfidence": {
+          "n": 20,
+          "mean": 0.31,
+          "median": 0.15,
+          "min": 0.15,
+          "max": 0.67
+        },
+        "estimatedTokens": {
+          "n": 20,
+          "mean": 2617.8,
+          "median": 2275,
+          "min": 1963,
+          "max": 4564
+        },
+        "memoryIncluded": {
+          "n": 20,
+          "mean": 0,
+          "median": 0,
+          "min": 0,
+          "max": 0
+        }
+      },
+      "evaluation": {
+        "calls": 27,
+        "assessments": {
+          "unknown": 18,
+          "unverified": 8,
+          "needs-review": 1
+        },
+        "changedFileCoverage": {
+          "n": 1,
+          "mean": 0,
+          "median": 0,
+          "min": 0,
+          "max": 0,
+          "buckets": {
+            "zero": 1,
+            "aboveZeroBelow50": 0,
+            "atLeast50Below80": 0,
+            "atLeast80": 0,
+            "exactly100": 0
+          }
+        },
+        "routeFocus": {
+          "n": 1,
+          "mean": 0,
+          "median": 0,
+          "min": 0,
+          "max": 0,
+          "buckets": {
+            "zero": 1,
+            "aboveZeroBelow50": 0,
+            "atLeast50Below80": 0,
+            "atLeast80": 0,
+            "exactly100": 0
+          }
+        },
+        "retrospectiveCalibration": {
+          "pairs": 1,
+          "routeConfidence": {
+            "n": 1,
+            "mean": 0.59,
+            "median": 0.59,
+            "min": 0.59,
+            "max": 0.59
+          },
+          "changedFileCoverage": {
+            "n": 1,
+            "mean": 0,
+            "median": 0,
+            "min": 0,
+            "max": 0
+          },
+          "absoluteError": {
+            "n": 1,
+            "mean": 0.59,
+            "median": 0.59,
+            "min": 0.59,
+            "max": 0.59
+          }
+        },
+        "perSessionWindow": {
+          "evaluableSessions": 1,
+          "medianOfSessionMedianCoverage": 0,
+          "zeroMedianCoverageSessions": 1,
+          "atLeast80MedianCoverageSessions": 0,
+          "privacyBoundary": "Only aggregate counts and distribution statistics are published; session IDs, titles, paths, and per-session rows are omitted."
+        }
+      }
+    }
+  },
+  "qualitativeSignals": {
+    "automatedPositiveMatches": 2,
+    "automatedNegativeMatches": 7,
+    "assistantEvaluationCandidates": 125,
+    "caveat": "Signal matching is a discovery aid only. Mixed feedback and false positives require manual review."
+  },
+  "interpretationLimits": [
+    "A call is a Codex tool-call envelope and can wrap more than one process-level command.",
+    "Repeated calls within one long-running conversation are not independent trials.",
+    "Operational completion measures transport behavior, not route correctness.",
+    "Changed-file coverage and route focus are retrospective route diagnostics, not end-to-end task success.",
+    "Palace token reduction compares indexed repository text with the pack, not total Codex tokens or wall time."
+  ]
+}

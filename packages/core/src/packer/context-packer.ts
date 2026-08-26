@@ -5,6 +5,7 @@ import type {
   MemorySelectionTelemetry,
   PackOutput,
   PalaceExecutionBoundaries,
+  PalaceMode,
   PalaceModeSelection,
   PalaceNode,
   PalacePayloadMetrics,
@@ -20,6 +21,7 @@ import {
   renderGuardedMemoryItem,
   type GuardedMemoryResult
 } from "../memory/pitfall-board";
+import { selectPalaceMode } from "../router/mode-selector";
 import { routePalace } from "../router/route-planner";
 import { readIndex } from "../storage/read-palace";
 import type { PackFormat } from "./output-format";
@@ -35,6 +37,13 @@ export type PackContextOptions = {
   includeExcluded?: boolean;
   modeSelection?: PalaceModeSelection;
   preparedMemory?: GuardedMemoryResult;
+};
+
+export type PackAutoContextOptions = Pick<
+  PackContextOptions,
+  "budget" | "format" | "routeLimit" | "maxDrawers"
+> & {
+  mode?: PalaceMode;
 };
 
 type PackedDrawer = {
@@ -68,6 +77,40 @@ const SECTION_NAMES = [
 
 type PalaceSectionName = (typeof SECTION_NAMES)[number];
 type PalaceSectionMaterial = Record<PalaceSectionName, string>;
+
+export async function packAutoContextForRoute(
+  root: string,
+  task: string,
+  route: PalaceRoute,
+  options: PackAutoContextOptions = {}
+): Promise<PackOutput> {
+  const index = await readIndex(root);
+  const memoryPreflight = await readGuardedMemory(root, {
+    task,
+    taskType: route.taskType,
+    ...MEMORY_PREFLIGHT_POLICY
+  });
+  const modeSelection = selectPalaceMode(index, route, task, {
+    budget: options.budget,
+    override: options.mode,
+    memoryPreflight
+  });
+
+  if (modeSelection.mode === "bypass") {
+    return packBypassContext(root, task, route, modeSelection, options.format, memoryPreflight);
+  }
+
+  return packContext(root, task, {
+    budget: options.budget,
+    format: options.format,
+    routeId: route.id,
+    routeLimit: options.routeLimit,
+    maxDrawers: options.maxDrawers,
+    includeExcluded: false,
+    modeSelection,
+    preparedMemory: memoryPreflight
+  });
+}
 
 export async function packContext(root: string, task: string, options: PackContextOptions = {}): Promise<PackOutput> {
   const index = await readIndex(root);
@@ -546,6 +589,9 @@ function adaptiveJson(
       id: route.id,
       taskType: route.taskType,
       confidence: route.confidence,
+      ...(route.intent ? { intent: compactTaskIntent(route.intent) } : {}),
+      ...(route.evidenceClosure ? { evidenceClosure: compactEvidenceClosure(route.evidenceClosure) } : {}),
+      ...(route.confidenceEvidence ? { confidenceEvidence: route.confidenceEvidence } : {}),
       ...(route.narrowingEvidence ? { narrowingEvidence: route.narrowingEvidence } : {}),
       entry: route.entry,
       primary: unloadedRouteSteps(tiered.primary, drawers).map(compactRouteStep)
@@ -579,6 +625,7 @@ function renderAdaptiveMarkdown(
   const requiredEvidenceReferences = boundaries.requiredEvidence.filter(
     (sourcePath) => !loadedPaths.has(normalizedRoutePath(sourcePath))
   );
+  const unresolvedEvidence = unresolvedEvidenceRequirements(route);
   const lines = [
     "# Vertex Palace Adaptive Context",
     "",
@@ -588,6 +635,9 @@ function renderAdaptiveMarkdown(
     `Evidence status: ${selection.evidenceStatus}`,
     `Intervention policy: ${selection.interventionPolicy}`,
     `Evidence: ${selection.evidenceReasons.join(" ")}`,
+    ...(route.evidenceClosure
+      ? [`Evidence closure: ${route.evidenceClosure.status}; required=${route.evidenceClosure.requiredRoles.join(", ") || "none"}; missing=${route.evidenceClosure.missingRoles.join(", ") || "none"}.`]
+      : []),
     `Why: ${selection.reasons.join(" ")}`,
     "",
     "## Task",
@@ -616,11 +666,14 @@ function renderAdaptiveMarkdown(
     "",
     "## Required Evidence",
     "",
+    ...unresolvedEvidence.map((item) => `- Unresolved: ${item}`),
     ...(requiredEvidenceReferences.length
       ? requiredEvidenceReferences.map((sourcePath) => `- ${sourcePath}`)
       : boundaries.requiredEvidence.length
         ? ["- Already delivered below as routed context; do not reopen it."]
-        : ["- No separate supporting evidence was selected."]),
+        : unresolvedEvidence.length
+          ? []
+          : ["- No separate supporting evidence was selected."]),
     ""
   );
 
@@ -1038,6 +1091,9 @@ function adaptiveMarkdownSectionMaterial(
     `Evidence status: ${selection.evidenceStatus}`,
     `Intervention policy: ${selection.interventionPolicy}`,
     `Evidence: ${selection.evidenceReasons.join(" ")}`,
+    ...(route.evidenceClosure
+      ? [`Evidence closure: ${route.evidenceClosure.status}; required=${route.evidenceClosure.requiredRoles.join(", ") || "none"}; missing=${route.evidenceClosure.missingRoles.join(", ") || "none"}.`]
+      : []),
     `Why: ${selection.reasons.join(" ")}`
   ].join("\n");
   material.primary = markdownTierMaterial("primary", tiered.primary, drawers);
@@ -1050,11 +1106,17 @@ function adaptiveMarkdownSectionMaterial(
   const requiredEvidenceReferences = boundaries.requiredEvidence.filter(
     (sourcePath) => !loadedPaths.has(normalizedRoutePath(sourcePath))
   );
-  material.requiredEvidence = requiredEvidenceReferences.length
-    ? requiredEvidenceReferences.map((item) => `- ${item}`).join("\n")
-    : boundaries.requiredEvidence.length
-      ? "- Already delivered below as routed context; do not reopen it."
-      : "- No separate supporting evidence was selected.";
+  const unresolvedEvidence = unresolvedEvidenceRequirements(route);
+  material.requiredEvidence = [
+    ...unresolvedEvidence.map((item) => `- Unresolved: ${item}`),
+    ...(requiredEvidenceReferences.length
+      ? requiredEvidenceReferences.map((item) => `- ${item}`)
+      : boundaries.requiredEvidence.length
+        ? ["- Already delivered below as routed context; do not reopen it."]
+        : unresolvedEvidence.length
+          ? []
+          : ["- No separate supporting evidence was selected."])
+  ].join("\n");
   material.doNot = boundaries.doNot.map((item) => `- ${item}`).join("\n");
   material.stopCondition = boundaries.stopCondition.map((item) => `- ${item}`).join("\n");
   material.conflictSummary = boundaries.conflictSummary.map((item) => `- ${item}`).join("\n");
@@ -1084,6 +1146,9 @@ function adaptiveJsonSectionMaterial(
     route: {
       taskType: route.taskType,
       confidence: route.confidence,
+      ...(route.intent ? { intent: compactTaskIntent(route.intent) } : {}),
+      ...(route.evidenceClosure ? { evidenceClosure: compactEvidenceClosure(route.evidenceClosure) } : {}),
+      ...(route.confidenceEvidence ? { confidenceEvidence: route.confidenceEvidence } : {}),
       entry: route.entry
     }
   });
@@ -1107,7 +1172,10 @@ function adaptiveJsonSectionMaterial(
     telemetry: memory.telemetry
   });
   material.guardrails = jsonLeafMaterial(guardrails);
-  material.requiredEvidence = jsonLeafMaterial(boundaries.requiredEvidence);
+  material.requiredEvidence = jsonLeafMaterial({
+    paths: boundaries.requiredEvidence,
+    unresolved: unresolvedEvidenceRequirements(route)
+  });
   material.doNot = jsonLeafMaterial(boundaries.doNot);
   material.stopCondition = jsonLeafMaterial(boundaries.stopCondition);
   material.conflictSummary = jsonLeafMaterial(boundaries.conflictSummary);
@@ -1284,6 +1352,47 @@ function compactSelection(selection: PalaceModeSelection): unknown {
       .filter(([, enabled]) => enabled)
       .map(([risk]) => risk)
   };
+}
+
+function compactEvidenceClosure(closure: NonNullable<PalaceRoute["evidenceClosure"]>): unknown {
+  return {
+    status: closure.status,
+    requiredRoles: closure.requiredRoles,
+    coveredRoles: closure.coveredRoles,
+    missingRoles: closure.missingRoles,
+    missingTerms: {
+      subjects: closure.termCoverage.subjects.missing,
+      outcomes: closure.termCoverage.outcomes.missing,
+      constraints: closure.termCoverage.constraints.missing
+    },
+    connectedRolePairCount: closure.connectedRolePairs.length,
+    missingCausalSources: closure.missingCausalSources,
+    ...(closure.status === "sufficient" ? {} : { reasons: closure.reasons })
+  };
+}
+
+function compactTaskIntent(intent: NonNullable<PalaceRoute["intent"]>): unknown {
+  return {
+    action: intent.action,
+    implementationBoundary: intent.implementationBoundary,
+    requestedRoles: intent.requestedRoles,
+    requiredRoles: intent.requiredRoles,
+    preferredScopes: intent.preferredScopes,
+    verificationRequired: intent.verificationRequired
+  };
+}
+
+function unresolvedEvidenceRequirements(route: PalaceRoute): string[] {
+  const closure = route.evidenceClosure;
+  if (!closure || closure.status === "sufficient") return [];
+  return [
+    ...closure.missingRoles.map((role) => `required role ${role}`),
+    ...closure.termCoverage.subjects.missing.map((term) => `task subject ${term}`),
+    ...closure.termCoverage.outcomes.missing.map((term) => `expected outcome ${term}`),
+    ...closure.termCoverage.constraints.missing.map((term) => `task constraint ${term}`),
+    ...closure.missingCausalSources.map((sourcePath) => `causal participant ${sourcePath}`),
+    ...closure.reasons.filter((reason) => /not causally connected/i.test(reason))
+  ];
 }
 
 function renderRouteReference(step: PalaceRouteStep): string {

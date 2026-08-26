@@ -14,6 +14,7 @@ export async function writeIndex(root: string, index: PalaceIndex): Promise<void
   await writeJson(root, ".palace/indexes/directory-tree.json", index.directoryTree);
   await writeJson(root, ".palace/indexes/nodes.json", index.nodes);
   await writeJson(root, ".palace/indexes/edges.json", index.edges);
+  await writeJson(root, ".palace/indexes/facts.json", index.facts);
   await writeJson(root, ".palace/indexes/rooms.json", index.rooms);
   await writeJson(root, ".palace/indexes/symbols.json", index.symbols);
   await writeJson(root, ".palace/indexes/routes.json", index.routes);
@@ -22,6 +23,7 @@ export async function writeIndex(root: string, index: PalaceIndex): Promise<void
     indexedAt: new Date().toISOString(),
     nodeCount: index.nodes.length,
     edgeCount: index.edges.length,
+    factCount: index.facts.length,
     roomCount: index.rooms.length
   });
 }

@@ -43,6 +43,13 @@ describe("routePalace", () => {
     expect(analysis.entities).toEqual(expect.arrayContaining(["client6-blogunlock", "client6blogunlock", "blogunlock"]));
   });
 
+  it("preserves explicit call identifiers even when their names are natural-language actions", () => {
+    const analysis = analyzeTask("Add test to ensure Add()/Remove() works without reading events");
+
+    expect(analysis.identifiers).toEqual(expect.arrayContaining(["Add", "Remove"]));
+    expect(analysis.entities).toEqual(expect.arrayContaining(["add", "remove"]));
+  });
+
   it("keeps evaluation-subsystem implementation distinct from evaluating the product", () => {
     expect(classifyTask(
       "Implement generated-artifact token estimates and evaluation regression tests in the parser, indexer, and router"
@@ -52,6 +59,84 @@ describe("routePalace", () => {
     )).toBe("evaluation");
     expect(classifyTask("feat(complete): Index-aware ValueCompleter")).toBe("feature");
     expect(classifyTask("fix(router)!: preserve exact route identity")).toBe("bugfix");
+    expect(classifyTask(
+      "Calibrate route confidence policy in the planner with regression tests"
+    )).toBe("refactor");
+  });
+
+  it("classifies a Codex usage reliability audit before its optimization wording", () => {
+    const task = "分析所有可访问的 Codex 对话中 Vertex Palace 的真实使用状况，量化可靠性并提出优化方向";
+    const analysis = analyzeTask(task);
+
+    expect(classifyTask(task)).toBe("evaluation");
+    expect(analysis.keywords).toEqual(expect.arrayContaining([
+      "evaluation",
+      "retrospective",
+      "usage",
+      "audit",
+      "research",
+      "docs",
+      "evidence",
+      "tooling"
+    ]));
+    expect(requestedRouteSurfaces(analysis)).toEqual(
+      expect.arrayContaining(["tooling", "docs", "evidence"])
+    );
+  });
+
+  it("keeps an object-first product change ahead of incidental evaluation nouns", () => {
+    const task = "将 Vertex Palace 核心优化为证据闭环路由：补齐 meta evaluation tooling docs machine evidence 任务意图，分离 evidence sufficiency 与 context mode，统一 palace context 和 evaluate 的自适应 payload 计量，并增加回归测试";
+    expect(classifyTask(task)).toBe("refactor");
+    expect(requestedRouteSurfaces(analyzeTask(task))).toEqual(expect.arrayContaining([
+      "implementation",
+      "shared",
+      "test"
+    ]));
+    expect(requestedRouteSurfaces(analyzeTask(task))).not.toEqual(expect.arrayContaining([
+      "docs",
+      "evidence",
+      "tooling"
+    ]));
+    expect(classifyTask(
+      "分析所有可访问的 Codex 对话中 Vertex Palace 的真实使用状况，量化可靠性并提出优化方向"
+    )).toBe("evaluation");
+    expect(classifyTask(
+      "Please update the router implementation and evaluation tests to share adaptive payload accounting"
+    )).toBe("refactor");
+
+    const continuation = "继续优化 Vertex Palace：完成 Round 13 主体归属闭环修复后的回归审计、完整验证、研究证据与简体中文记录；保持比赛冻结，不提交、不推送、不发布。";
+    const continuationAnalysis = analyzeTask(continuation);
+    expect(continuationAnalysis.keywords).toEqual(expect.arrayContaining([
+      "subject",
+      "owner",
+      "closure"
+    ]));
+    expect(requestedRouteSurfaces(continuationAnalysis)).toEqual(expect.arrayContaining([
+      "implementation",
+      "test",
+      "docs",
+      "evidence"
+    ]));
+    expect(requestedRouteSurfaces(continuationAnalysis)).not.toContain("config");
+
+    const compositionalLifecycleTask = "修复研究生命周期任务的路由：保留编号阶段身份，区分比赛冻结约束与配置请求，识别研究证据和中英文报告产出，并让任务分析、路由评分、路由规划与回归验证形成完整闭环；记录 Round 13 自审证据和双语结果，只做本地修改测试，不提交、不推送、不发布。";
+    const compositionalSurfaces = requestedRouteSurfaces(analyzeTask(compositionalLifecycleTask));
+    expect(classifyTask(compositionalLifecycleTask)).toBe("bugfix");
+    expect(compositionalSurfaces).toEqual(expect.arrayContaining([
+      "implementation",
+      "test",
+      "docs",
+      "evidence"
+    ]));
+    expect(compositionalSurfaces).not.toContain("config");
+
+    const completedRepair = "完成 Vertex Palace Round 14 组合式研究生命周期路由修复：让任务分析、路由评分与路由规划形成完整闭环，并记录机器证据和中英文报告。";
+    expect(classifyTask(completedRepair)).toBe("bugfix");
+    expect(analyzeTask(completedRepair).keywords).toEqual(expect.arrayContaining([
+      "bilingual",
+      "localization"
+    ]));
+    expect(classifyTask("完成本轮研究评估报告并总结结果")).toBe("evaluation");
   });
 
   it("classifies bounded Allow and Support tasks while preserving dotted code identity", () => {
@@ -66,6 +151,448 @@ describe("routePalace", () => {
     expect(analyzeTask(nameEmailTask).entities).toContain("nameemail");
     expect(analyzeTask(nameEmailTask).entities).not.toContain("allow");
     expect(analyzeTask(nameEmailTask).keywords).not.toContain("allow");
+  });
+
+  it("keeps a domain-level unknown value out of task-classification intent", () => {
+    const analysis = analyzeTask("allow unknown collation name (#1604)");
+
+    expect(classifyTask(analysis.raw)).toBe("feature");
+    expect(analysis.keywords).toEqual(expect.arrayContaining(["collation", "name"]));
+    expect(analysis.keywords).not.toEqual(expect.arrayContaining(["classify", "analyze", "task"]));
+  });
+
+  it("uses an exact diagnostic phrase as a behavior anchor without reclassifying the task", async () => {
+    await withFixture("ts-api", async (root) => {
+      const files = new Map<string, string>([
+        [
+          "collations.go",
+          "package protocol\nconst defaultCollationID = 45\nvar collations = map[string]byte{\"binary\": 63}\n"
+        ],
+        [
+          "packets.go",
+          `package protocol
+type mysqlConn struct{}
+func (mc *mysqlConn) writeHandshakeResponsePacket() (byte, error) {
+    cname := "binary"
+    collation, found := collations[cname]
+    if !found { return 0, fmt.Errorf("unknown collation: %q", cname) }
+    return collation, nil
+}
+`
+        ],
+        [
+          "connection.go",
+          "package protocol\nfunc (mc *mysqlConn) handleParams(cfg *Config) error { if cfg.Collation != \"\" { return nil }; return nil }\n"
+        ],
+        [
+          "connector.go",
+          "package protocol\nfunc Connect(mc *mysqlConn) error { if _, err := mc.writeHandshakeResponsePacket(); err != nil { return err }; return mc.handleParams(&Config{}) }\n"
+        ],
+        [
+          "rows.go",
+          "package protocol\ntype namedRow struct{}\nfunc buildNamedRow(mc *mysqlConn, cfg *Config) error { _ = cfg.Collation; if _, err := mc.writeHandshakeResponsePacket(); err != nil { return err }; return mc.handleParams(cfg) }\n"
+        ],
+        [
+          "dsn.go",
+          "package protocol\ntype Config struct { Collation string }\nfunc parseDSNParams(cfg *Config, value string) { cfg.Collation = value }\n"
+        ],
+        [
+          "dsn_test.go",
+          "package protocol\nfunc TestDSNUnsafeCollation(t *testing.T) { cfg := &Config{Collation: \"binary\"}; _ = cfg }\n"
+        ],
+        [
+          "driver_test.go",
+          "package protocol\nfunc TestConnectionName(t *testing.T) { name := \"generic\"; _ = name }\n"
+        ]
+      ]);
+      for (const [relativePath, source] of files) {
+        await writeFile(path.join(root, relativePath), source, "utf8");
+      }
+      await indexPalace(root);
+
+      const route = await routePalace(
+        root,
+        "allow unknown collation name (#1604)",
+        { routeLimit: 6, budget: 6000 }
+      );
+      const filesOnly = route.route.map((step) => step.sourcePath.replace(/:\d+(?:-\d+)?$/, ""));
+
+      expect(route.taskType).toBe("feature");
+      expect(filesOnly).toEqual(expect.arrayContaining([
+        "collations.go",
+        "connection.go",
+        "connector.go",
+        "dsn.go",
+        "dsn_test.go",
+        "packets.go"
+      ]));
+      expect(filesOnly).not.toContain("driver_test.go");
+      expect(filesOnly).not.toContain("rows.go");
+    });
+  });
+
+  it("keeps a leading task-named module with its mirrored regression test", async () => {
+    await withFixture("ts-api", async (root) => {
+      const files = new Map<string, string>([
+        [
+          "src/Lazy.ts",
+          "export default class Lazy { constructor(private builder: () => any) {} private _resolve() { const schema = this.builder(); if (!schema) throw new TypeError('lazy builder must return a schema'); return schema.resolve(); } validate() { return this._resolve().validate(); } }\n"
+        ],
+        [
+          "src/ValidationError.ts",
+          "export default class ValidationError extends Error { static isError(error: unknown) { return error instanceof ValidationError; } }\n"
+        ],
+        [
+          "src/schema.ts",
+          "import ValidationError from './ValidationError';\nexport function validate() { throw new ValidationError('validation failed'); }\n"
+        ],
+        [
+          "src/index.ts",
+          "export {default as Lazy} from './Lazy';\nexport {default as ValidationError} from './ValidationError';\n"
+        ],
+        [
+          "test/lazy.ts",
+          "import {Lazy} from '../src';\ndescribe('lazy', () => { it('should throw on a non-schema value', () => { const lazy = new Lazy(() => null); expect(() => lazy.validate()).toThrow(); }); });\n"
+        ],
+        [
+          "test/ValidationError.ts",
+          "import {ValidationError} from '../src';\ndescribe('ValidationError', () => { it('identifies validation errors', () => expect(ValidationError.isError(new ValidationError('bad'))).toBe(true)); });\n"
+        ]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const route = await routePalace(
+        root,
+        "fix: lazy validation errors thrown in builders should resolve async like other validations",
+        { routeLimit: 8, budget: 6000 }
+      );
+      const filesOnly = route.route.map((step) => step.sourcePath.replace(/:\d+(?:-\d+)?$/, ""));
+
+      expect(filesOnly).toEqual(expect.arrayContaining(["src/Lazy.ts", "test/lazy.ts"]));
+      expect(filesOnly[0]).toBe("src/Lazy.ts");
+    });
+  });
+
+  it("keeps an explicit method owner with its mirrored integration test ahead of a keyword-heavy sibling test", async () => {
+    await withFixture("ts-api", async (root) => {
+      const files = new Map<string, string>([
+        [
+          "derived_types.go",
+          "package pgx\ntype Conn struct{}\ntype ArrayCodec struct{}\nfunc (c *Conn) LoadTypes(names []string) error { _ = &ArrayCodec{}; return nil }\n"
+        ],
+        [
+          "derived_types_test.go",
+          "package pgx_test\nfunc TestCompositeCodecTranscodeWithLoadTypes(t *testing.T) { conn := &Conn{}; _ = conn.LoadTypes([]string{\"dtype_test\"}) }\n"
+        ],
+        [
+          "pgtype/array_codec.go",
+          "package pgtype\ntype ArrayCodec struct{}\n"
+        ],
+        [
+          "pgtype/array_codec_test.go",
+          "package pgtype_test\nfunc TestArrayCodecNamedSliceType(t *testing.T) { type namedStringSlice []string; _ = namedStringSlice{} }\nfunc TestArrayCodecAnyArray(t *testing.T) { type point3 [3]float32; _ = point3{} }\n"
+        ]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const route = await routePalace(
+        root,
+        "Fix LoadTypes overwriting box/point codecs with a bogus ArrayCodec",
+        { routeLimit: 10, budget: 6000 }
+      );
+      const filesOnly = route.route.map((step) => step.sourcePath.replace(/:\d+(?:-\d+)?$/, ""));
+
+      expect(filesOnly).toEqual(expect.arrayContaining([
+        "derived_types.go",
+        "derived_types_test.go"
+      ]));
+      expect(filesOnly).not.toContain("pgtype/array_codec_test.go");
+    });
+  });
+
+  it("does not duplicate verification for an indirect consumer of an explicit dotted owner", async () => {
+    await withFixture("ts-api", async (root) => {
+      const files = new Map<string, string>([
+        [
+          "src/marshmallow/validate.py",
+          "class URL:\n    def __call__(self, value):\n        return value.encode('idna')\n"
+        ],
+        [
+          "tests/test_validate.py",
+          "from marshmallow import validate\ndef test_url_accepts_idn():\n    assert validate.URL()('https://example.test')\n"
+        ],
+        [
+          "src/marshmallow/fields.py",
+          "from marshmallow import validate\nclass Url:\n    def __init__(self):\n        self.validate = validate.URL()\n"
+        ],
+        [
+          "tests/test_fields.py",
+          "from marshmallow.fields import Url\ndef test_url_field_validation():\n    assert Url().validate('https://example.test')\n"
+        ],
+        [
+          "CHANGELOG.rst",
+          "Changes\n=======\n\nUnreleased\n----------\n"
+        ]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const route = await routePalace(
+        root,
+        "Add support for IDNs to validate.URL (#2928)",
+        { routeLimit: 10, budget: 6000 }
+      );
+      const filesOnly = route.route.map((step) => step.sourcePath.replace(/:\d+(?:-\d+)?$/, ""));
+
+      expect(filesOnly).toEqual(expect.arrayContaining([
+        "src/marshmallow/validate.py",
+        "tests/test_validate.py",
+        "CHANGELOG.rst"
+      ]));
+      expect(filesOnly).not.toContain("tests/test_fields.py");
+      expect(filesOnly.length).toBeLessThanOrEqual(4);
+    });
+  });
+
+  it("closes an explicit member task through the member owner and that owner's mirrored test", async () => {
+    await withFixture("ts-api", async (root) => {
+      const files = new Map<string, string>([
+        [
+          "src/createStore.ts",
+          "import type { Store } from './types/store';\nexport function createStore(reducer: Function): Store {\n  function replaceReducer(nextReducer: Function) {\n    if (typeof nextReducer !== 'function') throw new Error('Expected the nextReducer to be a function.');\n    reducer = nextReducer;\n  }\n  return { replaceReducer };\n}\n"
+        ],
+        [
+          "test/createStore.spec.ts",
+          "import { createStore } from '../src/createStore';\ndescribe('createStore', () => it('validates replacement reducers', () => createStore(() => null).replaceReducer(null as any)));\n"
+        ],
+        [
+          "src/types/store.ts",
+          "export interface Store { replaceReducer(nextReducer: Function): void }\n"
+        ],
+        [
+          "src/utils/formatProdErrorMessage.ts",
+          "export function formatProdErrorMessage(code: number) { return `Minified Redux error #${code}; see the full message`; }\n"
+        ],
+        [
+          "test/utils/formatProdErrorMessage.spec.ts",
+          "import { formatProdErrorMessage } from '../../src/utils/formatProdErrorMessage';\nit('returns the expected error message', () => formatProdErrorMessage(10));\n"
+        ],
+        [
+          "src/combineReducers.ts",
+          "export function combineReducers(reducers: object) { const missingReducerError = 'missing reducer error message'; return { reducers, missingReducerError }; }\n"
+        ],
+        [
+          "test/combineReducers.spec.ts",
+          "import { combineReducers } from '../src/combineReducers';\ndescribe('combineReducers error messages', () => it('reports a missing closing quote for a reducer error message', () => combineReducers({})));\n"
+        ]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const route = await routePalace(
+        root,
+        "fix: add missing closing quote in replaceReducer error message",
+        { routeLimit: 4, budget: 6000 }
+      );
+      const filesOnly = route.route.map((step) => step.sourcePath.replace(/:\d+(?:-\d+)?$/, ""));
+
+      expect(filesOnly).toEqual(expect.arrayContaining([
+        "src/createStore.ts",
+        "test/createStore.spec.ts"
+      ]));
+      expect(filesOnly).not.toContain("test/combineReducers.spec.ts");
+      expect(filesOnly).not.toContain("test/utils/formatProdErrorMessage.spec.ts");
+    });
+  });
+
+  it("reserves a root-level module mirror when the implementation owns the task behavior", async () => {
+    await withFixture("ts-api", async (root) => {
+      const files = new Map<string, string>([
+        [
+          "named.go",
+          "package query\nvar valuesReg = regexp.MustCompile(`\\)\\s*(?i)VALUES\\s*\\(`)\nfunc fixBound(bound string, loop int) string { return valuesReg.ReplaceAllString(bound, `VALUES`) }\n"
+        ],
+        [
+          "named_test.go",
+          "package query\nfunc TestFixBounds(t *testing.T) { table := []string{`INSERT INTO foo VALUES (:a)`}; _ = fixBound(table[0], 1) }\n"
+        ],
+        [
+          "reflectx/reflect.go",
+          "package reflectx\ntype Mapper struct{}\nfunc (m *Mapper) FieldByIndexes(value any, indexes []int) any { return value }\n"
+        ],
+        [
+          "reflectx/reflect_test.go",
+          "package reflectx\nfunc TestMapperTableCases(t *testing.T) { table := []struct{ values []any }{}; _ = table }\n"
+        ],
+        [
+          "sqlx.go",
+          "package query\nfunc values(dest any) []any { return []any{dest} }\n"
+        ],
+        [
+          "sqlx_test.go",
+          "package query\nfunc TestNamedQuery(t *testing.T) { table := []struct{ values []any }{}; _ = table }\n"
+        ]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const route = await routePalace(
+        root,
+        "Fix: Table contains VALUES",
+        { routeLimit: 6, budget: 6000 }
+      );
+      const filesOnly = route.route.map((step) => step.sourcePath.replace(/:\d+(?:-\d+)?$/, ""));
+
+      expect(filesOnly).toEqual(expect.arrayContaining(["named.go", "named_test.go"]));
+      expect(filesOnly).not.toContain("reflectx/reflect_test.go");
+      expect(filesOnly.length).toBeLessThanOrEqual(4);
+    });
+  });
+
+  it("treats a trailing without-clause as a guardrail and keeps the behavioral owner pair", async () => {
+    await withFixture("ts-api", async (root) => {
+      const files = new Map<string, string>([
+        [
+          "lib/redaction.js",
+          "export function buildRedactionShape(paths) { const shape = {}; for (const path of paths) shape[path] = true; return shape; }\n"
+        ],
+        [
+          "test/redact.test.js",
+          "import { buildRedactionShape } from '../lib/redaction.js';\ndescribe('redact', () => it('builds a safe shape', () => buildRedactionShape(['secret'])));\n"
+        ],
+        [
+          "pino.js",
+          "import { buildRedactionShape } from './lib/redaction.js';\nexport function logger(options) { return Object.prototype.hasOwnProperty.call(options, 'redact') ? buildRedactionShape(options.redact) : {}; }\n"
+        ],
+        [
+          "test/basic.test.js",
+          "import { logger } from '../pino.js';\ndescribe('basic logger shape', () => it('uses Object.prototype for ordinary options', () => logger({})));\n"
+        ]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const route = await routePalace(
+        root,
+        "fix: build the redaction shape without Object.prototype",
+        { routeLimit: 4, budget: 6000 }
+      );
+      const filesOnly = route.route.map((step) => step.sourcePath.replace(/:\d+(?:-\d+)?$/, ""));
+
+      expect(filesOnly).toEqual(expect.arrayContaining([
+        "lib/redaction.js",
+        "test/redact.test.js"
+      ]));
+      expect(filesOnly).not.toContain("test/basic.test.js");
+      expect(route.confidence).toBeLessThanOrEqual(0.9);
+    });
+  });
+
+  it("caps confidence when a subject implementation has no owner-local verification", async () => {
+    await withFixture("ts-api", async (root) => {
+      const files = new Map<string, string>([
+        [
+          "lib/redaction.js",
+          "export function buildRedactionShape(paths) { return paths.reduce((shape, key) => ({ ...shape, [key]: true }), {}); }\n"
+        ],
+        [
+          "logger.js",
+          "import { buildRedactionShape } from './lib/redaction.js';\nexport function logger(options) { return buildRedactionShape(options.redact || []); }\n"
+        ],
+        [
+          "test/basic.test.js",
+          "import { logger } from '../logger.js';\ndescribe('basic logger', () => it('accepts Object.prototype options', () => logger({})));\n"
+        ]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const route = await routePalace(
+        root,
+        "fix: build the redaction shape without Object.prototype",
+        { routeLimit: 4, budget: 6000 }
+      );
+
+      expect(route.confidence).toBeLessThanOrEqual(0.4);
+    });
+  });
+
+  it("prefers an exact member verification over a generic task-phrase test", async () => {
+    await withFixture("ts-api", async (root) => {
+      const files = new Map<string, string>([
+        [
+          "src/blinker/base.py",
+          "class Signal:\n    def connected_to(self, receiver):\n        return receiver\n\n    def send(self):\n        return None\n"
+        ],
+        [
+          "tests/test_signals.py",
+          "from blinker.base import Signal\ndef test_signal_signals_any_sender():\n    signal = Signal()\n    assert signal.send() is None\n"
+        ],
+        [
+          "tests/test_context.py",
+          "def test_temporary_context_manager_switches_resource_off():\n    assert 'context manager temporary switching off'\n"
+        ],
+        [
+          "docs/index.rst",
+          "Blinker Documentation\n=====================\n\nSignal instances support connected context managers.\n"
+        ],
+        [
+          "CHANGES.rst",
+          "Context managers can temporarily switch resources off.\n"
+        ]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const route = await routePalace(
+        root,
+        "Added `muted` context manager for temproary switching signal off (#84)",
+        { routeLimit: 4, budget: 6000 }
+      );
+      const filesOnly = route.route.map((step) => step.sourcePath.replace(/:\d+(?:-\d+)?$/, ""));
+
+      expect(filesOnly).toEqual(expect.arrayContaining([
+        "src/blinker/base.py",
+        "tests/test_signals.py",
+        "docs/index.rst"
+      ]));
+      expect(filesOnly).not.toContain("tests/test_context.py");
+      expect(filesOnly).not.toContain("CHANGES.rst");
+    });
   });
 
   it("classifies inflected leading task actions before incidental intent words", () => {
@@ -271,6 +798,184 @@ export const $ZodDiscriminatedUnion = core.$constructor("$ZodDiscriminatedUnion"
       expect(filesOnly).not.toContain("benchmark.js");
       expect(filesOnly).not.toContain("scripts/benchmarker.js");
       expect(route.excluded.filter((item) => filesOnly.includes(item.sourcePath))).toEqual([]);
+    });
+  });
+
+  it("closes a missing public static member across runtime, declarations, and both test surfaces", async () => {
+    await withFixture("ts-api", async (root) => {
+      const files = new Map<string, string>([
+        [
+          "src/response.js",
+          `export class Response {
+  static error() { return new Response(); }
+  static redirect(url) { return new Response(url); }
+}
+`
+        ],
+        [
+          "src/index.js",
+          "export {Response} from './response.js';\n"
+        ],
+        [
+          "@types/index.d.ts",
+          `export class Response {
+  static error(): Response;
+  static redirect(url: string): Response;
+}
+`
+        ],
+        [
+          "@types/index.test-d.ts",
+          "import {expectType} from 'tsd';\nimport {Response} from './index.js';\nexpectType<Response>(Response.redirect('https://example.test'));\n"
+        ],
+        [
+          "test/main.js",
+          "import {Response} from '../src/index.js';\ntest('Response public static constructors', () => Response.redirect('https://example.test'));\n"
+        ],
+        [
+          "test/response.js",
+          "import {Response} from '../src/response.js';\ntest('Response body behavior', () => new Response());\n"
+        ],
+        [
+          "test/form-data.js",
+          "import {Response} from '../src/index.js';\ntest('form data response bodies', () => [new Response('a'), new Response('b'), new Response('c')]);\n"
+        ],
+        [
+          "test/request.js",
+          "test('Request body behavior', () => true);\n"
+        ],
+        [
+          "docs/v3-UPGRADE-GUIDE.md",
+          "# Upgrading to v3\n\n## `Response.statusText` no longer sets a default message\n\nResponse status text now remains blank.\n\n## Creating Request/Response objects with relative URLs is no longer supported\n\nRequest and Response objects now require absolute URLs.\n"
+        ]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const route = await routePalace(
+        root,
+        "feat: add static Response.json (#1670)",
+        { routeLimit: 8, budget: 6000 }
+      );
+      const filesOnly = route.route.map((step) => step.sourcePath.replace(/:\d+(?:-\d+)?$/, ""));
+
+      expect(filesOnly).toEqual(expect.arrayContaining([
+        "src/response.js",
+        "@types/index.d.ts",
+        "@types/index.test-d.ts",
+        "test/main.js"
+      ]));
+      expect(filesOnly).not.toContain("test/response.js");
+      expect(filesOnly).not.toContain("test/request.js");
+      expect(filesOnly).not.toContain("test/form-data.js");
+      expect(filesOnly).not.toContain("docs/v3-UPGRADE-GUIDE.md");
+      expect(filesOnly).toHaveLength(4);
+      expect(route.confidence).toBeLessThanOrEqual(0.4);
+      expect(route.evidenceClosure?.termCoverage.subjects.missing).toContain("Response.json");
+    });
+  });
+
+  it("keeps one strongest runtime test when relation-adjacent tests add no independent evidence", async () => {
+    await withFixture("ts-api", async (root) => {
+      const files = new Map<string, string>([
+        [
+          "src/deferred.ts",
+          "export class DeferredBuilder { async resolve(build: () => unknown) { return build(); } }\n"
+        ],
+        [
+          "src/index.ts",
+          "export { DeferredBuilder } from './deferred';\n"
+        ],
+        [
+          "src/schema.ts",
+          "import { DeferredBuilder } from './deferred';\nexport const validateObject = async (build: () => unknown) => new DeferredBuilder().resolve(build);\n"
+        ],
+        [
+          "test/deferred.test.ts",
+          "import { DeferredBuilder } from '../src/deferred';\ntest('deferred builder errors resolve asynchronously', async () => new DeferredBuilder().resolve(() => { throw new Error('validation'); }));\n"
+        ],
+        [
+          "test/object.test.ts",
+          "import { validateObject } from '../src/schema';\ntest('object validation uses deferred builders', async () => validateObject(() => { throw new Error('validation'); }));\n"
+        ]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const route = await routePalace(
+        root,
+        "fix: deferred validation errors thrown in builders should resolve async like other validations",
+        { routeLimit: 8, budget: 6000 }
+      );
+      const filesOnly = route.route.map((step) => step.sourcePath.replace(/:\d+(?:-\d+)?$/, ""));
+
+      expect(filesOnly).toContain("src/deferred.ts");
+      expect(filesOnly).toContain("test/deferred.test.ts");
+      expect(filesOnly).not.toContain("test/object.test.ts");
+    });
+  });
+
+  it("routes missing trait members through the owner and a generic integration test without adapter fan-out", async () => {
+    await withFixture("ts-api", async (root) => {
+      const files = new Map<string, string>([
+        [
+          "src/lib.rs",
+          `pub trait Itertools: Iterator {
+    fn intersperse(self) where Self: Sized {}
+    fn peeking_take_while(self) where Self: Sized {}
+}
+`
+        ],
+        [
+          "src/peeking_take_while.rs",
+          "use crate::Itertools;\npub fn peeking_take_while_adapter<I: Itertools>(iter: I) { let _ = iter; }\n"
+        ],
+        [
+          "src/adaptors/map.rs",
+          "use crate::Itertools;\npub fn map_adapter<I: Itertools>(iter: I) { let _ = iter; }\n"
+        ],
+        [
+          "tests/quick.rs",
+          "use itertools::Itertools;\n#[test]\nfn iterator_trait_quick_properties() { let _ = (0..3).intersperse(1); }\n"
+        ],
+        [
+          "tests/peeking_take_while.rs",
+          "use itertools::Itertools;\n#[test]\nfn peeking_take_while_adapter() { let _ = (0..3).peeking_take_while(); }\n"
+        ],
+        [
+          "tests/map.rs",
+          "use itertools::Itertools;\n#[test]\nfn map_adapter() { let _ = (0..3).intersperse(1); }\n"
+        ]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const route = await routePalace(
+        root,
+        "feat(Itertools): add strip_prefix and strip_prefix_by methods",
+        { routeLimit: 8, budget: 6000 }
+      );
+      const filesOnly = route.route.map((step) => step.sourcePath.replace(/:\d+(?:-\d+)?$/, ""));
+
+      expect(filesOnly).toEqual(expect.arrayContaining(["src/lib.rs", "tests/quick.rs"]));
+      expect(filesOnly).not.toContain("src/peeking_take_while.rs");
+      expect(filesOnly).not.toContain("tests/peeking_take_while.rs");
+      expect(filesOnly).not.toContain("src/adaptors/map.rs");
+      expect(filesOnly).not.toContain("tests/map.rs");
+      expect(filesOnly.length).toBeLessThanOrEqual(3);
+      expect(route.evidenceClosure?.requiredCausalSources).not.toContain("src/adaptors/map.rs");
     });
   });
 
@@ -502,6 +1207,524 @@ export const $ZodDiscriminatedUnion = core.$constructor("$ZodDiscriminatedUnion"
       expect(evaluation.coverage.routeFocus).toBeGreaterThanOrEqual(0.75);
       expect(evaluation.route.confidence).toBeGreaterThan(0.35);
       expect(evaluation.calibration.status).not.toBe("overconfident");
+    });
+  });
+
+  it("composes distinct implementation concerns with their tests and current research artifacts", async () => {
+    await withFixture("ts-api", async (root) => {
+      const changedFiles = [
+        "packages/core/src/utils/lexical-tokens.ts",
+        "packages/core/src/indexer/build-edges.ts",
+        "packages/core/src/parser/parse-fallback.ts",
+        "packages/core/src/router/route-planner.ts",
+        "packages/core/test/lexical-tokens.test.ts",
+        "packages/core/test/indexer.test.ts",
+        "packages/core/test/parser.test.ts",
+        "packages/core/test/router.test.ts",
+        "scripts/verify-disclosed-routing-round-19-after-generic-repair.cjs",
+        "docs/research/evidence/disclosed-routing-round-19-after-generic-repair-attempt-3-0.4-alpha.json",
+        "docs/research/DISCLOSED_ROUTING_ROUND_19_GENERIC_REPAIR_RESULT_0_4_ALPHA.md",
+        "docs/zh-CN/DISCLOSED_ROUTING_ROUND_19_GENERIC_REPAIR_RESULT_0_4_ALPHA.md",
+        "plugins/vertex-palace/mcp/server.cjs"
+      ];
+      const sources = new Map<string, string>([
+        [changedFiles[0], "export function normalizeBoundedLexicalMorphology() { return ['cloning', 'clone']; }\n"],
+        [changedFiles[1], "export function resolveCommonJsPackageRootIntegration() { return 'declared package entry'; }\n"],
+        [changedFiles[2], "export function preserveLongFallbackSymbolCompounds() { return 'neon-vfpv4'; }\n"],
+        [changedFiles[3], "export function stopParsingErrorCausalClosure() { return ['parse', 'error', 'exact test']; }\n"],
+        [changedFiles[4], "describe('bounded lexical morphology', () => it('normalizes cloning to clone', () => true));\n"],
+        [changedFiles[5], "describe('CommonJS package-root integration edges', () => it('resolves the declared package entry', () => true));\n"],
+        [changedFiles[6], "describe('long fallback symbols', () => it('preserves compound literals', () => true));\n"],
+        [changedFiles[7], "describe('parsing-error causal closure', () => it('stops at the exact regression', () => true));\n"],
+        [changedFiles[8], "export function verifyRound19GenericRepairReplay() { return { attempts: 3, status: 'failed-gate' }; }\n"],
+        [changedFiles[9], JSON.stringify({ schemaVersion: 1, round: 19, attempt: 3, routeFocus: 0.771 })],
+        [changedFiles[10], "# Disclosed Routing Round 19 Generic Repair Result\n\nAttempt 3 preserves the full failed-gate research lineage.\n"],
+        [changedFiles[11], "# Round 19 Simplified Chinese Generic Repair Result\n\nAttempt 3 bilingual failed-gate research record.\n"],
+        ["packages/mcp/src/server.ts", "export const startMcpServer = () => 'generic routing repair';\n"],
+        ["tsup.plugin-mcp.config.ts", "import { defineConfig } from 'tsup';\nexport default defineConfig({ entry: { server: 'packages/mcp/src/server.ts' }, outDir: 'plugins/vertex-palace/mcp', outExtension: () => ({ js: '.cjs' }) });\n"],
+        [changedFiles[12], "module.exports = { generated: true, round19GenericRepair: true };\n"],
+        ["packages/core/src/router/route-scorer.ts", "export function scoreGenericRoutingResearch() { return 'historic broad match'; }\n"],
+        ["scripts/test/round19-disclosed-generic-repair.test.cjs", "test('locks an older Round 19 disclosed repair route', () => true);\n"],
+        ["scripts/test/round8-routing-repair-preregistration.test.cjs", "test('locks a historic routing repair preregistration', () => true);\n"],
+        ["scripts/verify-disclosed-routing-round-11-after-owner-closure-repair.cjs", "export function verifyHistoricRound11Repair() { return true; }\n"],
+        ["docs/research/evidence/disclosed-routing-round-11-after-owner-closure-repair-attempt-7-0.4-alpha.json", JSON.stringify({ round: 11, attempt: 7 })],
+        ["docs/research/DISCLOSED_ROUTING_ROUND_11_OWNER_CLOSURE_REPAIR_RESULT_0_4_ALPHA.md", "# Historic Round 11 generic routing repair\n"],
+        ["docs/zh-CN/DISCLOSED_ROUTING_ROUND_11_OWNER_CLOSURE_REPAIR_RESULT_0_4_ALPHA.md", "# Historic Round 11 bilingual generic routing repair\n"]
+      ]);
+      for (const [relativePath, source] of sources) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const task = "Complete the Round 19 generic routing repair: improve bounded lexical morphology, CommonJS package-root integration closure, long fallback-symbol compounds, and parsing-error causal stopping; add focused lexical, indexer, parser, and router regressions, update and run the disclosed replay verifier, record machine-readable Attempt 3 evidence, update English and Simplified Chinese reports, and rebuild the generated MCP bundle without repository-specific rules.";
+      const evaluation = await evaluateRoute(root, task, {
+        changedFiles,
+        routeLimit: 14,
+        budget: 7000,
+        maxDrawers: 6
+      });
+
+      expect(requestedRouteSurfaces(analyzeTask(task))).toEqual(expect.arrayContaining([
+        "implementation",
+        "test",
+        "evidence",
+        "docs",
+        "mcp"
+      ]));
+      expect(evaluation.route.files).toEqual(expect.arrayContaining(changedFiles));
+      expect(evaluation.route.files).not.toEqual(expect.arrayContaining([
+        "packages/core/src/router/route-scorer.ts",
+        "scripts/test/round19-disclosed-generic-repair.test.cjs",
+        "scripts/test/round8-routing-repair-preregistration.test.cjs",
+        "scripts/verify-disclosed-routing-round-11-after-owner-closure-repair.cjs",
+        "docs/research/evidence/disclosed-routing-round-11-after-owner-closure-repair-attempt-7-0.4-alpha.json"
+      ]));
+      expect(evaluation.route.fileCount).toBeLessThanOrEqual(14);
+      expect(evaluation.coverage.changedFileCoverage).toBe(1);
+      expect(evaluation.coverage.routeFocus).toBeGreaterThanOrEqual(0.9);
+      expect(evaluation.calibration.status).not.toBe("overconfident");
+    });
+  });
+
+  it("routes a bugfix research lifecycle through its numbered artifact family without treating a competition freeze as config", async () => {
+    await withFixture("ts-api", async (root) => {
+      const changedFiles = [
+        "packages/core/src/router/route-planner.ts",
+        "packages/core/src/router/route-scorer.ts",
+        "packages/core/test/router.test.ts",
+        "scripts/verify-disclosed-routing-round-13-after-subject-owner-closure-repair.cjs",
+        "docs/research/DISCLOSED_ROUTING_ROUND_13_SUBJECT_OWNER_CLOSURE_REPAIR_RESULT_0_4_ALPHA.md",
+        "docs/zh-CN/DISCLOSED_ROUTING_ROUND_13_SUBJECT_OWNER_CLOSURE_REPAIR_RESULT_0_4_ALPHA.md",
+        "docs/research/evidence/disclosed-routing-round-13-after-subject-owner-closure-repair-attempt-1-0.4-alpha.json"
+      ];
+      const oldFamily = [
+        "scripts/verify-held-out-confidence-calibration-round-8.cjs",
+        "docs/research/ROUTE_PRECISION_AFTER_SELF_AUDIT_PROTOCOL_0_4_ALPHA.md",
+        "docs/research/evidence/held-out-confidence-calibration-round-8.json",
+        "scripts/verify-local-blind-routing-round-13.cjs",
+        "docs/research/LOCAL_BLIND_ROUTING_ROUND_13_RESULT_0_4_ALPHA.md",
+        "docs/research/evidence/local-blind-routing-validation-0.4-alpha-round-13.json",
+        "packages/core/src/evidence/evidence-closure.ts",
+        "packages/core/test/route-expander.test.ts"
+      ];
+      const sources = new Map<string, string>([
+        [changedFiles[0], "export function selectResearchLifecycleRoute() { return ['implementation', 'test', 'evidence', 'docs']; }\n"],
+        [changedFiles[1], "export function recognizeResearchLifecycleSurfaces() { return ['round13', 'bilingual']; }\n"],
+        [changedFiles[2], "describe('round 13 research lifecycle routing', () => it('keeps the final artifact family', () => true));\n"],
+        [changedFiles[3], "export function verifyRound13SubjectOwnerClosureRepair() { return { status: 'passed' }; }\n"],
+        [changedFiles[4], "# Disclosed Routing Round 13 Subject Owner Closure Repair Result\n\nFinal English result after the subject owner closure repair.\n"],
+        [changedFiles[5], "# 公开路由第 13 轮主体归属闭环修复结果\n\n主体归属闭环修复后的简体中文最终结果。\n"],
+        [changedFiles[6], JSON.stringify({ schemaVersion: 1, round: 13, attempt: 1, status: "passed" })],
+        [oldFamily[0], "export function verifyRound8ConfidenceCalibration() { return { status: 'historic' }; }\n"],
+        [oldFamily[1], "# Route Precision After Self Audit Protocol\n\nHistoric Round 8 protocol and confidence calibration.\n"],
+        [oldFamily[2], JSON.stringify({ schemaVersion: 1, round: 8, status: "historic" })],
+        [oldFamily[3], "export function verifyLocalBlindRound13() { return { status: 'historic' }; }\n"],
+        [oldFamily[4], "# Local Blind Routing Round 13 Result\n\nA competing same-round artifact family.\n"],
+        [oldFamily[5], JSON.stringify({ schemaVersion: 1, round: 13, family: "local-blind" })],
+        [oldFamily[6], "export function evaluateEvidenceClosure() { return 'generic closure'; }\n"],
+        [oldFamily[7], "describe('route expansion', () => it('expands generic closure edges', () => true));\n"],
+        ["packages/core/src/config/palace-config.ts", "export const competitionFreeze = { commit: false, push: false, publish: false };\n"],
+        ["scripts/analyze-round-8-confidence-calibration.cjs", "export function analyzeRound8() { return 'historic'; }\n"]
+      ]);
+      for (const [relativePath, source] of sources) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const tasks = [
+        "Fix subject-owner closure research routing after Round 13: update the planner and scorer, add regression tests and a verification script, record machine-readable evidence and bilingual result reports; keep the competition freeze and do not commit, push, or publish.",
+        "修复第 Round 13 轮主体归属闭环研究路由：更新 planner 与 scorer，增加回归测试和验证脚本，记录机器可读证据与英文、简体中文结果报告；保持比赛冻结，不提交、不推送、不发布。"
+      ];
+      for (const task of tasks) {
+        const analysis = analyzeTask(task);
+        const surfaces = requestedRouteSurfaces(analysis);
+        const evaluation = await evaluateRoute(root, task, {
+          changedFiles,
+          routeLimit: 8,
+          budget: 6000,
+          maxDrawers: 4
+        });
+
+        expect(classifyTask(task)).toBe("bugfix");
+        expect(analysis.entities).toEqual(expect.arrayContaining(["round-13", "round13"]));
+        expect(surfaces).toEqual(expect.arrayContaining([
+          "implementation",
+          "test",
+          "docs",
+          "evidence"
+        ]));
+        expect(surfaces).not.toContain("config");
+        expect(evaluation.route.files).toEqual(expect.arrayContaining(changedFiles));
+        expect(evaluation.route.files).not.toEqual(expect.arrayContaining(oldFamily));
+        expect(evaluation.route.files).not.toContain("packages/core/src/config/palace-config.ts");
+        expect(evaluation.route.fileCount).toBeLessThanOrEqual(8);
+        expect(evaluation.coverage.changedFileCoverage).toBe(1);
+        expect(evaluation.coverage.routeFocus).toBeGreaterThanOrEqual(0.875);
+        expect(evaluation.calibration.status).not.toBe("overconfident");
+      }
+
+      const continuationTask = "继续优化 Vertex Palace：完成 Round 13 主体归属闭环修复后的回归审计、完整验证、研究证据与简体中文记录；保持比赛冻结，不提交、不推送、不发布。";
+      const continuationFiles = [
+        changedFiles[0],
+        changedFiles[2],
+        changedFiles[4],
+        changedFiles[5],
+        changedFiles[6]
+      ];
+      const continuationEvaluation = await evaluateRoute(root, continuationTask, {
+        changedFiles: continuationFiles,
+        routeLimit: 8,
+        budget: 6000,
+        maxDrawers: 4
+      });
+      expect(continuationEvaluation.route.files).toEqual(expect.arrayContaining(continuationFiles));
+      expect(continuationEvaluation.route.files).not.toContain(oldFamily[6]);
+      expect(continuationEvaluation.route.files).not.toContain(oldFamily[7]);
+      expect(continuationEvaluation.coverage.changedFileCoverage).toBe(1);
+      expect(continuationEvaluation.calibration.status).not.toBe("overconfident");
+    });
+  });
+
+  it("composes meta-routing clauses and real Round 13 outputs without leaking contrast terms into surfaces", async () => {
+    await withFixture("ts-api", async (root) => {
+      const changedFiles = [
+        "packages/core/src/router/analyze-task.ts",
+        "packages/core/src/router/route-scorer.ts",
+        "packages/core/src/router/route-planner.ts",
+        "packages/core/test/router.test.ts",
+        "scripts/test/round13-research-lifecycle-routing-repair.test.cjs",
+        "docs/research/evidence/research-lifecycle-routing-repair-round-13-self-audit-0.4-alpha.json",
+        "docs/research/RESEARCH_LIFECYCLE_ROUTING_REPAIR_ROUND_13_RESULT_0_4_ALPHA.md",
+        "docs/zh-CN/RESEARCH_LIFECYCLE_ROUTING_REPAIR_ROUND_13_RESULT_0_4_ALPHA.md"
+      ];
+      const coreChangedFiles = changedFiles.filter(
+        (sourcePath) => sourcePath !== "scripts/test/round13-research-lifecycle-routing-repair.test.cjs"
+      );
+      const sources = new Map<string, string>([
+        [changedFiles[0], "export function analyzeNumberedResearchLifecycleTask() { return ['round13', 'constraint', 'output']; }\n"],
+        [changedFiles[1], "export function scoreResearchLifecycleSurfaces() { return ['implementation', 'test', 'evidence', 'docs']; }\n"],
+        [changedFiles[2], "export function planResearchLifecycleOwners() { return ['analysis', 'scoring', 'planning']; }\n"],
+        [changedFiles[3], "describe('research lifecycle routing', () => it('composes clauses', () => true));\n"],
+        [changedFiles[4], "test('locks the Round 13 research lifecycle self audit', () => true);\n"],
+        [changedFiles[5], JSON.stringify({ schemaVersion: 1, round: 13, artifact: "research-lifecycle-routing-repair-self-audit" })],
+        [changedFiles[6], "# Round 13 Research Lifecycle Routing Repair Result\n\nPost-observation self-audit result.\n"],
+        [changedFiles[7], "# 第 13 轮研究生命周期路由修复结果\n\n事后观察的自审结果。\n"],
+        ["packages/core/src/config/palace-config.ts", "export const routingContrastConfiguration = true;\n"],
+        ["docs/research/HELD_OUT_CONFIDENCE_CALIBRATION_PROTOCOL_0_4_ALPHA_ROUND_8.md", "# Historic Round 8 Protocol\n"],
+        ["docs/zh-CN/HELD_OUT_CONFIDENCE_CALIBRATION_PROTOCOL_0_4_ALPHA_ROUND_8.md", "# 旧第 8 轮协议\n"]
+      ]);
+      for (const [relativePath, source] of sources) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const task = "修复研究生命周期任务的路由：保留编号阶段身份，区分比赛冻结约束与配置请求，识别研究证据和中英文报告产出，并让任务分析、路由评分、路由规划与回归验证形成完整闭环；记录 Round 13 自审证据和双语结果，只做本地修改测试，不提交、不推送、不发布。";
+      const evaluation = await evaluateRoute(root, task, {
+        changedFiles,
+        routeLimit: 10,
+        budget: 6000,
+        maxDrawers: 4
+      });
+
+      expect(requestedRouteSurfaces(analyzeTask(task))).toEqual(expect.arrayContaining([
+        "implementation",
+        "test",
+        "docs",
+        "evidence"
+      ]));
+      expect(requestedRouteSurfaces(analyzeTask(task))).not.toContain("config");
+      expect(evaluation.route.files).toEqual(expect.arrayContaining(coreChangedFiles));
+      expect(evaluation.route.files).not.toContain("packages/core/src/config/palace-config.ts");
+      expect(evaluation.route.files).not.toEqual(expect.arrayContaining([
+        "docs/research/HELD_OUT_CONFIDENCE_CALIBRATION_PROTOCOL_0_4_ALPHA_ROUND_8.md",
+        "docs/zh-CN/HELD_OUT_CONFIDENCE_CALIBRATION_PROTOCOL_0_4_ALPHA_ROUND_8.md"
+      ]));
+      expect(evaluation.coverage.changedFileCoverage).toBe(0.875);
+      expect(evaluation.coverage.routeFocus).toBeGreaterThanOrEqual(0.8);
+      expect(evaluation.calibration.status).not.toBe("overconfident");
+    });
+  });
+
+  it("pairs bilingual reports across numbered rounds when the localized heading carries the identity", async () => {
+    await withFixture("ts-api", async (root) => {
+      const changedFiles = [
+        "packages/core/src/router/analyze-task.ts",
+        "packages/core/src/router/route-scorer.ts",
+        "packages/core/src/router/route-planner.ts",
+        "packages/core/test/router.test.ts",
+        "docs/research/evidence/research-lifecycle-routing-repair-self-audit-0.4-alpha.json",
+        "docs/research/evidence/compositional-lifecycle-routing-repair-round-14-self-audit-0.4-alpha.json",
+        "docs/research/RESEARCH_LIFECYCLE_ROUTING_REPAIR_RESULT_0_4_ALPHA.md",
+        "docs/zh-CN/RESEARCH_LIFECYCLE_ROUTING_REPAIR_RESULT_0_4_ALPHA.md",
+        "docs/research/COMPOSITIONAL_LIFECYCLE_ROUTING_REPAIR_ROUND_14_RESULT_0_4_ALPHA.md",
+        "docs/zh-CN/COMPOSITIONAL_LIFECYCLE_ROUTING_REPAIR_ROUND_14_RESULT_0_4_ALPHA.md"
+      ];
+      const sources = new Map<string, string>([
+        [changedFiles[0], "export function analyzeResearchLifecycleTask() { return ['round13', 'round14']; }\n"],
+        [changedFiles[1], "export function scoreResearchLifecycleSurfaces() { return ['implementation', 'test', 'evidence', 'docs']; }\n"],
+        [changedFiles[2], "export function planResearchLifecycleOwners() { return ['analysis', 'scoring', 'planning']; }\n"],
+        [changedFiles[3], "describe('compositional research lifecycle routing', () => it('pairs bilingual rounds', () => true));\n"],
+        [changedFiles[4], JSON.stringify({ schemaVersion: 1, round: 13, artifact: "research-lifecycle-routing-repair-self-audit" })],
+        [changedFiles[5], JSON.stringify({ schemaVersion: 1, round: 14, artifact: "compositional-lifecycle-routing-repair-self-audit" })],
+        [changedFiles[6], "# Round 13 Research Lifecycle Routing Repair Result\n\nPost-observation self-audit result.\n"],
+        [changedFiles[7], "# 第 13 轮研究生命周期路由修复结果\n\n事后观察的自审结果。\n"],
+        [changedFiles[8], "# Round 14 Compositional Lifecycle Routing Repair Result\n\nClause-level repair result.\n"],
+        [changedFiles[9], "# 第 14 轮组合式研究生命周期路由修复结果\n\n子句级修复结果。\n"],
+        ["docs/research/DISCLOSED_ROUND_8_ROUTING_REPAIR_PROTOCOL_0_4_ALPHA.md", "# Historic Round 8 Routing Repair Protocol\n\nOld research lifecycle routing evidence.\n"],
+        ["docs/zh-CN/DISCLOSED_ROUND_8_ROUTING_REPAIR_PROTOCOL_0_4_ALPHA.md", "# 第 8 轮历史路由修复协议\n\n旧研究生命周期路由证据。\n"]
+      ]);
+      for (const [relativePath, source] of sources) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const task = "Complete the Round 14 compositional research-lifecycle routing repair: make task analysis, route scoring, and route planning share the implementation closure, add a focused regression test, and record Round 13 and Round 14 machine evidence and bilingual reports; do not commit, push, or publish.";
+      const evaluation = await evaluateRoute(root, task, {
+        changedFiles,
+        routeLimit: 10,
+        budget: 6000,
+        maxDrawers: 4
+      });
+
+      expect(evaluation.route.files).toEqual(expect.arrayContaining(changedFiles));
+      expect(evaluation.route.files).not.toContain(
+        "docs/research/DISCLOSED_ROUND_8_ROUTING_REPAIR_PROTOCOL_0_4_ALPHA.md"
+      );
+      expect(evaluation.route.files).not.toContain(
+        "docs/zh-CN/DISCLOSED_ROUND_8_ROUTING_REPAIR_PROTOCOL_0_4_ALPHA.md"
+      );
+      expect(evaluation.coverage.changedFileCoverage).toBe(1);
+      expect(evaluation.coverage.routeFocus).toBe(1);
+      expect(evaluation.calibration.status).not.toBe("overconfident");
+    });
+  });
+
+  it("raises compound bugfix confidence only with complete verification closure and sufficient budget", async () => {
+    await withFixture("ts-api", async (root) => {
+      const changedFiles = [
+        "packages/core/src/router/analyze-task.ts",
+        "packages/core/src/router/route-scorer.ts",
+        "packages/core/src/router/route-planner.ts",
+        "packages/core/test/router.test.ts",
+        "docs/research/evidence/keystone-lifecycle-routing-repair.json",
+        "docs/research/KEYSTONE_LIFECYCLE_ROUTING_REPAIR_RESULT.md",
+        "docs/zh-CN/KEYSTONE_LIFECYCLE_ROUTING_REPAIR_RESULT.md"
+      ];
+      const completeTestSource = [
+        "import { analyzeKeystoneLifecycle } from '../src/router/analyze-task';",
+        "import { scoreKeystoneLifecycle } from '../src/router/route-scorer';",
+        "import { planKeystoneLifecycle } from '../src/router/route-planner';",
+        "describe('Keystone lifecycle routing repair', () => it('verifies every implementation concern', () => {",
+        "  expect([analyzeKeystoneLifecycle(), scoreKeystoneLifecycle(), planKeystoneLifecycle()]).toHaveLength(3);",
+        "}));",
+        ""
+      ].join("\n");
+      const sources = new Map<string, string>([
+        [changedFiles[0], "export function analyzeKeystoneLifecycle() { return 'task-analysis'; }\n"],
+        [changedFiles[1], "export function scoreKeystoneLifecycle() { return 'route-scoring'; }\n"],
+        [changedFiles[2], "export function planKeystoneLifecycle() { return 'route-planning'; }\n"],
+        [changedFiles[3], completeTestSource],
+        [changedFiles[4], JSON.stringify({ schemaVersion: 1, artifact: "keystone-lifecycle-routing-repair", status: "passed" })],
+        [changedFiles[5], "# Keystone Lifecycle Routing Repair Result\n\nTask analysis, route scoring, route planning, and product verification are complete.\n"],
+        [changedFiles[6], "# Keystone Lifecycle Routing Repair Result - Simplified Chinese\n\n任务分析、路由评分、路由规划与产品验证已经完成。\n"],
+        ["docs/research/ARCHIVE_KEYSTONE_ROUTING_NOTES.md", "# Archived Keystone Notes\n\nHistoric incomplete routing notes.\n"]
+      ]);
+      for (const [relativePath, source] of sources) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const task = "Fix the Keystone lifecycle router by updating task analysis, route scoring, and route planning; add a focused regression test, record machine-readable evidence, and write English and Simplified Chinese result reports.";
+      const completeRoute = await routePalace(root, task, {
+        routeLimit: 7,
+        budget: 6000
+      });
+      const complete = await evaluateRoute(root, task, {
+        routeId: completeRoute.id,
+        changedFiles,
+        routeLimit: 7,
+        budget: 6000,
+        maxDrawers: 4
+      });
+
+      expect(complete.route.files).toEqual(expect.arrayContaining(changedFiles));
+      expect(complete.route.files).not.toContain("docs/research/ARCHIVE_KEYSTONE_ROUTING_NOTES.md");
+      expect(complete.coverage.changedFileCoverage).toBe(1);
+      expect(complete.coverage.routeFocus).toBe(1);
+      expect(completeRoute.evidenceClosure?.status).toBe("sufficient");
+      expect(completeRoute.narrowingEvidence?.independentImplementationAnchor).toBe("confirmed");
+      expect(complete.route.confidence).toBeGreaterThanOrEqual(0.65);
+      expect(complete.route.confidence).toBeLessThanOrEqual(0.7);
+      expect(complete.calibration.status).not.toBe("overconfident");
+
+      const tightBudgetRoute = await routePalace(root, task, {
+        routeLimit: 7,
+        budget: 100
+      });
+      expect(tightBudgetRoute.route.map((step) => step.sourcePath.replace(/:\d+(?:-\d+)?$/, "")))
+        .toEqual(complete.route.files);
+      expect(tightBudgetRoute.confidence).toBeLessThanOrEqual(0.4);
+
+      await writeFile(
+        path.join(root, changedFiles[3]),
+        [
+          "import { analyzeKeystoneLifecycle } from '../src/router/analyze-task';",
+          "describe('Keystone lifecycle routing repair', () => it('checks only analysis', () => {",
+          "  expect(analyzeKeystoneLifecycle()).toBe('task-analysis');",
+          "}));",
+          ""
+        ].join("\n"),
+        "utf8"
+      );
+      await indexPalace(root);
+      const incompleteRoute = await routePalace(root, task, {
+        routeLimit: 7,
+        budget: 6000
+      });
+      const incomplete = await evaluateRoute(root, task, {
+        routeId: incompleteRoute.id,
+        changedFiles,
+        routeLimit: 7,
+        budget: 6000,
+        maxDrawers: 4
+      });
+      expect(incomplete.route.files).toEqual(expect.arrayContaining(changedFiles));
+      expect(incomplete.coverage.changedFileCoverage).toBe(1);
+      expect(incompleteRoute.narrowingEvidence?.independentImplementationAnchor).toBe("missing");
+      expect(incomplete.route.confidence).toBeLessThanOrEqual(0.4);
+      expect(incomplete.calibration.status).not.toBe("overconfident");
+    });
+  });
+
+  it("routes a calibration refactor through its current evidence family and causal product tests", async () => {
+    await withFixture("ts-api", async (root) => {
+      const changedFiles = [
+        "packages/core/src/router/task-intent.ts",
+        "packages/core/src/router/route-planner.ts",
+        "packages/core/test/router.test.ts",
+        "packages/core/test/evidence-model.test.ts",
+        "docs/research/evidence/compass-confidence-evidence-gate-phase-27.json",
+        "docs/research/COMPASS_CONFIDENCE_EVIDENCE_GATE_PHASE_27_RESULT.md",
+        "docs/zh-CN/COMPASS_CONFIDENCE_EVIDENCE_GATE_PHASE_27_RESULT.md"
+      ];
+      const completeRouterTest = [
+        "import { calibrateCompassConfidenceGate } from '../src/router/route-planner';",
+        "describe('Compass confidence evidence gate', () => it('keeps the planner conservative', () => {",
+        "  expect(calibrateCompassConfidenceGate()).toBe(0.68);",
+        "}));",
+        ""
+      ].join("\n");
+      const sources = new Map<string, string>([
+        [
+          changedFiles[0],
+          "export function excludeCompassArtifactOutputQualifiers() { return ['english', 'json']; }\n"
+        ],
+        [
+          changedFiles[1],
+          "export function calibrateCompassConfidenceGate() { return 0.68; }\n"
+        ],
+        [changedFiles[2], completeRouterTest],
+        [
+          changedFiles[3],
+          "import { excludeCompassArtifactOutputQualifiers } from '../src/router/task-intent';\ndescribe('Compass task intent', () => it('excludes output qualifiers', () => excludeCompassArtifactOutputQualifiers()));\n"
+        ],
+        [
+          changedFiles[4],
+          JSON.stringify({ schemaVersion: 1, phase: 27, artifact: "compass-confidence-evidence-gate", status: "passed" })
+        ],
+        [
+          changedFiles[5],
+          "# Compass Confidence Evidence Gate Phase 27 Result\n\nPlanner confidence and task-intent output qualifiers are verified.\n"
+        ],
+        [
+          changedFiles[6],
+          "# Compass Confidence Evidence Gate Phase 27 Result - Simplified Chinese\n\nPlanner confidence and task-intent output qualifiers are verified.\n"
+        ],
+        [
+          "packages/core/src/router/route-scorer.ts",
+          "export function scoreGenericArtifactOutputIntent() { return 0.99; }\n"
+        ],
+        [
+          "packages/core/src/router/analyze-task.ts",
+          "export function analyzeGenericConfidenceIntent() { return ['confidence', 'evidence']; }\n"
+        ],
+        [
+          "docs/research/evidence/artifact-intent-bilingual-followup.json",
+          JSON.stringify({ schemaVersion: 1, artifact: "artifact-intent-bilingual-followup", status: "historic" })
+        ],
+        [
+          "docs/research/ARTIFACT_INTENT_BILINGUAL_FOLLOWUP_RESULT.md",
+          "# Artifact Intent Bilingual Followup Result\n\nHistoric confidence evidence and output qualifier study.\n"
+        ],
+        [
+          "docs/zh-CN/ARTIFACT_INTENT_BILINGUAL_FOLLOWUP_RESULT.md",
+          "# Artifact Intent Bilingual Followup Result - Simplified Chinese\n\nHistoric result.\n"
+        ],
+        [
+          "scripts/test/phase27-compass-report-lock.test.cjs",
+          "test('locks the Phase 27 Compass report', () => true);\n"
+        ]
+      ]);
+      for (const [relativePath, source] of sources) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const task = "Calibrate the Phase 27 Compass confidence evidence gate in task-intent and route-planner: exclude artifact output qualifiers from code subjects, keep confidence conservative when independent verification is missing or the route exceeds budget, add router and evidence-model regression tests, record Phase 27 machine evidence, and write English and Simplified Chinese result reports.";
+      const completeRoute = await routePalace(root, task, {
+        routeLimit: 7,
+        budget: 6000
+      });
+      const complete = await evaluateRoute(root, task, {
+        routeId: completeRoute.id,
+        changedFiles,
+        routeLimit: 7,
+        budget: 6000,
+        maxDrawers: 4
+      });
+      expect(complete.taskType).toBe("refactor");
+      expect(requestedRouteSurfaces(analyzeTask(task))).not.toContain("shared");
+      expect(complete.route.files).toEqual(expect.arrayContaining(changedFiles));
+      expect(complete.route.fileCount).toBe(7);
+      expect(complete.route.files).not.toEqual(expect.arrayContaining([
+        "packages/core/src/router/route-scorer.ts",
+        "packages/core/src/router/analyze-task.ts",
+        "docs/research/evidence/artifact-intent-bilingual-followup.json",
+        "docs/research/ARTIFACT_INTENT_BILINGUAL_FOLLOWUP_RESULT.md",
+        "scripts/test/phase27-compass-report-lock.test.cjs"
+      ]));
+      expect(complete.coverage.changedFileCoverage).toBe(1);
+      expect(complete.coverage.routeFocus).toBe(1);
+      expect(completeRoute.narrowingEvidence?.independentImplementationAnchor).toBe("confirmed");
+      expect(completeRoute.confidenceEvidence?.ambiguity).toBe(0);
+      expect(complete.route.confidence).toBeGreaterThanOrEqual(0.65);
+      expect(complete.route.confidence).toBeLessThanOrEqual(0.68);
+
+      await writeFile(
+        path.join(root, changedFiles[2]),
+        "describe('Compass confidence evidence gate', () => it('has no planner import', () => true));\n",
+        "utf8"
+      );
+      await indexPalace(root);
+      const incompleteRoute = await routePalace(root, task, {
+        routeLimit: 7,
+        budget: 6000
+      });
+
+      expect(incompleteRoute.narrowingEvidence?.independentImplementationAnchor).toBe("missing");
+      expect(incompleteRoute.confidence).toBeLessThanOrEqual(0.4);
     });
   });
 
@@ -1352,6 +2575,49 @@ export const $ZodDiscriminatedUnion = core.$constructor("$ZodDiscriminatedUnion"
     });
   });
 
+  it("routes a Codex usage audit through its collector, summarizer, report, and machine evidence", async () => {
+    await withFixture("ts-api", async (root) => {
+      const changedFiles = [
+        "scripts/research/audit-codex-palace-usage.cjs",
+        "scripts/research/summarize-codex-palace-usage-audit.cjs",
+        "docs/research/CODEX_SESSION_USAGE_AUDIT.md",
+        "docs/research/evidence/codex-palace-usage-audit.json",
+        "docs/research/evidence/codex-palace-usage-summary.json"
+      ];
+      const sources = new Map<string, string>([
+        [changedFiles[0], "export function collectCodexSessionUsageAudit() { return 'Vertex Palace usage reliability audit'; }\n"],
+        [changedFiles[1], "export function summarizeCodexPalaceUsageAudit() { return 'aggregate session reliability evidence'; }\n"],
+        [changedFiles[2], "# Vertex Palace Codex Session Usage Audit\n\nAnalyze every conversation and report reliability.\n"],
+        [changedFiles[3], JSON.stringify({ schemaVersion: 1, kind: "codex-palace-usage-audit", sessions: 66 })],
+        [changedFiles[4], JSON.stringify({ schemaVersion: 1, kind: "codex-palace-usage-summary", reliability: 0.7 })],
+        ["frontend/pages/palace.tsx", "export default function PalaceMarketingPage() { return null; }\n"],
+        ["backend/services/session-usage.ts", "export const applicationSessionUsage = 'unrelated product analytics';\n"]
+      ]);
+      for (const [relativePath, source] of sources) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const task = "分析所有可访问的 Codex 对话中 Vertex Palace 的真实使用状况，量化可靠性并提出优化方向";
+      const route = await routePalace(root, task, { routeLimit: 8 });
+      const routed = route.route.map((step) => step.sourcePath.replace(/:\d+(?:-\d+)?$/, ""));
+
+      expect(route.taskType).toBe("evaluation");
+      expect(routed).toEqual(expect.arrayContaining(changedFiles));
+      expect(routed).not.toContain("frontend/pages/palace.tsx");
+      expect(routed).not.toContain("backend/services/session-usage.ts");
+      expect(route.intent).toMatchObject({
+        requiredRoles: expect.arrayContaining(["implementation", "documentation", "verification"]),
+        preferredScopes: expect.arrayContaining(["tooling", "documentation"])
+      });
+      expect(route.evidenceClosure?.coveredRoles).toEqual(
+        expect.arrayContaining(["implementation", "documentation", "verification"])
+      );
+    });
+  });
+
   it("refreshes a stale index before planning a route", async () => {
     await withFixture("ts-api", async (root) => {
       await indexPalace(root);
@@ -1715,6 +2981,112 @@ export function uploadProductVariantImageController(file: File) {
         "fix: prevent completions from mutating os.Args via append side effect",
         { changedFiles, routeLimit: 9, budget: 6000, maxDrawers: 4 }
       );
+      expect(evaluation.route.files).toEqual(expect.arrayContaining(changedFiles));
+      expect(evaluation.route.fileCount).toBe(2);
+      expect(evaluation.coverage.changedFileCoverage).toBe(1);
+      expect(evaluation.coverage.routeFocus).toBe(1);
+    });
+  });
+
+  it("pairs a package entry point with its conventional root integration test", async () => {
+    await withFixture("ts-api", async (root) => {
+      const changedFiles = ["lib/index.js", "test/test.js"];
+      const files = new Map<string, string>([
+        ["package.json", JSON.stringify({ name: "bounded-router", main: "./lib/index.js" })],
+        [
+          changedFiles[0],
+          "module.exports = function configureMaxAge(options) { return options.maxAge && options.maxAge.toString() }\n"
+        ],
+        [
+          changedFiles[1],
+          "const configureMaxAge = require('..')\ntest('omits maxAge unless specified', () => configureMaxAge({}))\n"
+        ],
+        [
+          "test/issue-2.js",
+          "test('maxAge issue reproduction without package ownership', () => true)\n"
+        ]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const evaluation = await evaluateRoute(
+        root,
+        "Fix setting maxAge option to 0",
+        { changedFiles, routeLimit: 10, budget: 6000, maxDrawers: 4 }
+      );
+
+      expect(evaluation.route.files).toEqual(expect.arrayContaining(changedFiles));
+      expect(evaluation.route.fileCount).toBe(2);
+      expect(evaluation.coverage.changedFileCoverage).toBe(1);
+      expect(evaluation.coverage.routeFocus).toBe(1);
+      expect(evaluation.calibration.status).not.toBe("overconfident");
+    });
+  });
+
+  it("keeps a conventional root integration test when only the package entry names the exact behavior", async () => {
+    await withFixture("ts-api", async (root) => {
+      const changedFiles = ["src/lib.rs", "tests/test.rs"];
+      const files = new Map<string, string>([
+        [
+          changedFiles[0],
+          "pub struct Build; impl Build { pub fn infer_target_flags(target: &str) -> &str { if target.contains(\"neon\") { \"-mfpu=neon\" } else { \"\" } } }\n"
+        ],
+        [
+          changedFiles[1],
+          "mod support; use crate::support::Test; #[test] fn gnu_target_flags() { Test::gnu().target(\"armv7\"); }\n"
+        ],
+        [
+          "tests/support/mod.rs",
+          "pub struct Test; impl Test { pub fn gnu() -> Self { Self } pub fn target(self, _: &str) -> Self { self } }\n"
+        ],
+        ["src/target/parser.rs", "pub fn parse_target_name(value: &str) -> &str { value }\n"]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const evaluation = await evaluateRoute(
+        root,
+        "fix: infer NEON, not VFPv4, from neon in the target name",
+        { changedFiles, routeLimit: 10, budget: 6000, maxDrawers: 4 }
+      );
+
+      expect([...evaluation.route.files].sort()).toEqual([...changedFiles].sort());
+      expect(evaluation.route.fileCount).toBe(2);
+      expect(evaluation.coverage.changedFileCoverage).toBe(1);
+      expect(evaluation.coverage.routeFocus).toBe(1);
+      expect(evaluation.calibration.status).not.toBe("overconfident");
+    });
+  });
+
+  it("normalizes an inflected behavior into a same-module implementation and test pair", async () => {
+    await withFixture("ts-api", async (root) => {
+      const changedFiles = ["lib/clone.js", "test/clone.js"];
+      const files = new Map<string, string>([
+        [changedFiles[0], "exports.clone = function clone(value) { return structuredClone(value) }\n"],
+        [changedFiles[1], "const Hoek = require('..')\ntest('clone inherited errors', () => Hoek.clone(new Error()))\n"],
+        ["lib/utils.js", "exports.inherit = function inherit(value) { return value }\n"],
+        ["test/index.js", "test('subclassed utility errors', () => true)\n"]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const evaluation = await evaluateRoute(
+        root,
+        "Fix cloning inherited subclassed errors",
+        { changedFiles, routeLimit: 10, budget: 6000, maxDrawers: 4 }
+      );
 
       expect(evaluation.route.files).toEqual(expect.arrayContaining(changedFiles));
       expect(evaluation.route.fileCount).toBe(2);
@@ -1752,7 +3124,6 @@ export function uploadProductVariantImageController(file: File) {
         "Support TSR when wildcard follows named param",
         { changedFiles, routeLimit: 9, budget: 6000, maxDrawers: 4 }
       );
-
       expect(evaluation.route.files).toEqual(changedFiles);
       expect(evaluation.coverage.changedFileCoverage).toBe(1);
       expect(evaluation.coverage.routeFocus).toBe(1);
@@ -1911,6 +3282,68 @@ export function uploadProductVariantImageController(file: File) {
     });
   });
 
+  it("routes object-literal behavior bugs through a transitive source test instead of docs tests", async () => {
+    await withFixture("ts-api", async (root) => {
+      const files = new Map<string, string>([
+        [
+          "src/sinon/default-behaviors.js",
+          `const defaultBehaviors = {
+  returns: function returns(fake, value) {
+    fake.returnValue = value;
+    fake.returnArgAt = undefined;
+  },
+  returnsArg: function returnsArg(fake, index) {
+    fake.returnArgAt = index;
+  }
+};
+export default defaultBehaviors;
+`
+        ],
+        [
+          "src/sinon/stub.js",
+          `import behaviors from "./default-behaviors.js";
+export function createStub() {
+  return { returns: behaviors.returns, returnsArg: behaviors.returnsArg };
+}
+`
+        ],
+        [
+          "test/src/stub-test.js",
+          `import { createStub } from "../../src/sinon/stub.js";
+describe(".returnsArg", function () {
+  it("lets returns override returnsArg", function () {
+    const stub = createStub();
+    stub.returnsArg(0);
+    stub.returns("value");
+  });
+});
+`
+        ],
+        ["docs/concepts/stubs/api/returns-arg.md", "# returnsArg\nReturn the selected argument.\n"],
+        [
+          "docs/tests/docs/stubs/api/returns-arg.test.js",
+          "test('documents returnsArg', () => expect('returnsArg').toBeTruthy());\n"
+        ]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const route = await routePalace(root, "fix: let returns override returnsArg", {
+        routeLimit: 9,
+        budget: 6000
+      });
+
+      expect(route.route.map((step) => step.sourcePath.split(":")[0])).toEqual([
+        "src/sinon/default-behaviors.js",
+        "test/src/stub-test.js"
+      ]);
+    });
+  });
+
   it("stops a specific request-method bug after its implementation and exact test", async () => {
     await withFixture("ts-api", async (root) => {
       const changedFiles = ["lib/request.js", "test/req.acceptsCharsets.js"];
@@ -1968,7 +3401,6 @@ export function uploadProductVariantImageController(file: File) {
         "Add cookies to the retried request when performing digest authentication.",
         { changedFiles, routeLimit: 9, budget: 6000, maxDrawers: 4 }
       );
-
       expect(evaluation.taskType).toBe("feature");
       expect(evaluation.route.files).toEqual(changedFiles);
       expect(evaluation.route.fileCount).toBe(2);
@@ -2728,6 +4160,7 @@ export const worker = result.post('/set-cookies', async ({ request }) => {
     headers: { 'Set-Cookie': await request.text() },
   });
 });
+
 `
         ],
         [
@@ -3082,6 +4515,653 @@ def test_parse_cookie_header_empty_key_in_fallback():
       );
 
       expect(route.confidence).toBeLessThanOrEqual(0.15);
+    });
+  });
+
+  it("reserves route budget for an explicitly requested locale before generic formatting modules", async () => {
+    await withFixture("ts-api", async (root) => {
+      const changedFiles = [
+        "src/calendar/locales/ja/custom.py",
+        "tests/formatting/test_formatter.py"
+      ];
+      const files = new Map<string, string>([
+        [
+          changedFiles[0],
+          "DATE_FORMATS = {'L': 'YYYY/MM/DD'}\ndef japanese_date_formats():\n    return DATE_FORMATS\n"
+        ],
+        [
+          changedFiles[1],
+          "from calendar.formatting.formatter import format_date\ndef test_japanese_date_formats_for_ja_locale():\n    assert format_date('ja') == 'YYYY/MM/DD'\n"
+        ],
+        [
+          "src/calendar/date.py",
+          "def format_date_for_locale(locale):\n    return locale\n"
+        ],
+        [
+          "src/calendar/datetime.py",
+          "def datetime_date_format(locale):\n    return locale\n"
+        ],
+        [
+          "src/calendar/formatting/formatter.py",
+          "def format_date(locale):\n    return 'date format for locale'\n"
+        ],
+        [
+          "src/calendar/formatting/difference_formatter.py",
+          "def format_date_difference(locale):\n    return 'date formats'\n"
+        ],
+        [
+          "tests/date/test_strings.py",
+          "def test_date_format_strings_for_locale():\n    assert True\n"
+        ],
+        [
+          "tests/datetime/test_from_format.py",
+          "def test_datetime_from_date_format():\n    assert True\n"
+        ]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const evaluation = await evaluateRoute(
+        root,
+        "fix(locale): use Japanese date formats for the ja locale",
+        { changedFiles, routeLimit: 8, budget: 6000, maxDrawers: 4 }
+      );
+
+      expect(evaluation.route.files).toEqual(expect.arrayContaining(changedFiles));
+      expect(evaluation.coverage.changedFileCoverage).toBe(1);
+      expect(evaluation.coverage.routeFocus).toBeGreaterThanOrEqual(0.5);
+      expect(evaluation.calibration.status).not.toBe("overconfident");
+    });
+  });
+
+  it("keeps a compound task inside the package anchored by its named implementation", async () => {
+    await withFixture("ts-api", async (root) => {
+      const changedFiles = [
+        "distribution/src/lib.rs",
+        "distribution/src/pert.rs",
+        "distribution/tests/value_stability.rs"
+      ];
+      const files = new Map<string, string>([
+        [
+          changedFiles[0],
+          "pub mod pert;\npub use pert::{Pert, PertBuilder};\n"
+        ],
+        [
+          changedFiles[1],
+          "pub struct Pert;\npub struct PertBuilder;\nimpl PertBuilder { pub fn mode_approximately_equal_to_mean(self) -> Pert { Pert } }\n"
+        ],
+        [
+          changedFiles[2],
+          "use distribution::{Pert, PertBuilder};\n#[test]\nfn pert_mode_approximately_equal_to_mean_is_stable() { let _ = PertBuilder; }\n"
+        ],
+        [
+          "distribution/src/geometric.rs",
+          "pub struct Geometric;\nimpl Geometric { pub fn mean_and_mode(&self) {} }\n"
+        ],
+        [
+          "distribution/src/hypergeometric.rs",
+          "pub struct Hypergeometric;\nimpl Hypergeometric { pub fn builder_mode_mean(&self) {} }\n"
+        ],
+        [
+          "src/rng.rs",
+          "pub trait Rng { fn mode_mean_builder(&self); }\n"
+        ],
+        [
+          "src/rngs/thread.rs",
+          "pub fn thread_rng_builder_mode_mean() {}\n"
+        ],
+        [
+          "src/rngs/reseeding.rs",
+          "pub fn reseeding_rng_builder_mode_mean() {}\n"
+        ],
+        [
+          "tests/rng_test.rs",
+          "#[test]\nfn rng_builder_mode_mean() { assert!(true); }\n"
+        ]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const evaluation = await evaluateRoute(
+        root,
+        "Fix Pert for mode approximately equal to mean; use builder pattern",
+        { changedFiles, routeLimit: 10, budget: 6000, maxDrawers: 4 }
+      );
+
+      expect(evaluation.route.files).toEqual(expect.arrayContaining(changedFiles));
+      expect(evaluation.route.files.every((sourcePath) => sourcePath.startsWith("distribution/"))).toBe(true);
+      expect(evaluation.coverage.changedFileCoverage).toBe(1);
+      expect(evaluation.coverage.routeFocus).toBeGreaterThanOrEqual(0.6);
+      expect(evaluation.calibration.status).not.toBe("overconfident");
+    });
+  });
+
+  it("stops at an exact implementation-test pair despite dense generic neighbors", async () => {
+    await withFixture("ts-api", async (root) => {
+      const changedFiles = ["watch.go", "watch_test.go"];
+      const files = new Map<string, string>([
+        [
+          changedFiles[0],
+          "package watch\nfunc Add(path string) {}\nfunc Remove(path string) {}\n"
+        ],
+        [
+          changedFiles[1],
+          "package watch\nfunc TestAddRemoveWithoutReadingEvents(t *testing.T) {}\n"
+        ],
+        ["backend_linux.go", "package watch\nfunc AddRemoveEventsWithoutReadingLinux() {}\n"],
+        ["backend_windows.go", "package watch\nfunc AddRemoveEventsWithoutReadingWindows() {}\n"],
+        ["backend_bsd.go", "package watch\nfunc AddRemoveEventsWithoutReadingBSD() {}\n"],
+        ["helpers_test.go", "package watch\nfunc addRemoveWithoutReadingHelper() {}\n"],
+        ["testdata/watch-dir/only-remove", "add remove without reading events\n"]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const evaluation = await evaluateRoute(
+        root,
+        "Add test to ensure Add()/Remove() works when not reading events",
+        { changedFiles, routeLimit: 10, budget: 6000, maxDrawers: 4 }
+      );
+
+      expect(evaluation.route.files).toEqual(changedFiles);
+      expect(evaluation.coverage.changedFileCoverage).toBe(1);
+      expect(evaluation.coverage.routeFocus).toBe(1);
+      expect(evaluation.calibration.status).not.toBe("overconfident");
+    });
+  });
+
+  it("stops at a task-named module mirror before related collection helpers", async () => {
+    await withFixture("ts-api", async (root) => {
+      const changedFiles = ["source/internal/_equals.js", "test/equals.js"];
+      const files = new Map<string, string>([
+        [
+          changedFiles[0],
+          "export function equals(a, b) { return compareSetAndMapMembersAsMultiset(a, b); }\nfunction compareSetAndMapMembersAsMultiset(a, b) { return true; }\n"
+        ],
+        [
+          changedFiles[1],
+          "import equals from '../source/internal/_equals.js';\ndescribe('equals', () => it('compares Set and Map members as a multiset', () => equals(new Set(), new Set())));\n"
+        ],
+        [
+          "source/internal/_Set.js",
+          "export function SetMemberMap(values) { return new Set(values); }\n"
+        ],
+        [
+          "source/empty.js",
+          "export function empty(value) { return value instanceof Set || value instanceof Map; }\n"
+        ],
+        [
+          "test/empty.js",
+          "import empty from '../source/empty.js';\ndescribe('empty', () => it('handles Set and Map members', () => empty(new Set())));\n"
+        ]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const evaluation = await evaluateRoute(
+        root,
+        "fix: compare Set and Map members as a multiset in equals",
+        { changedFiles, routeLimit: 10, budget: 6000, maxDrawers: 4 }
+      );
+
+      expect(evaluation.route.files).toEqual(changedFiles);
+      expect(evaluation.coverage.changedFileCoverage).toBe(1);
+      expect(evaluation.coverage.routeFocus).toBe(1);
+      expect(evaluation.calibration.status).not.toBe("overconfident");
+    });
+  });
+
+  it("bounds an additive external trait feature to its target type, package manifest, and main tests", async () => {
+    await withFixture("ts-api", async (root) => {
+      const changedFiles = ["src/lib.rs", "Cargo.toml", "src/tests.rs"];
+      const files = new Map<string, string>([
+        [
+          "Cargo.toml",
+          "[package]\nname = \"smallvec\"\nversion = \"1.0.0\"\n\n[dependencies]\nserde = \"1\"\n"
+        ],
+        [
+          "src/lib.rs",
+          "pub struct SmallVec<T> { values: Vec<T> }\nimpl<T> SmallVec<T> { pub fn push(&mut self, value: T) { self.values.push(value); } }\n"
+        ],
+        [
+          "src/tests.rs",
+          "use crate::SmallVec;\n#[test]\nfn small_vec_mutation() { let mut values = SmallVec { values: vec![] }; values.push(1); }\n"
+        ],
+        [
+          "fuzz/fuzz_targets/smallvec_ops.rs",
+          "use smallvec::SmallVec;\nfn fuzz_bytes(values: &mut SmallVec<u8>) { values.push(1); }\n"
+        ],
+        [
+          "benches/bench.rs",
+          "use smallvec::SmallVec;\nfn bench_mutation(values: &mut SmallVec<u8>) { values.push(1); }\n"
+        ],
+        [
+          "tests/macro.rs",
+          "use smallvec::SmallVec;\n#[test]\nfn smallvec_macro_mutation() { let _ = SmallVec::<u8> { values: vec![] }; }\n"
+        ]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const evaluation = await evaluateRoute(
+        root,
+        "feat: impl `bytes::BufMut` for `SmallVec` (v2)",
+        { changedFiles, routeLimit: 10, budget: 6000, maxDrawers: 4 }
+      );
+
+      expect(evaluation.route.files).toEqual(changedFiles);
+      expect(evaluation.coverage.changedFileCoverage).toBe(1);
+      expect(evaluation.coverage.routeFocus).toBe(1);
+      expect(evaluation.calibration.status).not.toBe("overconfident");
+    });
+  });
+
+  it("anchors generated-code tasks to the owning workspace package and root integration test", async () => {
+    await withFixture("ts-api", async (root) => {
+      const changedFiles = ["codegen/src/snapshot.rs", "tests/debug/gen.rs"];
+      const files = new Map<string, string>([
+        [
+          "Cargo.toml",
+          "[workspace]\nmembers = [\"codegen\"]\n\n[package]\nname = \"syntax\"\nversion = \"1.0.0\"\n"
+        ],
+        [
+          "codegen/Cargo.toml",
+          "[package]\nname = \"codegen\"\nversion = \"1.0.0\"\n"
+        ],
+        [
+          changedFiles[0],
+          `const TESTS_DEBUG_SRC: &str = "tests/debug/gen.rs";
+pub fn generate(definitions: &Definitions) -> Result<()> {
+    file::write(TESTS_DEBUG_SRC, quote! { #definitions })?;
+    Ok(())
+}
+`
+        ],
+        [
+          changedFiles[1],
+          "pub struct GeneratedNode;\nimpl core::fmt::Debug for GeneratedNode { fn fmt(&self, _: &mut core::fmt::Formatter) -> core::fmt::Result { Ok(()) } }\n"
+        ],
+        [
+          "codegen/src/main.rs",
+          "mod snapshot;\nfn main() { let definitions = load_definitions(); snapshot::generate(&definitions).unwrap(); }\n"
+        ],
+        ["src/generics.rs", "pub fn formatting_generics() {}\n"],
+        ["src/parse.rs", "pub fn parse_generated_formatting() {}\n"],
+        ["tests/test_derive_input.rs", "#[test]\nfn formatting_derive_input() {}\n"]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const evaluation = await evaluateRoute(
+        root,
+        "Resolve useless borrows in formatting lint in generated code",
+        { changedFiles, routeLimit: 8, budget: 6000, maxDrawers: 4 }
+      );
+
+      expect(evaluation.route.files).toEqual(changedFiles);
+      expect(evaluation.route.files).not.toContain("src/generics.rs");
+      expect(evaluation.route.files).not.toContain("src/parse.rs");
+      expect(evaluation.coverage.changedFileCoverage).toBe(1);
+      expect(evaluation.coverage.routeFocus).toBe(1);
+    });
+  });
+
+  it("follows a bounded transitive dependency to a second focused regression test", async () => {
+    await withFixture("ts-api", async (root) => {
+      const changedFiles = ["src/v1.ts", "src/test/v1.test.ts", "src/test/v6.test.ts"];
+      const files = new Map<string, string>([
+        [
+          changedFiles[0],
+          "export function v1Bytes(node?: Uint8Array) { return node ?? new Uint8Array(6); }\n"
+        ],
+        [
+          "src/v6.ts",
+          "import { v1Bytes } from './v1';\nexport function v6Bytes() { return v1Bytes(); }\n"
+        ],
+        [
+          changedFiles[1],
+          "import { v1Bytes } from '../v1';\ndescribe('v1Bytes', () => it('returns six node bytes', () => v1Bytes()));\n"
+        ],
+        [
+          changedFiles[2],
+          "import { v6Bytes } from '../v6';\ndescribe('v6Bytes', () => it('returns version six bytes', () => v6Bytes()));\n"
+        ],
+        [
+          "src/v4.ts",
+          "export function v4Bytes() { return new Uint8Array(16); }\n"
+        ],
+        [
+          "src/test/v4.test.ts",
+          "import { v4Bytes } from '../v4';\ndescribe('v4Bytes', () => it('returns version four bytes', () => v4Bytes()));\n"
+        ]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const evaluation = await evaluateRoute(
+        root,
+        "fix(v1): set the multicast bit on v1Bytes's own randomly-generated node",
+        { changedFiles, routeLimit: 8, budget: 6000, maxDrawers: 4 }
+      );
+
+      expect(evaluation.route.files).toEqual(expect.arrayContaining(changedFiles));
+      expect(evaluation.route.files).not.toContain("src/test/v4.test.ts");
+      expect(evaluation.coverage.changedFileCoverage).toBe(1);
+      expect(evaluation.coverage.routeFocus).toBeGreaterThanOrEqual(0.6);
+    });
+  });
+
+  it("recovers a causal implementation sibling jointly exercised by the focused test", async () => {
+    await withFixture("ts-api", async (root) => {
+      const changedFiles = [
+        "src/secure/serializer.py",
+        "src/secure/timed.py",
+        "tests/test_serializer.py"
+      ];
+      const files = new Map<string, string>([
+        [
+          changedFiles[0],
+          "class Serializer:\n    def default_fallback_digest(self):\n        return 'sha512'\n"
+        ],
+        [
+          changedFiles[1],
+          "from .serializer import Serializer\nclass TimedSerializer(Serializer):\n    pass\n"
+        ],
+        [
+          changedFiles[2],
+          "from secure.serializer import Serializer\nfrom secure.timed import TimedSerializer\ndef test_sha512_fallback_by_default():\n    assert Serializer().default_fallback_digest() == TimedSerializer().default_fallback_digest()\n"
+        ],
+        [
+          "src/secure/signer.py",
+          "class Signer:\n    def sha512_fallback_digest(self):\n        return 'legacy'\n"
+        ]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const evaluation = await evaluateRoute(
+        root,
+        "Add SHA-512 fallback by default",
+        { changedFiles, routeLimit: 8, budget: 6000, maxDrawers: 4 }
+      );
+
+      expect(evaluation.route.files).toEqual(expect.arrayContaining(changedFiles));
+      expect(evaluation.coverage.changedFileCoverage).toBe(1);
+      expect(evaluation.coverage.routeFocus).toBeGreaterThanOrEqual(0.6);
+    });
+  });
+
+  it("does not add verification configuration when a feature task does not request it", async () => {
+    await withFixture("ts-api", async (root) => {
+      const changedFiles = ["src/formatting.py", "tests/test_formatting.py", "CHANGES.rst"];
+      const files = new Map<string, string>([
+        [
+          changedFiles[0],
+          "class Formatter:\n    def format_map(self, values):\n        return values\n"
+        ],
+        [
+          changedFiles[1],
+          "from formatting import Formatter\ndef test_format_map():\n    assert Formatter().format_map({}) == {}\n"
+        ],
+        [changedFiles[2], "Changes\n=======\n\nUnreleased\n----------\n"],
+        ["tox.ini", "[tox]\nenvlist = py311\n[testenv]\ncommands = pytest\n"],
+        ["README.rst", "Formatting library documentation.\n"]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const evaluation = await evaluateRoute(
+        root,
+        "implement format_map",
+        { changedFiles, routeLimit: 8, budget: 6000, maxDrawers: 4 }
+      );
+
+      expect(evaluation.route.files).toEqual(expect.arrayContaining(changedFiles));
+      expect(evaluation.route.files).not.toContain("tox.ini");
+      expect(evaluation.route.files).not.toContain("README.rst");
+      expect(evaluation.coverage.changedFileCoverage).toBe(1);
+      expect(evaluation.coverage.routeFocus).toBe(1);
+    });
+  });
+
+  it("adds bounded changelog and explicitly requested verification configuration roles for a feature route", async () => {
+    await withFixture("ts-api", async (root) => {
+      const changedFiles = ["src/formatting.py", "tests/test_formatting.py", "CHANGES.rst", "tox.ini"];
+      const files = new Map<string, string>([
+        [
+          changedFiles[0],
+          "class Formatter:\n    def format_map(self, values):\n        return values\n"
+        ],
+        [
+          changedFiles[1],
+          "from formatting import Formatter\ndef test_format_map():\n    assert Formatter().format_map({}) == {}\n"
+        ],
+        [changedFiles[2], "Changes\n=======\n\nUnreleased\n----------\n"],
+        [changedFiles[3], "[tox]\nenvlist = py311\n[testenv]\ncommands = pytest\n"],
+        ["README.rst", "Formatting library documentation.\n"]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const evaluation = await evaluateRoute(
+        root,
+        "feat: implement format_map; include tox.ini",
+        { changedFiles, routeLimit: 8, budget: 6000, maxDrawers: 4 }
+      );
+
+      expect(evaluation.route.files).toEqual(expect.arrayContaining(changedFiles));
+      expect(evaluation.route.files).not.toContain("README.rst");
+      expect(evaluation.coverage.changedFileCoverage).toBe(1);
+      expect(evaluation.coverage.routeFocus).toBeGreaterThanOrEqual(0.67);
+    });
+  });
+
+  it("prunes single generic lexical hits and unrelated metadata after stronger implementation evidence", async () => {
+    await withFixture("ts-api", async (root) => {
+      const files = new Map<string, string>([
+        [
+          "src/fixed_buffer.rs",
+          "pub struct FixedBuffer;\nimpl FixedBuffer { pub const fn new_const() -> Self { Self } pub fn new() -> Self { Self } }\n"
+        ],
+        [
+          "src/text_buffer.rs",
+          "pub struct TextBuffer;\nimpl TextBuffer { pub const fn new_const() -> Self { Self } pub fn new() -> Self { Self } }\n"
+        ],
+        [
+          "src/buffer_impl.rs",
+          "pub trait BufferImpl { fn new() -> Self; fn new_const() -> Self; }\n"
+        ],
+        [
+          "src/char_codec.rs",
+          "pub fn add_character(value: char) -> char { value }\n"
+        ],
+        [
+          "src/errors.rs",
+          "pub fn new_error() -> &'static str { \"new error\" }\n"
+        ],
+        [
+          "src/helpers.rs",
+          "pub const fn const_storage() -> usize { 1 }\n"
+        ],
+        [
+          "tests/construction.rs",
+          "use crate::{FixedBuffer, TextBuffer};\n#[test]\nfn const_construction() { let _ = (FixedBuffer::new_const(), TextBuffer::new_const()); }\n"
+        ],
+        [
+          "Cargo.toml",
+          "[package]\nname = \"fixed-buffer\"\nversion = \"0.1.0\"\n"
+        ],
+        [
+          "LICENSE-APACHE",
+          "Apache License Version 2.0\n"
+        ]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const route = await routePalace(
+        root,
+        "FIX: Add new_const() for const construction and revert new to the old version",
+        { routeLimit: 10, budget: 6000 }
+      );
+      const filesOnly = route.route.map((step) => step.sourcePath.replace(/:\d+(?:-\d+)?$/, ""));
+
+      expect(filesOnly).toEqual(expect.arrayContaining([
+        "src/fixed_buffer.rs",
+        "src/text_buffer.rs",
+        "tests/construction.rs"
+      ]));
+      expect(filesOnly).not.toContain("src/char_codec.rs");
+      expect(filesOnly).not.toContain("src/errors.rs");
+      expect(filesOnly).not.toContain("Cargo.toml");
+      expect(filesOnly).not.toContain("LICENSE-APACHE");
+    });
+  });
+
+  it("stops after a task-aligned symbol pair when package neighbors add no new evidence", async () => {
+    await withFixture("ts-api", async (root) => {
+      const changedFiles = ["connection.go", "connection_test.go"];
+      const files = new Map<string, string>([
+        [
+          changedFiles[0],
+          "package socket\ntype MessageType int\nfunc (kind MessageType) String() string { return \"message\" }\n"
+        ],
+        [
+          changedFiles[1],
+          "package socket\nfunc TestMessageTypeString(t *testing.T) { var kind MessageType; _ = kind.String() }\n"
+        ],
+        ["prepared.go", "package socket\nfunc prepareMessageType(kind MessageType) string { return kind.String() }\n"],
+        ["server.go", "package socket\nfunc serveMessageType(kind MessageType) string { return kind.String() }\n"],
+        ["examples/chat/client.go", "package chat\nfunc displayMessageType() string { return \"message type\" }\n"]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const evaluation = await evaluateRoute(
+        root,
+        "feat: format message type",
+        { changedFiles, routeLimit: 8, budget: 6000, maxDrawers: 4 }
+      );
+
+      expect(evaluation.route.files).toEqual(changedFiles);
+      expect(evaluation.coverage.changedFileCoverage).toBe(1);
+      expect(evaluation.coverage.routeFocus).toBe(1);
+    });
+  });
+
+  it("stops a specific parsing-error route before shared-entity consumers and fuzz targets", async () => {
+    await withFixture("ts-api", async (root) => {
+      const changedFiles = ["src/error.rs", "src/parse.rs", "tests/test_version.rs"];
+      const files = new Map<string, string>([
+        [
+          "src/lib.rs",
+          "mod display; mod error; mod identifier; mod impls; mod parse; pub struct Version { pub major: u64 }\n"
+        ],
+        [
+          changedFiles[0],
+          `use crate::parse::Error;
+pub enum ErrorKind { EmptySegment, UnexpectedEnd }
+impl core::fmt::Display for Error {
+    fn fmt(&self, formatter: &mut core::fmt::Formatter) -> core::fmt::Result {
+        formatter.write_str("unexpected end while parsing version")
+    }
+}
+`
+        ],
+        [
+          changedFiles[1],
+          "use crate::error::ErrorKind; use crate::Version; pub struct Error { pub kind: ErrorKind } impl Version { pub fn parse(text: &str) -> Result<Self, Error> { if text.is_empty() { return Err(Error { kind: ErrorKind::UnexpectedEnd }); } Ok(Version { major: 1 }) } }\n"
+        ],
+        [
+          "src/identifier.rs",
+          "pub struct Identifier(String); impl Identifier { pub fn is_empty(&self) -> bool { self.0.is_empty() } } // crate version compatibility\n"
+        ],
+        [
+          "src/display.rs",
+          "use crate::Version; impl core::fmt::Display for Version { fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result { write!(f, \"{}\", self.major) } }\n"
+        ],
+        [
+          "src/impls.rs",
+          "use crate::Version; impl Default for Version { fn default() -> Self { Version { major: 0 } } }\n"
+        ],
+        [
+          changedFiles[2],
+          "use semver::Version; #[test] fn parse_empty_version_reports_dedicated_error() { assert!(Version::parse(\"\").is_err()); }\n"
+        ],
+        [
+          "tests/test_version_req.rs",
+          "use semver::VersionReq; #[test] fn parse_empty_version_requirement() { assert!(\"\".parse::<VersionReq>().is_err()); }\n"
+        ],
+        [
+          "fuzz/parse_version_req.rs",
+          "use semver::VersionReq; fn fuzz_parse_version_req(text: &str) { let _ = text.parse::<VersionReq>(); }\n"
+        ]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const evaluation = await evaluateRoute(
+        root,
+        "Add a dedicated error for parsing Version from empty string",
+        { changedFiles, routeLimit: 8, budget: 6000, maxDrawers: 4 }
+      );
+
+      expect([...evaluation.route.files].sort()).toEqual([...changedFiles].sort());
+      expect(evaluation.route.fileCount).toBe(3);
+      expect(evaluation.coverage.changedFileCoverage).toBe(1);
+      expect(evaluation.coverage.routeFocus).toBeGreaterThanOrEqual(0.75);
     });
   });
 });

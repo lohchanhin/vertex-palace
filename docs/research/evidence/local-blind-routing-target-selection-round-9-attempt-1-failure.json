@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "studyId": "local-blind-routing-round-9-0.4-alpha",
+  "attempt": 1,
+  "recordedAt": "2026-08-09T11:54:31.6628797Z",
+  "status": "invalid-selection-attempt",
+  "failureCategory": "environment-failure-exposed-harness-preservation-gap",
+  "claimBoundary": "No Round 9 task was sent to Vertex Palace and no product result was produced. The selector inspected repository history internally up to the rand repository, then a promisor-object fetch failed during a GitHub DNS outage. The unexpected exception was printed but the original selector did not preserve a create-only target manifest. This file preserves that failed attempt before any harness amendment.",
+  "taskExposure": {
+    "palaceCallsOnCandidateTasks": 0,
+    "taskTextDeliveredToPalace": false,
+    "taskTextPrintedBySelector": false,
+    "productCodeChangedAfterFreeze": false,
+    "repositoryHistoriesPossiblyInspectedBySelector": [
+      "eslint",
+      "fastapi",
+      "fsnotify",
+      "smallvec",
+      "ramda",
+      "structlog",
+      "go-kit",
+      "rand"
+    ]
+  },
+  "frozenInputs": {
+    "candidateFreezeSha256": "2371C7C4D8DA4566AD9450172954F76C2F84AF9D571D183B9D3D567DDE69D7AD",
+    "selectorSha256": "3B411E5FEF8204AC3B3A5F49704DA3948FCF6A382462A471011DA86AA7B98D8D",
+    "repositoryPoolSha256": "746E0D459D2EBC7EAF1610F3E576F32D24EC8F7B80F1D4A076FB7B89952F3B68"
+  },
+  "execution": {
+    "exitCode": 1,
+    "targetManifestCreated": false,
+    "failedRepository": "rand",
+    "failedCommand": "git show -s --format=%P b4b1eb7579c0a47c1d71560ada0acffd647c9370",
+    "error": "fatal: unable to access 'https://github.com/rust-random/rand.git/': Could not resolve host: github.com; fatal: could not fetch 862f2b70b33589295575711da34299d3a0bf3ece from promisor remote"
+  },
+  "rootCause": {
+    "environment": "GitHub DNS resolution failed during a lazy promisor-object fetch.",
+    "harness": "The selector used --filter=blob:none, allowing inspection to depend on later network fetches, and did not convert an unexpected inspection exception into preserved machine evidence."
+  },
+  "allowedAmendment": {
+    "productMayChange": false,
+    "repositoryPoolMayChange": false,
+    "repositoryOrderMayChange": false,
+    "taskEligibilityRulesMayChange": false,
+    "allowedChanges": [
+      "fetch complete objects for the frozen shallow history instead of using a promisor clone",
+      "capture per-repository inspection errors and advance only by the frozen family order",
+      "preserve an unexpected selection failure as create-only machine evidence"
+    ]
+  }
+}

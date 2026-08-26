@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "studyId": "local-blind-routing-round-16-0.4-alpha",
+  "attempt": 2,
+  "status": "verification-failed",
+  "completedAt": "2026-08-12T14:36:32.211Z",
+  "category": "post-head-pool-validation-harness-contract-failure",
+  "allHeadQueriesCompleted": true,
+  "failure": {
+    "expectedPriorObservedRepositoryCount": 162,
+    "validatorObservedRepositoryCount": 161,
+    "reason": "The generic pool validator counted the recursive prior source but did not add the current plan's explicitly declared Open WebUI prior observation."
+  },
+  "repositoryPlanChanged": false,
+  "canonicalPoolWritten": false,
+  "canonicalHeadEvidenceWritten": false,
+  "commitHistoryInspected": false,
+  "candidateTaskInspected": false,
+  "palaceCallsOnCandidateTasks": 0,
+  "claimBoundary": "All 16 URL-and-HEAD queries completed, but the create-only freezer wrote no canonical output because a generic exclusion-count validation ran before write. The repair may only teach the validator to count explicitly declared additional prior observations; repository identities, order, rules, and HEAD-only boundary remain unchanged."
+}

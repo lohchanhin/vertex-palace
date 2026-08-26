@@ -1,6 +1,6 @@
 import path from "node:path";
 import { Node, Project, SyntaxKind, type ObjectLiteralExpression, type SourceFile } from "ts-morph";
-import type { ParsedFile, ParsedSymbol } from "@vertex-palace/shared";
+import type { ParsedEvidenceFact, ParsedFile, ParsedSymbol } from "@vertex-palace/shared";
 import { extractSearchTerms } from "../utils/lexical-tokens";
 import { normalizeRelativePath } from "../utils/path-utils";
 
@@ -38,6 +38,21 @@ export function parseTsJs(sourcePath: string, content: string, language: string)
     }
   }
 
+  for (const variable of sourceFile.getVariableDeclarations()) {
+    const initializer = variable.getInitializer();
+    if (!initializer || !Node.isObjectLiteralExpression(initializer)) continue;
+    for (const property of initializer.getProperties()) {
+      if (Node.isMethodDeclaration(property)) {
+        symbols.push(makeSymbol(`${variable.getName()}.${cleanPropertyName(property.getName())}`, "method", property));
+        continue;
+      }
+      if (!Node.isPropertyAssignment(property)) continue;
+      const value = property.getInitializer();
+      if (!value || (!Node.isFunctionExpression(value) && !Node.isArrowFunction(value))) continue;
+      symbols.push(makeSymbol(`${variable.getName()}.${cleanPropertyName(property.getName())}`, "method", property));
+    }
+  }
+
   for (const cls of sourceFile.getClasses()) {
     const className = cls.getName();
     if (!className) continue;
@@ -55,8 +70,11 @@ export function parseTsJs(sourcePath: string, content: string, language: string)
     symbols.push(makeSymbol(alias.getName(), "type", alias));
   }
 
+  const testCases = extractTestCases(sourceFile);
+  const facts = testCases.map((testCase) => makeTestCaseFact(testCase.expression, testCase.title, testCase.call));
+
   const generatedArtifacts = extractTsupArtifacts(sourceFile);
-  const testCaseTerms = extractTestCaseTerms(sourceFile);
+  const testCaseTerms = extractTestCaseTerms(testCases);
 
   return {
     sourcePath,
@@ -64,6 +82,7 @@ export function parseTsJs(sourcePath: string, content: string, language: string)
     imports,
     exports,
     symbols: dedupeSymbols(symbols),
+    ...(facts.length ? { facts } : {}),
     ...(generatedArtifacts.length ? { generatedArtifacts } : {}),
     summarySeed: [
       imports.length ? `Imports: ${imports.join(", ")}` : "",
@@ -75,14 +94,23 @@ export function parseTsJs(sourcePath: string, content: string, language: string)
   };
 }
 
-function extractTestCaseTerms(sourceFile: SourceFile): string {
-  const titles = sourceFile.getDescendantsOfKind(SyntaxKind.CallExpression).flatMap((call) => {
+type ParsedTestCase = {
+  expression: string;
+  title: string;
+  call: Node;
+};
+
+function extractTestCases(sourceFile: SourceFile): ParsedTestCase[] {
+  return sourceFile.getDescendantsOfKind(SyntaxKind.CallExpression).flatMap((call) => {
     const expression = call.getExpression().getText().replace(/\s+/g, "");
     if (!isTestCaseCall(expression)) return [];
     const title = literalString(call.getArguments()[0]);
-    return title ? [title] : [];
+    return title ? [{ expression, title, call }] : [];
   });
-  return extractSearchTerms([...new Set(titles)].join(" "), 240);
+}
+
+function extractTestCaseTerms(testCases: ParsedTestCase[]): string {
+  return extractSearchTerms([...new Set(testCases.map((testCase) => testCase.title))].join(" "), 240);
 }
 
 function extractCommonJsImports(sourceFile: SourceFile): string[] {
@@ -167,6 +195,10 @@ function literalString(node: Node | undefined): string | undefined {
   return undefined;
 }
 
+function cleanPropertyName(value: string): string {
+  return value.replace(/^['"]|['"]$/g, "");
+}
+
 function makeSymbol(name: string, kind: ParsedSymbol["kind"], node: Node): ParsedSymbol {
   const startLine = node.getStartLineNumber();
   const endLine = node.getEndLineNumber();
@@ -176,7 +208,30 @@ function makeSymbol(name: string, kind: ParsedSymbol["kind"], node: Node): Parse
     startLine,
     endLine,
     signature: signatureFor(node),
-    searchText: extractSearchTerms(node.getText())
+    searchText: [exactIdentifierReferences(node), extractSearchTerms(node.getText())]
+      .filter(Boolean)
+      .join(" ")
+  };
+}
+
+function exactIdentifierReferences(node: Node): string {
+  return [...new Set(
+    node.getDescendantsOfKind(SyntaxKind.Identifier)
+      .map((identifier) => identifier.getText())
+      .filter((identifier) => identifier.length > 1)
+  )].slice(0, 80).join(" ");
+}
+
+function makeTestCaseFact(expression: string, title: string, node: Node): ParsedEvidenceFact {
+  const suite = /(?:^|\.)(?:describe|suite|context)(?:$|\.|[A-Z_])/.test(expression);
+  return {
+    name: title,
+    kind: suite ? "test-suite" : "test-case",
+    role: "verification",
+    startLine: node.getStartLineNumber(),
+    endLine: node.getEndLineNumber(),
+    searchText: extractSearchTerms(`${title} ${node.getText()}`, 80),
+    confidence: 1
   };
 }
 

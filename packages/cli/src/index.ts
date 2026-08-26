@@ -13,7 +13,7 @@ import { registerStatus } from "./commands/status";
 
 const program = new Command();
 
-program.name("palace").description("Vertex Palace context routing for Codex").version("0.3.0");
+program.name("palace").description("Vertex Palace context routing for Codex").version("0.4.0-alpha.1");
 
 registerInit(program);
 registerContext(program);

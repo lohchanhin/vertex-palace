@@ -1,0 +1,678 @@
+{
+  "schemaVersion": 1,
+  "studyId": "local-blind-routing-round-19-0.4-alpha",
+  "generatedAt": "2026-08-12T16:22:36.847Z",
+  "status": "review-complete",
+  "claimBoundary": "Developer-delegated, Codex-assisted semantic review performed after the Round 19 candidate freeze and before any Palace call on candidate tasks. The reviewer is not independent from product development, and no inter-rater agreement is available.",
+  "reviewBoundary": "single-developer-delegated-semantic-reviewer",
+  "publicPreregistration": false,
+  "candidateFreeze": {
+    "path": "docs/research/evidence/local-blind-candidate-freeze-0.4-alpha-round-19.json",
+    "sha256": "A1634BC5BA2563FEE2AE83FEC7FFF9F7F842090FB333158841BAD0EA6C42930A",
+    "frozenAt": "2026-08-12T15:26:27.891Z",
+    "artifactHashesVerified": true
+  },
+  "queue": {
+    "path": "docs/research/evidence/local-blind-routing-candidate-queue-0.4-alpha-round-19-attempt-2.json",
+    "sha256": "B762E2DAF4E1761565500D49DFC81CAE8DF3AD2CEB020130D657E5EDDB5CCA7E"
+  },
+  "reviewer": {
+    "id": "developer-delegated-codex-semantic-reviewer-1",
+    "role": "product-developer-delegated-semantic-review",
+    "codexAssisted": true,
+    "independent": false,
+    "interRaterAgreementAvailable": false
+  },
+  "timing": {
+    "candidateFrozenBeforeReview": true,
+    "reviewBeforeAnyPalaceCall": true,
+    "palaceCallsOnCandidateTasks": 0
+  },
+  "method": {
+    "candidateOrder": "newest-first within each repository",
+    "wholeTargetDecision": true,
+    "uncertainHunkRejectsTarget": true,
+    "partialOraclePruningForbidden": true,
+    "everyHunkReviewed": true
+  },
+  "limitations": [
+    "The semantic reviewer is not independent from product development.",
+    "No second reviewer or inter-rater agreement is available.",
+    "Ambiguous or unrelated hunks reject the whole target rather than being removed from the oracle."
+  ],
+  "reviews": [
+    {
+      "repository": "cors",
+      "candidateId": "candidate_32a96f45d24b4e39",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "The reviewed diff contains hand-maintained source, test, or documentation files and no generator-to-output ownership relationship.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      },
+      "review": {
+        "schemaVersion": 1,
+        "packetSha256": "8AB2A690F8ECD58D498E3542D7C560DA4812A200541191E226FFFEF428FA012C",
+        "reviewTiming": "pre-route",
+        "reviewPerformedAfterCandidateFreeze": true,
+        "reviewedWithoutPalaceOutput": true,
+        "palaceCallsOnCandidateTask": 0,
+        "targetDecision": "accept",
+        "files": [
+          {
+            "path": "HISTORY.md",
+            "decision": "task-aligned",
+            "reason": "The changelog entry, maxAge conversion guard, and regression test all address preserving the numeric zero option without another behavior change. All hunks in HISTORY.md serve that same task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_ca743cc8357ce6cb",
+                "decision": "task-aligned",
+                "reason": "The changelog entry, maxAge conversion guard, and regression test all address preserving the numeric zero option without another behavior change. This hunk is HISTORY.md @@ -0,0 +1,5 @@."
+              }
+            ]
+          },
+          {
+            "path": "lib/index.js",
+            "decision": "task-aligned",
+            "reason": "The changelog entry, maxAge conversion guard, and regression test all address preserving the numeric zero option without another behavior change. All hunks in lib/index.js serve that same task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_9b17e7ed2ab86ad3",
+                "decision": "task-aligned",
+                "reason": "The changelog entry, maxAge conversion guard, and regression test all address preserving the numeric zero option without another behavior change. This hunk is lib/index.js @@ -134 +134 @@."
+              }
+            ]
+          },
+          {
+            "path": "test/test.js",
+            "decision": "task-aligned",
+            "reason": "The changelog entry, maxAge conversion guard, and regression test all address preserving the numeric zero option without another behavior change. All hunks in test/test.js serve that same task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_029e3ddd799b60ba",
+                "decision": "task-aligned",
+                "reason": "The changelog entry, maxAge conversion guard, and regression test all address preserving the numeric zero option without another behavior change. This hunk is test/test.js @@ -674,0 +675,18 @@."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "repository": "hoek",
+      "candidateId": "candidate_9c1da3bb6a972b14",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "The reviewed diff contains hand-maintained source, test, or documentation files and no generator-to-output ownership relationship.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      },
+      "review": {
+        "schemaVersion": 1,
+        "packetSha256": "C0810B5C2499DC8BEB6EC73CC2F1C8BE8EA4CB760BAAEFE4DE1FBE553711BC88",
+        "reviewTiming": "pre-route",
+        "reviewPerformedAfterCandidateFreeze": true,
+        "reviewedWithoutPalaceOutput": true,
+        "palaceCallsOnCandidateTask": 0,
+        "targetDecision": "accept",
+        "files": [
+          {
+            "path": "lib/clone.js",
+            "decision": "task-aligned",
+            "reason": "The structured-clone guard excludes legacy Util.inherit error subclasses, the adjacent spacing follows that edited branch, and the tests exercise ordinary and legacy error cloning. All hunks in lib/clone.js serve that same task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_925862e1b4cbe3b7",
+                "decision": "task-aligned",
+                "reason": "The structured-clone guard excludes legacy Util.inherit error subclasses, the adjacent spacing follows that edited branch, and the tests exercise ordinary and legacy error cloning. This hunk is lib/clone.js @@ -176,2 +176,4 @@ internals.base = function (obj, baseProto, options) {."
+              },
+              {
+                "id": "hunk_1024fbdfe12fd995",
+                "decision": "task-aligned",
+                "reason": "The structured-clone guard excludes legacy Util.inherit error subclasses, the adjacent spacing follows that edited branch, and the tests exercise ordinary and legacy error cloning. This hunk is lib/clone.js @@ -179 +181 @@ internals.base = function (obj, baseProto, options) {."
+              }
+            ]
+          },
+          {
+            "path": "test/clone.js",
+            "decision": "task-aligned",
+            "reason": "The structured-clone guard excludes legacy Util.inherit error subclasses, the adjacent spacing follows that edited branch, and the tests exercise ordinary and legacy error cloning. All hunks in test/clone.js serve that same task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_de4d3ba58f3fb68f",
+                "decision": "task-aligned",
+                "reason": "The structured-clone guard excludes legacy Util.inherit error subclasses, the adjacent spacing follows that edited branch, and the tests exercise ordinary and legacy error cloning. This hunk is test/clone.js @@ -733,0 +734,29 @@ describe('clone()', () => {."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "repository": "jaraco-path",
+      "candidateId": "candidate_3606ee38fd7fd442",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "The reviewed diff contains hand-maintained source, test, or documentation files and no generator-to-output ownership relationship.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      },
+      "review": {
+        "schemaVersion": 1,
+        "packetSha256": "AA49E153072AF341409E5F712FE4D690A9D2F7E7DB7D0D4E5BB433C2FED14157",
+        "reviewTiming": "pre-route",
+        "reviewPerformedAfterCandidateFreeze": true,
+        "reviewedWithoutPalaceOutput": true,
+        "palaceCallsOnCandidateTask": 0,
+        "targetDecision": "accept",
+        "files": [
+          {
+            "path": "path/__init__.py",
+            "decision": "task-aligned",
+            "reason": "Every edit resolves the stated Ruff findings: warning stack level, missing test assertions, or explicit exception chaining. All hunks in path/__init__.py serve that same task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_95c5feff62daac76",
+                "decision": "task-aligned",
+                "reason": "Every edit resolves the stated Ruff findings: warning stack level, missing test assertions, or explicit exception chaining. This hunk is path/__init__.py @@ -1868 +1868 @@ class Handlers:."
+              }
+            ]
+          },
+          {
+            "path": "test_path.py",
+            "decision": "task-aligned",
+            "reason": "Every edit resolves the stated Ruff findings: warning stack level, missing test assertions, or explicit exception chaining. All hunks in test_path.py serve that same task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_3b0fcb85c6a8dc6e",
+                "decision": "task-aligned",
+                "reason": "Every edit resolves the stated Ruff findings: warning stack level, missing test assertions, or explicit exception chaining. This hunk is test_path.py @@ -364 +364 @@ class TestLinks:."
+              },
+              {
+                "id": "hunk_73bd145b406a8145",
+                "decision": "task-aligned",
+                "reason": "Every edit resolves the stated Ruff findings: warning stack level, missing test assertions, or explicit exception chaining. This hunk is test_path.py @@ -369 +369 @@ class TestLinks:."
+              },
+              {
+                "id": "hunk_2a6a8629c7cefddd",
+                "decision": "task-aligned",
+                "reason": "Every edit resolves the stated Ruff findings: warning stack level, missing test assertions, or explicit exception chaining. This hunk is test_path.py @@ -562 +562 @@ class TestScratchDir:."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "repository": "iniconfig",
+      "candidateId": "candidate_6b971c131e163482",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "The reviewed diff contains hand-maintained source, test, or documentation files and no generator-to-output ownership relationship.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      },
+      "review": {
+        "schemaVersion": 1,
+        "packetSha256": "F24DA08FDAB2347B8E9648D6913CD2183CBE30B6530266189188D0B319E2D0BA",
+        "reviewTiming": "pre-route",
+        "reviewPerformedAfterCandidateFreeze": true,
+        "reviewedWithoutPalaceOutput": true,
+        "palaceCallsOnCandidateTask": 0,
+        "targetDecision": "reject",
+        "files": [
+          {
+            "path": "iniconfig.py",
+            "decision": "uncertain",
+            "reason": "Changing the public __version__ value from 0.2.dev0 to 0.2.dev2 is release metadata with observable behavior and is not required to add the lineof proxy.",
+            "hunks": [
+              {
+                "id": "hunk_61d8a41556334cfd",
+                "decision": "uncertain",
+                "reason": "Changing the public __version__ value from 0.2.dev0 to 0.2.dev2 is release metadata with observable behavior and is not required to add the lineof proxy."
+              },
+              {
+                "id": "hunk_a2f1f72a112986eb",
+                "decision": "task-aligned",
+                "reason": "The SectionWrapper proxy and its assertions directly implement and verify lineof delegation. This hunk is iniconfig.py @@ -22,0 +23,3 @@ class SectionWrapper(object):."
+              }
+            ]
+          },
+          {
+            "path": "test_iniconfig.py",
+            "decision": "task-aligned",
+            "reason": "The SectionWrapper proxy and its assertions directly implement and verify lineof delegation. All hunks in test_iniconfig.py serve that same task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_ff7fe224d514e29d",
+                "decision": "task-aligned",
+                "reason": "The SectionWrapper proxy and its assertions directly implement and verify lineof delegation. This hunk is test_iniconfig.py @@ -173,0 +174,3 @@ def test_iniconfig_lineof():."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "repository": "iniconfig",
+      "candidateId": "candidate_48b7458ede97d311",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "The reviewed diff contains hand-maintained source, test, or documentation files and no generator-to-output ownership relationship.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      },
+      "review": {
+        "schemaVersion": 1,
+        "packetSha256": "CF57846AC1688FB5905E511B63C33EFC70BBD3C079CE6578005B7B633A209D1D",
+        "reviewTiming": "pre-route",
+        "reviewPerformedAfterCandidateFreeze": true,
+        "reviewedWithoutPalaceOutput": true,
+        "palaceCallsOnCandidateTask": 0,
+        "targetDecision": "reject",
+        "files": [
+          {
+            "path": "README.txt",
+            "decision": "unrelated",
+            "reason": "Deleting the README placeholder about a dictionary interface neither documents nor implements allowing a closing bracket at the end of a parsed value.",
+            "hunks": [
+              {
+                "id": "hunk_a9c158326d4187fc",
+                "decision": "unrelated",
+                "reason": "Deleting the README placeholder about a dictionary interface neither documents nor implements allowing a closing bracket at the end of a parsed value."
+              }
+            ]
+          },
+          {
+            "path": "iniconfig.py",
+            "decision": "task-aligned",
+            "reason": "Removing the bracket rejection and adjusting its positive and negative parser cases directly allows a closing bracket at the end of a value. All hunks in iniconfig.py serve that same task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_09dea734fa76bb8b",
+                "decision": "task-aligned",
+                "reason": "Removing the bracket rejection and adjusting its positive and negative parser cases directly allows a closing bracket at the end of a value. This hunk is iniconfig.py @@ -104,2 +103,0 @@ class IniConfig(object):."
+              }
+            ]
+          },
+          {
+            "path": "test_iniconfig.py",
+            "decision": "task-aligned",
+            "reason": "Removing the bracket rejection and adjusting its positive and negative parser cases directly allows a closing bracket at the end of a value. All hunks in test_iniconfig.py serve that same task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_875f2a0e1bbc69e7",
+                "decision": "task-aligned",
+                "reason": "Removing the bracket rejection and adjusting its positive and negative parser cases directly allows a closing bracket at the end of a value. This hunk is test_iniconfig.py @@ -67,0 +68,4 @@ check_tokens = {."
+              },
+              {
+                "id": "hunk_b311a41d0c1700bc",
+                "decision": "task-aligned",
+                "reason": "Removing the bracket rejection and adjusting its positive and negative parser cases directly allows a closing bracket at the end of a value. This hunk is test_iniconfig.py @@ -107,3 +110,0 @@ def test_section_cant_be_empty():."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "repository": "iniconfig",
+      "candidateId": "candidate_26ef0eeb502a5921",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "The reviewed diff contains hand-maintained source, test, or documentation files and no generator-to-output ownership relationship.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      },
+      "review": {
+        "schemaVersion": 1,
+        "packetSha256": "0255D2A1F7C29ADC164BDFDA9B5954DC2EB23C4D141A78E42C38955FB90E1E9A",
+        "reviewTiming": "pre-route",
+        "reviewPerformedAfterCandidateFreeze": true,
+        "reviewedWithoutPalaceOutput": true,
+        "palaceCallsOnCandidateTask": 0,
+        "targetDecision": "accept",
+        "files": [
+          {
+            "path": "iniconfig.py",
+            "decision": "task-aligned",
+            "reason": "The implementation changes displayed parser line numbers from zero-based to the common one-based convention and the paired test updates that exact expectation. All hunks in iniconfig.py serve that same task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_d6e3d1e027421ded",
+                "decision": "task-aligned",
+                "reason": "The implementation changes displayed parser line numbers from zero-based to the common one-based convention and the paired test updates that exact expectation. This hunk is iniconfig.py @@ -11 +11 @@ class ParseError(Exception):."
+              }
+            ]
+          },
+          {
+            "path": "test_iniconfig.py",
+            "decision": "task-aligned",
+            "reason": "The implementation changes displayed parser line numbers from zero-based to the common one-based convention and the paired test updates that exact expectation. All hunks in test_iniconfig.py serve that same task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_aa249577b6b57cb3",
+                "decision": "task-aligned",
+                "reason": "The implementation changes displayed parser line numbers from zero-based to the common one-based convention and the paired test updates that exact expectation. This hunk is test_iniconfig.py @@ -77 +77 @@ def test_ParseError():."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "repository": "pretty",
+      "candidateId": "candidate_6abe040c5620a2b3",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "The reviewed diff contains hand-maintained source, test, or documentation files and no generator-to-output ownership relationship.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      },
+      "review": {
+        "schemaVersion": 1,
+        "packetSha256": "EA3C35F2C59F2E357A9313CAE953E61427CEEF1B6AA03834672DB282562FE68C",
+        "reviewTiming": "pre-route",
+        "reviewPerformedAfterCandidateFreeze": true,
+        "reviewedWithoutPalaceOutput": true,
+        "palaceCallsOnCandidateTask": 0,
+        "targetDecision": "accept",
+        "files": [
+          {
+            "path": "pretty.go",
+            "decision": "task-aligned",
+            "reason": "The source retains the formatted buffer, isolates duplicate-key values, removes obsolete debug output, and the tests verify deterministic value ordering for duplicate keys. All hunks in pretty.go serve that same task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_40ee634536fb057b",
+                "decision": "task-aligned",
+                "reason": "The source retains the formatted buffer, isolates duplicate-key values, removes obsolete debug output, and the tests verify deterministic value ordering for duplicate keys. This hunk is pretty.go @@ -3,0 +4 @@ import (."
+              },
+              {
+                "id": "hunk_ff660f877dc613bb",
+                "decision": "task-aligned",
+                "reason": "The source retains the formatted buffer, isolates duplicate-key values, removes obsolete debug output, and the tests verify deterministic value ordering for duplicate keys. This hunk is pretty.go @@ -125,0 +127 @@ type byKeyVal struct {."
+              },
+              {
+                "id": "hunk_6d2c40ec29c8262b",
+                "decision": "task-aligned",
+                "reason": "The source retains the formatted buffer, isolates duplicate-key values, removes obsolete debug output, and the tests verify deterministic value ordering for duplicate keys. This hunk is pretty.go @@ -184,0 +187,2 @@ func (arr *byKeyVal) isLess(i, j int, kind byKind) bool {."
+              },
+              {
+                "id": "hunk_c7cf17636668b2a4",
+                "decision": "task-aligned",
+                "reason": "The source retains the formatted buffer, isolates duplicate-key values, removes obsolete debug output, and the tests verify deterministic value ordering for duplicate keys. This hunk is pretty.go @@ -187,2 +191,2 @@ func (arr *byKeyVal) isLess(i, j int, kind byKind) bool {."
+              },
+              {
+                "id": "hunk_737f08caf5473e14",
+                "decision": "task-aligned",
+                "reason": "The source retains the formatted buffer, isolates duplicate-key values, removes obsolete debug output, and the tests verify deterministic value ordering for duplicate keys. This hunk is pretty.go @@ -190,7 +194,8 @@ func (arr *byKeyVal) isLess(i, j int, kind byKind) bool {."
+              },
+              {
+                "id": "hunk_c3db4e4c7f3dc9d9",
+                "decision": "task-aligned",
+                "reason": "This removes the blank separator left when the adjacent duplicate-key debug-print block is replaced; it is coupled formatting inside the same sorting repair."
+              },
+              {
+                "id": "hunk_5861c9022d275aca",
+                "decision": "task-aligned",
+                "reason": "The source retains the formatted buffer, isolates duplicate-key values, removes obsolete debug output, and the tests verify deterministic value ordering for duplicate keys. This hunk is pretty.go @@ -341 +345 @@ func sortPairs(json, buf []byte, pairs []pair) []byte {."
+              }
+            ]
+          },
+          {
+            "path": "pretty_test.go",
+            "decision": "task-aligned",
+            "reason": "The source retains the formatted buffer, isolates duplicate-key values, removes obsolete debug output, and the tests verify deterministic value ordering for duplicate keys. All hunks in pretty_test.go serve that same task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_3f4d1b14dc9112a3",
+                "decision": "task-aligned",
+                "reason": "The source retains the formatted buffer, isolates duplicate-key values, removes obsolete debug output, and the tests verify deterministic value ordering for duplicate keys. This hunk is pretty_test.go @@ -495 +495 @@ func TestPrettyStableSort(t *testing.T) {."
+              },
+              {
+                "id": "hunk_4d09c16a33b4d060",
+                "decision": "task-aligned",
+                "reason": "The source retains the formatted buffer, isolates duplicate-key values, removes obsolete debug output, and the tests verify deterministic value ordering for duplicate keys. This hunk is pretty_test.go @@ -541,0 +542,19 @@ func TestSpec(t *testing.T) {."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "repository": "groupcache",
+      "candidateId": "candidate_d4665b9c0bd4605e",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "The reviewed diff contains hand-maintained source, test, or documentation files and no generator-to-output ownership relationship.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      },
+      "review": {
+        "schemaVersion": 1,
+        "packetSha256": "85D841FD68D0DD3AEAC1A84DABF2D94F97ED3B494040DB6C999F2D78CC175806",
+        "reviewTiming": "pre-route",
+        "reviewPerformedAfterCandidateFreeze": true,
+        "reviewedWithoutPalaceOutput": true,
+        "palaceCallsOnCandidateTask": 0,
+        "targetDecision": "accept",
+        "files": [
+          {
+            "path": "consistenthash/consistenthash.go",
+            "decision": "task-aligned",
+            "reason": "Each changed comment is rewritten to begin with the exact exported function or test name, matching the Effective Go convention named by the task. All hunks in consistenthash/consistenthash.go serve that same task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_7b24993dad5d39a0",
+                "decision": "task-aligned",
+                "reason": "Each changed comment is rewritten to begin with the exact exported function or test name, matching the Effective Go convention named by the task. This hunk is consistenthash/consistenthash.go @@ -47 +47 @@ func New(replicas int, fn Hash) *Map {."
+              },
+              {
+                "id": "hunk_74c76e28064df5bc",
+                "decision": "task-aligned",
+                "reason": "Each changed comment is rewritten to begin with the exact exported function or test name, matching the Effective Go convention named by the task. This hunk is consistenthash/consistenthash.go @@ -52 +52 @@ func (m *Map) IsEmpty() bool {."
+              },
+              {
+                "id": "hunk_c16e74c25d80665e",
+                "decision": "task-aligned",
+                "reason": "Each changed comment is rewritten to begin with the exact exported function or test name, matching the Effective Go convention named by the task. This hunk is consistenthash/consistenthash.go @@ -64 +64 @@ func (m *Map) Add(keys ...string) {."
+              }
+            ]
+          },
+          {
+            "path": "groupcache_test.go",
+            "decision": "task-aligned",
+            "reason": "Each changed comment is rewritten to begin with the exact exported function or test name, matching the Effective Go convention named by the task. All hunks in groupcache_test.go serve that same task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_9107492f094ab845",
+                "decision": "task-aligned",
+                "reason": "Each changed comment is rewritten to begin with the exact exported function or test name, matching the Effective Go convention named by the task. This hunk is groupcache_test.go @@ -81 +81 @@ func testSetup() {."
+              },
+              {
+                "id": "hunk_2fa96f36ccf46373",
+                "decision": "task-aligned",
+                "reason": "Each changed comment is rewritten to begin with the exact exported function or test name, matching the Effective Go convention named by the task. This hunk is groupcache_test.go @@ -123 +123 @@ func TestGetDupSuppressString(t *testing.T) {."
+              },
+              {
+                "id": "hunk_775d548c55477600",
+                "decision": "task-aligned",
+                "reason": "Each changed comment is rewritten to begin with the exact exported function or test name, matching the Effective Go convention named by the task. This hunk is groupcache_test.go @@ -252 +252 @@ func (p fakePeers) PickPeer(key string) (peer ProtoGetter, ok bool) {."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "repository": "semver",
+      "candidateId": "candidate_12bbaded378415f8",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "The reviewed diff contains hand-maintained source, test, or documentation files and no generator-to-output ownership relationship.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      },
+      "review": {
+        "schemaVersion": 1,
+        "packetSha256": "B13F906EFD1B782891713A4213C3EECCCE295CD8924930146A53EAFF2162D012",
+        "reviewTiming": "pre-route",
+        "reviewPerformedAfterCandidateFreeze": true,
+        "reviewedWithoutPalaceOutput": true,
+        "palaceCallsOnCandidateTask": 0,
+        "targetDecision": "accept",
+        "files": [
+          {
+            "path": "src/error.rs",
+            "decision": "task-aligned",
+            "reason": "The new Empty error kind, early parse guard, display message, and assertion form one complete dedicated empty-version error path. All hunks in src/error.rs serve that same task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_a00855e41420dd0e",
+                "decision": "task-aligned",
+                "reason": "The new Empty error kind, early parse guard, display message, and assertion form one complete dedicated empty-version error path. This hunk is src/error.rs @@ -4,0 +5 @@ pub(crate) enum ErrorKind {."
+              },
+              {
+                "id": "hunk_582064e8d19a5738",
+                "decision": "task-aligned",
+                "reason": "The new Empty error kind, early parse guard, display message, and assertion form one complete dedicated empty-version error path. This hunk is src/error.rs @@ -33,0 +35 @@ impl Display for Error {."
+              }
+            ]
+          },
+          {
+            "path": "src/parse.rs",
+            "decision": "task-aligned",
+            "reason": "The new Empty error kind, early parse guard, display message, and assertion form one complete dedicated empty-version error path. All hunks in src/parse.rs serve that same task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_66f9b179a1b624f1",
+                "decision": "task-aligned",
+                "reason": "The new Empty error kind, early parse guard, display message, and assertion form one complete dedicated empty-version error path. This hunk is src/parse.rs @@ -28,0 +29,4 @@ impl FromStr for Version {."
+              }
+            ]
+          },
+          {
+            "path": "tests/test_version.rs",
+            "decision": "task-aligned",
+            "reason": "The new Empty error kind, early parse guard, display message, and assertion form one complete dedicated empty-version error path. All hunks in tests/test_version.rs serve that same task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_072c14890adca049",
+                "decision": "task-aligned",
+                "reason": "The new Empty error kind, early parse guard, display message, and assertion form one complete dedicated empty-version error path. This hunk is tests/test_version.rs @@ -15,4 +15 @@ fn test_parse() {."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "repository": "cc-rs",
+      "candidateId": "candidate_fb544c22b29f1170",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "The reviewed diff contains hand-maintained source, test, or documentation files and no generator-to-output ownership relationship.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      },
+      "review": {
+        "schemaVersion": 1,
+        "packetSha256": "4508A2DEE6B3AEF849B2B17408EE2EF9BC4A19F58D75D29E0B828B004EF1A88F",
+        "reviewTiming": "pre-route",
+        "reviewPerformedAfterCandidateFreeze": true,
+        "reviewedWithoutPalaceOutput": true,
+        "palaceCallsOnCandidateTask": 0,
+        "targetDecision": "accept",
+        "files": [
+          {
+            "path": "src/lib.rs",
+            "decision": "task-aligned",
+            "reason": "The target inference now emits neon instead of neon-vfpv4 and the focused test checks both the required and forbidden compiler flags across affected targets. All hunks in src/lib.rs serve that same task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_b661be51fbbfec81",
+                "decision": "task-aligned",
+                "reason": "The target inference now emits neon instead of neon-vfpv4 and the focused test checks both the required and forbidden compiler flags across affected targets. This hunk is src/lib.rs @@ -2490 +2490 @@ impl Build {."
+              }
+            ]
+          },
+          {
+            "path": "tests/test.rs",
+            "decision": "task-aligned",
+            "reason": "The target inference now emits neon instead of neon-vfpv4 and the focused test checks both the required and forbidden compiler flags across affected targets. All hunks in tests/test.rs serve that same task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_b331915fe0741d73",
+                "decision": "task-aligned",
+                "reason": "The target inference now emits neon instead of neon-vfpv4 and the focused test checks both the required and forbidden compiler flags across affected targets. This hunk is tests/test.rs @@ -146,0 +147,21 @@ fn gnu_debug_nofp() {."
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "materialization": {
+    "semanticDecisionSha256": "3F08C07FB60241A9BFB7AC53D5A75A6AB73A61B7E05E6FAF614256D6CC7E70D7",
+    "semanticDecisionsCopiedWithoutModification": true,
+    "frozenValidatorDryRunRequiredBeforeWrite": true,
+    "outputCreateOnly": true,
+    "dryRun": {
+      "status": "selected",
+      "reviewedCandidates": 10,
+      "acceptedCandidates": 8,
+      "rejectedCandidates": 2,
+      "selectedTargets": [
+        {
+          "name": "cors",
+          "candidateId": "candidate_32a96f45d24b4e39",
+          "languageFamily": "javascript-typescript"
+        },
+        {
+          "name": "hoek",
+          "candidateId": "candidate_9c1da3bb6a972b14",
+          "languageFamily": "javascript-typescript"
+        },
+        {
+          "name": "jaraco-path",
+          "candidateId": "candidate_3606ee38fd7fd442",
+          "languageFamily": "python"
+        },
+        {
+          "name": "iniconfig",
+          "candidateId": "candidate_26ef0eeb502a5921",
+          "languageFamily": "python"
+        },
+        {
+          "name": "pretty",
+          "candidateId": "candidate_6abe040c5620a2b3",
+          "languageFamily": "go"
+        },
+        {
+          "name": "groupcache",
+          "candidateId": "candidate_d4665b9c0bd4605e",
+          "languageFamily": "go"
+        },
+        {
+          "name": "semver",
+          "candidateId": "candidate_12bbaded378415f8",
+          "languageFamily": "rust"
+        },
+        {
+          "name": "cc-rs",
+          "candidateId": "candidate_fb544c22b29f1170",
+          "languageFamily": "rust"
+        }
+      ],
+      "selectedPerLanguageFamily": {
+        "javascript-typescript": 2,
+        "python": 2,
+        "go": 2,
+        "rust": 2
+      },
+      "generatedArtifactTargets": 0,
+      "palaceCallsOnCandidateTasks": 0
+    }
+  }
+}

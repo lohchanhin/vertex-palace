@@ -1,0 +1,184 @@
+{
+  "schemaVersion": 1,
+  "studyId": "local-blind-routing-round-16-0.4-alpha",
+  "status": "locally-preregistered-before-head-query",
+  "createdAt": "2026-08-12T14:28:55.753Z",
+  "publicPreregistration": false,
+  "priorExclusionSource": {
+    "path": "docs/research/evidence/local-blind-routing-repository-pool-0.4-alpha-round-12.json",
+    "sha256": "085295D2798F47C0841526EF8219E17FFFCBF078F7F3C76AC2028DFDD3AFC125",
+    "includePreviousExclusionChain": true,
+    "includeRound12RepositoryPool": true,
+    "additionalPreviouslyObservedRepositories": [
+      "https://github.com/open-webui/open-webui.git"
+    ],
+    "expectedUniqueRepositoryCount": 162
+  },
+  "candidateFreeze": {
+    "path": "docs/research/evidence/local-blind-candidate-freeze-0.4-alpha-round-16.json"
+  },
+  "rules": {
+    "desiredTargets": 8,
+    "requiredLanguageFamilies": [
+      "javascript-typescript",
+      "python",
+      "go",
+      "rust"
+    ],
+    "targetsPerLanguageFamily": 2,
+    "repositoriesPerLanguageFamily": 4,
+    "repositoryOrderIsBinding": true,
+    "newestCoherentCandidatePerRepositoryWins": true,
+    "remainingRepositoriesPerFamilyAreFallbacks": true,
+    "taskClassifier": "inflected-behavioral-subject-v1",
+    "maximumMechanicalCandidatesPerRepository": 5,
+    "minimumFiles": 2,
+    "maximumFiles": 8,
+    "maximumAuxiliaryFiles": 2,
+    "maximumChangedLines": 400,
+    "allowedAuxiliaryExtensions": [
+      ".cfg",
+      ".conf",
+      ".ini",
+      ".json",
+      ".md",
+      ".mdx",
+      ".rst",
+      ".toml",
+      ".txt",
+      ".yaml",
+      ".yml"
+    ],
+    "taskDiffCoherenceReviewRequired": true,
+    "wholeTargetRejectionForUnrelatedOrUncertainHunk": true,
+    "partialOraclePruningForbidden": true,
+    "maximumGeneratedArtifactTargets": 1,
+    "pinnedHeadsObtainedWithGitLsRemoteHeadOnly": true,
+    "commitHistoryInspectedBeforePoolFreeze": false,
+    "palaceCallsOnCandidateTasksBeforePoolFreeze": 0,
+    "baselineAndCandidateFrozenBeforeTargetSelection": true,
+    "outputCreateOnly": true
+  },
+  "repositoryPlan": [
+    {
+      "name": "nock",
+      "language": "JavaScript/TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/nock/nock.git",
+      "extensions": [".cjs", ".js", ".jsx", ".mjs", ".ts", ".tsx"]
+    },
+    {
+      "name": "yarl",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/aio-libs/yarl.git",
+      "extensions": [".py"]
+    },
+    {
+      "name": "yaml",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/go-yaml/yaml.git",
+      "extensions": [".go"]
+    },
+    {
+      "name": "toml",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/toml-rs/toml.git",
+      "extensions": [".rs"]
+    },
+    {
+      "name": "js-yaml",
+      "language": "JavaScript/TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/nodeca/js-yaml.git",
+      "extensions": [".cjs", ".js", ".jsx", ".mjs", ".ts", ".tsx"]
+    },
+    {
+      "name": "twine",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/pypa/twine.git",
+      "extensions": [".py"]
+    },
+    {
+      "name": "sjson",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/tidwall/sjson.git",
+      "extensions": [".go"]
+    },
+    {
+      "name": "cfg-if",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/rust-lang/cfg-if.git",
+      "extensions": [".rs"]
+    },
+    {
+      "name": "validator-js",
+      "language": "JavaScript/TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/validatorjs/validator.js.git",
+      "extensions": [".cjs", ".js", ".jsx", ".mjs", ".ts", ".tsx"]
+    },
+    {
+      "name": "gunicorn",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/benoitc/gunicorn.git",
+      "extensions": [".py"]
+    },
+    {
+      "name": "go-querystring",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/google/go-querystring.git",
+      "extensions": [".go"]
+    },
+    {
+      "name": "predicates-rs",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/assert-rs/predicates-rs.git",
+      "extensions": [".rs"]
+    },
+    {
+      "name": "ms",
+      "language": "JavaScript/TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/vercel/ms.git",
+      "extensions": [".cjs", ".js", ".jsx", ".mjs", ".ts", ".tsx"]
+    },
+    {
+      "name": "sphinx",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/sphinx-doc/sphinx.git",
+      "extensions": [".py"]
+    },
+    {
+      "name": "mapstructure",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/mitchellh/mapstructure.git",
+      "extensions": [".go"]
+    },
+    {
+      "name": "chumsky",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/zesterer/chumsky.git",
+      "extensions": [".rs"]
+    }
+  ],
+  "executionBoundary": {
+    "allowedNetworkCommand": "git ls-remote <url> HEAD",
+    "repositoryCloneBeforePoolFreeze": false,
+    "commitHistoryInspectionBeforePoolFreeze": false,
+    "candidateTaskInspectionBeforePoolFreeze": false,
+    "palaceCallsOnCandidateTasksBeforePoolFreeze": 0
+  },
+  "claimBoundary": "The repository names and URLs were selected only after excluding the recursive 161-repository static-routing chain and the one additional Open WebUI repository observed by the v4 Agent study. No Round 16 HEAD, commit history, subject, diff, task, coherence review, oracle, or Palace result was inspected before this plan was written. This is a tamper-evident local plan, not public preregistration."
+}

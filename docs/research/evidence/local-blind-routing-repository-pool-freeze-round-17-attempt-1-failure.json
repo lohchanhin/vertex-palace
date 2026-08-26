@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "studyId": "local-blind-routing-round-17-0.4-alpha",
+  "status": "repository-pool-freeze-failed",
+  "failedAt": "2026-08-12T15:04:17.2746999Z",
+  "publicPreregistration": false,
+  "plan": {
+    "path": "docs/research/evidence/local-blind-routing-repository-plan-0.4-alpha-round-17.json",
+    "sha256": "65ADB5367D4F1825FC3310775EB895C4EA33D0AF0F804CC4AE06C69EC9781265"
+  },
+  "priorExclusionSource": {
+    "path": "docs/research/evidence/local-blind-routing-repository-pool-0.4-alpha-round-16.json",
+    "sha256": "FA2BB1D3ED982B189B32BA6089D2552EA7D5C54CBAD11960E80E1308122458CD",
+    "expectedUniqueRepositoryCountBeforeRound17Attempts": 178
+  },
+  "failure": {
+    "category": "invalid-planned-repository-url",
+    "repositoryIndex": 11,
+    "repositoryOrdinal": 12,
+    "name": "itoa",
+    "url": "https://github.com/serde-rs/itoa.git",
+    "attempts": 1,
+    "diagnostic": "remote: Repository not found.\nfatal: repository 'https://github.com/serde-rs/itoa.git/' not found"
+  },
+  "execution": {
+    "commandContract": "git ls-remote <url> HEAD",
+    "plannedRepositoryCount": 32,
+    "completedHeadQueriesBeforeFailure": 11,
+    "failedHeadQueries": 1,
+    "unqueriedRepositories": 20,
+    "attemptedRepositories": [
+      "https://github.com/sindresorhus/yocto-queue.git",
+      "https://github.com/psf/cachecontrol.git",
+      "https://github.com/davecgh/go-spew.git",
+      "https://github.com/rust-lang/libc.git",
+      "https://github.com/sindresorhus/p-queue.git",
+      "https://github.com/tox-dev/filelock.git",
+      "https://github.com/hashicorp/go-version.git",
+      "https://github.com/dtolnay/quote.git",
+      "https://github.com/npm/ini.git",
+      "https://github.com/jazzband/pip-tools.git",
+      "https://github.com/mitchellh/copystructure.git",
+      "https://github.com/serde-rs/itoa.git"
+    ],
+    "commitHistoryInspected": false,
+    "candidateTaskInspected": false,
+    "candidateDiffInspected": false,
+    "palaceCallsOnCandidateTasks": 0
+  },
+  "previouslyObservedRepositories": [
+    "https://github.com/sindresorhus/yocto-queue.git",
+    "https://github.com/psf/cachecontrol.git",
+    "https://github.com/davecgh/go-spew.git",
+    "https://github.com/rust-lang/libc.git",
+    "https://github.com/sindresorhus/p-queue.git",
+    "https://github.com/tox-dev/filelock.git",
+    "https://github.com/hashicorp/go-version.git",
+    "https://github.com/dtolnay/quote.git",
+    "https://github.com/npm/ini.git",
+    "https://github.com/jazzband/pip-tools.git",
+    "https://github.com/mitchellh/copystructure.git",
+    "https://github.com/serde-rs/itoa.git"
+  ],
+  "outputs": {
+    "canonicalPoolPath": "docs/research/evidence/local-blind-routing-repository-pool-0.4-alpha-round-17.json",
+    "canonicalPoolWritten": false,
+    "canonicalHeadEvidencePath": "docs/research/evidence/local-blind-routing-repository-head-verification-0.4-alpha-round-17.json",
+    "canonicalHeadEvidenceWritten": false,
+    "candidateFreezeWritten": false,
+    "targetSelectionStarted": false,
+    "staticValidationAuthorized": false,
+    "agentStudyAuthorized": false
+  },
+  "nextRoundExclusion": {
+    "excludeAllAttemptedRepositories": true,
+    "expectedAttemptedRepositoryCount": 12,
+    "unqueriedRound17RepositoriesMayBeReused": true,
+    "reason": "The first 12 repository identities were exposed to a HEAD-query attempt. The remaining 20 were never queried and no task content was inspected. A replacement round may reuse only those unqueried entries and must add fresh repositories before any new HEAD query."
+  },
+  "claimBoundary": "Round 17 failed during URL-and-HEAD-only pool construction because one preregistered URL did not exist. This is a protocol input failure, not a Vertex Palace product result. The frozen plan was not edited, no substitute repository was inserted, no canonical pool was written, and no repository history, candidate task, diff, oracle, or Palace result was inspected."
+}

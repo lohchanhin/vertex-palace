@@ -1,0 +1,157 @@
+{
+  "schemaVersion": 1,
+  "studyId": "local-blind-routing-round-11-0.4-alpha",
+  "generatedAt": "2026-08-09T19:15:33.807Z",
+  "status": "verified",
+  "claimBoundary": "Remote HEAD identity verification only. This command used git ls-remote <url> HEAD and did not fetch or inspect commit history, subjects, diffs, tasks, or Palace output.",
+  "repositoryPool": "docs/research/evidence/local-blind-routing-repository-pool-0.4-alpha-round-11.json",
+  "commandShape": "git ls-remote --exit-code <url> HEAD",
+  "commitHistoryInspected": false,
+  "palaceCallsOnCandidateTasks": 0,
+  "repositories": [
+    {
+      "name": "yup",
+      "url": "https://github.com/jquense/yup.git",
+      "expectedHead": "ff31eee8a2b10c938bb3a22544d9e33957a8cf01",
+      "observedHead": "ff31eee8a2b10c938bb3a22544d9e33957a8cf01",
+      "matched": true,
+      "elapsedMs": 797,
+      "error": null
+    },
+    {
+      "name": "marshmallow",
+      "url": "https://github.com/marshmallow-code/marshmallow.git",
+      "expectedHead": "c7b559a1fa3aba57ca6dba0ab336841c5038a782",
+      "observedHead": "c7b559a1fa3aba57ca6dba0ab336841c5038a782",
+      "matched": true,
+      "elapsedMs": 753,
+      "error": null
+    },
+    {
+      "name": "logr",
+      "url": "https://github.com/go-logr/logr.git",
+      "expectedHead": "45677ce6d14c4a65c85548acae894d7717ebcc4a",
+      "observedHead": "45677ce6d14c4a65c85548acae894d7717ebcc4a",
+      "matched": true,
+      "elapsedMs": 715,
+      "error": null
+    },
+    {
+      "name": "arrayvec",
+      "url": "https://github.com/bluss/arrayvec.git",
+      "expectedHead": "8a7c8211a237b9b258275e6ab0d967b7d0cb2704",
+      "observedHead": "8a7c8211a237b9b258275e6ab0d967b7d0cb2704",
+      "matched": true,
+      "elapsedMs": 847,
+      "error": null
+    },
+    {
+      "name": "node-fetch",
+      "url": "https://github.com/node-fetch/node-fetch.git",
+      "expectedHead": "8b3320d2a7c07bce4afc6b2bf6c3bbddda85b01f",
+      "observedHead": "8b3320d2a7c07bce4afc6b2bf6c3bbddda85b01f",
+      "matched": true,
+      "elapsedMs": 720,
+      "error": null
+    },
+    {
+      "name": "jsonschema",
+      "url": "https://github.com/python-jsonschema/jsonschema.git",
+      "expectedHead": "d39388624a2032df8633503e8bb1951ad1059198",
+      "observedHead": "d39388624a2032df8633503e8bb1951ad1059198",
+      "matched": true,
+      "elapsedMs": 708,
+      "error": null
+    },
+    {
+      "name": "go-sql-driver-mysql",
+      "url": "https://github.com/go-sql-driver/mysql.git",
+      "expectedHead": "03d76c7e07908e255ce62d126d07ede3f2365d86",
+      "observedHead": "03d76c7e07908e255ce62d126d07ede3f2365d86",
+      "matched": true,
+      "elapsedMs": 711,
+      "error": null
+    },
+    {
+      "name": "itertools",
+      "url": "https://github.com/rust-itertools/itertools.git",
+      "expectedHead": "cef9a8203ec485b06ec1889550cde0aa989d103a",
+      "observedHead": "cef9a8203ec485b06ec1889550cde0aa989d103a",
+      "matched": true,
+      "elapsedMs": 772,
+      "error": null
+    },
+    {
+      "name": "mocha",
+      "url": "https://github.com/mochajs/mocha.git",
+      "expectedHead": "505b5e9cec2f0fcbb1e52457f9c638fbfaf87900",
+      "observedHead": "505b5e9cec2f0fcbb1e52457f9c638fbfaf87900",
+      "matched": true,
+      "elapsedMs": 757,
+      "error": null
+    },
+    {
+      "name": "python-prompt-toolkit",
+      "url": "https://github.com/prompt-toolkit/python-prompt-toolkit.git",
+      "expectedHead": "583b3412c792a5cc9f01adde603679f3824a88f3",
+      "observedHead": "583b3412c792a5cc9f01adde603679f3824a88f3",
+      "matched": true,
+      "elapsedMs": 879,
+      "error": null
+    },
+    {
+      "name": "pgx",
+      "url": "https://github.com/jackc/pgx.git",
+      "expectedHead": "ec1a0befd22592cffffdeeb0a50311b506372f4c",
+      "observedHead": "ec1a0befd22592cffffdeeb0a50311b506372f4c",
+      "matched": true,
+      "elapsedMs": 729,
+      "error": null
+    },
+    {
+      "name": "petgraph",
+      "url": "https://github.com/petgraph/petgraph.git",
+      "expectedHead": "ed714652ab4576104e506c096b6ed9f5128613a7",
+      "observedHead": "ed714652ab4576104e506c096b6ed9f5128613a7",
+      "matched": true,
+      "elapsedMs": 740,
+      "error": null
+    },
+    {
+      "name": "dom-testing-library",
+      "url": "https://github.com/testing-library/dom-testing-library.git",
+      "expectedHead": "e395d5b8ecd4ec95cc02540ddcf16571ecd33e0f",
+      "observedHead": "e395d5b8ecd4ec95cc02540ddcf16571ecd33e0f",
+      "matched": true,
+      "elapsedMs": 741,
+      "error": null
+    },
+    {
+      "name": "tqdm",
+      "url": "https://github.com/tqdm/tqdm.git",
+      "expectedHead": "96f2e60e4584cdab57a23602e27043d0465254ad",
+      "observedHead": "96f2e60e4584cdab57a23602e27043d0465254ad",
+      "matched": true,
+      "elapsedMs": 817,
+      "error": null
+    },
+    {
+      "name": "lo",
+      "url": "https://github.com/samber/lo.git",
+      "expectedHead": "8d1aa4f84d585cb4de04aafd156a4c65a7f82e0e",
+      "observedHead": "8d1aa4f84d585cb4de04aafd156a4c65a7f82e0e",
+      "matched": true,
+      "elapsedMs": 739,
+      "error": null
+    },
+    {
+      "name": "fd",
+      "url": "https://github.com/sharkdp/fd.git",
+      "expectedHead": "ee20f426ddf338ac7ead5c5f00ea49258005caaf",
+      "observedHead": "ee20f426ddf338ac7ead5c5f00ea49258005caaf",
+      "matched": true,
+      "elapsedMs": 763,
+      "error": null
+    }
+  ]
+}

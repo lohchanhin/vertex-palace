@@ -6,13 +6,17 @@ Vertex Palace turns a repository into a local palace of floors, rooms, cabinets,
 
 OpenAI Build Week work is documented separately in [BUILD_WEEK.md](./BUILD_WEEK.md), including the pre-existing baseline, submission-period additions, Codex/GPT-5.6 collaboration, and judge verification steps.
 
-**Release status:** Version `0.3.0` is the competition release. The CLI, MCP server, and plugin instructions below are pinned to the same exact version. Do not install the incomplete `v0.2.4` plugin tag: its npm pin was never published.
+**Stable release:** Version `0.3.0` remains the competition release and npm `latest`. The CLI, MCP server, and stable plugin instructions below stay pinned to that exact version.
 
-**Development note:** `main` now contains unreleased `0.4.0-alpha` work derived from the frozen v3 findings. Memory Preflight selects memory once and preserves guarded decision memory; PR3 adds exact section-level UTF-8 accounting and Agent-adherence telemetry; PR4 adds a deduplicated cross-stack execution contract with no-reopen and enforced-stop signals. Read the [Memory Preflight result](./docs/research/MEMORY_PREFLIGHT_0_4_ALPHA_RESULT.md), [telemetry design](./docs/research/SECTION_AND_ADHERENCE_TELEMETRY_0_4_ALPHA.md), and [cross-stack contract](./docs/research/CROSS_STACK_EXECUTION_CONTRACT_0_4_ALPHA.md). No `0.4.0-alpha` npm package, tag, or GitHub Release exists yet.
+**Preview release:** Version `0.4.0-alpha.1` is available through npm `next` and Git tag `v0.4.0-alpha.1`. It makes Palace advisory by default, adds evidence-role and dependency-closure routing, protects structured decision memory, reports exact section-level UTF-8 costs, and delivers explicit no-reopen and stop boundaries. Install it with `npm install -g vertex-palace@next`, or add the plugin marketplace with `codex plugin marketplace add lohchanhin/vertex-palace --ref v0.4.0-alpha.1`.
 
-**研发说明：** `main` 目前包含依据冻结 v3 研究结果完成、但尚未发布的 `0.4.0-alpha` 工作。Memory Preflight 只筛选一次记忆并保护决策记忆；PR3 新增精确的 UTF-8 分区成本与 Agent 遵循指标；PR4 新增去重后的跨栈执行合同、禁止重开与强制停止信号。详见[记忆预检结果](./docs/zh-CN/MEMORY_PREFLIGHT_0_4_ALPHA_RESULT.md)、[指标设计](./docs/zh-CN/SECTION_AND_ADHERENCE_TELEMETRY_0_4_ALPHA.md)和[跨栈合同](./docs/zh-CN/CROSS_STACK_EXECUTION_CONTRACT_0_4_ALPHA.md)。目前尚未发布 `0.4.0-alpha` npm、Git tag 或 GitHub Release。
+This preview is intentionally labeled alpha. Disclosed post-observation replays improved substantially, but the frozen Round 19 held-out gate did not pass. The evidence does not support a general claim of lower end-to-end Agent tokens, faster wall time, or better correctness. Read the [Memory Preflight result](./docs/research/MEMORY_PREFLIGHT_0_4_ALPHA_RESULT.md), [advisory safety contract](./docs/research/ADVISORY_SAFETY_CONTRACT_0_4_ALPHA.md), [compositional routing result](./docs/research/COMPOSITIONAL_ROUTING_THREE_LEVEL_REPAIR_RESULT_0_4_ALPHA.md), and [Round 19 result](./docs/research/LOCAL_BLIND_ROUTING_ROUND_19_RESULT_0_4_ALPHA.md).
 
-**发布状态：** `0.3.0` 是比赛发布版本。以下 CLI、MCP server 与插件说明都固定到同一个准确版本。不要安装不完整的 `v0.2.4` 插件标签，因为它指向的 npm 版本从未发布。
+**预览版本：** `0.4.0-alpha.1` 已通过 npm `next` 与 Git 标签 `v0.4.0-alpha.1` 提供。这个版本默认把 Palace 作为建议层，新增证据角色与依赖闭包路由、结构化决策记忆、精确 UTF-8 分区成本，以及明确的禁止重开与停止边界。可运行 `npm install -g vertex-palace@next`，或执行 `codex plugin marketplace add lohchanhin/vertex-palace --ref v0.4.0-alpha.1` 安装插件。
+
+这个版本仍明确标记为 alpha。披露后的重放结果明显改善，但冻结的 Round 19 held-out gate 没有通过，因此目前不能宣称它普遍减少 Agent 总 Token、缩短时间或提高正确率。详见[记忆预检结果](./docs/zh-CN/MEMORY_PREFLIGHT_0_4_ALPHA_RESULT.md)、[建议式安全合同](./docs/zh-CN/ADVISORY_SAFETY_CONTRACT_0_4_ALPHA.md)、[组合式路由结果](./docs/zh-CN/COMPOSITIONAL_ROUTING_THREE_LEVEL_REPAIR_RESULT_0_4_ALPHA.md)与[第 19 轮结果](./docs/zh-CN/LOCAL_BLIND_ROUTING_ROUND_19_RESULT_0_4_ALPHA.md)。
+
+**稳定版本：** `0.3.0` 仍是比赛发布版本与 npm `latest`。以下稳定版 CLI、MCP server 与插件说明继续固定到这个准确版本。不要安装不完整的 `v0.2.4` 插件标签，因为它指向的 npm 版本从未发布。
 
 Name note: `记忆宫殿工具`, `记忆宫殿`, `memory palace`, `palace tool`, and the old name `Context Palace` all refer to Vertex Palace. The preferred MCP entry is `palace_context`; the preferred CLI entry is `palace context`. Lower-level `palace_status`, `palace_index`, `palace_route`, and `palace_pack` remain available for diagnosis and manual control.
 

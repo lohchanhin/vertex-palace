@@ -1,0 +1,1008 @@
+{
+  "schemaVersion": 1,
+  "studyId": "local-blind-routing-round-9-0.4-alpha",
+  "generatedAt": "2026-08-09T11:58:48.144Z",
+  "status": "selected",
+  "claimBoundary": "Mechanical local candidate-held-out target selection only. The frozen baseline and candidate have not initialized, indexed, routed, packed, contextualized, or evaluated any selected Round 9 task. This locally hash-frozen evidence is not public preregistration.",
+  "evidenceClass": "local-hash-frozen-candidate-held-out-target-selection",
+  "publicPreregistration": false,
+  "heldOutAgainstCandidate": true,
+  "candidate": {
+    "role": "local-evidence-closure-and-adaptive-payload-candidate",
+    "baseCommit": "67c0a2ce8754cece3773d5fd16b89dae4e3af0c1",
+    "sourceState": "uncommitted-local-working-tree-frozen-by-content-hash",
+    "cliPath": "dist/palace.cjs",
+    "cliSha256": "C1A473947B8A3E76BA059996F4ED03DFF802F6F7290934546E05449CFA16C557",
+    "generatedMcpPath": "plugins/vertex-palace/mcp/server.cjs",
+    "generatedMcpSha256": "CF8854D46452D0447E04A23E6A1114E68C97F3666638B2BB0D0F2F01A2090E53",
+    "sourceTree": {
+      "algorithm": "sha256-path-length-bytes-v1",
+      "fileCount": 185,
+      "sha256": "8B9B08A81FE1F07B89C7535567865260222D4EA8E24E7B9CF5BEFD7D4A7BFC3E"
+    },
+    "buildCommand": "pnpm build"
+  },
+  "comparisonBaseline": {
+    "role": "pre-local-evidence-closure-optimization",
+    "productCommit": "67c0a2ce8754cece3773d5fd16b89dae4e3af0c1",
+    "sourceTree": {
+      "algorithm": "sha256-path-length-bytes-v1",
+      "fileCount": 121,
+      "sha256": "73BB3192CE756367031E8B3E1C5FE8332811C5FB333036A5BA6DFB7B2007B5E0"
+    },
+    "cliPath": "dist/palace.cjs",
+    "cliSha256": "52A1876B00AF4AAA884A6C7EA47AC2E701E88C34FC8FEE65DD1B32BB6513B8AE",
+    "rebuild": {
+      "dependencyCommand": "pnpm install --offline --frozen-lockfile --ignore-scripts",
+      "buildCommand": "pnpm build",
+      "networkRequired": false
+    }
+  },
+  "localFreeze": {
+    "path": "docs/research/evidence/local-blind-candidate-freeze-0.4-alpha-round-9.json",
+    "sha256": "A5136AACC91239A56062E7F84C28E7AA1A27FA7C6468E821D401EE6D10AF19EA",
+    "frozenAt": "2026-08-09T11:55:59.7731293Z",
+    "artifactHashesVerified": true
+  },
+  "selector": {
+    "path": "scripts/select-local-blind-routing-targets-round-9.cjs",
+    "sha256": "D6E11F277D5A0F09061B51D13CFC8DFF2376EA5AACF8B7454EFF9F0034D6E135"
+  },
+  "repositoryPool": {
+    "path": "docs/research/evidence/local-blind-routing-repository-pool-0.4-alpha-round-9.json",
+    "sha256": "746E0D459D2EBC7EAF1610F3E576F32D24EC8F7B80F1D4A076FB7B89952F3B68",
+    "priorExclusionSource": {
+      "path": "docs/research/evidence/held-out-routing-repository-pool-0.4-alpha-round-8.json",
+      "sha256": "118644384D9E099E0833E36900ED5A7E10648827FF4C2DE5AF40CE11A0018158",
+      "includePreviouslyObservedRepositories": true,
+      "includeRound8RepositoryPool": true,
+      "expectedUniqueRepositoryCount": 97
+    },
+    "repositories": [
+      {
+        "name": "eslint",
+        "language": "JavaScript",
+        "languageFamily": "javascript-typescript",
+        "url": "https://github.com/eslint/eslint.git",
+        "pinnedHead": "f3993b0547bace7370e9728ee7408af49d367d76",
+        "extensions": [
+          ".cjs",
+          ".js",
+          ".jsx",
+          ".mjs",
+          ".ts",
+          ".tsx"
+        ]
+      },
+      {
+        "name": "fastapi",
+        "language": "Python",
+        "languageFamily": "python",
+        "url": "https://github.com/tiangolo/fastapi.git",
+        "pinnedHead": "244d66308d6c525f394d0c2ce32dabceb2ed262b",
+        "extensions": [
+          ".py"
+        ]
+      },
+      {
+        "name": "fsnotify",
+        "language": "Go fallback parser",
+        "languageFamily": "go",
+        "url": "https://github.com/fsnotify/fsnotify.git",
+        "pinnedHead": "20b1e15ef3c70caeb37ea2bd184f48ef8382669e",
+        "extensions": [
+          ".go"
+        ]
+      },
+      {
+        "name": "smallvec",
+        "language": "Rust fallback parser",
+        "languageFamily": "rust",
+        "url": "https://github.com/servo/rust-smallvec.git",
+        "pinnedHead": "bc8a854926a8d940164f6c4ad4fc6efe51962e93",
+        "extensions": [
+          ".rs"
+        ]
+      },
+      {
+        "name": "ramda",
+        "language": "JavaScript",
+        "languageFamily": "javascript-typescript",
+        "url": "https://github.com/ramda/ramda.git",
+        "pinnedHead": "803cab30f2e63cd102c6721c1da6c61e57e12429",
+        "extensions": [
+          ".cjs",
+          ".js",
+          ".jsx",
+          ".mjs",
+          ".ts",
+          ".tsx"
+        ]
+      },
+      {
+        "name": "structlog",
+        "language": "Python",
+        "languageFamily": "python",
+        "url": "https://github.com/hynek/structlog.git",
+        "pinnedHead": "ab24a2678ca68f3115d71e55eb9dbf12d9d2dea7",
+        "extensions": [
+          ".py"
+        ]
+      },
+      {
+        "name": "go-kit",
+        "language": "Go fallback parser",
+        "languageFamily": "go",
+        "url": "https://github.com/go-kit/kit.git",
+        "pinnedHead": "78fbbceece7bbcf073bee814a7772f4397ea756c",
+        "extensions": [
+          ".go"
+        ]
+      },
+      {
+        "name": "rand",
+        "language": "Rust fallback parser",
+        "languageFamily": "rust",
+        "url": "https://github.com/rust-random/rand.git",
+        "pinnedHead": "bb1262f703ca04e4ce56be78e1dc4e204cd6a998",
+        "extensions": [
+          ".rs"
+        ]
+      },
+      {
+        "name": "immer",
+        "language": "TypeScript",
+        "languageFamily": "javascript-typescript",
+        "url": "https://github.com/immerjs/immer.git",
+        "pinnedHead": "d2c158f5bac7081a760bbaf501ea5c360b7856e1",
+        "extensions": [
+          ".cjs",
+          ".js",
+          ".jsx",
+          ".mjs",
+          ".ts",
+          ".tsx"
+        ]
+      },
+      {
+        "name": "pendulum",
+        "language": "Python",
+        "languageFamily": "python",
+        "url": "https://github.com/python-pendulum/pendulum.git",
+        "pinnedHead": "5ad098bc7b74d660679f0606673728042b9d4aca",
+        "extensions": [
+          ".py"
+        ]
+      },
+      {
+        "name": "client-golang",
+        "language": "Go fallback parser",
+        "languageFamily": "go",
+        "url": "https://github.com/prometheus/client_golang.git",
+        "pinnedHead": "18218bff2edc2fed6be959af9816d9e2baa4c7f1",
+        "extensions": [
+          ".go"
+        ]
+      },
+      {
+        "name": "time",
+        "language": "Rust fallback parser",
+        "languageFamily": "rust",
+        "url": "https://github.com/time-rs/time.git",
+        "pinnedHead": "857d9c404c5b6f6cb64d1bfa604c695be3369e12",
+        "extensions": [
+          ".rs"
+        ]
+      },
+      {
+        "name": "lodash",
+        "language": "JavaScript",
+        "languageFamily": "javascript-typescript",
+        "url": "https://github.com/lodash/lodash.git",
+        "pinnedHead": "a666ba591064c8011988275790ad7d625279f09c",
+        "extensions": [
+          ".cjs",
+          ".js",
+          ".jsx",
+          ".mjs",
+          ".ts",
+          ".tsx"
+        ]
+      },
+      {
+        "name": "hypothesis",
+        "language": "Python",
+        "languageFamily": "python",
+        "url": "https://github.com/HypothesisWorks/hypothesis.git",
+        "pinnedHead": "d139e32f8c64334b2aea6480181e771d095bb850",
+        "extensions": [
+          ".py"
+        ]
+      },
+      {
+        "name": "go-cmp",
+        "language": "Go fallback parser",
+        "languageFamily": "go",
+        "url": "https://github.com/google/go-cmp.git",
+        "pinnedHead": "b133f1f1932e48f466f597a3346ce6f5a49a0dc1",
+        "extensions": [
+          ".go"
+        ]
+      },
+      {
+        "name": "bitflags",
+        "language": "Rust fallback parser",
+        "languageFamily": "rust",
+        "url": "https://github.com/bitflags/bitflags.git",
+        "pinnedHead": "c3f8d31d59f3ba8c05833fb322ecab8a2cb88060",
+        "extensions": [
+          ".rs"
+        ]
+      }
+    ]
+  },
+  "rules": {
+    "desiredTargets": 8,
+    "requiredLanguageFamilies": [
+      "javascript-typescript",
+      "python",
+      "go",
+      "rust"
+    ],
+    "targetsPerLanguageFamily": 2,
+    "repositoriesPerLanguageFamily": 4,
+    "repositoryOrderIsBinding": true,
+    "firstEligibleRepositoriesPerFamilyWin": true,
+    "remainingRepositoriesPerFamilyAreFallbacks": true,
+    "taskClassifier": "inflected-behavioral-subject-v1",
+    "minimumFiles": 2,
+    "maximumFiles": 8,
+    "maximumAuxiliaryFiles": 2,
+    "maximumChangedLines": 400,
+    "allowedAuxiliaryExtensions": [
+      ".cfg",
+      ".conf",
+      ".ini",
+      ".json",
+      ".md",
+      ".mdx",
+      ".rst",
+      ".toml",
+      ".txt",
+      ".yaml",
+      ".yml"
+    ],
+    "pinnedHeadsObtainedWithGitLsRemoteHeadOnly": true,
+    "commitHistoryInspectedBeforePoolFreeze": false,
+    "palaceCallsOnCandidateTasksBeforePoolFreeze": 0,
+    "baselineAndCandidateFrozenBeforeTargetSelection": true,
+    "outputCreateOnly": true,
+    "languageDiversitySatisfied": true,
+    "selectedPerLanguageFamily": {
+      "javascript-typescript": 2,
+      "python": 2,
+      "go": 2,
+      "rust": 2
+    },
+    "fetchDepth": 400,
+    "fetchMode": "complete-shallow-history-no-promisor",
+    "scanLimit": 300,
+    "nonMergeSingleParent": true,
+    "newestEligibleCommitWins": true,
+    "allFilesMustBeModified": true,
+    "requiresImplementationAndFocusedTest": true,
+    "implementationAndTestMustUsePrimaryLanguageExtension": true,
+    "auxiliaryFilesAreIncludedInOracle": true,
+    "expectedTaskTypeDerivedBeforeRouting": true,
+    "materializationAttempts": 3,
+    "retryDelayMs": 5000,
+    "palaceCallsOnCandidateTasksDuringSelection": 0
+  },
+  "repositoryReports": [
+    {
+      "name": "eslint",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/eslint/eslint.git",
+      "pinnedHead": "f3993b0547bace7370e9728ee7408af49d367d76",
+      "status": "selected",
+      "scannedCommits": 10,
+      "rejectionCounts": {
+        "non-behavioral-or-ambiguous-subject": 9
+      },
+      "selectedTarget": {
+        "name": "eslint",
+        "language": "JavaScript",
+        "languageFamily": "javascript-typescript",
+        "url": "https://github.com/eslint/eslint.git",
+        "pinnedHead": "f3993b0547bace7370e9728ee7408af49d367d76",
+        "routeCommit": "0a148005051fded2ef1d14cc228ae505251b4b10",
+        "groundTruthCommit": "18eb0a7e787b9fac3049ef3dad0e845d2bd940a4",
+        "task": "fix: prevent ASI hazard in `no-unused-labels` autofix (#21173)",
+        "expectedTaskType": "bugfix",
+        "changedFiles": [
+          "lib/rules/no-unused-labels.js",
+          "tests/lib/rules/no-unused-labels.js"
+        ],
+        "implementationFiles": [
+          "lib/rules/no-unused-labels.js"
+        ],
+        "testFiles": [
+          "tests/lib/rules/no-unused-labels.js"
+        ],
+        "auxiliaryFiles": [],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 71,
+        "additions": 71,
+        "deletions": 0
+      },
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "elapsedMs": 3551,
+          "errorCode": null,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "fastapi",
+      "languageFamily": "python",
+      "url": "https://github.com/tiangolo/fastapi.git",
+      "pinnedHead": "244d66308d6c525f394d0c2ce32dabceb2ed262b",
+      "status": "no-eligible-commit",
+      "scannedCommits": 300,
+      "rejectionCounts": {
+        "non-behavioral-or-ambiguous-subject": 300
+      },
+      "selectedTarget": null,
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "elapsedMs": 5767,
+          "errorCode": null,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "fsnotify",
+      "languageFamily": "go",
+      "url": "https://github.com/fsnotify/fsnotify.git",
+      "pinnedHead": "20b1e15ef3c70caeb37ea2bd184f48ef8382669e",
+      "status": "selected",
+      "scannedCommits": 42,
+      "rejectionCounts": {
+        "non-behavioral-or-ambiguous-subject": 36,
+        "missing-implementation-or-test": 2,
+        "file-count-outside-range": 3
+      },
+      "selectedTarget": {
+        "name": "fsnotify",
+        "language": "Go fallback parser",
+        "languageFamily": "go",
+        "url": "https://github.com/fsnotify/fsnotify.git",
+        "pinnedHead": "20b1e15ef3c70caeb37ea2bd184f48ef8382669e",
+        "routeCommit": "e7ec5f74c5b88aa47ff49a221dead2a4fdcf0b8e",
+        "groundTruthCommit": "644fbb6b8d9659d3b03e12c52d1fdbd11e4513fc",
+        "task": "Add test to ensure Add()/Remove() works when not reading events",
+        "expectedTaskType": "feature",
+        "changedFiles": [
+          "fsnotify.go",
+          "fsnotify_test.go"
+        ],
+        "implementationFiles": [
+          "fsnotify.go"
+        ],
+        "testFiles": [
+          "fsnotify_test.go"
+        ],
+        "auxiliaryFiles": [],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 34,
+        "additions": 33,
+        "deletions": 1
+      },
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "elapsedMs": 1417,
+          "errorCode": null,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "smallvec",
+      "languageFamily": "rust",
+      "url": "https://github.com/servo/rust-smallvec.git",
+      "pinnedHead": "bc8a854926a8d940164f6c4ad4fc6efe51962e93",
+      "status": "selected",
+      "scannedCommits": 16,
+      "rejectionCounts": {
+        "non-behavioral-or-ambiguous-subject": 12,
+        "file-count-outside-range": 2,
+        "contains-excluded-path": 1
+      },
+      "selectedTarget": {
+        "name": "smallvec",
+        "language": "Rust fallback parser",
+        "languageFamily": "rust",
+        "url": "https://github.com/servo/rust-smallvec.git",
+        "pinnedHead": "bc8a854926a8d940164f6c4ad4fc6efe51962e93",
+        "routeCommit": "30c30a628cc0ca838f6bd4afc3dd1640fa48c2d6",
+        "groundTruthCommit": "4aaa02887f2ae18247e0dacb3a64d750bf56729e",
+        "task": "feat: impl `bytes::BufMut` for `SmallVec` (v2) (#371)",
+        "expectedTaskType": "feature",
+        "changedFiles": [
+          "Cargo.toml",
+          "src/lib.rs",
+          "src/tests.rs"
+        ],
+        "implementationFiles": [
+          "src/lib.rs"
+        ],
+        "testFiles": [
+          "src/tests.rs"
+        ],
+        "auxiliaryFiles": [
+          "Cargo.toml"
+        ],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 168,
+        "additions": 165,
+        "deletions": 3
+      },
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "elapsedMs": 1325,
+          "errorCode": null,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "ramda",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/ramda/ramda.git",
+      "pinnedHead": "803cab30f2e63cd102c6721c1da6c61e57e12429",
+      "status": "selected",
+      "scannedCommits": 2,
+      "rejectionCounts": {
+        "non-behavioral-or-ambiguous-subject": 1
+      },
+      "selectedTarget": {
+        "name": "ramda",
+        "language": "JavaScript",
+        "languageFamily": "javascript-typescript",
+        "url": "https://github.com/ramda/ramda.git",
+        "pinnedHead": "803cab30f2e63cd102c6721c1da6c61e57e12429",
+        "routeCommit": "bcb320e60b5d91c958a6b02feb0bd8658d744298",
+        "groundTruthCommit": "e31ee01d6f2ccd0570919c6b0fbb4c5296f63bc0",
+        "task": "fix: compare Set and Map members as a multiset in equals (#3534)",
+        "expectedTaskType": "bugfix",
+        "changedFiles": [
+          "source/internal/_equals.js",
+          "test/equals.js"
+        ],
+        "implementationFiles": [
+          "source/internal/_equals.js"
+        ],
+        "testFiles": [
+          "test/equals.js"
+        ],
+        "auxiliaryFiles": [],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 61,
+        "additions": 50,
+        "deletions": 11
+      },
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "elapsedMs": 2677,
+          "errorCode": null,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "structlog",
+      "languageFamily": "python",
+      "url": "https://github.com/hynek/structlog.git",
+      "pinnedHead": "ab24a2678ca68f3115d71e55eb9dbf12d9d2dea7",
+      "status": "selected",
+      "scannedCommits": 32,
+      "rejectionCounts": {
+        "non-behavioral-or-ambiguous-subject": 28,
+        "file-count-outside-range": 1,
+        "contains-non-modified-file": 1,
+        "missing-implementation-or-test": 1
+      },
+      "selectedTarget": {
+        "name": "structlog",
+        "language": "Python",
+        "languageFamily": "python",
+        "url": "https://github.com/hynek/structlog.git",
+        "pinnedHead": "ab24a2678ca68f3115d71e55eb9dbf12d9d2dea7",
+        "routeCommit": "3922ddabc1ff3c9a249665b8aae93a95c60e6f62",
+        "groundTruthCommit": "ba1a17857a9634ec790370aa09effabbcab3e067",
+        "task": "Add CallsiteParameter.QUAL_MODULE (#812)",
+        "expectedTaskType": "feature",
+        "changedFiles": [
+          "CHANGELOG.md",
+          "src/structlog/processors.py",
+          "tests/processors/test_processors.py"
+        ],
+        "implementationFiles": [
+          "src/structlog/processors.py"
+        ],
+        "testFiles": [
+          "tests/processors/test_processors.py"
+        ],
+        "auxiliaryFiles": [
+          "CHANGELOG.md"
+        ],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 34,
+        "additions": 31,
+        "deletions": 3
+      },
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "elapsedMs": 1751,
+          "errorCode": null,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "go-kit",
+      "languageFamily": "go",
+      "url": "https://github.com/go-kit/kit.git",
+      "pinnedHead": "78fbbceece7bbcf073bee814a7772f4397ea756c",
+      "status": "selected",
+      "scannedCommits": 15,
+      "rejectionCounts": {
+        "file-count-outside-range": 1,
+        "non-behavioral-or-ambiguous-subject": 13
+      },
+      "selectedTarget": {
+        "name": "go-kit",
+        "language": "Go fallback parser",
+        "languageFamily": "go",
+        "url": "https://github.com/go-kit/kit.git",
+        "pinnedHead": "78fbbceece7bbcf073bee814a7772f4397ea756c",
+        "routeCommit": "6ed2328dbb52ba4d056bf9c0afe418a4b3e205b7",
+        "groundTruthCommit": "0e6a1b1cc32caa3f1506098107384240e2a11ae2",
+        "task": "Fixed instancer logic for Consul (#1215)",
+        "expectedTaskType": "bugfix",
+        "changedFiles": [
+          "sd/consul/instancer.go",
+          "sd/consul/instancer_test.go"
+        ],
+        "implementationFiles": [
+          "sd/consul/instancer.go"
+        ],
+        "testFiles": [
+          "sd/consul/instancer_test.go"
+        ],
+        "auxiliaryFiles": [],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 69,
+        "additions": 67,
+        "deletions": 2
+      },
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "elapsedMs": 2143,
+          "errorCode": null,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "rand",
+      "languageFamily": "rust",
+      "url": "https://github.com/rust-random/rand.git",
+      "pinnedHead": "bb1262f703ca04e4ce56be78e1dc4e204cd6a998",
+      "status": "selected",
+      "scannedCommits": 274,
+      "rejectionCounts": {
+        "non-behavioral-or-ambiguous-subject": 231,
+        "file-count-outside-range": 20,
+        "missing-implementation-or-test": 12,
+        "contains-non-modified-file": 6,
+        "contains-excluded-path": 2,
+        "too-many-auxiliary-files": 2
+      },
+      "selectedTarget": {
+        "name": "rand",
+        "language": "Rust fallback parser",
+        "languageFamily": "rust",
+        "url": "https://github.com/rust-random/rand.git",
+        "pinnedHead": "bb1262f703ca04e4ce56be78e1dc4e204cd6a998",
+        "routeCommit": "d17ce4e0a10d3dfba7e30fa06588544ef7625534",
+        "groundTruthCommit": "2584f48ace692d1cb93c73a10fff94daf9e1ceee",
+        "task": "Fix pert for mode approx eq mean; use builder pattern (#1452)",
+        "expectedTaskType": "bugfix",
+        "changedFiles": [
+          "rand_distr/CHANGELOG.md",
+          "rand_distr/src/lib.rs",
+          "rand_distr/src/pert.rs",
+          "rand_distr/tests/value_stability.rs"
+        ],
+        "implementationFiles": [
+          "rand_distr/src/lib.rs",
+          "rand_distr/src/pert.rs"
+        ],
+        "testFiles": [
+          "rand_distr/tests/value_stability.rs"
+        ],
+        "auxiliaryFiles": [
+          "rand_distr/CHANGELOG.md"
+        ],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 111,
+        "additions": 86,
+        "deletions": 25
+      },
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "elapsedMs": 1919,
+          "errorCode": null,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "immer",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/immerjs/immer.git",
+      "pinnedHead": "d2c158f5bac7081a760bbaf501ea5c360b7856e1",
+      "status": "family-quota-filled-not-inspected",
+      "scannedCommits": 0,
+      "rejectionCounts": {},
+      "selectedTarget": null
+    },
+    {
+      "name": "pendulum",
+      "languageFamily": "python",
+      "url": "https://github.com/python-pendulum/pendulum.git",
+      "pinnedHead": "5ad098bc7b74d660679f0606673728042b9d4aca",
+      "status": "selected",
+      "scannedCommits": 4,
+      "rejectionCounts": {
+        "non-behavioral-or-ambiguous-subject": 2,
+        "contains-non-modified-file": 1
+      },
+      "selectedTarget": {
+        "name": "pendulum",
+        "language": "Python",
+        "languageFamily": "python",
+        "url": "https://github.com/python-pendulum/pendulum.git",
+        "pinnedHead": "5ad098bc7b74d660679f0606673728042b9d4aca",
+        "routeCommit": "1d9e31a678caf4b4881fe93709c7eaa166116a2a",
+        "groundTruthCommit": "cbab60ca95562b96ad10fd4af83133be61f0783e",
+        "task": "fix(locale): use Japanese date formats for the ja locale (#977)",
+        "expectedTaskType": "bugfix",
+        "changedFiles": [
+          "src/pendulum/locales/ja/custom.py",
+          "tests/formatting/test_formatter.py"
+        ],
+        "implementationFiles": [
+          "src/pendulum/locales/ja/custom.py"
+        ],
+        "testFiles": [
+          "tests/formatting/test_formatter.py"
+        ],
+        "auxiliaryFiles": [],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 19,
+        "additions": 13,
+        "deletions": 6
+      },
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "elapsedMs": 1908,
+          "errorCode": null,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "client-golang",
+      "languageFamily": "go",
+      "url": "https://github.com/prometheus/client_golang.git",
+      "pinnedHead": "18218bff2edc2fed6be959af9816d9e2baa4c7f1",
+      "status": "reserved-fallback-not-inspected",
+      "scannedCommits": 0,
+      "rejectionCounts": {},
+      "selectedTarget": null
+    },
+    {
+      "name": "time",
+      "languageFamily": "rust",
+      "url": "https://github.com/time-rs/time.git",
+      "pinnedHead": "857d9c404c5b6f6cb64d1bfa604c695be3369e12",
+      "status": "reserved-fallback-not-inspected",
+      "scannedCommits": 0,
+      "rejectionCounts": {},
+      "selectedTarget": null
+    },
+    {
+      "name": "lodash",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/lodash/lodash.git",
+      "pinnedHead": "a666ba591064c8011988275790ad7d625279f09c",
+      "status": "reserved-fallback-not-inspected",
+      "scannedCommits": 0,
+      "rejectionCounts": {},
+      "selectedTarget": null
+    },
+    {
+      "name": "hypothesis",
+      "languageFamily": "python",
+      "url": "https://github.com/HypothesisWorks/hypothesis.git",
+      "pinnedHead": "d139e32f8c64334b2aea6480181e771d095bb850",
+      "status": "reserved-fallback-not-inspected",
+      "scannedCommits": 0,
+      "rejectionCounts": {},
+      "selectedTarget": null
+    },
+    {
+      "name": "go-cmp",
+      "languageFamily": "go",
+      "url": "https://github.com/google/go-cmp.git",
+      "pinnedHead": "b133f1f1932e48f466f597a3346ce6f5a49a0dc1",
+      "status": "reserved-fallback-not-inspected",
+      "scannedCommits": 0,
+      "rejectionCounts": {},
+      "selectedTarget": null
+    },
+    {
+      "name": "bitflags",
+      "languageFamily": "rust",
+      "url": "https://github.com/bitflags/bitflags.git",
+      "pinnedHead": "c3f8d31d59f3ba8c05833fb322ecab8a2cb88060",
+      "status": "reserved-fallback-not-inspected",
+      "scannedCommits": 0,
+      "rejectionCounts": {},
+      "selectedTarget": null
+    }
+  ],
+  "targets": [
+    {
+      "name": "eslint",
+      "language": "JavaScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/eslint/eslint.git",
+      "pinnedHead": "f3993b0547bace7370e9728ee7408af49d367d76",
+      "routeCommit": "0a148005051fded2ef1d14cc228ae505251b4b10",
+      "groundTruthCommit": "18eb0a7e787b9fac3049ef3dad0e845d2bd940a4",
+      "task": "fix: prevent ASI hazard in `no-unused-labels` autofix (#21173)",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "lib/rules/no-unused-labels.js",
+        "tests/lib/rules/no-unused-labels.js"
+      ],
+      "implementationFiles": [
+        "lib/rules/no-unused-labels.js"
+      ],
+      "testFiles": [
+        "tests/lib/rules/no-unused-labels.js"
+      ],
+      "auxiliaryFiles": [],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 71,
+      "additions": 71,
+      "deletions": 0
+    },
+    {
+      "name": "fsnotify",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/fsnotify/fsnotify.git",
+      "pinnedHead": "20b1e15ef3c70caeb37ea2bd184f48ef8382669e",
+      "routeCommit": "e7ec5f74c5b88aa47ff49a221dead2a4fdcf0b8e",
+      "groundTruthCommit": "644fbb6b8d9659d3b03e12c52d1fdbd11e4513fc",
+      "task": "Add test to ensure Add()/Remove() works when not reading events",
+      "expectedTaskType": "feature",
+      "changedFiles": [
+        "fsnotify.go",
+        "fsnotify_test.go"
+      ],
+      "implementationFiles": [
+        "fsnotify.go"
+      ],
+      "testFiles": [
+        "fsnotify_test.go"
+      ],
+      "auxiliaryFiles": [],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 34,
+      "additions": 33,
+      "deletions": 1
+    },
+    {
+      "name": "smallvec",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/servo/rust-smallvec.git",
+      "pinnedHead": "bc8a854926a8d940164f6c4ad4fc6efe51962e93",
+      "routeCommit": "30c30a628cc0ca838f6bd4afc3dd1640fa48c2d6",
+      "groundTruthCommit": "4aaa02887f2ae18247e0dacb3a64d750bf56729e",
+      "task": "feat: impl `bytes::BufMut` for `SmallVec` (v2) (#371)",
+      "expectedTaskType": "feature",
+      "changedFiles": [
+        "Cargo.toml",
+        "src/lib.rs",
+        "src/tests.rs"
+      ],
+      "implementationFiles": [
+        "src/lib.rs"
+      ],
+      "testFiles": [
+        "src/tests.rs"
+      ],
+      "auxiliaryFiles": [
+        "Cargo.toml"
+      ],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 168,
+      "additions": 165,
+      "deletions": 3
+    },
+    {
+      "name": "ramda",
+      "language": "JavaScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/ramda/ramda.git",
+      "pinnedHead": "803cab30f2e63cd102c6721c1da6c61e57e12429",
+      "routeCommit": "bcb320e60b5d91c958a6b02feb0bd8658d744298",
+      "groundTruthCommit": "e31ee01d6f2ccd0570919c6b0fbb4c5296f63bc0",
+      "task": "fix: compare Set and Map members as a multiset in equals (#3534)",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "source/internal/_equals.js",
+        "test/equals.js"
+      ],
+      "implementationFiles": [
+        "source/internal/_equals.js"
+      ],
+      "testFiles": [
+        "test/equals.js"
+      ],
+      "auxiliaryFiles": [],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 61,
+      "additions": 50,
+      "deletions": 11
+    },
+    {
+      "name": "structlog",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/hynek/structlog.git",
+      "pinnedHead": "ab24a2678ca68f3115d71e55eb9dbf12d9d2dea7",
+      "routeCommit": "3922ddabc1ff3c9a249665b8aae93a95c60e6f62",
+      "groundTruthCommit": "ba1a17857a9634ec790370aa09effabbcab3e067",
+      "task": "Add CallsiteParameter.QUAL_MODULE (#812)",
+      "expectedTaskType": "feature",
+      "changedFiles": [
+        "CHANGELOG.md",
+        "src/structlog/processors.py",
+        "tests/processors/test_processors.py"
+      ],
+      "implementationFiles": [
+        "src/structlog/processors.py"
+      ],
+      "testFiles": [
+        "tests/processors/test_processors.py"
+      ],
+      "auxiliaryFiles": [
+        "CHANGELOG.md"
+      ],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 34,
+      "additions": 31,
+      "deletions": 3
+    },
+    {
+      "name": "go-kit",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/go-kit/kit.git",
+      "pinnedHead": "78fbbceece7bbcf073bee814a7772f4397ea756c",
+      "routeCommit": "6ed2328dbb52ba4d056bf9c0afe418a4b3e205b7",
+      "groundTruthCommit": "0e6a1b1cc32caa3f1506098107384240e2a11ae2",
+      "task": "Fixed instancer logic for Consul (#1215)",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "sd/consul/instancer.go",
+        "sd/consul/instancer_test.go"
+      ],
+      "implementationFiles": [
+        "sd/consul/instancer.go"
+      ],
+      "testFiles": [
+        "sd/consul/instancer_test.go"
+      ],
+      "auxiliaryFiles": [],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 69,
+      "additions": 67,
+      "deletions": 2
+    },
+    {
+      "name": "rand",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/rust-random/rand.git",
+      "pinnedHead": "bb1262f703ca04e4ce56be78e1dc4e204cd6a998",
+      "routeCommit": "d17ce4e0a10d3dfba7e30fa06588544ef7625534",
+      "groundTruthCommit": "2584f48ace692d1cb93c73a10fff94daf9e1ceee",
+      "task": "Fix pert for mode approx eq mean; use builder pattern (#1452)",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "rand_distr/CHANGELOG.md",
+        "rand_distr/src/lib.rs",
+        "rand_distr/src/pert.rs",
+        "rand_distr/tests/value_stability.rs"
+      ],
+      "implementationFiles": [
+        "rand_distr/src/lib.rs",
+        "rand_distr/src/pert.rs"
+      ],
+      "testFiles": [
+        "rand_distr/tests/value_stability.rs"
+      ],
+      "auxiliaryFiles": [
+        "rand_distr/CHANGELOG.md"
+      ],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 111,
+      "additions": 86,
+      "deletions": 25
+    },
+    {
+      "name": "pendulum",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/python-pendulum/pendulum.git",
+      "pinnedHead": "5ad098bc7b74d660679f0606673728042b9d4aca",
+      "routeCommit": "1d9e31a678caf4b4881fe93709c7eaa166116a2a",
+      "groundTruthCommit": "cbab60ca95562b96ad10fd4af83133be61f0783e",
+      "task": "fix(locale): use Japanese date formats for the ja locale (#977)",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "src/pendulum/locales/ja/custom.py",
+        "tests/formatting/test_formatter.py"
+      ],
+      "implementationFiles": [
+        "src/pendulum/locales/ja/custom.py"
+      ],
+      "testFiles": [
+        "tests/formatting/test_formatter.py"
+      ],
+      "auxiliaryFiles": [],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 19,
+      "additions": 13,
+      "deletions": 6
+    }
+  ]
+}

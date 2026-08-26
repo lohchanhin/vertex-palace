@@ -1,0 +1,1385 @@
+{
+  "schemaVersion": 1,
+  "studyId": "local-blind-routing-round-12-0.4-alpha",
+  "generatedAt": "2026-08-10T22:57:23.729Z",
+  "status": "review-complete",
+  "claimBoundary": "Developer-delegated, Codex-assisted semantic review performed after the Round 12 candidate freeze and before any Palace call on selected tasks. The reviewer is not independent from product development, and no inter-rater agreement is available.",
+  "reviewBoundary": "single-developer-delegated-semantic-reviewer",
+  "publicPreregistration": false,
+  "candidateFreeze": {
+    "path": "docs/research/evidence/local-blind-candidate-freeze-0.4-alpha-round-12.json",
+    "sha256": "D3B7BE55E1B80F964490A5E773E11AFCB97323A04E933AB30D131AAE6B48F406"
+  },
+  "queue": {
+    "path": "docs/research/evidence/local-blind-routing-candidate-queue-0.4-alpha-round-12-attempt-1.json",
+    "sha256": "0B6CDDCD91C34DF7A30F57AC1CF1E3B99A1180982FC6B0DE56B45075433047C9"
+  },
+  "reviewer": {
+    "id": "developer-delegated-codex-semantic-reviewer-1",
+    "role": "product-developer-delegated-semantic-review",
+    "codexAssisted": true,
+    "independent": false,
+    "interRaterAgreementAvailable": false
+  },
+  "timing": {
+    "candidateFrozenBeforeReview": true,
+    "reviewBeforeAnyPalaceCall": true,
+    "palaceCallsOnCandidateTasks": 0
+  },
+  "limitations": [
+    "The semantic reviewer is not independent from product development.",
+    "No second reviewer or inter-rater agreement is available.",
+    "Ambiguous hunks are rejected conservatively rather than adjudicated."
+  ],
+  "reviews": [
+    {
+      "repository": "redux",
+      "candidateId": "candidate_e5cbbd9506b340fd",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "No generated artifact relationship appears in this candidate.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      },
+      "review": {
+        "schemaVersion": 1,
+        "packetSha256": "74B7179148897694BA0A77CE6C754ACA2E1115FFD4A86D80A8C1F58B4DBAC573",
+        "reviewTiming": "pre-route",
+        "reviewPerformedAfterCandidateFreeze": true,
+        "reviewedWithoutPalaceOutput": true,
+        "palaceCallsOnCandidateTask": 0,
+        "targetDecision": "accept",
+        "files": [
+          {
+            "path": "src/createStore.ts",
+            "decision": "task-aligned",
+            "reason": "Every hunk in this file directly implements, verifies, or documents the frozen task without an independent behavior change.",
+            "hunks": [
+              {
+                "id": "hunk_b5beea5e2140460a",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -325 +325 @@ export function createStore< in src/createStore.ts directly implements, verifies, or documents the frozen task: fix: add missing closing quote in replaceReducer error message."
+              }
+            ]
+          },
+          {
+            "path": "test/createStore.spec.ts",
+            "decision": "task-aligned",
+            "reason": "Every hunk in this file directly implements, verifies, or documents the frozen task without an independent behavior change.",
+            "hunks": [
+              {
+                "id": "hunk_13b1216afba8f355",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -706 +706,6 @@ describe('createStore', () => { in test/createStore.spec.ts directly implements, verifies, or documents the frozen task: fix: add missing closing quote in replaceReducer error message."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "repository": "blinker",
+      "candidateId": "candidate_288b0ea0516e3d32",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "No generated artifact relationship appears in this candidate.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      },
+      "review": {
+        "schemaVersion": 1,
+        "packetSha256": "8DB30D0ED24C1EECFE28AA6D54E1A6692E1D1842ACE1622EB5312E5506197991",
+        "reviewTiming": "pre-route",
+        "reviewPerformedAfterCandidateFreeze": true,
+        "reviewedWithoutPalaceOutput": true,
+        "palaceCallsOnCandidateTask": 0,
+        "targetDecision": "reject",
+        "files": [
+          {
+            "path": "src/blinker/_saferef.py",
+            "decision": "unrelated",
+            "reason": "This file contains 3 hunk(s) that are unrelated to or not provably required by the frozen task.",
+            "hunks": [
+              {
+                "id": "hunk_15453ca7fcaa1fc4",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -34,2 +34,3 @@ in src/blinker/_saferef.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_500f97617412cc4e",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -38,0 +40 @@ import traceback in src/blinker/_saferef.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_8c9fa3dfb6fc8e74",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -40 +42 @@ import weakref in src/blinker/_saferef.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_cd8182b4f0ccac75",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -44,0 +47,2 @@ get_func = operator.attrgetter(\"__func__\") in src/blinker/_saferef.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_959d7984cfcd6ea9",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -46 +50,5 @@ get_func = operator.attrgetter(\"__func__\") in src/blinker/_saferef.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_6d80ff6215d9b096",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -61 +69 @@ def safe_ref(target, on_delete=None): in src/blinker/_saferef.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_02671bac23a9d62e",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -63,12 +71,16 @@ def safe_ref(target, on_delete=None): in src/blinker/_saferef.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_fcb0c443b3bc9d4a",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -111,3 +123,11 @@ class BoundMethodWeakref: in src/blinker/_saferef.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_5f63347b3652dfe5",
+                "decision": "uncertain",
+                "reason": "Removing the base initializer can change object construction, and the diff does not establish that mypy strictness requires this runtime change."
+              },
+              {
+                "id": "hunk_8f92742fc092049a",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -135 +154,3 @@ class BoundMethodWeakref: in src/blinker/_saferef.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_0b77f83806d20b25",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -152 +173 @@ class BoundMethodWeakref: in src/blinker/_saferef.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_480dd312325791ca",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -184 +205 @@ class BoundMethodWeakref: in src/blinker/_saferef.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_ea69e452b28e5546",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -190 +211 @@ class BoundMethodWeakref: in src/blinker/_saferef.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_fb86afb13f0d9b8d",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -192 +213 @@ class BoundMethodWeakref: in src/blinker/_saferef.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_8b721a61d3e60167",
+                "decision": "unrelated",
+                "reason": "Rewriting str.format as an f-string is an independent style cleanup, not a mypy strict finding."
+              },
+              {
+                "id": "hunk_9dff8781eb854408",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -202 +219 @@ class BoundMethodWeakref: in src/blinker/_saferef.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_ce71d08d8b6620db",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -205 +222 @@ class BoundMethodWeakref: in src/blinker/_saferef.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_9e1780d0fdc0a5de",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -209 +226 @@ class BoundMethodWeakref: in src/blinker/_saferef.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_4b97eded572f3bcd",
+                "decision": "uncertain",
+                "reason": "The equality implementation is behaviorally rewritten, and its necessity for the stated mypy task cannot be established from this diff."
+              },
+              {
+                "id": "hunk_ef314a6bebb2d86a",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -215 +232 @@ class BoundMethodWeakref: in src/blinker/_saferef.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_18c90ff4f5171b8e",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -229 +246 @@ class BoundMethodWeakref: in src/blinker/_saferef.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              }
+            ]
+          },
+          {
+            "path": "src/blinker/_utilities.py",
+            "decision": "task-aligned",
+            "reason": "Every hunk in this file directly implements, verifies, or documents the frozen task without an independent behavior change.",
+            "hunks": [
+              {
+                "id": "hunk_57635c7f03bc2b35",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -7,0 +8,3 @@ from blinker._saferef import BoundMethodWeakref in src/blinker/_utilities.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_21d11b497cf85204",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -12 +15 @@ class _symbol: in src/blinker/_utilities.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_97bd6ee96b58911b",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -14 +17,2 @@ class _symbol: in src/blinker/_utilities.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_9c586b725ec0bfd3",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -16 +20 @@ class _symbol: in src/blinker/_utilities.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_3cf9e9fbce7417b2",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -19 +23 @@ class _symbol: in src/blinker/_utilities.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_4866290daedbd21a",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -41 +45,2 @@ class symbol: in src/blinker/_utilities.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_2f9f36607a76c99d",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -43 +48 @@ class symbol: in src/blinker/_utilities.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_1f165e48abbf13ef",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -64 +69 @@ WeakTypes = (ref, BoundMethodWeakref) in src/blinker/_utilities.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_4761f97ab0f61c12",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -67,2 +72,2 @@ class annotatable_weakref(ref): in src/blinker/_utilities.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_c8de68db2d02fc97",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -71,2 +76,4 @@ class annotatable_weakref(ref): in src/blinker/_utilities.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_bdb6c39eeefe56d4",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -78 +85 @@ def reference(  # type: ignore[no-untyped-def] in src/blinker/_utilities.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_f5da4f020c92f5d6",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -81 +88 @@ def reference(  # type: ignore[no-untyped-def] in src/blinker/_utilities.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_ee0e76f300b168f2",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -84 +91,4 @@ def reference(  # type: ignore[no-untyped-def] in src/blinker/_utilities.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_81c9389873388e4d",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -87 +97 @@ def callable_reference(object, callback=None): in src/blinker/_utilities.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_7b9786ee461a50b6",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -89,2 +99,2 @@ def callable_reference(object, callback=None): in src/blinker/_utilities.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_8c003a8b9f6e8f02",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -96 +106 @@ class lazy_property: in src/blinker/_utilities.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_ba9e2787c1571226",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -100 +110 @@ class lazy_property: in src/blinker/_utilities.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              }
+            ]
+          },
+          {
+            "path": "src/blinker/base.py",
+            "decision": "unrelated",
+            "reason": "This file contains 2 hunk(s) that are unrelated to or not provably required by the frozen task.",
+            "hunks": [
+              {
+                "id": "hunk_2e4a15c7656afcf8",
+                "decision": "unrelated",
+                "reason": "Adding a documentation blank line is formatting cleanup independent of the mypy strict task."
+              },
+              {
+                "id": "hunk_40ecb84ee5b3deba",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -54 +55 @@ class Signal: in src/blinker/base.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_20d6fde90fce9651",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -106 +107,3 @@ class Signal: in src/blinker/base.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_0230e152c845e116",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -218 +221 @@ class Signal: in src/blinker/base.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_f70cac4133118c1a",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -259 +262 @@ class Signal: in src/blinker/base.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_7d027ccd3257fd98",
+                "decision": "unrelated",
+                "reason": "Changing the warning stacklevel alters runtime warning attribution and is not required by the stated mypy strict task."
+              },
+              {
+                "id": "hunk_53c2f851fb607ff0",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -282 +286 @@ class Signal: in src/blinker/base.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_798d228d9ebcf09a",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -284 +288 @@ class Signal: in src/blinker/base.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_929c86ef75da30eb",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -314 +318 @@ class Signal: in src/blinker/base.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_0a7a99284aff3c37",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -316 +320 @@ class Signal: in src/blinker/base.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_bd29ec1e832dfe4c",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -405 +409 @@ class Signal: in src/blinker/base.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_9697be3dc345b8ed",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -518 +522 @@ class NamedSignal(Signal): in src/blinker/base.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_cafdc881f21c6d1d",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -534 +538 @@ class Namespace(dict): in src/blinker/base.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              }
+            ]
+          },
+          {
+            "path": "tests/test_context.py",
+            "decision": "unrelated",
+            "reason": "This file contains 1 hunk(s) that are unrelated to or not provably required by the frozen task.",
+            "hunks": [
+              {
+                "id": "hunk_b115ee1e621aef6b",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -0,0 +1,4 @@ in tests/test_context.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_38c595903374eb7c",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -6 +10 @@ from blinker import Signal in tests/test_context.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_2718db88e199dac3",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -11 +15 @@ def test_temp_connection(): in tests/test_context.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_1820306ac6ebb1ee",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -23 +27 @@ def test_temp_connection(): in tests/test_context.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_715a144cf112b45d",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -28 +32 @@ def test_temp_connection_for_sender(): in tests/test_context.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_6c222b95311fba61",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -48 +52 @@ class BaseFailure(BaseException): in tests/test_context.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_f6dc25d27112bb14",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -53 +57 @@ def test_temp_connection_failure(exc_type): in tests/test_context.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_0296f295c880f4e6",
+                "decision": "unrelated",
+                "reason": "Removing a local exception class and a lint suppression is cleanup outside the stated mypy strict findings."
+              }
+            ]
+          },
+          {
+            "path": "tests/test_saferef.py",
+            "decision": "task-aligned",
+            "reason": "Every hunk in this file directly implements, verifies, or documents the frozen task without an independent behavior change.",
+            "hunks": [
+              {
+                "id": "hunk_8160a28c4c818645",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -34 +34,4 @@ in tests/test_saferef.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_7b1649f23f531daf",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -41 +44 @@ class _Sample1: in tests/test_saferef.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_ec5e5c90d9976b94",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -45 +48 @@ class _Sample1: in tests/test_saferef.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_33457f3001b65baa",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -50 +53 @@ class _Sample3: in tests/test_saferef.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_6900284ceeb58479",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -59,3 +62,3 @@ class TestSaferef(unittest.TestCase): in tests/test_saferef.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_7a399ea105ee9f8e",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -63,6 +66,6 @@ class TestSaferef(unittest.TestCase): in tests/test_saferef.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_35dd1d1c75244288",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -70,6 +73,6 @@ class TestSaferef(unittest.TestCase): in tests/test_saferef.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_a7c671a5ba7b3065",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -78 +81 @@ class TestSaferef(unittest.TestCase): in tests/test_saferef.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_7c5048f930be2f2d",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -84 +87 @@ class TestSaferef(unittest.TestCase): in tests/test_saferef.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_584fc11e15275594",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -86,2 +89,2 @@ class TestSaferef(unittest.TestCase): in tests/test_saferef.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_3729ecde0f4badb0",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -89 +92 @@ class TestSaferef(unittest.TestCase): in tests/test_saferef.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_f3fd83c0e2a35573",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -94 +97 @@ class TestSaferef(unittest.TestCase): in tests/test_saferef.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_161b5423d56fc2b1",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -99,3 +102,3 @@ class TestSaferef(unittest.TestCase): in tests/test_saferef.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_e5d8283d16fd7997",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -103 +106 @@ class TestSaferef(unittest.TestCase): in tests/test_saferef.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_2c21b248669ae52a",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -105 +108 @@ class TestSaferef(unittest.TestCase): in tests/test_saferef.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_ae5f24c6f49c59c1",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -113 +116 @@ class TestSaferef(unittest.TestCase): in tests/test_saferef.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              }
+            ]
+          },
+          {
+            "path": "tests/test_signals.py",
+            "decision": "unrelated",
+            "reason": "This file contains 6 hunk(s) that are unrelated to or not provably required by the frozen task.",
+            "hunks": [
+              {
+                "id": "hunk_e02860b4328c11a9",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -0,0 +1,2 @@ in tests/test_signals.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_dc1d6cf14990f75d",
+                "decision": "unrelated",
+                "reason": "Removing the time import participates in deleting the Jython compatibility path, an independent compatibility change."
+              },
+              {
+                "id": "hunk_bd66bc1e4fad3711",
+                "decision": "unrelated",
+                "reason": "This hunk removes Jython and PyPy compatibility flags while annotating a helper, so it mixes an independent compatibility change into the typing task."
+              },
+              {
+                "id": "hunk_317cc5fc97f88acd",
+                "decision": "unrelated",
+                "reason": "Changing garbage-collection handling from Jython-or-PyPy to PyPy-only is an independent runtime compatibility change."
+              },
+              {
+                "id": "hunk_9048d521074dd3e7",
+                "decision": "unrelated",
+                "reason": "Deleting the Jython timing workaround changes compatibility behavior and is unrelated to mypy strict findings."
+              },
+              {
+                "id": "hunk_327a587d7d205ab1",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -22 +18 @@ def collect_acyclic_refs(): in tests/test_signals.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_01dcd2da5a9c80f3",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -25 +21 @@ class Sentinel(list): in tests/test_signals.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_50157a266528347e",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -32 +28 @@ class Sentinel(list): in tests/test_signals.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_adabdb91a180d8f2",
+                "decision": "unrelated",
+                "reason": "Removing the legacy receiver function-name assignment is compatibility cleanup outside the stated typing task."
+              },
+              {
+                "id": "hunk_50f968a67bbbf984",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -39 +34 @@ class Sentinel(list): in tests/test_signals.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_d2e377839d0997ee",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -42 +37 @@ def test_meta_connect(): in tests/test_signals.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_ff5a70b42886e2a5",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -49 +44 @@ def test_meta_connect(): in tests/test_signals.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_87de44fcb3708226",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -67 +62 @@ def test_meta_connect(): in tests/test_signals.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_93e3f05cf822e82e",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -110 +105 @@ def _test_signal_signals(sender): in tests/test_signals.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_7b0839c8af261381",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -114 +109 @@ def test_signal_signals_any_sender(): in tests/test_signals.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_ab6964281b9ee882",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -118 +113 @@ def test_signal_signals_strong_sender(): in tests/test_signals.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_ccdb92b0fd69b818",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -155 +150 @@ def test_signal_weak_receiver_vanishes(): in tests/test_signals.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_93ad5902f0ab0382",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -193,2 +188,2 @@ def test_signal_signals_weak_sender(): in tests/test_signals.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_bff10b23d0d079e8",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -200 +195 @@ def test_empty_bucket_growth(): in tests/test_signals.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_f33bb3dac011c983",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -236,2 +231,2 @@ def test_empty_bucket_growth(): in tests/test_signals.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_54f94167087e23aa",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -243 +238 @@ def test_meta_connect_failure(): in tests/test_signals.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_dac070d3abd4a134",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -256 +251 @@ def test_meta_connect_failure(): in tests/test_signals.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_bc3e508757212b6c",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -273 +268 @@ def test_weak_namespace(): in tests/test_signals.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_8303cc2f53cbc1e7",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -288 +283 @@ def test_namespace(): in tests/test_signals.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_39c6109517a58c23",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -291 +286 @@ def test_weak_receiver(): in tests/test_signals.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_e5d4d0f9a49a86f8",
+                "decision": "unrelated",
+                "reason": "Deleting the Jython-specific connection branch changes supported-runtime behavior and is unrelated to mypy strict findings."
+              },
+              {
+                "id": "hunk_3079119ee3d4e050",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -315 +304 @@ def test_weak_receiver(): in tests/test_signals.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_6f2b21125fe3e748",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -318 +307 @@ def test_strong_receiver(): in tests/test_signals.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_859182043065bb59",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -335 +324 @@ def test_strong_receiver(): in tests/test_signals.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_d7f532ff98eb110d",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -338 +327 @@ async def test_async_receiver(): in tests/test_signals.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_83f88b3dbde534b5",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -341 +330 @@ async def test_async_receiver(): in tests/test_signals.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_dcb9e34157379101",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -344,2 +333,2 @@ async def test_async_receiver(): in tests/test_signals.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_6d817eada4ff6565",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -348 +337 @@ async def test_async_receiver(): in tests/test_signals.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_2829f59404134a73",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -354 +343 @@ async def test_async_receiver(): in tests/test_signals.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_831403b410a29f44",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -361,2 +350,2 @@ async def test_async_receiver(): in tests/test_signals.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_fccb099965db97c8",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -365 +354 @@ def test_instancemethod_receiver(): in tests/test_signals.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_fbf887e515524cf6",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -368 +357 @@ def test_instancemethod_receiver(): in tests/test_signals.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_fb006b39581099c0",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -386 +375 @@ def test_instancemethod_receiver(): in tests/test_signals.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_d45e1e2d961f49c2",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -389 +378 @@ def test_filtered_receiver(): in tests/test_signals.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_c51fc90ea1fb965d",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -417 +406 @@ def test_filtered_receiver(): in tests/test_signals.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_b6073214cedc889e",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -420 +409 @@ def test_filtered_receiver_weakref(): in tests/test_signals.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_64019a9556533534",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -445 +434 @@ def test_filtered_receiver_weakref(): in tests/test_signals.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_b10ac41325cb732a",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -456 +445 @@ def test_decorated_receiver(): in tests/test_signals.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_a04a2b0c1fe4a638",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -472 +461 @@ def test_decorated_receiver(): in tests/test_signals.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_05c82d7c0696a5c0",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -475 +464 @@ def test_no_double_send(): in tests/test_signals.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_351baff9cf3eac4e",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -492,2 +481,2 @@ def test_no_double_send(): in tests/test_signals.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_154b605dd680c8ab",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -528 +517 @@ def test_has_receivers(): in tests/test_signals.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_c67aace7a3099e82",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -536 +525 @@ def test_instance_doc(): in tests/test_signals.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_802ae789117849ac",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -541 +530 @@ def test_named_blinker(): in tests/test_signals.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_d1d628546eaf166c",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -544 +533 @@ def test_mute_signal(): in tests/test_signals.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_bed6a9773727c2fe",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -558 +547 @@ def test_mute_signal(): in tests/test_signals.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_9c5d4f3e1201c9f7",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -563 +552 @@ def values_are_empty_sets_(dictionary): in tests/test_signals.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_7251e574cfdb7429",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -566 +555 @@ def test_int_sender(): in tests/test_signals.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              }
+            ]
+          },
+          {
+            "path": "tests/test_utilities.py",
+            "decision": "task-aligned",
+            "reason": "Every hunk in this file directly implements, verifies, or documents the frozen task without an independent behavior change.",
+            "hunks": [
+              {
+                "id": "hunk_48be5ff5901b0c5d",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -0,0 +1,2 @@ in tests/test_utilities.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_5d8782f32030c148",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -6 +8 @@ from blinker._utilities import symbol in tests/test_utilities.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              },
+              {
+                "id": "hunk_393ec09e74880985",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -19 +21 @@ def test_symbols(): in tests/test_utilities.py directly implements, verifies, or documents the frozen task: fix mypy strict findings."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "repository": "blinker",
+      "candidateId": "candidate_8452d933662dc775",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "No generated artifact relationship appears in this candidate.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      },
+      "review": {
+        "schemaVersion": 1,
+        "packetSha256": "8A47F0B8685EFD3E0C9E77051B6D8378E89ECF13773C014CB04E0D3B774A3535",
+        "reviewTiming": "pre-route",
+        "reviewPerformedAfterCandidateFreeze": true,
+        "reviewedWithoutPalaceOutput": true,
+        "palaceCallsOnCandidateTask": 0,
+        "targetDecision": "reject",
+        "files": [
+          {
+            "path": "docs/index.rst",
+            "decision": "task-aligned",
+            "reason": "Every hunk in this file directly implements, verifies, or documents the frozen task without an independent behavior change.",
+            "hunks": [
+              {
+                "id": "hunk_dc3699378e288333",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -337,0 +338,18 @@ event loop the following example can be used: in docs/index.rst directly implements, verifies, or documents the frozen task: Allow the Signal set_class to be customised."
+              }
+            ]
+          },
+          {
+            "path": "src/blinker/base.py",
+            "decision": "task-aligned",
+            "reason": "Every hunk in this file directly implements, verifies, or documents the frozen task without an independent behavior change.",
+            "hunks": [
+              {
+                "id": "hunk_e4ffb20142b220a0",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -53,0 +54,2 @@ class Signal: in src/blinker/base.py directly implements, verifies, or documents the frozen task: Allow the Signal set_class to be customised."
+              },
+              {
+                "id": "hunk_092b08037760a19f",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -106,2 +108,6 @@ class Signal: in src/blinker/base.py directly implements, verifies, or documents the frozen task: Allow the Signal set_class to be customised."
+              }
+            ]
+          },
+          {
+            "path": "tests/test_context.py",
+            "decision": "unrelated",
+            "reason": "This file contains 1 hunk(s) that are unrelated to or not provably required by the frozen task.",
+            "hunks": [
+              {
+                "id": "hunk_9a6c0b8b125165b6",
+                "decision": "unrelated",
+                "reason": "Changing quote style in an existing parametrization is formatting-only and does not implement or verify customizable Signal.set_class behavior."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "repository": "blinker",
+      "candidateId": "candidate_df72bc2e35f925d6",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "No generated artifact relationship appears in this candidate.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      },
+      "review": {
+        "schemaVersion": 1,
+        "packetSha256": "E7D231D2CEC029A05ABFB261C4AEF1481F59711F8663E9F0E2C5EFCBC8712CC4",
+        "reviewTiming": "pre-route",
+        "reviewPerformedAfterCandidateFreeze": true,
+        "reviewedWithoutPalaceOutput": true,
+        "palaceCallsOnCandidateTask": 0,
+        "targetDecision": "accept",
+        "files": [
+          {
+            "path": "docs/index.rst",
+            "decision": "task-aligned",
+            "reason": "Every hunk in this file directly implements, verifies, or documents the frozen task without an independent behavior change.",
+            "hunks": [
+              {
+                "id": "hunk_08bad7db9fa7f380",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -159,0 +160,13 @@ value``) pairs: in docs/index.rst directly implements, verifies, or documents the frozen task: Added `muted` context manager for temproary switching signal off (#84)."
+              }
+            ]
+          },
+          {
+            "path": "src/blinker/base.py",
+            "decision": "task-aligned",
+            "reason": "Every hunk in this file directly implements, verifies, or documents the frozen task without an independent behavior change.",
+            "hunks": [
+              {
+                "id": "hunk_3bc4ade700791214",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -84,0 +85 @@ class Signal: in src/blinker/base.py directly implements, verifies, or documents the frozen task: Added `muted` context manager for temproary switching signal off (#84)."
+              },
+              {
+                "id": "hunk_03dc3e8c2c388d55",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -211,0 +213,13 @@ class Signal: in src/blinker/base.py directly implements, verifies, or documents the frozen task: Added `muted` context manager for temproary switching signal off (#84)."
+              },
+              {
+                "id": "hunk_ee24b5ffe9dc3f2f",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -262,4 +276,8 @@ class Signal: in src/blinker/base.py directly implements, verifies, or documents the frozen task: Added `muted` context manager for temproary switching signal off (#84)."
+              }
+            ]
+          },
+          {
+            "path": "tests/test_signals.py",
+            "decision": "task-aligned",
+            "reason": "Every hunk in this file directly implements, verifies, or documents the frozen task without an independent behavior change.",
+            "hunks": [
+              {
+                "id": "hunk_d4ef578adf6af018",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -514,0 +515,17 @@ def test_named_blinker(): in tests/test_signals.py directly implements, verifies, or documents the frozen task: Added `muted` context manager for temproary switching signal off (#84)."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "repository": "sqlx",
+      "candidateId": "candidate_dac9c856c6325158",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "No generated artifact relationship appears in this candidate.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      },
+      "review": {
+        "schemaVersion": 1,
+        "packetSha256": "CFD2138D2B696BA7F8736D66C6F49253896ED27E4FEB1825D9C0CC00F3515D36",
+        "reviewTiming": "pre-route",
+        "reviewPerformedAfterCandidateFreeze": true,
+        "reviewedWithoutPalaceOutput": true,
+        "palaceCallsOnCandidateTask": 0,
+        "targetDecision": "accept",
+        "files": [
+          {
+            "path": "named.go",
+            "decision": "task-aligned",
+            "reason": "Every hunk in this file directly implements, verifies, or documents the frozen task without an independent behavior change.",
+            "hunks": [
+              {
+                "id": "hunk_cf722234fa2d707f",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -227 +227 @@ func bindStruct(bindType int, query string, arg interface{}, m *reflectx.Mapper) in named.go directly implements, verifies, or documents the frozen task: Fix: Table contains VALUES."
+              }
+            ]
+          },
+          {
+            "path": "named_test.go",
+            "decision": "task-aligned",
+            "reason": "Every hunk in this file directly implements, verifies, or documents the frozen task without an independent behavior change.",
+            "hunks": [
+              {
+                "id": "hunk_3e585b3e89a95d92",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -387,0 +388,6 @@ func TestFixBounds(t *testing.T) { in named_test.go directly implements, verifies, or documents the frozen task: Fix: Table contains VALUES."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "repository": "bat",
+      "candidateId": "candidate_7f6480d8d3856a2d",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "No generated artifact relationship appears in this candidate.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      },
+      "review": {
+        "schemaVersion": 1,
+        "packetSha256": "67BC3795569B0FC667D5AF9DE89DA26ED423FAAD9C8E1210506ED48B5A3677D2",
+        "reviewTiming": "pre-route",
+        "reviewPerformedAfterCandidateFreeze": true,
+        "reviewedWithoutPalaceOutput": true,
+        "palaceCallsOnCandidateTask": 0,
+        "targetDecision": "accept",
+        "files": [
+          {
+            "path": "CHANGELOG.md",
+            "decision": "task-aligned",
+            "reason": "Every hunk in this file directly implements, verifies, or documents the frozen task without an independent behavior change.",
+            "hunks": [
+              {
+                "id": "hunk_187b184195a68b4a",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -24,0 +25 @@ in CHANGELOG.md directly implements, verifies, or documents the frozen task: Fix capacity-overflow panic in print_snip at --terminal-width 1."
+              }
+            ]
+          },
+          {
+            "path": "src/printer.rs",
+            "decision": "task-aligned",
+            "reason": "Every hunk in this file directly implements, verifies, or documents the frozen task without an independent behavior change.",
+            "hunks": [
+              {
+                "id": "hunk_1704f73f872f7c8c",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -606 +606,7 @@ impl Printer for InteractivePrinter<'_> { in src/printer.rs directly implements, verifies, or documents the frozen task: Fix capacity-overflow panic in print_snip at --terminal-width 1."
+              },
+              {
+                "id": "hunk_8987e122f935193c",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -609,2 +615,8 @@ impl Printer for InteractivePrinter<'_> { in src/printer.rs directly implements, verifies, or documents the frozen task: Fix capacity-overflow panic in print_snip at --terminal-width 1."
+              }
+            ]
+          },
+          {
+            "path": "tests/integration_tests.rs",
+            "decision": "task-aligned",
+            "reason": "Every hunk in this file directly implements, verifies, or documents the frozen task without an independent behavior change.",
+            "hunks": [
+              {
+                "id": "hunk_b0b34a81617d869f",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -307,0 +308,13 @@ fn line_range_multiple() { in tests/integration_tests.rs directly implements, verifies, or documents the frozen task: Fix capacity-overflow panic in print_snip at --terminal-width 1."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "repository": "pino",
+      "candidateId": "candidate_c0333816ecd11b2e",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "No generated artifact relationship appears in this candidate.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      },
+      "review": {
+        "schemaVersion": 1,
+        "packetSha256": "352360349447D48FED878FBF8306C1D42005BE24102D5D729988B7B813620653",
+        "reviewTiming": "pre-route",
+        "reviewPerformedAfterCandidateFreeze": true,
+        "reviewedWithoutPalaceOutput": true,
+        "palaceCallsOnCandidateTask": 0,
+        "targetDecision": "accept",
+        "files": [
+          {
+            "path": "lib/redaction.js",
+            "decision": "task-aligned",
+            "reason": "Every hunk in this file directly implements, verifies, or documents the frozen task without an independent behavior change.",
+            "hunks": [
+              {
+                "id": "hunk_5400bdf44188b751",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -67 +67,4 @@ function redaction (opts, serialize) { in lib/redaction.js directly implements, verifies, or documents the frozen task: fix: build the redaction shape without Object.prototype (#2495)."
+              },
+              {
+                "id": "hunk_23e14217b711c1c9",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -72 +75,3 @@ function redaction (opts, serialize) { in lib/redaction.js directly implements, verifies, or documents the frozen task: fix: build the redaction shape without Object.prototype (#2495)."
+              },
+              {
+                "id": "hunk_f0bfa06761d5167e",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -74 +79 @@ function redaction (opts, serialize) { in lib/redaction.js directly implements, verifies, or documents the frozen task: fix: build the redaction shape without Object.prototype (#2495)."
+              }
+            ]
+          },
+          {
+            "path": "test/redact.test.js",
+            "decision": "task-aligned",
+            "reason": "Every hunk in this file directly implements, verifies, or documents the frozen task without an independent behavior change.",
+            "hunks": [
+              {
+                "id": "hunk_7013fb3f38f37db4",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -893,0 +894,30 @@ test('censor function should not be called for non-existent nested paths (issue in test/redact.test.js directly implements, verifies, or documents the frozen task: fix: build the redaction shape without Object.prototype (#2495)."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "repository": "packaging",
+      "candidateId": "candidate_d7176794c1d49db8",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "No generated artifact relationship appears in this candidate.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      },
+      "review": {
+        "schemaVersion": 1,
+        "packetSha256": "48E9A382743BF15A88EB3E6ECA698BA86D4BF09FEA8D655075A20F790A6FA13D",
+        "reviewTiming": "pre-route",
+        "reviewPerformedAfterCandidateFreeze": true,
+        "reviewedWithoutPalaceOutput": true,
+        "palaceCallsOnCandidateTask": 0,
+        "targetDecision": "accept",
+        "files": [
+          {
+            "path": "src/packaging/tags.py",
+            "decision": "task-aligned",
+            "reason": "Every hunk in this file directly implements, verifies, or documents the frozen task without an independent behavior change.",
+            "hunks": [
+              {
+                "id": "hunk_d2dd60863eeaad1b",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -451 +451 @@ def cpython_tags( in src/packaging/tags.py directly implements, verifies, or documents the frozen task: fix(tags): preserve explicitly empty platform iterables (#1360)."
+              },
+              {
+                "id": "hunk_8ae2d5f1898f441e",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -558 +558 @@ def generic_tags( in src/packaging/tags.py directly implements, verifies, or documents the frozen task: fix(tags): preserve explicitly empty platform iterables (#1360)."
+              },
+              {
+                "id": "hunk_3dc84613a8863bd3",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -632 +632 @@ def compatible_tags( in src/packaging/tags.py directly implements, verifies, or documents the frozen task: fix(tags): preserve explicitly empty platform iterables (#1360)."
+              }
+            ]
+          },
+          {
+            "path": "tests/test_tags.py",
+            "decision": "task-aligned",
+            "reason": "Every hunk in this file directly implements, verifies, or documents the frozen task without an independent behavior change.",
+            "hunks": [
+              {
+                "id": "hunk_04097cdeaee69743",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -1300,0 +1301,3 @@ class TestCPythonTags: in tests/test_tags.py directly implements, verifies, or documents the frozen task: fix(tags): preserve explicitly empty platform iterables (#1360)."
+              },
+              {
+                "id": "hunk_103fc67a207ee876",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -1510,0 +1514,4 @@ class TestGenericTags: in tests/test_tags.py directly implements, verifies, or documents the frozen task: fix(tags): preserve explicitly empty platform iterables (#1360)."
+              },
+              {
+                "id": "hunk_6208ebfedf1661b6",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -1568,0 +1576,7 @@ class TestCompatibleTags: in tests/test_tags.py directly implements, verifies, or documents the frozen task: fix(tags): preserve explicitly empty platform iterables (#1360)."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "repository": "afero",
+      "candidateId": "candidate_daec93c07e5e3f21",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "No generated artifact relationship appears in this candidate.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      },
+      "review": {
+        "schemaVersion": 1,
+        "packetSha256": "52A495BD9D03C23CC0090A3CC193A4EC978B4DA49386218486CD32F27FAB8C23",
+        "reviewTiming": "pre-route",
+        "reviewPerformedAfterCandidateFreeze": true,
+        "reviewedWithoutPalaceOutput": true,
+        "palaceCallsOnCandidateTask": 0,
+        "targetDecision": "accept",
+        "files": [
+          {
+            "path": "path.go",
+            "decision": "task-aligned",
+            "reason": "Every hunk in this file directly implements, verifies, or documents the frozen task without an independent behavior change.",
+            "hunks": [
+              {
+                "id": "hunk_ad8681971d8f8608",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -18,0 +19 @@ import ( in path.go directly implements, verifies, or documents the frozen task: feat: Add WalkDir (#571)."
+              },
+              {
+                "id": "hunk_f5b4f56cf86a21d3",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -21,0 +23,2 @@ import ( in path.go directly implements, verifies, or documents the frozen task: feat: Add WalkDir (#571)."
+              },
+              {
+                "id": "hunk_64c148fb01d0f328",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -106,0 +110,104 @@ func Walk(fs Fs, root string, walkFn filepath.WalkFunc) error { in path.go directly implements, verifies, or documents the frozen task: feat: Add WalkDir (#571)."
+              }
+            ]
+          },
+          {
+            "path": "path_test.go",
+            "decision": "task-aligned",
+            "reason": "Every hunk in this file directly implements, verifies, or documents the frozen task without an independent behavior change.",
+            "hunks": [
+              {
+                "id": "hunk_4d60f83dd1e1e328",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -18,0 +19 @@ import ( in path_test.go directly implements, verifies, or documents the frozen task: feat: Add WalkDir (#571)."
+              },
+              {
+                "id": "hunk_e361de4d47014b89",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -19,0 +21 @@ import ( in path_test.go directly implements, verifies, or documents the frozen task: feat: Add WalkDir (#571)."
+              },
+              {
+                "id": "hunk_958390f60050fb36",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -69,0 +72,170 @@ func TestWalk(t *testing.T) { in path_test.go directly implements, verifies, or documents the frozen task: feat: Add WalkDir (#571)."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "repository": "notify",
+      "candidateId": "candidate_8f7e1b6272cbe60e",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "No generated artifact relationship appears in this candidate.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      },
+      "review": {
+        "schemaVersion": 1,
+        "packetSha256": "E848903D20B865642413FA8CA7181F296CE0234D1B52D3771E3CE3AE384AA44D",
+        "reviewTiming": "pre-route",
+        "reviewPerformedAfterCandidateFreeze": true,
+        "reviewedWithoutPalaceOutput": true,
+        "palaceCallsOnCandidateTask": 0,
+        "targetDecision": "accept",
+        "files": [
+          {
+            "path": "notify/src/poll.rs",
+            "decision": "task-aligned",
+            "reason": "Every hunk in this file directly implements, verifies, or documents the frozen task without an independent behavior change.",
+            "hunks": [
+              {
+                "id": "hunk_53525f9d0f877ea6",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -702,0 +703 @@ mod tests { in notify/src/poll.rs directly implements, verifies, or documents the frozen task: fix: flaky PollWatcher tests (#732)."
+              },
+              {
+                "id": "hunk_5bc479fd13ba4c37",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -703,0 +705 @@ mod tests { in notify/src/poll.rs directly implements, verifies, or documents the frozen task: fix: flaky PollWatcher tests (#732)."
+              },
+              {
+                "id": "hunk_67a1b4031c2d10c4",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -715,0 +718 @@ mod tests { in notify/src/poll.rs directly implements, verifies, or documents the frozen task: fix: flaky PollWatcher tests (#732)."
+              },
+              {
+                "id": "hunk_f52bb9de0b58d076",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -716,0 +720 @@ mod tests { in notify/src/poll.rs directly implements, verifies, or documents the frozen task: fix: flaky PollWatcher tests (#732)."
+              },
+              {
+                "id": "hunk_4c49800e6631bf9a",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -726,0 +731,2 @@ mod tests { in notify/src/poll.rs directly implements, verifies, or documents the frozen task: fix: flaky PollWatcher tests (#732)."
+              },
+              {
+                "id": "hunk_5fd9c7628f468848",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -743,0 +750,2 @@ mod tests { in notify/src/poll.rs directly implements, verifies, or documents the frozen task: fix: flaky PollWatcher tests (#732)."
+              },
+              {
+                "id": "hunk_b5823257b6ceeaee",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -744,0 +753 @@ mod tests { in notify/src/poll.rs directly implements, verifies, or documents the frozen task: fix: flaky PollWatcher tests (#732)."
+              },
+              {
+                "id": "hunk_fc0b2d259fbc5961",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -747,0 +757,2 @@ mod tests { in notify/src/poll.rs directly implements, verifies, or documents the frozen task: fix: flaky PollWatcher tests (#732)."
+              },
+              {
+                "id": "hunk_6613db92da69ce0a",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -758,0 +770,2 @@ mod tests { in notify/src/poll.rs directly implements, verifies, or documents the frozen task: fix: flaky PollWatcher tests (#732)."
+              },
+              {
+                "id": "hunk_49ada49ccdd3178e",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -759,0 +773 @@ mod tests { in notify/src/poll.rs directly implements, verifies, or documents the frozen task: fix: flaky PollWatcher tests (#732)."
+              },
+              {
+                "id": "hunk_81cf92aa0df1b375",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -764,0 +779,3 @@ mod tests { in notify/src/poll.rs directly implements, verifies, or documents the frozen task: fix: flaky PollWatcher tests (#732)."
+              },
+              {
+                "id": "hunk_4b1c309251571ddf",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -778,0 +796,2 @@ mod tests { in notify/src/poll.rs directly implements, verifies, or documents the frozen task: fix: flaky PollWatcher tests (#732)."
+              },
+              {
+                "id": "hunk_f0ee251b3d071928",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -785,0 +805,2 @@ mod tests { in notify/src/poll.rs directly implements, verifies, or documents the frozen task: fix: flaky PollWatcher tests (#732)."
+              }
+            ]
+          },
+          {
+            "path": "notify/src/test.rs",
+            "decision": "task-aligned",
+            "reason": "Every hunk in this file directly implements, verifies, or documents the frozen task without an independent behavior change.",
+            "hunks": [
+              {
+                "id": "hunk_aa4485438ad17789",
+                "decision": "task-aligned",
+                "reason": "The change at @@ -176,0 +177,54 @@ impl Receiver { in notify/src/test.rs directly implements, verifies, or documents the frozen task: fix: flaky PollWatcher tests (#732)."
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "materialization": {
+    "semanticDecisionSha256": "BE78485F465C6042438604503B1A424A358F5AD7B3F4C95D39D2B131B0B76498",
+    "semanticDecisionsCopiedWithoutModification": true,
+    "frozenValidatorDryRunRequiredBeforeWrite": true,
+    "outputCreateOnly": true,
+    "dryRun": {
+      "status": "selected",
+      "reviewedCandidates": 10,
+      "acceptedCandidates": 8,
+      "rejectedCandidates": 2,
+      "selectedTargets": [
+        {
+          "name": "redux",
+          "candidateId": "candidate_e5cbbd9506b340fd"
+        },
+        {
+          "name": "blinker",
+          "candidateId": "candidate_df72bc2e35f925d6"
+        },
+        {
+          "name": "sqlx",
+          "candidateId": "candidate_dac9c856c6325158"
+        },
+        {
+          "name": "bat",
+          "candidateId": "candidate_7f6480d8d3856a2d"
+        },
+        {
+          "name": "pino",
+          "candidateId": "candidate_c0333816ecd11b2e"
+        },
+        {
+          "name": "packaging",
+          "candidateId": "candidate_d7176794c1d49db8"
+        },
+        {
+          "name": "afero",
+          "candidateId": "candidate_daec93c07e5e3f21"
+        },
+        {
+          "name": "notify",
+          "candidateId": "candidate_8f7e1b6272cbe60e"
+        }
+      ],
+      "selectedPerLanguageFamily": {
+        "javascript-typescript": 2,
+        "python": 2,
+        "go": 2,
+        "rust": 2
+      },
+      "generatedArtifactTargets": 0
+    }
+  }
+}

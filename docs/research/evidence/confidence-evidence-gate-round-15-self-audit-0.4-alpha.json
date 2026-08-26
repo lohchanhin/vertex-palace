@@ -1,0 +1,218 @@
+{
+  "schemaVersion": 1,
+  "artifact": "confidence-evidence-gate-round-15-self-audit-0.4-alpha",
+  "round": 15,
+  "evidenceClass": "post-observation-controlled-regression",
+  "status": "controlled-regression-passed-self-hosting-repaired-with-residuals",
+  "createdAt": "2026-08-11T03:27:08.475Z",
+  "researchQuestion": "Can a compound multi-surface bugfix receive moderately higher route confidence only when its selected implementation, verification, evidence, and bilingual documentation are complete, connected, unambiguous, and within budget?",
+  "protocol": {
+    "fixture": "synthetic-keystone-lifecycle-family",
+    "sameTaskText": true,
+    "sameSevenFileOracle": true,
+    "sameRouteLimit": 7,
+    "sequential": true,
+    "concurrent": false,
+    "selectedAfterObservation": true,
+    "independentHeldOut": false,
+    "immutableCandidateCommit": false
+  },
+  "task": "Fix the Keystone lifecycle router by updating task analysis, route scoring, and route planning; add a focused regression test, record machine-readable evidence, and write English and Simplified Chinese result reports.",
+  "oracle": [
+    "packages/core/src/router/analyze-task.ts",
+    "packages/core/src/router/route-scorer.ts",
+    "packages/core/src/router/route-planner.ts",
+    "packages/core/test/router.test.ts",
+    "docs/research/evidence/keystone-lifecycle-routing-repair.json",
+    "docs/research/KEYSTONE_LIFECYCLE_ROUTING_REPAIR_RESULT.md",
+    "docs/zh-CN/KEYSTONE_LIFECYCLE_ROUTING_REPAIR_RESULT.md"
+  ],
+  "conditions": {
+    "completeEvidence": {
+      "budgetTokens": 6000,
+      "estimatedRouteTokens": 1548,
+      "routeFiles": [
+        "packages/core/src/router/route-scorer.ts",
+        "docs/zh-CN/KEYSTONE_LIFECYCLE_ROUTING_REPAIR_RESULT.md",
+        "docs/research/evidence/keystone-lifecycle-routing-repair.json",
+        "packages/core/test/router.test.ts",
+        "packages/core/src/router/route-planner.ts",
+        "packages/core/src/router/analyze-task.ts",
+        "docs/research/KEYSTONE_LIFECYCLE_ROUTING_REPAIR_RESULT.md"
+      ],
+      "matchedFiles": 7,
+      "oracleFiles": 7,
+      "routeOnlyFiles": 0,
+      "changedFileCoverage": 1,
+      "routeFocus": 1,
+      "routeConfidence": 0.68,
+      "calibration": "underconfident",
+      "evidenceClosure": "sufficient",
+      "requiredRoles": [
+        "verification",
+        "documentation",
+        "implementation"
+      ],
+      "confidenceEvidence": {
+        "basis": "evidence-closure-v2",
+        "score": 0.99,
+        "completeness": 1,
+        "connectivity": 1,
+        "semanticCoverage": 1,
+        "ambiguity": 0,
+        "indexFreshness": "fresh",
+        "memoryReliability": "not-applied"
+      },
+      "independentImplementationAnchor": "confirmed",
+      "verifiedImplementationSources": 3
+    },
+    "tightBudget": {
+      "budgetTokens": 100,
+      "estimatedRouteTokens": 1548,
+      "sameOrderedRouteAsCompleteEvidence": true,
+      "routeConfidence": 0.4,
+      "reason": "The selected route exceeds the explicit input budget, so the separate budget cap remains active."
+    },
+    "incompleteIndependentVerification": {
+      "budgetTokens": 6000,
+      "estimatedRouteTokens": 1438,
+      "sameRouteFileSetAsCompleteEvidence": true,
+      "matchedFiles": 7,
+      "oracleFiles": 7,
+      "routeOnlyFiles": 0,
+      "changedFileCoverage": 1,
+      "routeFocus": 1,
+      "routeConfidence": 0.4,
+      "calibration": "underconfident",
+      "evidenceClosure": "sufficient",
+      "independentImplementationAnchor": "missing",
+      "uncoveredImplementationSources": [
+        "packages/core/src/router/route-planner.ts",
+        "packages/core/src/router/route-scorer.ts"
+      ],
+      "reason": "Role-level closure alone is insufficient for confidence uplift when the selected test does not independently connect to every routed implementation source."
+    }
+  },
+  "intentQualifierControl": {
+    "artifactOutputQualifiersExcludedFromSubjects": [
+      "machinereadable",
+      "json",
+      "english",
+      "simplified",
+      "chinese"
+    ],
+    "implementationTask": "Fix the English parser",
+    "implementationSubjectsPreserved": [
+      "english",
+      "parser"
+    ]
+  },
+  "confidencePolicy": {
+    "completeCompoundCap": 0.68,
+    "incompleteCompoundCap": 0.4,
+    "overBudgetCap": 0.4,
+    "upliftRequirements": {
+      "minimumCompleteness": 0.95,
+      "minimumConnectivity": 0.95,
+      "minimumSemanticCoverage": 0.95,
+      "maximumAmbiguity": 0,
+      "minimumRequestedSurfaceBreadth": 0.85,
+      "minimumArtifactFamilyCoverageWhenPresent": 0.8,
+      "independentVerificationForMultipleImplementationSources": "confirmed"
+    }
+  },
+  "selfHostingObservation": {
+    "taskObservedAfterBuild": true,
+    "repairLineage": "post-observation-disclosed",
+    "independentHeldOut": false,
+    "baseline": {
+      "evaluationId": "evaluation_d806f35697a07487",
+      "routeId": "route_7a69b1ecd0bd3fdd",
+      "taskType": "evaluation",
+      "matchedFiles": 0,
+      "oracleFiles": 9,
+      "changedFileCoverage": 0,
+      "routeFocus": 0,
+      "routeConfidence": 0.3,
+      "calibration": "overconfident",
+      "contextTokens": 5007,
+      "selectedFamily": "artifact-intent-bilingual-followup"
+    },
+    "intermediate": {
+      "evaluationId": "evaluation_33738334c61a91f0",
+      "routeId": "route_8406c1731f303802",
+      "taskType": "refactor",
+      "matchedFiles": 4,
+      "oracleFiles": 9,
+      "changedFileCoverage": 0.444,
+      "routeFocus": 0.571,
+      "routeConfidence": 0.4,
+      "calibration": "well-calibrated",
+      "contextTokens": 3479,
+      "residual": "The product code and focused tests were recovered, but an older multi-surface report family displaced the current Round 15 artifacts."
+    },
+    "repaired": {
+      "evaluationId": "evaluation_d36bfd38072b0d23",
+      "routeId": "route_8a7710e68e5a69f8",
+      "taskType": "refactor",
+      "semanticCoreMatchedFiles": 7,
+      "semanticCoreFiles": 7,
+      "matchedFiles": 7,
+      "oracleFiles": 9,
+      "changedFileCoverage": 0.778,
+      "routeFocus": 1,
+      "routeConfidence": 0.4,
+      "calibration": "underconfident",
+      "routeOnlyFiles": 0,
+      "contextTokens": 4852,
+      "contextTokenCeiling": 6000,
+      "missedFiles": [
+        "scripts/test/round15-confidence-evidence-gate.test.cjs",
+        "plugins/vertex-palace/mcp/server.cjs"
+      ]
+    },
+    "interpretation": "The disclosed repair moved the live self-hosting route from 0/9 with an unrelated artifact family to 7/7 requested semantic-core files and 7/9 of the broader historical changed-file oracle with no route-only files. The remaining misses are the retrospective report-lock script and generated MCP bundle; they are preserved as residuals rather than forced into the route.",
+    "disclosure": "This repair was designed after observing the baseline and intermediate failures. It is not an independent held-out result, and the original 0/9 outcome remains immutable."
+  },
+  "verification": {
+    "focusedKeystoneRegression": "passed",
+    "focusedIntentQualifierRegression": "passed",
+    "routerAndEvidenceModelTests": {
+      "passed": 120,
+      "total": 120
+    },
+    "monorepoTests": {
+      "core": 225,
+      "cli": 2,
+      "mcp": 2,
+      "passed": 229,
+      "total": 229
+    },
+    "coreTypecheck": "passed",
+    "build": "passed",
+    "researchLifecycleTests": {
+      "regular": 173,
+      "inheritedBeforeRound15": 170,
+      "round15EvidenceLocks": 3,
+      "round11Freeze": 2,
+      "round12Freeze": 2,
+      "failed": 0
+    }
+  },
+  "claimBoundary": [
+    "This is a disclosed post-observation controlled regression on a synthetic fixture, not independent held-out evidence.",
+    "The complete and negative conditions were designed after observing the prior confidence behavior.",
+    "The result demonstrates a local calibration invariant, not improved repository routing recall.",
+    "No Agent task was executed, so this result supports no Agent correctness, Token, tool-call, or wall-time improvement claim.",
+    "Earlier immutable formal outcomes are not rewritten by this result."
+  ],
+  "competitionFreeze": {
+    "active": true,
+    "localChangesOnly": true,
+    "committed": false,
+    "pushed": false,
+    "tagged": false,
+    "npmPublished": false,
+    "published": false
+  }
+}

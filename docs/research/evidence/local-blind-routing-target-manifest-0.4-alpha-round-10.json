@@ -1,0 +1,1000 @@
+{
+  "schemaVersion": 1,
+  "studyId": "local-blind-routing-round-10-0.4-alpha",
+  "generatedAt": "2026-08-09T14:36:51.346Z",
+  "status": "selected",
+  "claimBoundary": "Mechanical local candidate-held-out target selection only. The frozen baseline and candidate have not initialized, indexed, routed, packed, contextualized, or evaluated any selected Round 10 task. This locally hash-frozen evidence is not public preregistration.",
+  "evidenceClass": "local-hash-frozen-candidate-held-out-target-selection",
+  "publicPreregistration": false,
+  "heldOutAgainstCandidate": true,
+  "candidate": {
+    "role": "post-round-9-disclosed-evidence-closure-repair-candidate",
+    "baseCommit": "67c0a2ce8754cece3773d5fd16b89dae4e3af0c1",
+    "sourceState": "uncommitted-local-working-tree-frozen-by-content-hash",
+    "cliPath": "dist/palace.cjs",
+    "cliSha256": "74DE697F77B5ADA01C2DBD15646FD87FE5DA9C43763D574D21AC98C02CB27624",
+    "generatedMcpPath": "plugins/vertex-palace/mcp/server.cjs",
+    "generatedMcpSha256": "E80F74F3F5368D5DA4F28BE8781A281DD0756F2E57F019F935CB7E490DBB1ABE",
+    "sourceTree": {
+      "algorithm": "sha256-path-length-bytes-v1",
+      "fileCount": 185,
+      "sha256": "1711A6DDD8670D401C04B4487D57980E8A0E5FDC7BE0B59A004B38AB6BA6BA84"
+    },
+    "buildCommand": "pnpm build"
+  },
+  "comparisonBaseline": {
+    "role": "pre-local-evidence-closure-optimization",
+    "productCommit": "67c0a2ce8754cece3773d5fd16b89dae4e3af0c1",
+    "sourceTree": {
+      "algorithm": "sha256-path-length-bytes-v1",
+      "fileCount": 121,
+      "sha256": "73BB3192CE756367031E8B3E1C5FE8332811C5FB333036A5BA6DFB7B2007B5E0"
+    },
+    "cliPath": "dist/palace.cjs",
+    "cliSha256": "52A1876B00AF4AAA884A6C7EA47AC2E701E88C34FC8FEE65DD1B32BB6513B8AE",
+    "rebuild": {
+      "dependencyCommand": "pnpm install --offline --frozen-lockfile --ignore-scripts",
+      "buildCommand": "pnpm build",
+      "networkRequired": false
+    }
+  },
+  "localFreeze": {
+    "path": "docs/research/evidence/local-blind-candidate-freeze-0.4-alpha-round-10.json",
+    "sha256": "F1E7EFE6D15BC279970BD7E9171E930C649941F2B272FA4394F33CC0ED48F984",
+    "frozenAt": "2026-08-09T14:33:23.782Z",
+    "artifactHashesVerified": true
+  },
+  "selector": {
+    "path": "scripts/select-local-blind-routing-targets-round-10.cjs",
+    "sha256": "9C1928537D94C0F169AF0E4239E175967CC1D59C3A260527536A92D0074CE8ED"
+  },
+  "repositoryPool": {
+    "path": "docs/research/evidence/local-blind-routing-repository-pool-0.4-alpha-round-10.json",
+    "sha256": "E8641790EDE5AFED2E32FB215A553E727DE99ED1EC3D729F8110360003C1DCE2",
+    "priorExclusionSource": {
+      "path": "docs/research/evidence/local-blind-routing-repository-pool-0.4-alpha-round-9.json",
+      "sha256": "746E0D459D2EBC7EAF1610F3E576F32D24EC8F7B80F1D4A076FB7B89952F3B68",
+      "includePreviousExclusionChain": true,
+      "includeRound9RepositoryPool": true,
+      "expectedUniqueRepositoryCount": 113
+    },
+    "repositories": [
+      {
+        "name": "p-map",
+        "language": "JavaScript",
+        "languageFamily": "javascript-typescript",
+        "url": "https://github.com/sindresorhus/p-map.git",
+        "pinnedHead": "bc26cf03f81292325236a1188063dac8e7a4de0f",
+        "extensions": [
+          ".cjs",
+          ".js",
+          ".jsx",
+          ".mjs",
+          ".ts",
+          ".tsx"
+        ]
+      },
+      {
+        "name": "itsdangerous",
+        "language": "Python",
+        "languageFamily": "python",
+        "url": "https://github.com/pallets/itsdangerous.git",
+        "pinnedHead": "672971d66a2ef9f85151e53283113f33d642dabd",
+        "extensions": [
+          ".py"
+        ]
+      },
+      {
+        "name": "gorilla-websocket",
+        "language": "Go fallback parser",
+        "languageFamily": "go",
+        "url": "https://github.com/gorilla/websocket.git",
+        "pinnedHead": "e064f32e3674d9d79a8fd417b5bc06fa5c6cad8f",
+        "extensions": [
+          ".go"
+        ]
+      },
+      {
+        "name": "syn",
+        "language": "Rust fallback parser",
+        "languageFamily": "rust",
+        "url": "https://github.com/dtolnay/syn.git",
+        "pinnedHead": "f2c5c50200c1f056adc422e231819c8e4374bdfa",
+        "extensions": [
+          ".rs"
+        ]
+      },
+      {
+        "name": "uuid",
+        "language": "TypeScript",
+        "languageFamily": "javascript-typescript",
+        "url": "https://github.com/uuidjs/uuid.git",
+        "pinnedHead": "b1da338815af4d919295eacb33aae340e372232a",
+        "extensions": [
+          ".cjs",
+          ".js",
+          ".jsx",
+          ".mjs",
+          ".ts",
+          ".tsx"
+        ]
+      },
+      {
+        "name": "markupsafe",
+        "language": "Python",
+        "languageFamily": "python",
+        "url": "https://github.com/pallets/markupsafe.git",
+        "pinnedHead": "b2e4d9c7687be25695fffbe93a37622302b24fb1",
+        "extensions": [
+          ".py"
+        ]
+      },
+      {
+        "name": "logrus",
+        "language": "Go fallback parser",
+        "languageFamily": "go",
+        "url": "https://github.com/sirupsen/logrus.git",
+        "pinnedHead": "a23d315dfebb6de47d18c92c8ae1430736a60b0c",
+        "extensions": [
+          ".go"
+        ]
+      },
+      {
+        "name": "slab",
+        "language": "Rust fallback parser",
+        "languageFamily": "rust",
+        "url": "https://github.com/tokio-rs/slab.git",
+        "pinnedHead": "a1e4346070a48c936d808de75191dee5d01e433c",
+        "extensions": [
+          ".rs"
+        ]
+      },
+      {
+        "name": "qs",
+        "language": "JavaScript",
+        "languageFamily": "javascript-typescript",
+        "url": "https://github.com/ljharb/qs.git",
+        "pinnedHead": "3a890d4ecd3deb72a45d90be36f4f8c5970467c7",
+        "extensions": [
+          ".cjs",
+          ".js",
+          ".jsx",
+          ".mjs",
+          ".ts",
+          ".tsx"
+        ]
+      },
+      {
+        "name": "urllib3",
+        "language": "Python",
+        "languageFamily": "python",
+        "url": "https://github.com/urllib3/urllib3.git",
+        "pinnedHead": "824d97bb1e36f8ac9d3445d9ca1726f0a48b4b78",
+        "extensions": [
+          ".py"
+        ]
+      },
+      {
+        "name": "go-retryablehttp",
+        "language": "Go fallback parser",
+        "languageFamily": "go",
+        "url": "https://github.com/hashicorp/go-retryablehttp.git",
+        "pinnedHead": "fd004584a46724fae09e2f21d7c382e15c893f42",
+        "extensions": [
+          ".go"
+        ]
+      },
+      {
+        "name": "parking-lot",
+        "language": "Rust fallback parser",
+        "languageFamily": "rust",
+        "url": "https://github.com/Amanieu/parking_lot.git",
+        "pinnedHead": "d20d71e5a8955ec1d2a53e3659142a505476bb3d",
+        "extensions": [
+          ".rs"
+        ]
+      },
+      {
+        "name": "nanoid",
+        "language": "JavaScript",
+        "languageFamily": "javascript-typescript",
+        "url": "https://github.com/ai/nanoid.git",
+        "pinnedHead": "9247b6dbfe97854e6e136784ae5dde0c672d22c5",
+        "extensions": [
+          ".cjs",
+          ".js",
+          ".jsx",
+          ".mjs",
+          ".ts",
+          ".tsx"
+        ]
+      },
+      {
+        "name": "typer",
+        "language": "Python",
+        "languageFamily": "python",
+        "url": "https://github.com/fastapi/typer.git",
+        "pinnedHead": "361bdd822dd5eafc9c2e3e55ed3a94b746a39aa6",
+        "extensions": [
+          ".py"
+        ]
+      },
+      {
+        "name": "prometheus-common",
+        "language": "Go fallback parser",
+        "languageFamily": "go",
+        "url": "https://github.com/prometheus/common.git",
+        "pinnedHead": "7748b9a8ce5a5f3682efcd18c792b7031a8d4a95",
+        "extensions": [
+          ".go"
+        ]
+      },
+      {
+        "name": "rust-log",
+        "language": "Rust fallback parser",
+        "languageFamily": "rust",
+        "url": "https://github.com/rust-lang/log.git",
+        "pinnedHead": "037d7a58f6ad184abb3afc4db81d37c43a5696ec",
+        "extensions": [
+          ".rs"
+        ]
+      }
+    ]
+  },
+  "rules": {
+    "desiredTargets": 8,
+    "requiredLanguageFamilies": [
+      "javascript-typescript",
+      "python",
+      "go",
+      "rust"
+    ],
+    "targetsPerLanguageFamily": 2,
+    "repositoriesPerLanguageFamily": 4,
+    "repositoryOrderIsBinding": true,
+    "firstEligibleRepositoriesPerFamilyWin": true,
+    "remainingRepositoriesPerFamilyAreFallbacks": true,
+    "taskClassifier": "inflected-behavioral-subject-v1",
+    "minimumFiles": 2,
+    "maximumFiles": 8,
+    "maximumAuxiliaryFiles": 2,
+    "maximumChangedLines": 400,
+    "allowedAuxiliaryExtensions": [
+      ".cfg",
+      ".conf",
+      ".ini",
+      ".json",
+      ".md",
+      ".mdx",
+      ".rst",
+      ".toml",
+      ".txt",
+      ".yaml",
+      ".yml"
+    ],
+    "pinnedHeadsObtainedWithGitLsRemoteHeadOnly": true,
+    "commitHistoryInspectedBeforePoolFreeze": false,
+    "palaceCallsOnCandidateTasksBeforePoolFreeze": 0,
+    "baselineAndCandidateFrozenBeforeTargetSelection": true,
+    "outputCreateOnly": true,
+    "languageDiversitySatisfied": true,
+    "selectedPerLanguageFamily": {
+      "javascript-typescript": 2,
+      "python": 2,
+      "go": 2,
+      "rust": 2
+    },
+    "fetchDepth": 400,
+    "fetchMode": "complete-shallow-history-no-promisor",
+    "scanLimit": 300,
+    "nonMergeSingleParent": true,
+    "newestEligibleCommitWins": true,
+    "allFilesMustBeModified": true,
+    "requiresImplementationAndFocusedTest": true,
+    "implementationAndTestMustUsePrimaryLanguageExtension": true,
+    "auxiliaryFilesAreIncludedInOracle": true,
+    "expectedTaskTypeDerivedBeforeRouting": true,
+    "materializationAttempts": 3,
+    "retryDelayMs": 5000,
+    "palaceCallsOnCandidateTasksDuringSelection": 0
+  },
+  "repositoryReports": [
+    {
+      "name": "p-map",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/sindresorhus/p-map.git",
+      "pinnedHead": "bc26cf03f81292325236a1188063dac8e7a4de0f",
+      "status": "selected",
+      "scannedCommits": 2,
+      "rejectionCounts": {
+        "non-behavioral-or-ambiguous-subject": 1
+      },
+      "selectedTarget": {
+        "name": "p-map",
+        "language": "JavaScript",
+        "languageFamily": "javascript-typescript",
+        "url": "https://github.com/sindresorhus/p-map.git",
+        "pinnedHead": "bc26cf03f81292325236a1188063dac8e7a4de0f",
+        "routeCommit": "3ada5f36632aca8df860c376856270b6d2ba2de8",
+        "groundTruthCommit": "3f153f118657a905d26e4ff3008355a9c24a3190",
+        "task": "Fix abort listener cleanup for already-aborted signals (#91)",
+        "expectedTaskType": "bugfix",
+        "changedFiles": [
+          "index.js",
+          "test.js"
+        ],
+        "implementationFiles": [
+          "index.js"
+        ],
+        "testFiles": [
+          "test.js"
+        ],
+        "auxiliaryFiles": [],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 3,
+        "additions": 3,
+        "deletions": 0
+      },
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "elapsedMs": 1437,
+          "errorCode": null,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "itsdangerous",
+      "languageFamily": "python",
+      "url": "https://github.com/pallets/itsdangerous.git",
+      "pinnedHead": "672971d66a2ef9f85151e53283113f33d642dabd",
+      "status": "selected",
+      "scannedCommits": 280,
+      "rejectionCounts": {
+        "non-behavioral-or-ambiguous-subject": 262,
+        "file-count-outside-range": 11,
+        "contains-non-modified-file": 2,
+        "missing-implementation-or-test": 4
+      },
+      "selectedTarget": {
+        "name": "itsdangerous",
+        "language": "Python",
+        "languageFamily": "python",
+        "url": "https://github.com/pallets/itsdangerous.git",
+        "pinnedHead": "672971d66a2ef9f85151e53283113f33d642dabd",
+        "routeCommit": "ef8fd9894efab262761d2dcf24671592a8fc8bbf",
+        "groundTruthCommit": "d79c74ac6b56e7802f3e3ead948cd3454f55ab95",
+        "task": "Added SHA-512 fallback by default",
+        "expectedTaskType": "feature",
+        "changedFiles": [
+          "CHANGES.rst",
+          "src/itsdangerous/serializer.py",
+          "src/itsdangerous/timed.py",
+          "tests/test_itsdangerous/test_serializer.py",
+          "tox.ini"
+        ],
+        "implementationFiles": [
+          "src/itsdangerous/serializer.py",
+          "src/itsdangerous/timed.py"
+        ],
+        "testFiles": [
+          "tests/test_itsdangerous/test_serializer.py"
+        ],
+        "auxiliaryFiles": [
+          "CHANGES.rst",
+          "tox.ini"
+        ],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 25,
+        "additions": 20,
+        "deletions": 5
+      },
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "elapsedMs": 1370,
+          "errorCode": null,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "gorilla-websocket",
+      "languageFamily": "go",
+      "url": "https://github.com/gorilla/websocket.git",
+      "pinnedHead": "e064f32e3674d9d79a8fd417b5bc06fa5c6cad8f",
+      "status": "selected",
+      "scannedCommits": 35,
+      "rejectionCounts": {
+        "contains-non-modified-file": 1,
+        "non-behavioral-or-ambiguous-subject": 27,
+        "file-count-outside-range": 5,
+        "contains-excluded-path": 1
+      },
+      "selectedTarget": {
+        "name": "gorilla-websocket",
+        "language": "Go fallback parser",
+        "languageFamily": "go",
+        "url": "https://github.com/gorilla/websocket.git",
+        "pinnedHead": "e064f32e3674d9d79a8fd417b5bc06fa5c6cad8f",
+        "routeCommit": "316861440d22b24cfa1977a7f92bb68b15ccbe13",
+        "groundTruthCommit": "0cfb2cafd049d84b9c349558e9ff759c3b4869b4",
+        "task": "feat: format message type",
+        "expectedTaskType": "feature",
+        "changedFiles": [
+          "conn.go",
+          "conn_test.go"
+        ],
+        "implementationFiles": [
+          "conn.go"
+        ],
+        "testFiles": [
+          "conn_test.go"
+        ],
+        "auxiliaryFiles": [],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 29,
+        "additions": 29,
+        "deletions": 0
+      },
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "elapsedMs": 1724,
+          "errorCode": null,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "syn",
+      "languageFamily": "rust",
+      "url": "https://github.com/dtolnay/syn.git",
+      "pinnedHead": "f2c5c50200c1f056adc422e231819c8e4374bdfa",
+      "status": "selected",
+      "scannedCommits": 151,
+      "rejectionCounts": {
+        "non-behavioral-or-ambiguous-subject": 122,
+        "missing-implementation-or-test": 5,
+        "file-count-outside-range": 22,
+        "contains-unsupported-extension": 1
+      },
+      "selectedTarget": {
+        "name": "syn",
+        "language": "Rust fallback parser",
+        "languageFamily": "rust",
+        "url": "https://github.com/dtolnay/syn.git",
+        "pinnedHead": "f2c5c50200c1f056adc422e231819c8e4374bdfa",
+        "routeCommit": "e027fef2adcd6588fa8097c63dc916778d1aa11b",
+        "groundTruthCommit": "774d389bb16cefbf14790dfcbe8554b1c50e07da",
+        "task": "Resolve useless_borrows_in_formatting clippy lint in generated code",
+        "expectedTaskType": "bugfix",
+        "changedFiles": [
+          "codegen/src/snapshot.rs",
+          "tests/debug/gen.rs"
+        ],
+        "implementationFiles": [
+          "codegen/src/snapshot.rs"
+        ],
+        "testFiles": [
+          "tests/debug/gen.rs"
+        ],
+        "auxiliaryFiles": [],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 6,
+        "additions": 3,
+        "deletions": 3
+      },
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "elapsedMs": 1939,
+          "errorCode": null,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "uuid",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/uuidjs/uuid.git",
+      "pinnedHead": "b1da338815af4d919295eacb33aae340e372232a",
+      "status": "selected",
+      "scannedCommits": 1,
+      "rejectionCounts": {},
+      "selectedTarget": {
+        "name": "uuid",
+        "language": "TypeScript",
+        "languageFamily": "javascript-typescript",
+        "url": "https://github.com/uuidjs/uuid.git",
+        "pinnedHead": "b1da338815af4d919295eacb33aae340e372232a",
+        "routeCommit": "6adcc1d81bfaeb653c49d9b7ca7b0579244ae60c",
+        "groundTruthCommit": "b1da338815af4d919295eacb33aae340e372232a",
+        "task": "fix(v1): set the multicast bit on v1Bytes's own randomly-generated node (#973)",
+        "expectedTaskType": "bugfix",
+        "changedFiles": [
+          "src/test/v1.test.ts",
+          "src/test/v6.test.ts",
+          "src/v1.ts"
+        ],
+        "implementationFiles": [
+          "src/v1.ts"
+        ],
+        "testFiles": [
+          "src/test/v1.test.ts",
+          "src/test/v6.test.ts"
+        ],
+        "auxiliaryFiles": [],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 31,
+        "additions": 30,
+        "deletions": 1
+      },
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "elapsedMs": 1958,
+          "errorCode": null,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "markupsafe",
+      "languageFamily": "python",
+      "url": "https://github.com/pallets/markupsafe.git",
+      "pinnedHead": "b2e4d9c7687be25695fffbe93a37622302b24fb1",
+      "status": "selected",
+      "scannedCommits": 148,
+      "rejectionCounts": {
+        "non-behavioral-or-ambiguous-subject": 140,
+        "too-many-auxiliary-files": 1,
+        "contains-non-modified-file": 1,
+        "file-count-outside-range": 4,
+        "missing-implementation-or-test": 1
+      },
+      "selectedTarget": {
+        "name": "markupsafe",
+        "language": "Python",
+        "languageFamily": "python",
+        "url": "https://github.com/pallets/markupsafe.git",
+        "pinnedHead": "b2e4d9c7687be25695fffbe93a37622302b24fb1",
+        "routeCommit": "60e7eb97e65947a83fa290010f3dde71be8fed84",
+        "groundTruthCommit": "391aa07d3c68d4d0888b31fdea62516df9e19cb8",
+        "task": "implement `format_map`",
+        "expectedTaskType": "feature",
+        "changedFiles": [
+          "CHANGES.rst",
+          "src/markupsafe/__init__.py",
+          "tests/test_markupsafe.py"
+        ],
+        "implementationFiles": [
+          "src/markupsafe/__init__.py"
+        ],
+        "testFiles": [
+          "tests/test_markupsafe.py"
+        ],
+        "auxiliaryFiles": [
+          "CHANGES.rst"
+        ],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 10,
+        "additions": 10,
+        "deletions": 0
+      },
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "elapsedMs": 1407,
+          "errorCode": null,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "logrus",
+      "languageFamily": "go",
+      "url": "https://github.com/sirupsen/logrus.git",
+      "pinnedHead": "a23d315dfebb6de47d18c92c8ae1430736a60b0c",
+      "status": "selected",
+      "scannedCommits": 41,
+      "rejectionCounts": {
+        "non-behavioral-or-ambiguous-subject": 34,
+        "file-count-outside-range": 3,
+        "missing-implementation-or-test": 1,
+        "contains-non-modified-file": 2
+      },
+      "selectedTarget": {
+        "name": "logrus",
+        "language": "Go fallback parser",
+        "languageFamily": "go",
+        "url": "https://github.com/sirupsen/logrus.git",
+        "pinnedHead": "a23d315dfebb6de47d18c92c8ae1430736a60b0c",
+        "routeCommit": "4e3d3133d57894562639ccc807bcb1d7fd3466fc",
+        "groundTruthCommit": "8011284fadc315067c23e8cfc19bef11e130051c",
+        "task": "Allow for custom level mapping between logrus and slog",
+        "expectedTaskType": "feature",
+        "changedFiles": [
+          "hooks/slog/slog.go",
+          "hooks/slog/slog_test.go"
+        ],
+        "implementationFiles": [
+          "hooks/slog/slog.go"
+        ],
+        "testFiles": [
+          "hooks/slog/slog_test.go"
+        ],
+        "auxiliaryFiles": [],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 42,
+        "additions": 35,
+        "deletions": 7
+      },
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "elapsedMs": 1458,
+          "errorCode": null,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "slab",
+      "languageFamily": "rust",
+      "url": "https://github.com/tokio-rs/slab.git",
+      "pinnedHead": "a1e4346070a48c936d808de75191dee5d01e433c",
+      "status": "selected",
+      "scannedCommits": 6,
+      "rejectionCounts": {
+        "non-behavioral-or-ambiguous-subject": 3,
+        "file-count-outside-range": 2
+      },
+      "selectedTarget": {
+        "name": "slab",
+        "language": "Rust fallback parser",
+        "languageFamily": "rust",
+        "url": "https://github.com/tokio-rs/slab.git",
+        "pinnedHead": "a1e4346070a48c936d808de75191dee5d01e433c",
+        "routeCommit": "6a1b675665ee141ab68fd3e4f82b3cb3efc09e01",
+        "groundTruthCommit": "2d65c514bc964b192bab212ddf3c1fcea4ae96b8",
+        "task": "Fix get_disjoint_mut error condition (#152)",
+        "expectedTaskType": "bugfix",
+        "changedFiles": [
+          "src/lib.rs",
+          "tests/slab.rs"
+        ],
+        "implementationFiles": [
+          "src/lib.rs"
+        ],
+        "testFiles": [
+          "tests/slab.rs"
+        ],
+        "auxiliaryFiles": [],
+        "oracleSource": "mechanically selected single-parent real Git-history diff",
+        "changedLines": 18,
+        "additions": 16,
+        "deletions": 2
+      },
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "elapsedMs": 1411,
+          "errorCode": null,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "qs",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/ljharb/qs.git",
+      "pinnedHead": "3a890d4ecd3deb72a45d90be36f4f8c5970467c7",
+      "status": "reserved-fallback-not-inspected",
+      "scannedCommits": 0,
+      "rejectionCounts": {},
+      "selectedTarget": null
+    },
+    {
+      "name": "urllib3",
+      "languageFamily": "python",
+      "url": "https://github.com/urllib3/urllib3.git",
+      "pinnedHead": "824d97bb1e36f8ac9d3445d9ca1726f0a48b4b78",
+      "status": "reserved-fallback-not-inspected",
+      "scannedCommits": 0,
+      "rejectionCounts": {},
+      "selectedTarget": null
+    },
+    {
+      "name": "go-retryablehttp",
+      "languageFamily": "go",
+      "url": "https://github.com/hashicorp/go-retryablehttp.git",
+      "pinnedHead": "fd004584a46724fae09e2f21d7c382e15c893f42",
+      "status": "reserved-fallback-not-inspected",
+      "scannedCommits": 0,
+      "rejectionCounts": {},
+      "selectedTarget": null
+    },
+    {
+      "name": "parking-lot",
+      "languageFamily": "rust",
+      "url": "https://github.com/Amanieu/parking_lot.git",
+      "pinnedHead": "d20d71e5a8955ec1d2a53e3659142a505476bb3d",
+      "status": "reserved-fallback-not-inspected",
+      "scannedCommits": 0,
+      "rejectionCounts": {},
+      "selectedTarget": null
+    },
+    {
+      "name": "nanoid",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/ai/nanoid.git",
+      "pinnedHead": "9247b6dbfe97854e6e136784ae5dde0c672d22c5",
+      "status": "reserved-fallback-not-inspected",
+      "scannedCommits": 0,
+      "rejectionCounts": {},
+      "selectedTarget": null
+    },
+    {
+      "name": "typer",
+      "languageFamily": "python",
+      "url": "https://github.com/fastapi/typer.git",
+      "pinnedHead": "361bdd822dd5eafc9c2e3e55ed3a94b746a39aa6",
+      "status": "reserved-fallback-not-inspected",
+      "scannedCommits": 0,
+      "rejectionCounts": {},
+      "selectedTarget": null
+    },
+    {
+      "name": "prometheus-common",
+      "languageFamily": "go",
+      "url": "https://github.com/prometheus/common.git",
+      "pinnedHead": "7748b9a8ce5a5f3682efcd18c792b7031a8d4a95",
+      "status": "reserved-fallback-not-inspected",
+      "scannedCommits": 0,
+      "rejectionCounts": {},
+      "selectedTarget": null
+    },
+    {
+      "name": "rust-log",
+      "languageFamily": "rust",
+      "url": "https://github.com/rust-lang/log.git",
+      "pinnedHead": "037d7a58f6ad184abb3afc4db81d37c43a5696ec",
+      "status": "reserved-fallback-not-inspected",
+      "scannedCommits": 0,
+      "rejectionCounts": {},
+      "selectedTarget": null
+    }
+  ],
+  "targets": [
+    {
+      "name": "p-map",
+      "language": "JavaScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/sindresorhus/p-map.git",
+      "pinnedHead": "bc26cf03f81292325236a1188063dac8e7a4de0f",
+      "routeCommit": "3ada5f36632aca8df860c376856270b6d2ba2de8",
+      "groundTruthCommit": "3f153f118657a905d26e4ff3008355a9c24a3190",
+      "task": "Fix abort listener cleanup for already-aborted signals (#91)",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "index.js",
+        "test.js"
+      ],
+      "implementationFiles": [
+        "index.js"
+      ],
+      "testFiles": [
+        "test.js"
+      ],
+      "auxiliaryFiles": [],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 3,
+      "additions": 3,
+      "deletions": 0
+    },
+    {
+      "name": "itsdangerous",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/pallets/itsdangerous.git",
+      "pinnedHead": "672971d66a2ef9f85151e53283113f33d642dabd",
+      "routeCommit": "ef8fd9894efab262761d2dcf24671592a8fc8bbf",
+      "groundTruthCommit": "d79c74ac6b56e7802f3e3ead948cd3454f55ab95",
+      "task": "Added SHA-512 fallback by default",
+      "expectedTaskType": "feature",
+      "changedFiles": [
+        "CHANGES.rst",
+        "src/itsdangerous/serializer.py",
+        "src/itsdangerous/timed.py",
+        "tests/test_itsdangerous/test_serializer.py",
+        "tox.ini"
+      ],
+      "implementationFiles": [
+        "src/itsdangerous/serializer.py",
+        "src/itsdangerous/timed.py"
+      ],
+      "testFiles": [
+        "tests/test_itsdangerous/test_serializer.py"
+      ],
+      "auxiliaryFiles": [
+        "CHANGES.rst",
+        "tox.ini"
+      ],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 25,
+      "additions": 20,
+      "deletions": 5
+    },
+    {
+      "name": "gorilla-websocket",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/gorilla/websocket.git",
+      "pinnedHead": "e064f32e3674d9d79a8fd417b5bc06fa5c6cad8f",
+      "routeCommit": "316861440d22b24cfa1977a7f92bb68b15ccbe13",
+      "groundTruthCommit": "0cfb2cafd049d84b9c349558e9ff759c3b4869b4",
+      "task": "feat: format message type",
+      "expectedTaskType": "feature",
+      "changedFiles": [
+        "conn.go",
+        "conn_test.go"
+      ],
+      "implementationFiles": [
+        "conn.go"
+      ],
+      "testFiles": [
+        "conn_test.go"
+      ],
+      "auxiliaryFiles": [],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 29,
+      "additions": 29,
+      "deletions": 0
+    },
+    {
+      "name": "syn",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/dtolnay/syn.git",
+      "pinnedHead": "f2c5c50200c1f056adc422e231819c8e4374bdfa",
+      "routeCommit": "e027fef2adcd6588fa8097c63dc916778d1aa11b",
+      "groundTruthCommit": "774d389bb16cefbf14790dfcbe8554b1c50e07da",
+      "task": "Resolve useless_borrows_in_formatting clippy lint in generated code",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "codegen/src/snapshot.rs",
+        "tests/debug/gen.rs"
+      ],
+      "implementationFiles": [
+        "codegen/src/snapshot.rs"
+      ],
+      "testFiles": [
+        "tests/debug/gen.rs"
+      ],
+      "auxiliaryFiles": [],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 6,
+      "additions": 3,
+      "deletions": 3
+    },
+    {
+      "name": "uuid",
+      "language": "TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/uuidjs/uuid.git",
+      "pinnedHead": "b1da338815af4d919295eacb33aae340e372232a",
+      "routeCommit": "6adcc1d81bfaeb653c49d9b7ca7b0579244ae60c",
+      "groundTruthCommit": "b1da338815af4d919295eacb33aae340e372232a",
+      "task": "fix(v1): set the multicast bit on v1Bytes's own randomly-generated node (#973)",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "src/test/v1.test.ts",
+        "src/test/v6.test.ts",
+        "src/v1.ts"
+      ],
+      "implementationFiles": [
+        "src/v1.ts"
+      ],
+      "testFiles": [
+        "src/test/v1.test.ts",
+        "src/test/v6.test.ts"
+      ],
+      "auxiliaryFiles": [],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 31,
+      "additions": 30,
+      "deletions": 1
+    },
+    {
+      "name": "markupsafe",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/pallets/markupsafe.git",
+      "pinnedHead": "b2e4d9c7687be25695fffbe93a37622302b24fb1",
+      "routeCommit": "60e7eb97e65947a83fa290010f3dde71be8fed84",
+      "groundTruthCommit": "391aa07d3c68d4d0888b31fdea62516df9e19cb8",
+      "task": "implement `format_map`",
+      "expectedTaskType": "feature",
+      "changedFiles": [
+        "CHANGES.rst",
+        "src/markupsafe/__init__.py",
+        "tests/test_markupsafe.py"
+      ],
+      "implementationFiles": [
+        "src/markupsafe/__init__.py"
+      ],
+      "testFiles": [
+        "tests/test_markupsafe.py"
+      ],
+      "auxiliaryFiles": [
+        "CHANGES.rst"
+      ],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 10,
+      "additions": 10,
+      "deletions": 0
+    },
+    {
+      "name": "logrus",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/sirupsen/logrus.git",
+      "pinnedHead": "a23d315dfebb6de47d18c92c8ae1430736a60b0c",
+      "routeCommit": "4e3d3133d57894562639ccc807bcb1d7fd3466fc",
+      "groundTruthCommit": "8011284fadc315067c23e8cfc19bef11e130051c",
+      "task": "Allow for custom level mapping between logrus and slog",
+      "expectedTaskType": "feature",
+      "changedFiles": [
+        "hooks/slog/slog.go",
+        "hooks/slog/slog_test.go"
+      ],
+      "implementationFiles": [
+        "hooks/slog/slog.go"
+      ],
+      "testFiles": [
+        "hooks/slog/slog_test.go"
+      ],
+      "auxiliaryFiles": [],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 42,
+      "additions": 35,
+      "deletions": 7
+    },
+    {
+      "name": "slab",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/tokio-rs/slab.git",
+      "pinnedHead": "a1e4346070a48c936d808de75191dee5d01e433c",
+      "routeCommit": "6a1b675665ee141ab68fd3e4f82b3cb3efc09e01",
+      "groundTruthCommit": "2d65c514bc964b192bab212ddf3c1fcea4ae96b8",
+      "task": "Fix get_disjoint_mut error condition (#152)",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "src/lib.rs",
+        "tests/slab.rs"
+      ],
+      "implementationFiles": [
+        "src/lib.rs"
+      ],
+      "testFiles": [
+        "tests/slab.rs"
+      ],
+      "auxiliaryFiles": [],
+      "oracleSource": "mechanically selected single-parent real Git-history diff",
+      "changedLines": 18,
+      "additions": 16,
+      "deletions": 2
+    }
+  ]
+}

@@ -1,13 +1,19 @@
-import type { PalaceEdge, PalaceNode, TaskType } from "@vertex-palace/shared";
+import type { PalaceEdge, PalaceEvidenceFact, PalaceNode, TaskType } from "@vertex-palace/shared";
 import type { TaskAnalysis } from "./analyze-task";
 import { floorTemplate } from "./locate-entry";
 import { isBinaryLikePath } from "../utils/binary-files";
 import { expandedTaskAcronyms } from "../utils/lexical-acronyms";
-import { normalizeLexicalToken, tokenizeLexical } from "../utils/lexical-tokens";
+import {
+  extractCodeIdentifierCompacts,
+  normalizeLexicalToken,
+  tokenizeLexical
+} from "../utils/lexical-tokens";
 import { analyzePublicationIntent } from "./publication-intent";
+import { classifyDirectedChange } from "./classify-task";
 
 export type ScoredNode = {
   node: PalaceNode;
+  matchedFact?: PalaceEvidenceFact;
   score: number;
   reasons: string[];
   matchedKeywordCount: number;
@@ -22,25 +28,46 @@ export type RouteSurface =
   | "docs"
   | "ci"
   | "evidence"
+  | "tooling"
   | "package"
   | "plugin"
   | "implementation";
 
-export function scoreNodes(nodes: PalaceNode[], edges: PalaceEdge[], analysis: TaskAnalysis, taskType: TaskType): ScoredNode[] {
+export function scoreNodes(
+  nodes: PalaceNode[],
+  edges: PalaceEdge[],
+  analysis: TaskAnalysis,
+  taskType: TaskType,
+  facts: PalaceEvidenceFact[] = []
+): ScoredNode[] {
   const floors = floorTemplate(taskType);
   const edgeBoosts = relationBoosts(edges);
   const requestedSurfaces = requestedRouteSurfaces(analysis);
   const semanticMatchLimit = taskType === "bugfix" ? 8 : 4;
   const typeDeclarationIntent = isTypeDeclarationIntent(analysis);
+  const factsBySource = groupFactsBySource(facts);
 
   return nodes
     .filter((node) => node.kind !== "directory")
     .map((node) => {
       const reasons: string[] = [];
       let score = 0;
-      const haystack = [node.sourcePath, node.title, node.summary, node.lod.level4, node.wing, node.room, ...node.tags].filter(Boolean).join(" ").toLowerCase();
+      const matchedFact = node.startLine
+        ? undefined
+        : bestMatchingEvidenceFact(factsBySource.get(node.sourcePath) ?? [], analysis);
+      const haystack = [
+        node.sourcePath,
+        node.title,
+        node.summary,
+        node.lod.level4,
+        node.wing,
+        node.room,
+        ...node.tags,
+        matchedFact?.name,
+        matchedFact?.searchText
+      ].filter(Boolean).join(" ").toLowerCase();
       const tokens = tokenize(haystack);
-      const entityHit = entityHintBoost(node, analysis);
+      const entityHit = entityHintBoost(node, analysis, matchedFact);
       const matchedKeywords = new Set<string>();
       let semanticMatchCount = 0;
 
@@ -89,9 +116,11 @@ export function scoreNodes(nodes: PalaceNode[], edges: PalaceEdge[], analysis: T
         score += Math.min(60, (discriminativeKeywordCount - 3) * 15);
         reasons.push("implementation coherently matches several bug symptoms");
       }
-      if (node.startLine && matchedKeywords.size > 0) {
+      if ((node.startLine || matchedFact) && matchedKeywords.size > 0) {
         score += 12;
-        reasons.push("symbol-level match provides a precise source range");
+        reasons.push(matchedFact
+          ? `${matchedFact.kind} evidence provides a precise source range`
+          : "symbol-level match provides a precise source range");
       }
 
       if (entityHit > 0) {
@@ -202,6 +231,7 @@ export function scoreNodes(nodes: PalaceNode[], edges: PalaceEdge[], analysis: T
 
       return {
         node,
+        ...(matchedFact ? { matchedFact } : {}),
         score,
         reasons: [...new Set(reasons)].slice(0, 4),
         matchedKeywordCount: matchedKeywords.size
@@ -213,6 +243,39 @@ export function scoreNodes(nodes: PalaceNode[], edges: PalaceEdge[], analysis: T
         (taskType === "test" || analysis.keywords.includes("fixture") || !isFixtureLikePath(item.node.sourcePath))
     )
     .sort((a, b) => b.score - a.score || a.node.sourcePath.localeCompare(b.node.sourcePath));
+}
+
+function groupFactsBySource(facts: PalaceEvidenceFact[]): Map<string, PalaceEvidenceFact[]> {
+  const grouped = new Map<string, PalaceEvidenceFact[]>();
+  for (const fact of facts) grouped.set(fact.sourcePath, [...(grouped.get(fact.sourcePath) ?? []), fact]);
+  return grouped;
+}
+
+function bestMatchingEvidenceFact(
+  facts: PalaceEvidenceFact[],
+  analysis: TaskAnalysis
+): PalaceEvidenceFact | undefined {
+  const taskIdentifierCompacts = explicitTaskIdentifierCompacts(analysis);
+  const taskEntityCompacts = [...new Set(analysis.entities.map(compact).filter(Boolean))]
+    .filter((entity) => !taskIdentifierCompacts.has(entity));
+  return facts.map((fact) => {
+    const factText = `${fact.name} ${fact.searchText ?? ""}`;
+    const factTokens = tokenize(factText);
+    const keywordMatches = analysis.keywords.filter((keyword) => {
+      const normalized = normalizeLexicalToken(keyword);
+      return normalized && !SURFACE_ONLY_KEYWORDS.has(normalized) && factTokens.has(normalized);
+    }).length;
+    const compactFact = compact(factText);
+    const factIdentifierCompacts = extractCodeIdentifierCompacts(factText);
+    const identifierMatches = [...taskIdentifierCompacts]
+      .filter((identifier) => factIdentifierCompacts.has(identifier)).length;
+    const entityMatches = taskEntityCompacts.filter((entity) => compactFact.includes(entity)).length;
+    const score = keywordMatches * 10 + identifierMatches * 32 + entityMatches * 18 + fact.confidence;
+    return { fact, score, keywordMatches, identifierMatches, entityMatches };
+  }).filter((candidate) => candidate.keywordMatches > 0 || candidate.identifierMatches > 0 || candidate.entityMatches > 0)
+    .sort((left, right) => right.score - left.score
+      || (left.fact.endLine - left.fact.startLine) - (right.fact.endLine - right.fact.startLine)
+      || left.fact.startLine - right.fact.startLine)[0]?.fact;
 }
 
 const SURFACE_ONLY_KEYWORDS = new Set(["regression", "test", "verification"]);
@@ -298,20 +361,38 @@ function requestsTypeTestSetup(analysis: TaskAnalysis): boolean {
     || /(?:类型|型別)(?:测试|測試)|(?:测试|測試)(?:配置|設定)/.test(analysis.raw);
 }
 
-function entityHintBoost(node: PalaceNode, analysis: TaskAnalysis): number {
+function entityHintBoost(node: PalaceNode, analysis: TaskAnalysis, matchedFact?: PalaceEvidenceFact): number {
   if (!analysis.entities.length) return 0;
+  const explicitIdentifiers = explicitTaskIdentifierCompacts(analysis);
   const compactPath = compact(node.sourcePath);
   const compactTitle = compact(node.title);
   const compactSummary = compact(node.summary);
+  const compactFact = compact(`${matchedFact?.name ?? ""} ${matchedFact?.searchText ?? ""}`);
+  const pathIdentifiers = extractCodeIdentifierCompacts(node.sourcePath);
+  const titleIdentifiers = extractCodeIdentifierCompacts(node.title);
+  const summaryIdentifiers = extractCodeIdentifierCompacts(node.summary);
+  const factIdentifiers = extractCodeIdentifierCompacts(`${matchedFact?.name ?? ""} ${matchedFact?.searchText ?? ""}`);
   let boost = 0;
   for (const entity of analysis.entities) {
     const compactEntity = compact(entity);
     if (!compactEntity) continue;
-    if (compactPath.includes(compactEntity)) boost += 50;
+    if (explicitIdentifiers.has(compactEntity)) {
+      if (pathIdentifiers.has(compactEntity)) boost += 50;
+      else if (titleIdentifiers.has(compactEntity)) boost += 35;
+      else if (summaryIdentifiers.has(compactEntity)) boost += 20;
+      else if (factIdentifiers.has(compactEntity)) boost += 35;
+    } else if (compactPath.includes(compactEntity)) boost += 50;
     else if (compactTitle.includes(compactEntity)) boost += 35;
     else if (compactSummary.includes(compactEntity)) boost += 20;
+    else if (compactFact.includes(compactEntity)) boost += 35;
   }
   return Math.min(90, boost);
+}
+
+function explicitTaskIdentifierCompacts(analysis: TaskAnalysis): Set<string> {
+  return new Set(
+    analysis.identifiers.flatMap((identifier) => [...extractCodeIdentifierCompacts(identifier)])
+  );
 }
 
 function evaluationHintBoost(node: PalaceNode, taskType: TaskType, analysis: TaskAnalysis, hasEntityHit: boolean): number {
@@ -367,6 +448,14 @@ function isEvaluationMetaPath(path: string, analysis: TaskAnalysis): boolean {
   if (/(^|\/)(evaluation)(\/|$)|evaluate|confidence-calibration|changed-file-coverage/.test(path)) return true;
 
   const keywords = new Set(analysis.keywords);
+  if (
+    hasAny(keywords, ["usage", "audit", "research"])
+    && (
+      /(^|\/)(?:scripts|tools)\/research(\/|$)/.test(path)
+      || /(^|\/)docs\/research(\/|$)/.test(path)
+      || /(?:usage|session)[-_.]?(?:audit|analysis)|audit[-_.]?(?:codex|palace|usage)/.test(path)
+    )
+  ) return true;
   if (hasAny(keywords, ["route", "router", "confidence", "score", "scorer", "classify", "analyze"]) && /(router|route-planner|route-scorer|route-expander|locate-entry|analyze-task|classify-task)/.test(path)) return true;
   if (hasAny(keywords, ["pack", "packer", "context", "token"]) && /(packer|context-packer|token-estimator|snippet-extractor|output-format)/.test(path)) return true;
   if (hasAny(keywords, ["memory", "retrospective", "pitfall"]) && /(memory|pitfall|latest-route|task-log|write-memory)/.test(path)) return true;
@@ -378,6 +467,9 @@ function isEvaluationMetaPath(path: string, analysis: TaskAnalysis): boolean {
 export function requestedRouteSurfaces(analysis: TaskAnalysis): RouteSurface[] {
   const keywords = new Set(analysis.keywords);
   const publication = analyzePublicationIntent(analysis.raw);
+  const routingVocabularyImplementation = isRoutingVocabularyImplementation(analysis.raw);
+  const documentationArtifactOutput = hasDocumentationArtifactOutputIntent(analysis.raw);
+  const evidenceArtifactOutput = hasEvidenceArtifactOutputIntent(analysis.raw);
   const requested: RouteSurface[] = [];
   if (hasAny(keywords, ["cli", "command", "commands"])) requested.push("cli");
   if (keywords.has("mcp")) requested.push("mcp");
@@ -390,13 +482,20 @@ export function requestedRouteSurfaces(analysis: TaskAnalysis): RouteSurface[] {
     && hasAny(keywords, ["implementation", "source"])
     && hasAny(keywords, ["config", "plan", "protocol", "frozen"]);
   if (explicitVerification || evidencePinVerification || empiricalReplication) requested.push("test");
-  if (hasAny(keywords, ["config", "configuration", "migration", "migrate", "migrated", "plan", "protocol", "frozen"])) requested.push("config");
+  if (hasConfigurationSurfaceIntent(analysis.raw)) requested.push("config");
   if (
-    hasDocumentationSurfaceIntent(analysis.raw)
+    (!routingVocabularyImplementation && hasDocumentationSurfaceIntent(analysis.raw))
+    || documentationArtifactOutput
     || hasAny(keywords, ["migration", "migrate", "migrated"])
   ) requested.push("docs");
   if (hasAny(keywords, ["ci", "workflow", "workflows", "actions"])) requested.push("ci");
-  if (isMachineEvidenceArtifactRequest(analysis.raw)) requested.push("evidence");
+  const usageAudit = hasAny(keywords, ["usage", "audit"])
+    && hasAny(keywords, ["evaluation", "retrospective", "research"]);
+  if (
+    evidenceArtifactOutput
+    || (!routingVocabularyImplementation && (isMachineEvidenceArtifactRequest(analysis.raw) || (usageAudit && keywords.has("evidence"))))
+  ) requested.push("evidence");
+  if (!routingVocabularyImplementation && (keywords.has("tooling") || usageAudit)) requested.push("tooling");
   if (publication.releaseIntent || (isTypeDeclarationIntent(analysis) && requestsTypeTestSetup(analysis))) requested.push("package");
   if (hasAny(keywords, ["plugin", "marketplace"])) requested.push("plugin");
   const evidenceArtifactEvaluationIntent = publication.releaseArtifactReference
@@ -404,13 +503,18 @@ export function requestedRouteSurfaces(analysis: TaskAnalysis): RouteSurface[] {
     && publication.evidenceSubject
     && !publication.releaseIntent
     && !hasExplicitCodeChangeIntent(analysis.raw);
-  const evaluationIntent = hasAny(keywords, ["evaluation", "evaluate", "retrospective"])
-    || evidenceArtifactEvaluationIntent;
+  const evaluationIntent = (
+    hasAny(keywords, ["evaluation", "evaluate", "retrospective"])
+    && !hasExplicitCodeChangeIntent(analysis.raw)
+  ) || evidenceArtifactEvaluationIntent;
   if (
     hasAny(keywords, ["implementation", "source", "generator"])
     || (!evaluationIntent && hasAny(keywords, ["adaptive", "bypass", "mode", "selector", "context", "packer", "route", "router", "score", "scorer", "precision", "recall", "confidence"]))
   ) requested.push("implementation");
-  if ((publication.releaseIntent || keywords.has("changelog")) && !requested.includes("docs")) requested.push("docs");
+  if (
+    (publication.releaseIntent || keywords.has("changelog") || (usageAudit && keywords.has("docs")))
+    && !requested.includes("docs")
+  ) requested.push("docs");
   if (keywords.has("release") && requested.includes("plugin")) {
     if (!requested.includes("mcp")) requested.push("mcp");
     if (!requested.includes("cli")) requested.push("cli");
@@ -420,8 +524,80 @@ export function requestedRouteSurfaces(analysis: TaskAnalysis): RouteSurface[] {
 }
 
 function hasExplicitCodeChangeIntent(task: string): boolean {
-  return /^\s*(?:add|build|create|debug|enhance|fix|implement|improve|optimi[sz]e|refactor|repair|resolve|support|update)\b/i.test(task)
-    || /^\s*(?:新增|增加|建立|创建|創建|实现|實作|支援|支持|修复|修正|修補|修补|解决|解決|重构|重構|优化|優化|改善|改进|改進|更新)/.test(task);
+  return Boolean(classifyDirectedChange(task))
+    || /^\s*(?:build|debug|enhance)\b/i.test(task)
+    || /^\s*(?:continue\s+(?:debugging|fixing|improving|optimizing|optimising)|keep\s+(?:debugging|fixing|improving|optimizing|optimising))\b/i.test(task)
+    || /^\s*(?:更新|继续|繼續|持续|持續)(?:优化|優化|修复|修復|修正|改进|改進|改善)/.test(task);
+}
+
+function isRoutingVocabularyImplementation(task: string): boolean {
+  if (!hasExplicitCodeChangeIntent(task)) return false;
+  return /\b(?:task[-\s]?intent|route[-\s]?surfaces?|evidence[-\s]?roles?|routing[-\s]?(?:intent|vocabulary|classification))\b/i.test(task)
+    || /(?:任务|任務)(?:意图|意圖|分类|分類)|(?:路由|路線|路线)(?:表面|介面|界面|词汇|詞彙|意图|意圖)|证据角色|證據角色/.test(task)
+    || taskClauses(task).some(isRoutingVocabularyClause);
+}
+
+function hasConfigurationSurfaceIntent(task: string): boolean {
+  const configurationMention = (clause: string): boolean =>
+    /\b(?:config(?:uration)?|migrat(?:e|ed|ion)|study\s+plan|result\s+manifest|protocol)\b/i.test(clause)
+    || /(?:配置|迁移|遷移|计划|計划|計畫|协议|協議|结果清单|結果清單)/.test(clause);
+  if (taskClauses(task).some(
+    (clause) => configurationMention(clause) && !isRoutingVocabularyClause(clause)
+  )) return true;
+  const frozen = /\bfreeze(?:d)?\b|冻结|凍結/i.test(task);
+  if (!frozen) return false;
+  const operationalFreeze = /\b(?:competition|contest|hackathon|build\s+week)\b.{0,48}\bfreeze(?:d)?\b|\bfreeze(?:d)?\b.{0,48}\b(?:competition|contest|hackathon|build\s+week)\b/i.test(task)
+    || /(?:比赛|比賽|竞赛|競賽|参赛|參賽).{0,20}(?:冻结|凍結)|(?:冻结|凍結).{0,20}(?:比赛|比賽|竞赛|競賽|参赛|參賽)/.test(task)
+    || /\b(?:do\s+not|don't)\s+(?:commit|push|publish)\b/i.test(task)
+    || /不(?:提交|推送|发布|發佈|發布)/.test(task);
+  return !operationalFreeze;
+}
+
+function hasDocumentationArtifactOutputIntent(task: string): boolean {
+  return taskClauses(task).some((clause) => {
+    const artifact = /\b(?:bilingual|locali[sz]ed?|simplified\s+chinese|english)\b.{0,64}\b(?:docs?|documentation|records?|reports?|results?|evidence|instructions?|guides?)\b/i.test(clause)
+      || /\b(?:research|result|study)\s+(?:records?|reports?)\b|\breadme\b/i.test(clause)
+      || /(?:简体中文|簡體中文|双语|雙語|英文|中英文).{0,24}(?:说明|說明|记录|記錄|报告|報告|结果|結果|文档|文檔|协议|協議)/.test(clause)
+      || /(?:研究|结果|結果).{0,12}(?:记录|記錄|报告|報告)/.test(clause);
+    if (!artifact || !hasArtifactOutputAction(clause)) return false;
+    const metaOnly = isRoutingVocabularyClause(clause);
+    return !metaOnly;
+  });
+}
+
+function hasEvidenceArtifactOutputIntent(task: string): boolean {
+  return taskClauses(task).some((clause) => {
+    const structuredArtifact = /\bmachine(?:[-\s]?readable)?\s+(?:evaluation\s+)?evidence\b|\bevidence(?:[-\s]+directory)?\s+json\b/i.test(clause)
+      || /(?:机器|機器)(?:可读|可讀)?(?:评估|評估)?证据|证据\s*JSON|證據\s*JSON/i.test(clause);
+    const researchArtifact = /\b(?:research|self[-\s]?audit|evaluation|audit)\s+evidence\b/i.test(clause)
+      || /(?:研究|自审|自審|自评|自評|评估|評估|审计|審計)证据|(?:研究|自審|自評|評估|審計)證據/.test(clause);
+    const createsResearchArtifact = hasArtifactOutputAction(clause);
+    if (
+      !(structuredArtifact && hasArtifactOutputAction(clause))
+      && !(researchArtifact && createsResearchArtifact)
+    ) return false;
+    const metaOnly = isRoutingVocabularyClause(clause);
+    return !metaOnly;
+  });
+}
+
+function taskClauses(task: string): string[] {
+  return task.split(/[,.，、;；。!?！？]+/).map((clause) => clause.trim()).filter(Boolean);
+}
+
+function isRoutingVocabularyClause(clause: string): boolean {
+  const metaAction = /\b(?:classif(?:y|ication)|differentiate|distinguish|identify|interpret|parse|recognize)\b/i.test(clause)
+    || /(?:区分|區分|分类|分類|识别|識別|解析|解读|解讀)/.test(clause);
+  const routingModel = /\b(?:config(?:uration)?|docs?|documentation|evidence|output|report|result)[-\s]+routing\b|\brouting[-\s]+(?:classification|intent|roles?|surfaces?|vocabulary)\b/i.test(clause)
+    || /(?:配置|文档|文檔|证据|證據|产出|產出|报告|報告|结果|結果)(?:路由|路線|路线)|(?:路由|路線|路线)(?:分类|分類|意图|意圖|角色|表面|界面|介面|词汇|詞彙)/.test(clause);
+  if (!metaAction && !routingModel) return false;
+  return /\b(?:artifact|config(?:uration)?|docs?|documentation|evidence|intent|output|report|result|route|routing|surface|task)\b/i.test(clause)
+    || /(?:产出|產出|任务|任務|意图|意圖|配置|文档|文檔|证据|證據|报告|報告|结果|結果|路由|路線|路线|表面|界面|介面)/.test(clause);
+}
+
+function hasArtifactOutputAction(task: string): boolean {
+  return /\b(?:add|attach|complete|create|generate|include|preserve|record|refresh|sync|update|write)\b/i.test(task)
+    || /(?:新增|加入|附上|完成|建立|创建|創建|生成|纳入|納入|保留|记录|記錄|更新|刷新|同步|编写|編寫|补齐|補齊)/.test(task);
 }
 
 function hasDocumentationSurfaceIntent(task: string): boolean {
@@ -470,6 +646,9 @@ export function matchesRouteSurface(node: PalaceNode, surface: RouteSurface): bo
       return /(^|\/)\.github\/workflows(\/|$)|(^|\/)(ci|workflows?)(\/|$)/.test(sourcePath);
     case "evidence":
       return isMachineEvidencePath(sourcePath);
+    case "tooling":
+      return /(^|\/)(?:scripts|tools|tooling)(\/|$)/.test(sourcePath)
+        && !isVerificationScriptPath(sourcePath);
     case "package":
       return isPackageManifestPath(sourcePath);
     case "plugin":
@@ -500,7 +679,7 @@ function isMachineEvidencePath(sourcePath: string): boolean {
 }
 
 function hasEvaluationKeywordPath(path: string, analysis: TaskAnalysis): boolean {
-  if (/(route|router|memory|packer|context|pitfall|confidence|index|stale|classif|evaluation|retrospective)/.test(path)) return true;
+  if (/(route|router|memory|packer|context|pitfall|confidence|index|stale|classif|evaluation|retrospective|research|audit|usage)/.test(path)) return true;
   return analysis.keywords.some((keyword) => keyword.length > 3 && path.includes(keyword));
 }
 

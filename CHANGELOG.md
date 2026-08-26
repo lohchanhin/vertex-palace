@@ -2,6 +2,34 @@
 
 ## Unreleased
 
+## 0.4.0-alpha.1 - 2026-08-26
+
+### Added
+
+- An advisory-by-default safety contract that treats routing as an auditable starting hypothesis instead of an authority that can replace source inspection, tests, or Git evidence.
+- Structured evidence roles, subject/owner closure, repository-condition facts, CommonJS import relationships, lifecycle artifact handling, and compositional multi-surface routing.
+- Exact UTF-8 section accounting, Agent-adherence telemetry, explicit no-reopen guidance, stop conditions, and conservative post-route evaluation.
+- A preregistered research lineage covering disclosed repairs, immutable candidate queues, held-out routing rounds, confidence calibration, and bilingual machine-readable evidence.
+
+### Changed
+
+- Memory is selected once during preflight, scoped by tenant and task, and preserved as decision or pitfall evidence without forcing every task into a memory-heavy mode.
+- Route scoring now reserves verification and owner surfaces, distinguishes implementation from generated or historical artifacts, and widens context only when concrete dependency or task evidence requires it.
+- Confidence is capped when evidence roles are incomplete, parsing fails, repository conditions are uncertain, or the requested task spans more surfaces than the selected route covers.
+- Plugin, CLI, MCP, and package metadata are aligned on `0.4.0-alpha.1`; npm publishes the preview under dist-tag `next` while `0.3.0` remains `latest`.
+
+### Fixed
+
+- CommonJS root closure, fallback compound symbols, task morphology such as `status`, and cross-file test/module identity no longer disappear from otherwise relevant routes.
+- Generated, stale, nested, and similarly named artifacts are less likely to displace current implementation, direct verification, configuration, or public contract evidence.
+- Parsing failures and unsupported evidence now reduce confidence instead of allowing a high-confidence but incomplete route.
+
+### Verification And Limits
+
+- The workspace core suite passes 234 tests, and the disclosed 13-file compositional replay reached 13/13 changed-file coverage with 1.00 route focus.
+- The abstract eight-file summary self-evaluation reached only 3/8. More importantly, the frozen Round 19 held-out gate did not pass; those negative results are preserved in the repository.
+- This alpha validates product contracts and documents substantial post-observation routing repairs. It does not prove a general reduction in end-to-end Agent tokens, wall time, or correctness errors.
+
 ## 0.3.0 - 2026-07-21
 
 ### Added

@@ -1,0 +1,188 @@
+{
+  "schemaVersion": 1,
+  "studyId": "local-blind-routing-round-11-0.4-alpha",
+  "status": "locally-frozen",
+  "claimBoundary": "Fresh local repository pool frozen from URLs and git ls-remote HEAD object IDs only. No Round 11 commit history, subject, diff, task, coherence review, oracle, or Palace output was inspected before this pool was written. This is not public preregistration.",
+  "candidateFreeze": {
+    "path": "docs/research/evidence/local-blind-candidate-freeze-0.4-alpha-round-11.json"
+  },
+  "priorExclusionSource": {
+    "path": "docs/research/evidence/local-blind-routing-repository-pool-0.4-alpha-round-10.json",
+    "sha256": "E8641790EDE5AFED2E32FB215A553E727DE99ED1EC3D729F8110360003C1DCE2",
+    "includePreviousExclusionChain": true,
+    "includeRound10RepositoryPool": true,
+    "expectedUniqueRepositoryCount": 129
+  },
+  "rules": {
+    "desiredTargets": 8,
+    "requiredLanguageFamilies": [
+      "javascript-typescript",
+      "python",
+      "go",
+      "rust"
+    ],
+    "targetsPerLanguageFamily": 2,
+    "repositoriesPerLanguageFamily": 4,
+    "repositoryOrderIsBinding": true,
+    "newestCoherentCandidatePerRepositoryWins": true,
+    "remainingRepositoriesPerFamilyAreFallbacks": true,
+    "taskClassifier": "inflected-behavioral-subject-v1",
+    "maximumMechanicalCandidatesPerRepository": 5,
+    "minimumFiles": 2,
+    "maximumFiles": 8,
+    "maximumAuxiliaryFiles": 2,
+    "maximumChangedLines": 400,
+    "allowedAuxiliaryExtensions": [
+      ".cfg",
+      ".conf",
+      ".ini",
+      ".json",
+      ".md",
+      ".mdx",
+      ".rst",
+      ".toml",
+      ".txt",
+      ".yaml",
+      ".yml"
+    ],
+    "taskDiffCoherenceReviewRequired": true,
+    "wholeTargetRejectionForUnrelatedOrUncertainHunk": true,
+    "partialOraclePruningForbidden": true,
+    "maximumGeneratedArtifactTargets": 1,
+    "pinnedHeadsObtainedWithGitLsRemoteHeadOnly": true,
+    "commitHistoryInspectedBeforePoolFreeze": false,
+    "palaceCallsOnCandidateTasksBeforePoolFreeze": 0,
+    "baselineAndCandidateFrozenBeforeTargetSelection": true,
+    "outputCreateOnly": true
+  },
+  "repositoryPool": [
+    {
+      "name": "yup",
+      "language": "JavaScript/TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/jquense/yup.git",
+      "pinnedHead": "ff31eee8a2b10c938bb3a22544d9e33957a8cf01",
+      "extensions": [".cjs", ".js", ".jsx", ".mjs", ".ts", ".tsx"]
+    },
+    {
+      "name": "marshmallow",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/marshmallow-code/marshmallow.git",
+      "pinnedHead": "c7b559a1fa3aba57ca6dba0ab336841c5038a782",
+      "extensions": [".py"]
+    },
+    {
+      "name": "logr",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/go-logr/logr.git",
+      "pinnedHead": "45677ce6d14c4a65c85548acae894d7717ebcc4a",
+      "extensions": [".go"]
+    },
+    {
+      "name": "arrayvec",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/bluss/arrayvec.git",
+      "pinnedHead": "8a7c8211a237b9b258275e6ab0d967b7d0cb2704",
+      "extensions": [".rs"]
+    },
+    {
+      "name": "node-fetch",
+      "language": "JavaScript/TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/node-fetch/node-fetch.git",
+      "pinnedHead": "8b3320d2a7c07bce4afc6b2bf6c3bbddda85b01f",
+      "extensions": [".cjs", ".js", ".jsx", ".mjs", ".ts", ".tsx"]
+    },
+    {
+      "name": "jsonschema",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/python-jsonschema/jsonschema.git",
+      "pinnedHead": "d39388624a2032df8633503e8bb1951ad1059198",
+      "extensions": [".py"]
+    },
+    {
+      "name": "go-sql-driver-mysql",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/go-sql-driver/mysql.git",
+      "pinnedHead": "03d76c7e07908e255ce62d126d07ede3f2365d86",
+      "extensions": [".go"]
+    },
+    {
+      "name": "itertools",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/rust-itertools/itertools.git",
+      "pinnedHead": "cef9a8203ec485b06ec1889550cde0aa989d103a",
+      "extensions": [".rs"]
+    },
+    {
+      "name": "mocha",
+      "language": "JavaScript/TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/mochajs/mocha.git",
+      "pinnedHead": "505b5e9cec2f0fcbb1e52457f9c638fbfaf87900",
+      "extensions": [".cjs", ".js", ".jsx", ".mjs", ".ts", ".tsx"]
+    },
+    {
+      "name": "python-prompt-toolkit",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/prompt-toolkit/python-prompt-toolkit.git",
+      "pinnedHead": "583b3412c792a5cc9f01adde603679f3824a88f3",
+      "extensions": [".py"]
+    },
+    {
+      "name": "pgx",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/jackc/pgx.git",
+      "pinnedHead": "ec1a0befd22592cffffdeeb0a50311b506372f4c",
+      "extensions": [".go"]
+    },
+    {
+      "name": "petgraph",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/petgraph/petgraph.git",
+      "pinnedHead": "ed714652ab4576104e506c096b6ed9f5128613a7",
+      "extensions": [".rs"]
+    },
+    {
+      "name": "dom-testing-library",
+      "language": "JavaScript/TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/testing-library/dom-testing-library.git",
+      "pinnedHead": "e395d5b8ecd4ec95cc02540ddcf16571ecd33e0f",
+      "extensions": [".cjs", ".js", ".jsx", ".mjs", ".ts", ".tsx"]
+    },
+    {
+      "name": "tqdm",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/tqdm/tqdm.git",
+      "pinnedHead": "96f2e60e4584cdab57a23602e27043d0465254ad",
+      "extensions": [".py"]
+    },
+    {
+      "name": "lo",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/samber/lo.git",
+      "pinnedHead": "8d1aa4f84d585cb4de04aafd156a4c65a7f82e0e",
+      "extensions": [".go"]
+    },
+    {
+      "name": "fd",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/sharkdp/fd.git",
+      "pinnedHead": "ee20f426ddf338ac7ead5c5f00ea49258005caaf",
+      "extensions": [".rs"]
+    }
+  ]
+}

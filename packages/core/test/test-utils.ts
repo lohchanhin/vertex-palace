@@ -6,7 +6,10 @@ import { fileURLToPath } from "node:url";
 export async function withFixture(name: string, run: (root: string) => Promise<void>): Promise<void> {
   const tempRoot = await mkdtemp(path.join(os.tmpdir(), `vertex-palace-${name}-`));
   const source = path.join(path.dirname(fileURLToPath(import.meta.url)), "fixtures", name);
-  await cp(source, tempRoot, { recursive: true });
+  await cp(source, tempRoot, {
+    recursive: true,
+    filter: (sourcePath) => path.basename(sourcePath) !== ".palace"
+  });
   try {
     await run(tempRoot);
   } finally {

@@ -1,0 +1,1077 @@
+{
+  "schemaVersion": 1,
+  "studyId": "local-blind-routing-round-11-0.4-alpha",
+  "generatedAt": "2026-08-09T19:46:31.300Z",
+  "status": "review-complete",
+  "claimBoundary": "Developer-delegated, Codex-assisted semantic review performed after candidate freeze and before any Palace call on Round 11 tasks. The reviewer is not independent from product development, and no inter-rater agreement is available.",
+  "reviewBoundary": "single-developer-delegated-semantic-reviewer",
+  "publicPreregistration": false,
+  "candidateFreeze": {
+    "path": "docs/research/evidence/local-blind-candidate-freeze-0.4-alpha-round-11.json",
+    "sha256": "FD201FD0CE6D3A1C8FE3ADF85F87AB7AE9020BCA320E38922F36E3A5807CA440"
+  },
+  "queue": {
+    "path": "docs/research/evidence/local-blind-routing-candidate-queue-0.4-alpha-round-11-attempt-1.json",
+    "sha256": "B9A4F20691CE8DEA95AAD674F6F6B960715CA0F4A4B0CF40B2179F835C2256FC"
+  },
+  "reviewer": {
+    "id": "developer-delegated-codex-semantic-reviewer-1",
+    "role": "product-developer-delegated-semantic-review",
+    "codexAssisted": true,
+    "independent": false,
+    "interRaterAgreementAvailable": false
+  },
+  "timing": {
+    "candidateFrozenBeforeReview": true,
+    "reviewBeforeAnyPalaceCall": true,
+    "palaceCallsOnCandidateTasks": 0
+  },
+  "limitations": [
+    "The semantic reviewer is not independent from product development.",
+    "No second reviewer or inter-rater agreement is available.",
+    "Ambiguous hunks are rejected conservatively rather than adjudicated."
+  ],
+  "materialization": {
+    "draftSha256": "A93B5A4F91E751DDC512F7EFEC53300A325014A9FE1AC19F96C06853EC4610F3",
+    "semanticDecisionsCopiedWithoutModification": true,
+    "frozenValidatorDryRunRequiredBeforeWrite": true,
+    "outputCreateOnly": true,
+    "dryRun": {
+      "status": "selected",
+      "reviewedCandidates": 12,
+      "acceptedCandidates": 8,
+      "rejectedCandidates": 4,
+      "selectedTargets": [
+        {
+          "name": "yup",
+          "candidateId": "candidate_1f61adc8f1c0aa34"
+        },
+        {
+          "name": "marshmallow",
+          "candidateId": "candidate_d9b640e1de3ea73e"
+        },
+        {
+          "name": "arrayvec",
+          "candidateId": "candidate_6ba7ad1f75777269"
+        },
+        {
+          "name": "node-fetch",
+          "candidateId": "candidate_17aa3b59108e7e0e"
+        },
+        {
+          "name": "jsonschema",
+          "candidateId": "candidate_c6ee89789c620ee0"
+        },
+        {
+          "name": "go-sql-driver-mysql",
+          "candidateId": "candidate_e99f7ef34aabce46"
+        },
+        {
+          "name": "itertools",
+          "candidateId": "candidate_ddb750077d21b36b"
+        },
+        {
+          "name": "pgx",
+          "candidateId": "candidate_38e3997f35582093"
+        }
+      ],
+      "selectedPerLanguageFamily": {
+        "javascript-typescript": 2,
+        "python": 2,
+        "go": 2,
+        "rust": 2
+      },
+      "generatedArtifactTargets": 0
+    }
+  },
+  "reviews": [
+    {
+      "repository": "yup",
+      "candidateId": "candidate_25ac50f16a627490",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "No generated artifact relationship appears in this candidate.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      },
+      "review": {
+        "schemaVersion": 1,
+        "packetSha256": "E4D9C4384AB8609F553E9D920CF6BDB5D7ECE591AA3A0FB5AC2D57814C156C0C",
+        "reviewTiming": "pre-route",
+        "reviewPerformedAfterCandidateFreeze": true,
+        "reviewedWithoutPalaceOutput": true,
+        "palaceCallsOnCandidateTask": 0,
+        "targetDecision": "reject",
+        "files": [
+          {
+            "path": "src/index.ts",
+            "decision": "unrelated",
+            "reason": "The file only exposes an additional public SchemaSpec type and is independent of runtime reference resolution.",
+            "hunks": [
+              {
+                "id": "hunk_52bb61614b9344ec",
+                "decision": "unrelated",
+                "reason": "This import only enables the independent public SchemaSpec re-export and does not implement describe reference resolution."
+              },
+              {
+                "id": "hunk_c15d7a5eea93ba22",
+                "decision": "unrelated",
+                "reason": "This adds a public SchemaSpec type export, an API surface not stated or required by the frozen task."
+              }
+            ]
+          },
+          {
+            "path": "src/schema.ts",
+            "decision": "task-aligned",
+            "reason": "Every hunk resolves validation parameters while Schema.describe builds its test descriptions.",
+            "hunks": [
+              {
+                "id": "hunk_11cbd56722b36867",
+                "decision": "task-aligned",
+                "reason": "The imported helper is used to resolve reference-backed parameters during description."
+              },
+              {
+                "id": "hunk_452ff9d85479f473",
+                "decision": "task-aligned",
+                "reason": "Removing the pre-resolution mapping lets each validation retain its options until parameters are resolved."
+              },
+              {
+                "id": "hunk_db79b75c04f39410",
+                "decision": "task-aligned",
+                "reason": "The replacement maps validation options after resolving reference parameters with the supplied describe options."
+              }
+            ]
+          },
+          {
+            "path": "src/util/createValidation.ts",
+            "decision": "task-aligned",
+            "reason": "Every hunk extracts and reuses the reference-parameter resolution required by Schema.describe.",
+            "hunks": [
+              {
+                "id": "hunk_596575bc8f683bfe",
+                "decision": "task-aligned",
+                "reason": "ResolveOptions supplies the value, parent, and context needed for reference evaluation."
+              },
+              {
+                "id": "hunk_45e01a4680ad07e5",
+                "decision": "task-aligned",
+                "reason": "The hunk creates reusable resolution options so validation and description use the same reference context."
+              },
+              {
+                "id": "hunk_ee1f60629dd15ce8",
+                "decision": "task-aligned",
+                "reason": "The new helper resolves all validation parameters, enabling the same behavior during describe."
+              },
+              {
+                "id": "hunk_64c86b8b4f786703",
+                "decision": "task-aligned",
+                "reason": "The validation callback now delegates single-reference resolution to the extracted shared helper."
+              },
+              {
+                "id": "hunk_28ddd94555ff623a",
+                "decision": "task-aligned",
+                "reason": "The extracted resolveParams function is the mechanism Schema.describe calls for reference-backed parameters."
+              }
+            ]
+          },
+          {
+            "path": "test/number.ts",
+            "decision": "task-aligned",
+            "reason": "Both hunks set up and verify context and sibling references in described number constraints.",
+            "hunks": [
+              {
+                "id": "hunk_39634d5eccca180d",
+                "decision": "task-aligned",
+                "reason": "The added object and ref imports are required by the focused describe-reference test."
+              },
+              {
+                "id": "hunk_868061db09dd0902",
+                "decision": "task-aligned",
+                "reason": "The test directly verifies that describe resolves context and sibling reference parameters."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "repository": "yup",
+      "candidateId": "candidate_1f61adc8f1c0aa34",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "No generated artifact relationship appears in this candidate.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      },
+      "review": {
+        "schemaVersion": 1,
+        "packetSha256": "9D875E492EC33A8A0FFBBB32D0DF23CD65B825E7596E9C707315225D6DC137B3",
+        "reviewTiming": "pre-route",
+        "reviewPerformedAfterCandidateFreeze": true,
+        "reviewedWithoutPalaceOutput": true,
+        "palaceCallsOnCandidateTask": 0,
+        "targetDecision": "accept",
+        "files": [
+          {
+            "path": "src/Lazy.ts",
+            "decision": "task-aligned",
+            "reason": "Every hunk converts lazy-builder validation failures to the promised asynchronous behavior while preserving compatibility.",
+            "hunks": [
+              {
+                "id": "hunk_766ad5060fdfe751",
+                "decision": "task-aligned",
+                "reason": "The moved InferType import supports the direct schema imports needed by the validation-error handling change."
+              },
+              {
+                "id": "hunk_a35f8cf10924f1d2",
+                "decision": "task-aligned",
+                "reason": "Direct ValidationError and Schema imports enable typed error handling without the prior barrel import."
+              },
+              {
+                "id": "hunk_544437cc7ca98b5e",
+                "decision": "task-aligned",
+                "reason": "The helper converts synchronous lazy-builder ValidationError exceptions into rejected promises."
+              },
+              {
+                "id": "hunk_ba5b7e967ac54e05",
+                "decision": "task-aligned",
+                "reason": "Async validate now routes lazy-builder validation failures through the rejection helper."
+              },
+              {
+                "id": "hunk_e1ab5ce321dcc028",
+                "decision": "task-aligned",
+                "reason": "Async validateAt now receives the same promised validation-error behavior as validate."
+              },
+              {
+                "id": "hunk_7ff151b9c54eb733",
+                "decision": "task-aligned",
+                "reason": "Async isValid converts a lazy-builder ValidationError into a resolved false result while rethrowing other errors."
+              }
+            ]
+          },
+          {
+            "path": "test/lazy.ts",
+            "decision": "task-aligned",
+            "reason": "Every hunk verifies the new asynchronous validation-error behavior and its synchronous compatibility boundary.",
+            "hunks": [
+              {
+                "id": "hunk_f9f74c616973bc38",
+                "decision": "task-aligned",
+                "reason": "ValidationError is imported to construct the focused lazy-builder failure test."
+              },
+              {
+                "id": "hunk_ec4f327c7a9308c5",
+                "decision": "task-aligned",
+                "reason": "The old synchronous throw assertion moves to validateSync because async validate now rejects by design."
+              },
+              {
+                "id": "hunk_d4b3c98c78b311c5",
+                "decision": "task-aligned",
+                "reason": "The new test directly covers async rejection, isValid false, sync throwing, and non-validation-error compatibility."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "repository": "marshmallow",
+      "candidateId": "candidate_16458512fda4e821",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "No generated artifact relationship appears in this candidate.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      },
+      "review": {
+        "schemaVersion": 1,
+        "packetSha256": "BF09A61C08ABDD0AA812BA6BAEF25601AD90B3E1F8B19A2E7E75D61481DB962C",
+        "reviewTiming": "pre-route",
+        "reviewPerformedAfterCandidateFreeze": true,
+        "reviewedWithoutPalaceOutput": true,
+        "palaceCallsOnCandidateTask": 0,
+        "targetDecision": "reject",
+        "files": [
+          {
+            "path": "AUTHORS.rst",
+            "decision": "unrelated",
+            "reason": "The contributor roster update is project attribution metadata and does not describe or verify the frozen URL behavior.",
+            "hunks": [
+              {
+                "id": "hunk_de499f619c4c9708",
+                "decision": "unrelated",
+                "reason": "Adding the contributor name is independent project-maintenance metadata rather than evidence for fragment validation."
+              }
+            ]
+          },
+          {
+            "path": "CHANGELOG.rst",
+            "decision": "task-aligned",
+            "reason": "The changelog hunk directly records acceptance of a fragment after an empty URL path.",
+            "hunks": [
+              {
+                "id": "hunk_c0dfaab86733af33",
+                "decision": "task-aligned",
+                "reason": "The release note precisely describes the frozen URL-validator fix and its example."
+              }
+            ]
+          },
+          {
+            "path": "src/marshmallow/validate.py",
+            "decision": "task-aligned",
+            "reason": "The sole hunk changes the URL suffix expression to allow fragments after an empty path.",
+            "hunks": [
+              {
+                "id": "hunk_25bc0b493300049d",
+                "decision": "task-aligned",
+                "reason": "Adding the fragment marker to the allowed relative part directly implements the stated fix."
+              }
+            ]
+          },
+          {
+            "path": "tests/test_validate.py",
+            "decision": "task-aligned",
+            "reason": "Every hunk tests the accepted absolute-fragment form or preserves rejection of fragment-only relative input.",
+            "hunks": [
+              {
+                "id": "hunk_ffd5a2313a8fb1e1",
+                "decision": "task-aligned",
+                "reason": "These cases directly verify fragments following an empty absolute URL path."
+              },
+              {
+                "id": "hunk_ced5d8baed44bb20",
+                "decision": "task-aligned",
+                "reason": "The absolute validator still rejects a fragment with no scheme or host, defining the fix boundary."
+              },
+              {
+                "id": "hunk_6a94954b7e99e887",
+                "decision": "task-aligned",
+                "reason": "The relative validator still rejects a fragment-only value, preserving the intended boundary."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "repository": "marshmallow",
+      "candidateId": "candidate_7e71798aa51d7bbb",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "No generated artifact relationship appears in this candidate.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      },
+      "review": {
+        "schemaVersion": 1,
+        "packetSha256": "C5358E5CD10F31ABCBE140CEC3975AE5DAA6D13C2439BA4894C0834B34A46202",
+        "reviewTiming": "pre-route",
+        "reviewPerformedAfterCandidateFreeze": true,
+        "reviewedWithoutPalaceOutput": true,
+        "palaceCallsOnCandidateTask": 0,
+        "targetDecision": "reject",
+        "files": [
+          {
+            "path": "CHANGELOG.rst",
+            "decision": "unrelated",
+            "reason": "One hunk documents the IDN fix, but another independently corrects an old unrelated spelling error.",
+            "hunks": [
+              {
+                "id": "hunk_9a3a1e7160c5a551",
+                "decision": "task-aligned",
+                "reason": "This release note directly documents Email IDN acceptance and invalid hyphen boundaries."
+              },
+              {
+                "id": "hunk_ef3c1e253a235a51",
+                "decision": "unrelated",
+                "reason": "Correcting netsted to nested in an older typing entry is independent of Email IDN validation."
+              }
+            ]
+          },
+          {
+            "path": "src/marshmallow/validate.py",
+            "decision": "task-aligned",
+            "reason": "Every hunk shares the Unicode range and updates Email domain validation to accept IDNs with correct boundaries.",
+            "hunks": [
+              {
+                "id": "hunk_07162d37fee6f5a6",
+                "decision": "task-aligned",
+                "reason": "Hoisting the Unicode-letter range makes the established URL character class reusable by Email."
+              },
+              {
+                "id": "hunk_440334de018d6841",
+                "decision": "task-aligned",
+                "reason": "Removing the URL-local Unicode range is required after sharing it with Email."
+              },
+              {
+                "id": "hunk_18c601065a1b5214",
+                "decision": "task-aligned",
+                "reason": "This URL expression switches to the shared Unicode range needed by the Email IDN implementation."
+              },
+              {
+                "id": "hunk_d5bf6c6bffa5efe8",
+                "decision": "task-aligned",
+                "reason": "This URL expression switches to the shared Unicode range needed by the Email IDN implementation."
+              },
+              {
+                "id": "hunk_7483160c9a5a347b",
+                "decision": "task-aligned",
+                "reason": "This URL expression switches to the shared Unicode range needed by the Email IDN implementation."
+              },
+              {
+                "id": "hunk_98dfc5f5f1026795",
+                "decision": "task-aligned",
+                "reason": "This URL expression switches to the shared Unicode range needed by the Email IDN implementation."
+              },
+              {
+                "id": "hunk_5dc7d8d04726895e",
+                "decision": "task-aligned",
+                "reason": "This URL expression switches to the shared Unicode range needed by the Email IDN implementation."
+              },
+              {
+                "id": "hunk_e3b148c3cb79ddbf",
+                "decision": "task-aligned",
+                "reason": "This URL expression switches to the shared Unicode range needed by the Email IDN implementation."
+              },
+              {
+                "id": "hunk_69d0e45a77d327c8",
+                "decision": "task-aligned",
+                "reason": "This URL expression switches to the shared Unicode range needed by the Email IDN implementation."
+              },
+              {
+                "id": "hunk_fbc877389678c5b4",
+                "decision": "task-aligned",
+                "reason": "This URL expression switches to the shared Unicode range needed by the Email IDN implementation."
+              },
+              {
+                "id": "hunk_450fc15613a91bcf",
+                "decision": "task-aligned",
+                "reason": "The Email domain expression now accepts Unicode letters while retaining label-edge restrictions."
+              },
+              {
+                "id": "hunk_b6404eab5dd7e7f5",
+                "decision": "task-aligned",
+                "reason": "The direct Unicode-aware expression replaces the prior IDNA fallback path for Email domains."
+              }
+            ]
+          },
+          {
+            "path": "tests/test_validate.py",
+            "decision": "task-aligned",
+            "reason": "The hunk directly tests accepted IDN email domains and rejected invalid IDN boundaries.",
+            "hunks": [
+              {
+                "id": "hunk_76a1f17edb744929",
+                "decision": "task-aligned",
+                "reason": "The added cases directly verify multilingual IDNs and leading, trailing, and incomplete-domain failures."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "repository": "marshmallow",
+      "candidateId": "candidate_d9b640e1de3ea73e",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "No generated artifact relationship appears in this candidate.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      },
+      "review": {
+        "schemaVersion": 1,
+        "packetSha256": "04CF5D2C5584996E98579A3C2BCC5B595EDFAF9DA915386FDDB61A54EAA52C0A",
+        "reviewTiming": "pre-route",
+        "reviewPerformedAfterCandidateFreeze": true,
+        "reviewedWithoutPalaceOutput": true,
+        "palaceCallsOnCandidateTask": 0,
+        "targetDecision": "accept",
+        "files": [
+          {
+            "path": "CHANGELOG.rst",
+            "decision": "task-aligned",
+            "reason": "The only hunk directly documents that URL validation now accepts internationalized domain names.",
+            "hunks": [
+              {
+                "id": "hunk_e81b892a11190006",
+                "decision": "task-aligned",
+                "reason": "The release note precisely records the frozen IDN support behavior and linked issue."
+              }
+            ]
+          },
+          {
+            "path": "src/marshmallow/validate.py",
+            "decision": "task-aligned",
+            "reason": "Every hunk adds Unicode letters to URL hostname validation while preserving label and hyphen constraints.",
+            "hunks": [
+              {
+                "id": "hunk_ffd173d6ffd3d6ff",
+                "decision": "task-aligned",
+                "reason": "The Unicode-letter range is the input needed to extend hostname expressions for IDNs."
+              },
+              {
+                "id": "hunk_d8f3ed8af3873ec3",
+                "decision": "task-aligned",
+                "reason": "The comment is updated to document Unicode letters in the changed hostname expression."
+              },
+              {
+                "id": "hunk_d495dd3fb65ec2fb",
+                "decision": "task-aligned",
+                "reason": "The primary hostname expression now accepts Unicode letters in labels and top-level domains."
+              },
+              {
+                "id": "hunk_9af0d3d8913a30a9",
+                "decision": "task-aligned",
+                "reason": "The localhost-allowed hostname variant receives the same IDN character support."
+              }
+            ]
+          },
+          {
+            "path": "tests/test_validate.py",
+            "decision": "task-aligned",
+            "reason": "The hunk directly covers valid multilingual URLs and invalid IDN strings without a URL scheme.",
+            "hunks": [
+              {
+                "id": "hunk_bb1a91ab62a557c3",
+                "decision": "task-aligned",
+                "reason": "The cases verify IDNs with paths, ports, queries and fragments plus the missing-scheme boundary."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "repository": "arrayvec",
+      "candidateId": "candidate_f58596cf603371ba",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "No generated artifact relationship appears in this candidate.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      },
+      "review": {
+        "schemaVersion": 1,
+        "packetSha256": "D5BFD1B57C58F31FE3D0F36A7A50469C62EF140ACA350BB984DF6956EFC1D08D",
+        "reviewTiming": "pre-route",
+        "reviewPerformedAfterCandidateFreeze": true,
+        "reviewedWithoutPalaceOutput": true,
+        "palaceCallsOnCandidateTask": 0,
+        "targetDecision": "reject",
+        "files": [
+          {
+            "path": "src/array_string.rs",
+            "decision": "task-aligned",
+            "reason": "The sole hunk implements and documents the requested zero_filled ArrayString constructor.",
+            "hunks": [
+              {
+                "id": "hunk_40e9262937ab9890",
+                "decision": "task-aligned",
+                "reason": "This constructor safely initializes the full fixed-capacity string with ASCII null characters."
+              }
+            ]
+          },
+          {
+            "path": "tests/tests.rs",
+            "decision": "unrelated",
+            "reason": "The file adds the focused constructor test but also contains an independent whitespace cleanup hunk.",
+            "hunks": [
+              {
+                "id": "hunk_d76fe7f3278b6431",
+                "decision": "unrelated",
+                "reason": "Deleting an existing blank line is generic formatting cleanup not requested by the frozen constructor task."
+              },
+              {
+                "id": "hunk_437143fcb37d0e72",
+                "decision": "task-aligned",
+                "reason": "The new test directly verifies full null initialization and capacity-length behavior."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "repository": "arrayvec",
+      "candidateId": "candidate_6ba7ad1f75777269",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "No generated artifact relationship appears in this candidate.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      },
+      "review": {
+        "schemaVersion": 1,
+        "packetSha256": "B31245F87FEF7D999E4523E80BE9061179BE0B91FABFDCA4B64942CB7CB6CA50",
+        "reviewTiming": "pre-route",
+        "reviewPerformedAfterCandidateFreeze": true,
+        "reviewedWithoutPalaceOutput": true,
+        "palaceCallsOnCandidateTask": 0,
+        "targetDecision": "accept",
+        "files": [
+          {
+            "path": "src/array_string.rs",
+            "decision": "task-aligned",
+            "reason": "Both hunks restore the non-const constructor and add the explicit const constructor named by the task.",
+            "hunks": [
+              {
+                "id": "hunk_ade66d8fcda09943",
+                "decision": "task-aligned",
+                "reason": "Changing new back to a non-const function directly implements the stated reversion."
+              },
+              {
+                "id": "hunk_29c5621d55520c6c",
+                "decision": "task-aligned",
+                "reason": "The old initialization returns to new while new_const supplies documented const construction."
+              }
+            ]
+          },
+          {
+            "path": "src/arrayvec.rs",
+            "decision": "task-aligned",
+            "reason": "Both hunks apply the same requested constructor split to ArrayVec.",
+            "hunks": [
+              {
+                "id": "hunk_4e02ad087d912143",
+                "decision": "task-aligned",
+                "reason": "Changing ArrayVec new back to non-const directly implements the stated reversion."
+              },
+              {
+                "id": "hunk_7ba54bf6ce468b40",
+                "decision": "task-aligned",
+                "reason": "The old initialization returns to new while new_const provides the explicit const alternative."
+              }
+            ]
+          },
+          {
+            "path": "src/lib.rs",
+            "decision": "task-aligned",
+            "reason": "The macro split provides separate runtime and const-compatible capacity checks required by the constructor split.",
+            "hunks": [
+              {
+                "id": "hunk_19a17816e077941d",
+                "decision": "task-aligned",
+                "reason": "The added runtime capacity assertion and renamed const assertion support new and new_const respectively."
+              }
+            ]
+          },
+          {
+            "path": "tests/tests.rs",
+            "decision": "task-aligned",
+            "reason": "Every hunk updates capacity behavior or verifies const construction through the newly named constructor.",
+            "hunks": [
+              {
+                "id": "hunk_3b8fc5a2c66a0a76",
+                "decision": "task-aligned",
+                "reason": "The expected panic now reflects the restored runtime capacity check in new."
+              },
+              {
+                "id": "hunk_62134a6a3e60e2ae",
+                "decision": "task-aligned",
+                "reason": "The platform guard message follows the restored runtime capacity-limit failure."
+              },
+              {
+                "id": "hunk_93be2a8af4b89f99",
+                "decision": "task-aligned",
+                "reason": "The new test verifies that new_const preserves the prior const capacity-limit behavior."
+              },
+              {
+                "id": "hunk_b11f38ed856cdda7",
+                "decision": "task-aligned",
+                "reason": "The ArrayVec const-construction test now uses the explicitly introduced new_const API."
+              },
+              {
+                "id": "hunk_48f37e729cde479a",
+                "decision": "task-aligned",
+                "reason": "The ArrayString const-construction test now uses the explicitly introduced new_const API."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "repository": "node-fetch",
+      "candidateId": "candidate_17aa3b59108e7e0e",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "No generated artifact relationship appears in this candidate.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      },
+      "review": {
+        "schemaVersion": 1,
+        "packetSha256": "73342FAE33ED5F7D3531E824510CAF7110CF2E42EEEDDF3EFABE86F6FD7161CC",
+        "reviewTiming": "pre-route",
+        "reviewPerformedAfterCandidateFreeze": true,
+        "reviewedWithoutPalaceOutput": true,
+        "palaceCallsOnCandidateTask": 0,
+        "targetDecision": "accept",
+        "files": [
+          {
+            "path": "@types/index.d.ts",
+            "decision": "task-aligned",
+            "reason": "The declaration hunk exposes the newly added static Response.json API to TypeScript users.",
+            "hunks": [
+              {
+                "id": "hunk_a311c32f2876f749",
+                "decision": "task-aligned",
+                "reason": "The static json signature directly declares the frozen feature and its optional ResponseInit argument."
+              }
+            ]
+          },
+          {
+            "path": "@types/index.test-d.ts",
+            "decision": "task-aligned",
+            "reason": "The type-test hunk verifies both supported call forms return a Response.",
+            "hunks": [
+              {
+                "id": "hunk_3e851e1b7cb407cd",
+                "decision": "task-aligned",
+                "reason": "The assertions directly verify static Response.json typing with and without initialization options."
+              }
+            ]
+          },
+          {
+            "path": "src/response.js",
+            "decision": "task-aligned",
+            "reason": "The sole hunk implements JSON serialization, content type defaults, and Response construction for the new API.",
+            "hunks": [
+              {
+                "id": "hunk_08f29d5271749b8d",
+                "decision": "task-aligned",
+                "reason": "This static method is the complete runtime implementation of the stated Response.json feature."
+              }
+            ]
+          },
+          {
+            "path": "test/main.js",
+            "decision": "task-aligned",
+            "reason": "The behavior test directly covers default JSON responses and preservation of caller-supplied response metadata.",
+            "hunks": [
+              {
+                "id": "hunk_34855eba252184e1",
+                "decision": "task-aligned",
+                "reason": "The cases verify body serialization, default status and content type, overrides, and case-insensitive headers."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "repository": "jsonschema",
+      "candidateId": "candidate_c6ee89789c620ee0",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "No generated artifact relationship appears in this candidate.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      },
+      "review": {
+        "schemaVersion": 1,
+        "packetSha256": "95A63EED67A23D0F06749BCFF1E3F805303D9EE1F8BB6FD39A557450A3973178",
+        "reviewTiming": "pre-route",
+        "reviewPerformedAfterCandidateFreeze": true,
+        "reviewedWithoutPalaceOutput": true,
+        "palaceCallsOnCandidateTask": 0,
+        "targetDecision": "accept",
+        "files": [
+          {
+            "path": "jsonschema/_format.py",
+            "decision": "task-aligned",
+            "reason": "The hunk tightens UUID acceptance by requiring canonical normalized spelling as stated in the task.",
+            "hunks": [
+              {
+                "id": "hunk_57cc9492e5efb171",
+                "decision": "task-aligned",
+                "reason": "Comparing the parsed UUID canonical form directly implements the task's tightened UUID cases."
+              }
+            ]
+          },
+          {
+            "path": "jsonschema/tests/test_jsonschema_test_suite.py",
+            "decision": "task-aligned",
+            "reason": "Every hunk precisely skips unsupported complex email or IDN hostname cases in the same upstream suite adaptation.",
+            "hunks": [
+              {
+                "id": "hunk_680679770bc9767e",
+                "decision": "task-aligned",
+                "reason": "The complex-email filter now covers idn-email subjects as required by the stated skip repair."
+              },
+              {
+                "id": "hunk_78f7175962ef3aea",
+                "decision": "task-aligned",
+                "reason": "The lone-surrogate email case is added to the unsupported complex-email skips."
+              },
+              {
+                "id": "hunk_f3cc94eeb89448a3",
+                "decision": "task-aligned",
+                "reason": "Removing the single-case early return allows precise IDN hostname skips to be enumerated below."
+              },
+              {
+                "id": "hunk_526769e830ca0838",
+                "decision": "task-aligned",
+                "reason": "The named upstream case groups support exact skip matching for the affected IDN hostname tests."
+              },
+              {
+                "id": "hunk_fa149053b381f058",
+                "decision": "task-aligned",
+                "reason": "This trailing-dot exception is constrained to the exact unsupported separator case group."
+              },
+              {
+                "id": "hunk_c450e61e2e58049b",
+                "decision": "task-aligned",
+                "reason": "This ideographic-stop exception is constrained to the exact unsupported separator case group."
+              },
+              {
+                "id": "hunk_e1c3536df4bf33bd",
+                "decision": "task-aligned",
+                "reason": "This fullwidth-stop exception is constrained to the exact unsupported separator case group."
+              },
+              {
+                "id": "hunk_011fdbf4f39bafbc",
+                "decision": "task-aligned",
+                "reason": "This halfwidth-stop exception is constrained to the exact unsupported separator case group."
+              },
+              {
+                "id": "hunk_2fdaa51b97637e59",
+                "decision": "task-aligned",
+                "reason": "The added precise skips cover two unsupported complex IDN hostname cases from the same suite update."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "repository": "go-sql-driver-mysql",
+      "candidateId": "candidate_e99f7ef34aabce46",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "No generated artifact relationship appears in this candidate.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      },
+      "review": {
+        "schemaVersion": 1,
+        "packetSha256": "205FCF8C9B852926C90F65FA6C504656FBC53D38E0B361F0A7CE61559E11E860",
+        "reviewTiming": "pre-route",
+        "reviewPerformedAfterCandidateFreeze": true,
+        "reviewedWithoutPalaceOutput": true,
+        "palaceCallsOnCandidateTask": 0,
+        "targetDecision": "accept",
+        "files": [
+          {
+            "path": "collations.go",
+            "decision": "task-aligned",
+            "reason": "The default collation becomes an ID used for handshakes when a configured name is unknown.",
+            "hunks": [
+              {
+                "id": "hunk_a2bfdc14db2d8036",
+                "decision": "task-aligned",
+                "reason": "A fixed default ID allows the handshake to proceed without resolving an unknown configured name."
+              }
+            ]
+          },
+          {
+            "path": "connection.go",
+            "decision": "task-aligned",
+            "reason": "Every hunk removes charset and collation handling from generic post-connect parameters so it can run at the required earlier stage.",
+            "hunks": [
+              {
+                "id": "hunk_e434eaf206606ef9",
+                "decision": "task-aligned",
+                "reason": "The charset special case moves out while generic system variables retain their SET construction."
+              },
+              {
+                "id": "hunk_5e767c6977bc590d",
+                "decision": "task-aligned",
+                "reason": "The generic parameter writer remains intact after removing the charset branch."
+              },
+              {
+                "id": "hunk_ee76af8bce94b43f",
+                "decision": "task-aligned",
+                "reason": "The obsolete per-charset error return disappears because charset execution moved into connector setup."
+              }
+            ]
+          },
+          {
+            "path": "connector.go",
+            "decision": "task-aligned",
+            "reason": "The hunk applies charset and potentially unknown collation through SET NAMES after handshake setup.",
+            "hunks": [
+              {
+                "id": "hunk_f3222be013bd69a7",
+                "decision": "task-aligned",
+                "reason": "Trying configured charsets after connecting is the mechanism that permits unknown handshake collation names safely."
+              }
+            ]
+          },
+          {
+            "path": "dsn.go",
+            "decision": "task-aligned",
+            "reason": "Every hunk gives charset dedicated configuration storage and preserves parsing and formatting around the new collation flow.",
+            "hunks": [
+              {
+                "id": "hunk_629192367532a61c",
+                "decision": "task-aligned",
+                "reason": "Dedicated charset storage is required to decide whether unknown collation must be validated through SET NAMES."
+              },
+              {
+                "id": "hunk_ace1d59a0cca898c",
+                "decision": "task-aligned",
+                "reason": "Formatting the dedicated charset list preserves DSN round-trip behavior after separating it from Params."
+              },
+              {
+                "id": "hunk_73aaca54656a3f4d",
+                "decision": "task-aligned",
+                "reason": "Parsing charset into dedicated storage enables the new connection and handshake decision path."
+              }
+            ]
+          },
+          {
+            "path": "dsn_test.go",
+            "decision": "task-aligned",
+            "reason": "All three hunks update expected parsed configurations for the dedicated charset representation.",
+            "hunks": [
+              {
+                "id": "hunk_3cb5cbcb491d0e24",
+                "decision": "task-aligned",
+                "reason": "The single-charset DSN expectation now uses the dedicated charset field."
+              },
+              {
+                "id": "hunk_97792a026ba1d9d6",
+                "decision": "task-aligned",
+                "reason": "The TLS DSN expectation now uses the same dedicated charset representation."
+              },
+              {
+                "id": "hunk_683a4b0dfe17453c",
+                "decision": "task-aligned",
+                "reason": "The fallback charset list expectation verifies comma-separated parsing into ordered values."
+              }
+            ]
+          },
+          {
+            "path": "packets.go",
+            "decision": "task-aligned",
+            "reason": "The hunk permits handshake fallback for unknown collation names while retaining an error when SET NAMES must use that name.",
+            "hunks": [
+              {
+                "id": "hunk_291621573dd66e52",
+                "decision": "task-aligned",
+                "reason": "Defaulting the handshake ID and conditionally rejecting unknown names directly implements the requested allowance boundary."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "repository": "itertools",
+      "candidateId": "candidate_ddb750077d21b36b",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "No generated artifact relationship appears in this candidate.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      },
+      "review": {
+        "schemaVersion": 1,
+        "packetSha256": "108010A09DA064A200D6D5368A1756322037CFA9AD42114C9E13D676E3C329DF",
+        "reviewTiming": "pre-route",
+        "reviewPerformedAfterCandidateFreeze": true,
+        "reviewedWithoutPalaceOutput": true,
+        "palaceCallsOnCandidateTask": 0,
+        "targetDecision": "accept",
+        "files": [
+          {
+            "path": "src/lib.rs",
+            "decision": "task-aligned",
+            "reason": "The sole hunk implements and documents both requested prefix-removal methods and their recoverable error type.",
+            "hunks": [
+              {
+                "id": "hunk_182c0c8bedcaa347",
+                "decision": "task-aligned",
+                "reason": "The additions are the complete public API, comparison loop, mismatch state, and documentation named by the task."
+              }
+            ]
+          },
+          {
+            "path": "tests/quick.rs",
+            "decision": "task-aligned",
+            "reason": "The sole hunk verifies both methods against established behavior and checks all recoverable mismatch fields.",
+            "hunks": [
+              {
+                "id": "hunk_bc81205371fa08aa",
+                "decision": "task-aligned",
+                "reason": "The property and focused tests directly cover successful stripping, custom equality, mismatch, and exhaustion."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "repository": "pgx",
+      "candidateId": "candidate_38e3997f35582093",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "No generated artifact relationship appears in this candidate.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      },
+      "review": {
+        "schemaVersion": 1,
+        "packetSha256": "043AAF0F9361BC524001D76C466EF2F1CFD7425EEB4581481C74D33D20C29FCB",
+        "reviewTiming": "pre-route",
+        "reviewPerformedAfterCandidateFreeze": true,
+        "reviewedWithoutPalaceOutput": true,
+        "palaceCallsOnCandidateTask": 0,
+        "targetDecision": "accept",
+        "files": [
+          {
+            "path": "derived_types.go",
+            "decision": "task-aligned",
+            "reason": "Every SQL hunk restricts array detection to true PostgreSQL array categories so built-in geometric codecs remain registered.",
+            "hunks": [
+              {
+                "id": "hunk_54efb9c6799a4a6f",
+                "decision": "task-aligned",
+                "reason": "The comment explains why typelem alone misclassifies box and point and why typcategory is required."
+              },
+              {
+                "id": "hunk_3af7705719860684",
+                "decision": "task-aligned",
+                "reason": "The recursive dependency query now recognizes only true array-category parents."
+              },
+              {
+                "id": "hunk_3cb52e4bd6a32466",
+                "decision": "task-aligned",
+                "reason": "The final type query excludes non-array base types before LoadTypes can overwrite their codecs."
+              }
+            ]
+          },
+          {
+            "path": "derived_types_test.go",
+            "decision": "task-aligned",
+            "reason": "Both hunks construct and verify a geometric composite without replacing built-in box or point codecs.",
+            "hunks": [
+              {
+                "id": "hunk_53d5c715765e5e8e",
+                "decision": "task-aligned",
+                "reason": "The pgtype import supplies the Box and composite values used by the focused regression test."
+              },
+              {
+                "id": "hunk_65e405123ea21074",
+                "decision": "task-aligned",
+                "reason": "The test directly proves LoadTypes omits box and point and preserves correct composite encoding and scanning."
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

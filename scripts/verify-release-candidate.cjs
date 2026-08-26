@@ -8,7 +8,6 @@ const path = require("node:path");
 const projectRoot = path.resolve(__dirname, "..");
 const packageJson = require(path.join(projectRoot, "package.json"));
 const outputPath = outputArgument(process.argv.slice(2));
-const packageSourceCommit = "a29053f5952131887ff057a8fa7e6777ab045e1f";
 const task = "Fix currency formatting so negative zero is rendered as $0.00. Keep the public API stable.";
 
 main().catch((error) => {
@@ -17,6 +16,8 @@ main().catch((error) => {
 });
 
 async function main() {
+  const packageSourceCommit = run("git", ["rev-parse", "HEAD"], { cwd: projectRoot }).stdout.trim();
+  const sourceTreeDirty = run("git", ["status", "--short"], { cwd: projectRoot }).stdout.trim() !== "";
   const temporaryRoot = await mkdtemp(path.join(os.tmpdir(), "vertex-palace-release-candidate-"));
   const packRoot = path.join(temporaryRoot, "pack");
   const installRoot = path.join(temporaryRoot, "install");
@@ -71,36 +72,37 @@ async function main() {
 
     await createLargeFixture(fixtureRoot);
     initializeGitFixture(fixtureRoot);
-    const bypassTrials = [];
+    const advisoryTrials = [];
     for (let trial = 1; trial <= 4; trial += 1) {
       const raw = runNode(
         [cliPath, "context", task, "--auto", "--format", "json", "--budget", "6000"],
         { cwd: fixtureRoot }
       ).stdout;
       const output = JSON.parse(raw);
-      assert.deepEqual(Object.keys(output), [
-        "mode",
-        "evidenceStatus",
-        "interventionPolicy",
-        "primaryCandidate",
-        "reason"
-      ]);
-      assert.equal(output.mode, "bypass");
-      assert.equal(output.evidenceStatus, "insufficient");
-      assert.equal(output.interventionPolicy, "advisory");
-      assert.equal(output.primaryCandidate, "src/format-currency.mjs");
-      assert.match(
-        output.reason,
-        /final scope check `git diff --check; git status --short; git diff -- src\/format-currency\.mjs`/
-      );
-      bypassTrials.push({
+      assert.equal(output.mode, "full-palace");
+      assert.equal(output.selection.evidenceStatus, "insufficient");
+      assert.equal(output.selection.interventionPolicy, "advisory");
+      assert.ok(output.route.evidenceClosure.missingRoles.includes("verification"));
+      assert.deepEqual(output.executionBoundaries.primary, ["src/format-currency.mjs:1"]);
+      assert.equal(output.context.length, 1);
+      assert.equal(output.context[0].sourcePath, "src/format-currency.mjs");
+      assert.equal(output.context[0].do_not_reopen, true);
+      assert.equal(output.executionBoundaries.stopEnforced, false);
+      assert.match(output.executionBoundaries.conflictSummary.join("\n"), /evidence is insufficient/i);
+      assert.match(output.recommendedExecution.join("\n"), /starting points, not a complete or exclusive scope/i);
+      assert.equal(output.payload.contextBytes, Buffer.byteLength(raw, "utf8"));
+      assert.ok(output.payload.contextEstimatedTokens <= output.selection.maxContextTokens);
+      advisoryTrials.push({
         trial,
         mode: output.mode,
-        evidenceStatus: output.evidenceStatus,
-        interventionPolicy: output.interventionPolicy,
-        primaryCandidate: output.primaryCandidate,
+        evidenceStatus: output.selection.evidenceStatus,
+        interventionPolicy: output.selection.interventionPolicy,
+        primary: output.executionBoundaries.primary,
+        missingRoles: output.route.evidenceClosure.missingRoles,
+        stopEnforced: output.executionBoundaries.stopEnforced,
         fields: Object.keys(output).length,
-        bytes: Buffer.byteLength(raw, "utf8")
+        bytes: Buffer.byteLength(raw, "utf8"),
+        estimatedTokens: output.payload.contextEstimatedTokens
       });
     }
     const excludePath = path.join(fixtureRoot, ".git", "info", "exclude");
@@ -258,6 +260,7 @@ async function main() {
       generatedAt: new Date().toISOString(),
       claimBoundary: "Product packaging and context-contract validation only; not an Agent performance benchmark.",
       sourceCommit: packageSourceCommit,
+      sourceTreeDirty,
       validationHarnessCommit: run("git", ["rev-parse", "HEAD"], { cwd: projectRoot }).stdout.trim(),
       package: `${metadata.name}@${metadata.version}`,
       files: metadata.files.length,
@@ -270,7 +273,7 @@ async function main() {
         ignoreSource: ignoreSource.replace(/^.*?\.git\//, ".git/")
       },
       distractorFiles: 240,
-      bypassTrials,
+      advisoryTrials,
       relevantMemory: {
         mode: full.mode,
         candidates: full.memoryTelemetry.memoryCandidates,

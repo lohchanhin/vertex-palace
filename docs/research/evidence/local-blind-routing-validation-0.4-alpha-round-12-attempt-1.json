@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "studyId": "local-blind-routing-validation-round-12-attempt-1-0.4-alpha",
+  "generatedAt": "2026-08-10T23:02:08.933Z",
+  "status": "invalid",
+  "evidenceClass": "local-hash-frozen-candidate-held-out-paired-static-routing",
+  "publicPreregistration": false,
+  "validityFailures": [
+    "unexpected validator failure before a complete paired result was produced"
+  ],
+  "failureCategory": "unexpected-validator-failure",
+  "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n1 !== 2\n\n    at assertFrozenInputs (D:\\工作资料\\codex palace\\scripts\\verify-local-blind-routing-round-12.cjs:265:10)\n    at async main (D:\\工作资料\\codex palace\\scripts\\verify-local-blind-routing-round-12.cjs:83:59)"
+}

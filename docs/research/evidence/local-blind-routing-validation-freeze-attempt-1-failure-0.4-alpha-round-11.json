@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "studyId": "local-blind-routing-validation-round-11-attempt-1-0.4-alpha",
+  "recordedAt": "2026-08-10T19:27:50.2587385Z",
+  "status": "invalid-before-palace-observation",
+  "phase": "post-freeze-integrity-test",
+  "failureCategory": "documentation-assertion-harness-error",
+  "claimBoundary": "The first Round 11 validation freeze failed one over-specific documentation assertion before any Palace call on a selected task. No route, pack, confidence, mode, or evaluation result was observed, so held-out task integrity remains intact.",
+  "failedFreeze": {
+    "path": "docs/research/evidence/local-blind-routing-validation-freeze-0.4-alpha-round-11.json",
+    "sha256": "74037950922DB58F3628E916FD77CDF3BF2AE0AED7F7110D26BAD72D74724B4D"
+  },
+  "verification": {
+    "command": "node --test scripts/test/round11-local-blind-validation-freeze.test.cjs",
+    "tests": 4,
+    "passed": 3,
+    "failed": 1,
+    "assertionExpected": "cannot support claims about Agent correctness",
+    "protocolActuallySaid": "cannot establish Agent correctness",
+    "semanticDifference": false
+  },
+  "selectedTaskPalaceCalls": 0,
+  "productCommandsStarted": 0,
+  "productMutation": false,
+  "candidate": {
+    "cliSha256": "258ABFF9CE05B052C03CD4B772B38310BC7E4AAFD08A3FAEAE79334FB1B4E900",
+    "generatedMcpSha256": "453402E9C685FB04DDF8134FA1E48E190D8F0F282D6DA70577EB9DFA4D871AFC"
+  },
+  "competitionFreeze": {
+    "noCommit": true,
+    "noPush": true,
+    "noTag": true,
+    "noNpmPublish": true
+  },
+  "nextAction": "Preserve this failed freeze, correct only the validation documentation assertion contract, create a distinct attempt-2 validation freeze, rerun integrity checks, and abort if any candidate product hash changes."
+}

@@ -1,11 +1,12 @@
 import { slugify } from "../utils/path-utils";
-import { normalizeLexicalToken, tokenizeLexical } from "../utils/lexical-tokens";
+import { extractCodeIdentifiers, normalizeLexicalToken, tokenizeLexical } from "../utils/lexical-tokens";
 import { analyzePublicationIntent } from "./publication-intent";
 
 export type TaskAnalysis = {
   raw: string;
   keywords: string[];
   entities: string[];
+  identifiers: string[];
   wingHints: string[];
   roomHints: string[];
 };
@@ -92,6 +93,7 @@ const STOP_WORDS = new Set([
   "focused",
   "handling",
   "is",
+  "let",
   "right",
   "so",
   "update",
@@ -159,13 +161,15 @@ const PHRASE_KEYWORDS: Array<[RegExp, string[]]> = [
   [/plugin|marketplace|插件/i, ["plugin", "marketplace"]],
   [/adaptive|full[-\s]?palace|route[-\s]?lite|guarded[-\s]?memory[-\s]?palace/i, ["adaptive", "mode", "selector", "context", "packer"]],
   [/source\s+(?:code|implementation)|implementation\s+source|源码|源碼|源代码|源代碼/i, ["implementation", "source"]],
+  [/(?:主体|主體).{0,24}(?:归属|歸屬|所有权|所有權).{0,24}(?:闭环|閉環)/i, ["subject", "owner", "closure"]],
   [/evidence|research(?:\s+(?:record|report|evidence))?|strict\s+precision|target\s+(?:precision|recall)|证据|證據|研究(?:记录|記錄|报告|報告)?|严格精度|嚴格精度|目标精度|目標精度|召回率?/i, ["evidence", "precision", "recall", "route", "confidence"]],
   [/protocol|study\s+plan|result\s+manifest|freeze\s+gate|frozen|协议|協議|计划|計划|計畫|结果清单|結果清單|冻结|凍結/i, ["protocol", "plan", "config", "frozen"]],
   [/readme|简体中文(?:辅助)?说明|簡體中文(?:輔助)?說明/i, ["docs", "documentation", "readme", "bilingual", "localization"]],
-  [/documentation|\bdocs?\b|bilingual|locali[sz](?:e|ed|ation)|simplified\s+chinese|(?:research|result|study)\s+reports?|简体中文|簡體中文|研究(?:报告|報告)|结果报告|結果報告|双语|雙語|文档|文檔/i, ["docs", "documentation", "bilingual", "localization"]],
+  [/documentation|\bdocs?\b|bilingual|locali[sz](?:e|ed|ation)|simplified\s+chinese|(?:research|result|study)\s+reports?|简体中文|簡體中文|中英文|中英双语|中英雙語|研究(?:报告|報告)|结果报告|結果報告|双语|雙語|文档|文檔/i, ["docs", "documentation", "bilingual", "localization"]],
   [/memory.{0,24}budget|context.{0,16}ceiling|记忆.{0,16}预算|記憶.{0,16}預算/i, ["memory", "context", "token", "budget"]],
   [/verify|verification|regression|test suite|测试|測試|验证|驗證|回归|回歸/i, ["test", "verification", "regression"]],
   [/benchmark|evaluate route|evaluation report|changed[-\s]?file coverage|confidence calibration|token reduction|context savings?/i, ["evaluation", "evaluate", "route", "confidence", "pack", "token"]],
+  [/\b(?:usage|session|conversation)[-\s]+(?:audit|analysis|history|records?)\b|\b(?:audit|analy[sz]e|measure|quantify)\b.{0,80}\b(?:usage|sessions?|conversations?|reliability)\b|(?:分析|审计|審計|量化).{0,60}(?:使用(?:记录|紀錄|状况|狀況|情况|情況)|对话|對話|会话|會話|可靠性)/i, ["evaluation", "retrospective", "usage", "audit", "research", "docs", "evidence", "tooling"]],
   [/scanner|scanning|scan repo|ignore rules?|exclude|worktree|nested repo/i, ["scanner", "ignore"]],
   [/context pack|packing|packer|pack output/i, ["pack", "packer"]],
   [/pitfall|memory ledger/i, ["memory", "pitfall"]],
@@ -173,11 +177,11 @@ const PHRASE_KEYWORDS: Array<[RegExp, string[]]> = [
   [/前端|頁面|页面|界面|畫面|画面|组件|組件|表单|表單|按钮|按鈕|\bfooter\b|\bui\b/i, ["frontend", "page", "component"]],
   [/后端|後端|服务端|服務端|服务器|伺服器|\bservice\b|\bserver\b/i, ["backend", "server", "service"]],
   [/接口|\bapi\b|\bcontroller\b|控制器/i, ["api", "controller"]],
-  [/数据库|資料庫|资料表|資料表|schema|model|prisma/i, ["database", "schema", "model"]],
+  [/数据库|資料庫|资料表|資料表|\b(?:data[-\s]?model|schema|prisma)\b|(?:^|[\s_/])models?\b/i, ["database", "schema", "model"]],
   [/路由|路线|路線|route|router|routing/i, ["route", "router"]],
   [/准确|準確|完整度|相关度|相關度|\b(?:score|scorer|scoring|relevance)\b/i, ["score", "scorer", "route"]],
   [/依赖|依賴|导入|導入|引用|import|dependency|dependencies/i, ["import", "dependency", "edge"]],
-  [/unknown|未识别|未識別|任务判断|任務判斷|任务分类|任務分類|任务类型|任務類型|classify|classification|task type/i, ["classify", "analyze", "task"]],
+  [/\bunknown\s+(?:task|task\s+type|classification)\b|\bunknown.{0,8}(?:任务|任務)|未识别(?:任务|任務)|未識別(?:任务|任務)|任务判断|任務判斷|任务分类|任務分類|任务类型|任務類型|classify|classification|task type/i, ["classify", "analyze", "task"]],
   [/索引|\bindex\b/i, ["index"]],
   [/新鲜度|新鮮度|过期|過期|刷新|\b(?:stale|fresh|freshness)\b/i, ["index", "stale", "fresh"]],
   [/\b(?:evaluation|evaluate|assessment|score|rating|grade)\b|评估|評估|评价|評價|评分|評分|打分/i, ["evaluation", "evaluate", "route", "confidence"]],
@@ -201,7 +205,23 @@ export function analyzeTask(task: string): TaskAnalysis {
     .replace(/\bproduct\s+intent\b/gi, "intent")
     .replace(/\b(?:keep|preserve|without\s+changing|do\s+not\s+change)\s+(?:the\s+)?public\s+api(?:\s+stable)?\b/gi, " compatibility guardrail ")
     .replace(/\b(?:keep|preserve|without\s+changing|do\s+not\s+change)\s+(?:the\s+)?api\s+contract(?:\s+stable)?\b/gi, " compatibility guardrail ");
-  const entities = entityKeywords(task);
+  const callIdentifiers = explicitCallIdentifiers(task);
+  const identifiers = [...new Set([...extractCodeIdentifiers(task), ...callIdentifiers])]
+    .filter((candidate) => !isMorphologicalHyphenWord(candidate))
+    .filter(
+      (candidate) => callIdentifiers.includes(candidate)
+        || !CAPITALIZED_ENTITY_STOP_WORDS.has(candidate.toLowerCase())
+    );
+  const entities = [
+    ...new Set([
+      ...entityKeywords(task),
+      ...callIdentifiers.flatMap((candidate) => {
+        const slug = slugify(candidate);
+        const compact = candidate.toLowerCase().replace(/[^a-z0-9]+/g, "");
+        return [slug, compact].filter((value) => value.length > 2);
+      })
+    ])
+  ];
   const publication = analyzePublicationIntent(task);
   const contextualStopWords = new Set(STOP_WORDS);
   if (/\bbuild\s+week\b/i.test(task)) contextualStopWords.add("build");
@@ -229,9 +249,19 @@ export function analyzeTask(task: string): TaskAnalysis {
     raw: task,
     keywords,
     entities,
+    identifiers,
     wingHints: keywords.filter((keyword) => WING_HINTS.has(keyword)),
     roomHints: keywords.filter((keyword) => ROOM_HINTS.has(keyword))
   };
+}
+
+function explicitCallIdentifiers(task: string): string[] {
+  return [
+    ...new Set(
+      [...task.matchAll(/\b([A-Za-z_$][A-Za-z0-9_$]*(?:\.[A-Za-z_$][A-Za-z0-9_$]*)*)\s*\(\s*\)/g)]
+        .flatMap((match) => match[1] ? [match[1]] : [])
+    )
+  ];
 }
 
 function englishKeywords(task: string): string[] {
@@ -245,13 +275,17 @@ function phraseKeywords(task: string): string[] {
 }
 
 function entityKeywords(task: string): string[] {
-  const candidates = (task.match(/[A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*)+|[A-Za-z0-9]+(?:[-_][A-Za-z0-9]+)+|[A-Z][a-z0-9]+(?:[A-Z][a-z0-9]+)+/g) ?? [])
+  const candidates = [
+    ...(task.match(/[A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*)+|[A-Za-z0-9]+(?:[-_][A-Za-z0-9]+)+|[A-Z][a-z0-9]+(?:[A-Z][a-z0-9]+)+/g) ?? []),
+    ...(task.match(/\b[a-z][a-z0-9]*(?:[A-Z][A-Za-z0-9]*)+\b/g) ?? [])
+  ]
     .filter((candidate) => !isMorphologicalHyphenWord(candidate));
   const capitalizedIdentifiers = (task.match(/\b[A-Z][A-Za-z0-9]{2,}\b/g) ?? [])
     .filter((candidate) => !CAPITALIZED_ENTITY_STOP_WORDS.has(candidate.toLowerCase()));
   const namedPhrases = [
     ...(/\bbuild\s+week\b/i.test(task) ? ["build-week", "buildweek"] : []),
-    ...(/跨仓库|跨倉庫/.test(task) ? ["cross-repository", "crossrepository"] : [])
+    ...(/跨仓库|跨倉庫/.test(task) ? ["cross-repository", "crossrepository"] : []),
+    ...numberedArtifactEntityKeywords(task)
   ];
   return [
     ...new Set(
@@ -265,6 +299,31 @@ function entityKeywords(task: string): string[] {
       ]
     )
   ];
+}
+
+function numberedArtifactEntityKeywords(task: string): string[] {
+  const labels = new Map<string, string>([
+    ["attempt", "attempt"],
+    ["iteration", "iteration"],
+    ["phase", "phase"],
+    ["round", "round"],
+    ["stage", "phase"],
+    ["trial", "attempt"]
+  ]);
+  const values: string[] = [];
+  for (const match of task.matchAll(/\b(round|phase|stage|iteration|attempt|trial)\s*[-#:]?\s*(\d+)\b/gi)) {
+    const label = labels.get(match[1]?.toLowerCase() ?? "");
+    const number = match[2];
+    if (!label || !number) continue;
+    values.push(`${label}-${number}`, `${label}${number}`);
+  }
+  for (const match of task.matchAll(/第\s*(\d+)\s*(轮|輪|阶段|階段|次)/g)) {
+    const number = match[1];
+    const label = /阶段|階段/.test(match[2] ?? "") ? "phase" : "round";
+    if (!number) continue;
+    values.push(`${label}-${number}`, `${label}${number}`);
+  }
+  return values;
 }
 
 function isMorphologicalHyphenWord(candidate: string): boolean {

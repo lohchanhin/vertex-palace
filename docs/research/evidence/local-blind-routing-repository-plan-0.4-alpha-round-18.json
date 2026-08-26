@@ -1,0 +1,295 @@
+{
+  "schemaVersion": 1,
+  "studyId": "local-blind-routing-round-18-0.4-alpha",
+  "status": "locally-preregistered-before-head-query",
+  "createdAt": "2026-08-12T15:06:51.2408216Z",
+  "publicPreregistration": false,
+  "priorExclusionSource": {
+    "path": "docs/research/evidence/local-blind-routing-repository-pool-freeze-round-17-attempt-1-failure.json",
+    "sha256": "C76EFEA728EFBA240BB6A29AB8EEFF3910F37A8D515239A4A3A2DB24FD7C2510",
+    "includePreviousExclusionChain": true,
+    "includeRound17AttemptedRepositories": true,
+    "reuseOnlyUnqueriedRound17Repositories": true,
+    "additionalPreviouslyObservedRepositories": [],
+    "expectedUniqueRepositoryCount": 190
+  },
+  "candidateFreeze": {
+    "path": "docs/research/evidence/local-blind-candidate-freeze-0.4-alpha-round-18.json"
+  },
+  "rules": {
+    "desiredTargets": 8,
+    "requiredLanguageFamilies": [
+      "javascript-typescript",
+      "python",
+      "go",
+      "rust"
+    ],
+    "targetsPerLanguageFamily": 2,
+    "repositoriesPerLanguageFamily": 8,
+    "repositoryOrderIsBinding": true,
+    "newestCoherentCandidatePerRepositoryWins": true,
+    "remainingRepositoriesPerFamilyAreFallbacks": true,
+    "taskClassifier": "inflected-behavioral-subject-v1",
+    "maximumMechanicalCandidatesPerRepository": 5,
+    "minimumFiles": 2,
+    "maximumFiles": 8,
+    "maximumAuxiliaryFiles": 2,
+    "maximumChangedLines": 400,
+    "allowedAuxiliaryExtensions": [
+      ".cfg",
+      ".conf",
+      ".ini",
+      ".json",
+      ".md",
+      ".mdx",
+      ".rst",
+      ".toml",
+      ".txt",
+      ".yaml",
+      ".yml"
+    ],
+    "taskDiffCoherenceReviewRequired": true,
+    "wholeTargetRejectionForUnrelatedOrUncertainHunk": true,
+    "partialOraclePruningForbidden": true,
+    "maximumGeneratedArtifactTargets": 1,
+    "pinnedHeadsObtainedWithGitLsRemoteHeadOnly": true,
+    "commitHistoryInspectedBeforePoolFreeze": false,
+    "palaceCallsOnCandidateTasksBeforePoolFreeze": 0,
+    "baselineAndCandidateFrozenBeforeTargetSelection": true,
+    "outputCreateOnly": true
+  },
+  "repositoryPlan": [
+    {
+      "name": "minimatch",
+      "language": "JavaScript/TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/isaacs/minimatch.git",
+      "extensions": [".cjs", ".js", ".jsx", ".mjs", ".ts", ".tsx"]
+    },
+    {
+      "name": "cachelib",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/pallets-eco/cachelib.git",
+      "extensions": [".py"]
+    },
+    {
+      "name": "slog-multi",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/samber/slog-multi.git",
+      "extensions": [".go"]
+    },
+    {
+      "name": "ryu",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/serde-rs/ryu.git",
+      "extensions": [".rs"]
+    },
+    {
+      "name": "cors",
+      "language": "JavaScript/TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/expressjs/cors.git",
+      "extensions": [".cjs", ".js", ".jsx", ".mjs", ".ts", ".tsx"]
+    },
+    {
+      "name": "identify",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/asottile/identify.git",
+      "extensions": [".py"]
+    },
+    {
+      "name": "pretty",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/tidwall/pretty.git",
+      "extensions": [".go"]
+    },
+    {
+      "name": "memchr",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/BurntSushi/memchr.git",
+      "extensions": [".rs"]
+    },
+    {
+      "name": "hoek",
+      "language": "JavaScript/TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/hapijs/hoek.git",
+      "extensions": [".cjs", ".js", ".jsx", ".mjs", ".ts", ".tsx"]
+    },
+    {
+      "name": "jaraco-path",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/jaraco/path.git",
+      "extensions": [".py"]
+    },
+    {
+      "name": "groupcache",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/golang/groupcache.git",
+      "extensions": [".go"]
+    },
+    {
+      "name": "rustc-hash",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/rust-lang/rustc-hash.git",
+      "extensions": [".rs"]
+    },
+    {
+      "name": "object-assign",
+      "language": "JavaScript/TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/ljharb/object.assign.git",
+      "extensions": [".cjs", ".js", ".jsx", ".mjs", ".ts", ".tsx"]
+    },
+    {
+      "name": "iniconfig",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/pytest-dev/iniconfig.git",
+      "extensions": [".py"]
+    },
+    {
+      "name": "ozzo-validation",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/go-ozzo/ozzo-validation.git",
+      "extensions": [".go"]
+    },
+    {
+      "name": "semver",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/rust-lang/semver.git",
+      "extensions": [".rs"]
+    },
+    {
+      "name": "chokidar",
+      "language": "JavaScript/TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/paulmillr/chokidar.git",
+      "extensions": [".cjs", ".js", ".jsx", ".mjs", ".ts", ".tsx"]
+    },
+    {
+      "name": "importlib-metadata",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/python/importlib_metadata.git",
+      "extensions": [".py"]
+    },
+    {
+      "name": "objx",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/stretchr/objx.git",
+      "extensions": [".go"]
+    },
+    {
+      "name": "rustc-demangle",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/rust-lang/rustc-demangle.git",
+      "extensions": [".rs"]
+    },
+    {
+      "name": "is-callable",
+      "language": "JavaScript/TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/ljharb/is-callable.git",
+      "extensions": [".cjs", ".js", ".jsx", ".mjs", ".ts", ".tsx"]
+    },
+    {
+      "name": "platformdirs",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/tox-dev/platformdirs.git",
+      "extensions": [".py"]
+    },
+    {
+      "name": "pkg-errors",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/pkg/errors.git",
+      "extensions": [".go"]
+    },
+    {
+      "name": "itoa",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/dtolnay/itoa.git",
+      "extensions": [".rs"]
+    },
+    {
+      "name": "is-stream",
+      "language": "JavaScript/TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/sindresorhus/is-stream.git",
+      "extensions": [".cjs", ".js", ".jsx", ".mjs", ".ts", ".tsx"]
+    },
+    {
+      "name": "dateutil",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/dateutil/dateutil.git",
+      "extensions": [".py"]
+    },
+    {
+      "name": "fatih-color",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/fatih/color.git",
+      "extensions": [".go"]
+    },
+    {
+      "name": "aho-corasick",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/BurntSushi/aho-corasick.git",
+      "extensions": [".rs"]
+    },
+    {
+      "name": "path-scurry",
+      "language": "JavaScript/TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/isaacs/path-scurry.git",
+      "extensions": [".cjs", ".js", ".jsx", ".mjs", ".ts", ".tsx"]
+    },
+    {
+      "name": "pytest-mock",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/pytest-dev/pytest-mock.git",
+      "extensions": [".py"]
+    },
+    {
+      "name": "xxhash",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/cespare/xxhash.git",
+      "extensions": [".go"]
+    },
+    {
+      "name": "cc-rs",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/rust-lang/cc-rs.git",
+      "extensions": [".rs"]
+    }
+  ],
+  "executionBoundary": {
+    "allowedNetworkCommand": "git ls-remote <url> HEAD",
+    "repositoryCloneBeforePoolFreeze": false,
+    "commitHistoryInspectionBeforePoolFreeze": false,
+    "candidateTaskInspectionBeforePoolFreeze": false,
+    "palaceCallsOnCandidateTasksBeforePoolFreeze": 0
+  },
+  "claimBoundary": "The repository plan was written after preserving the Round 17 invalid-URL failure and before any Round 18 HEAD query. It recursively excludes the 178 repositories observed through Round 16 plus all 12 Round 17 HEAD-query attempts. It reuses only the 20 Round 17 entries that were never queried and adds 12 locally exclusion-checked repositories. No Round 18 history, subject, diff, task, review, oracle, or Palace result was inspected. The final target quota and absolute static gate remain unchanged. This is a tamper-evident local plan, not public preregistration."
+}

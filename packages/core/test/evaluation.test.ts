@@ -24,6 +24,9 @@ describe("evaluateRoute", () => {
       });
 
       expect(evaluation.context.repositoryTokens).toBeGreaterThan(evaluation.context.packTokens);
+      expect(evaluation.context.measurement).toBe("adaptive-delivered-payload");
+      expect(evaluation.context.payloadBytes).toBeGreaterThan(0);
+      expect(evaluation.context.packTokens).toBeLessThanOrEqual(evaluation.context.tokenCeiling);
       expect(evaluation.context.tokenReductionPercent).toBeGreaterThan(0);
       expect(evaluation.context.repositoryToPackRatio).toBeGreaterThan(1);
       expect(evaluation.coverage.changedFileCoverage).toBe(1);
@@ -43,6 +46,39 @@ describe("evaluateRoute", () => {
       expect(markdown).toContain("Changed-file coverage: 100%");
       expect(json.id).toBe(evaluation.id);
       expect(json.routeId).toBe(evaluation.routeId);
+    });
+  });
+
+  it("measures the bounded adaptive payload when the primary route artifact is very large", async () => {
+    await withFixture("ts-api", async (root) => {
+      const auditPath = path.join(root, "docs", "research", "evidence", "codex-session-usage-audit.json");
+      await mkdir(path.dirname(auditPath), { recursive: true });
+      await writeFile(
+        auditPath,
+        JSON.stringify({
+          kind: "codex-session-usage-audit",
+          reliability: "measured",
+          observations: "session usage evidence ".repeat(100_000)
+        }),
+        "utf8"
+      );
+      await indexPalace(root);
+
+      const evaluation = await evaluateRoute(
+        root,
+        "Analyze the Codex session usage audit evidence and quantify reliability",
+        {
+          changedFiles: ["docs/research/evidence/codex-session-usage-audit.json"],
+          budget: 6000,
+          routeLimit: 6
+        }
+      );
+
+      expect(evaluation.route.files).toContain("docs/research/evidence/codex-session-usage-audit.json");
+      expect(evaluation.context.measurement).toBe("adaptive-delivered-payload");
+      expect(evaluation.context.packTokens).toBeLessThanOrEqual(6000);
+      expect(evaluation.context.packTokens).toBeLessThan(10_000);
+      expect(evaluation.context.payloadBytes).toBeGreaterThan(0);
     });
   });
 
@@ -102,5 +138,22 @@ describe("evaluateRoute", () => {
     expect(calibrateConfidence(0.9, 0.2).status).toBe("overconfident");
     expect(calibrateConfidence(0.2, 0.9).status).toBe("underconfident");
     expect(calibrateConfidence(0.8).status).toBe("unverified");
+  });
+
+  it("reports route ratios to three decimal places for independent metric agreement", async () => {
+    await withFixture("ts-api", async (root) => {
+      await indexPalace(root);
+
+      const evaluation = await evaluateRoute(root, "fix login refresh token bug", {
+        changedFiles: [
+          "src/controllers/auth.controller.ts",
+          "src/services/token.service.ts",
+          "src/payment/payment.service.ts"
+        ],
+        routeLimit: 8
+      });
+
+      expect(evaluation.coverage.changedFileCoverage).toBe(0.667);
+    });
   });
 });

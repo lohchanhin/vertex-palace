@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "studyId": "local-blind-routing-round-19-0.4-alpha",
+  "status": "stable-after-transient-inspection-retry-with-disclosed-packet-timestamp-variance",
+  "generatedAt": "2026-08-12T16:12:13.6069104Z",
+  "publicPreregistration": false,
+  "candidateFreeze": {
+    "path": "docs/research/evidence/local-blind-candidate-freeze-0.4-alpha-round-19.json",
+    "sha256": "A1634BC5BA2563FEE2AE83FEC7FFF9F7F842090FB333158841BAD0EA6C42930A"
+  },
+  "repositoryPool": {
+    "path": "docs/research/evidence/local-blind-routing-repository-pool-0.4-alpha-round-19.json",
+    "sha256": "A6FE9F45F7A404976871C4A501AD66281FBA67517E27CB31ABD627CB4BA41E74"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "path": "docs/research/evidence/local-blind-routing-candidate-queue-0.4-alpha-round-19-attempt-1.json",
+      "sha256": "B5C5AA183C6487AF75055B00C3C89A679AD461F14A06F7C4F28642DCBD1695EF",
+      "status": "candidate-queue-partial",
+      "repositoriesInspected": 31,
+      "mechanicalCandidates": 99,
+      "failure": {
+        "repository": "memchr",
+        "category": "harness-inspection-error",
+        "command": "git show -s --format=%B b74f6065b54661f499e6a5428b09d8382e9d3b6d",
+        "observedStdout": "doc: fix misspelling\n\nPR #66",
+        "exitCode": 1
+      },
+      "palaceCallsOnCandidateTasks": 0
+    },
+    {
+      "attempt": 2,
+      "path": "docs/research/evidence/local-blind-routing-candidate-queue-0.4-alpha-round-19-attempt-2.json",
+      "sha256": "B762E2DAF4E1761565500D49DFC81CAE8DF3AD2CEB020130D657E5EDDB5CCA7E",
+      "status": "candidate-queue-ready",
+      "repositoriesInspected": 32,
+      "mechanicalCandidates": 99,
+      "palaceCallsOnCandidateTasks": 0
+    }
+  ],
+  "reproduction": {
+    "repository": "memchr",
+    "samePinnedHead": true,
+    "sameCommitObjectPresent": true,
+    "gitShowExitCode": 0,
+    "gitCatFileCommitExitCode": 0,
+    "messageMatchedAttempt1Stdout": true,
+    "classification": "non-reproducible-transient-local-git-inspection-failure"
+  },
+  "comparison": {
+    "commonInspectedRepositories": 31,
+    "commonRepositorySemanticMismatches": 0,
+    "ignoredVolatileFields": [
+      "generatedAt",
+      "packetSha256",
+      "materializationAttempts"
+    ],
+    "candidateIdsMatched": true,
+    "candidateRanksMatched": true,
+    "routeAndGroundTruthCommitsMatched": true,
+    "changedFilesMatched": true,
+    "diffHunksMatched": true,
+    "rejectionCountsMatched": true,
+    "scannedCommitCountsMatched": true,
+    "attempt2Memchr": {
+      "status": "inspected",
+      "scannedCommits": 279,
+      "mechanicalCandidates": 0
+    },
+    "attempt2CandidateRepositories": 25,
+    "attempt2MechanicalCandidates": 99
+  },
+  "disclosedHarnessLimitation": {
+    "packetSha256StableAcrossEquivalentReruns": false,
+    "reason": "The task-diff coherence packet includes the queue run's generatedAt timestamp in its packetSha256. Equivalent task, commit, file, and hunk content therefore receives a different packet hash on each run.",
+    "impactOnRound19": "Attempt 2 is selected as the exact create-only canonical queue and all semantic reviews must bind its bytes and packet hashes. The timestamp variance does not change candidate identity, order, diff content, or target selection, but it weakens byte-for-byte rerun reproducibility and must be repaired only after the first Round 19 result is preserved.",
+    "productCandidateChanged": false,
+    "frozenSelectorChanged": false
+  },
+  "claimBoundary": "The retry established semantic queue stability after a non-reproducible local Git inspection failure. It did not establish byte-identical packet hashes because the frozen queue format hashes generatedAt. No candidate task was sent to Palace before this evidence, and the frozen product and selector were not changed."
+}

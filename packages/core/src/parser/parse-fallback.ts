@@ -1,11 +1,13 @@
-import type { ParsedFile, ParsedSymbol } from "@vertex-palace/shared";
+import type { ParsedFile, ParsedGeneratedArtifact, ParsedSymbol } from "@vertex-palace/shared";
 import { extractSearchTerms } from "../utils/lexical-tokens";
+import { normalizeRelativePath } from "../utils/path-utils";
 
 type FallbackSymbol = Pick<ParsedSymbol, "name" | "kind">;
 
 export function parseFallback(sourcePath: string, language: string, content: string): ParsedFile {
   const lines = content.split(/\r?\n/);
   const symbols: ParsedSymbol[] = [];
+  const generatedArtifacts = extractFallbackGeneratedArtifacts(sourcePath, language, content);
 
   for (let index = 0; index < lines.length; index += 1) {
     const definition = fallbackSymbolFor(lines[index], language);
@@ -27,6 +29,7 @@ export function parseFallback(sourcePath: string, language: string, content: str
     imports: extractImports(lines, language),
     exports: [],
     symbols: dedupeSymbols(symbols),
+    ...(generatedArtifacts.length ? { generatedArtifacts } : {}),
     summarySeed: lines
       .map((line) => line.trim())
       .filter(Boolean)
@@ -34,6 +37,58 @@ export function parseFallback(sourcePath: string, language: string, content: str
       .join(" ")
       .slice(0, 500)
   };
+}
+
+function extractFallbackGeneratedArtifacts(
+  sourcePath: string,
+  language: string,
+  content: string
+): ParsedGeneratedArtifact[] {
+  if (!['rs', 'rust'].includes(language)) return [];
+  if (!/\bfn\s+(?:generate(?:_[A-Za-z0-9_]*)?|emit(?:_[A-Za-z0-9_]*)?|render(?:_[A-Za-z0-9_]*)?|write_generated(?:_[A-Za-z0-9_]*)?)\b/.test(content)) {
+    return [];
+  }
+
+  const constants = new Map<string, string>();
+  for (const match of content.matchAll(
+    /^\s*(?:pub(?:\([^)]*\))?\s+)?const\s+([A-Za-z_][A-Za-z0-9_]*)\s*:\s*&(?:'static\s+)?str\s*=\s*"([^"\r\n]+)"\s*;/gm
+  )) {
+    constants.set(match[1], match[2]);
+  }
+  for (const match of content.matchAll(
+    /^\s*(?:pub(?:\([^)]*\))?\s+)?const\s+([A-Za-z_][A-Za-z0-9_]*)\s*:\s*&(?:'static\s+)?str\s*=\s*r(#{0,8})"([^"\r\n]+)"\2\s*;/gm
+  )) {
+    constants.set(match[1], match[3]);
+  }
+
+  const inputPath = normalizeRelativePath(sourcePath);
+  const artifacts: ParsedGeneratedArtifact[] = [];
+  const seen = new Set<string>();
+  for (const [name, declaredPath] of constants) {
+    const writeCall = new RegExp(
+      `\\b(?:[A-Za-z_][A-Za-z0-9_]*::)*write\\s*\\(\\s*${escapeRegExp(name)}\\b`
+    );
+    if (!writeCall.test(content)) continue;
+    const outputPath = normalizeRelativePath(declaredPath);
+    if (!isSafeGeneratedOutputPath(outputPath) || seen.has(outputPath)) continue;
+    seen.add(outputPath);
+    artifacts.push({ inputPath, outputPath, tool: "rust-generator" });
+  }
+  return artifacts;
+}
+
+function isSafeGeneratedOutputPath(sourcePath: string): boolean {
+  if (
+    !sourcePath
+    || sourcePath.startsWith("/")
+    || /^[A-Za-z]:\//.test(sourcePath)
+    || sourcePath.split("/").some((part) => part === "..")
+  ) return false;
+  return /\.(?:c|cc|cpp|cxx|go|h|hh|hpp|hxx|java|js|json|jsx|kt|kts|md|mdx|py|rs|swift|toml|ts|tsx|ya?ml)$/i.test(sourcePath);
+}
+
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
 function fallbackSymbolFor(line: string, language: string): FallbackSymbol | undefined {
@@ -45,6 +100,8 @@ function fallbackSymbolFor(line: string, language: string): FallbackSymbol | und
     if (receiverMatch) return { name: `${receiverMatch[1]}.${receiverMatch[2]}`, kind: "method" };
     const functionMatch = line.match(/^\s*func\s+([A-Za-z_][A-Za-z0-9_]*)\b/);
     if (functionMatch) return { name: functionMatch[1], kind: "function" };
+    const variableMatch = line.match(/^\s*var\s+([A-Za-z_][A-Za-z0-9_]*)\b/);
+    if (variableMatch) return { name: variableMatch[1], kind: "const" };
   }
 
   const functionMatch = line.match(
@@ -143,7 +200,7 @@ function isCharacterLiteralStart(line: string, startIndex: number): boolean {
 function fallbackSearchText(value: string): string {
   const phrases: string[] = [];
   const seen = new Set<string>();
-  for (const match of value.matchAll(/\b[A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*)*\b/g)) {
+  for (const match of value.matchAll(/\b[A-Za-z_][A-Za-z0-9_]*(?:[.-][A-Za-z0-9_]+)*\b/g)) {
     const phrase = extractSearchTerms(match[0], 12);
     if (!phrase.includes(" ") || seen.has(phrase)) continue;
     seen.add(phrase);

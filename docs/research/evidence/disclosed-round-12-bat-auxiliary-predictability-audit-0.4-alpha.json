@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "studyId": "disclosed-round-12-bat-auxiliary-predictability-audit-0.4-alpha",
+  "generatedAt": "2026-08-11T01:30:13.7227670Z",
+  "status": "completed",
+  "evidenceClass": "disclosed-post-observation-auxiliary-predictability-audit",
+  "heldOutAgainstCandidate": false,
+  "claimBoundary": "Descriptive Git-history and frozen-index audit for the already observed Bat Round 12 auxiliary miss. It does not estimate a causal probability, does not execute an Agent, and supports no correctness, Token, tool-call, or wall-time claim.",
+  "repository": {
+    "name": "bat",
+    "routeCommit": "af1f53d9a977154216d01435991fe33631b74713",
+    "paths": {
+      "auxiliary": "CHANGELOG.md",
+      "implementation": "src/printer.rs",
+      "verification": "tests/integration_tests.rs"
+    }
+  },
+  "method": {
+    "historyScope": "Commits reachable from the frozen route commit",
+    "countRule": "Count unique commit hashes returned by git log --format=%H -- <path>, then intersect the three path-specific sets.",
+    "indexObservation": "The frozen Palace index contains a direct implementation/verification relation, but no relation from CHANGELOG.md to either core path."
+  },
+  "counts": {
+    "changelogCommits": 595,
+    "printerCommits": 225,
+    "integrationTestCommits": 223,
+    "changelogWithPrinter": 33,
+    "changelogWithIntegrationTests": 65,
+    "allThree": 18,
+    "changelogGivenPrinterRate": 0.1467,
+    "changelogGivenIntegrationTestsRate": 0.2915
+  },
+  "decision": {
+    "classification": "unresolved-auxiliary-prediction-boundary",
+    "reason": "The frozen task and index strongly identify the implementation/test pair but do not provide a discriminative changelog signal. A global bugfix-to-changelog rule would be a disclosed-target policy override rather than an evidence-based route repair."
+  }
+}

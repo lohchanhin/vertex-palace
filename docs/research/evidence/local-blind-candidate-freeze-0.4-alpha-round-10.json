@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "studyId": "local-blind-routing-round-10-0.4-alpha",
+  "status": "locally-frozen",
+  "frozenAt": "2026-08-09T14:33:23.782Z",
+  "publicPreregistration": false,
+  "claimBoundary": "Tamper-evident local freeze created before any Round 10 repository history, commit subject, diff, task, oracle, or Palace result was inspected. This supports internal product decisions only because the competition freeze prevents a Git commit or external timestamp. It is not public preregistration and cannot establish Agent correctness, Token savings, tool-call reduction, or wall-time improvement.",
+  "competitionFreeze": {
+    "noCommit": true,
+    "noPush": true,
+    "noTag": true,
+    "noNpmPublish": true,
+    "reason": "Do not alter submitted project materials until competition results are announced."
+  },
+  "candidate": {
+    "role": "post-round-9-disclosed-evidence-closure-repair-candidate",
+    "baseCommit": "67c0a2ce8754cece3773d5fd16b89dae4e3af0c1",
+    "sourceState": "uncommitted-local-working-tree-frozen-by-content-hash",
+    "cliPath": "dist/palace.cjs",
+    "cliSha256": "74DE697F77B5ADA01C2DBD15646FD87FE5DA9C43763D574D21AC98C02CB27624",
+    "generatedMcpPath": "plugins/vertex-palace/mcp/server.cjs",
+    "generatedMcpSha256": "E80F74F3F5368D5DA4F28BE8781A281DD0756F2E57F019F935CB7E490DBB1ABE",
+    "sourceTree": {
+      "algorithm": "sha256-path-length-bytes-v1",
+      "fileCount": 185,
+      "sha256": "1711A6DDD8670D401C04B4487D57980E8A0E5FDC7BE0B59A004B38AB6BA6BA84"
+    },
+    "buildCommand": "pnpm build"
+  },
+  "comparisonBaseline": {
+    "role": "pre-local-evidence-closure-optimization",
+    "productCommit": "67c0a2ce8754cece3773d5fd16b89dae4e3af0c1",
+    "sourceTree": {
+      "algorithm": "sha256-path-length-bytes-v1",
+      "fileCount": 121,
+      "sha256": "73BB3192CE756367031E8B3E1C5FE8332811C5FB333036A5BA6DFB7B2007B5E0"
+    },
+    "cliPath": "dist/palace.cjs",
+    "cliSha256": "52A1876B00AF4AAA884A6C7EA47AC2E701E88C34FC8FEE65DD1B32BB6513B8AE",
+    "rebuild": {
+      "dependencyCommand": "pnpm install --offline --frozen-lockfile --ignore-scripts",
+      "buildCommand": "pnpm build",
+      "networkRequired": false
+    }
+  },
+  "artifacts": {
+    "docs/research/LOCAL_BLIND_ROUTING_TARGET_SELECTION_PROTOCOL_0_4_ALPHA_ROUND_10.md": "F30201F0C2FED26794EB0D8B366A8D99D2E17F9B5AEF4A5AB39270A37D7048A4",
+    "docs/zh-CN/LOCAL_BLIND_ROUTING_TARGET_SELECTION_PROTOCOL_0_4_ALPHA_ROUND_10.md": "9C26CB94940CFE32A935CFC0097861EAF47665E45D1406B81C314FBE4324357F",
+    "docs/research/evidence/local-blind-routing-repository-pool-0.4-alpha-round-10.json": "E8641790EDE5AFED2E32FB215A553E727DE99ED1EC3D729F8110360003C1DCE2",
+    "scripts/select-local-blind-routing-targets-round-10.cjs": "9C1928537D94C0F169AF0E4239E175967CC1D59C3A260527536A92D0074CE8ED",
+    "scripts/test/round10-local-blind-selection-freeze.test.cjs": "922E5F021BDBD728BC7F985A0A2CDD7D6B60B2972B844FA0104CFEFF5AD8C316",
+    "scripts/lib/commit-task-classifier.cjs": "C3D787029C019FD64BFB079913F23B58082C38560448A9B9567954ECA9FE1254",
+    "scripts/lib/held-out-file-surfaces.cjs": "A604A7F55386C1C45BEBBCCA0024B40D84798C4480247181895238929B9F030D"
+  },
+  "selectionRules": {
+    "candidateTaskHistoryObservedBeforeFreeze": false,
+    "candidateTaskDiffObservedBeforeFreeze": false,
+    "palaceCallsOnCandidateTasksBeforeFreeze": 0,
+    "resultCreateOnly": true,
+    "productChangesForbiddenUntilFirstResultPreserved": true
+  }
+}

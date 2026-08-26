@@ -1,0 +1,219 @@
+{
+  "schemaVersion": "1.0",
+  "analysisId": "disclosed-routing-round-10-attempt-3-task-coherent-sensitivity-0.4-alpha",
+  "generatedAt": "2026-08-09T18:46:26.317Z",
+  "analysisTiming": "post-hoc-after-round-10-disclosure",
+  "evidenceClass": "diagnostic-sensitivity-analysis",
+  "heldOutAgainstCandidate": false,
+  "targetTestsExecuted": false,
+  "formalGateStatus": "failed",
+  "sensitivityGateStatus": "passed",
+  "gateFailures": [],
+  "sourceEvidence": {
+    "path": "docs/research/evidence/disclosed-routing-round-10-after-generic-causal-repair-attempt-3-0.4-alpha.json",
+    "sha256": "82E1A5B65B6A517061D622B82D455A4FBF2E65B6A3E0B8B9F88D610D777CB955",
+    "preservedWithoutModification": true
+  },
+  "coherenceAudit": {
+    "path": "docs/research/evidence/round10-task-diff-coherence-audit-0.4-alpha.json",
+    "sha256": "BD2B1D12AC5AD2D00E8D815C99B514D59D09A90CE096C715F1DE5F5F757BED19",
+    "timing": "post-hoc-after-round-10-disclosure"
+  },
+  "excludedTargets": [
+    {
+      "name": "itsdangerous",
+      "status": "mixed-semantic-commit",
+      "decision": "Exclude this entire target only from a separately labeled post-hoc sensitivity analysis. Do not change the frozen oracle or formal gate."
+    }
+  ],
+  "includedTargets": [
+    "p-map",
+    "gorilla-websocket",
+    "syn",
+    "uuid",
+    "markupsafe",
+    "logrus",
+    "slab"
+  ],
+  "protocol": {
+    "pairedWithOriginalFormalObservation": false,
+    "repetitions": 2,
+    "repetitionsAreDeterminismChecksNotIndependentSamples": true,
+    "sequential": true,
+    "concurrent": false,
+    "freshPalacePerTarget": true,
+    "targetTestsExecuted": false,
+    "budget": 6000,
+    "routeLimit": 10,
+    "maxDrawers": 4,
+    "fetchDepth": 400,
+    "metricAgreementTolerance": 0.005,
+    "calibrationTolerance": 0.15,
+    "oraclePolicy": {
+      "core": "Frozen implementationFiles plus testFiles; required for the disclosed repair gate.",
+      "auxiliary": "Frozen changelog or package/config files; reported separately as task-diff bookkeeping and not allowed to substitute for implementation or test evidence.",
+      "fullChangedFiles": "Retained for comparability with the immutable formal Round 10 result."
+    },
+    "gates": {
+      "completedTargets": 8,
+      "deterministicRoutes": 8,
+      "taskTypeMatchedTargets": 8,
+      "coreSurfaceCompleteTargets": 8,
+      "auxiliarySurfaceCompleteTargets": "all frozen targets with auxiliary files",
+      "minimumMacroChangedFileCoverage": 0.9,
+      "minimumMacroRouteFocus": 0.7,
+      "minimumTargetChangedFileCoverage": 0.5,
+      "minimumTargetRouteFocus": 0.4,
+      "overconfidentAgainstCoreTrials": 0,
+      "unsafeNarrowAgainstCoreTrials": 0,
+      "unsafeEnforcedStopAgainstCoreTrials": 0,
+      "metricDisagreementTrials": 0,
+      "contextWithinBudget": true,
+      "trackedTargetWorktreeChanges": 0
+    },
+    "taskDiffCoherenceRule": "Exclude an entire target only when a separately preserved semantic audit identifies unrelated changed hunks."
+  },
+  "aggregate": {
+    "targetCount": 7,
+    "completedTargets": 7,
+    "passedTargets": 7,
+    "failedTargets": 0,
+    "deterministicTargets": 7,
+    "taskTypeMatchedTargets": 7,
+    "coreSurfaceCompleteTargets": 7,
+    "auxiliarySurfaceCompleteTargets": 1,
+    "auxiliarySurfaceTargetCount": 1,
+    "targetMacroChangedFileCoverage": 1,
+    "targetMacroCoreSurfaceCoverage": 1,
+    "targetMacroRouteFocus": 0.831,
+    "targetMacroCoreRouteFocus": 0.795,
+    "minimumTargetChangedFileCoverage": 1,
+    "minimumTargetRouteFocus": 0.4,
+    "calibrationCoreMeanAbsoluteError": 0.311,
+    "calibrationFullDiffMeanAbsoluteError": 0.311,
+    "overconfidentAgainstCoreTrials": 0,
+    "unsafeNarrowAgainstCoreTrials": 0,
+    "unsafeNarrowAgainstFullDiffTrials": 0,
+    "unsafeEnforcedStopAgainstCoreTrials": 0,
+    "metricDisagreementTrials": 0,
+    "evaluationContextRouteDisagreementTrials": 0,
+    "maxContextEstimatedTokens": 3292,
+    "contextBudget": 6000,
+    "trackedTargetWorktreeChanges": 0
+  },
+  "targets": [
+    {
+      "name": "p-map",
+      "status": "passed",
+      "routeFiles": [
+        "index.js",
+        "test.js"
+      ],
+      "changedFileCoverage": 1,
+      "coreSurfaceCoverage": 1,
+      "routeFocus": 1,
+      "coreRouteFocus": 1,
+      "routeConfidence": 0.67,
+      "deterministicRoutes": true,
+      "trackedTargetWorktreeClean": true
+    },
+    {
+      "name": "gorilla-websocket",
+      "status": "passed",
+      "routeFiles": [
+        "conn.go",
+        "prepared.go",
+        "server.go",
+        "examples/chat/client.go",
+        "conn_test.go"
+      ],
+      "changedFileCoverage": 1,
+      "coreSurfaceCoverage": 1,
+      "routeFocus": 0.4,
+      "coreRouteFocus": 0.4,
+      "routeConfidence": 0.65,
+      "deterministicRoutes": true,
+      "trackedTargetWorktreeClean": true
+    },
+    {
+      "name": "syn",
+      "status": "passed",
+      "routeFiles": [
+        "codegen/src/snapshot.rs",
+        "tests/debug/gen.rs"
+      ],
+      "changedFileCoverage": 1,
+      "coreSurfaceCoverage": 1,
+      "routeFocus": 1,
+      "coreRouteFocus": 1,
+      "routeConfidence": 0.53,
+      "deterministicRoutes": true,
+      "trackedTargetWorktreeClean": true
+    },
+    {
+      "name": "uuid",
+      "status": "passed",
+      "routeFiles": [
+        "src/v1.ts",
+        "src/test/v1.test.ts",
+        "src/test/v6.test.ts"
+      ],
+      "changedFileCoverage": 1,
+      "coreSurfaceCoverage": 1,
+      "routeFocus": 1,
+      "coreRouteFocus": 1,
+      "routeConfidence": 0.8,
+      "deterministicRoutes": true,
+      "trackedTargetWorktreeClean": true
+    },
+    {
+      "name": "markupsafe",
+      "status": "passed",
+      "routeFiles": [
+        "src/markupsafe/__init__.py",
+        "tests/test_markupsafe.py",
+        "CHANGES.rst",
+        "tox.ini"
+      ],
+      "changedFileCoverage": 1,
+      "coreSurfaceCoverage": 1,
+      "routeFocus": 0.75,
+      "coreRouteFocus": 0.5,
+      "routeConfidence": 0.67,
+      "deterministicRoutes": true,
+      "trackedTargetWorktreeClean": true
+    },
+    {
+      "name": "logrus",
+      "status": "passed",
+      "routeFiles": [
+        "hooks/slog/slog.go",
+        "hooks/slog/slog_test.go",
+        "CHANGELOG.md"
+      ],
+      "changedFileCoverage": 1,
+      "coreSurfaceCoverage": 1,
+      "routeFocus": 0.667,
+      "coreRouteFocus": 0.667,
+      "routeConfidence": 0.6,
+      "deterministicRoutes": true,
+      "trackedTargetWorktreeClean": true
+    },
+    {
+      "name": "slab",
+      "status": "passed",
+      "routeFiles": [
+        "src/lib.rs",
+        "tests/slab.rs"
+      ],
+      "changedFileCoverage": 1,
+      "coreSurfaceCoverage": 1,
+      "routeFocus": 1,
+      "coreRouteFocus": 1,
+      "routeConfidence": 0.9,
+      "deterministicRoutes": true,
+      "trackedTargetWorktreeClean": true
+    }
+  ],
+  "claimBoundary": "The preregistered Round 10 gate remains failed. This post-hoc result only estimates the task-coherent subset and cannot authorize Agent A/B advancement or replace a fresh held-out Round 11."
+}

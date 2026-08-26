@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 1,
+  "studyId": "local-blind-routing-round-12-0.4-alpha",
+  "generatedAt": "2026-08-10T22:45:21.065Z",
+  "status": "passed",
+  "claimBoundary": "Local pre-freeze product and research-harness verification. This proves only that the frozen candidate and selection machinery pass their declared local checks; it is not a Round 12 routing result or Agent A/B result.",
+  "competitionFreeze": {
+    "noCommit": true,
+    "noPush": true,
+    "noTag": true,
+    "noNpmPublish": true
+  },
+  "gitBaseCommit": "67c0a2ce8754cece3773d5fd16b89dae4e3af0c1",
+  "candidate": {
+    "sourceTree": {
+      "algorithm": "sha256-path-length-bytes-v1",
+      "fileCount": 185,
+      "sha256": "7DCD8B3C93BB1D2B94B2F1A1D0878BD64039ED7D8D3839AA4ACC30818A4F095C"
+    },
+    "cliPath": "dist/palace.cjs",
+    "cliSha256": "3815B78163F3E401A24C9A63F77DB355B2BD2EDEEF42CB029E961A89B49D79C2",
+    "generatedMcpPath": "plugins/vertex-palace/mcp/server.cjs",
+    "generatedMcpSha256": "45E51F092A97EA796E194759909279E3A0C3BB92E1441B04E76B843553E03BE1"
+  },
+  "results": [
+    {
+      "label": "round12-research-harness",
+      "command": "node --test scripts/test/task-diff-coherence.test.cjs scripts/test/round12-task-diff-coherence-protocol.test.cjs scripts/test/round12-target-selection.test.cjs scripts/test/round12-candidate-queue.test.cjs scripts/test/round12-repository-pool.test.cjs",
+      "status": "passed",
+      "exitCode": 0,
+      "elapsedMs": 1782,
+      "outputSha256": "E3BF7FA1047840FD4ADD7AA8AEC4C4D84768C14C255B20FCE2D2CA01D4532EE1",
+      "outputTail": "✔ builds a hunk-addressed candidate from a real single-parent fixture commit (905.113ms)\n✔ rejects a mechanically mixed commit that adds an oracle file (735.3707ms)\n✔ parses deterministic Git name-status and numstat records (0.2418ms)\n✔ Round 12 pool is balanced and recursively excludes all 145 observed repositories (8.0589ms)\n✔ Round 12 pool keeps the preregistered interleaved family order (2.4945ms)\n✔ Round 12 queue and finalizer are create-only and contain no Palace execution path (1.6913ms)\n✔ selects the newest coherent candidate and stops later review deterministically (6.5084ms)\n✔ requires every newest candidate before an accepted older candidate (1.381ms)\n✔ rejects discretionary reviews after the first accepted candidate (0.4151ms)\n✔ requires generated outputs and their owning generator to remain in the whole oracle (0.1506ms)\n✔ keeps Round 12 explicitly unexecuted until a matching candidate freeze (6.9242ms)\n✔ locks whole-target semantic review before any Palace call (1.6964ms)\n✔ preserves the absolute static gate and fresh Round 12 advancement rule (1.5528ms)\n✔ keeps the coherence library free of repository execution and Palace invocation (1.7056ms)\n✔ builds a complete hunk-addressed packet for the mechanical oracle (1.7642ms)\n✔ accepts a target only when every file and hunk is task aligned (1.1349ms)\n✔ rejects the whole target when one bundled hunk is unrelated (1.3099ms)\n✔ treats uncertainty and incomplete hunk review as rejection evidence (0.9123ms)\nℹ tests 18\nℹ suites 0\nℹ pass 18\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 1712.5255\n",
+      "error": null
+    },
+    {
+      "label": "core-full",
+      "command": "C:\\Windows\\system32\\cmd.exe /d /s /c pnpm --filter @vertex-palace/core test",
+      "status": "passed",
+      "exitCode": 0,
+      "elapsedMs": 47004,
+      "outputSha256": "88FEEE5E1BAA4020650E3FF1689663AA7C03733F15B058E0116C7EC656E5A449",
+      "outputTail": "\n RUN  v2.1.9 D:/工作资料/codex palace/packages/core\n\n ✓ test/router.test.ts (93 tests) 21359ms\n   ✓ routePalace > uses an exact diagnostic phrase as a behavior anchor without reclassifying the task 440ms\n   ✓ routePalace > allocates a bounded route across coordinated implementation, verification, docs, config, and generated artifacts 352ms\n   ✓ routePalace > keeps complete real-shaped multi-surface recall without filling the route with generic siblings 319ms\n   ✓ routePalace > routes simultaneous planner and scorer work with its current bilingual precision evidence 330ms\n   ✓ routePalace > routes a frozen cross-repository replication to its complete artifact family 427ms\n   ✓ routePalace > keeps a newly named recursive artifact family ahead of an older scope-matching family 619ms\n   ✓ routePalace > keeps an explicit Latin artifact identity ahead of a Chinese-derived scope entity 395ms\n   ✓ routePalace > keeps a product repair about a named artifact family on implementation, focused test, and generated bundle 311ms\n   ✓ routePalace > keeps both implementation concerns, focused tests, and generated MCP bundle in a compound bugfix 312ms\n   ✓ routePalace > keeps release-vocabulary classification work ahead of adjacent analysis and evaluation modules 305ms\n   ✓ routePalace > routes bilingual evidence synchronization across its plan, generator, test, and documentation surfaces 525ms\n   ✓ routePalace > covers implementation, regression, package, plugin, and release records for a release task 317ms\n   ✓ routePalace > stops an Allow feature after the NameEmail implementation and focused test 360ms\n   ✓ routePalace > keeps an attribute-macro task inside one workspace crate and its causal siblings 368ms\n   ✓ routePalace > expands a response-use bug through all causally related implementation siblings 523ms\n ✓ test/context.test.ts (22 tests) 6804ms\n   ✓ palaceContext > widens all repeated small-local trials when evidence remains insufficient 1431ms\n   ✓ palaceContext > delivers relevant seeded memory when auto selects full-palace 641ms\n   ✓ palaceContext > keeps full-palace output inside its context ceiling when memory telemetry is dense 506ms\n   ✓ palaceContext > hard-bounds guarded Markdown and JSON with fifty auditable memory candidates 327ms\n ✓ test/indexer.test.ts (12 tests) 2735ms\n   ✓ indexPalace > indexes workspace imports, local co-consumers, and generated artifact provenance 351ms\n ✓ test/release-routing.test.ts (5 tests) 1688ms\n   ✓ release routing matrix > routes a JavaScript monorepo npm release through manifests, notes, and regression tests 367ms\n   ✓ release routing matrix > balances implementation and distribution surfaces for a mixed feature release 511ms\n ✓ test/memory.test.ts (11 tests) 1436ms\n ✓ test/evidence-model.test.ts (14 tests) 14ms\n ✓ test/mode-selector.test.ts (17 tests) 7ms\n ✓ test/parser.test.ts (13 tests) 1480ms\n ✓ test/packer.test.ts (8 tests) 1871ms\n   ✓ packContext > uses a prepared memory result without reading the mutable board again 318ms\n ✓ test/evaluation.test.ts (6 tests) 1849ms\n   ✓ evaluateRoute > measures context reduction and changed-file route coverage 356ms\n   ✓ evaluateRoute > keeps declared generated artifacts routable without counting their bundled source 676ms\n ✓ test/scanner.test.ts (3 tests) 396ms\n ✓ test/route-expander.test.ts (2 tests) 3ms\n ✓ test/init-palace.test.ts (3 tests) 362ms\n ✓ test/lexical-acronyms.test.ts (3 tests) 3ms\n\n Test Files  14 passed (14)\n      Tests  212 passed (212)\n   Start at  06:44:16\n   Duration  46.11s (transform 608ms, setup 0ms, collect 3.42s, tests 40.01s, environment 2ms, prepare 901ms)\n\n\n$ vitest run\n",
+      "error": null
+    },
+    {
+      "label": "cli-full",
+      "command": "C:\\Windows\\system32\\cmd.exe /d /s /c pnpm --filter @vertex-palace/cli test",
+      "status": "passed",
+      "exitCode": 0,
+      "elapsedMs": 1883,
+      "outputSha256": "05C02F8E4A77C509C2546E148A051F0E017D50A509E4303E0DFB6ADA504D9A2B",
+      "outputTail": "\n RUN  v2.1.9 D:/工作资料/codex palace/packages/cli\n\n ✓ test/evaluate.test.ts (1 test) 2ms\n ✓ test/memory.test.ts (1 test) 2ms\n\n Test Files  2 passed (2)\n      Tests  2 passed (2)\n   Start at  06:45:03\n   Duration  1.06s (transform 282ms, setup 0ms, collect 1.30s, tests 4ms, environment 1ms, prepare 293ms)\n\n\n$ vitest run --passWithNoTests\n",
+      "error": null
+    },
+    {
+      "label": "mcp-full",
+      "command": "C:\\Windows\\system32\\cmd.exe /d /s /c pnpm --filter @vertex-palace/mcp test",
+      "status": "passed",
+      "exitCode": 0,
+      "elapsedMs": 1239,
+      "outputSha256": "76496075BE84D66C54D95C75FCD7C7E75077414C8C50FD6987300388ACB33C97",
+      "outputTail": "\n RUN  v2.1.9 D:/工作资料/codex palace/packages/mcp\n\n ✓ test/definitions.test.ts (2 tests) 2ms\n\n Test Files  1 passed (1)\n      Tests  2 passed (2)\n   Start at  06:45:04\n   Duration  426ms (transform 59ms, setup 0ms, collect 59ms, tests 2ms, environment 0ms, prepare 157ms)\n\n\n$ vitest run --passWithNoTests\n",
+      "error": null
+    },
+    {
+      "label": "workspace-build",
+      "command": "C:\\Windows\\system32\\cmd.exe /d /s /c pnpm build",
+      "status": "passed",
+      "exitCode": 0,
+      "elapsedMs": 9797,
+      "outputSha256": "A98ACC98CA0E01919292EDBC684DABEE74D813FFC08385480203ABF13F2AAF63",
+      "outputTail": "Scope: 4 of 5 workspace projects\npackages/shared build$ tsup src/index.ts --format esm --dts --clean\npackages/shared build: CLI Building entry: src/index.ts\npackages/shared build: CLI Using tsconfig: tsconfig.json\npackages/shared build: CLI tsup v8.5.1\npackages/shared build: CLI Target: es2022\npackages/shared build: CLI Cleaning output folder\npackages/shared build: ESM Build start\npackages/shared build: ESM dist\\index.js 1.85 KB\npackages/shared build: ESM ⚡️ Build success in 29ms\npackages/shared build: DTS Build start\npackages/shared build: DTS ⚡️ Build success in 796ms\npackages/shared build: DTS dist\\index.d.ts 22.67 KB\npackages/shared build: Done\npackages/core build$ tsup src/index.ts --format esm --dts --clean\npackages/core build: CLI Building entry: src/index.ts\npackages/core build: CLI Using tsconfig: tsconfig.json\npackages/core build: CLI tsup v8.5.1\npackages/core build: CLI Target: es2022\npackages/core build: CLI Cleaning output folder\npackages/core build: ESM Build start\npackages/core build: ESM dist\\chunk-74NWWB4Q.js          6.01 KB\npackages/core build: ESM dist\\write-memory-Z2ULPD7N.js   211.00 B\npackages/core build: ESM dist\\chunk-SHNWWFSG.js          1.40 KB\npackages/core build: ESM dist\\index.js                   6.91 KB\npackages/core build: ESM dist\\doctor-5LN2P4QU.js         141.00 B\npackages/core build: ESM dist\\init-palace-WVWXWN5N.js    227.00 B\npackages/core build: ESM dist\\index-palace-7DRWTX3G.js   319.00 B\npackages/core build: ESM dist\\route-planner-WNLGNL3N.js  379.00 B\npackages/core build: ESM dist\\context-packer-QFHRZ2AA.js 581.00 B\npackages/core build: ESM dist\\open-ZIWBR42C.js           235.00 B\npackages/core build: ESM dist\\evaluate-route-RKYHG6YU.js 549.00 B\npackages/core build: ESM dist\\chunk-X2GZOHVV.js          755.00 B\npackages/core build: ESM dist\\chunk-CX5D2BVK.js          11.84 KB\npackages/core build: ESM dist\\chunk-KQYEUIF2.js          71.96 KB\npackages/core build: ESM dist\\chunk-RKS7W7UF.js          268.69 KB\npackages/core build: ESM dist\\chunk-AES5IPZW.js          70.92 KB\npackages/core build: ESM dist\\chunk-GOIN67QS.js          6.15 KB\npackages/core build: ESM dist\\chunk-IWX43N5M.js          2.04 KB\npackages/core build: ESM dist\\chunk-ZXWLCLH6.js          21.78 KB\npackages/core build: ESM dist\\chunk-64NGGQRK.js          368.00 B\npackages/core build: ESM dist\\chunk-M5A2W3PW.js          5.79 KB\npackages/core build: ESM dist\\chunk-74NFQOE3.js          360.00 B\npackages/core build: ESM dist\\chunk-M54JX7NK.js          4.45 KB\npackages/core build: ESM dist\\chunk-DVP5EKXC.js          1.77 KB\npackages/core build: ESM dist\\chunk-V3QDOAPT.js          134.00 B\npackages/core build: ESM dist\\status-ER6NAB3M.js         207.00 B\npackages/core build: ESM dist\\chunk-4ASOJMBH.js          1.22 KB\npackages/core build: ESM dist\\chunk-B7ZU7MV3.js          1.21 KB\npackages/core build: ESM ⚡️ Build success in 70ms\npackages/core build: DTS Build start\npackages/core build: DTS ⚡️ Build success in 1998ms\npackages/core build: DTS dist\\index.d.ts 15.18 KB\npackages/core build: Done\npackages/cli build$ tsup src/index.ts --format esm --dts --clean\npackages/mcp build$ tsup src/server.ts --format esm --dts --clean\npackages/cli build: CLI Building entry: src/index.ts\npackages/cli build: CLI Using tsconfig: tsconfig.json\npackages/cli build: CLI tsup v8.5.1\npackages/cli build: CLI Target: es2022\npackages/mcp build: CLI Building entry: src/server.ts\npackages/cli build: CLI Cleaning output folder\npackages/mcp build: CLI Using tsconfig: tsconfig.json\npackages/cli build: ESM Build start\npackages/mcp build: CLI tsup v8.5.1\npackages/mcp build: CLI Target: es2022\npackages/mcp build: CLI Cleaning output folder\npackages/mcp build: ESM Build start\npackages/cli build: ESM dist\\index.js 11.96 KB\npackages/cli build: ESM ⚡️ Build success in 45ms\npackages/mcp build: ESM dist\\server.js 11.73 KB\npackages/mcp build: ESM ⚡️ Build success in 40ms\npackages/cli build: DTS Build start\npackages/mcp build: DTS Build start\npackages/cli build: DTS ⚡️ Build success in 810ms\npackages/cli build: DTS dist\\index.d.ts 20.00 B\npackages/mcp build: DTS ⚡️ Build success in 809ms\npackages/mcp build: DTS dist\\server.d.ts 20.00 B\npackages/cli build: Done\npackages/mcp build: Done\nCLI Building entry: {\"server\":\"packages/mcp/src/server.ts\"}\nCLI Using tsconfig: tsconfig.json\nCLI tsup v8.5.1\nCLI Using tsup config: D:\\工作资料\\codex palace\\tsup.plugin-mcp.config.ts\nCLI Target: es2022\nCLI Cleaning output folder\nCJS Build start\nCJS plugins\\vertex-palace\\mcp\\server.cjs 9.44 MB\nCJS ⚡️ Build success in 479ms\nCLI Building entry: {\"palace\":\"packages/cli/src/index.ts\"}\nCLI Using tsconfig: tsconfig.json\nCLI tsup v8.5.1\nCLI Using tsup config: D:\\工作资料\\codex palace\\tsup.package-cli.config.ts\nCLI Target: es2022\nCLI Cleaning output folder\nCJS Build start\nCJS dist\\palace.cjs 9.49 MB\nCJS ⚡️ Build success in 466ms\n\n$ pnpm -r build && pnpm build:plugin-mcp && pnpm build:package-cli\n$ tsup --config tsup.plugin-mcp.config.ts && node scripts/trim-generated.cjs\n$ tsup --config tsup.package-cli.config.ts && node scripts/trim-generated.cjs\n",
+      "error": null
+    },
+    {
+      "label": "mcp-smoke",
+      "command": "node scripts/smoke-mcp.cjs",
+      "status": "passed",
+      "exitCode": 0,
+      "elapsedMs": 5897,
+      "outputSha256": "DB11041F555E7633B6FFAE064789667BEF563D0F79510FE483AC20A3C139167E",
+      "outputTail": "MCP smoke test passed for Vertex Palace 0.3.0 (10 tools, bypass context, 382 delivered bytes).\n",
+      "error": null
+    }
+  ]
+}

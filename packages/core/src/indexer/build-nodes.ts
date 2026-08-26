@@ -4,6 +4,7 @@ import { hashText } from "../scanner/file-hash";
 import { makePalaceAddress } from "../palace/palace-address";
 import { KNOWN_ROOMS, KNOWN_WINGS } from "../palace/room-types";
 import { estimateTokens } from "../packer/token-estimator";
+import { describeNodeEvidence } from "../evidence/evidence-model";
 import { normalizeRelativePath, slugify, stripExtension } from "../utils/path-utils";
 
 export type ParsedFileWithHash = ParsedFile & {
@@ -85,6 +86,8 @@ export function inferFloor(sourcePath: string, language: string): PalaceFloor {
   const lower = normalizeRelativePath(sourcePath).toLowerCase();
   if (
     /(^|\/)(test|tests|spec|__tests__)(\/|$)|\.(test|spec|e2e)\.[tj]sx?$/.test(lower)
+    || /\.(?:test|spec)-d\.[cm]?ts$/.test(lower)
+    || /(^|\/)(?:test-d|type-tests?)(\/|$)/.test(lower)
     || /(^|\/)(?:test_[^/]+|[^/]+_(?:test|spec))\.[a-z0-9]+$/.test(lower)
     || /(^|\/)[^/]+tests?\.(?:cs|java|kt)$/.test(lower)
   ) return "05-verification";
@@ -128,6 +131,13 @@ function makeNode(input: {
 }): PalaceNode {
   const sourcePath = normalizeRelativePath(input.sourcePath);
   const palacePath = makePalaceAddress(input);
+  const evidence = describeNodeEvidence({
+    sourcePath,
+    floor: input.floor,
+    kind: input.kind,
+    title: input.title,
+    generated: input.extraTags?.includes("generated-artifact")
+  });
   const id = `node_${hashText(`${palacePath}:${sourcePath}:${input.startLine ?? ""}:${input.title}`).slice(0, 16)}`;
   const tokenCost = estimateTokens(input.summary) + estimateTokens(input.signature ?? "");
   return {
@@ -140,6 +150,7 @@ function makeNode(input: {
     cabinet: input.cabinet,
     drawer: input.drawer,
     kind: input.kind,
+    evidence,
     language: input.language,
     title: input.title,
     summary: input.summary,

@@ -7,6 +7,7 @@ import { parseFile } from "../parser/parse-file";
 import { buildDirectoryMap } from "./build-directory-map";
 import { buildNodes, type ParsedFileWithHash } from "./build-nodes";
 import { buildEdges } from "./build-edges";
+import { buildFacts } from "./build-facts";
 import { buildRooms } from "./build-rooms";
 import { initPalace } from "../storage/init-palace";
 import { readIndex } from "../storage/read-palace";
@@ -29,6 +30,7 @@ export async function indexPalace(root: string): Promise<IndexPalaceOutput> {
   const previous = await readIndex(root);
   const nodes = buildNodes(scan, parsedFiles, now);
   const edges = buildEdges(nodes, parsedFiles, now);
+  const facts = buildFacts(parsedFiles, nodes);
   const rooms = await buildRooms(nodes, root, now);
   const symbols = nodes.filter((node) => node.drawer || ["function", "class", "interface", "type", "symbol"].includes(node.kind));
   const directoryTree = buildDirectoryMap(scan.files.map((file) => file.path));
@@ -36,6 +38,7 @@ export async function indexPalace(root: string): Promise<IndexPalaceOutput> {
   const index: PalaceIndex = {
     nodes,
     edges,
+    facts,
     rooms,
     symbols,
     directoryTree,
@@ -52,6 +55,7 @@ export async function indexPalace(root: string): Promise<IndexPalaceOutput> {
     fileCount: scan.files.length,
     nodeCount: nodes.length,
     edgeCount: edges.length,
+    factCount: facts.length,
     roomCount: rooms.length,
     symbolCount: symbols.length,
     ignoredCount: scan.ignored.length,
@@ -65,12 +69,23 @@ async function appendDeclaredGeneratedArtifacts(
   parsedFiles: ParsedFileWithHash[]
 ): Promise<void> {
   const known = new Set(scan.files.map((file) => file.path));
+  const parsedByPath = new Map(parsedFiles.map((parsed) => [parsed.sourcePath, parsed]));
   const declarations = parsedFiles.flatMap((parsed) => (
     (parsed.generatedArtifacts ?? []).map((artifact) => ({ artifact, configPath: parsed.sourcePath }))
   ));
 
   for (const { artifact, configPath } of declarations) {
-    if (known.has(artifact.outputPath)) continue;
+    if (known.has(artifact.outputPath)) {
+      const output = parsedByPath.get(artifact.outputPath);
+      if (output && !output.generatedArtifact) {
+        output.generatedArtifact = {
+          inputPath: artifact.inputPath,
+          configPath,
+          tool: artifact.tool
+        };
+      }
+      continue;
+    }
     const absolute = path.resolve(root, artifact.outputPath);
     const relative = path.relative(root, absolute);
     if (!relative || relative.startsWith("..") || path.isAbsolute(relative)) continue;
@@ -80,7 +95,7 @@ async function appendDeclaredGeneratedArtifacts(
       const hash = await hashFile(absolute);
       const language = detectLanguage(artifact.outputPath);
       scan.files.push({ path: artifact.outputPath, size: info.size, hash, language });
-      parsedFiles.push({
+      const parsedArtifact: ParsedFileWithHash = {
         sourcePath: artifact.outputPath,
         language,
         imports: [],
@@ -94,7 +109,9 @@ async function appendDeclaredGeneratedArtifacts(
         summarySeed: `Generated ${artifact.tool} artifact declared by ${configPath} from ${artifact.inputPath}`,
         hash,
         size: info.size
-      });
+      };
+      parsedFiles.push(parsedArtifact);
+      parsedByPath.set(artifact.outputPath, parsedArtifact);
       known.add(artifact.outputPath);
     } catch {
       // A declared output is indexed only after the build has produced it.

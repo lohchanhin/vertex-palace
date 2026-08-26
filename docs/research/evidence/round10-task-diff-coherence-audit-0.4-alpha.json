@@ -1,0 +1,44 @@
+{
+  "schemaVersion": "1.0",
+  "auditId": "round10-task-diff-coherence-audit-0.4-alpha",
+  "createdAt": "2026-08-09T18:44:47.419Z",
+  "auditTiming": "post-hoc-after-round-10-disclosure",
+  "method": "Human semantic review of the frozen task text against every changed hunk in the pinned single-parent commit diff.",
+  "formalEvidencePreserved": true,
+  "formalGateStatusRemains": "failed",
+  "auditedTargets": [
+    {
+      "name": "itsdangerous",
+      "task": "Added SHA-512 fallback by default",
+      "routeCommit": "ef8fd9894efab262761d2dcf24671592a8fc8bbf",
+      "groundTruthCommit": "d79c74ac6b56e7802f3e3ead948cd3454f55ab95",
+      "status": "mixed-semantic-commit",
+      "taskAlignedFiles": [
+        {
+          "path": "CHANGES.rst",
+          "evidence": "Adds the default SHA-512 fallback release note."
+        },
+        {
+          "path": "src/itsdangerous/serializer.py",
+          "evidence": "Adds hashlib.sha512 as the default fallback signer and applies the default when fallback_signers is omitted."
+        },
+        {
+          "path": "tests/test_itsdangerous/test_serializer.py",
+          "evidence": "Updates fallback signer coverage to exercise a non-default digest."
+        }
+      ],
+      "unrelatedBundledFiles": [
+        {
+          "path": "src/itsdangerous/timed.py",
+          "evidence": "Changes SignatureExpired control flow so deserialization stops instead of trying the next signer; this is a distinct behavior from configuring a SHA-512 default."
+        },
+        {
+          "path": "tox.ini",
+          "evidence": "Adds pytest --tb=short output formatting; this does not verify or configure the SHA-512 fallback behavior."
+        }
+      ],
+      "decision": "Exclude this entire target only from a separately labeled post-hoc sensitivity analysis. Do not change the frozen oracle or formal gate."
+    }
+  ],
+  "claimBoundary": "This audit was performed after disclosure and cannot retroactively alter Round 10. It is evidence for strengthening Round 11 target selection, not evidence that the preregistered Round 10 gate passed."
+}

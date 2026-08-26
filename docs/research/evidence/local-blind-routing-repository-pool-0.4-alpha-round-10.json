@@ -1,0 +1,183 @@
+{
+  "schemaVersion": 1,
+  "studyId": "local-blind-routing-round-10-0.4-alpha",
+  "status": "locally-frozen",
+  "claimBoundary": "Local candidate-held-out repository pool for a fresh static-routing gate. Only repository URLs and HEAD object IDs were observed before this pool was frozen. No Round 10 history, commit subject, diff, task, oracle, or Palace result was inspected. Because the competition freeze forbids a Git commit, this is tamper-evident local development evidence rather than public preregistration.",
+  "candidateFreeze": {
+    "path": "docs/research/evidence/local-blind-candidate-freeze-0.4-alpha-round-10.json"
+  },
+  "priorExclusionSource": {
+    "path": "docs/research/evidence/local-blind-routing-repository-pool-0.4-alpha-round-9.json",
+    "sha256": "746E0D459D2EBC7EAF1610F3E576F32D24EC8F7B80F1D4A076FB7B89952F3B68",
+    "includePreviousExclusionChain": true,
+    "includeRound9RepositoryPool": true,
+    "expectedUniqueRepositoryCount": 113
+  },
+  "rules": {
+    "desiredTargets": 8,
+    "requiredLanguageFamilies": [
+      "javascript-typescript",
+      "python",
+      "go",
+      "rust"
+    ],
+    "targetsPerLanguageFamily": 2,
+    "repositoriesPerLanguageFamily": 4,
+    "repositoryOrderIsBinding": true,
+    "firstEligibleRepositoriesPerFamilyWin": true,
+    "remainingRepositoriesPerFamilyAreFallbacks": true,
+    "taskClassifier": "inflected-behavioral-subject-v1",
+    "minimumFiles": 2,
+    "maximumFiles": 8,
+    "maximumAuxiliaryFiles": 2,
+    "maximumChangedLines": 400,
+    "allowedAuxiliaryExtensions": [
+      ".cfg",
+      ".conf",
+      ".ini",
+      ".json",
+      ".md",
+      ".mdx",
+      ".rst",
+      ".toml",
+      ".txt",
+      ".yaml",
+      ".yml"
+    ],
+    "pinnedHeadsObtainedWithGitLsRemoteHeadOnly": true,
+    "commitHistoryInspectedBeforePoolFreeze": false,
+    "palaceCallsOnCandidateTasksBeforePoolFreeze": 0,
+    "baselineAndCandidateFrozenBeforeTargetSelection": true,
+    "outputCreateOnly": true
+  },
+  "repositoryPool": [
+    {
+      "name": "p-map",
+      "language": "JavaScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/sindresorhus/p-map.git",
+      "pinnedHead": "bc26cf03f81292325236a1188063dac8e7a4de0f",
+      "extensions": [".cjs", ".js", ".jsx", ".mjs", ".ts", ".tsx"]
+    },
+    {
+      "name": "itsdangerous",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/pallets/itsdangerous.git",
+      "pinnedHead": "672971d66a2ef9f85151e53283113f33d642dabd",
+      "extensions": [".py"]
+    },
+    {
+      "name": "gorilla-websocket",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/gorilla/websocket.git",
+      "pinnedHead": "e064f32e3674d9d79a8fd417b5bc06fa5c6cad8f",
+      "extensions": [".go"]
+    },
+    {
+      "name": "syn",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/dtolnay/syn.git",
+      "pinnedHead": "f2c5c50200c1f056adc422e231819c8e4374bdfa",
+      "extensions": [".rs"]
+    },
+    {
+      "name": "uuid",
+      "language": "TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/uuidjs/uuid.git",
+      "pinnedHead": "b1da338815af4d919295eacb33aae340e372232a",
+      "extensions": [".cjs", ".js", ".jsx", ".mjs", ".ts", ".tsx"]
+    },
+    {
+      "name": "markupsafe",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/pallets/markupsafe.git",
+      "pinnedHead": "b2e4d9c7687be25695fffbe93a37622302b24fb1",
+      "extensions": [".py"]
+    },
+    {
+      "name": "logrus",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/sirupsen/logrus.git",
+      "pinnedHead": "a23d315dfebb6de47d18c92c8ae1430736a60b0c",
+      "extensions": [".go"]
+    },
+    {
+      "name": "slab",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/tokio-rs/slab.git",
+      "pinnedHead": "a1e4346070a48c936d808de75191dee5d01e433c",
+      "extensions": [".rs"]
+    },
+    {
+      "name": "qs",
+      "language": "JavaScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/ljharb/qs.git",
+      "pinnedHead": "3a890d4ecd3deb72a45d90be36f4f8c5970467c7",
+      "extensions": [".cjs", ".js", ".jsx", ".mjs", ".ts", ".tsx"]
+    },
+    {
+      "name": "urllib3",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/urllib3/urllib3.git",
+      "pinnedHead": "824d97bb1e36f8ac9d3445d9ca1726f0a48b4b78",
+      "extensions": [".py"]
+    },
+    {
+      "name": "go-retryablehttp",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/hashicorp/go-retryablehttp.git",
+      "pinnedHead": "fd004584a46724fae09e2f21d7c382e15c893f42",
+      "extensions": [".go"]
+    },
+    {
+      "name": "parking-lot",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/Amanieu/parking_lot.git",
+      "pinnedHead": "d20d71e5a8955ec1d2a53e3659142a505476bb3d",
+      "extensions": [".rs"]
+    },
+    {
+      "name": "nanoid",
+      "language": "JavaScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/ai/nanoid.git",
+      "pinnedHead": "9247b6dbfe97854e6e136784ae5dde0c672d22c5",
+      "extensions": [".cjs", ".js", ".jsx", ".mjs", ".ts", ".tsx"]
+    },
+    {
+      "name": "typer",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/fastapi/typer.git",
+      "pinnedHead": "361bdd822dd5eafc9c2e3e55ed3a94b746a39aa6",
+      "extensions": [".py"]
+    },
+    {
+      "name": "prometheus-common",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/prometheus/common.git",
+      "pinnedHead": "7748b9a8ce5a5f3682efcd18c792b7031a8d4a95",
+      "extensions": [".go"]
+    },
+    {
+      "name": "rust-log",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/rust-lang/log.git",
+      "pinnedHead": "037d7a58f6ad184abb3afc4db81d37c43a5696ec",
+      "extensions": [".rs"]
+    }
+  ]
+}

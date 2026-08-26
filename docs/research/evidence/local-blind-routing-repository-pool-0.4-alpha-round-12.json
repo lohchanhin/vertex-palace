@@ -1,0 +1,188 @@
+{
+  "schemaVersion": 1,
+  "studyId": "local-blind-routing-round-12-0.4-alpha",
+  "status": "locally-frozen",
+  "claimBoundary": "Fresh local repository pool frozen from URLs and git ls-remote HEAD object IDs only. No Round 12 commit history, subject, diff, task, coherence review, oracle, or Palace output was inspected before this pool was written. This is not public preregistration.",
+  "candidateFreeze": {
+    "path": "docs/research/evidence/local-blind-candidate-freeze-0.4-alpha-round-12.json"
+  },
+  "priorExclusionSource": {
+    "path": "docs/research/evidence/local-blind-routing-repository-pool-0.4-alpha-round-11.json",
+    "sha256": "29D9BBEEDCD43F05E8AE1A059FFC7F9D4F3CB94F19BFF1C424E7EF962AAC0CCD",
+    "includePreviousExclusionChain": true,
+    "includeRound11RepositoryPool": true,
+    "expectedUniqueRepositoryCount": 145
+  },
+  "rules": {
+    "desiredTargets": 8,
+    "requiredLanguageFamilies": [
+      "javascript-typescript",
+      "python",
+      "go",
+      "rust"
+    ],
+    "targetsPerLanguageFamily": 2,
+    "repositoriesPerLanguageFamily": 4,
+    "repositoryOrderIsBinding": true,
+    "newestCoherentCandidatePerRepositoryWins": true,
+    "remainingRepositoriesPerFamilyAreFallbacks": true,
+    "taskClassifier": "inflected-behavioral-subject-v1",
+    "maximumMechanicalCandidatesPerRepository": 5,
+    "minimumFiles": 2,
+    "maximumFiles": 8,
+    "maximumAuxiliaryFiles": 2,
+    "maximumChangedLines": 400,
+    "allowedAuxiliaryExtensions": [
+      ".cfg",
+      ".conf",
+      ".ini",
+      ".json",
+      ".md",
+      ".mdx",
+      ".rst",
+      ".toml",
+      ".txt",
+      ".yaml",
+      ".yml"
+    ],
+    "taskDiffCoherenceReviewRequired": true,
+    "wholeTargetRejectionForUnrelatedOrUncertainHunk": true,
+    "partialOraclePruningForbidden": true,
+    "maximumGeneratedArtifactTargets": 1,
+    "pinnedHeadsObtainedWithGitLsRemoteHeadOnly": true,
+    "commitHistoryInspectedBeforePoolFreeze": false,
+    "palaceCallsOnCandidateTasksBeforePoolFreeze": 0,
+    "baselineAndCandidateFrozenBeforeTargetSelection": true,
+    "outputCreateOnly": true
+  },
+  "repositoryPool": [
+    {
+      "name": "redux",
+      "language": "JavaScript/TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/reduxjs/redux.git",
+      "pinnedHead": "3084fc33bb23ab4cab4796172eafe342da4e73d9",
+      "extensions": [".cjs", ".js", ".jsx", ".mjs", ".ts", ".tsx"]
+    },
+    {
+      "name": "blinker",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/pallets-eco/blinker.git",
+      "pinnedHead": "c3364059663df1ddce32799d6b1922af89a345f6",
+      "extensions": [".py"]
+    },
+    {
+      "name": "sqlx",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/jmoiron/sqlx.git",
+      "pinnedHead": "41dac167fdad5e3fd81d66cafba0951dc6823a30",
+      "extensions": [".go"]
+    },
+    {
+      "name": "bat",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/sharkdp/bat.git",
+      "pinnedHead": "af59a3218303837421ce06bb2dc3c545525bba0f",
+      "extensions": [".rs"]
+    },
+    {
+      "name": "pino",
+      "language": "JavaScript/TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/pinojs/pino.git",
+      "pinnedHead": "e63966d01126d4c7d0d5d2f0783ddc7a5fd52451",
+      "extensions": [".cjs", ".js", ".jsx", ".mjs", ".ts", ".tsx"]
+    },
+    {
+      "name": "packaging",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/pypa/packaging.git",
+      "pinnedHead": "ef91ddbe6891b87f687e95628224901bf06da58d",
+      "extensions": [".py"]
+    },
+    {
+      "name": "afero",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/spf13/afero.git",
+      "pinnedHead": "768f1fb0e5535b77d90e44c531aacd652aabd96a",
+      "extensions": [".go"]
+    },
+    {
+      "name": "crossterm",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/crossterm-rs/crossterm.git",
+      "pinnedHead": "34636cf8149c1e7252f778e24ad1d0ade0f1a1ca",
+      "extensions": [".rs"]
+    },
+    {
+      "name": "preact",
+      "language": "JavaScript/TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/preactjs/preact.git",
+      "pinnedHead": "e881e7e8386d7a430f87498a41c6a532992b4599",
+      "extensions": [".cjs", ".js", ".jsx", ".mjs", ".ts", ".tsx"]
+    },
+    {
+      "name": "pluggy",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/pytest-dev/pluggy.git",
+      "pinnedHead": "54c95345d24edbe1b06646c931d6dcfcfa6683c2",
+      "extensions": [".py"]
+    },
+    {
+      "name": "gjson",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/tidwall/gjson.git",
+      "pinnedHead": "7d8b3821e9d2acf35e8a226b63fcf801078e9b96",
+      "extensions": [".go"]
+    },
+    {
+      "name": "notify",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/notify-rs/notify.git",
+      "pinnedHead": "f49baa2e294bb80e0af01c4bfbb615e418abe94d",
+      "extensions": [".rs"]
+    },
+    {
+      "name": "ava",
+      "language": "JavaScript/TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/avajs/ava.git",
+      "pinnedHead": "bbfd946322fdeca2b547a691d947fb4e18c0c67f",
+      "extensions": [".cjs", ".js", ".jsx", ".mjs", ".ts", ".tsx"]
+    },
+    {
+      "name": "multidict",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/aio-libs/multidict.git",
+      "pinnedHead": "41c1b9144b13dcdfa4c18085aedc874cc9d24006",
+      "extensions": [".py"]
+    },
+    {
+      "name": "go-cleanhttp",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/hashicorp/go-cleanhttp.git",
+      "pinnedHead": "b8a14b6bfc68b4ced977e4f9e64948a4133d8fcf",
+      "extensions": [".go"]
+    },
+    {
+      "name": "jiff",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/BurntSushi/jiff.git",
+      "pinnedHead": "ab6e8c83462e9b6d0dfe33f9cb70583d3d82049b",
+      "extensions": [".rs"]
+    }
+  ]
+}

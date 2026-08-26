@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "studyId": "local-blind-routing-round-18-0.4-alpha",
+  "status": "repository-pool-freeze-failed",
+  "startedAt": "2026-08-12T15:13:23.890Z",
+  "failedAt": "2026-08-12T15:13:26.890Z",
+  "publicPreregistration": false,
+  "plan": {
+    "path": "docs/research/evidence/local-blind-routing-repository-plan-0.4-alpha-round-18.json",
+    "sha256": "76D8C1955353A016547B62746E3B646F8FF207B73F66B1892989DFF4B2C8B9F1"
+  },
+  "priorExclusionSource": {
+    "path": "docs/research/evidence/local-blind-routing-repository-pool-freeze-round-17-attempt-1-failure.json",
+    "sha256": "C76EFEA728EFBA240BB6A29AB8EEFF3910F37A8D515239A4A3A2DB24FD7C2510",
+    "observedRepositoryCount": 190
+  },
+  "failure": {
+    "category": "invalid-planned-repository-url",
+    "repositoryIndex": 3,
+    "repositoryOrdinal": 4,
+    "name": "ryu",
+    "url": "https://github.com/serde-rs/ryu.git",
+    "attempts": 1,
+    "diagnostic": "remote: Repository not found.\nfatal: repository 'https://github.com/serde-rs/ryu.git/' not found"
+  },
+  "execution": {
+    "commandContract": "git ls-remote <url> HEAD",
+    "plannedRepositoryCount": 32,
+    "completedHeadQueriesBeforeFailure": 3,
+    "failedHeadQueries": 1,
+    "unqueriedRepositories": 28,
+    "completedRepositories": [
+      {
+        "name": "minimatch",
+        "languageFamily": "javascript-typescript",
+        "url": "https://github.com/isaacs/minimatch.git",
+        "observedHead": "ded1bbd01beca62a5978bc1650ed0a1ccf9039d5",
+        "attempts": 1
+      },
+      {
+        "name": "cachelib",
+        "languageFamily": "python",
+        "url": "https://github.com/pallets-eco/cachelib.git",
+        "observedHead": "698a81edf73f3915470520cd7363af20d383c7b3",
+        "attempts": 1
+      },
+      {
+        "name": "slog-multi",
+        "languageFamily": "go",
+        "url": "https://github.com/samber/slog-multi.git",
+        "observedHead": "1bfe7ad4e0adbe28b2cff59a2ea9377ff0269222",
+        "attempts": 1
+      }
+    ],
+    "attemptedRepositories": [
+      "https://github.com/isaacs/minimatch.git",
+      "https://github.com/pallets-eco/cachelib.git",
+      "https://github.com/samber/slog-multi.git",
+      "https://github.com/serde-rs/ryu.git"
+    ],
+    "commitHistoryInspected": false,
+    "candidateTaskInspected": false,
+    "candidateDiffInspected": false,
+    "palaceCallsOnCandidateTasks": 0
+  },
+  "previouslyObservedRepositories": [
+    "https://github.com/isaacs/minimatch.git",
+    "https://github.com/pallets-eco/cachelib.git",
+    "https://github.com/samber/slog-multi.git",
+    "https://github.com/serde-rs/ryu.git"
+  ],
+  "outputs": {
+    "canonicalPoolPath": "docs/research/evidence/local-blind-routing-repository-pool-0.4-alpha-round-18.json",
+    "canonicalPoolWritten": false,
+    "canonicalHeadEvidencePath": "docs/research/evidence/local-blind-routing-repository-head-verification-0.4-alpha-round-18.json",
+    "canonicalHeadEvidenceWritten": false,
+    "candidateFreezeWritten": false,
+    "targetSelectionStarted": false,
+    "staticValidationAuthorized": false,
+    "agentStudyAuthorized": false
+  },
+  "claimBoundary": "Round 18 failed during URL-and-HEAD-only pool construction. The frozen plan was not edited, no substitute repository was inserted, no canonical pool was written, and no repository history, candidate task, diff, oracle, or Palace result was inspected. This is a protocol or environment result, not a Vertex Palace product result."
+}

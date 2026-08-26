@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "studyId": "local-blind-routing-round-16-0.4-alpha",
+  "attempt": 1,
+  "status": "verification-failed",
+  "completedAt": "2026-08-12T14:34:32.371Z",
+  "category": "transient-github-connectivity-failure",
+  "failedRepository": {
+    "name": "mapstructure",
+    "url": "https://github.com/mitchellh/mapstructure.git"
+  },
+  "commandContract": "git ls-remote <url> HEAD",
+  "error": "fatal: unable to access 'https://github.com/mitchellh/mapstructure.git/': Failed to connect to github.com port 443 after 21067 ms: Could not connect to server",
+  "canonicalPoolWritten": false,
+  "canonicalHeadEvidenceWritten": false,
+  "commitHistoryInspected": false,
+  "candidateTaskInspected": false,
+  "palaceCallsOnCandidateTasks": 0,
+  "claimBoundary": "The create-only freezer collected HEAD responses in process memory but wrote no repository pool or canonical head evidence because all 16 queries did not complete. No repository history, task, diff, oracle, or Palace result was inspected. A later attempt may retry only the same URL-and-HEAD-only plan."
+}

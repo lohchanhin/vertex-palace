@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "studyId": "local-blind-routing-validation-round-10-attempt-1-0.4-alpha",
+  "status": "locally-frozen",
+  "frozenAt": "2026-08-09T14:43:37.8641879Z",
+  "publicPreregistration": false,
+  "claimBoundary": "First local hash freeze for the Round 10 paired static-routing validator, created after mechanical target selection but before opening selected task content or making any Palace call on a selected task. This remains internal candidate-held-out evidence, not public preregistration.",
+  "inputs": {
+    "targetManifestPath": "docs/research/evidence/local-blind-routing-target-manifest-0.4-alpha-round-10.json",
+    "targetManifestSha256": "2E2D8BFA6867FADDF21916F80F161BCA9BFF6F4DD589BBDF4C15B2FD34067F06",
+    "candidateFreezePath": "docs/research/evidence/local-blind-candidate-freeze-0.4-alpha-round-10.json",
+    "candidateFreezeSha256": "F1E7EFE6D15BC279970BD7E9171E930C649941F2B272FA4394F33CC0ED48F984",
+    "candidateCliSha256": "74DE697F77B5ADA01C2DBD15646FD87FE5DA9C43763D574D21AC98C02CB27624",
+    "baselineCommit": "67c0a2ce8754cece3773d5fd16b89dae4e3af0c1",
+    "baselineCliSha256": "52A1876B00AF4AAA884A6C7EA47AC2E701E88C34FC8FEE65DD1B32BB6513B8AE"
+  },
+  "protocol": {
+    "noTaskContentOpenedBeforeValidatorFreeze": true,
+    "palaceCallsOnSelectedTasksBeforeFreeze": 0,
+    "targets": 8,
+    "conditions": ["baseline", "candidate"],
+    "repetitions": 2,
+    "formalObservationsPerCondition": 16,
+    "totalFormalObservations": 32,
+    "budget": 6000,
+    "routeLimit": 10,
+    "maxDrawers": 4,
+    "fetchDepth": 400,
+    "fetchMode": "complete-shallow-history-no-promisor",
+    "indexAttempts": 1,
+    "indexTimeoutMs": 900000,
+    "evaluateRetries": 0,
+    "contextRetries": 0,
+    "calibrationTolerance": 0.15,
+    "minimumMacroCoverage": 0.9,
+    "minimumMacroFocus": 0.7,
+    "minimumTargetCoverage": 0.5,
+    "minimumTargetFocus": 0.4,
+    "pairedNonInferiorityMargin": 0.05,
+    "conditionOrder": "balanced-ab-ba-by-manifest-index",
+    "execution": "sequential-never-concurrent",
+    "resultCreateOnly": true,
+    "agentExecuted": false,
+    "agentToolCallsMeasured": false
+  },
+  "artifacts": {
+    "docs/research/LOCAL_BLIND_ROUTING_VALIDATION_PROTOCOL_0_4_ALPHA_ROUND_10.md": "9C383FE005ECF18E8A7D10FEC4D0473A9E7F906FDFEBC665CC75DAF9B4DBB85D",
+    "docs/zh-CN/LOCAL_BLIND_ROUTING_VALIDATION_PROTOCOL_0_4_ALPHA_ROUND_10.md": "E99335EC4728E8E5759C2E09484E18B306F66E67CD218BEBD609D8BDE9832AB4",
+    "scripts/verify-local-blind-routing-round-10.cjs": "7575EA47883E835C7A266A0E68265F69F3ACEBD73EC22F495CE2815D594E28C6",
+    "scripts/test/round10-local-blind-validation-freeze.test.cjs": "A811EEAED7EFB7B3ADC0D8C736EA15DA463096C9C94513EA2487B05929299BD5",
+    "scripts/lib/context-telemetry.cjs": "E79111BC35AF85AE9D0541E3D45A62AC4E9D6B6501A50FCC51C0F6454098B4E3",
+    "scripts/lib/commit-task-classifier.cjs": "C3D787029C019FD64BFB079913F23B58082C38560448A9B9567954ECA9FE1254"
+  },
+  "preservation": {
+    "productChangesForbiddenUntilFirstResult": true,
+    "taskRemovalAfterObservationForbidden": true,
+    "outcomeDependentExclusionForbidden": true,
+    "negativeProductResultRemainsCompleted": true,
+    "environmentHarnessAndProductFailuresSeparated": true
+  }
+}

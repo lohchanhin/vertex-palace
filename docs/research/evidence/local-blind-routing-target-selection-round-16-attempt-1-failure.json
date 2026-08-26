@@ -1,0 +1,156 @@
+{
+  "schemaVersion": 1,
+  "studyId": "local-blind-routing-round-16-0.4-alpha",
+  "attempt": 1,
+  "status": "selection-failed-before-semantic-review",
+  "completedAt": "2026-08-12T14:53:08.214Z",
+  "evidenceClass": "fresh-locally-frozen-mechanical-selection-failure",
+  "candidateFreeze": {
+    "path": "docs/research/evidence/local-blind-candidate-freeze-0.4-alpha-round-16.json",
+    "sha256": "66DA9821BF49A3221A2B96BBDEE9F9594C42ED1BF8EF55E8414EEC3E863CB36F"
+  },
+  "repositoryPool": {
+    "path": "docs/research/evidence/local-blind-routing-repository-pool-0.4-alpha-round-16.json",
+    "sha256": "FA2BB1D3ED982B189B32BA6089D2552EA7D5C54CBAD11960E80E1308122458CD",
+    "repositories": 16
+  },
+  "candidateQueue": {
+    "path": "docs/research/evidence/local-blind-routing-candidate-queue-0.4-alpha-round-16-attempt-1.json",
+    "sha256": "1EC499D48175182BCD5B5543BBA85AF6DAA85B125F7D8C2C78E305E56A1E2D1D",
+    "repositoriesInspected": 16,
+    "mechanicalCandidates": 56
+  },
+  "familyFeasibility": [
+    {
+      "languageFamily": "javascript-typescript",
+      "requiredTargets": 2,
+      "repositoriesInPool": 4,
+      "repositoriesWithMechanicalCandidates": 4,
+      "mechanicalCandidates": 20,
+      "candidateRepositories": [
+        {
+          "name": "nock",
+          "candidates": 5
+        },
+        {
+          "name": "js-yaml",
+          "candidates": 5
+        },
+        {
+          "name": "validator-js",
+          "candidates": 5
+        },
+        {
+          "name": "ms",
+          "candidates": 5
+        }
+      ],
+      "repositoriesWithoutMechanicalCandidates": [],
+      "feasibleBeforeSemanticReview": true
+    },
+    {
+      "languageFamily": "python",
+      "requiredTargets": 2,
+      "repositoriesInPool": 4,
+      "repositoriesWithMechanicalCandidates": 3,
+      "mechanicalCandidates": 11,
+      "candidateRepositories": [
+        {
+          "name": "twine",
+          "candidates": 1
+        },
+        {
+          "name": "gunicorn",
+          "candidates": 5
+        },
+        {
+          "name": "sphinx",
+          "candidates": 5
+        }
+      ],
+      "repositoriesWithoutMechanicalCandidates": [
+        "yarl"
+      ],
+      "feasibleBeforeSemanticReview": true
+    },
+    {
+      "languageFamily": "go",
+      "requiredTargets": 2,
+      "repositoriesInPool": 4,
+      "repositoriesWithMechanicalCandidates": 4,
+      "mechanicalCandidates": 20,
+      "candidateRepositories": [
+        {
+          "name": "yaml",
+          "candidates": 5
+        },
+        {
+          "name": "sjson",
+          "candidates": 5
+        },
+        {
+          "name": "go-querystring",
+          "candidates": 5
+        },
+        {
+          "name": "mapstructure",
+          "candidates": 5
+        }
+      ],
+      "repositoriesWithoutMechanicalCandidates": [],
+      "feasibleBeforeSemanticReview": true
+    },
+    {
+      "languageFamily": "rust",
+      "requiredTargets": 2,
+      "repositoriesInPool": 4,
+      "repositoriesWithMechanicalCandidates": 1,
+      "mechanicalCandidates": 5,
+      "candidateRepositories": [
+        {
+          "name": "toml",
+          "candidates": 5
+        }
+      ],
+      "repositoriesWithoutMechanicalCandidates": [
+        "cfg-if",
+        "predicates-rs",
+        "chumsky"
+      ],
+      "feasibleBeforeSemanticReview": false
+    }
+  ],
+  "blockingFamilies": [
+    "rust"
+  ],
+  "selection": {
+    "desiredTargets": 8,
+    "selectedTargets": 0,
+    "semanticReviewStarted": false,
+    "semanticReviewRequiredButNotReached": true,
+    "reason": "Rust had only one repository with any mechanically eligible candidate, below the frozen two-target family quota. No semantic decisions can make the frozen pool feasible.",
+    "partialSelectionPublished": false,
+    "familyQuotaLowered": false,
+    "poolSubstitutedAfterHistoryObservation": false
+  },
+  "exposureBoundary": {
+    "repositoryHistoryInspectedByMechanicalSelector": true,
+    "candidateSubjectsAndDiffsMaterialized": true,
+    "semanticReviewPerformed": false,
+    "palaceCallsOnCandidateTasks": 0,
+    "productChangesAfterCandidateFreeze": false
+  },
+  "advancement": {
+    "round16StaticValidationAuthorized": false,
+    "v5AgentStudyAuthorized": false,
+    "nextStep": "Preserve this failure, recursively exclude all 16 Round 16 repositories, and freeze a new larger fallback pool under a new round identifier before inspecting any new history."
+  },
+  "claimBoundary": "Round 16 failed target selection before semantic review and before any Palace call on a candidate task. It provides no product-routing, Agent-correctness, Token, tool-call, or wall-time result. The failure cannot be repaired by lowering the family quota, substituting repositories, or publishing a partial oracle under the Round 16 identity.",
+  "competitionFreeze": {
+    "active": true,
+    "committed": false,
+    "pushed": false,
+    "tagged": false,
+    "npmPublished": false
+  }
+}

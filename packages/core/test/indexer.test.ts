@@ -19,6 +19,28 @@ describe("indexPalace", () => {
     });
   });
 
+  it("places declaration tests on the verification floor", async () => {
+    await withFixture("ts-api", async (root) => {
+      const target = path.join(root, "types", "index.test-d.ts");
+      await mkdir(path.dirname(target), { recursive: true });
+      await writeFile(
+        target,
+        "import {expectType} from 'tsd';\nexpectType<string>('value');\n",
+        "utf8"
+      );
+
+      await indexPalace(root);
+      const index = await readIndex(root);
+      const declarationTest = index.nodes.find(
+        (node) => node.sourcePath === "types/index.test-d.ts" && !node.startLine
+      );
+
+      expect(declarationTest?.floor).toBe("05-verification");
+      expect(declarationTest?.evidence?.roles.map((role) => role.role)).toContain("verification");
+      expect(declarationTest?.evidence?.roles.map((role) => role.role)).not.toContain("implementation");
+    });
+  });
+
   it("removes stale generated rooms when rebuilding the index", async () => {
     await withFixture("ts-api", async (root) => {
       const staleRoom = path.join(root, ".palace", "rooms", "stale-wing", "stale-room");
@@ -102,6 +124,51 @@ describe("indexPalace", () => {
         "changed_with"
       )).toBe(true);
       expect(fileNode("plugins/acme/mcp/server.cjs")?.tags).toContain("generated-artifact");
+    });
+  });
+
+  it("indexes tracked Rust generator outputs with provenance and ownership edges", async () => {
+    await withFixture("ts-api", async (root) => {
+      const files = new Map<string, string>([
+        [
+          "codegen/src/snapshot.rs",
+          `const GENERATED_SOURCE: &str = "tests/debug/gen.rs";
+pub fn generate(definitions: &Definitions) -> Result<()> {
+    file::write(GENERATED_SOURCE, render(definitions))?;
+    Ok(())
+}
+`
+        ],
+        ["tests/debug/gen.rs", "impl Debug for GeneratedNode {}\n"]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+
+      await indexPalace(root);
+      const index = await readIndex(root);
+      const generator = index.nodes.find(
+        (node) => node.sourcePath === "codegen/src/snapshot.rs" && !node.startLine
+      );
+      const output = index.nodes.find(
+        (node) => node.sourcePath === "tests/debug/gen.rs" && !node.startLine
+      );
+
+      expect(output?.tags).toContain("generated-artifact");
+      expect(output?.tags).toContain("generated-by-rust-generator");
+      expect(index.edges.some(
+        (edge) => edge.type === "changed_with"
+          && edge.from === generator?.id
+          && edge.to === output?.id
+          && edge.weight === 0.98
+      )).toBe(true);
+      expect(index.edges.some(
+        (edge) => edge.type === "configures"
+          && edge.from === generator?.id
+          && edge.to === output?.id
+      )).toBe(true);
     });
   });
 
@@ -205,6 +272,72 @@ describe("indexPalace", () => {
     });
   });
 
+  it("links a Go consumer to a uniquely declared top-level var", async () => {
+    await withFixture("ts-api", async (root) => {
+      const files = new Map<string, string>([
+        [
+          "collations.go",
+          "package protocol\nvar collations = map[string]byte{\"binary\": 63}\n"
+        ],
+        [
+          "packets.go",
+          "package protocol\nfunc writeHandshake(name string) byte { return collations[name] }\n"
+        ]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await writeFile(target, source, "utf8");
+      }
+
+      await indexPalace(root);
+      const index = await readIndex(root);
+      const from = index.nodes.find((node) => node.sourcePath === "packets.go" && !node.startLine);
+      const to = index.nodes.find((node) => node.sourcePath === "collations.go" && !node.startLine);
+
+      expect(index.symbols.find(
+        (node) => node.sourcePath === "collations.go" && node.title === "collations"
+      )?.kind).toBe("symbol");
+      expect(index.edges.some(
+        (edge) => edge.type === "depends_on" && edge.from === from?.id && edge.to === to?.id
+      )).toBe(true);
+    });
+  });
+
+  it("links a Go caller to uniquely declared functions across implementation files", async () => {
+    await withFixture("ts-api", async (root) => {
+      const files = new Map<string, string>([
+        [
+          "connection.go",
+          "package protocol\nfunc handleParams() error { return nil }\n"
+        ],
+        [
+          "packets.go",
+          "package protocol\ntype mysqlConn struct{}\nfunc (mc *mysqlConn) writeHandshakeResponsePacket() error { return nil }\n"
+        ],
+        [
+          "connector.go",
+          "package protocol\nfunc Connect(mc *mysqlConn) error { if err := mc.writeHandshakeResponsePacket(); err != nil { return err }; return handleParams() }\n"
+        ]
+      ]);
+      for (const [relativePath, source] of files) {
+        await writeFile(path.join(root, relativePath), source, "utf8");
+      }
+
+      await indexPalace(root);
+      const index = await readIndex(root);
+      const connector = index.nodes.find((node) => node.sourcePath === "connector.go" && !node.startLine);
+      const connection = index.nodes.find((node) => node.sourcePath === "connection.go" && !node.startLine);
+      const packets = index.nodes.find((node) => node.sourcePath === "packets.go" && !node.startLine);
+
+      expect(index.edges.some(
+        (edge) => edge.type === "depends_on" && edge.from === connector?.id && edge.to === connection?.id
+      )).toBe(true);
+      expect(index.edges.some(
+        (edge) => edge.type === "depends_on" && edge.from === connector?.id && edge.to === packets?.id
+      )).toBe(true);
+    });
+  });
+
   it("does not create direct symbol-test edges from a short nested name", async () => {
     await withFixture("ts-api", async (root) => {
       const files = new Map<string, string>([
@@ -298,6 +431,37 @@ test('parses an empty directive', () => parseDirective(''))
       );
       const test = index.nodes.find(
         (node) => node.sourcePath === testPath && node.kind === "test"
+      );
+
+      expect(index.edges).toContainEqual(expect.objectContaining({
+        from: test?.id,
+        to: source?.id,
+        type: "imports",
+        weight: 0.8
+      }));
+    });
+  });
+
+  it("resolves a relative package-root require to the declared entry point", async () => {
+    await withFixture("ts-api", async (root) => {
+      const files = new Map<string, string>([
+        ["package.json", JSON.stringify({ name: "bounded-router", main: "./lib/index.js" })],
+        ["lib/index.js", "module.exports = function configureLimit(value) { return value }\n"],
+        ["test/test.js", "const configureLimit = require('..')\ntest('configures a limit', () => configureLimit(0))\n"]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+
+      await indexPalace(root);
+      const index = await readIndex(root);
+      const source = index.nodes.find(
+        (node) => node.sourcePath === "lib/index.js" && !node.startLine
+      );
+      const test = index.nodes.find(
+        (node) => node.sourcePath === "test/test.js" && !node.startLine
       );
 
       expect(index.edges).toContainEqual(expect.objectContaining({

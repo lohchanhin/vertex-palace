@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "artifact": "compositional-routing-three-level-repair-self-audit",
+  "version": "0.4-alpha",
+  "researchClass": "disclosed-post-observation-self-audit",
+  "candidate": "local-uncommitted",
+  "publicFreeze": true,
+  "evaluation": {
+    "id": "evaluation_ba1298508358a555",
+    "routeId": "route_ef67d062c299c495",
+    "taskType": "bugfix",
+    "routeLimit": 14,
+    "changedFileCount": 13,
+    "routeFileCount": 13,
+    "matchedFileCount": 13,
+    "missedFileCount": 0,
+    "routeOnlyFileCount": 0,
+    "changedFileCoverage": 1,
+    "routeFocus": 1,
+    "predictedConfidence": 0.4,
+    "calibrationStatus": "underconfident",
+    "assessment": "strong"
+  },
+  "summaryTaskSelfEvaluation": {
+    "id": "evaluation_8fb1b809e6590be8",
+    "routeId": "route_a35517291af0a49d",
+    "changedFileCount": 8,
+    "matchedFileCount": 3,
+    "changedFileCoverage": 0.375,
+    "routeFocus": 0.5,
+    "predictedConfidence": 0.4,
+    "calibrationStatus": "well-calibrated",
+    "interpretation": "The abstract repair summary did not explicitly preserve enough lexical and artifact-family identity to recover the complete local change set."
+  },
+  "progression": [
+    {
+      "stage": "initial-fully-specified-real-repository-replay",
+      "matched": 7,
+      "target": 13,
+      "changedFileCoverage": 0.538,
+      "routeFocus": 0.538
+    },
+    {
+      "stage": "after-first-compositional-repair",
+      "matched": 10,
+      "target": 13,
+      "changedFileCoverage": 0.769,
+      "routeFocus": 0.769
+    },
+    {
+      "stage": "after-three-level-repair",
+      "matched": 13,
+      "target": 13,
+      "changedFileCoverage": 1,
+      "routeFocus": 1
+    }
+  ],
+  "issues": [
+    {
+      "level": 1,
+      "problem": "The singular token status was normalized to statu, dropping an explicitly requested storage-status implementation.",
+      "repair": "Preserve status and normalize statuses to status; add lexical and compound-route regressions."
+    },
+    {
+      "level": 2,
+      "problem": "Loose near-test matching let historical disclosed tests consume slots intended for explicitly listed lexical, indexer, parser, and router regressions, while routing concepts could consume duplicate implementation slots.",
+      "repair": "Give concepts named before regressions/tests stronger affinity, derive quotas from those explicit concepts, reserve verifier capacity, and deduplicate implementation concern families."
+    },
+    {
+      "level": 3,
+      "problem": "A compound test module such as release-routing collapsed into the same route concept as router.test, causing a compatibility regression.",
+      "repair": "Preserve explicitly named compound test-module identities and remove all temporary routing diagnostics."
+    }
+  ],
+  "verification": {
+    "targetedRegressionTests": "passed",
+    "coreTestFiles": 15,
+    "coreTestsPassed": 234,
+    "coreTestsFailed": 0,
+    "fullBuild": "passed"
+  },
+  "limitations": [
+    "This is a disclosed same-repository post-observation replay, not a fresh held-out validation.",
+    "The abstract summary-task self-evaluation matched only 3 of 8 local change files; success remains sensitive to task specificity.",
+    "The route is underconfident at 0.4 despite complete observed coverage; calibration remains future work.",
+    "Repository-to-pack reduction is payload accounting, not proof of lower end-to-end agent tokens or wall time.",
+    "No commit, push, tag, release, npm publish, Devpost edit, or video edit was performed."
+  ]
+}

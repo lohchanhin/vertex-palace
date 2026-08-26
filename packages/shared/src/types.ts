@@ -220,6 +220,123 @@ export type TaskType =
   | "review"
   | "unknown";
 
+export type EvidenceRole =
+  | "navigation"
+  | "implementation"
+  | "verification"
+  | "contract"
+  | "documentation"
+  | "configuration"
+  | "generated"
+  | "runtime"
+  | "decision"
+  | "memory";
+
+export type EvidenceScope = "product" | "documentation" | "tooling" | "project-history" | "unknown";
+
+export type EvidenceRoleAssignment = {
+  role: EvidenceRole;
+  basis: "syntax" | "artifact-kind" | "path-convention" | "declaration" | "history";
+  confidence: number;
+};
+
+export type PalaceNodeEvidence = {
+  scope: EvidenceScope;
+  roles: EvidenceRoleAssignment[];
+};
+
+export type EvidenceFactKind =
+  | "declaration"
+  | "reference"
+  | "call"
+  | "import"
+  | "export"
+  | "test-case"
+  | "test-suite"
+  | "contract"
+  | "configuration"
+  | "generation"
+  | "runtime-observation"
+  | "decision";
+
+export type ParsedEvidenceFact = {
+  kind: EvidenceFactKind;
+  role: EvidenceRole;
+  name: string;
+  startLine: number;
+  endLine: number;
+  searchText?: string;
+  confidence: number;
+};
+
+export type PalaceEvidenceFact = ParsedEvidenceFact & {
+  id: string;
+  sourcePath: string;
+  scope: EvidenceScope;
+  provenance: {
+    extractor: string;
+    directness: "direct" | "inferred";
+  };
+};
+
+export type TaskIntentTerm = {
+  value: string;
+  normalized: string;
+  kind: "identifier" | "concept" | "outcome" | "constraint";
+  source: "explicit" | "inferred";
+};
+
+export type TaskIntent = {
+  action: TaskType;
+  implementationBoundary: "declaration" | "runtime";
+  subjects: TaskIntentTerm[];
+  outcomes: TaskIntentTerm[];
+  constraints: TaskIntentTerm[];
+  requestedRoles: EvidenceRole[];
+  requiredRoles: EvidenceRole[];
+  preferredScopes: EvidenceScope[];
+  verificationRequired: boolean;
+};
+
+export type EvidenceClosure = {
+  status: PalaceEvidenceStatus;
+  requiredRoles: EvidenceRole[];
+  coveredRoles: EvidenceRole[];
+  missingRoles: EvidenceRole[];
+  termCoverage: {
+    subjects: EvidenceTermCoverage;
+    outcomes: EvidenceTermCoverage;
+    constraints: EvidenceTermCoverage;
+  };
+  connectedRolePairs: Array<{
+    from: EvidenceRole;
+    to: EvidenceRole;
+    strength: number;
+    hops: number;
+    via: string[];
+  }>;
+  requiredCausalSources: string[];
+  missingCausalSources: string[];
+  reasons: string[];
+};
+
+export type EvidenceTermCoverage = {
+  required: string[];
+  covered: string[];
+  missing: string[];
+};
+
+export type RouteConfidenceEvidence = {
+  basis: "evidence-closure-v2";
+  score: number;
+  completeness: number;
+  connectivity: number;
+  semanticCoverage: number;
+  ambiguity: number;
+  indexFreshness: "fresh" | "stale" | "unknown";
+  memoryReliability: "not-applied" | "current" | "guarded" | "conflicted";
+};
+
 export type PalaceNode = {
   id: string;
   palacePath: string;
@@ -230,6 +347,7 @@ export type PalaceNode = {
   cabinet?: string;
   drawer?: string;
   kind: PalaceNodeKind;
+  evidence?: PalaceNodeEvidence;
   language?: string;
   title: string;
   summary: string;
@@ -345,6 +463,9 @@ export type PalaceRoute = {
     reservedOutputTokens: number;
   };
   confidence: number;
+  intent?: TaskIntent;
+  evidenceClosure?: EvidenceClosure;
+  confidenceEvidence?: RouteConfidenceEvidence;
   narrowingEvidence?: PalaceRouteNarrowingEvidence;
   createdAt: string;
 };
@@ -428,6 +549,7 @@ export type ParsedFile = {
   imports: string[];
   exports: string[];
   symbols: ParsedSymbol[];
+  facts?: ParsedEvidenceFact[];
   headings?: ParsedHeading[];
   packageMetadata?: ParsedPackageMetadata;
   generatedArtifacts?: ParsedGeneratedArtifact[];
@@ -445,6 +567,7 @@ export type DirectoryTreeNode = {
 export type PalaceIndex = {
   nodes: PalaceNode[];
   edges: PalaceEdge[];
+  facts: PalaceEvidenceFact[];
   rooms: PalaceRoom[];
   symbols: PalaceNode[];
   directoryTree: DirectoryTreeNode;
@@ -460,6 +583,7 @@ export type PalaceStatus = {
   stale: boolean;
   nodeCount: number;
   edgeCount: number;
+  factCount: number;
   roomCount: number;
   lastIndexedAt?: string;
   configPath?: string;
@@ -471,6 +595,7 @@ export type IndexPalaceOutput = {
   fileCount: number;
   nodeCount: number;
   edgeCount: number;
+  factCount: number;
   roomCount: number;
   symbolCount: number;
   ignoredCount: number;
@@ -523,6 +648,10 @@ export type PalaceEvaluation = {
     fileCount: number;
   };
   context: {
+    measurement: "adaptive-delivered-payload";
+    deliveryMode: PalaceMode;
+    payloadBytes: number;
+    tokenCeiling: number;
     repositoryTextFiles: number;
     skippedBinaryFiles: number;
     skippedGeneratedFiles: number;

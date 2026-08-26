@@ -1,0 +1,156 @@
+{
+  "schemaVersion": 1,
+  "studyId": "local-blind-routing-round-16-0.4-alpha",
+  "status": "verified",
+  "startedAt": "2026-08-12T14:37:10.706Z",
+  "completedAt": "2026-08-12T14:38:41.172Z",
+  "plan": {
+    "path": "docs/research/evidence/local-blind-routing-repository-plan-0.4-alpha-round-16.json",
+    "sha256": "278B3AEC73D81E4A20EE8189C3CAB4FAE97F2745D75C4C11D96EE965B40F557A"
+  },
+  "priorExclusionSource": {
+    "path": "docs/research/evidence/local-blind-routing-repository-pool-0.4-alpha-round-12.json",
+    "sha256": "085295D2798F47C0841526EF8219E17FFFCBF078F7F3C76AC2028DFDD3AFC125",
+    "observedRepositoryCount": 162
+  },
+  "commandContract": "git ls-remote <url> HEAD",
+  "retryPolicy": {
+    "maximumAttemptsPerRepository": 3,
+    "delayMs": 5000,
+    "transientNetworkFailuresOnly": true,
+    "repositoryPlanChangedAfterFailure": false
+  },
+  "commitHistoryInspected": false,
+  "candidateTaskInspected": false,
+  "palaceCallsOnCandidateTasks": 0,
+  "repositories": [
+    {
+      "name": "nock",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/nock/nock.git",
+      "observedHead": "1ee467c68d601ddc22629d7a657061e6c27097c2",
+      "attempts": 1,
+      "matchedFrozenPool": true
+    },
+    {
+      "name": "yarl",
+      "languageFamily": "python",
+      "url": "https://github.com/aio-libs/yarl.git",
+      "observedHead": "d1421d884ca0c359ccd8f02d70d3e5114e104fe6",
+      "attempts": 1,
+      "matchedFrozenPool": true
+    },
+    {
+      "name": "yaml",
+      "languageFamily": "go",
+      "url": "https://github.com/go-yaml/yaml.git",
+      "observedHead": "944c86a7d29391925ed6ac33bee98a0516f1287a",
+      "attempts": 1,
+      "matchedFrozenPool": true
+    },
+    {
+      "name": "toml",
+      "languageFamily": "rust",
+      "url": "https://github.com/toml-rs/toml.git",
+      "observedHead": "dd941b4c773b9560310b119ad752a8f7b4f109f3",
+      "attempts": 1,
+      "matchedFrozenPool": true
+    },
+    {
+      "name": "js-yaml",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/nodeca/js-yaml.git",
+      "observedHead": "e2dc2a7fdfcf544e86c1e77df9bb03c405eeb0cb",
+      "attempts": 1,
+      "matchedFrozenPool": true
+    },
+    {
+      "name": "twine",
+      "languageFamily": "python",
+      "url": "https://github.com/pypa/twine.git",
+      "observedHead": "f536ac5d0c77a24a997854328e64644f576b4992",
+      "attempts": 1,
+      "matchedFrozenPool": true
+    },
+    {
+      "name": "sjson",
+      "languageFamily": "go",
+      "url": "https://github.com/tidwall/sjson.git",
+      "observedHead": "3a21ce7b0cab4e0f0d91eb8db4a3d0434622eeb8",
+      "attempts": 1,
+      "matchedFrozenPool": true
+    },
+    {
+      "name": "cfg-if",
+      "languageFamily": "rust",
+      "url": "https://github.com/rust-lang/cfg-if.git",
+      "observedHead": "a66c2d4d559cdd6b047d1db3290f6bf252773fc9",
+      "attempts": 1,
+      "matchedFrozenPool": true
+    },
+    {
+      "name": "validator-js",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/validatorjs/validator.js.git",
+      "observedHead": "cdb7dafc281d14125b924969bf3ee5bc482ec169",
+      "attempts": 1,
+      "matchedFrozenPool": true
+    },
+    {
+      "name": "gunicorn",
+      "languageFamily": "python",
+      "url": "https://github.com/benoitc/gunicorn.git",
+      "observedHead": "a8283bbf5e1416d0dd13f994f71ec2761988aeab",
+      "attempts": 1,
+      "matchedFrozenPool": true
+    },
+    {
+      "name": "go-querystring",
+      "languageFamily": "go",
+      "url": "https://github.com/google/go-querystring.git",
+      "observedHead": "d39ef06364e81c4317c23bc015261a0e51f15305",
+      "attempts": 1,
+      "matchedFrozenPool": true
+    },
+    {
+      "name": "predicates-rs",
+      "languageFamily": "rust",
+      "url": "https://github.com/assert-rs/predicates-rs.git",
+      "observedHead": "c85937062f58cdaf0ba9ef9d678ed71d6a57ba53",
+      "attempts": 1,
+      "matchedFrozenPool": true
+    },
+    {
+      "name": "ms",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/vercel/ms.git",
+      "observedHead": "4ff48cec099f0514c3e9bbca18706c9c21122bfb",
+      "attempts": 3,
+      "matchedFrozenPool": true
+    },
+    {
+      "name": "sphinx",
+      "languageFamily": "python",
+      "url": "https://github.com/sphinx-doc/sphinx.git",
+      "observedHead": "e44a40eb2f810558ccd9da1425421270ccb81351",
+      "attempts": 1,
+      "matchedFrozenPool": true
+    },
+    {
+      "name": "mapstructure",
+      "languageFamily": "go",
+      "url": "https://github.com/mitchellh/mapstructure.git",
+      "observedHead": "8508981c8b6c964e6986dd8aa85490e70ce3c2e2",
+      "attempts": 2,
+      "matchedFrozenPool": true
+    },
+    {
+      "name": "chumsky",
+      "languageFamily": "rust",
+      "url": "https://github.com/zesterer/chumsky.git",
+      "observedHead": "4879268c589b18927df6ec21331e66d7fb56df86",
+      "attempts": 1,
+      "matchedFrozenPool": true
+    }
+  ]
+}

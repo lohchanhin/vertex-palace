@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "studyId": "local-blind-routing-round-11-0.4-alpha",
+  "generatedAt": "2026-08-09T19:19:53.179Z",
+  "status": "failed",
+  "claimBoundary": "Local pre-freeze product and research-harness verification. This proves only that the frozen candidate and selection machinery pass their declared local checks; it is not a Round 11 routing result or Agent A/B result.",
+  "competitionFreeze": {
+    "noCommit": true,
+    "noPush": true,
+    "noTag": true,
+    "noNpmPublish": true
+  },
+  "gitBaseCommit": "67c0a2ce8754cece3773d5fd16b89dae4e3af0c1",
+  "candidate": {
+    "sourceTree": {
+      "algorithm": "sha256-path-length-bytes-v1",
+      "fileCount": 185,
+      "sha256": "2EC8C8FC66365F7FFF2CF07F9F5449C5BF82BF6361CEC785E8ADD0447A7D684D"
+    },
+    "cliPath": "dist/palace.cjs",
+    "cliSha256": "258ABFF9CE05B052C03CD4B772B38310BC7E4AAFD08A3FAEAE79334FB1B4E900",
+    "generatedMcpPath": "plugins/vertex-palace/mcp/server.cjs",
+    "generatedMcpSha256": "453402E9C685FB04DDF8134FA1E48E190D8F0F282D6DA70577EB9DFA4D871AFC"
+  },
+  "results": [
+    {
+      "label": "round11-research-harness",
+      "command": "node --test scripts/test/task-diff-coherence.test.cjs scripts/test/round11-task-diff-coherence-protocol.test.cjs scripts/test/round11-target-selection.test.cjs scripts/test/round11-candidate-queue.test.cjs scripts/test/round11-repository-pool.test.cjs",
+      "status": "passed",
+      "exitCode": 0,
+      "elapsedMs": 3232,
+      "outputSha256": "650D0350CAFAC67532AD358A80B30F9AC149B9BFA78088A371DFCAD05F05644B",
+      "outputTail": "✔ builds a hunk-addressed candidate from a real single-parent fixture commit (1607.271ms)\n✔ rejects a mechanically mixed commit that adds an oracle file (1243.6951ms)\n✔ parses deterministic Git name-status and numstat records (0.38ms)\n✔ Round 11 pool is balanced and recursively excludes all 129 observed repositories (20.404ms)\n✔ Round 11 pool keeps the preregistered interleaved family order (7.6467ms)\n✔ Round 11 queue and finalizer are create-only and contain no Palace execution path (3.4597ms)\n✔ selects the newest coherent candidate and stops later review deterministically (8.0325ms)\n✔ requires every newest candidate before an accepted older candidate (5.7665ms)\n✔ rejects discretionary reviews after the first accepted candidate (1.1962ms)\n✔ requires generated outputs and their owning generator to remain in the whole oracle (0.4189ms)\n✔ keeps Round 11 explicitly unexecuted until a matching candidate freeze (20.1705ms)\n✔ locks whole-target semantic review before any Palace call (3.453ms)\n✔ preserves the absolute static gate and fresh Round 11 advancement rule (2.4966ms)\n✔ keeps the coherence library free of repository execution and Palace invocation (4.4281ms)\n✔ builds a complete hunk-addressed packet for the mechanical oracle (4.5566ms)\n✔ accepts a target only when every file and hunk is task aligned (2.7699ms)\n✔ rejects the whole target when one bundled hunk is unrelated (2.407ms)\n✔ treats uncertainty and incomplete hunk review as rejection evidence (1.6634ms)\nℹ tests 18\nℹ suites 0\nℹ pass 18\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 3045.1831\n",
+      "error": null
+    },
+    {
+      "label": "core-full",
+      "command": "pnpm --filter @vertex-palace/core test",
+      "status": "execution-error",
+      "exitCode": null,
+      "elapsedMs": 1,
+      "outputSha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "outputTail": "",
+      "error": "Error: spawnSync pnpm ENOENT\n    at Object.spawnSync (node:internal/child_process:1120:20)\n    at spawnSync (node:child_process:911:24)\n    at main (D:\\工作资料\\codex palace\\scripts\\verify-round11-prefreeze.cjs:60:20)\n    at Object.<anonymous> (D:\\工作资料\\codex palace\\scripts\\verify-round11-prefreeze.cjs:50:1)\n    at Module._compile (node:internal/modules/cjs/loader:1804:14)\n    at Object..js (node:internal/modules/cjs/loader:1936:10)\n    at Module.load (node:internal/modules/cjs/loader:1525:32)\n    at Module._load (node:internal/modules/cjs/loader:1327:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:328:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)"
+    }
+  ]
+}

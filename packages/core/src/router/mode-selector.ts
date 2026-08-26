@@ -31,6 +31,14 @@ export function selectPalaceMode(
   const normalizedTask = task.toLowerCase();
   const fileCount = Object.keys(index.fileHashes).length;
   const explicitFiles = explicitFileReferences(task);
+  const routedSourcePaths = [...new Set(route.route.map(
+    (step) => step.sourcePath.replace(/:\d+(?:-\d+)?$/, "").replaceAll("\\", "/").toLowerCase()
+  ))];
+  const explicitTargetAuthorized = explicitFiles.length === 1
+    && (
+      explicitReferenceExists(explicitFiles[0], Object.keys(index.fileHashes))
+      || routedReferenceMatches(explicitFiles[0], routedSourcePaths)
+    );
   const riskSignals = detectRiskSignals(normalizedTask, route);
   const memoryEvidenceCount = options.memoryPreflight?.included ?? options.relevantMemoryCount ?? 0;
   const memoryEvidenceAvailable = memoryEvidenceCount > 0;
@@ -39,10 +47,11 @@ export function selectPalaceMode(
   const narrowingEvidenceInsufficient =
     route.narrowingEvidence?.independentImplementationAnchor === "missing";
   const uncertainRoute = route.confidence < 0.45;
-  const singleExplicitTarget = explicitFiles.length === 1 && route.confidence >= 0.45;
+  const singleExplicitTarget = explicitTargetAuthorized;
   const singleImplicitTarget = explicitFiles.length === 0
-    && new Set(route.route.map((step) => step.sourcePath.replace(/:\d+(?:-\d+)?$/, ""))).size === 1
-    && route.confidence >= 0.5;
+    && routedSourcePaths.length === 1
+    && primaryCount === 1
+    && (primarySteps[0]?.confidence ?? route.confidence) >= 0.4;
   const highConfidenceSingleFile = singleExplicitTarget || singleImplicitTarget;
   const memoryCheckedAndAbsent = options.memoryPreflight
     ? options.memoryPreflight.included === 0
@@ -50,6 +59,7 @@ export function selectPalaceMode(
   const structuralSelection = selectStructuralMode({
     fileCount,
     explicitFiles,
+    explicitTargetAuthorized,
     primaryCount,
     highConfidenceSingleFile,
     memoryCheckedAndAbsent,
@@ -68,7 +78,7 @@ export function selectPalaceMode(
       1
     );
     return withMemoryTransition(
-      withEvidencePolicy(overridden, route, options),
+      withEvidencePolicy(overridden, route, options, explicitTargetAuthorized, true),
       options.override,
       options.memoryPreflight
     );
@@ -89,7 +99,9 @@ export function selectPalaceMode(
         )
       : structuralSelection;
 
-  if (!options.memoryPreflight) return withEvidencePolicy(selectionBeforeMemory, route, options);
+  if (!options.memoryPreflight) {
+    return withEvidencePolicy(selectionBeforeMemory, route, options, explicitTargetAuthorized);
+  }
 
   const guardedDeliveryRequired = options.memoryPreflight.conflictCount > 0
     || options.memoryPreflight.requiresGuardedDelivery
@@ -107,7 +119,7 @@ export function selectPalaceMode(
       : structuralSelection;
 
   return withMemoryTransition(
-    withEvidencePolicy(finalSelection, route, options),
+    withEvidencePolicy(finalSelection, route, options, explicitTargetAuthorized),
     selectionBeforeMemory.mode,
     options.memoryPreflight
   );
@@ -116,6 +128,7 @@ export function selectPalaceMode(
 function selectStructuralMode(input: {
   fileCount: number;
   explicitFiles: string[];
+  explicitTargetAuthorized: boolean;
   primaryCount: number;
   highConfidenceSingleFile: boolean;
   memoryCheckedAndAbsent: boolean;
@@ -124,10 +137,11 @@ function selectStructuralMode(input: {
   riskSignals: PalaceRiskSignals;
   budget?: number;
 }): BasePalaceModeSelection {
+  const explicitTargetAuthorized = input.explicitTargetAuthorized;
   if (
     input.highConfidenceSingleFile
     && input.memoryCheckedAndAbsent
-    && !input.narrowingEvidenceInsufficient
+    && (!input.narrowingEvidenceInsufficient || explicitTargetAuthorized)
     && !input.riskSignals.crossStack
     && !input.riskSignals.tenantIsolationRisk
     && !input.riskSignals.publicContractRisk
@@ -145,7 +159,7 @@ function selectStructuralMode(input: {
 
   const boundedTask =
     !input.uncertainRoute
-    && !input.narrowingEvidenceInsufficient
+    && (!input.narrowingEvidenceInsufficient || explicitTargetAuthorized)
     && !input.riskSignals.crossStack
     && !input.riskSignals.tenantIsolationRisk
     && !input.riskSignals.publicContractRisk
@@ -227,7 +241,9 @@ function withMemoryTransition(
 function withEvidencePolicy(
   selection: BasePalaceModeSelection,
   route: PalaceRoute,
-  options: SelectPalaceModeOptions
+  options: SelectPalaceModeOptions,
+  explicitTargetAuthorized: boolean,
+  preserveExplicitOverride = false
 ): PalaceModeSelection {
   const memoryPreflight = options.memoryPreflight;
   const primaryCount = route.route.filter(
@@ -237,23 +253,43 @@ function withEvidencePolicy(
 
   if (memoryPreflight?.conflictCount) {
     evidenceReasons.push(`${memoryPreflight.conflictCount} unresolved memory conflict(s) remain.`);
-    return {
-      ...selection,
-      evidenceStatus: "conflicted",
+    return finalizeEvidencePolicy(
+      selection,
+      "conflicted",
       evidenceReasons,
-      interventionPolicy: "advisory"
-    };
+      options,
+      preserveExplicitOverride
+    );
+  }
+
+  if (route.evidenceClosure?.status === "conflicted") {
+    evidenceReasons.push(...route.evidenceClosure.reasons);
+    return finalizeEvidencePolicy(
+      selection,
+      "conflicted",
+      evidenceReasons,
+      options,
+      preserveExplicitOverride
+    );
   }
 
   if (primaryCount === 0) {
-    evidenceReasons.push("The route contains no Primary implementation evidence.");
+    evidenceReasons.push("The route contains no Primary task evidence.");
+  }
+  if (route.evidenceClosure?.status === "insufficient" && !explicitTargetAuthorized) {
+    evidenceReasons.push(...route.evidenceClosure.reasons);
   }
   if (route.confidence < MIN_SUFFICIENT_ROUTE_CONFIDENCE) {
-    evidenceReasons.push(
-      `Route confidence ${route.confidence} is below the ${MIN_SUFFICIENT_ROUTE_CONFIDENCE} sufficiency threshold.`
-    );
+    if (!explicitTargetAuthorized) {
+      evidenceReasons.push(
+        `Route confidence ${route.confidence} is below the ${MIN_SUFFICIENT_ROUTE_CONFIDENCE} sufficiency threshold.`
+      );
+    }
   }
-  if (route.narrowingEvidence?.independentImplementationAnchor === "missing") {
+  if (
+    route.narrowingEvidence?.independentImplementationAnchor === "missing"
+    && !explicitTargetAuthorized
+  ) {
     evidenceReasons.push(...route.narrowingEvidence.reasons);
   }
 
@@ -282,20 +318,52 @@ function withEvidencePolicy(
     );
   }
 
-  const boundaryRisk = selection.riskSignals.crossStack
-    || selection.riskSignals.memoryRelevant
-    || selection.riskSignals.staleMemoryRisk
-    || selection.riskSignals.tenantIsolationRisk
-    || selection.riskSignals.publicContractRisk
-    || selection.riskSignals.scopeRisk
-    || selection.riskSignals.verificationChangeRisk;
+  return finalizeEvidencePolicy(
+    selection,
+    evidenceStatus,
+    evidenceReasons,
+    options,
+    preserveExplicitOverride
+  );
+}
+
+function finalizeEvidencePolicy(
+  selection: BasePalaceModeSelection,
+  evidenceStatus: PalaceModeSelection["evidenceStatus"],
+  evidenceReasons: string[],
+  options: SelectPalaceModeOptions,
+  preserveExplicitOverride: boolean
+): PalaceModeSelection {
   const boundedMode = selection.mode === "bypass" || selection.mode === "route-lite";
-  const interventionPolicy = evidenceStatus === "sufficient" && boundedMode && !boundaryRisk
+  const evidenceSafeSelection = evidenceStatus !== "sufficient"
+    && boundedMode
+    && !preserveExplicitOverride
+    ? buildSelection(
+        "full-palace",
+        [
+          ...selection.reasons,
+          `Automatic ${selection.mode} selection was widened because routed evidence is ${evidenceStatus}.`
+        ],
+        selection.riskSignals,
+        options.budget,
+        Math.min(selection.confidence, 0.68)
+      )
+    : selection;
+  const boundaryRisk = evidenceSafeSelection.riskSignals.crossStack
+    || evidenceSafeSelection.riskSignals.memoryRelevant
+    || evidenceSafeSelection.riskSignals.staleMemoryRisk
+    || evidenceSafeSelection.riskSignals.tenantIsolationRisk
+    || evidenceSafeSelection.riskSignals.publicContractRisk
+    || evidenceSafeSelection.riskSignals.scopeRisk
+    || evidenceSafeSelection.riskSignals.verificationChangeRisk;
+  const safelyBoundedMode = evidenceSafeSelection.mode === "bypass"
+    || evidenceSafeSelection.mode === "route-lite";
+  const interventionPolicy = evidenceStatus === "sufficient" && safelyBoundedMode && !boundaryRisk
     ? "bounded"
     : "advisory";
 
   return {
-    ...selection,
+    ...evidenceSafeSelection,
     evidenceStatus,
     evidenceReasons,
     interventionPolicy
@@ -529,6 +597,19 @@ function explicitFileReferences(task: string): string[] {
   const fileMatches = task.match(/\b[\w.@-]+\.(?:ts|tsx|js|jsx|mjs|cjs|json|md|py|go|rs|java|cs|css|scss|html|yaml|yml|toml)\b/gi) ?? [];
   const references = pathMatches.length ? pathMatches : fileMatches;
   return [...new Set(references.map((value) => value.replaceAll("\\", "/").toLowerCase()))];
+}
+
+function explicitReferenceExists(reference: string, indexedPaths: string[]): boolean {
+  const normalizedPaths = indexedPaths.map((value) => value.replaceAll("\\", "/").toLowerCase());
+  if (normalizedPaths.includes(reference)) return true;
+  if (reference.includes("/")) return false;
+  return normalizedPaths.filter((value) => value.split("/").at(-1) === reference).length === 1;
+}
+
+function routedReferenceMatches(reference: string, routedPaths: string[]): boolean {
+  if (routedPaths.includes(reference)) return true;
+  if (reference.includes("/")) return false;
+  return routedPaths.filter((value) => value.split("/").at(-1) === reference).length === 1;
 }
 
 function hasAny(value: string, terms: string[]): boolean {

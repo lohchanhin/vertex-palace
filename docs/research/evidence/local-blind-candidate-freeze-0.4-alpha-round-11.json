@@ -1,0 +1,114 @@
+{
+  "schemaVersion": 1,
+  "studyId": "local-blind-routing-round-11-0.4-alpha",
+  "status": "locally-frozen",
+  "frozenAt": "2026-08-09T19:24:54.108Z",
+  "publicPreregistration": false,
+  "claimBoundary": "Tamper-evident local freeze created after URL-and-HEAD-only pool verification and before any Round 11 repository history, subject, diff, task, coherence review, oracle, or Palace result was inspected. It is not public preregistration and cannot establish Agent correctness, Token savings, tool-call reduction, or wall-time improvement.",
+  "competitionFreeze": {
+    "noCommit": true,
+    "noPush": true,
+    "noTag": true,
+    "noNpmPublish": true,
+    "reason": "Do not alter submitted project materials until competition results are announced."
+  },
+  "candidate": {
+    "role": "post-round-10-generic-causal-repair-candidate",
+    "baseCommit": "67c0a2ce8754cece3773d5fd16b89dae4e3af0c1",
+    "sourceState": "uncommitted-local-working-tree-frozen-by-content-hash",
+    "cliPath": "dist/palace.cjs",
+    "cliSha256": "258ABFF9CE05B052C03CD4B772B38310BC7E4AAFD08A3FAEAE79334FB1B4E900",
+    "generatedMcpPath": "plugins/vertex-palace/mcp/server.cjs",
+    "generatedMcpSha256": "453402E9C685FB04DDF8134FA1E48E190D8F0F282D6DA70577EB9DFA4D871AFC",
+    "sourceTree": {
+      "algorithm": "sha256-path-length-bytes-v1",
+      "fileCount": 185,
+      "sha256": "2EC8C8FC66365F7FFF2CF07F9F5449C5BF82BF6361CEC785E8ADD0447A7D684D"
+    },
+    "buildCommand": "pnpm build"
+  },
+  "comparisonBaseline": {
+    "role": "pre-local-evidence-closure-optimization",
+    "productCommit": "67c0a2ce8754cece3773d5fd16b89dae4e3af0c1",
+    "sourceTree": {
+      "algorithm": "sha256-path-length-bytes-v1",
+      "fileCount": 121,
+      "sha256": "73BB3192CE756367031E8B3E1C5FE8332811C5FB333036A5BA6DFB7B2007B5E0"
+    },
+    "cliPath": "dist/palace.cjs",
+    "cliSha256": "52A1876B00AF4AAA884A6C7EA47AC2E701E88C34FC8FEE65DD1B32BB6513B8AE",
+    "rebuild": {
+      "dependencyCommand": "pnpm install --offline --frozen-lockfile --ignore-scripts",
+      "buildCommand": "pnpm build",
+      "networkRequired": false
+    },
+    "provenance": {
+      "path": "docs/research/evidence/local-blind-candidate-freeze-0.4-alpha-round-10.json",
+      "sha256": "F1E7EFE6D15BC279970BD7E9171E930C649941F2B272FA4394F33CC0ED48F984"
+    }
+  },
+  "preFreezeEvidence": {
+    "repositoryHeads": {
+      "path": "docs/research/evidence/local-blind-routing-repository-head-verification-0.4-alpha-round-11.json",
+      "sha256": "D795F240624DD8759E82211C88F34F5AA88FBEC592C02B7F867BC8E0B3DC4972",
+      "matchedRepositories": 16
+    },
+    "verification": {
+      "path": "docs/research/evidence/local-blind-routing-prefreeze-verification-attempt-3-0.4-alpha-round-11.json",
+      "sha256": "678C13594878000AA8DC22C0BFC27BFB0244EACBB57C702C48F05E50ACE30AAA",
+      "commandsPassed": 6
+    },
+    "failedAttempts": [
+      {
+        "path": "docs/research/evidence/local-blind-routing-prefreeze-verification-0.4-alpha-round-11.json",
+        "sha256": "A828512F2D3E8F338DF3BFD590A7834121FF752631781AC1B2AC185B18E82DBD",
+        "category": "windows-package-manager-command-not-found-harness-error",
+        "productCommandsStarted": 0
+      },
+      {
+        "path": "docs/research/evidence/local-blind-routing-prefreeze-verification-attempt-2-0.4-alpha-round-11.json",
+        "sha256": "0CFC2A5B47F5AA944E52D4F918EAB1F37495DB23FB3F28D1D99924F534C82D68",
+        "category": "windows-direct-cmd-spawn-einval-harness-error",
+        "productCommandsStarted": 0
+      }
+    ]
+  },
+  "artifacts": {
+    "docs/research/LOCAL_BLIND_ROUTING_TARGET_SELECTION_PROTOCOL_0_4_ALPHA_ROUND_11.md": "CABBD96309B5CE10941881445B571B108DCF8B836B6D9646C9E8C8CC9056E4F8",
+    "docs/zh-CN/LOCAL_BLIND_ROUTING_TARGET_SELECTION_PROTOCOL_0_4_ALPHA_ROUND_11.md": "03CB65EB33DDC9F50EB580E4780204C5336DE7C041B539A000AC727251CCBAE6",
+    "docs/research/evidence/local-blind-routing-repository-pool-0.4-alpha-round-11.json": "29D9BBEEDCD43F05E8AE1A059FFC7F9D4F3CB94F19BFF1C424E7EF962AAC0CCD",
+    "docs/research/evidence/local-blind-routing-repository-head-verification-0.4-alpha-round-11.json": "D795F240624DD8759E82211C88F34F5AA88FBEC592C02B7F867BC8E0B3DC4972",
+    "docs/research/evidence/local-blind-routing-prefreeze-verification-0.4-alpha-round-11.json": "A828512F2D3E8F338DF3BFD590A7834121FF752631781AC1B2AC185B18E82DBD",
+    "docs/research/evidence/local-blind-routing-prefreeze-verification-attempt-2-0.4-alpha-round-11.json": "0CFC2A5B47F5AA944E52D4F918EAB1F37495DB23FB3F28D1D99924F534C82D68",
+    "docs/research/evidence/local-blind-routing-prefreeze-verification-attempt-3-0.4-alpha-round-11.json": "678C13594878000AA8DC22C0BFC27BFB0244EACBB57C702C48F05E50ACE30AAA",
+    "scripts/prepare-local-blind-routing-candidates-round-11.cjs": "5BBD77737F6129A55314CF01086DED3084C3C5B19EED90F3ABD38311B968C681",
+    "scripts/finalize-local-blind-routing-targets-round-11.cjs": "E0AD213B5D45674889D879A61C753C4093FC552ADDA4C46CD577F8E63958BBA7",
+    "scripts/verify-round11-repository-pool-heads.cjs": "CCAC25BF6FA405BB74DCCA3ACF562D85049BF4F7E25BA85B5040883075DAF5EF",
+    "scripts/verify-round11-prefreeze.cjs": "CCDBF0C444349C85D2DED9D4C5CB466023036660F631E27D0459F5A724AAF8AE",
+    "scripts/freeze-local-blind-round-11.cjs": "FF3637FA284ED090B25F0B08061DDAB31FB777B791FCA757ACCFD0176E84F017",
+    "scripts/lib/commit-task-classifier.cjs": "C3D787029C019FD64BFB079913F23B58082C38560448A9B9567954ECA9FE1254",
+    "scripts/lib/held-out-file-surfaces.cjs": "A604A7F55386C1C45BEBBCCA0024B40D84798C4480247181895238929B9F030D",
+    "scripts/lib/task-diff-coherence.cjs": "744D409FE39D2E951A426788D5719413729DD220A24D303282D1256CD92A8779",
+    "scripts/lib/local-blind-freeze.cjs": "AC1952B40EE6BA950614AA18F231451168DEA04417FFF4A845806F668878F3A6",
+    "scripts/lib/round11-target-selection.cjs": "9B092F0225267DCA2FEF2617EF1F58C06B94E822C99590D0EB681D2D0B55E3A1",
+    "scripts/test/task-diff-coherence.test.cjs": "EAB7368723CD404E9118310EA317F8E209ACF7D984AE6F08FF181BB61249504C",
+    "scripts/test/round11-task-diff-coherence-protocol.test.cjs": "78D2A396E4A2B203B698DC30AA51E6F15E3831F3DB9C63A4C329FB1F01C9A7AD",
+    "scripts/test/round11-target-selection.test.cjs": "6505BB900FD3196D465E3182760CA8D77C2D6CC0EFFFC8E6D52B0E978BD8DB43",
+    "scripts/test/round11-candidate-queue.test.cjs": "1B854167F72839A383FC712D1FB30A76C9735592EDDE04EC9E676F629640FA84",
+    "scripts/test/round11-repository-pool.test.cjs": "D7E175263C47007D1EA2F9C0B504A9CD573E2FB7FF931D550CF8EE73BCAA1107",
+    "scripts/test/round11-local-blind-selection-freeze.test.cjs": "34539D42AA3E5989C0A4E2F18EDB40E5E840E929517B4F060994C93150A781D4"
+  },
+  "selectionRules": {
+    "candidateTaskHistoryObservedBeforeFreeze": false,
+    "candidateTaskDiffObservedBeforeFreeze": false,
+    "palaceCallsOnCandidateTasksBeforeFreeze": 0,
+    "mechanicalCandidatesPerRepositoryMaximum": 5,
+    "newestFirstReviewOrder": true,
+    "familyQuotaStopsLaterReviews": true,
+    "wholeTargetSemanticReviewRequired": true,
+    "uncertainHunkRejectsWholeTarget": true,
+    "partialOraclePruningForbidden": true,
+    "resultCreateOnly": true,
+    "productChangesForbiddenUntilFirstResultPreserved": true
+  }
+}

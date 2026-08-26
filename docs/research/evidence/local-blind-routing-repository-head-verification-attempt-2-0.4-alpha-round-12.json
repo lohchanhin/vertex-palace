@@ -1,0 +1,157 @@
+{
+  "schemaVersion": 1,
+  "studyId": "local-blind-routing-round-12-0.4-alpha",
+  "generatedAt": "2026-08-10T22:44:08.153Z",
+  "status": "verified",
+  "claimBoundary": "Remote HEAD identity verification only. This command used git ls-remote <url> HEAD and did not fetch or inspect commit history, subjects, diffs, tasks, or Palace output.",
+  "repositoryPool": "docs/research/evidence/local-blind-routing-repository-pool-0.4-alpha-round-12.json",
+  "commandShape": "git ls-remote --exit-code <url> HEAD",
+  "commitHistoryInspected": false,
+  "palaceCallsOnCandidateTasks": 0,
+  "repositories": [
+    {
+      "name": "redux",
+      "url": "https://github.com/reduxjs/redux.git",
+      "expectedHead": "3084fc33bb23ab4cab4796172eafe342da4e73d9",
+      "observedHead": "3084fc33bb23ab4cab4796172eafe342da4e73d9",
+      "matched": true,
+      "elapsedMs": 812,
+      "error": null
+    },
+    {
+      "name": "blinker",
+      "url": "https://github.com/pallets-eco/blinker.git",
+      "expectedHead": "c3364059663df1ddce32799d6b1922af89a345f6",
+      "observedHead": "c3364059663df1ddce32799d6b1922af89a345f6",
+      "matched": true,
+      "elapsedMs": 762,
+      "error": null
+    },
+    {
+      "name": "sqlx",
+      "url": "https://github.com/jmoiron/sqlx.git",
+      "expectedHead": "41dac167fdad5e3fd81d66cafba0951dc6823a30",
+      "observedHead": "41dac167fdad5e3fd81d66cafba0951dc6823a30",
+      "matched": true,
+      "elapsedMs": 732,
+      "error": null
+    },
+    {
+      "name": "bat",
+      "url": "https://github.com/sharkdp/bat.git",
+      "expectedHead": "af59a3218303837421ce06bb2dc3c545525bba0f",
+      "observedHead": "af59a3218303837421ce06bb2dc3c545525bba0f",
+      "matched": true,
+      "elapsedMs": 726,
+      "error": null
+    },
+    {
+      "name": "pino",
+      "url": "https://github.com/pinojs/pino.git",
+      "expectedHead": "e63966d01126d4c7d0d5d2f0783ddc7a5fd52451",
+      "observedHead": "e63966d01126d4c7d0d5d2f0783ddc7a5fd52451",
+      "matched": true,
+      "elapsedMs": 711,
+      "error": null
+    },
+    {
+      "name": "packaging",
+      "url": "https://github.com/pypa/packaging.git",
+      "expectedHead": "ef91ddbe6891b87f687e95628224901bf06da58d",
+      "observedHead": "ef91ddbe6891b87f687e95628224901bf06da58d",
+      "matched": true,
+      "elapsedMs": 678,
+      "error": null
+    },
+    {
+      "name": "afero",
+      "url": "https://github.com/spf13/afero.git",
+      "expectedHead": "768f1fb0e5535b77d90e44c531aacd652aabd96a",
+      "observedHead": "768f1fb0e5535b77d90e44c531aacd652aabd96a",
+      "matched": true,
+      "elapsedMs": 675,
+      "error": null
+    },
+    {
+      "name": "crossterm",
+      "url": "https://github.com/crossterm-rs/crossterm.git",
+      "expectedHead": "34636cf8149c1e7252f778e24ad1d0ade0f1a1ca",
+      "observedHead": "34636cf8149c1e7252f778e24ad1d0ade0f1a1ca",
+      "matched": true,
+      "elapsedMs": 688,
+      "error": null
+    },
+    {
+      "name": "preact",
+      "url": "https://github.com/preactjs/preact.git",
+      "expectedHead": "e881e7e8386d7a430f87498a41c6a532992b4599",
+      "observedHead": "e881e7e8386d7a430f87498a41c6a532992b4599",
+      "matched": true,
+      "elapsedMs": 1878,
+      "error": null
+    },
+    {
+      "name": "pluggy",
+      "url": "https://github.com/pytest-dev/pluggy.git",
+      "expectedHead": "54c95345d24edbe1b06646c931d6dcfcfa6683c2",
+      "observedHead": "54c95345d24edbe1b06646c931d6dcfcfa6683c2",
+      "matched": true,
+      "elapsedMs": 883,
+      "error": null
+    },
+    {
+      "name": "gjson",
+      "url": "https://github.com/tidwall/gjson.git",
+      "expectedHead": "7d8b3821e9d2acf35e8a226b63fcf801078e9b96",
+      "observedHead": "7d8b3821e9d2acf35e8a226b63fcf801078e9b96",
+      "matched": true,
+      "elapsedMs": 665,
+      "error": null
+    },
+    {
+      "name": "notify",
+      "url": "https://github.com/notify-rs/notify.git",
+      "expectedHead": "f49baa2e294bb80e0af01c4bfbb615e418abe94d",
+      "observedHead": "f49baa2e294bb80e0af01c4bfbb615e418abe94d",
+      "matched": true,
+      "elapsedMs": 863,
+      "error": null
+    },
+    {
+      "name": "ava",
+      "url": "https://github.com/avajs/ava.git",
+      "expectedHead": "bbfd946322fdeca2b547a691d947fb4e18c0c67f",
+      "observedHead": "bbfd946322fdeca2b547a691d947fb4e18c0c67f",
+      "matched": true,
+      "elapsedMs": 669,
+      "error": null
+    },
+    {
+      "name": "multidict",
+      "url": "https://github.com/aio-libs/multidict.git",
+      "expectedHead": "41c1b9144b13dcdfa4c18085aedc874cc9d24006",
+      "observedHead": "41c1b9144b13dcdfa4c18085aedc874cc9d24006",
+      "matched": true,
+      "elapsedMs": 685,
+      "error": null
+    },
+    {
+      "name": "go-cleanhttp",
+      "url": "https://github.com/hashicorp/go-cleanhttp.git",
+      "expectedHead": "b8a14b6bfc68b4ced977e4f9e64948a4133d8fcf",
+      "observedHead": "b8a14b6bfc68b4ced977e4f9e64948a4133d8fcf",
+      "matched": true,
+      "elapsedMs": 629,
+      "error": null
+    },
+    {
+      "name": "jiff",
+      "url": "https://github.com/BurntSushi/jiff.git",
+      "expectedHead": "ab6e8c83462e9b6d0dfe33f9cb70583d3d82049b",
+      "observedHead": "ab6e8c83462e9b6d0dfe33f9cb70583d3d82049b",
+      "matched": true,
+      "elapsedMs": 663,
+      "error": null
+    }
+  ]
+}

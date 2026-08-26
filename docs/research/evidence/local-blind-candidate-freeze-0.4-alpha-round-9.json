@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "studyId": "local-blind-routing-round-9-0.4-alpha",
+  "status": "locally-frozen",
+  "frozenAt": "2026-08-09T11:55:59.7731293Z",
+  "publicPreregistration": false,
+  "claimBoundary": "Tamper-evident local freeze amended after a preserved infrastructure-only selection failure. Attempt 1 exposed no task text to Palace and changed no product, pool, order, eligibility rule, quota, or metric. This supports internal development decisions only because the competition freeze prevents a Git commit or external timestamp.",
+  "amendment": {
+    "supersedesFreezeSha256": "2371C7C4D8DA4566AD9450172954F76C2F84AF9D571D183B9D3D567DDE69D7AD",
+    "attempt1FailurePreserved": true,
+    "attempt1FailurePath": "docs/research/evidence/local-blind-routing-target-selection-round-9-attempt-1-failure.json",
+    "productChanged": false,
+    "poolOrEligibilityChanged": false,
+    "allowedHarnessChanges": [
+      "complete frozen shallow-history fetch without a promisor clone",
+      "per-repository inspection-error capture",
+      "create-only preservation of unexpected selector failures"
+    ]
+  },
+  "competitionFreeze": {
+    "noCommit": true,
+    "noPush": true,
+    "noTag": true,
+    "noNpmPublish": true,
+    "reason": "Do not alter submitted project materials until competition results are announced."
+  },
+  "candidate": {
+    "role": "local-evidence-closure-and-adaptive-payload-candidate",
+    "baseCommit": "67c0a2ce8754cece3773d5fd16b89dae4e3af0c1",
+    "sourceState": "uncommitted-local-working-tree-frozen-by-content-hash",
+    "cliPath": "dist/palace.cjs",
+    "cliSha256": "C1A473947B8A3E76BA059996F4ED03DFF802F6F7290934546E05449CFA16C557",
+    "generatedMcpPath": "plugins/vertex-palace/mcp/server.cjs",
+    "generatedMcpSha256": "CF8854D46452D0447E04A23E6A1114E68C97F3666638B2BB0D0F2F01A2090E53",
+    "sourceTree": {
+      "algorithm": "sha256-path-length-bytes-v1",
+      "fileCount": 185,
+      "sha256": "8B9B08A81FE1F07B89C7535567865260222D4EA8E24E7B9CF5BEFD7D4A7BFC3E"
+    },
+    "buildCommand": "pnpm build"
+  },
+  "comparisonBaseline": {
+    "role": "pre-local-evidence-closure-optimization",
+    "productCommit": "67c0a2ce8754cece3773d5fd16b89dae4e3af0c1",
+    "sourceTree": {
+      "algorithm": "sha256-path-length-bytes-v1",
+      "fileCount": 121,
+      "sha256": "73BB3192CE756367031E8B3E1C5FE8332811C5FB333036A5BA6DFB7B2007B5E0"
+    },
+    "cliPath": "dist/palace.cjs",
+    "cliSha256": "52A1876B00AF4AAA884A6C7EA47AC2E701E88C34FC8FEE65DD1B32BB6513B8AE",
+    "rebuild": {
+      "dependencyCommand": "pnpm install --offline --frozen-lockfile --ignore-scripts",
+      "buildCommand": "pnpm build",
+      "networkRequired": false
+    }
+  },
+  "artifacts": {
+    "docs/research/LOCAL_BLIND_ROUTING_TARGET_SELECTION_PROTOCOL_0_4_ALPHA_ROUND_9.md": "641CAE04676F01D51A5EAB593E98876B8E883359E659A2B00BD37688ED37A1BB",
+    "docs/zh-CN/LOCAL_BLIND_ROUTING_TARGET_SELECTION_PROTOCOL_0_4_ALPHA_ROUND_9.md": "3380B236D9ABFF038D20C0A8A1ADAF8AEFCF3558EDC38B13D1D34943B05763E9",
+    "docs/research/evidence/local-blind-routing-repository-pool-0.4-alpha-round-9.json": "746E0D459D2EBC7EAF1610F3E576F32D24EC8F7B80F1D4A076FB7B89952F3B68",
+    "docs/research/evidence/local-blind-routing-target-selection-round-9-attempt-1-failure.json": "DAEC70586E24EF0644A395EE0B8B2ABE00EEFD7B5F49264C0CEE056E1DBB843A",
+    "scripts/select-local-blind-routing-targets-round-9.cjs": "D6E11F277D5A0F09061B51D13CFC8DFF2376EA5AACF8B7454EFF9F0034D6E135",
+    "scripts/test/round9-local-blind-selection-freeze.test.cjs": "5B7940C35BCC13186C726A4EF2BCB730439028F1821C147E9ACA1D03F8E7D583",
+    "scripts/lib/commit-task-classifier.cjs": "C3D787029C019FD64BFB079913F23B58082C38560448A9B9567954ECA9FE1254",
+    "scripts/lib/held-out-file-surfaces.cjs": "A604A7F55386C1C45BEBBCCA0024B40D84798C4480247181895238929B9F030D"
+  },
+  "selectionRules": {
+    "candidateTaskHistoryObservedBeforeFreeze": false,
+    "candidateTaskDiffObservedBeforeFreeze": false,
+    "palaceCallsOnCandidateTasksBeforeFreeze": 0,
+    "resultCreateOnly": true,
+    "productChangesForbiddenUntilFirstResultPreserved": true
+  }
+}

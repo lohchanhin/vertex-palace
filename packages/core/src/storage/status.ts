@@ -30,6 +30,7 @@ export async function getPalaceStatus(root: string): Promise<PalaceStatus> {
     stale,
     nodeCount: index?.nodes.length ?? 0,
     edgeCount: index?.edges.length ?? 0,
+    factCount: index?.facts.length ?? 0,
     roomCount: index?.rooms.length ?? 0,
     lastIndexedAt: lastIndex.indexedAt,
     configPath: initialized ? configPath(root) : undefined

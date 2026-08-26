@@ -15,9 +15,13 @@ export * from "./indexer/index-palace";
 export * from "./indexer/build-directory-map";
 export * from "./indexer/build-nodes";
 export * from "./indexer/build-edges";
+export * from "./indexer/build-facts";
 export * from "./indexer/build-rooms";
 export * from "./indexer/incremental-index";
+export * from "./evidence/evidence-model";
+export * from "./evidence/evidence-closure";
 export * from "./router/analyze-task";
+export * from "./router/task-intent";
 export * from "./router/classify-task";
 export * from "./router/locate-entry";
 export * from "./router/route-planner";
@@ -80,7 +84,7 @@ export async function palacePack(input: {
 
 export async function palaceContext(input: import("@vertex-palace/shared").PalaceContextInput) {
   const root = resolveRoot(input.root);
-  const { packBypassContext, packContext } = await import("./packer/context-packer");
+  const { packAutoContextForRoute, packContext } = await import("./packer/context-packer");
   if (!input.auto && !input.mode) {
     return packContext(root, input.task, {
       budget: input.budget,
@@ -91,39 +95,17 @@ export async function palaceContext(input: import("@vertex-palace/shared").Palac
     });
   }
 
-  const [{ routePalace }, { readIndex }, { selectPalaceMode }, { readGuardedMemory, MEMORY_PREFLIGHT_POLICY }] = await Promise.all([
-    import("./router/route-planner"),
-    import("./storage/read-palace"),
-    import("./router/mode-selector"),
-    import("./memory/pitfall-board")
-  ]);
+  const { routePalace } = await import("./router/route-planner");
   const route = await routePalace(root, input.task, {
     budget: input.budget,
     routeLimit: input.routeLimit
   });
-  const index = await readIndex(root);
-  const memoryPreflight = await readGuardedMemory(root, {
-    task: input.task,
-    taskType: route.taskType,
-    ...MEMORY_PREFLIGHT_POLICY
-  });
-  const modeSelection = selectPalaceMode(index, route, input.task, {
-    budget: input.budget,
-    override: input.mode,
-    memoryPreflight
-  });
-  if (modeSelection.mode === "bypass") {
-    return packBypassContext(root, input.task, route, modeSelection, input.format, memoryPreflight);
-  }
-  return packContext(root, input.task, {
+  return packAutoContextForRoute(root, input.task, route, {
     budget: input.budget,
     format: input.format,
-    routeId: route.id,
     routeLimit: input.routeLimit,
     maxDrawers: input.maxDrawers,
-    includeExcluded: false,
-    modeSelection,
-    preparedMemory: memoryPreflight
+    mode: input.mode
   });
 }
 

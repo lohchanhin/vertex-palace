@@ -1,0 +1,201 @@
+{
+  "schemaVersion": 1,
+  "artifact": "compositional-lifecycle-routing-repair-round-14-self-audit-0.4-alpha",
+  "round": 14,
+  "evidenceClass": "post-observation-development-self-audit",
+  "status": "improved-with-residuals",
+  "createdAt": "2026-08-11T02:38:00.000Z",
+  "task": "修复研究生命周期任务的路由：保留编号阶段身份，区分比赛冻结约束与配置请求，识别研究证据和中英文报告产出，并让任务分析、路由评分、路由规划与回归验证形成完整闭环；记录 Round 13 自审证据和双语结果，只做本地修改测试，不提交、不推送、不发布。",
+  "protocol": {
+    "repository": "vertex-palace-local-worktree",
+    "sourceState": "dirty-local-development-worktree",
+    "routeLimit": 10,
+    "budgetTokens": 6000,
+    "maxDrawers": 4,
+    "sameTaskText": true,
+    "sameFullChangedFileOracle": true,
+    "immutableCandidateCommit": false,
+    "independentHeldOut": false,
+    "sequential": true,
+    "concurrent": false
+  },
+  "fullChangedFileOracle": [
+    "packages/core/src/router/analyze-task.ts",
+    "packages/core/src/router/route-scorer.ts",
+    "packages/core/src/router/route-planner.ts",
+    "packages/core/test/router.test.ts",
+    "plugins/vertex-palace/mcp/server.cjs",
+    "docs/research/evidence/research-lifecycle-routing-repair-self-audit-0.4-alpha.json",
+    "docs/research/RESEARCH_LIFECYCLE_ROUTING_REPAIR_RESULT_0_4_ALPHA.md",
+    "docs/zh-CN/RESEARCH_LIFECYCLE_ROUTING_REPAIR_RESULT_0_4_ALPHA.md",
+    "scripts/test/round13-research-lifecycle-routing-repair.test.cjs"
+  ],
+  "observations": {
+    "baseline": {
+      "evaluationId": "evaluation_8b8f74264a8b8ff6",
+      "routeConfidence": 0.15,
+      "changedFileCoverage": 0.222,
+      "routeFocus": 0.4,
+      "calibration": "well-calibrated",
+      "matchedChangedFiles": [
+        "packages/core/src/router/analyze-task.ts",
+        "packages/core/test/router.test.ts"
+      ],
+      "routeFiles": [
+        "packages/core/test/router.test.ts",
+        "packages/core/src/router/analyze-task.ts",
+        "docs/research/HELD_OUT_CONFIDENCE_CALIBRATION_PROTOCOL_0_4_ALPHA_ROUND_8.md",
+        "docs/zh-CN/HELD_OUT_CONFIDENCE_CALIBRATION_PROTOCOL_0_4_ALPHA_ROUND_8.md",
+        "packages/core/vitest.config.ts"
+      ]
+    },
+    "afterClauseComposition": {
+      "evaluationId": "evaluation_7db16c85710ed312",
+      "routeConfidence": 0.15,
+      "changedFileCoverage": 0.444,
+      "routeFocus": 0.571,
+      "calibration": "underconfident",
+      "matchedChangedFiles": [
+        "packages/core/src/router/analyze-task.ts",
+        "packages/core/src/router/route-scorer.ts",
+        "packages/core/src/router/route-planner.ts",
+        "packages/core/test/router.test.ts"
+      ]
+    },
+    "candidate": {
+      "evaluationId": "evaluation_5757c7811b91f791",
+      "routeConfidence": 0.4,
+      "changedFileCoverage": 0.778,
+      "routeFocus": 1,
+      "calibration": "underconfident",
+      "assessment": "needs-review",
+      "matchedChangedFiles": [
+        "packages/core/src/router/analyze-task.ts",
+        "packages/core/src/router/route-scorer.ts",
+        "packages/core/src/router/route-planner.ts",
+        "packages/core/test/router.test.ts",
+        "docs/research/evidence/research-lifecycle-routing-repair-self-audit-0.4-alpha.json",
+        "docs/research/RESEARCH_LIFECYCLE_ROUTING_REPAIR_RESULT_0_4_ALPHA.md",
+        "docs/zh-CN/RESEARCH_LIFECYCLE_ROUTING_REPAIR_RESULT_0_4_ALPHA.md"
+      ],
+      "routeFiles": [
+        "packages/core/src/router/route-planner.ts",
+        "packages/core/src/router/route-scorer.ts",
+        "packages/core/test/router.test.ts",
+        "packages/core/src/router/analyze-task.ts",
+        "docs/research/evidence/research-lifecycle-routing-repair-self-audit-0.4-alpha.json",
+        "docs/research/RESEARCH_LIFECYCLE_ROUTING_REPAIR_RESULT_0_4_ALPHA.md",
+        "docs/zh-CN/RESEARCH_LIFECYCLE_ROUTING_REPAIR_RESULT_0_4_ALPHA.md"
+      ],
+      "routeOnlyFiles": []
+    }
+  },
+  "postObservationSemanticCore": {
+    "role": "secondary diagnostic only",
+    "selectedAfterObservation": true,
+    "matchedFiles": 7,
+    "totalFiles": 7,
+    "coverage": 1,
+    "files": [
+      "packages/core/src/router/analyze-task.ts",
+      "packages/core/src/router/route-scorer.ts",
+      "packages/core/src/router/route-planner.ts",
+      "packages/core/test/router.test.ts",
+      "docs/research/evidence/research-lifecycle-routing-repair-self-audit-0.4-alpha.json",
+      "docs/research/RESEARCH_LIFECYCLE_ROUTING_REPAIR_RESULT_0_4_ALPHA.md",
+      "docs/zh-CN/RESEARCH_LIFECYCLE_ROUTING_REPAIR_RESULT_0_4_ALPHA.md"
+    ]
+  },
+  "finalRound14Audit": {
+    "evaluationId": "evaluation_349196c29ddf9bb7",
+    "taskType": "bugfix",
+    "fullChangedFileOracleCount": 13,
+    "routeLimit": 10,
+    "matchedChangedFiles": 10,
+    "changedFileCoverage": 0.769,
+    "routeFocus": 1,
+    "routeConfidence": 0.4,
+    "calibration": "underconfident",
+    "assessment": "needs-review",
+    "routeOnlyFiles": [],
+    "routeFiles": [
+      "packages/core/src/router/route-planner.ts",
+      "packages/core/src/router/route-scorer.ts",
+      "packages/core/test/router.test.ts",
+      "docs/research/evidence/compositional-lifecycle-routing-repair-round-14-self-audit-0.4-alpha.json",
+      "packages/core/src/router/analyze-task.ts",
+      "docs/research/evidence/research-lifecycle-routing-repair-self-audit-0.4-alpha.json",
+      "docs/research/COMPOSITIONAL_LIFECYCLE_ROUTING_REPAIR_ROUND_14_RESULT_0_4_ALPHA.md",
+      "docs/zh-CN/COMPOSITIONAL_LIFECYCLE_ROUTING_REPAIR_ROUND_14_RESULT_0_4_ALPHA.md",
+      "docs/research/RESEARCH_LIFECYCLE_ROUTING_REPAIR_RESULT_0_4_ALPHA.md",
+      "docs/zh-CN/RESEARCH_LIFECYCLE_ROUTING_REPAIR_RESULT_0_4_ALPHA.md"
+    ],
+    "missedFiles": [
+      "plugins/vertex-palace/mcp/server.cjs",
+      "scripts/test/round13-research-lifecycle-routing-repair.test.cjs",
+      "scripts/test/round14-compositional-lifecycle-routing-repair.test.cjs"
+    ],
+    "postObservationSemanticCore": {
+      "role": "secondary diagnostic only",
+      "selectedAfterObservation": true,
+      "matchedFiles": 10,
+      "totalFiles": 10,
+      "coverage": 1
+    }
+  },
+  "residualMisses": [
+    {
+      "path": "plugins/vertex-palace/mcp/server.cjs",
+      "role": "generated distribution bundle",
+      "interpretation": "The task did not request generated or MCP distribution output."
+    },
+    {
+      "path": "scripts/test/round13-research-lifecycle-routing-repair.test.cjs",
+      "role": "auxiliary report-lock test",
+      "interpretation": "The route included the product regression test; the report-lock test remains auxiliary."
+    }
+  ],
+  "interventions": [
+    "Parse comma- and semicolon-delimited task clauses before assigning artifact surfaces.",
+    "Separate meta-routing actions such as recognize and distinguish from output actions such as record and add.",
+    "Treat task analysis, route scoring, and route planning as independent implementation concerns.",
+    "Use indexed title, summary, tags, and matched evidence facts in artifact-family identity instead of relying on paths alone.",
+    "Recognize Chinese numbered headings such as 第 13 轮 and 第 2 阶段 as the same identities as Round 13 and Phase 2.",
+    "Allocate artifact-lifecycle test slots from the task's explicit test request instead of assuming one test per numbered round.",
+    "Prefer the product regression test before auxiliary report-lock tests even when the test quota is one."
+  ],
+  "controlledRegression": {
+    "testName": "composes meta-routing clauses and real Round 13 outputs without leaking contrast terms into surfaces",
+    "fullOracleCoverage": 0.875,
+    "coreFilesMatched": 7,
+    "coreFilesTotal": 7,
+    "auxiliaryFilesMissed": 1,
+    "unrelatedConfigurationSelected": false,
+    "historicRound8ArtifactsSelected": false
+  },
+  "crossRoundBilingualRegression": {
+    "testName": "pairs bilingual reports across numbered rounds when the localized heading carries the identity",
+    "fullOracleCoverage": 1,
+    "fullOracleFiles": 10,
+    "routeFocus": 1,
+    "localizedHeadingSuppliesRoundIdentity": true,
+    "productRegressionSelectedFirst": true,
+    "historicRound8ArtifactsSelected": false
+  },
+  "claimBoundary": [
+    "This is a disclosed post-observation development self-audit on one local repository, not independent held-out evidence.",
+    "The seven-file semantic core was selected after observing the route and is secondary diagnostic evidence only.",
+    "The frozen nine-file comparison remains unchanged; the later 13-file full audit is recorded separately.",
+    "The final 13-file audit remains primary for the completed repair and misses three auxiliary or distribution files.",
+    "The final ten-file semantic core was selected after observation and remains secondary diagnostic evidence only.",
+    "No Agent was executed and this result supports no Agent correctness, Token, tool-call, or wall-time claim.",
+    "Earlier immutable Round 11 and Round 12 formal outcomes are not rewritten by this repair."
+  ],
+  "competitionFreeze": {
+    "active": true,
+    "localChangesOnly": true,
+    "committed": false,
+    "pushed": false,
+    "published": false
+  }
+}

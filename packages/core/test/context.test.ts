@@ -141,7 +141,7 @@ describe("palaceContext", () => {
     });
   });
 
-  it("keeps a focused implicit candidate minimal but advisory below sufficiency", async () => {
+  it("widens a focused implicit candidate when evidence remains insufficient", async () => {
     await withFixture("ts-api", async (root) => {
       const target = path.join(root, "src", "format-currency.mjs");
       await writeFile(target, "export function formatCurrency(value) { return `$${value.toFixed(2)}`; }\n", "utf8");
@@ -155,27 +155,33 @@ describe("palaceContext", () => {
         format: "json"
       });
 
-      expect(output.mode).toBe("bypass");
-      expect(output.json).toMatchObject({
-        mode: "bypass",
+      const json = output.json as {
+        selection: { evidenceStatus: string; interventionPolicy: string };
+        executionBoundaries: { primary: string[]; stopEnforced: boolean };
+        recommendedExecution: string[];
+      };
+
+      expect(output.mode).toBe("full-palace");
+      expect(output.modeSelection).toMatchObject({
         evidenceStatus: "insufficient",
         interventionPolicy: "advisory",
-        primaryCandidate: "src/format-currency.mjs"
+        selectedModeBeforeMemory: "bypass",
+        selectedModeAfterMemory: "full-palace"
       });
-      expect((output.json as Record<string, unknown>).reason).toContain(
-        "treat the Primary candidate as a starting point"
-      );
-      expect(Object.keys(output.json as Record<string, unknown>)).toEqual([
-        "mode",
-        "evidenceStatus",
-        "interventionPolicy",
-        "primaryCandidate",
-        "reason"
+      expect(json.selection).toMatchObject({
+        evidenceStatus: "insufficient",
+        interventionPolicy: "advisory"
+      });
+      expect(json.executionBoundaries.primary).toEqual([
+        expect.stringContaining("src/format-currency.mjs")
       ]);
+      expect(json.executionBoundaries.stopEnforced).toBe(false);
+      expect(json.recommendedExecution.some((step) => step.includes("starting points"))).toBe(true);
+      expect(output.payload?.contextEstimatedTokens).toBeLessThanOrEqual(6000);
     });
   });
 
-  it("bypasses all four repeated small-local trials in a large indexed repository", async () => {
+  it("widens all repeated small-local trials when evidence remains insufficient", async () => {
     await withFixture("ts-api", async (root) => {
       const target = path.join(root, "src", "format-currency.mjs");
       const noiseRoot = path.join(root, "noise");
@@ -201,25 +207,35 @@ describe("palaceContext", () => {
         }));
       }
 
-      expect(outputs.map((output) => output.mode)).toEqual(["bypass", "bypass", "bypass", "bypass"]);
+      expect(outputs.map((output) => output.mode)).toEqual([
+        "full-palace",
+        "full-palace",
+        "full-palace",
+        "full-palace"
+      ]);
       for (const output of outputs) {
-        expect(output.json).toMatchObject({
-          mode: "bypass",
+        const json = output.json as {
+          selection: { evidenceStatus: string; interventionPolicy: string };
+          executionBoundaries: { primary: string[]; stopEnforced: boolean };
+          recommendedExecution: string[];
+        };
+
+        expect(output.modeSelection).toMatchObject({
           evidenceStatus: "insufficient",
           interventionPolicy: "advisory",
-          primaryCandidate: "src/format-currency.mjs"
+          selectedModeBeforeMemory: "bypass",
+          selectedModeAfterMemory: "full-palace"
         });
-        expect((output.json as Record<string, unknown>).reason).toContain(
-          "treat the Primary candidate as a starting point"
-        );
-        expect(Object.keys(output.json as Record<string, unknown>)).toEqual([
-          "mode",
-          "evidenceStatus",
-          "interventionPolicy",
-          "primaryCandidate",
-          "reason"
+        expect(json.selection).toMatchObject({
+          evidenceStatus: "insufficient",
+          interventionPolicy: "advisory"
+        });
+        expect(json.executionBoundaries.primary).toEqual([
+          expect.stringContaining("src/format-currency.mjs")
         ]);
-        expect(output.payload?.contextEstimatedTokens).toBeLessThan(200);
+        expect(json.executionBoundaries.stopEnforced).toBe(false);
+        expect(json.recommendedExecution.some((step) => step.includes("starting points"))).toBe(true);
+        expect(output.payload?.contextEstimatedTokens).toBeLessThanOrEqual(6000);
       }
     });
   });
@@ -358,7 +374,7 @@ describe("palaceContext", () => {
 
       expect(output.mode).toBe("bypass");
       expect(output.json).toMatchObject({
-        evidenceStatus: "insufficient",
+        evidenceStatus: "sufficient",
         interventionPolicy: "advisory"
       });
       expect(Object.keys(output.json as Record<string, unknown>)).toEqual([
@@ -393,6 +409,13 @@ describe("palaceContext", () => {
         format: "json"
       });
       const json = output.json as {
+        route: {
+          evidenceClosure: {
+            status: string;
+            requiredRoles: string[];
+            missingRoles: string[];
+          };
+        };
         context: Array<{ tier: string; loadLevel: string }>;
         deferredReferences: Array<{ tier: string }>;
         recommendedExecution: string[];
@@ -410,6 +433,11 @@ describe("palaceContext", () => {
       };
 
       expect(output.mode).toBe("route-lite");
+      expect(json.route.evidenceClosure).toMatchObject({
+        status: "sufficient",
+        requiredRoles: ["implementation", "verification"],
+        missingRoles: []
+      });
       expect(json.context.length).toBeGreaterThan(0);
       expect(json.context.every((item) => item.tier === "primary")).toBe(true);
       expect(json.deferredReferences.some((item) => item.tier === "support")).toBe(true);
@@ -417,7 +445,9 @@ describe("palaceContext", () => {
       expect(json.executionBoundaries.support.length).toBeGreaterThan(0);
       expect(json.executionBoundaries.deferred).toBeInstanceOf(Array);
       expect(json.executionBoundaries.excluded).toBeInstanceOf(Array);
-      expect(json.executionBoundaries.requiredEvidence).toEqual(["tests/auth.e2e.test.ts"]);
+      expect(json.executionBoundaries.requiredEvidence.map(
+        (sourcePath) => sourcePath.replace(/:\d+(?:-\d+)?$/, "")
+      )).toEqual(["tests/auth.e2e.test.ts"]);
       expect(json.executionBoundaries.requiredEvidence).not.toContain("README.md");
       expect(json.context.every((item) => item.loadLevel === "full_symbol" || item.loadLevel === "full_file")).toBe(true);
       expect(json.recommendedExecution).toContain("Use delivered full_file or full_symbol drawers directly; do not reopen those paths.");

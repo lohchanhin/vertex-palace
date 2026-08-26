@@ -2,7 +2,7 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import type { PalaceEvaluation, PalaceEvaluationInput, PalaceIndex, PalaceRoute } from "@vertex-palace/shared";
 import { indexPalace } from "../indexer/index-palace";
-import { packContext } from "../packer/context-packer";
+import { packAutoContextForRoute } from "../packer/context-packer";
 import { estimateTokens } from "../packer/token-estimator";
 import { routePalace } from "../router/route-planner";
 import { hashText } from "../scanner/file-hash";
@@ -29,12 +29,10 @@ export async function evaluateRoute(root: string, task: string, options: Evaluat
   index = await readIndex(root);
 
   const [pack, repository] = await Promise.all([
-    packContext(root, task, {
-      routeId: route.id,
+    packAutoContextForRoute(root, task, route, {
       budget: options.budget,
       routeLimit: options.routeLimit,
-      maxDrawers: options.maxDrawers,
-      includeExcluded: false
+      maxDrawers: options.maxDrawers
     }),
     estimateRepositoryTokens(root, index)
   ]);
@@ -77,6 +75,10 @@ export async function evaluateRoute(root: string, task: string, options: Evaluat
       fileCount: routeFiles.length
     },
     context: {
+      measurement: "adaptive-delivered-payload",
+      deliveryMode: pack.mode ?? "full-palace",
+      payloadBytes: pack.payload?.contextBytes ?? 0,
+      tokenCeiling: pack.modeSelection?.maxContextTokens ?? options.budget ?? 0,
       repositoryTextFiles: repository.textFiles,
       skippedBinaryFiles: repository.skippedBinaryFiles,
       skippedGeneratedFiles: repository.skippedGeneratedFiles,
@@ -219,7 +221,7 @@ function unique(values: string[]): string[] {
 }
 
 function ratio(numerator: number, denominator: number): number {
-  return denominator ? rounded(numerator / denominator, 2) : 0;
+  return denominator ? rounded(numerator / denominator, 3) : 0;
 }
 
 function percent(numerator: number, denominator: number): number {
@@ -291,6 +293,10 @@ function renderEvaluationMarkdown(evaluation: Omit<PalaceEvaluation, "markdown">
     "",
     "## Context Efficiency",
     "",
+    `- Measurement: ${evaluation.context.measurement}`,
+    `- Delivery mode: ${evaluation.context.deliveryMode}`,
+    `- Payload bytes: ${evaluation.context.payloadBytes}`,
+    `- Token ceiling: ${evaluation.context.tokenCeiling}`,
     `- Indexed repository text: ${evaluation.context.repositoryTokens} estimated tokens across ${evaluation.context.repositoryTextFiles} files`,
     `- Context pack: ${evaluation.context.packTokens} estimated tokens`,
     `- Tokens saved: ${evaluation.context.savedTokens}`,

@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "studyId": "local-blind-routing-validation-round-12-attempt-1-0.4-alpha",
+  "status": "locally-frozen",
+  "freezeAttempt": 1,
+  "frozenAt": "2026-08-10T23:01:53.736Z",
+  "publicPreregistration": false,
+  "claimBoundary": "Local hash freeze for the Round 12 paired static-routing validator, created after whole-target task-coherence selection but before any Palace route, pack, confidence, mode, or evaluation result was observed for a selected task. This is not public preregistration and cannot establish Agent correctness, Token savings, tool-call reduction, or wall-time improvement.",
+  "competitionFreeze": {
+    "noCommit": true,
+    "noPush": true,
+    "noTag": true,
+    "noNpmPublish": true,
+    "reason": "Do not alter submitted project materials until competition results are announced."
+  },
+  "inputs": {
+    "targetManifestPath": "docs/research/evidence/local-blind-routing-target-manifest-0.4-alpha-round-12.json",
+    "targetManifestSha256": "693B398DDB28682D535208AA87F4DDA07AE01F1B97B1BE970C103CED6B046486",
+    "candidateFreezePath": "docs/research/evidence/local-blind-candidate-freeze-0.4-alpha-round-12.json",
+    "candidateFreezeSha256": "D3B7BE55E1B80F964490A5E773E11AFCB97323A04E933AB30D131AAE6B48F406",
+    "candidateCliSha256": "3815B78163F3E401A24C9A63F77DB355B2BD2EDEEF42CB029E961A89B49D79C2",
+    "baselineCommit": "67c0a2ce8754cece3773d5fd16b89dae4e3af0c1",
+    "baselineCliSha256": "52A1876B00AF4AAA884A6C7EA47AC2E701E88C34FC8FEE65DD1B32BB6513B8AE",
+    "candidateQueuePath": "docs/research/evidence/local-blind-routing-candidate-queue-0.4-alpha-round-12-attempt-1.json",
+    "candidateQueueSha256": "0B6CDDCD91C34DF7A30F57AC1CF1E3B99A1180982FC6B0DE56B45075433047C9",
+    "coherenceReviewsPath": "docs/research/evidence/local-blind-routing-coherence-reviews-0.4-alpha-round-12.json",
+    "coherenceReviewsSha256": "2F17D6551B4E24F1404811D1F757D2718F13E856B095DD0EE88B1E1FC7992FF0"
+  },
+  "protocol": {
+    "noPalaceResultObservedBeforeValidatorFreeze": true,
+    "palaceCallsOnSelectedTasksBeforeFreeze": 0,
+    "wholeTargetTaskCoherenceReviewedBeforeFreeze": true,
+    "targets": 8,
+    "conditions": [
+      "baseline",
+      "candidate"
+    ],
+    "repetitions": 2,
+    "formalObservationsPerCondition": 16,
+    "totalFormalObservations": 32,
+    "budget": 6000,
+    "routeLimit": 10,
+    "maxDrawers": 4,
+    "fetchDepth": 400,
+    "fetchMode": "complete-shallow-history-no-promisor",
+    "materializationAttempts": 3,
+    "indexAttempts": 1,
+    "indexTimeoutMs": 900000,
+    "evaluateRetries": 0,
+    "contextRetries": 0,
+    "calibrationTolerance": 0.15,
+    "minimumMacroCoverage": 0.9,
+    "minimumMacroFocus": 0.7,
+    "minimumTargetCoverage": 0.5,
+    "minimumTargetFocus": 0.4,
+    "pairedNonInferiorityMargin": 0.05,
+    "conditionOrder": "balanced-ab-ba-by-manifest-index",
+    "execution": "sequential-never-concurrent",
+    "resultCreateOnly": true,
+    "agentExecuted": false,
+    "agentToolCallsMeasured": false
+  },
+  "artifacts": {
+    "docs/research/LOCAL_BLIND_ROUTING_VALIDATION_PROTOCOL_0_4_ALPHA_ROUND_12.md": "AA9179CB3597FF962D81BEE42194427A1D1832E5E19B41D1F9EADB9C144BEFBB",
+    "docs/zh-CN/LOCAL_BLIND_ROUTING_VALIDATION_PROTOCOL_0_4_ALPHA_ROUND_12.md": "D434ED8AC3479F07EA7830AB32503F03812E91961C9FE90B96F9AC58E8000200",
+    "scripts/verify-local-blind-routing-round-12.cjs": "214BD73C40496685C6C67AA960CE46FD62CDB3C70CE6D4FD9BF08552EA186F45",
+    "scripts/freeze-local-blind-validation-round-12.cjs": "9176DBD23C04E77A5593C7F837D03EC05A9991D3ABEAC449943E3B54EFF07971",
+    "scripts/test/round12-local-blind-validation-freeze.test.cjs": "0D4749AF978CA924255961F697AB7861D5AED5C67E661C30634768BFFB2A97EA",
+    "scripts/lib/context-telemetry.cjs": "E79111BC35AF85AE9D0541E3D45A62AC4E9D6B6501A50FCC51C0F6454098B4E3",
+    "scripts/lib/commit-task-classifier.cjs": "C3D787029C019FD64BFB079913F23B58082C38560448A9B9567954ECA9FE1254",
+    "scripts/lib/local-blind-freeze.cjs": "AC1952B40EE6BA950614AA18F231451168DEA04417FFF4A845806F668878F3A6",
+    "scripts/create-round12-coherence-reviews.cjs": "946E5016A9253B5289847DB0310FD36DF2732C44555B048007C23FB4496163F2"
+  },
+  "preservation": {
+    "productChangesForbiddenUntilFirstResult": true,
+    "taskRemovalAfterObservationForbidden": true,
+    "outcomeDependentExclusionForbidden": true,
+    "negativeProductResultRemainsCompleted": true,
+    "environmentHarnessAndProductFailuresSeparated": true,
+    "competitionRemoteFreezeRemainsActive": true
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "studyId": "local-blind-routing-validation-round-11-attempt-1-0.4-alpha",
+  "status": "locally-frozen",
+  "freezeAttempt": 2,
+  "frozenAt": "2026-08-10T19:30:14.900Z",
+  "publicPreregistration": false,
+  "claimBoundary": "Local hash freeze for the Round 11 paired static-routing validator, created after whole-target task-coherence selection but before any Palace route, pack, confidence, mode, or evaluation result was observed for a selected task. This is not public preregistration and cannot establish Agent correctness, Token savings, tool-call reduction, or wall-time improvement.",
+  "competitionFreeze": {
+    "noCommit": true,
+    "noPush": true,
+    "noTag": true,
+    "noNpmPublish": true,
+    "reason": "Do not alter submitted project materials until competition results are announced."
+  },
+  "amendment": {
+    "reason": "documentation-assertion-harness-error",
+    "failedFreezePath": "docs/research/evidence/local-blind-routing-validation-freeze-0.4-alpha-round-11.json",
+    "failedFreezeSha256": "74037950922DB58F3628E916FD77CDF3BF2AE0AED7F7110D26BAD72D74724B4D",
+    "failureRecordPath": "docs/research/evidence/local-blind-routing-validation-freeze-attempt-1-failure-0.4-alpha-round-11.json",
+    "failureRecordSha256": "6B44107A6F851EC49195F8FE5434664F295A3D1868C6A8AE98E292973933527E",
+    "semanticProtocolChange": false,
+    "productChange": false,
+    "selectedTaskPalaceCallsBeforeAttempt2": 0
+  },
+  "inputs": {
+    "targetManifestPath": "docs/research/evidence/local-blind-routing-target-manifest-0.4-alpha-round-11.json",
+    "targetManifestSha256": "3174A480FE83E2B0D140262306C3ACADCA5C6BA0190165B1335C4AC3ED442ECE",
+    "candidateFreezePath": "docs/research/evidence/local-blind-candidate-freeze-0.4-alpha-round-11.json",
+    "candidateFreezeSha256": "FD201FD0CE6D3A1C8FE3ADF85F87AB7AE9020BCA320E38922F36E3A5807CA440",
+    "candidateCliSha256": "258ABFF9CE05B052C03CD4B772B38310BC7E4AAFD08A3FAEAE79334FB1B4E900",
+    "baselineCommit": "67c0a2ce8754cece3773d5fd16b89dae4e3af0c1",
+    "baselineCliSha256": "52A1876B00AF4AAA884A6C7EA47AC2E701E88C34FC8FEE65DD1B32BB6513B8AE",
+    "candidateQueuePath": "docs/research/evidence/local-blind-routing-candidate-queue-0.4-alpha-round-11-attempt-1.json",
+    "candidateQueueSha256": "B9A4F20691CE8DEA95AAD674F6F6B960715CA0F4A4B0CF40B2179F835C2256FC",
+    "coherenceReviewsPath": "docs/research/evidence/local-blind-routing-coherence-reviews-0.4-alpha-round-11.json",
+    "coherenceReviewsSha256": "C8BA8AC87E8ADB3A335ADAA674B97988F77DE574DB9D51C779644B24FF018F3A"
+  },
+  "protocol": {
+    "noPalaceResultObservedBeforeValidatorFreeze": true,
+    "palaceCallsOnSelectedTasksBeforeFreeze": 0,
+    "wholeTargetTaskCoherenceReviewedBeforeFreeze": true,
+    "targets": 8,
+    "conditions": [
+      "baseline",
+      "candidate"
+    ],
+    "repetitions": 2,
+    "formalObservationsPerCondition": 16,
+    "totalFormalObservations": 32,
+    "budget": 6000,
+    "routeLimit": 10,
+    "maxDrawers": 4,
+    "fetchDepth": 400,
+    "fetchMode": "complete-shallow-history-no-promisor",
+    "materializationAttempts": 3,
+    "indexAttempts": 1,
+    "indexTimeoutMs": 900000,
+    "evaluateRetries": 0,
+    "contextRetries": 0,
+    "calibrationTolerance": 0.15,
+    "minimumMacroCoverage": 0.9,
+    "minimumMacroFocus": 0.7,
+    "minimumTargetCoverage": 0.5,
+    "minimumTargetFocus": 0.4,
+    "pairedNonInferiorityMargin": 0.05,
+    "conditionOrder": "balanced-ab-ba-by-manifest-index",
+    "execution": "sequential-never-concurrent",
+    "resultCreateOnly": true,
+    "agentExecuted": false,
+    "agentToolCallsMeasured": false
+  },
+  "artifacts": {
+    "docs/research/LOCAL_BLIND_ROUTING_VALIDATION_PROTOCOL_0_4_ALPHA_ROUND_11.md": "4AE6CB7B33C83CD7005873C3582B45721AB35F98E9321F33022F2F58DF209DA6",
+    "docs/zh-CN/LOCAL_BLIND_ROUTING_VALIDATION_PROTOCOL_0_4_ALPHA_ROUND_11.md": "285BA891866DAD90960345726B70F3100B4F79F2A8C2A8AAD47BB3E4D548720A",
+    "scripts/verify-local-blind-routing-round-11.cjs": "79779853552324AB0D4831541CA62EE4F192EEECBA398F59005DA5F7DFE601C1",
+    "scripts/freeze-local-blind-validation-round-11.cjs": "B8ADF02588D318847B838FC5B9D59C46859716B571F9B26D47A8FE87E341D1E0",
+    "scripts/test/round11-local-blind-validation-freeze.test.cjs": "1C6C593A12C2D6E55FEA8CF92B5DC232B2A5AA4643FB2B7077AA7B0E910B378F",
+    "scripts/lib/context-telemetry.cjs": "E79111BC35AF85AE9D0541E3D45A62AC4E9D6B6501A50FCC51C0F6454098B4E3",
+    "scripts/lib/commit-task-classifier.cjs": "C3D787029C019FD64BFB079913F23B58082C38560448A9B9567954ECA9FE1254",
+    "scripts/lib/local-blind-freeze.cjs": "AC1952B40EE6BA950614AA18F231451168DEA04417FFF4A845806F668878F3A6",
+    "docs/research/evidence/local-blind-routing-validation-freeze-0.4-alpha-round-11.json": "74037950922DB58F3628E916FD77CDF3BF2AE0AED7F7110D26BAD72D74724B4D",
+    "docs/research/evidence/local-blind-routing-validation-freeze-attempt-1-failure-0.4-alpha-round-11.json": "6B44107A6F851EC49195F8FE5434664F295A3D1868C6A8AE98E292973933527E"
+  },
+  "preservation": {
+    "productChangesForbiddenUntilFirstResult": true,
+    "taskRemovalAfterObservationForbidden": true,
+    "outcomeDependentExclusionForbidden": true,
+    "negativeProductResultRemainsCompleted": true,
+    "environmentHarnessAndProductFailuresSeparated": true,
+    "competitionRemoteFreezeRemainsActive": true
+  }
+}

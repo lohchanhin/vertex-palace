@@ -1,0 +1,701 @@
+{
+  "schemaVersion": 1,
+  "studyId": "local-blind-routing-round-12-0.4-alpha",
+  "generatedAt": "2026-08-10T22:57:40.933Z",
+  "status": "selected",
+  "claimBoundary": "Pre-route whole-target semantic selection only. Every selected target is the first coherent candidate in newest-first order for its repository, and the first two accepted repositories in frozen language-family order. This is not a Palace product result or public preregistration.",
+  "evidenceClass": "local-hash-frozen-task-coherent-target-selection",
+  "publicPreregistration": false,
+  "heldOutAgainstCandidate": true,
+  "candidate": {
+    "role": "post-round-11-focus-repair-candidate",
+    "baseCommit": "67c0a2ce8754cece3773d5fd16b89dae4e3af0c1",
+    "sourceState": "uncommitted-local-working-tree-frozen-by-content-hash",
+    "cliPath": "dist/palace.cjs",
+    "cliSha256": "3815B78163F3E401A24C9A63F77DB355B2BD2EDEEF42CB029E961A89B49D79C2",
+    "generatedMcpPath": "plugins/vertex-palace/mcp/server.cjs",
+    "generatedMcpSha256": "45E51F092A97EA796E194759909279E3A0C3BB92E1441B04E76B843553E03BE1",
+    "sourceTree": {
+      "algorithm": "sha256-path-length-bytes-v1",
+      "fileCount": 185,
+      "sha256": "7DCD8B3C93BB1D2B94B2F1A1D0878BD64039ED7D8D3839AA4ACC30818A4F095C"
+    },
+    "buildCommand": "pnpm build"
+  },
+  "comparisonBaseline": {
+    "role": "pre-local-evidence-closure-optimization",
+    "productCommit": "67c0a2ce8754cece3773d5fd16b89dae4e3af0c1",
+    "sourceTree": {
+      "algorithm": "sha256-path-length-bytes-v1",
+      "fileCount": 121,
+      "sha256": "73BB3192CE756367031E8B3E1C5FE8332811C5FB333036A5BA6DFB7B2007B5E0"
+    },
+    "cliPath": "dist/palace.cjs",
+    "cliSha256": "52A1876B00AF4AAA884A6C7EA47AC2E701E88C34FC8FEE65DD1B32BB6513B8AE",
+    "rebuild": {
+      "dependencyCommand": "pnpm install --offline --frozen-lockfile --ignore-scripts",
+      "buildCommand": "pnpm build",
+      "networkRequired": false
+    },
+    "provenance": {
+      "path": "docs/research/evidence/local-blind-candidate-freeze-0.4-alpha-round-11.json",
+      "sha256": "FD201FD0CE6D3A1C8FE3ADF85F87AB7AE9020BCA320E38922F36E3A5807CA440"
+    }
+  },
+  "localFreeze": {
+    "path": "docs/research/evidence/local-blind-candidate-freeze-0.4-alpha-round-12.json",
+    "sha256": "D3B7BE55E1B80F964490A5E773E11AFCB97323A04E933AB30D131AAE6B48F406",
+    "frozenAt": "2026-08-10T22:45:27.826Z",
+    "artifactHashesVerified": true
+  },
+  "repositoryPool": {
+    "path": "docs/research/evidence/local-blind-routing-repository-pool-0.4-alpha-round-12.json",
+    "sha256": "085295D2798F47C0841526EF8219E17FFFCBF078F7F3C76AC2028DFDD3AFC125"
+  },
+  "candidateQueue": {
+    "path": "docs/research/evidence/local-blind-routing-candidate-queue-0.4-alpha-round-12-attempt-1.json",
+    "sha256": "0B6CDDCD91C34DF7A30F57AC1CF1E3B99A1180982FC6B0DE56B45075433047C9",
+    "palaceCallsOnCandidateTasks": 0
+  },
+  "semanticReview": {
+    "path": "docs/research/evidence/local-blind-routing-coherence-reviews-0.4-alpha-round-12.json",
+    "sha256": "2F17D6551B4E24F1404811D1F757D2718F13E856B095DD0EE88B1E1FC7992FF0",
+    "boundary": "single-developer-delegated-semantic-reviewer",
+    "independent": false,
+    "interRaterAgreementAvailable": false,
+    "palaceCallsOnCandidateTasks": 0
+  },
+  "rules": {
+    "desiredTargets": 8,
+    "requiredLanguageFamilies": [
+      "javascript-typescript",
+      "python",
+      "go",
+      "rust"
+    ],
+    "targetsPerLanguageFamily": 2,
+    "repositoriesPerLanguageFamily": 4,
+    "repositoryOrderIsBinding": true,
+    "newestCoherentCandidatePerRepositoryWins": true,
+    "remainingRepositoriesPerFamilyAreFallbacks": true,
+    "taskClassifier": "inflected-behavioral-subject-v1",
+    "maximumMechanicalCandidatesPerRepository": 5,
+    "minimumFiles": 2,
+    "maximumFiles": 8,
+    "maximumAuxiliaryFiles": 2,
+    "maximumChangedLines": 400,
+    "allowedAuxiliaryExtensions": [
+      ".cfg",
+      ".conf",
+      ".ini",
+      ".json",
+      ".md",
+      ".mdx",
+      ".rst",
+      ".toml",
+      ".txt",
+      ".yaml",
+      ".yml"
+    ],
+    "taskDiffCoherenceReviewRequired": true,
+    "wholeTargetRejectionForUnrelatedOrUncertainHunk": true,
+    "partialOraclePruningForbidden": true,
+    "maximumGeneratedArtifactTargets": 1,
+    "pinnedHeadsObtainedWithGitLsRemoteHeadOnly": true,
+    "commitHistoryInspectedBeforePoolFreeze": false,
+    "palaceCallsOnCandidateTasksBeforePoolFreeze": 0,
+    "baselineAndCandidateFrozenBeforeTargetSelection": true,
+    "outputCreateOnly": true,
+    "familyQuotaStopsLaterReviews": true,
+    "wholeTargetRejection": true,
+    "selectedPerLanguageFamily": {
+      "javascript-typescript": 2,
+      "python": 2,
+      "go": 2,
+      "rust": 2
+    },
+    "languageDiversitySatisfied": true,
+    "generatedArtifactTargets": 0,
+    "palaceCallsOnCandidateTasksBeforeFinalization": 0
+  },
+  "repositoryReports": [
+    {
+      "name": "redux",
+      "languageFamily": "javascript-typescript",
+      "status": "selected-newest-coherent-candidate",
+      "reviewedCandidates": [
+        {
+          "candidateId": "candidate_e5cbbd9506b340fd",
+          "candidateRank": 1,
+          "groundTruthCommit": "9b21de4947de93dcc7a8234b243aa263b9e8fd22",
+          "decision": "accept",
+          "reviewedFiles": 2,
+          "reviewedHunks": 2,
+          "unrelatedHunks": 0,
+          "uncertainHunks": 0,
+          "packetSha256": "74B7179148897694BA0A77CE6C754ACA2E1115FFD4A86D80A8C1F58B4DBAC573",
+          "generatedArtifact": {
+            "isGeneratedArtifactTarget": false,
+            "reason": "No generated artifact relationship appears in this candidate.",
+            "ownerGeneratorPath": null,
+            "generatedOutputPaths": []
+          }
+        }
+      ],
+      "selectedCandidateId": "candidate_e5cbbd9506b340fd"
+    },
+    {
+      "name": "blinker",
+      "languageFamily": "python",
+      "status": "selected-newest-coherent-candidate",
+      "reviewedCandidates": [
+        {
+          "candidateId": "candidate_288b0ea0516e3d32",
+          "candidateRank": 1,
+          "groundTruthCommit": "e6c88d65585d8c7a644e6c23a719689b28ad3ea8",
+          "decision": "reject",
+          "reviewedFiles": 7,
+          "reviewedHunks": 131,
+          "unrelatedHunks": 10,
+          "uncertainHunks": 2,
+          "packetSha256": "8DB30D0ED24C1EECFE28AA6D54E1A6692E1D1842ACE1622EB5312E5506197991",
+          "generatedArtifact": {
+            "isGeneratedArtifactTarget": false,
+            "reason": "No generated artifact relationship appears in this candidate.",
+            "ownerGeneratorPath": null,
+            "generatedOutputPaths": []
+          }
+        },
+        {
+          "candidateId": "candidate_8452d933662dc775",
+          "candidateRank": 2,
+          "groundTruthCommit": "5ad0039fac16e99b4207996903b51052e401ab9e",
+          "decision": "reject",
+          "reviewedFiles": 3,
+          "reviewedHunks": 4,
+          "unrelatedHunks": 1,
+          "uncertainHunks": 0,
+          "packetSha256": "8A47F0B8685EFD3E0C9E77051B6D8378E89ECF13773C014CB04E0D3B774A3535",
+          "generatedArtifact": {
+            "isGeneratedArtifactTarget": false,
+            "reason": "No generated artifact relationship appears in this candidate.",
+            "ownerGeneratorPath": null,
+            "generatedOutputPaths": []
+          }
+        },
+        {
+          "candidateId": "candidate_df72bc2e35f925d6",
+          "candidateRank": 3,
+          "groundTruthCommit": "d06b2416ea43c535b907b7d0a2b72fff3b2f3a0f",
+          "decision": "accept",
+          "reviewedFiles": 3,
+          "reviewedHunks": 5,
+          "unrelatedHunks": 0,
+          "uncertainHunks": 0,
+          "packetSha256": "E7D231D2CEC029A05ABFB261C4AEF1481F59711F8663E9F0E2C5EFCBC8712CC4",
+          "generatedArtifact": {
+            "isGeneratedArtifactTarget": false,
+            "reason": "No generated artifact relationship appears in this candidate.",
+            "ownerGeneratorPath": null,
+            "generatedOutputPaths": []
+          }
+        }
+      ],
+      "selectedCandidateId": "candidate_df72bc2e35f925d6"
+    },
+    {
+      "name": "sqlx",
+      "languageFamily": "go",
+      "status": "selected-newest-coherent-candidate",
+      "reviewedCandidates": [
+        {
+          "candidateId": "candidate_dac9c856c6325158",
+          "candidateRank": 1,
+          "groundTruthCommit": "3ab43dbec9270483ab1935a7650dbe9cb68f0d5e",
+          "decision": "accept",
+          "reviewedFiles": 2,
+          "reviewedHunks": 2,
+          "unrelatedHunks": 0,
+          "uncertainHunks": 0,
+          "packetSha256": "CFD2138D2B696BA7F8736D66C6F49253896ED27E4FEB1825D9C0CC00F3515D36",
+          "generatedArtifact": {
+            "isGeneratedArtifactTarget": false,
+            "reason": "No generated artifact relationship appears in this candidate.",
+            "ownerGeneratorPath": null,
+            "generatedOutputPaths": []
+          }
+        }
+      ],
+      "selectedCandidateId": "candidate_dac9c856c6325158"
+    },
+    {
+      "name": "bat",
+      "languageFamily": "rust",
+      "status": "selected-newest-coherent-candidate",
+      "reviewedCandidates": [
+        {
+          "candidateId": "candidate_7f6480d8d3856a2d",
+          "candidateRank": 1,
+          "groundTruthCommit": "d28aa4a8b4d9fe4fb5567e708cde82d03953f1ee",
+          "decision": "accept",
+          "reviewedFiles": 3,
+          "reviewedHunks": 4,
+          "unrelatedHunks": 0,
+          "uncertainHunks": 0,
+          "packetSha256": "67BC3795569B0FC667D5AF9DE89DA26ED423FAAD9C8E1210506ED48B5A3677D2",
+          "generatedArtifact": {
+            "isGeneratedArtifactTarget": false,
+            "reason": "No generated artifact relationship appears in this candidate.",
+            "ownerGeneratorPath": null,
+            "generatedOutputPaths": []
+          }
+        }
+      ],
+      "selectedCandidateId": "candidate_7f6480d8d3856a2d"
+    },
+    {
+      "name": "pino",
+      "languageFamily": "javascript-typescript",
+      "status": "selected-newest-coherent-candidate",
+      "reviewedCandidates": [
+        {
+          "candidateId": "candidate_c0333816ecd11b2e",
+          "candidateRank": 1,
+          "groundTruthCommit": "ab18ad9c32fa41ba04390f63b4a53e802ae829fb",
+          "decision": "accept",
+          "reviewedFiles": 2,
+          "reviewedHunks": 4,
+          "unrelatedHunks": 0,
+          "uncertainHunks": 0,
+          "packetSha256": "352360349447D48FED878FBF8306C1D42005BE24102D5D729988B7B813620653",
+          "generatedArtifact": {
+            "isGeneratedArtifactTarget": false,
+            "reason": "No generated artifact relationship appears in this candidate.",
+            "ownerGeneratorPath": null,
+            "generatedOutputPaths": []
+          }
+        }
+      ],
+      "selectedCandidateId": "candidate_c0333816ecd11b2e"
+    },
+    {
+      "name": "packaging",
+      "languageFamily": "python",
+      "status": "selected-newest-coherent-candidate",
+      "reviewedCandidates": [
+        {
+          "candidateId": "candidate_d7176794c1d49db8",
+          "candidateRank": 1,
+          "groundTruthCommit": "4e79787a31c99348649bb0dafee2a5078d3595be",
+          "decision": "accept",
+          "reviewedFiles": 2,
+          "reviewedHunks": 6,
+          "unrelatedHunks": 0,
+          "uncertainHunks": 0,
+          "packetSha256": "48E9A382743BF15A88EB3E6ECA698BA86D4BF09FEA8D655075A20F790A6FA13D",
+          "generatedArtifact": {
+            "isGeneratedArtifactTarget": false,
+            "reason": "No generated artifact relationship appears in this candidate.",
+            "ownerGeneratorPath": null,
+            "generatedOutputPaths": []
+          }
+        }
+      ],
+      "selectedCandidateId": "candidate_d7176794c1d49db8"
+    },
+    {
+      "name": "afero",
+      "languageFamily": "go",
+      "status": "selected-newest-coherent-candidate",
+      "reviewedCandidates": [
+        {
+          "candidateId": "candidate_daec93c07e5e3f21",
+          "candidateRank": 1,
+          "groundTruthCommit": "ba8d668ac955629ae0e5a64115b74c6ad3f7ae67",
+          "decision": "accept",
+          "reviewedFiles": 2,
+          "reviewedHunks": 6,
+          "unrelatedHunks": 0,
+          "uncertainHunks": 0,
+          "packetSha256": "52A495BD9D03C23CC0090A3CC193A4EC978B4DA49386218486CD32F27FAB8C23",
+          "generatedArtifact": {
+            "isGeneratedArtifactTarget": false,
+            "reason": "No generated artifact relationship appears in this candidate.",
+            "ownerGeneratorPath": null,
+            "generatedOutputPaths": []
+          }
+        }
+      ],
+      "selectedCandidateId": "candidate_daec93c07e5e3f21"
+    },
+    {
+      "name": "crossterm",
+      "languageFamily": "rust",
+      "status": "no-mechanical-candidate",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "preact",
+      "languageFamily": "javascript-typescript",
+      "status": "family-quota-filled-not-reviewed",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "pluggy",
+      "languageFamily": "python",
+      "status": "family-quota-filled-not-reviewed",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "gjson",
+      "languageFamily": "go",
+      "status": "family-quota-filled-not-reviewed",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "notify",
+      "languageFamily": "rust",
+      "status": "selected-newest-coherent-candidate",
+      "reviewedCandidates": [
+        {
+          "candidateId": "candidate_8f7e1b6272cbe60e",
+          "candidateRank": 1,
+          "groundTruthCommit": "9de75aa2f80dbd1ef6ba30ac1e59e0204654ba34",
+          "decision": "accept",
+          "reviewedFiles": 2,
+          "reviewedHunks": 14,
+          "unrelatedHunks": 0,
+          "uncertainHunks": 0,
+          "packetSha256": "E848903D20B865642413FA8CA7181F296CE0234D1B52D3771E3CE3AE384AA44D",
+          "generatedArtifact": {
+            "isGeneratedArtifactTarget": false,
+            "reason": "No generated artifact relationship appears in this candidate.",
+            "ownerGeneratorPath": null,
+            "generatedOutputPaths": []
+          }
+        }
+      ],
+      "selectedCandidateId": "candidate_8f7e1b6272cbe60e"
+    },
+    {
+      "name": "ava",
+      "languageFamily": "javascript-typescript",
+      "status": "family-quota-filled-not-reviewed",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "multidict",
+      "languageFamily": "python",
+      "status": "family-quota-filled-not-reviewed",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "go-cleanhttp",
+      "languageFamily": "go",
+      "status": "family-quota-filled-not-reviewed",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "jiff",
+      "languageFamily": "rust",
+      "status": "family-quota-filled-not-reviewed",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    }
+  ],
+  "targets": [
+    {
+      "name": "redux",
+      "language": "JavaScript/TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/reduxjs/redux.git",
+      "pinnedHead": "3084fc33bb23ab4cab4796172eafe342da4e73d9",
+      "routeCommit": "ea81ac429272c1931a8af3126db058b747725a09",
+      "groundTruthCommit": "9b21de4947de93dcc7a8234b243aa263b9e8fd22",
+      "task": "fix: add missing closing quote in replaceReducer error message",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "src/createStore.ts",
+        "test/createStore.spec.ts"
+      ],
+      "implementationFiles": [
+        "src/createStore.ts"
+      ],
+      "testFiles": [
+        "test/createStore.spec.ts"
+      ],
+      "auxiliaryFiles": [],
+      "oracleSource": "mechanically eligible single-parent real Git-history diff pending whole-target semantic review",
+      "changedLines": 9,
+      "additions": 7,
+      "deletions": 2,
+      "candidateId": "candidate_e5cbbd9506b340fd",
+      "candidateRank": 1,
+      "coherencePacketSha256": "74B7179148897694BA0A77CE6C754ACA2E1115FFD4A86D80A8C1F58B4DBAC573",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "No generated artifact relationship appears in this candidate.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      }
+    },
+    {
+      "name": "blinker",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/pallets-eco/blinker.git",
+      "pinnedHead": "c3364059663df1ddce32799d6b1922af89a345f6",
+      "routeCommit": "9c2f289f024e7aac20bf3dbdebfc4ec279df3458",
+      "groundTruthCommit": "d06b2416ea43c535b907b7d0a2b72fff3b2f3a0f",
+      "task": "Added `muted` context manager for temproary switching signal off (#84)",
+      "expectedTaskType": "feature",
+      "changedFiles": [
+        "docs/index.rst",
+        "src/blinker/base.py",
+        "tests/test_signals.py"
+      ],
+      "implementationFiles": [
+        "src/blinker/base.py"
+      ],
+      "testFiles": [
+        "tests/test_signals.py"
+      ],
+      "auxiliaryFiles": [
+        "docs/index.rst"
+      ],
+      "oracleSource": "mechanically eligible single-parent real Git-history diff pending whole-target semantic review",
+      "changedLines": 56,
+      "additions": 52,
+      "deletions": 4,
+      "candidateId": "candidate_df72bc2e35f925d6",
+      "candidateRank": 3,
+      "coherencePacketSha256": "E7D231D2CEC029A05ABFB261C4AEF1481F59711F8663E9F0E2C5EFCBC8712CC4",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "No generated artifact relationship appears in this candidate.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      }
+    },
+    {
+      "name": "sqlx",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/jmoiron/sqlx.git",
+      "pinnedHead": "41dac167fdad5e3fd81d66cafba0951dc6823a30",
+      "routeCommit": "b20d6792f4845804a18eac1a21f928eaaba4d63a",
+      "groundTruthCommit": "3ab43dbec9270483ab1935a7650dbe9cb68f0d5e",
+      "task": "Fix: Table contains VALUES",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "named.go",
+        "named_test.go"
+      ],
+      "implementationFiles": [
+        "named.go"
+      ],
+      "testFiles": [
+        "named_test.go"
+      ],
+      "auxiliaryFiles": [],
+      "oracleSource": "mechanically eligible single-parent real Git-history diff pending whole-target semantic review",
+      "changedLines": 8,
+      "additions": 7,
+      "deletions": 1,
+      "candidateId": "candidate_dac9c856c6325158",
+      "candidateRank": 1,
+      "coherencePacketSha256": "CFD2138D2B696BA7F8736D66C6F49253896ED27E4FEB1825D9C0CC00F3515D36",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "No generated artifact relationship appears in this candidate.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      }
+    },
+    {
+      "name": "bat",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/sharkdp/bat.git",
+      "pinnedHead": "af59a3218303837421ce06bb2dc3c545525bba0f",
+      "routeCommit": "af1f53d9a977154216d01435991fe33631b74713",
+      "groundTruthCommit": "d28aa4a8b4d9fe4fb5567e708cde82d03953f1ee",
+      "task": "Fix capacity-overflow panic in print_snip at --terminal-width 1",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "CHANGELOG.md",
+        "src/printer.rs",
+        "tests/integration_tests.rs"
+      ],
+      "implementationFiles": [
+        "src/printer.rs"
+      ],
+      "testFiles": [
+        "tests/integration_tests.rs"
+      ],
+      "auxiliaryFiles": [
+        "CHANGELOG.md"
+      ],
+      "oracleSource": "mechanically eligible single-parent real Git-history diff pending whole-target semantic review",
+      "changedLines": 32,
+      "additions": 29,
+      "deletions": 3,
+      "candidateId": "candidate_7f6480d8d3856a2d",
+      "candidateRank": 1,
+      "coherencePacketSha256": "67BC3795569B0FC667D5AF9DE89DA26ED423FAAD9C8E1210506ED48B5A3677D2",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "No generated artifact relationship appears in this candidate.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      }
+    },
+    {
+      "name": "pino",
+      "language": "JavaScript/TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/pinojs/pino.git",
+      "pinnedHead": "e63966d01126d4c7d0d5d2f0783ddc7a5fd52451",
+      "routeCommit": "e25dbbb65922aab8f4128abec08075e5d86900ed",
+      "groundTruthCommit": "ab18ad9c32fa41ba04390f63b4a53e802ae829fb",
+      "task": "fix: build the redaction shape without Object.prototype (#2495)",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "lib/redaction.js",
+        "test/redact.test.js"
+      ],
+      "implementationFiles": [
+        "lib/redaction.js"
+      ],
+      "testFiles": [
+        "test/redact.test.js"
+      ],
+      "auxiliaryFiles": [],
+      "oracleSource": "mechanically eligible single-parent real Git-history diff pending whole-target semantic review",
+      "changedLines": 41,
+      "additions": 38,
+      "deletions": 3,
+      "candidateId": "candidate_c0333816ecd11b2e",
+      "candidateRank": 1,
+      "coherencePacketSha256": "352360349447D48FED878FBF8306C1D42005BE24102D5D729988B7B813620653",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "No generated artifact relationship appears in this candidate.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      }
+    },
+    {
+      "name": "packaging",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/pypa/packaging.git",
+      "pinnedHead": "ef91ddbe6891b87f687e95628224901bf06da58d",
+      "routeCommit": "b097450461523502ada842f98274449ad74ff1ff",
+      "groundTruthCommit": "4e79787a31c99348649bb0dafee2a5078d3595be",
+      "task": "fix(tags): preserve explicitly empty platform iterables (#1360)",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "src/packaging/tags.py",
+        "tests/test_tags.py"
+      ],
+      "implementationFiles": [
+        "src/packaging/tags.py"
+      ],
+      "testFiles": [
+        "tests/test_tags.py"
+      ],
+      "auxiliaryFiles": [],
+      "oracleSource": "mechanically eligible single-parent real Git-history diff pending whole-target semantic review",
+      "changedLines": 20,
+      "additions": 17,
+      "deletions": 3,
+      "candidateId": "candidate_d7176794c1d49db8",
+      "candidateRank": 1,
+      "coherencePacketSha256": "48E9A382743BF15A88EB3E6ECA698BA86D4BF09FEA8D655075A20F790A6FA13D",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "No generated artifact relationship appears in this candidate.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      }
+    },
+    {
+      "name": "afero",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/spf13/afero.git",
+      "pinnedHead": "768f1fb0e5535b77d90e44c531aacd652aabd96a",
+      "routeCommit": "90865967734e90fa9a2629171d95d93abba5d2c0",
+      "groundTruthCommit": "ba8d668ac955629ae0e5a64115b74c6ad3f7ae67",
+      "task": "feat: Add WalkDir (#571)",
+      "expectedTaskType": "feature",
+      "changedFiles": [
+        "path.go",
+        "path_test.go"
+      ],
+      "implementationFiles": [
+        "path.go"
+      ],
+      "testFiles": [
+        "path_test.go"
+      ],
+      "auxiliaryFiles": [],
+      "oracleSource": "mechanically eligible single-parent real Git-history diff pending whole-target semantic review",
+      "changedLines": 279,
+      "additions": 279,
+      "deletions": 0,
+      "candidateId": "candidate_daec93c07e5e3f21",
+      "candidateRank": 1,
+      "coherencePacketSha256": "52A495BD9D03C23CC0090A3CC193A4EC978B4DA49386218486CD32F27FAB8C23",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "No generated artifact relationship appears in this candidate.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      }
+    },
+    {
+      "name": "notify",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/notify-rs/notify.git",
+      "pinnedHead": "f49baa2e294bb80e0af01c4bfbb615e418abe94d",
+      "routeCommit": "7658aaa51c261d7d781e1821a614cf7a8cbaa492",
+      "groundTruthCommit": "9de75aa2f80dbd1ef6ba30ac1e59e0204654ba34",
+      "task": "fix: flaky PollWatcher tests (#732)",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "notify/src/poll.rs",
+        "notify/src/test.rs"
+      ],
+      "implementationFiles": [
+        "notify/src/poll.rs"
+      ],
+      "testFiles": [
+        "notify/src/test.rs"
+      ],
+      "auxiliaryFiles": [],
+      "oracleSource": "mechanically eligible single-parent real Git-history diff pending whole-target semantic review",
+      "changedLines": 75,
+      "additions": 75,
+      "deletions": 0,
+      "candidateId": "candidate_8f7e1b6272cbe60e",
+      "candidateRank": 1,
+      "coherencePacketSha256": "E848903D20B865642413FA8CA7181F296CE0234D1B52D3771E3CE3AE384AA44D",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "No generated artifact relationship appears in this candidate.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      }
+    }
+  ]
+}

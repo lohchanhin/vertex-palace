@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "studyId": "local-blind-routing-round-18-0.4-alpha",
+  "status": "pre-head-structural-correction",
+  "createdAt": "2026-08-12T15:11:47.7224805Z",
+  "publicPreregistration": false,
+  "exposureBoundary": {
+    "round18HeadQueriesBeforeCorrection": 0,
+    "round18CommitHistoryInspected": false,
+    "round18CandidateTaskInspected": false,
+    "round18PalaceCallsOnCandidateTasks": 0
+  },
+  "originalPlan": {
+    "path": "docs/research/evidence/local-blind-routing-repository-plan-0.4-alpha-round-18.json",
+    "sha256": "353C78330CE67114C5A8D3DB9F94C0AD96AA78E9C1C91C0F549490A627E57C31"
+  },
+  "correctedPlan": {
+    "path": "docs/research/evidence/local-blind-routing-repository-plan-0.4-alpha-round-18.json",
+    "sha256": "76D8C1955353A016547B62746E3B646F8FF207B73F66B1892989DFF4B2C8B9F1"
+  },
+  "originalRound17FailureEvidence": {
+    "path": "docs/research/evidence/local-blind-routing-repository-pool-freeze-round-17-attempt-1-failure.json",
+    "sha256": "40171C77550AFD962F9EEE62C241F92A6B0AB287E3247AF728029A4493C86281"
+  },
+  "correctedRound17FailureEvidence": {
+    "path": "docs/research/evidence/local-blind-routing-repository-pool-freeze-round-17-attempt-1-failure.json",
+    "sha256": "C76EFEA728EFBA240BB6A29AB8EEFF3910F37A8D515239A4A3A2DB24FD7C2510"
+  },
+  "correction": {
+    "issue": "The Round 17 failure evidence exposed 12 attempted repositories but omitted its recursive priorExclusionSource link to the Round 16 pool. Generic recursive validation therefore counted 12 instead of the declared 190 identities.",
+    "changes": [
+      "Added the immutable Round 16 pool path and SHA-256 as the Round 17 failure evidence priorExclusionSource.",
+      "Updated only the Round 18 plan's bound SHA-256 for that prior exclusion source."
+    ],
+    "repositoryPlanChanged": false,
+    "repositoryOrderChanged": false,
+    "quotaChanged": false,
+    "productGateChanged": false
+  },
+  "claimBoundary": "This correction was discovered by an integrity test and completed before any Round 18 network query or product exposure. It restores the declared recursive exclusion chain without changing a repository, order, target quota, or product-performance gate."
+}

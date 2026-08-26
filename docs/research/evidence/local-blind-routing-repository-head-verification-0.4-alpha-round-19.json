@@ -1,0 +1,581 @@
+{
+  "schemaVersion": 1,
+  "studyId": "local-blind-routing-round-19-0.4-alpha",
+  "status": "verified",
+  "startedAt": "2026-08-12T15:19:51.830Z",
+  "completedAt": "2026-08-12T15:20:50.941Z",
+  "plan": {
+    "path": "docs/research/evidence/local-blind-routing-repository-plan-0.4-alpha-round-19.json",
+    "sha256": "EF185B13E133B6C5F2799F9C6C9079839055E44AC19A6A2B3D88657F332D5262"
+  },
+  "priorExclusionSource": {
+    "path": "docs/research/evidence/local-blind-routing-repository-pool-freeze-round-18-attempt-1-failure.json",
+    "sha256": "D833102582ABB7750EBC1C7699B867053F1E78DD10021B92C26FFDED045F20AD",
+    "observedRepositoryCount": 194
+  },
+  "commandContract": "git ls-remote <url> HEAD",
+  "selectionContract": "first-eight-reachable-per-family-v1",
+  "retryPolicy": {
+    "maximumAttemptsPerRepository": 3,
+    "delayMs": 5000,
+    "transientNetworkFailuresOnly": true,
+    "transientNetworkExhaustionAbortsRound": true,
+    "definitivelyMissingRepositoryMayBeSkipped": true,
+    "repositoryPlanChangedAfterFailure": false
+  },
+  "reachabilityCounts": {
+    "javascript-typescript": {
+      "roster": 12,
+      "reachable": 12,
+      "definitivelyMissing": 0
+    },
+    "python": {
+      "roster": 12,
+      "reachable": 9,
+      "definitivelyMissing": 3
+    },
+    "go": {
+      "roster": 12,
+      "reachable": 12,
+      "definitivelyMissing": 0
+    },
+    "rust": {
+      "roster": 12,
+      "reachable": 12,
+      "definitivelyMissing": 0
+    }
+  },
+  "commitHistoryInspected": false,
+  "candidateTaskInspected": false,
+  "palaceCallsOnCandidateTasks": 0,
+  "repositories": [
+    {
+      "repositoryIndex": 0,
+      "name": "cors",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/expressjs/cors.git",
+      "status": "reachable",
+      "observedHead": "5317ebe670db2aaebc1d496eb5d33493deefb3ed",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 1,
+      "name": "identify",
+      "languageFamily": "python",
+      "url": "https://github.com/asottile/identify.git",
+      "status": "definitively-missing",
+      "observedHead": null,
+      "attempts": 1,
+      "diagnostic": "remote: Repository not found.\nfatal: repository 'https://github.com/asottile/identify.git/' not found",
+      "selectedForCanonicalPool": false
+    },
+    {
+      "repositoryIndex": 2,
+      "name": "pretty",
+      "languageFamily": "go",
+      "url": "https://github.com/tidwall/pretty.git",
+      "status": "reachable",
+      "observedHead": "9090695766b652478676cc3e55bc3187056b1ff0",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 3,
+      "name": "memchr",
+      "languageFamily": "rust",
+      "url": "https://github.com/BurntSushi/memchr.git",
+      "status": "reachable",
+      "observedHead": "bd6068c30e9074a90c285e47912fa0b047d07597",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 4,
+      "name": "hoek",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/hapijs/hoek.git",
+      "status": "reachable",
+      "observedHead": "cbb4c2bbb5ed1d850a2658ee8b42b3248e1404ac",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 5,
+      "name": "jaraco-path",
+      "languageFamily": "python",
+      "url": "https://github.com/jaraco/path.git",
+      "status": "reachable",
+      "observedHead": "67319bba24b0986abcf6c5a749a1b8ab6359bb22",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 6,
+      "name": "groupcache",
+      "languageFamily": "go",
+      "url": "https://github.com/golang/groupcache.git",
+      "status": "reachable",
+      "observedHead": "2c02b8208cf8c02a3e358cb1d9b60950647543fc",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 7,
+      "name": "rustc-hash",
+      "languageFamily": "rust",
+      "url": "https://github.com/rust-lang/rustc-hash.git",
+      "status": "reachable",
+      "observedHead": "6ced6cb4235295509102d05f8915e0bb0d8cfe54",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 8,
+      "name": "object-assign",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/ljharb/object.assign.git",
+      "status": "reachable",
+      "observedHead": "7f6aa5ae8a297c4e227648a52fd6e03a564b0f8a",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 9,
+      "name": "iniconfig",
+      "languageFamily": "python",
+      "url": "https://github.com/pytest-dev/iniconfig.git",
+      "status": "reachable",
+      "observedHead": "00e7d87c7353b1ffecc4cd55f19acfffedd5233e",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 10,
+      "name": "ozzo-validation",
+      "languageFamily": "go",
+      "url": "https://github.com/go-ozzo/ozzo-validation.git",
+      "status": "reachable",
+      "observedHead": "4c6f999a985642080774f68796c17abab9686bf0",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 11,
+      "name": "semver",
+      "languageFamily": "rust",
+      "url": "https://github.com/rust-lang/semver.git",
+      "status": "reachable",
+      "observedHead": "280ebcb6edac3aa4cdc545dbff8a26c5ac4861fe",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 12,
+      "name": "chokidar",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/paulmillr/chokidar.git",
+      "status": "reachable",
+      "observedHead": "0bc7bed37d6b018e5b11afcce329bbf797d6441f",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 13,
+      "name": "importlib-metadata",
+      "languageFamily": "python",
+      "url": "https://github.com/python/importlib_metadata.git",
+      "status": "reachable",
+      "observedHead": "9757b400ee412ddb1d685f139ed3300f607c059a",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 14,
+      "name": "objx",
+      "languageFamily": "go",
+      "url": "https://github.com/stretchr/objx.git",
+      "status": "reachable",
+      "observedHead": "b7ad70c8adc800b08e717e87ca2b76fe4c46d26b",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 15,
+      "name": "rustc-demangle",
+      "languageFamily": "rust",
+      "url": "https://github.com/rust-lang/rustc-demangle.git",
+      "status": "reachable",
+      "observedHead": "f36e2988643d7db47a6aa6e328cc7ffd61343651",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 16,
+      "name": "is-callable",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/ljharb/is-callable.git",
+      "status": "reachable",
+      "observedHead": "79f55409989ab125926cd45f53ce076a8c24b805",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 17,
+      "name": "platformdirs",
+      "languageFamily": "python",
+      "url": "https://github.com/tox-dev/platformdirs.git",
+      "status": "reachable",
+      "observedHead": "7e4746ca6c8c1e5cbb66c90486e8de8af57891b4",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 18,
+      "name": "pkg-errors",
+      "languageFamily": "go",
+      "url": "https://github.com/pkg/errors.git",
+      "status": "reachable",
+      "observedHead": "87f8819acf6dc28bf5d3c14b334268236d686f48",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 19,
+      "name": "itoa",
+      "languageFamily": "rust",
+      "url": "https://github.com/dtolnay/itoa.git",
+      "status": "reachable",
+      "observedHead": "1577ed901354d0d7448ac162328f9dbf5183124c",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 20,
+      "name": "is-stream",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/sindresorhus/is-stream.git",
+      "status": "reachable",
+      "observedHead": "ab06c4acc9dce4dcadc9dfc6416e1be2c836862d",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 21,
+      "name": "dateutil",
+      "languageFamily": "python",
+      "url": "https://github.com/dateutil/dateutil.git",
+      "status": "reachable",
+      "observedHead": "48bd1af97e71baf8e96fce5b663d589caac8f147",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 22,
+      "name": "fatih-color",
+      "languageFamily": "go",
+      "url": "https://github.com/fatih/color.git",
+      "status": "reachable",
+      "observedHead": "820c6ebc21b06a3a5328297d556a87f91556e577",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 23,
+      "name": "aho-corasick",
+      "languageFamily": "rust",
+      "url": "https://github.com/BurntSushi/aho-corasick.git",
+      "status": "reachable",
+      "observedHead": "6c0abf5681bfc30bb9d8f7f52b68a350b436fffa",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 24,
+      "name": "path-scurry",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/isaacs/path-scurry.git",
+      "status": "reachable",
+      "observedHead": "ecf15269c9d7fbdc199741718a7dbb7706a7109a",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 25,
+      "name": "pytest-mock",
+      "languageFamily": "python",
+      "url": "https://github.com/pytest-dev/pytest-mock.git",
+      "status": "reachable",
+      "observedHead": "4c4c2238f1d9916273b0bdfac723619ee7f1b887",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 26,
+      "name": "xxhash",
+      "languageFamily": "go",
+      "url": "https://github.com/cespare/xxhash.git",
+      "status": "reachable",
+      "observedHead": "ab37246c889f9db16b606fda1c232d659df9271d",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 27,
+      "name": "cc-rs",
+      "languageFamily": "rust",
+      "url": "https://github.com/rust-lang/cc-rs.git",
+      "status": "reachable",
+      "observedHead": "cdb470173f4c9ffe0fa96abe4a408e9d1345fb99",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 28,
+      "name": "onetime",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/sindresorhus/onetime.git",
+      "status": "reachable",
+      "observedHead": "481ec583f8303e98c4d1d16bb316ef8e6b04d72c",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 29,
+      "name": "pyproject-api",
+      "languageFamily": "python",
+      "url": "https://github.com/tox-dev/pyproject-api.git",
+      "status": "reachable",
+      "observedHead": "c0617d88ff102934683c6cff21f37599795d7229",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 30,
+      "name": "snappy",
+      "languageFamily": "go",
+      "url": "https://github.com/golang/snappy.git",
+      "status": "reachable",
+      "observedHead": "9ae09f520e93143c782aa6088d18a5e300c69dd0",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 31,
+      "name": "once-cell",
+      "languageFamily": "rust",
+      "url": "https://github.com/matklad/once_cell.git",
+      "status": "reachable",
+      "observedHead": "80fe900b21f6d76c1a2ed74d3343e8a3a88c46d0",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 32,
+      "name": "mimic-fn",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/sindresorhus/mimic-fn.git",
+      "status": "reachable",
+      "observedHead": "3ee1e62d926ac0a5cf631815734d8e06a9381d72",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": false
+    },
+    {
+      "repositoryIndex": 33,
+      "name": "jaraco-functools",
+      "languageFamily": "python",
+      "url": "https://github.com/jaraco/functools.git",
+      "status": "definitively-missing",
+      "observedHead": null,
+      "attempts": 1,
+      "diagnostic": "remote: Repository not found.\nfatal: repository 'https://github.com/jaraco/functools.git/' not found",
+      "selectedForCanonicalPool": false
+    },
+    {
+      "repositoryIndex": 34,
+      "name": "termenv",
+      "languageFamily": "go",
+      "url": "https://github.com/muesli/termenv.git",
+      "status": "reachable",
+      "observedHead": "368a3572b8146cc038b3f240da6792003d7e42c5",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": false
+    },
+    {
+      "repositoryIndex": 35,
+      "name": "backtrace-rs",
+      "languageFamily": "rust",
+      "url": "https://github.com/rust-lang/backtrace-rs.git",
+      "status": "reachable",
+      "observedHead": "06b2cc573703c98df4b543422c8339694420bb02",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": false
+    },
+    {
+      "repositoryIndex": 36,
+      "name": "escape-string-regexp",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/sindresorhus/escape-string-regexp.git",
+      "status": "reachable",
+      "observedHead": "cbc42403142c96923b482604e1f3d627b1956aff",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": false
+    },
+    {
+      "repositoryIndex": 37,
+      "name": "jaraco-context",
+      "languageFamily": "python",
+      "url": "https://github.com/jaraco/context.git",
+      "status": "definitively-missing",
+      "observedHead": null,
+      "attempts": 1,
+      "diagnostic": "remote: Repository not found.\nfatal: repository 'https://github.com/jaraco/context.git/' not found",
+      "selectedForCanonicalPool": false
+    },
+    {
+      "repositoryIndex": 38,
+      "name": "tidwall-match",
+      "languageFamily": "go",
+      "url": "https://github.com/tidwall/match.git",
+      "status": "reachable",
+      "observedHead": "afc69bce52e08c02e78156a7697bd808fc868ec5",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": false
+    },
+    {
+      "repositoryIndex": 39,
+      "name": "tempfile",
+      "languageFamily": "rust",
+      "url": "https://github.com/stebalien/tempfile.git",
+      "status": "reachable",
+      "observedHead": "889f7bfbd8a61cfa87cb0886c4dbfbca1ef08919",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": false
+    },
+    {
+      "repositoryIndex": 40,
+      "name": "has-symbols",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/ljharb/has-symbols.git",
+      "status": "reachable",
+      "observedHead": "8e5041604a716727cb95bb8ec1e25423a427756d",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": false
+    },
+    {
+      "repositoryIndex": 41,
+      "name": "pyproject-hooks",
+      "languageFamily": "python",
+      "url": "https://github.com/pypa/pyproject-hooks.git",
+      "status": "reachable",
+      "observedHead": "d9ee8a0fe9f1fe351187ff85965a8b8fcb7e78a6",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 42,
+      "name": "go-internal",
+      "languageFamily": "go",
+      "url": "https://github.com/rogpeppe/go-internal.git",
+      "status": "reachable",
+      "observedHead": "b848aba6082101b7cbc37c5e55b681dd13096926",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": false
+    },
+    {
+      "repositoryIndex": 43,
+      "name": "cmake-rs",
+      "languageFamily": "rust",
+      "url": "https://github.com/alexcrichton/cmake-rs.git",
+      "status": "reachable",
+      "observedHead": "63190697197b34e5e5cd3cabf17da4fcab348bef",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": false
+    },
+    {
+      "repositoryIndex": 44,
+      "name": "call-bind",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/ljharb/call-bind.git",
+      "status": "reachable",
+      "observedHead": "8d6a98c3e049fac59e17b9a2399bb39624d7abd7",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": false
+    },
+    {
+      "repositoryIndex": 45,
+      "name": "pypa-build",
+      "languageFamily": "python",
+      "url": "https://github.com/pypa/build.git",
+      "status": "reachable",
+      "observedHead": "84d9d50891b4b7b599099635c7cfbcdcf7d6a8bf",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": false
+    },
+    {
+      "repositoryIndex": 46,
+      "name": "conc",
+      "languageFamily": "go",
+      "url": "https://github.com/sourcegraph/conc.git",
+      "status": "reachable",
+      "observedHead": "5f936abd7ae87036af1f75c95fb9d0daaf00116b",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": false
+    },
+    {
+      "repositoryIndex": 47,
+      "name": "pkg-config-rs",
+      "languageFamily": "rust",
+      "url": "https://github.com/rust-lang/pkg-config-rs.git",
+      "status": "reachable",
+      "observedHead": "10693b587b8e1771f8a82b47d804368760823401",
+      "attempts": 2,
+      "diagnostic": null,
+      "selectedForCanonicalPool": false
+    }
+  ]
+}

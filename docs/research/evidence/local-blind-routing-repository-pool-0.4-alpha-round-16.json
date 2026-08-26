@@ -1,0 +1,250 @@
+{
+  "schemaVersion": 1,
+  "studyId": "local-blind-routing-round-16-0.4-alpha",
+  "status": "locally-frozen",
+  "frozenAt": "2026-08-12T14:38:41.172Z",
+  "publicPreregistration": false,
+  "plan": {
+    "path": "docs/research/evidence/local-blind-routing-repository-plan-0.4-alpha-round-16.json",
+    "sha256": "278B3AEC73D81E4A20EE8189C3CAB4FAE97F2745D75C4C11D96EE965B40F557A"
+  },
+  "claimBoundary": "Fresh URL-and-HEAD-only repository pool frozen before any Round 16 repository history, commit subject, diff, task, coherence review, oracle, or Palace result was inspected. Candidate source, selectors, and validation artifacts must still be frozen before target selection. This is not public preregistration.",
+  "candidateFreeze": {
+    "path": "docs/research/evidence/local-blind-candidate-freeze-0.4-alpha-round-16.json"
+  },
+  "priorExclusionSource": {
+    "path": "docs/research/evidence/local-blind-routing-repository-pool-0.4-alpha-round-12.json",
+    "sha256": "085295D2798F47C0841526EF8219E17FFFCBF078F7F3C76AC2028DFDD3AFC125",
+    "includePreviousExclusionChain": true,
+    "includeRound12RepositoryPool": true,
+    "includeAdditionalPreviouslyObservedRepositories": true,
+    "expectedUniqueRepositoryCount": 162
+  },
+  "previouslyObservedRepositories": [
+    "https://github.com/open-webui/open-webui.git"
+  ],
+  "rules": {
+    "desiredTargets": 8,
+    "requiredLanguageFamilies": [
+      "javascript-typescript",
+      "python",
+      "go",
+      "rust"
+    ],
+    "targetsPerLanguageFamily": 2,
+    "repositoriesPerLanguageFamily": 4,
+    "repositoryOrderIsBinding": true,
+    "newestCoherentCandidatePerRepositoryWins": true,
+    "remainingRepositoriesPerFamilyAreFallbacks": true,
+    "taskClassifier": "inflected-behavioral-subject-v1",
+    "maximumMechanicalCandidatesPerRepository": 5,
+    "minimumFiles": 2,
+    "maximumFiles": 8,
+    "maximumAuxiliaryFiles": 2,
+    "maximumChangedLines": 400,
+    "allowedAuxiliaryExtensions": [
+      ".cfg",
+      ".conf",
+      ".ini",
+      ".json",
+      ".md",
+      ".mdx",
+      ".rst",
+      ".toml",
+      ".txt",
+      ".yaml",
+      ".yml"
+    ],
+    "taskDiffCoherenceReviewRequired": true,
+    "wholeTargetRejectionForUnrelatedOrUncertainHunk": true,
+    "partialOraclePruningForbidden": true,
+    "maximumGeneratedArtifactTargets": 1,
+    "pinnedHeadsObtainedWithGitLsRemoteHeadOnly": true,
+    "commitHistoryInspectedBeforePoolFreeze": false,
+    "palaceCallsOnCandidateTasksBeforePoolFreeze": 0,
+    "baselineAndCandidateFrozenBeforeTargetSelection": true,
+    "outputCreateOnly": true
+  },
+  "repositoryPool": [
+    {
+      "name": "nock",
+      "language": "JavaScript/TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/nock/nock.git",
+      "extensions": [
+        ".cjs",
+        ".js",
+        ".jsx",
+        ".mjs",
+        ".ts",
+        ".tsx"
+      ],
+      "pinnedHead": "1ee467c68d601ddc22629d7a657061e6c27097c2"
+    },
+    {
+      "name": "yarl",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/aio-libs/yarl.git",
+      "extensions": [
+        ".py"
+      ],
+      "pinnedHead": "d1421d884ca0c359ccd8f02d70d3e5114e104fe6"
+    },
+    {
+      "name": "yaml",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/go-yaml/yaml.git",
+      "extensions": [
+        ".go"
+      ],
+      "pinnedHead": "944c86a7d29391925ed6ac33bee98a0516f1287a"
+    },
+    {
+      "name": "toml",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/toml-rs/toml.git",
+      "extensions": [
+        ".rs"
+      ],
+      "pinnedHead": "dd941b4c773b9560310b119ad752a8f7b4f109f3"
+    },
+    {
+      "name": "js-yaml",
+      "language": "JavaScript/TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/nodeca/js-yaml.git",
+      "extensions": [
+        ".cjs",
+        ".js",
+        ".jsx",
+        ".mjs",
+        ".ts",
+        ".tsx"
+      ],
+      "pinnedHead": "e2dc2a7fdfcf544e86c1e77df9bb03c405eeb0cb"
+    },
+    {
+      "name": "twine",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/pypa/twine.git",
+      "extensions": [
+        ".py"
+      ],
+      "pinnedHead": "f536ac5d0c77a24a997854328e64644f576b4992"
+    },
+    {
+      "name": "sjson",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/tidwall/sjson.git",
+      "extensions": [
+        ".go"
+      ],
+      "pinnedHead": "3a21ce7b0cab4e0f0d91eb8db4a3d0434622eeb8"
+    },
+    {
+      "name": "cfg-if",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/rust-lang/cfg-if.git",
+      "extensions": [
+        ".rs"
+      ],
+      "pinnedHead": "a66c2d4d559cdd6b047d1db3290f6bf252773fc9"
+    },
+    {
+      "name": "validator-js",
+      "language": "JavaScript/TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/validatorjs/validator.js.git",
+      "extensions": [
+        ".cjs",
+        ".js",
+        ".jsx",
+        ".mjs",
+        ".ts",
+        ".tsx"
+      ],
+      "pinnedHead": "cdb7dafc281d14125b924969bf3ee5bc482ec169"
+    },
+    {
+      "name": "gunicorn",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/benoitc/gunicorn.git",
+      "extensions": [
+        ".py"
+      ],
+      "pinnedHead": "a8283bbf5e1416d0dd13f994f71ec2761988aeab"
+    },
+    {
+      "name": "go-querystring",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/google/go-querystring.git",
+      "extensions": [
+        ".go"
+      ],
+      "pinnedHead": "d39ef06364e81c4317c23bc015261a0e51f15305"
+    },
+    {
+      "name": "predicates-rs",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/assert-rs/predicates-rs.git",
+      "extensions": [
+        ".rs"
+      ],
+      "pinnedHead": "c85937062f58cdaf0ba9ef9d678ed71d6a57ba53"
+    },
+    {
+      "name": "ms",
+      "language": "JavaScript/TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/vercel/ms.git",
+      "extensions": [
+        ".cjs",
+        ".js",
+        ".jsx",
+        ".mjs",
+        ".ts",
+        ".tsx"
+      ],
+      "pinnedHead": "4ff48cec099f0514c3e9bbca18706c9c21122bfb"
+    },
+    {
+      "name": "sphinx",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/sphinx-doc/sphinx.git",
+      "extensions": [
+        ".py"
+      ],
+      "pinnedHead": "e44a40eb2f810558ccd9da1425421270ccb81351"
+    },
+    {
+      "name": "mapstructure",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/mitchellh/mapstructure.git",
+      "extensions": [
+        ".go"
+      ],
+      "pinnedHead": "8508981c8b6c964e6986dd8aa85490e70ce3c2e2"
+    },
+    {
+      "name": "chumsky",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/zesterer/chumsky.git",
+      "extensions": [
+        ".rs"
+      ],
+      "pinnedHead": "4879268c589b18927df6ec21331e66d7fb56df86"
+    }
+  ]
+}

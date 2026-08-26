@@ -1,0 +1,106 @@
+{
+  "schemaVersion": "0.4-alpha",
+  "status": "local-disclosed-regression-passed",
+  "claimBoundary": "This is a development-influenced regression, not held-out evidence or a release claim.",
+  "task": "分析所有可访问的 Codex 对话中 Vertex Palace 的真实使用状况，量化可靠性并提出优化方向",
+  "targetFiles": [
+    "scripts/research/audit-codex-palace-usage.cjs",
+    "scripts/research/summarize-codex-palace-usage-audit.cjs",
+    "docs/research/evidence/codex-palace-usage-audit.json",
+    "docs/research/evidence/codex-palace-usage-summary.json",
+    "docs/research/CODEX_SESSION_USAGE_AUDIT_2026-08-09.md"
+  ],
+  "baseline": {
+    "evaluationId": "evaluation_8c1af9099b05e7ff",
+    "taskType": "refactor",
+    "routeConfidence": 0.68,
+    "changedFilesFound": 0,
+    "changedFilesTotal": 5,
+    "changedFileCoverage": 0,
+    "routeFocus": 0,
+    "calibration": "overconfident"
+  },
+  "current": {
+    "evaluationId": "evaluation_595e225440cc6ba4",
+    "taskType": "evaluation",
+    "routeConfidence": 0.72,
+    "changedFilesFound": 5,
+    "changedFilesTotal": 5,
+    "changedFileCoverage": 1,
+    "routeFocus": 0.83,
+    "calibration": "underconfident",
+    "routeFileCount": 6
+  },
+  "adaptivePayload": {
+    "measurement": "adaptive-delivered-payload",
+    "deliveryMode": "full-palace",
+    "payloadBytes": 12493,
+    "estimatedTokens": 3108,
+    "tokenCeiling": 6000,
+    "repositoryEstimatedTokens": 3098474,
+    "legacyMisreportedPackTokens": 2029921
+  },
+  "compoundImplementationSelfAudit": {
+    "claimBoundary": "Iteratively observed during development; disclosed regression only.",
+    "changedFiles": {
+      "productAndTests": 16,
+      "retrospectiveRecordsAuthoredAfterImplementation": 2,
+      "total": 18
+    },
+    "iterations": [
+      {
+        "evaluationId": "evaluation_05341f2e10fe66e9",
+        "taskType": "evaluation",
+        "matchedFiles": 1,
+        "changedFileCoverage": 0.06,
+        "routeFocus": 0.17,
+        "calibration": "overconfident"
+      },
+      {
+        "evaluationId": "evaluation_fff476a393a08c6d",
+        "taskType": "refactor",
+        "matchedFiles": 10,
+        "changedFileCoverage": 0.56,
+        "routeFocus": 0.5,
+        "calibration": "underconfident"
+      },
+      {
+        "evaluationId": "evaluation_1d18b54f92b92d67",
+        "taskType": "refactor",
+        "matchedFiles": 13,
+        "changedFileCoverage": 0.72,
+        "routeFocus": 0.65,
+        "calibration": "well-calibrated"
+      },
+      {
+        "evaluationId": "evaluation_a28320ea7aa66ab8",
+        "taskType": "refactor",
+        "routeConfidence": 0.4,
+        "matchedFiles": 16,
+        "changedFileCoverage": 0.89,
+        "productAndTestCoverage": 1,
+        "routeFocus": 0.8,
+        "calibration": "underconfident",
+        "adaptivePayloadTokens": 3587,
+        "adaptivePayloadBytes": 14430
+      }
+    ]
+  },
+  "verification": {
+    "typecheck": "passed",
+    "coreTestFiles": 14,
+    "coreTests": 177,
+    "cliTestFiles": 2,
+    "cliTests": 2,
+    "mcpTestFiles": 1,
+    "mcpTests": 2,
+    "build": "passed",
+    "mcpSmoke": "passed"
+  },
+  "remainingLimits": [
+    "One older audit report remained route-only, so route focus was 0.83 rather than 1.0.",
+    "One required evidence role pair remained causally disconnected, so the context stayed advisory.",
+    "No held-out end-to-end coding benefit is claimed.",
+    "Repository-to-pack estimates do not measure billed tokens, wall time, tool calls, or task correctness."
+  ]
+}

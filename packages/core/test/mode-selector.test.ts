@@ -114,6 +114,68 @@ describe("selectPalaceMode", () => {
     expect(selection.riskSignals.scopeRisk).toBe(false);
   });
 
+  it("widens an automatic focused delivery when required evidence is incomplete", () => {
+    const route = focusedRoute(0.8);
+    route.evidenceClosure = {
+      status: "insufficient",
+      requiredRoles: ["implementation", "verification"],
+      coveredRoles: ["implementation"],
+      missingRoles: ["verification"],
+      termCoverage: {
+        subjects: { required: ["currency"], covered: ["currency"], missing: [] },
+        outcomes: { required: [], covered: [], missing: [] },
+        constraints: { required: [], covered: [], missing: [] }
+      },
+      connectedRolePairs: [],
+      requiredCausalSources: [],
+      missingCausalSources: [],
+      reasons: ["Missing required verification evidence."]
+    };
+    const selection = selectPalaceMode(
+      smallIndex(),
+      route,
+      "Fix currency formatting so negative zero is rendered as $0.00.",
+      { relevantMemoryCount: 0 }
+    );
+
+    expect(selection.mode).toBe("full-palace");
+    expect(selection.evidenceStatus).toBe("insufficient");
+    expect(selection.interventionPolicy).toBe("advisory");
+    expect(selection.evidenceReasons).toContain("Missing required verification evidence.");
+    expect(selection.reasons).toContain(
+      "Automatic bypass selection was widened because routed evidence is insufficient."
+    );
+  });
+
+  it("preserves an explicit narrow override while keeping incomplete evidence advisory", () => {
+    const route = focusedRoute(0.8);
+    route.evidenceClosure = {
+      status: "insufficient",
+      requiredRoles: ["implementation", "verification"],
+      coveredRoles: ["implementation"],
+      missingRoles: ["verification"],
+      termCoverage: {
+        subjects: { required: ["currency"], covered: ["currency"], missing: [] },
+        outcomes: { required: [], covered: [], missing: [] },
+        constraints: { required: [], covered: [], missing: [] }
+      },
+      connectedRolePairs: [],
+      requiredCausalSources: [],
+      missingCausalSources: [],
+      reasons: ["Missing required verification evidence."]
+    };
+    const selection = selectPalaceMode(
+      smallIndex(),
+      route,
+      "Fix currency formatting so negative zero is rendered as $0.00.",
+      { relevantMemoryCount: 0, override: "route-lite" }
+    );
+
+    expect(selection.mode).toBe("route-lite");
+    expect(selection.evidenceStatus).toBe("insufficient");
+    expect(selection.interventionPolicy).toBe("advisory");
+  });
+
   it("keeps low-confidence routing advisory and fail-open", () => {
     const selection = selectPalaceMode(
       smallIndex(120),
@@ -150,6 +212,27 @@ describe("selectPalaceMode", () => {
     expect(selection.evidenceReasons).toContain(
       "No selected implementation independently covers both leading bugfix anchors: payload, parsing."
     );
+  });
+
+  it("accepts one explicit file as scope authorization without an independently discovered anchor", () => {
+    const route = focusedRoute(0.8);
+    route.narrowingEvidence = {
+      independentImplementationAnchor: "missing",
+      leadingTaskAnchors: ["formatting"],
+      reasons: ["No independently discovered implementation anchor covers formatting."]
+    };
+    const index = smallIndex();
+    index.fileHashes["src/format-currency.mjs"] = "format-hash";
+    const selection = selectPalaceMode(
+      index,
+      route,
+      "Fix formatting in src/format-currency.mjs",
+      { relevantMemoryCount: 0 }
+    );
+
+    expect(selection.mode).toBe("bypass");
+    expect(selection.evidenceStatus).toBe("sufficient");
+    expect(selection.interventionPolicy).toBe("bounded");
   });
 
   it("marks unresolved memory evidence as conflicted and advisory", () => {

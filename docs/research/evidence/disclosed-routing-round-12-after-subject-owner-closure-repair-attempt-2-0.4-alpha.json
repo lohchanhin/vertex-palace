@@ -1,0 +1,1762 @@
+{
+  "schemaVersion": 1,
+  "studyId": "disclosed-routing-round-12-after-subject-owner-closure-repair-0.4-alpha",
+  "generatedAt": "2026-08-11T00:39:32.531Z",
+  "status": "completed",
+  "gateStatus": "failed",
+  "gateFailures": [
+    "bounded auxiliary coverage incomplete",
+    "target-macro route focus below threshold",
+    "route focus below threshold"
+  ],
+  "evidenceClass": "disclosed-post-observation-static-routing-regression",
+  "heldOutAgainstCandidate": false,
+  "claimBoundary": "Disclosed post-observation regression on the eight already observed Round 12 tasks after generic task-subject parsing, subject-owner routing, owner-local verification closure, and confidence calibration repairs. The immutable formal Round 12 candidate gate remains failed. This result is not held out, does not execute target tests or an Agent, and supports no Agent correctness, Token, tool-call, or wall-time claim. A fresh frozen round is required for new generalization evidence.",
+  "originalFormalEvidence": {
+    "path": "docs/research/evidence/local-blind-routing-validation-0.4-alpha-round-12-attempt-2.json",
+    "sha256": "4A7D6DBB68FBD6C1AEA3CD3159A092E5C2E8D6931187533F827A55BA6B1529D3",
+    "status": "completed",
+    "candidateGateStatus": "failed",
+    "preservedWithoutModification": true
+  },
+  "targetSelection": {
+    "manifestPath": "docs/research/evidence/local-blind-routing-target-manifest-0.4-alpha-round-12.json",
+    "manifestSha256": "693B398DDB28682D535208AA87F4DDA07AE01F1B97B1BE970C103CED6B046486",
+    "targetCount": 8,
+    "reusedAfterObservation": true,
+    "replacementOrExclusionAllowed": false
+  },
+  "candidate": {
+    "gitHead": "67c0a2ce8754cece3773d5fd16b89dae4e3af0c1",
+    "sourceState": "local uncommitted disclosed repair worktree",
+    "cliPath": "dist/palace.cjs",
+    "cliSha256": "BC35EFB53F621DC96D22B097A45C9074312E5777BEBBA9503E5AA639C2849B0A",
+    "sourceTree": {
+      "roots": [
+        "packages/core/src",
+        "packages/shared/src",
+        "packages/cli/src",
+        "packages/mcp/src",
+        "plugins/vertex-palace/mcp/server.cjs"
+      ],
+      "fileCount": 78,
+      "sha256": "3531CC986B7C95A850D9E4F360B79B2DCEAF350241FEC2CF2BB8B74F65CF06DA"
+    },
+    "rebuiltBeforeMeasurement": true,
+    "unchangedDuringMeasurement": true
+  },
+  "protocol": {
+    "pairedWithOriginalFormalObservation": false,
+    "repetitions": 2,
+    "repetitionsAreDeterminismChecksNotIndependentSamples": true,
+    "sequential": true,
+    "concurrent": false,
+    "freshPalacePerTarget": true,
+    "targetTestsExecuted": false,
+    "budget": 6000,
+    "routeLimit": 10,
+    "maxDrawers": 4,
+    "fetchDepth": 400,
+    "metricAgreementTolerance": 0.005,
+    "calibrationTolerance": 0.15,
+    "oraclePolicy": {
+      "core": "Frozen implementationFiles plus testFiles; required for the disclosed repair gate.",
+      "auxiliary": "Frozen changelog or package/config files; reported separately as task-diff bookkeeping and not allowed to substitute for implementation or test evidence.",
+      "fullChangedFiles": "Retained for comparability with the immutable formal Round 12 result."
+    },
+    "gates": {
+      "completedTargets": 8,
+      "deterministicRoutes": 8,
+      "taskTypeMatchedTargets": 8,
+      "coreSurfaceCompleteTargets": 8,
+      "auxiliarySurfaceCompleteTargets": "all frozen targets with auxiliary files",
+      "minimumMacroChangedFileCoverage": 0.9,
+      "minimumMacroRouteFocus": 0.7,
+      "minimumTargetChangedFileCoverage": 0.5,
+      "minimumTargetRouteFocus": 0.4,
+      "overconfidentAgainstCoreTrials": 0,
+      "unsafeNarrowAgainstCoreTrials": 0,
+      "unsafeEnforcedStopAgainstCoreTrials": 0,
+      "metricDisagreementTrials": 0,
+      "contextWithinBudget": true,
+      "trackedTargetWorktreeChanges": 0
+    }
+  },
+  "aggregate": {
+    "targetCount": 8,
+    "completedTargets": 8,
+    "passedTargets": 7,
+    "failedTargets": 1,
+    "executionErrorTargets": 0,
+    "deterministicTargets": 8,
+    "taskTypeMatchedTargets": 8,
+    "coreSurfaceCompleteTargets": 8,
+    "auxiliarySurfaceCompleteTargets": 0,
+    "auxiliarySurfaceTargetCount": 2,
+    "targetMacroChangedFileCoverage": 0.917,
+    "targetMacroCoreSurfaceCoverage": 1,
+    "targetMacroRouteFocus": 0.69,
+    "targetMacroCoreRouteFocus": 0.69,
+    "minimumTargetChangedFileCoverage": 0.667,
+    "minimumTargetRouteFocus": 0.286,
+    "calibrationCoreMeanAbsoluteError": 0.554,
+    "calibrationFullDiffMeanAbsoluteError": 0.471,
+    "overconfidentAgainstCoreTrials": 0,
+    "unsafeNarrowAgainstCoreTrials": 0,
+    "unsafeNarrowAgainstFullDiffTrials": 0,
+    "unsafeEnforcedStopAgainstCoreTrials": 0,
+    "metricDisagreementTrials": 0,
+    "evaluationContextRouteDisagreementTrials": 0,
+    "maxContextEstimatedTokens": 5904,
+    "trackedTargetWorktreeChanges": 0,
+    "repairedRouteChangedTargets": 4,
+    "repairedModeChangedTargets": 0
+  },
+  "targets": [
+    {
+      "name": "redux",
+      "language": "JavaScript/TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/reduxjs/redux.git",
+      "routeCommit": "ea81ac429272c1931a8af3126db058b747725a09",
+      "groundTruthCommit": "9b21de4947de93dcc7a8234b243aa263b9e8fd22",
+      "task": "fix: add missing closing quote in replaceReducer error message",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "src/createStore.ts",
+        "test/createStore.spec.ts"
+      ],
+      "implementationFiles": [
+        "src/createStore.ts"
+      ],
+      "testFiles": [
+        "test/createStore.spec.ts"
+      ],
+      "auxiliaryFiles": [],
+      "originalCandidate": {
+        "conditionStatus": "failed",
+        "failures": [
+          "implementation or path-derived focused-test coverage was incomplete",
+          "target route focus fell below 0.40",
+          "route was overconfident against independent coverage"
+        ],
+        "trial": {
+          "routeFiles": [
+            "src/combineReducers.ts",
+            "src/createStore.ts",
+            "test/combineReducers.spec.ts"
+          ],
+          "changedFileCoverage": 0.5,
+          "coreSurfaceCoverage": 0.5,
+          "routeFocus": 0.333,
+          "routeConfidence": 0.89,
+          "mode": "full-palace",
+          "evidenceStatus": "insufficient",
+          "unsafeNarrowMode": false
+        }
+      },
+      "repairedCandidate": {
+        "status": "passed",
+        "failures": [],
+        "index": {
+          "elapsedMs": 6821,
+          "staleAfterIndex": false
+        },
+        "deterministicRoutes": true,
+        "trackedTargetWorktreeClean": true,
+        "trials": [
+          {
+            "trial": 1,
+            "status": "completed",
+            "expectedTaskType": "bugfix",
+            "taskType": "bugfix",
+            "routeFiles": [
+              "src/types/store.ts",
+              "src/utils/formatProdErrorMessage.ts",
+              "src/createStore.ts",
+              "test/utils/formatProdErrorMessage.spec.ts",
+              "test/createStore.spec.ts"
+            ],
+            "routeFileCount": 5,
+            "matchedChangedFiles": [
+              "src/createStore.ts",
+              "test/createStore.spec.ts"
+            ],
+            "matchedCoreFiles": [
+              "src/createStore.ts",
+              "test/createStore.spec.ts"
+            ],
+            "routeOnlyFiles": [
+              "src/types/store.ts",
+              "src/utils/formatProdErrorMessage.ts",
+              "test/utils/formatProdErrorMessage.spec.ts"
+            ],
+            "changedFileCoverage": 1,
+            "coreSurfaceCoverage": 1,
+            "routeFocus": 0.4,
+            "coreRouteFocus": 0.4,
+            "auxiliarySurfaceCoverage": null,
+            "missingImplementationFiles": [],
+            "missingTestFiles": [],
+            "missingAuxiliaryFiles": [],
+            "routeConfidence": 0.4,
+            "calibrationAgainstCore": {
+              "confidence": 0.4,
+              "coverage": 1,
+              "signedError": -0.6,
+              "absoluteError": 0.6,
+              "status": "underconfident"
+            },
+            "calibrationAgainstFullDiff": {
+              "confidence": 0.4,
+              "coverage": 1,
+              "signedError": -0.6,
+              "absoluteError": 0.6,
+              "status": "underconfident"
+            },
+            "reportedChangedFileCoverage": 1,
+            "reportedRouteFocus": 0.4,
+            "coverageMetricAgreement": true,
+            "focusMetricAgreement": true,
+            "mode": "full-palace",
+            "evidenceStatus": "insufficient",
+            "interventionPolicy": "advisory",
+            "stopEnforced": false,
+            "unsafeNarrowAgainstCore": false,
+            "unsafeNarrowAgainstFullDiff": false,
+            "unsafeEnforcedStopAgainstCore": false,
+            "contextSelectedFiles": [
+              "src/types/store.ts",
+              "src/utils/formatProdErrorMessage.ts",
+              "src/createStore.ts",
+              "test/utils/formatProdErrorMessage.spec.ts",
+              "test/createStore.spec.ts"
+            ],
+            "evaluationContextRouteAgreement": true,
+            "contextEstimatedTokens": 5904,
+            "contextBytes": 23624,
+            "contextMetricSource": "reported",
+            "evaluationElapsedMs": 1725,
+            "contextElapsedMs": 1333,
+            "staticPalaceCliCalls": 2,
+            "incidentalCoreOverlap": 2
+          },
+          {
+            "trial": 2,
+            "status": "completed",
+            "expectedTaskType": "bugfix",
+            "taskType": "bugfix",
+            "routeFiles": [
+              "src/types/store.ts",
+              "src/utils/formatProdErrorMessage.ts",
+              "src/createStore.ts",
+              "test/utils/formatProdErrorMessage.spec.ts",
+              "test/createStore.spec.ts"
+            ],
+            "routeFileCount": 5,
+            "matchedChangedFiles": [
+              "src/createStore.ts",
+              "test/createStore.spec.ts"
+            ],
+            "matchedCoreFiles": [
+              "src/createStore.ts",
+              "test/createStore.spec.ts"
+            ],
+            "routeOnlyFiles": [
+              "src/types/store.ts",
+              "src/utils/formatProdErrorMessage.ts",
+              "test/utils/formatProdErrorMessage.spec.ts"
+            ],
+            "changedFileCoverage": 1,
+            "coreSurfaceCoverage": 1,
+            "routeFocus": 0.4,
+            "coreRouteFocus": 0.4,
+            "auxiliarySurfaceCoverage": null,
+            "missingImplementationFiles": [],
+            "missingTestFiles": [],
+            "missingAuxiliaryFiles": [],
+            "routeConfidence": 0.4,
+            "calibrationAgainstCore": {
+              "confidence": 0.4,
+              "coverage": 1,
+              "signedError": -0.6,
+              "absoluteError": 0.6,
+              "status": "underconfident"
+            },
+            "calibrationAgainstFullDiff": {
+              "confidence": 0.4,
+              "coverage": 1,
+              "signedError": -0.6,
+              "absoluteError": 0.6,
+              "status": "underconfident"
+            },
+            "reportedChangedFileCoverage": 1,
+            "reportedRouteFocus": 0.4,
+            "coverageMetricAgreement": true,
+            "focusMetricAgreement": true,
+            "mode": "full-palace",
+            "evidenceStatus": "insufficient",
+            "interventionPolicy": "advisory",
+            "stopEnforced": false,
+            "unsafeNarrowAgainstCore": false,
+            "unsafeNarrowAgainstFullDiff": false,
+            "unsafeEnforcedStopAgainstCore": false,
+            "contextSelectedFiles": [
+              "src/types/store.ts",
+              "src/utils/formatProdErrorMessage.ts",
+              "src/createStore.ts",
+              "test/utils/formatProdErrorMessage.spec.ts",
+              "test/createStore.spec.ts"
+            ],
+            "evaluationContextRouteAgreement": true,
+            "contextEstimatedTokens": 5904,
+            "contextBytes": 23624,
+            "contextMetricSource": "reported",
+            "evaluationElapsedMs": 1722,
+            "contextElapsedMs": 1387,
+            "staticPalaceCliCalls": 2,
+            "incidentalCoreOverlap": 2
+          }
+        ]
+      },
+      "comparison": {
+        "routeChanged": true,
+        "modeChanged": false,
+        "coreSurfaceCoverageDelta": 0.5,
+        "changedFileCoverageDelta": 0.5,
+        "routeFocusDelta": 0.067,
+        "routeConfidenceDelta": -0.49
+      }
+    },
+    {
+      "name": "blinker",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/pallets-eco/blinker.git",
+      "routeCommit": "9c2f289f024e7aac20bf3dbdebfc4ec279df3458",
+      "groundTruthCommit": "d06b2416ea43c535b907b7d0a2b72fff3b2f3a0f",
+      "task": "Added `muted` context manager for temproary switching signal off (#84)",
+      "expectedTaskType": "feature",
+      "changedFiles": [
+        "docs/index.rst",
+        "src/blinker/base.py",
+        "tests/test_signals.py"
+      ],
+      "implementationFiles": [
+        "src/blinker/base.py"
+      ],
+      "testFiles": [
+        "tests/test_signals.py"
+      ],
+      "auxiliaryFiles": [
+        "docs/index.rst"
+      ],
+      "originalCandidate": {
+        "conditionStatus": "failed",
+        "failures": [
+          "implementation or path-derived focused-test coverage was incomplete",
+          "bounded auxiliary coverage was incomplete",
+          "target changed-file coverage fell below 0.50",
+          "target route focus fell below 0.40",
+          "route was overconfident against independent coverage"
+        ],
+        "trial": {
+          "routeFiles": [
+            "src/blinker/base.py",
+            "tests/test_context.py",
+            "CHANGES.rst"
+          ],
+          "changedFileCoverage": 0.333,
+          "coreSurfaceCoverage": 0.5,
+          "routeFocus": 0.333,
+          "routeConfidence": 0.6,
+          "mode": "full-palace",
+          "evidenceStatus": "insufficient",
+          "unsafeNarrowMode": false
+        }
+      },
+      "repairedCandidate": {
+        "status": "passed",
+        "failures": [],
+        "index": {
+          "elapsedMs": 779,
+          "staleAfterIndex": false
+        },
+        "deterministicRoutes": true,
+        "trackedTargetWorktreeClean": true,
+        "trials": [
+          {
+            "trial": 1,
+            "status": "completed",
+            "expectedTaskType": "feature",
+            "taskType": "feature",
+            "routeFiles": [
+              "src/blinker/base.py",
+              "tests/test_signals.py",
+              "CHANGES.rst"
+            ],
+            "routeFileCount": 3,
+            "matchedChangedFiles": [
+              "src/blinker/base.py",
+              "tests/test_signals.py"
+            ],
+            "matchedCoreFiles": [
+              "src/blinker/base.py",
+              "tests/test_signals.py"
+            ],
+            "routeOnlyFiles": [
+              "CHANGES.rst"
+            ],
+            "changedFileCoverage": 0.667,
+            "coreSurfaceCoverage": 1,
+            "routeFocus": 0.667,
+            "coreRouteFocus": 0.667,
+            "auxiliarySurfaceCoverage": 0,
+            "missingImplementationFiles": [],
+            "missingTestFiles": [],
+            "missingAuxiliaryFiles": [
+              "docs/index.rst"
+            ],
+            "routeConfidence": 0.4,
+            "calibrationAgainstCore": {
+              "confidence": 0.4,
+              "coverage": 1,
+              "signedError": -0.6,
+              "absoluteError": 0.6,
+              "status": "underconfident"
+            },
+            "calibrationAgainstFullDiff": {
+              "confidence": 0.4,
+              "coverage": 0.667,
+              "signedError": -0.267,
+              "absoluteError": 0.267,
+              "status": "underconfident"
+            },
+            "reportedChangedFileCoverage": 0.667,
+            "reportedRouteFocus": 0.667,
+            "coverageMetricAgreement": true,
+            "focusMetricAgreement": true,
+            "mode": "full-palace",
+            "evidenceStatus": "insufficient",
+            "interventionPolicy": "advisory",
+            "stopEnforced": false,
+            "unsafeNarrowAgainstCore": false,
+            "unsafeNarrowAgainstFullDiff": false,
+            "unsafeEnforcedStopAgainstCore": false,
+            "contextSelectedFiles": [
+              "src/blinker/base.py",
+              "tests/test_signals.py",
+              "CHANGES.rst"
+            ],
+            "evaluationContextRouteAgreement": true,
+            "contextEstimatedTokens": 2763,
+            "contextBytes": 11049,
+            "contextMetricSource": "reported",
+            "evaluationElapsedMs": 500,
+            "contextElapsedMs": 464,
+            "staticPalaceCliCalls": 2,
+            "incidentalCoreOverlap": 2
+          },
+          {
+            "trial": 2,
+            "status": "completed",
+            "expectedTaskType": "feature",
+            "taskType": "feature",
+            "routeFiles": [
+              "src/blinker/base.py",
+              "tests/test_signals.py",
+              "CHANGES.rst"
+            ],
+            "routeFileCount": 3,
+            "matchedChangedFiles": [
+              "src/blinker/base.py",
+              "tests/test_signals.py"
+            ],
+            "matchedCoreFiles": [
+              "src/blinker/base.py",
+              "tests/test_signals.py"
+            ],
+            "routeOnlyFiles": [
+              "CHANGES.rst"
+            ],
+            "changedFileCoverage": 0.667,
+            "coreSurfaceCoverage": 1,
+            "routeFocus": 0.667,
+            "coreRouteFocus": 0.667,
+            "auxiliarySurfaceCoverage": 0,
+            "missingImplementationFiles": [],
+            "missingTestFiles": [],
+            "missingAuxiliaryFiles": [
+              "docs/index.rst"
+            ],
+            "routeConfidence": 0.4,
+            "calibrationAgainstCore": {
+              "confidence": 0.4,
+              "coverage": 1,
+              "signedError": -0.6,
+              "absoluteError": 0.6,
+              "status": "underconfident"
+            },
+            "calibrationAgainstFullDiff": {
+              "confidence": 0.4,
+              "coverage": 0.667,
+              "signedError": -0.267,
+              "absoluteError": 0.267,
+              "status": "underconfident"
+            },
+            "reportedChangedFileCoverage": 0.667,
+            "reportedRouteFocus": 0.667,
+            "coverageMetricAgreement": true,
+            "focusMetricAgreement": true,
+            "mode": "full-palace",
+            "evidenceStatus": "insufficient",
+            "interventionPolicy": "advisory",
+            "stopEnforced": false,
+            "unsafeNarrowAgainstCore": false,
+            "unsafeNarrowAgainstFullDiff": false,
+            "unsafeEnforcedStopAgainstCore": false,
+            "contextSelectedFiles": [
+              "src/blinker/base.py",
+              "tests/test_signals.py",
+              "CHANGES.rst"
+            ],
+            "evaluationContextRouteAgreement": true,
+            "contextEstimatedTokens": 2763,
+            "contextBytes": 11049,
+            "contextMetricSource": "reported",
+            "evaluationElapsedMs": 516,
+            "contextElapsedMs": 439,
+            "staticPalaceCliCalls": 2,
+            "incidentalCoreOverlap": 2
+          }
+        ]
+      },
+      "comparison": {
+        "routeChanged": true,
+        "modeChanged": false,
+        "coreSurfaceCoverageDelta": 0.5,
+        "changedFileCoverageDelta": 0.334,
+        "routeFocusDelta": 0.334,
+        "routeConfidenceDelta": -0.2
+      }
+    },
+    {
+      "name": "sqlx",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/jmoiron/sqlx.git",
+      "routeCommit": "b20d6792f4845804a18eac1a21f928eaaba4d63a",
+      "groundTruthCommit": "3ab43dbec9270483ab1935a7650dbe9cb68f0d5e",
+      "task": "Fix: Table contains VALUES",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "named.go",
+        "named_test.go"
+      ],
+      "implementationFiles": [
+        "named.go"
+      ],
+      "testFiles": [
+        "named_test.go"
+      ],
+      "auxiliaryFiles": [],
+      "originalCandidate": {
+        "conditionStatus": "failed",
+        "failures": [
+          "implementation or path-derived focused-test coverage was incomplete",
+          "target route focus fell below 0.40"
+        ],
+        "trial": {
+          "routeFiles": [
+            "named.go",
+            "reflectx/reflect.go",
+            "types/types.go",
+            "reflectx/reflect_test.go",
+            "sqlx.go",
+            "sqlx_context.go"
+          ],
+          "changedFileCoverage": 0.5,
+          "coreSurfaceCoverage": 0.5,
+          "routeFocus": 0.167,
+          "routeConfidence": 0.4,
+          "mode": "full-palace",
+          "evidenceStatus": "insufficient",
+          "unsafeNarrowMode": false
+        }
+      },
+      "repairedCandidate": {
+        "status": "failed",
+        "failures": [
+          "route focus below disclosed threshold"
+        ],
+        "index": {
+          "elapsedMs": 928,
+          "staleAfterIndex": false
+        },
+        "deterministicRoutes": true,
+        "trackedTargetWorktreeClean": true,
+        "trials": [
+          {
+            "trial": 1,
+            "status": "completed",
+            "expectedTaskType": "bugfix",
+            "taskType": "bugfix",
+            "routeFiles": [
+              "named.go",
+              "reflectx/reflect.go",
+              "types/types.go",
+              "reflectx/reflect_test.go",
+              "sqlx.go",
+              "sqlx_context.go",
+              "named_test.go"
+            ],
+            "routeFileCount": 7,
+            "matchedChangedFiles": [
+              "named.go",
+              "named_test.go"
+            ],
+            "matchedCoreFiles": [
+              "named.go",
+              "named_test.go"
+            ],
+            "routeOnlyFiles": [
+              "reflectx/reflect.go",
+              "types/types.go",
+              "reflectx/reflect_test.go",
+              "sqlx.go",
+              "sqlx_context.go"
+            ],
+            "changedFileCoverage": 1,
+            "coreSurfaceCoverage": 1,
+            "routeFocus": 0.286,
+            "coreRouteFocus": 0.286,
+            "auxiliarySurfaceCoverage": null,
+            "missingImplementationFiles": [],
+            "missingTestFiles": [],
+            "missingAuxiliaryFiles": [],
+            "routeConfidence": 0.4,
+            "calibrationAgainstCore": {
+              "confidence": 0.4,
+              "coverage": 1,
+              "signedError": -0.6,
+              "absoluteError": 0.6,
+              "status": "underconfident"
+            },
+            "calibrationAgainstFullDiff": {
+              "confidence": 0.4,
+              "coverage": 1,
+              "signedError": -0.6,
+              "absoluteError": 0.6,
+              "status": "underconfident"
+            },
+            "reportedChangedFileCoverage": 1,
+            "reportedRouteFocus": 0.286,
+            "coverageMetricAgreement": true,
+            "focusMetricAgreement": true,
+            "mode": "full-palace",
+            "evidenceStatus": "insufficient",
+            "interventionPolicy": "advisory",
+            "stopEnforced": false,
+            "unsafeNarrowAgainstCore": false,
+            "unsafeNarrowAgainstFullDiff": false,
+            "unsafeEnforcedStopAgainstCore": false,
+            "contextSelectedFiles": [
+              "named.go",
+              "reflectx/reflect.go",
+              "types/types.go",
+              "reflectx/reflect_test.go",
+              "sqlx.go",
+              "sqlx_context.go",
+              "named_test.go"
+            ],
+            "evaluationContextRouteAgreement": true,
+            "contextEstimatedTokens": 2792,
+            "contextBytes": 11165,
+            "contextMetricSource": "reported",
+            "evaluationElapsedMs": 630,
+            "contextElapsedMs": 572,
+            "staticPalaceCliCalls": 2,
+            "incidentalCoreOverlap": 2
+          },
+          {
+            "trial": 2,
+            "status": "completed",
+            "expectedTaskType": "bugfix",
+            "taskType": "bugfix",
+            "routeFiles": [
+              "named.go",
+              "reflectx/reflect.go",
+              "types/types.go",
+              "reflectx/reflect_test.go",
+              "sqlx.go",
+              "sqlx_context.go",
+              "named_test.go"
+            ],
+            "routeFileCount": 7,
+            "matchedChangedFiles": [
+              "named.go",
+              "named_test.go"
+            ],
+            "matchedCoreFiles": [
+              "named.go",
+              "named_test.go"
+            ],
+            "routeOnlyFiles": [
+              "reflectx/reflect.go",
+              "types/types.go",
+              "reflectx/reflect_test.go",
+              "sqlx.go",
+              "sqlx_context.go"
+            ],
+            "changedFileCoverage": 1,
+            "coreSurfaceCoverage": 1,
+            "routeFocus": 0.286,
+            "coreRouteFocus": 0.286,
+            "auxiliarySurfaceCoverage": null,
+            "missingImplementationFiles": [],
+            "missingTestFiles": [],
+            "missingAuxiliaryFiles": [],
+            "routeConfidence": 0.4,
+            "calibrationAgainstCore": {
+              "confidence": 0.4,
+              "coverage": 1,
+              "signedError": -0.6,
+              "absoluteError": 0.6,
+              "status": "underconfident"
+            },
+            "calibrationAgainstFullDiff": {
+              "confidence": 0.4,
+              "coverage": 1,
+              "signedError": -0.6,
+              "absoluteError": 0.6,
+              "status": "underconfident"
+            },
+            "reportedChangedFileCoverage": 1,
+            "reportedRouteFocus": 0.286,
+            "coverageMetricAgreement": true,
+            "focusMetricAgreement": true,
+            "mode": "full-palace",
+            "evidenceStatus": "insufficient",
+            "interventionPolicy": "advisory",
+            "stopEnforced": false,
+            "unsafeNarrowAgainstCore": false,
+            "unsafeNarrowAgainstFullDiff": false,
+            "unsafeEnforcedStopAgainstCore": false,
+            "contextSelectedFiles": [
+              "named.go",
+              "reflectx/reflect.go",
+              "types/types.go",
+              "reflectx/reflect_test.go",
+              "sqlx.go",
+              "sqlx_context.go",
+              "named_test.go"
+            ],
+            "evaluationContextRouteAgreement": true,
+            "contextEstimatedTokens": 2792,
+            "contextBytes": 11165,
+            "contextMetricSource": "reported",
+            "evaluationElapsedMs": 622,
+            "contextElapsedMs": 546,
+            "staticPalaceCliCalls": 2,
+            "incidentalCoreOverlap": 2
+          }
+        ]
+      },
+      "comparison": {
+        "routeChanged": true,
+        "modeChanged": false,
+        "coreSurfaceCoverageDelta": 0.5,
+        "changedFileCoverageDelta": 0.5,
+        "routeFocusDelta": 0.119,
+        "routeConfidenceDelta": 0
+      }
+    },
+    {
+      "name": "bat",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/sharkdp/bat.git",
+      "routeCommit": "af1f53d9a977154216d01435991fe33631b74713",
+      "groundTruthCommit": "d28aa4a8b4d9fe4fb5567e708cde82d03953f1ee",
+      "task": "Fix capacity-overflow panic in print_snip at --terminal-width 1",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "CHANGELOG.md",
+        "src/printer.rs",
+        "tests/integration_tests.rs"
+      ],
+      "implementationFiles": [
+        "src/printer.rs"
+      ],
+      "testFiles": [
+        "tests/integration_tests.rs"
+      ],
+      "auxiliaryFiles": [
+        "CHANGELOG.md"
+      ],
+      "originalCandidate": {
+        "conditionStatus": "failed",
+        "failures": [
+          "bounded auxiliary coverage was incomplete"
+        ],
+        "trial": {
+          "routeFiles": [
+            "src/printer.rs",
+            "tests/integration_tests.rs"
+          ],
+          "changedFileCoverage": 0.667,
+          "coreSurfaceCoverage": 1,
+          "routeFocus": 1,
+          "routeConfidence": 0.71,
+          "mode": "full-palace",
+          "evidenceStatus": "insufficient",
+          "unsafeNarrowMode": false
+        }
+      },
+      "repairedCandidate": {
+        "status": "passed",
+        "failures": [],
+        "index": {
+          "elapsedMs": 5590,
+          "staleAfterIndex": false
+        },
+        "deterministicRoutes": true,
+        "trackedTargetWorktreeClean": true,
+        "trials": [
+          {
+            "trial": 1,
+            "status": "completed",
+            "expectedTaskType": "bugfix",
+            "taskType": "bugfix",
+            "routeFiles": [
+              "src/printer.rs",
+              "tests/integration_tests.rs"
+            ],
+            "routeFileCount": 2,
+            "matchedChangedFiles": [
+              "src/printer.rs",
+              "tests/integration_tests.rs"
+            ],
+            "matchedCoreFiles": [
+              "src/printer.rs",
+              "tests/integration_tests.rs"
+            ],
+            "routeOnlyFiles": [],
+            "changedFileCoverage": 0.667,
+            "coreSurfaceCoverage": 1,
+            "routeFocus": 1,
+            "coreRouteFocus": 1,
+            "auxiliarySurfaceCoverage": 0,
+            "missingImplementationFiles": [],
+            "missingTestFiles": [],
+            "missingAuxiliaryFiles": [
+              "CHANGELOG.md"
+            ],
+            "routeConfidence": 0.4,
+            "calibrationAgainstCore": {
+              "confidence": 0.4,
+              "coverage": 1,
+              "signedError": -0.6,
+              "absoluteError": 0.6,
+              "status": "underconfident"
+            },
+            "calibrationAgainstFullDiff": {
+              "confidence": 0.4,
+              "coverage": 0.667,
+              "signedError": -0.267,
+              "absoluteError": 0.267,
+              "status": "underconfident"
+            },
+            "reportedChangedFileCoverage": 0.667,
+            "reportedRouteFocus": 1,
+            "coverageMetricAgreement": true,
+            "focusMetricAgreement": true,
+            "mode": "full-palace",
+            "evidenceStatus": "insufficient",
+            "interventionPolicy": "advisory",
+            "stopEnforced": false,
+            "unsafeNarrowAgainstCore": false,
+            "unsafeNarrowAgainstFullDiff": false,
+            "unsafeEnforcedStopAgainstCore": false,
+            "contextSelectedFiles": [
+              "src/printer.rs",
+              "tests/integration_tests.rs"
+            ],
+            "evaluationContextRouteAgreement": true,
+            "contextEstimatedTokens": 2134,
+            "contextBytes": 8539,
+            "contextMetricSource": "reported",
+            "evaluationElapsedMs": 3340,
+            "contextElapsedMs": 2447,
+            "staticPalaceCliCalls": 2,
+            "incidentalCoreOverlap": 2
+          },
+          {
+            "trial": 2,
+            "status": "completed",
+            "expectedTaskType": "bugfix",
+            "taskType": "bugfix",
+            "routeFiles": [
+              "src/printer.rs",
+              "tests/integration_tests.rs"
+            ],
+            "routeFileCount": 2,
+            "matchedChangedFiles": [
+              "src/printer.rs",
+              "tests/integration_tests.rs"
+            ],
+            "matchedCoreFiles": [
+              "src/printer.rs",
+              "tests/integration_tests.rs"
+            ],
+            "routeOnlyFiles": [],
+            "changedFileCoverage": 0.667,
+            "coreSurfaceCoverage": 1,
+            "routeFocus": 1,
+            "coreRouteFocus": 1,
+            "auxiliarySurfaceCoverage": 0,
+            "missingImplementationFiles": [],
+            "missingTestFiles": [],
+            "missingAuxiliaryFiles": [
+              "CHANGELOG.md"
+            ],
+            "routeConfidence": 0.4,
+            "calibrationAgainstCore": {
+              "confidence": 0.4,
+              "coverage": 1,
+              "signedError": -0.6,
+              "absoluteError": 0.6,
+              "status": "underconfident"
+            },
+            "calibrationAgainstFullDiff": {
+              "confidence": 0.4,
+              "coverage": 0.667,
+              "signedError": -0.267,
+              "absoluteError": 0.267,
+              "status": "underconfident"
+            },
+            "reportedChangedFileCoverage": 0.667,
+            "reportedRouteFocus": 1,
+            "coverageMetricAgreement": true,
+            "focusMetricAgreement": true,
+            "mode": "full-palace",
+            "evidenceStatus": "insufficient",
+            "interventionPolicy": "advisory",
+            "stopEnforced": false,
+            "unsafeNarrowAgainstCore": false,
+            "unsafeNarrowAgainstFullDiff": false,
+            "unsafeEnforcedStopAgainstCore": false,
+            "contextSelectedFiles": [
+              "src/printer.rs",
+              "tests/integration_tests.rs"
+            ],
+            "evaluationContextRouteAgreement": true,
+            "contextEstimatedTokens": 2134,
+            "contextBytes": 8539,
+            "contextMetricSource": "reported",
+            "evaluationElapsedMs": 3447,
+            "contextElapsedMs": 2528,
+            "staticPalaceCliCalls": 2,
+            "incidentalCoreOverlap": 2
+          }
+        ]
+      },
+      "comparison": {
+        "routeChanged": false,
+        "modeChanged": false,
+        "coreSurfaceCoverageDelta": 0,
+        "changedFileCoverageDelta": 0,
+        "routeFocusDelta": 0,
+        "routeConfidenceDelta": -0.31
+      }
+    },
+    {
+      "name": "pino",
+      "language": "JavaScript/TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/pinojs/pino.git",
+      "routeCommit": "e25dbbb65922aab8f4128abec08075e5d86900ed",
+      "groundTruthCommit": "ab18ad9c32fa41ba04390f63b4a53e802ae829fb",
+      "task": "fix: build the redaction shape without Object.prototype (#2495)",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "lib/redaction.js",
+        "test/redact.test.js"
+      ],
+      "implementationFiles": [
+        "lib/redaction.js"
+      ],
+      "testFiles": [
+        "test/redact.test.js"
+      ],
+      "auxiliaryFiles": [],
+      "originalCandidate": {
+        "conditionStatus": "failed",
+        "failures": [
+          "implementation or path-derived focused-test coverage was incomplete",
+          "target changed-file coverage fell below 0.50",
+          "target route focus fell below 0.40",
+          "route was overconfident against independent coverage"
+        ],
+        "trial": {
+          "routeFiles": [
+            "pino.js",
+            "test/basic.test.js"
+          ],
+          "changedFileCoverage": 0,
+          "coreSurfaceCoverage": 0,
+          "routeFocus": 0,
+          "routeConfidence": 0.9,
+          "mode": "full-palace",
+          "evidenceStatus": "insufficient",
+          "unsafeNarrowMode": false
+        }
+      },
+      "repairedCandidate": {
+        "status": "passed",
+        "failures": [],
+        "index": {
+          "elapsedMs": 2640,
+          "staleAfterIndex": false
+        },
+        "deterministicRoutes": true,
+        "trackedTargetWorktreeClean": true,
+        "trials": [
+          {
+            "trial": 1,
+            "status": "completed",
+            "expectedTaskType": "bugfix",
+            "taskType": "bugfix",
+            "routeFiles": [
+              "lib/redaction.js",
+              "pino.js",
+              "lib/transport.js",
+              "test/redact.test.js"
+            ],
+            "routeFileCount": 4,
+            "matchedChangedFiles": [
+              "lib/redaction.js",
+              "test/redact.test.js"
+            ],
+            "matchedCoreFiles": [
+              "lib/redaction.js",
+              "test/redact.test.js"
+            ],
+            "routeOnlyFiles": [
+              "pino.js",
+              "lib/transport.js"
+            ],
+            "changedFileCoverage": 1,
+            "coreSurfaceCoverage": 1,
+            "routeFocus": 0.5,
+            "coreRouteFocus": 0.5,
+            "auxiliarySurfaceCoverage": null,
+            "missingImplementationFiles": [],
+            "missingTestFiles": [],
+            "missingAuxiliaryFiles": [],
+            "routeConfidence": 0.77,
+            "calibrationAgainstCore": {
+              "confidence": 0.77,
+              "coverage": 1,
+              "signedError": -0.23,
+              "absoluteError": 0.23,
+              "status": "underconfident"
+            },
+            "calibrationAgainstFullDiff": {
+              "confidence": 0.77,
+              "coverage": 1,
+              "signedError": -0.23,
+              "absoluteError": 0.23,
+              "status": "underconfident"
+            },
+            "reportedChangedFileCoverage": 1,
+            "reportedRouteFocus": 0.5,
+            "coverageMetricAgreement": true,
+            "focusMetricAgreement": true,
+            "mode": "full-palace",
+            "evidenceStatus": "insufficient",
+            "interventionPolicy": "advisory",
+            "stopEnforced": false,
+            "unsafeNarrowAgainstCore": false,
+            "unsafeNarrowAgainstFullDiff": false,
+            "unsafeEnforcedStopAgainstCore": false,
+            "contextSelectedFiles": [
+              "lib/redaction.js",
+              "pino.js",
+              "lib/transport.js",
+              "test/redact.test.js"
+            ],
+            "evaluationContextRouteAgreement": true,
+            "contextEstimatedTokens": 4771,
+            "contextBytes": 19083,
+            "contextMetricSource": "reported",
+            "evaluationElapsedMs": 1326,
+            "contextElapsedMs": 1127,
+            "staticPalaceCliCalls": 2,
+            "incidentalCoreOverlap": 2
+          },
+          {
+            "trial": 2,
+            "status": "completed",
+            "expectedTaskType": "bugfix",
+            "taskType": "bugfix",
+            "routeFiles": [
+              "lib/redaction.js",
+              "pino.js",
+              "lib/transport.js",
+              "test/redact.test.js"
+            ],
+            "routeFileCount": 4,
+            "matchedChangedFiles": [
+              "lib/redaction.js",
+              "test/redact.test.js"
+            ],
+            "matchedCoreFiles": [
+              "lib/redaction.js",
+              "test/redact.test.js"
+            ],
+            "routeOnlyFiles": [
+              "pino.js",
+              "lib/transport.js"
+            ],
+            "changedFileCoverage": 1,
+            "coreSurfaceCoverage": 1,
+            "routeFocus": 0.5,
+            "coreRouteFocus": 0.5,
+            "auxiliarySurfaceCoverage": null,
+            "missingImplementationFiles": [],
+            "missingTestFiles": [],
+            "missingAuxiliaryFiles": [],
+            "routeConfidence": 0.77,
+            "calibrationAgainstCore": {
+              "confidence": 0.77,
+              "coverage": 1,
+              "signedError": -0.23,
+              "absoluteError": 0.23,
+              "status": "underconfident"
+            },
+            "calibrationAgainstFullDiff": {
+              "confidence": 0.77,
+              "coverage": 1,
+              "signedError": -0.23,
+              "absoluteError": 0.23,
+              "status": "underconfident"
+            },
+            "reportedChangedFileCoverage": 1,
+            "reportedRouteFocus": 0.5,
+            "coverageMetricAgreement": true,
+            "focusMetricAgreement": true,
+            "mode": "full-palace",
+            "evidenceStatus": "insufficient",
+            "interventionPolicy": "advisory",
+            "stopEnforced": false,
+            "unsafeNarrowAgainstCore": false,
+            "unsafeNarrowAgainstFullDiff": false,
+            "unsafeEnforcedStopAgainstCore": false,
+            "contextSelectedFiles": [
+              "lib/redaction.js",
+              "pino.js",
+              "lib/transport.js",
+              "test/redact.test.js"
+            ],
+            "evaluationContextRouteAgreement": true,
+            "contextEstimatedTokens": 4771,
+            "contextBytes": 19083,
+            "contextMetricSource": "reported",
+            "evaluationElapsedMs": 1273,
+            "contextElapsedMs": 1134,
+            "staticPalaceCliCalls": 2,
+            "incidentalCoreOverlap": 2
+          }
+        ]
+      },
+      "comparison": {
+        "routeChanged": true,
+        "modeChanged": false,
+        "coreSurfaceCoverageDelta": 1,
+        "changedFileCoverageDelta": 1,
+        "routeFocusDelta": 0.5,
+        "routeConfidenceDelta": -0.13
+      }
+    },
+    {
+      "name": "packaging",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/pypa/packaging.git",
+      "routeCommit": "b097450461523502ada842f98274449ad74ff1ff",
+      "groundTruthCommit": "4e79787a31c99348649bb0dafee2a5078d3595be",
+      "task": "fix(tags): preserve explicitly empty platform iterables (#1360)",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "src/packaging/tags.py",
+        "tests/test_tags.py"
+      ],
+      "implementationFiles": [
+        "src/packaging/tags.py"
+      ],
+      "testFiles": [
+        "tests/test_tags.py"
+      ],
+      "auxiliaryFiles": [],
+      "originalCandidate": {
+        "conditionStatus": "passed",
+        "failures": [],
+        "trial": {
+          "routeFiles": [
+            "src/packaging/tags.py",
+            "tests/test_tags.py"
+          ],
+          "changedFileCoverage": 1,
+          "coreSurfaceCoverage": 1,
+          "routeFocus": 1,
+          "routeConfidence": 0.64,
+          "mode": "full-palace",
+          "evidenceStatus": "insufficient",
+          "unsafeNarrowMode": false
+        }
+      },
+      "repairedCandidate": {
+        "status": "passed",
+        "failures": [],
+        "index": {
+          "elapsedMs": 2814,
+          "staleAfterIndex": false
+        },
+        "deterministicRoutes": true,
+        "trackedTargetWorktreeClean": true,
+        "trials": [
+          {
+            "trial": 1,
+            "status": "completed",
+            "expectedTaskType": "bugfix",
+            "taskType": "bugfix",
+            "routeFiles": [
+              "src/packaging/tags.py",
+              "tests/test_tags.py"
+            ],
+            "routeFileCount": 2,
+            "matchedChangedFiles": [
+              "src/packaging/tags.py",
+              "tests/test_tags.py"
+            ],
+            "matchedCoreFiles": [
+              "src/packaging/tags.py",
+              "tests/test_tags.py"
+            ],
+            "routeOnlyFiles": [],
+            "changedFileCoverage": 1,
+            "coreSurfaceCoverage": 1,
+            "routeFocus": 1,
+            "coreRouteFocus": 1,
+            "auxiliarySurfaceCoverage": null,
+            "missingImplementationFiles": [],
+            "missingTestFiles": [],
+            "missingAuxiliaryFiles": [],
+            "routeConfidence": 0.4,
+            "calibrationAgainstCore": {
+              "confidence": 0.4,
+              "coverage": 1,
+              "signedError": -0.6,
+              "absoluteError": 0.6,
+              "status": "underconfident"
+            },
+            "calibrationAgainstFullDiff": {
+              "confidence": 0.4,
+              "coverage": 1,
+              "signedError": -0.6,
+              "absoluteError": 0.6,
+              "status": "underconfident"
+            },
+            "reportedChangedFileCoverage": 1,
+            "reportedRouteFocus": 1,
+            "coverageMetricAgreement": true,
+            "focusMetricAgreement": true,
+            "mode": "full-palace",
+            "evidenceStatus": "insufficient",
+            "interventionPolicy": "advisory",
+            "stopEnforced": false,
+            "unsafeNarrowAgainstCore": false,
+            "unsafeNarrowAgainstFullDiff": false,
+            "unsafeEnforcedStopAgainstCore": false,
+            "contextSelectedFiles": [
+              "src/packaging/tags.py",
+              "tests/test_tags.py"
+            ],
+            "evaluationContextRouteAgreement": true,
+            "contextEstimatedTokens": 2269,
+            "contextBytes": 9076,
+            "contextMetricSource": "reported",
+            "evaluationElapsedMs": 1490,
+            "contextElapsedMs": 1213,
+            "staticPalaceCliCalls": 2,
+            "incidentalCoreOverlap": 2
+          },
+          {
+            "trial": 2,
+            "status": "completed",
+            "expectedTaskType": "bugfix",
+            "taskType": "bugfix",
+            "routeFiles": [
+              "src/packaging/tags.py",
+              "tests/test_tags.py"
+            ],
+            "routeFileCount": 2,
+            "matchedChangedFiles": [
+              "src/packaging/tags.py",
+              "tests/test_tags.py"
+            ],
+            "matchedCoreFiles": [
+              "src/packaging/tags.py",
+              "tests/test_tags.py"
+            ],
+            "routeOnlyFiles": [],
+            "changedFileCoverage": 1,
+            "coreSurfaceCoverage": 1,
+            "routeFocus": 1,
+            "coreRouteFocus": 1,
+            "auxiliarySurfaceCoverage": null,
+            "missingImplementationFiles": [],
+            "missingTestFiles": [],
+            "missingAuxiliaryFiles": [],
+            "routeConfidence": 0.4,
+            "calibrationAgainstCore": {
+              "confidence": 0.4,
+              "coverage": 1,
+              "signedError": -0.6,
+              "absoluteError": 0.6,
+              "status": "underconfident"
+            },
+            "calibrationAgainstFullDiff": {
+              "confidence": 0.4,
+              "coverage": 1,
+              "signedError": -0.6,
+              "absoluteError": 0.6,
+              "status": "underconfident"
+            },
+            "reportedChangedFileCoverage": 1,
+            "reportedRouteFocus": 1,
+            "coverageMetricAgreement": true,
+            "focusMetricAgreement": true,
+            "mode": "full-palace",
+            "evidenceStatus": "insufficient",
+            "interventionPolicy": "advisory",
+            "stopEnforced": false,
+            "unsafeNarrowAgainstCore": false,
+            "unsafeNarrowAgainstFullDiff": false,
+            "unsafeEnforcedStopAgainstCore": false,
+            "contextSelectedFiles": [
+              "src/packaging/tags.py",
+              "tests/test_tags.py"
+            ],
+            "evaluationContextRouteAgreement": true,
+            "contextEstimatedTokens": 2269,
+            "contextBytes": 9076,
+            "contextMetricSource": "reported",
+            "evaluationElapsedMs": 1509,
+            "contextElapsedMs": 1231,
+            "staticPalaceCliCalls": 2,
+            "incidentalCoreOverlap": 2
+          }
+        ]
+      },
+      "comparison": {
+        "routeChanged": false,
+        "modeChanged": false,
+        "coreSurfaceCoverageDelta": 0,
+        "changedFileCoverageDelta": 0,
+        "routeFocusDelta": 0,
+        "routeConfidenceDelta": -0.24
+      }
+    },
+    {
+      "name": "afero",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/spf13/afero.git",
+      "routeCommit": "90865967734e90fa9a2629171d95d93abba5d2c0",
+      "groundTruthCommit": "ba8d668ac955629ae0e5a64115b74c6ad3f7ae67",
+      "task": "feat: Add WalkDir (#571)",
+      "expectedTaskType": "feature",
+      "changedFiles": [
+        "path.go",
+        "path_test.go"
+      ],
+      "implementationFiles": [
+        "path.go"
+      ],
+      "testFiles": [
+        "path_test.go"
+      ],
+      "auxiliaryFiles": [],
+      "originalCandidate": {
+        "conditionStatus": "passed",
+        "failures": [],
+        "trial": {
+          "routeFiles": [
+            "path.go",
+            "path_test.go"
+          ],
+          "changedFileCoverage": 1,
+          "coreSurfaceCoverage": 1,
+          "routeFocus": 1,
+          "routeConfidence": 0.67,
+          "mode": "full-palace",
+          "evidenceStatus": "insufficient",
+          "unsafeNarrowMode": false
+        }
+      },
+      "repairedCandidate": {
+        "status": "passed",
+        "failures": [],
+        "index": {
+          "elapsedMs": 1314,
+          "staleAfterIndex": false
+        },
+        "deterministicRoutes": true,
+        "trackedTargetWorktreeClean": true,
+        "trials": [
+          {
+            "trial": 1,
+            "status": "completed",
+            "expectedTaskType": "feature",
+            "taskType": "feature",
+            "routeFiles": [
+              "path.go",
+              "path_test.go"
+            ],
+            "routeFileCount": 2,
+            "matchedChangedFiles": [
+              "path.go",
+              "path_test.go"
+            ],
+            "matchedCoreFiles": [
+              "path.go",
+              "path_test.go"
+            ],
+            "routeOnlyFiles": [],
+            "changedFileCoverage": 1,
+            "coreSurfaceCoverage": 1,
+            "routeFocus": 1,
+            "coreRouteFocus": 1,
+            "auxiliarySurfaceCoverage": null,
+            "missingImplementationFiles": [],
+            "missingTestFiles": [],
+            "missingAuxiliaryFiles": [],
+            "routeConfidence": 0.4,
+            "calibrationAgainstCore": {
+              "confidence": 0.4,
+              "coverage": 1,
+              "signedError": -0.6,
+              "absoluteError": 0.6,
+              "status": "underconfident"
+            },
+            "calibrationAgainstFullDiff": {
+              "confidence": 0.4,
+              "coverage": 1,
+              "signedError": -0.6,
+              "absoluteError": 0.6,
+              "status": "underconfident"
+            },
+            "reportedChangedFileCoverage": 1,
+            "reportedRouteFocus": 1,
+            "coverageMetricAgreement": true,
+            "focusMetricAgreement": true,
+            "mode": "full-palace",
+            "evidenceStatus": "insufficient",
+            "interventionPolicy": "advisory",
+            "stopEnforced": false,
+            "unsafeNarrowAgainstCore": false,
+            "unsafeNarrowAgainstFullDiff": false,
+            "unsafeEnforcedStopAgainstCore": false,
+            "contextSelectedFiles": [
+              "path.go",
+              "path_test.go"
+            ],
+            "evaluationContextRouteAgreement": true,
+            "contextEstimatedTokens": 2213,
+            "contextBytes": 8849,
+            "contextMetricSource": "reported",
+            "evaluationElapsedMs": 989,
+            "contextElapsedMs": 809,
+            "staticPalaceCliCalls": 2,
+            "incidentalCoreOverlap": 2
+          },
+          {
+            "trial": 2,
+            "status": "completed",
+            "expectedTaskType": "feature",
+            "taskType": "feature",
+            "routeFiles": [
+              "path.go",
+              "path_test.go"
+            ],
+            "routeFileCount": 2,
+            "matchedChangedFiles": [
+              "path.go",
+              "path_test.go"
+            ],
+            "matchedCoreFiles": [
+              "path.go",
+              "path_test.go"
+            ],
+            "routeOnlyFiles": [],
+            "changedFileCoverage": 1,
+            "coreSurfaceCoverage": 1,
+            "routeFocus": 1,
+            "coreRouteFocus": 1,
+            "auxiliarySurfaceCoverage": null,
+            "missingImplementationFiles": [],
+            "missingTestFiles": [],
+            "missingAuxiliaryFiles": [],
+            "routeConfidence": 0.4,
+            "calibrationAgainstCore": {
+              "confidence": 0.4,
+              "coverage": 1,
+              "signedError": -0.6,
+              "absoluteError": 0.6,
+              "status": "underconfident"
+            },
+            "calibrationAgainstFullDiff": {
+              "confidence": 0.4,
+              "coverage": 1,
+              "signedError": -0.6,
+              "absoluteError": 0.6,
+              "status": "underconfident"
+            },
+            "reportedChangedFileCoverage": 1,
+            "reportedRouteFocus": 1,
+            "coverageMetricAgreement": true,
+            "focusMetricAgreement": true,
+            "mode": "full-palace",
+            "evidenceStatus": "insufficient",
+            "interventionPolicy": "advisory",
+            "stopEnforced": false,
+            "unsafeNarrowAgainstCore": false,
+            "unsafeNarrowAgainstFullDiff": false,
+            "unsafeEnforcedStopAgainstCore": false,
+            "contextSelectedFiles": [
+              "path.go",
+              "path_test.go"
+            ],
+            "evaluationContextRouteAgreement": true,
+            "contextEstimatedTokens": 2213,
+            "contextBytes": 8849,
+            "contextMetricSource": "reported",
+            "evaluationElapsedMs": 971,
+            "contextElapsedMs": 804,
+            "staticPalaceCliCalls": 2,
+            "incidentalCoreOverlap": 2
+          }
+        ]
+      },
+      "comparison": {
+        "routeChanged": false,
+        "modeChanged": false,
+        "coreSurfaceCoverageDelta": 0,
+        "changedFileCoverageDelta": 0,
+        "routeFocusDelta": 0,
+        "routeConfidenceDelta": -0.27
+      }
+    },
+    {
+      "name": "notify",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/notify-rs/notify.git",
+      "routeCommit": "7658aaa51c261d7d781e1821a614cf7a8cbaa492",
+      "groundTruthCommit": "9de75aa2f80dbd1ef6ba30ac1e59e0204654ba34",
+      "task": "fix: flaky PollWatcher tests (#732)",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "notify/src/poll.rs",
+        "notify/src/test.rs"
+      ],
+      "implementationFiles": [
+        "notify/src/poll.rs"
+      ],
+      "testFiles": [
+        "notify/src/test.rs"
+      ],
+      "auxiliaryFiles": [],
+      "originalCandidate": {
+        "conditionStatus": "passed",
+        "failures": [],
+        "trial": {
+          "routeFiles": [
+            "notify/src/poll.rs",
+            "notify/src/lib.rs",
+            "notify/src/test.rs"
+          ],
+          "changedFileCoverage": 1,
+          "coreSurfaceCoverage": 1,
+          "routeFocus": 0.667,
+          "routeConfidence": 0.74,
+          "mode": "full-palace",
+          "evidenceStatus": "insufficient",
+          "unsafeNarrowMode": false
+        }
+      },
+      "repairedCandidate": {
+        "status": "passed",
+        "failures": [],
+        "index": {
+          "elapsedMs": 1384,
+          "staleAfterIndex": false
+        },
+        "deterministicRoutes": true,
+        "trackedTargetWorktreeClean": true,
+        "trials": [
+          {
+            "trial": 1,
+            "status": "completed",
+            "expectedTaskType": "bugfix",
+            "taskType": "bugfix",
+            "routeFiles": [
+              "notify/src/poll.rs",
+              "notify/src/lib.rs",
+              "notify/src/test.rs"
+            ],
+            "routeFileCount": 3,
+            "matchedChangedFiles": [
+              "notify/src/poll.rs",
+              "notify/src/test.rs"
+            ],
+            "matchedCoreFiles": [
+              "notify/src/poll.rs",
+              "notify/src/test.rs"
+            ],
+            "routeOnlyFiles": [
+              "notify/src/lib.rs"
+            ],
+            "changedFileCoverage": 1,
+            "coreSurfaceCoverage": 1,
+            "routeFocus": 0.667,
+            "coreRouteFocus": 0.667,
+            "auxiliarySurfaceCoverage": null,
+            "missingImplementationFiles": [],
+            "missingTestFiles": [],
+            "missingAuxiliaryFiles": [],
+            "routeConfidence": 0.4,
+            "calibrationAgainstCore": {
+              "confidence": 0.4,
+              "coverage": 1,
+              "signedError": -0.6,
+              "absoluteError": 0.6,
+              "status": "underconfident"
+            },
+            "calibrationAgainstFullDiff": {
+              "confidence": 0.4,
+              "coverage": 1,
+              "signedError": -0.6,
+              "absoluteError": 0.6,
+              "status": "underconfident"
+            },
+            "reportedChangedFileCoverage": 1,
+            "reportedRouteFocus": 0.667,
+            "coverageMetricAgreement": true,
+            "focusMetricAgreement": true,
+            "mode": "full-palace",
+            "evidenceStatus": "insufficient",
+            "interventionPolicy": "advisory",
+            "stopEnforced": false,
+            "unsafeNarrowAgainstCore": false,
+            "unsafeNarrowAgainstFullDiff": false,
+            "unsafeEnforcedStopAgainstCore": false,
+            "contextSelectedFiles": [
+              "notify/src/poll.rs",
+              "notify/src/lib.rs",
+              "notify/src/test.rs"
+            ],
+            "evaluationContextRouteAgreement": true,
+            "contextEstimatedTokens": 2330,
+            "contextBytes": 9318,
+            "contextMetricSource": "reported",
+            "evaluationElapsedMs": 945,
+            "contextElapsedMs": 769,
+            "staticPalaceCliCalls": 2,
+            "incidentalCoreOverlap": 2
+          },
+          {
+            "trial": 2,
+            "status": "completed",
+            "expectedTaskType": "bugfix",
+            "taskType": "bugfix",
+            "routeFiles": [
+              "notify/src/poll.rs",
+              "notify/src/lib.rs",
+              "notify/src/test.rs"
+            ],
+            "routeFileCount": 3,
+            "matchedChangedFiles": [
+              "notify/src/poll.rs",
+              "notify/src/test.rs"
+            ],
+            "matchedCoreFiles": [
+              "notify/src/poll.rs",
+              "notify/src/test.rs"
+            ],
+            "routeOnlyFiles": [
+              "notify/src/lib.rs"
+            ],
+            "changedFileCoverage": 1,
+            "coreSurfaceCoverage": 1,
+            "routeFocus": 0.667,
+            "coreRouteFocus": 0.667,
+            "auxiliarySurfaceCoverage": null,
+            "missingImplementationFiles": [],
+            "missingTestFiles": [],
+            "missingAuxiliaryFiles": [],
+            "routeConfidence": 0.4,
+            "calibrationAgainstCore": {
+              "confidence": 0.4,
+              "coverage": 1,
+              "signedError": -0.6,
+              "absoluteError": 0.6,
+              "status": "underconfident"
+            },
+            "calibrationAgainstFullDiff": {
+              "confidence": 0.4,
+              "coverage": 1,
+              "signedError": -0.6,
+              "absoluteError": 0.6,
+              "status": "underconfident"
+            },
+            "reportedChangedFileCoverage": 1,
+            "reportedRouteFocus": 0.667,
+            "coverageMetricAgreement": true,
+            "focusMetricAgreement": true,
+            "mode": "full-palace",
+            "evidenceStatus": "insufficient",
+            "interventionPolicy": "advisory",
+            "stopEnforced": false,
+            "unsafeNarrowAgainstCore": false,
+            "unsafeNarrowAgainstFullDiff": false,
+            "unsafeEnforcedStopAgainstCore": false,
+            "contextSelectedFiles": [
+              "notify/src/poll.rs",
+              "notify/src/lib.rs",
+              "notify/src/test.rs"
+            ],
+            "evaluationContextRouteAgreement": true,
+            "contextEstimatedTokens": 2330,
+            "contextBytes": 9318,
+            "contextMetricSource": "reported",
+            "evaluationElapsedMs": 973,
+            "contextElapsedMs": 780,
+            "staticPalaceCliCalls": 2,
+            "incidentalCoreOverlap": 2
+          }
+        ]
+      },
+      "comparison": {
+        "routeChanged": false,
+        "modeChanged": false,
+        "coreSurfaceCoverageDelta": 0,
+        "changedFileCoverageDelta": 0,
+        "routeFocusDelta": 0,
+        "routeConfidenceDelta": -0.34
+      }
+    }
+  ]
+}

@@ -1,0 +1,817 @@
+{
+  "schemaVersion": 1,
+  "studyId": "local-blind-routing-round-19-0.4-alpha",
+  "generatedAt": "2026-08-12T16:22:45.225Z",
+  "status": "selected",
+  "claimBoundary": "Pre-route whole-target semantic selection only. Every selected target is the first coherent candidate in newest-first order for its repository, and the first two accepted repositories in frozen language-family order. This is not a Palace product result or public preregistration.",
+  "evidenceClass": "local-hash-frozen-task-coherent-target-selection",
+  "publicPreregistration": false,
+  "heldOutAgainstCandidate": true,
+  "candidate": {
+    "role": "post-round-15-evidence-closure-candidate",
+    "baseCommit": "67c0a2ce8754cece3773d5fd16b89dae4e3af0c1",
+    "sourceState": "uncommitted-local-working-tree-frozen-by-content-hash",
+    "cliPath": "dist/palace.cjs",
+    "cliSha256": "40EB6FAE7BCCFCFCE8788FB48AD8DB15D8F94EB2EBC8EEDADA65E0D5C38B62EA",
+    "generatedMcpPath": "plugins/vertex-palace/mcp/server.cjs",
+    "generatedMcpSha256": "F299185521D57763671828FC24BFC2E111F1E79B1A9EF6FD928E66089A34CE2F",
+    "sourceTree": {
+      "algorithm": "sha256-path-length-bytes-v1",
+      "fileCount": 185,
+      "sha256": "0481938D792B327E9C0AB9C4499A7C7FB26838D3A61B00C96FEFB23683BAF550"
+    },
+    "buildCommand": "pnpm build"
+  },
+  "comparisonBaseline": {
+    "role": "pre-local-evidence-closure-optimization",
+    "productCommit": "67c0a2ce8754cece3773d5fd16b89dae4e3af0c1",
+    "sourceTree": {
+      "algorithm": "sha256-path-length-bytes-v1",
+      "fileCount": 121,
+      "sha256": "73BB3192CE756367031E8B3E1C5FE8332811C5FB333036A5BA6DFB7B2007B5E0"
+    },
+    "cliPath": "dist/palace.cjs",
+    "cliSha256": "52A1876B00AF4AAA884A6C7EA47AC2E701E88C34FC8FEE65DD1B32BB6513B8AE",
+    "rebuild": {
+      "dependencyCommand": "pnpm install --offline --frozen-lockfile --ignore-scripts",
+      "buildCommand": "pnpm build",
+      "networkRequired": false
+    },
+    "provenance": {
+      "path": "docs/research/evidence/local-blind-candidate-freeze-0.4-alpha-round-12.json",
+      "sha256": "D3B7BE55E1B80F964490A5E773E11AFCB97323A04E933AB30D131AAE6B48F406"
+    }
+  },
+  "localFreeze": {
+    "path": "docs/research/evidence/local-blind-candidate-freeze-0.4-alpha-round-19.json",
+    "sha256": "A1634BC5BA2563FEE2AE83FEC7FFF9F7F842090FB333158841BAD0EA6C42930A",
+    "frozenAt": "2026-08-12T15:26:27.891Z",
+    "artifactHashesVerified": true
+  },
+  "repositoryPool": {
+    "path": "docs/research/evidence/local-blind-routing-repository-pool-0.4-alpha-round-19.json",
+    "sha256": "A6FE9F45F7A404976871C4A501AD66281FBA67517E27CB31ABD627CB4BA41E74"
+  },
+  "candidateQueue": {
+    "path": "docs/research/evidence/local-blind-routing-candidate-queue-0.4-alpha-round-19-attempt-2.json",
+    "sha256": "B762E2DAF4E1761565500D49DFC81CAE8DF3AD2CEB020130D657E5EDDB5CCA7E",
+    "palaceCallsOnCandidateTasks": 0
+  },
+  "semanticReview": {
+    "path": "docs/research/evidence/local-blind-routing-coherence-reviews-0.4-alpha-round-19.json",
+    "sha256": "D8A36E79DD1ABB1AFE178FD7540F1A16D3ABD3D64B21BDC4DACAD32D716990A2",
+    "boundary": "single-developer-delegated-semantic-reviewer",
+    "independent": false,
+    "interRaterAgreementAvailable": false,
+    "palaceCallsOnCandidateTasks": 0
+  },
+  "rules": {
+    "desiredTargets": 8,
+    "requiredLanguageFamilies": [
+      "javascript-typescript",
+      "python",
+      "go",
+      "rust"
+    ],
+    "targetsPerLanguageFamily": 2,
+    "repositoriesPerLanguageFamily": 8,
+    "rosterRepositoriesPerLanguageFamily": 12,
+    "repositoryRosterOrderIsBinding": true,
+    "reachableRepositorySelection": "first-eight-reachable-per-family-v1",
+    "definitivelyMissingRepositoryMayBeSkipped": true,
+    "transientNetworkExhaustionAbortsRound": true,
+    "newestCoherentCandidatePerRepositoryWins": true,
+    "remainingRepositoriesPerFamilyAreFallbacks": true,
+    "taskClassifier": "inflected-behavioral-subject-v1",
+    "maximumMechanicalCandidatesPerRepository": 5,
+    "minimumFiles": 2,
+    "maximumFiles": 8,
+    "maximumAuxiliaryFiles": 2,
+    "maximumChangedLines": 400,
+    "allowedAuxiliaryExtensions": [
+      ".cfg",
+      ".conf",
+      ".ini",
+      ".json",
+      ".md",
+      ".mdx",
+      ".rst",
+      ".toml",
+      ".txt",
+      ".yaml",
+      ".yml"
+    ],
+    "taskDiffCoherenceReviewRequired": true,
+    "wholeTargetRejectionForUnrelatedOrUncertainHunk": true,
+    "partialOraclePruningForbidden": true,
+    "maximumGeneratedArtifactTargets": 1,
+    "pinnedHeadsObtainedWithGitLsRemoteHeadOnly": true,
+    "commitHistoryInspectedBeforePoolFreeze": false,
+    "palaceCallsOnCandidateTasksBeforePoolFreeze": 0,
+    "baselineAndCandidateFrozenBeforeTargetSelection": true,
+    "outputCreateOnly": true,
+    "repositoryOrderIsBinding": true,
+    "familyQuotaStopsLaterReviews": true,
+    "wholeTargetRejection": true,
+    "selectedPerLanguageFamily": {
+      "javascript-typescript": 2,
+      "python": 2,
+      "go": 2,
+      "rust": 2
+    },
+    "languageDiversitySatisfied": true,
+    "generatedArtifactTargets": 0,
+    "palaceCallsOnCandidateTasksBeforeFinalization": 0
+  },
+  "repositoryReports": [
+    {
+      "name": "cors",
+      "languageFamily": "javascript-typescript",
+      "status": "selected-newest-coherent-candidate",
+      "reviewedCandidates": [
+        {
+          "candidateId": "candidate_32a96f45d24b4e39",
+          "candidateRank": 1,
+          "groundTruthCommit": "01477dc2ecf8379aaec706f8e721760027bb7780",
+          "decision": "accept",
+          "reviewedFiles": 3,
+          "reviewedHunks": 3,
+          "unrelatedHunks": 0,
+          "uncertainHunks": 0,
+          "packetSha256": "8AB2A690F8ECD58D498E3542D7C560DA4812A200541191E226FFFEF428FA012C",
+          "generatedArtifact": {
+            "isGeneratedArtifactTarget": false,
+            "reason": "The reviewed diff contains hand-maintained source, test, or documentation files and no generator-to-output ownership relationship.",
+            "ownerGeneratorPath": null,
+            "generatedOutputPaths": []
+          }
+        }
+      ],
+      "selectedCandidateId": "candidate_32a96f45d24b4e39"
+    },
+    {
+      "name": "hoek",
+      "languageFamily": "javascript-typescript",
+      "status": "selected-newest-coherent-candidate",
+      "reviewedCandidates": [
+        {
+          "candidateId": "candidate_9c1da3bb6a972b14",
+          "candidateRank": 1,
+          "groundTruthCommit": "5870f1f2bccb6dfd038702be3b60e72aa14773e3",
+          "decision": "accept",
+          "reviewedFiles": 2,
+          "reviewedHunks": 3,
+          "unrelatedHunks": 0,
+          "uncertainHunks": 0,
+          "packetSha256": "C0810B5C2499DC8BEB6EC73CC2F1C8BE8EA4CB760BAAEFE4DE1FBE553711BC88",
+          "generatedArtifact": {
+            "isGeneratedArtifactTarget": false,
+            "reason": "The reviewed diff contains hand-maintained source, test, or documentation files and no generator-to-output ownership relationship.",
+            "ownerGeneratorPath": null,
+            "generatedOutputPaths": []
+          }
+        }
+      ],
+      "selectedCandidateId": "candidate_9c1da3bb6a972b14"
+    },
+    {
+      "name": "object-assign",
+      "languageFamily": "javascript-typescript",
+      "status": "family-quota-filled-not-reviewed",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "chokidar",
+      "languageFamily": "javascript-typescript",
+      "status": "family-quota-filled-not-reviewed",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "is-callable",
+      "languageFamily": "javascript-typescript",
+      "status": "family-quota-filled-not-reviewed",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "is-stream",
+      "languageFamily": "javascript-typescript",
+      "status": "family-quota-filled-not-reviewed",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "path-scurry",
+      "languageFamily": "javascript-typescript",
+      "status": "family-quota-filled-not-reviewed",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "onetime",
+      "languageFamily": "javascript-typescript",
+      "status": "family-quota-filled-not-reviewed",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "jaraco-path",
+      "languageFamily": "python",
+      "status": "selected-newest-coherent-candidate",
+      "reviewedCandidates": [
+        {
+          "candidateId": "candidate_3606ee38fd7fd442",
+          "candidateRank": 1,
+          "groundTruthCommit": "7f5d13873983ed797100ef2ff8f35e41e3583123",
+          "decision": "accept",
+          "reviewedFiles": 2,
+          "reviewedHunks": 4,
+          "unrelatedHunks": 0,
+          "uncertainHunks": 0,
+          "packetSha256": "AA49E153072AF341409E5F712FE4D690A9D2F7E7DB7D0D4E5BB433C2FED14157",
+          "generatedArtifact": {
+            "isGeneratedArtifactTarget": false,
+            "reason": "The reviewed diff contains hand-maintained source, test, or documentation files and no generator-to-output ownership relationship.",
+            "ownerGeneratorPath": null,
+            "generatedOutputPaths": []
+          }
+        }
+      ],
+      "selectedCandidateId": "candidate_3606ee38fd7fd442"
+    },
+    {
+      "name": "iniconfig",
+      "languageFamily": "python",
+      "status": "selected-newest-coherent-candidate",
+      "reviewedCandidates": [
+        {
+          "candidateId": "candidate_6b971c131e163482",
+          "candidateRank": 1,
+          "groundTruthCommit": "ce9f697fae4b1eaa58abd4a12865381462c79524",
+          "decision": "reject",
+          "reviewedFiles": 2,
+          "reviewedHunks": 3,
+          "unrelatedHunks": 0,
+          "uncertainHunks": 1,
+          "packetSha256": "F24DA08FDAB2347B8E9648D6913CD2183CBE30B6530266189188D0B319E2D0BA",
+          "generatedArtifact": {
+            "isGeneratedArtifactTarget": false,
+            "reason": "The reviewed diff contains hand-maintained source, test, or documentation files and no generator-to-output ownership relationship.",
+            "ownerGeneratorPath": null,
+            "generatedOutputPaths": []
+          }
+        },
+        {
+          "candidateId": "candidate_48b7458ede97d311",
+          "candidateRank": 2,
+          "groundTruthCommit": "22a7f651c2921416f4d4b879b288b819e9ec8b36",
+          "decision": "reject",
+          "reviewedFiles": 3,
+          "reviewedHunks": 4,
+          "unrelatedHunks": 1,
+          "uncertainHunks": 0,
+          "packetSha256": "CF57846AC1688FB5905E511B63C33EFC70BBD3C079CE6578005B7B633A209D1D",
+          "generatedArtifact": {
+            "isGeneratedArtifactTarget": false,
+            "reason": "The reviewed diff contains hand-maintained source, test, or documentation files and no generator-to-output ownership relationship.",
+            "ownerGeneratorPath": null,
+            "generatedOutputPaths": []
+          }
+        },
+        {
+          "candidateId": "candidate_26ef0eeb502a5921",
+          "candidateRank": 3,
+          "groundTruthCommit": "b1ac788f26135d36548eeb127571828cafe76fb0",
+          "decision": "accept",
+          "reviewedFiles": 2,
+          "reviewedHunks": 2,
+          "unrelatedHunks": 0,
+          "uncertainHunks": 0,
+          "packetSha256": "0255D2A1F7C29ADC164BDFDA9B5954DC2EB23C4D141A78E42C38955FB90E1E9A",
+          "generatedArtifact": {
+            "isGeneratedArtifactTarget": false,
+            "reason": "The reviewed diff contains hand-maintained source, test, or documentation files and no generator-to-output ownership relationship.",
+            "ownerGeneratorPath": null,
+            "generatedOutputPaths": []
+          }
+        }
+      ],
+      "selectedCandidateId": "candidate_26ef0eeb502a5921"
+    },
+    {
+      "name": "importlib-metadata",
+      "languageFamily": "python",
+      "status": "family-quota-filled-not-reviewed",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "platformdirs",
+      "languageFamily": "python",
+      "status": "family-quota-filled-not-reviewed",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "dateutil",
+      "languageFamily": "python",
+      "status": "family-quota-filled-not-reviewed",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "pytest-mock",
+      "languageFamily": "python",
+      "status": "family-quota-filled-not-reviewed",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "pyproject-api",
+      "languageFamily": "python",
+      "status": "family-quota-filled-not-reviewed",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "pyproject-hooks",
+      "languageFamily": "python",
+      "status": "family-quota-filled-not-reviewed",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "pretty",
+      "languageFamily": "go",
+      "status": "selected-newest-coherent-candidate",
+      "reviewedCandidates": [
+        {
+          "candidateId": "candidate_6abe040c5620a2b3",
+          "candidateRank": 1,
+          "groundTruthCommit": "f3227178675d04d6c6456f847e85c8d599322e87",
+          "decision": "accept",
+          "reviewedFiles": 2,
+          "reviewedHunks": 9,
+          "unrelatedHunks": 0,
+          "uncertainHunks": 0,
+          "packetSha256": "EA3C35F2C59F2E357A9313CAE953E61427CEEF1B6AA03834672DB282562FE68C",
+          "generatedArtifact": {
+            "isGeneratedArtifactTarget": false,
+            "reason": "The reviewed diff contains hand-maintained source, test, or documentation files and no generator-to-output ownership relationship.",
+            "ownerGeneratorPath": null,
+            "generatedOutputPaths": []
+          }
+        }
+      ],
+      "selectedCandidateId": "candidate_6abe040c5620a2b3"
+    },
+    {
+      "name": "groupcache",
+      "languageFamily": "go",
+      "status": "selected-newest-coherent-candidate",
+      "reviewedCandidates": [
+        {
+          "candidateId": "candidate_d4665b9c0bd4605e",
+          "candidateRank": 1,
+          "groundTruthCommit": "4a4ac3fbac33b83bb138f808c8945a2812023fc4",
+          "decision": "accept",
+          "reviewedFiles": 2,
+          "reviewedHunks": 6,
+          "unrelatedHunks": 0,
+          "uncertainHunks": 0,
+          "packetSha256": "85D841FD68D0DD3AEAC1A84DABF2D94F97ED3B494040DB6C999F2D78CC175806",
+          "generatedArtifact": {
+            "isGeneratedArtifactTarget": false,
+            "reason": "The reviewed diff contains hand-maintained source, test, or documentation files and no generator-to-output ownership relationship.",
+            "ownerGeneratorPath": null,
+            "generatedOutputPaths": []
+          }
+        }
+      ],
+      "selectedCandidateId": "candidate_d4665b9c0bd4605e"
+    },
+    {
+      "name": "ozzo-validation",
+      "languageFamily": "go",
+      "status": "family-quota-filled-not-reviewed",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "objx",
+      "languageFamily": "go",
+      "status": "family-quota-filled-not-reviewed",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "pkg-errors",
+      "languageFamily": "go",
+      "status": "family-quota-filled-not-reviewed",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "fatih-color",
+      "languageFamily": "go",
+      "status": "family-quota-filled-not-reviewed",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "xxhash",
+      "languageFamily": "go",
+      "status": "family-quota-filled-not-reviewed",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "snappy",
+      "languageFamily": "go",
+      "status": "family-quota-filled-not-reviewed",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "memchr",
+      "languageFamily": "rust",
+      "status": "no-mechanical-candidate",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "rustc-hash",
+      "languageFamily": "rust",
+      "status": "no-mechanical-candidate",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "semver",
+      "languageFamily": "rust",
+      "status": "selected-newest-coherent-candidate",
+      "reviewedCandidates": [
+        {
+          "candidateId": "candidate_12bbaded378415f8",
+          "candidateRank": 1,
+          "groundTruthCommit": "d92a4d8ff7d1a90caf9fcac9bf120c360455d8d9",
+          "decision": "accept",
+          "reviewedFiles": 3,
+          "reviewedHunks": 4,
+          "unrelatedHunks": 0,
+          "uncertainHunks": 0,
+          "packetSha256": "B13F906EFD1B782891713A4213C3EECCCE295CD8924930146A53EAFF2162D012",
+          "generatedArtifact": {
+            "isGeneratedArtifactTarget": false,
+            "reason": "The reviewed diff contains hand-maintained source, test, or documentation files and no generator-to-output ownership relationship.",
+            "ownerGeneratorPath": null,
+            "generatedOutputPaths": []
+          }
+        }
+      ],
+      "selectedCandidateId": "candidate_12bbaded378415f8"
+    },
+    {
+      "name": "rustc-demangle",
+      "languageFamily": "rust",
+      "status": "no-mechanical-candidate",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "itoa",
+      "languageFamily": "rust",
+      "status": "no-mechanical-candidate",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "aho-corasick",
+      "languageFamily": "rust",
+      "status": "no-mechanical-candidate",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "cc-rs",
+      "languageFamily": "rust",
+      "status": "selected-newest-coherent-candidate",
+      "reviewedCandidates": [
+        {
+          "candidateId": "candidate_fb544c22b29f1170",
+          "candidateRank": 1,
+          "groundTruthCommit": "0e91755354dbfe073fbe5f88aee427b75cc1c06f",
+          "decision": "accept",
+          "reviewedFiles": 2,
+          "reviewedHunks": 2,
+          "unrelatedHunks": 0,
+          "uncertainHunks": 0,
+          "packetSha256": "4508A2DEE6B3AEF849B2B17408EE2EF9BC4A19F58D75D29E0B828B004EF1A88F",
+          "generatedArtifact": {
+            "isGeneratedArtifactTarget": false,
+            "reason": "The reviewed diff contains hand-maintained source, test, or documentation files and no generator-to-output ownership relationship.",
+            "ownerGeneratorPath": null,
+            "generatedOutputPaths": []
+          }
+        }
+      ],
+      "selectedCandidateId": "candidate_fb544c22b29f1170"
+    },
+    {
+      "name": "once-cell",
+      "languageFamily": "rust",
+      "status": "family-quota-filled-not-reviewed",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    }
+  ],
+  "targets": [
+    {
+      "name": "cors",
+      "language": "JavaScript/TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/expressjs/cors.git",
+      "pinnedHead": "5317ebe670db2aaebc1d496eb5d33493deefb3ed",
+      "routeCommit": "cb910541ca1660a4f8880fae802af0f55ca777cf",
+      "groundTruthCommit": "01477dc2ecf8379aaec706f8e721760027bb7780",
+      "task": "Fix setting \"maxAge\" option to 0",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "HISTORY.md",
+        "lib/index.js",
+        "test/test.js"
+      ],
+      "implementationFiles": [
+        "lib/index.js"
+      ],
+      "testFiles": [
+        "test/test.js"
+      ],
+      "auxiliaryFiles": [
+        "HISTORY.md"
+      ],
+      "oracleSource": "mechanically eligible single-parent real Git-history diff pending whole-target semantic review",
+      "changedLines": 25,
+      "additions": 24,
+      "deletions": 1,
+      "candidateId": "candidate_32a96f45d24b4e39",
+      "candidateRank": 1,
+      "coherencePacketSha256": "8AB2A690F8ECD58D498E3542D7C560DA4812A200541191E226FFFEF428FA012C",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "The reviewed diff contains hand-maintained source, test, or documentation files and no generator-to-output ownership relationship.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      }
+    },
+    {
+      "name": "hoek",
+      "language": "JavaScript/TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/hapijs/hoek.git",
+      "pinnedHead": "cbb4c2bbb5ed1d850a2658ee8b42b3248e1404ac",
+      "routeCommit": "9b91eee216baef735d362d803d0f9e7460805ba0",
+      "groundTruthCommit": "5870f1f2bccb6dfd038702be3b60e72aa14773e3",
+      "task": "Fix cloning Util.inherit() subclassed errors. Backports #401",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "lib/clone.js",
+        "test/clone.js"
+      ],
+      "implementationFiles": [
+        "lib/clone.js"
+      ],
+      "testFiles": [
+        "test/clone.js"
+      ],
+      "auxiliaryFiles": [],
+      "oracleSource": "mechanically eligible single-parent real Git-history diff pending whole-target semantic review",
+      "changedLines": 37,
+      "additions": 34,
+      "deletions": 3,
+      "candidateId": "candidate_9c1da3bb6a972b14",
+      "candidateRank": 1,
+      "coherencePacketSha256": "C0810B5C2499DC8BEB6EC73CC2F1C8BE8EA4CB760BAAEFE4DE1FBE553711BC88",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "The reviewed diff contains hand-maintained source, test, or documentation files and no generator-to-output ownership relationship.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      }
+    },
+    {
+      "name": "jaraco-path",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/jaraco/path.git",
+      "pinnedHead": "67319bba24b0986abcf6c5a749a1b8ab6359bb22",
+      "routeCommit": "cf71b38498a6681fae1d4c2e26af7a71ef6c66c4",
+      "groundTruthCommit": "7f5d13873983ed797100ef2ff8f35e41e3583123",
+      "task": "Fix some issues flagged by ruff",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "path/__init__.py",
+        "test_path.py"
+      ],
+      "implementationFiles": [
+        "path/__init__.py"
+      ],
+      "testFiles": [
+        "test_path.py"
+      ],
+      "auxiliaryFiles": [],
+      "oracleSource": "mechanically eligible single-parent real Git-history diff pending whole-target semantic review",
+      "changedLines": 8,
+      "additions": 4,
+      "deletions": 4,
+      "candidateId": "candidate_3606ee38fd7fd442",
+      "candidateRank": 1,
+      "coherencePacketSha256": "AA49E153072AF341409E5F712FE4D690A9D2F7E7DB7D0D4E5BB433C2FED14157",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "The reviewed diff contains hand-maintained source, test, or documentation files and no generator-to-output ownership relationship.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      }
+    },
+    {
+      "name": "iniconfig",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/pytest-dev/iniconfig.git",
+      "pinnedHead": "00e7d87c7353b1ffecc4cd55f19acfffedd5233e",
+      "routeCommit": "50bdbee3b967b4ceb7b75539541a870bc56b205c",
+      "groundTruthCommit": "b1ac788f26135d36548eeb127571828cafe76fb0",
+      "task": "fix test and code to follow the common convention:",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "iniconfig.py",
+        "test_iniconfig.py"
+      ],
+      "implementationFiles": [
+        "iniconfig.py"
+      ],
+      "testFiles": [
+        "test_iniconfig.py"
+      ],
+      "auxiliaryFiles": [],
+      "oracleSource": "mechanically eligible single-parent real Git-history diff pending whole-target semantic review",
+      "changedLines": 4,
+      "additions": 2,
+      "deletions": 2,
+      "candidateId": "candidate_26ef0eeb502a5921",
+      "candidateRank": 3,
+      "coherencePacketSha256": "0255D2A1F7C29ADC164BDFDA9B5954DC2EB23C4D141A78E42C38955FB90E1E9A",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "The reviewed diff contains hand-maintained source, test, or documentation files and no generator-to-output ownership relationship.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      }
+    },
+    {
+      "name": "pretty",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/tidwall/pretty.git",
+      "pinnedHead": "9090695766b652478676cc3e55bc3187056b1ff0",
+      "routeCommit": "5124de163f67ee480ce919582a7bcc4a64c3d46b",
+      "groundTruthCommit": "f3227178675d04d6c6456f847e85c8d599322e87",
+      "task": "Fix sorting on duplicate keys",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "pretty.go",
+        "pretty_test.go"
+      ],
+      "implementationFiles": [
+        "pretty.go"
+      ],
+      "testFiles": [
+        "pretty_test.go"
+      ],
+      "auxiliaryFiles": [],
+      "oracleSource": "mechanically eligible single-parent real Git-history diff pending whole-target semantic review",
+      "changedLines": 47,
+      "additions": 35,
+      "deletions": 12,
+      "candidateId": "candidate_6abe040c5620a2b3",
+      "candidateRank": 1,
+      "coherencePacketSha256": "EA3C35F2C59F2E357A9313CAE953E61427CEEF1B6AA03834672DB282562FE68C",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "The reviewed diff contains hand-maintained source, test, or documentation files and no generator-to-output ownership relationship.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      }
+    },
+    {
+      "name": "groupcache",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/golang/groupcache.git",
+      "pinnedHead": "2c02b8208cf8c02a3e358cb1d9b60950647543fc",
+      "routeCommit": "404acd9df4cc9859d64fb9eed42e5c026187287a",
+      "groundTruthCommit": "4a4ac3fbac33b83bb138f808c8945a2812023fc4",
+      "task": "Fix function comments based on best practices from Effective Go",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "consistenthash/consistenthash.go",
+        "groupcache_test.go"
+      ],
+      "implementationFiles": [
+        "consistenthash/consistenthash.go"
+      ],
+      "testFiles": [
+        "groupcache_test.go"
+      ],
+      "auxiliaryFiles": [],
+      "oracleSource": "mechanically eligible single-parent real Git-history diff pending whole-target semantic review",
+      "changedLines": 12,
+      "additions": 6,
+      "deletions": 6,
+      "candidateId": "candidate_d4665b9c0bd4605e",
+      "candidateRank": 1,
+      "coherencePacketSha256": "85D841FD68D0DD3AEAC1A84DABF2D94F97ED3B494040DB6C999F2D78CC175806",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "The reviewed diff contains hand-maintained source, test, or documentation files and no generator-to-output ownership relationship.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      }
+    },
+    {
+      "name": "semver",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/rust-lang/semver.git",
+      "pinnedHead": "280ebcb6edac3aa4cdc545dbff8a26c5ac4861fe",
+      "routeCommit": "cc2cfed67c17dfe6abae18726830bdb6d7cf740d",
+      "groundTruthCommit": "d92a4d8ff7d1a90caf9fcac9bf120c360455d8d9",
+      "task": "Add a dedicated error for parsing Version from empty string",
+      "expectedTaskType": "feature",
+      "changedFiles": [
+        "src/error.rs",
+        "src/parse.rs",
+        "tests/test_version.rs"
+      ],
+      "implementationFiles": [
+        "src/error.rs",
+        "src/parse.rs"
+      ],
+      "testFiles": [
+        "tests/test_version.rs"
+      ],
+      "auxiliaryFiles": [],
+      "oracleSource": "mechanically eligible single-parent real Git-history diff pending whole-target semantic review",
+      "changedLines": 11,
+      "additions": 7,
+      "deletions": 4,
+      "candidateId": "candidate_12bbaded378415f8",
+      "candidateRank": 1,
+      "coherencePacketSha256": "B13F906EFD1B782891713A4213C3EECCCE295CD8924930146A53EAFF2162D012",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "The reviewed diff contains hand-maintained source, test, or documentation files and no generator-to-output ownership relationship.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      }
+    },
+    {
+      "name": "cc-rs",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/rust-lang/cc-rs.git",
+      "pinnedHead": "cdb470173f4c9ffe0fa96abe4a408e9d1345fb99",
+      "routeCommit": "c20feddb4f25567c488478cf12e1d95cbb7eef87",
+      "groundTruthCommit": "0e91755354dbfe073fbe5f88aee427b75cc1c06f",
+      "task": "fix: Infer NEON, not VFPv4, from `neon` in the target name (#1843)",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "src/lib.rs",
+        "tests/test.rs"
+      ],
+      "implementationFiles": [
+        "src/lib.rs"
+      ],
+      "testFiles": [
+        "tests/test.rs"
+      ],
+      "auxiliaryFiles": [],
+      "oracleSource": "mechanically eligible single-parent real Git-history diff pending whole-target semantic review",
+      "changedLines": 23,
+      "additions": 22,
+      "deletions": 1,
+      "candidateId": "candidate_fb544c22b29f1170",
+      "candidateRank": 1,
+      "coherencePacketSha256": "4508A2DEE6B3AEF849B2B17408EE2EF9BC4A19F58D75D29E0B828B004EF1A88F",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "The reviewed diff contains hand-maintained source, test, or documentation files and no generator-to-output ownership relationship.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      }
+    }
+  ]
+}

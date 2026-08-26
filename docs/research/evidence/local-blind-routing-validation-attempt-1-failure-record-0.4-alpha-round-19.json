@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "studyId": "local-blind-routing-validation-round-19-attempt-1-0.4-alpha",
+  "generatedAt": "2026-08-12T16:33:07.119Z",
+  "status": "invalid-after-partial-palace-observation",
+  "failureCategory": "validator-commit-message-subject-contract-harness-error",
+  "claimBoundary": "The create-only Round 19 attempt-1 result is preserved as invalid. Seven target pairs were observed before completion, so a corrected attempt is not a pristine first observation for those targets. No product code, candidate hash, target, oracle, gate, or condition order is changed before the corrected replay.",
+  "failedValidationFreeze": {
+    "path": "docs/research/evidence/local-blind-routing-validation-freeze-0.4-alpha-round-19.json",
+    "sha256": "66FCB08D9409232CE3334983A526CC67DF0D5962AD40B71F5C1AA83449F917AB"
+  },
+  "failedFormalResult": {
+    "path": "docs/research/evidence/local-blind-routing-validation-0.4-alpha-round-19-attempt-1.json",
+    "sha256": "FE60BA76CF77C79CC6BE54F3213237B8008D1180A1A0056BE784CE8064344560"
+  },
+  "targetManifest": {
+    "path": "docs/research/evidence/local-blind-routing-target-manifest-0.4-alpha-round-19.json",
+    "sha256": "9589EA30B3367F3E612461808805F4FC1D9D3A145ED5052ABFB3FCE0DCFBE090",
+    "targetsChanged": false,
+    "targetOrderChanged": false,
+    "oracleChanged": false
+  },
+  "candidate": {
+    "freezePath": "docs/research/evidence/local-blind-candidate-freeze-0.4-alpha-round-19.json",
+    "freezeSha256": "A1634BC5BA2563FEE2AE83FEC7FFF9F7F842090FB333158841BAD0EA6C42930A",
+    "cliSha256": "40EB6FAE7BCCFCFCE8788FB48AD8DB15D8F94EB2EBC8EEDADA65E0D5C38B62EA",
+    "sourceTree": {
+      "algorithm": "sha256-path-length-bytes-v1",
+      "fileCount": 185,
+      "sha256": "0481938D792B327E9C0AB9C4499A7C7FB26838D3A61B00C96FEFB23683BAF550"
+    },
+    "changed": false
+  },
+  "observationBoundary": {
+    "pairedTargetsObserved": 7,
+    "requiredPairedTargets": 8,
+    "baselineCompletedTrials": 14,
+    "candidateCompletedTrials": 14,
+    "selectedTaskPalaceCalls": 98,
+    "productCommandsStarted": true,
+    "productTuningBeforeCorrection": false,
+    "partialAggregateIsNotAFormalProductConclusion": true
+  },
+  "failedTarget": {
+    "name": "iniconfig",
+    "candidateId": "candidate_26ef0eeb502a5921",
+    "task": "fix test and code to follow the common convention:",
+    "materializationAttempts": 3,
+    "attempt1ReportedCategory": "environment-or-setup",
+    "correctedCategory": "harness-contract"
+  },
+  "diagnosis": {
+    "selectorContract": "first-nonempty-line-of-git-format-B",
+    "attempt1ValidatorContract": "collapsed-git-format-s-subject",
+    "mismatch": "The iniconfig commit has a multi-line first paragraph. Git %s collapses that paragraph, while the frozen selector intentionally keeps only the first non-empty %B line.",
+    "secondaryHarnessError": "The materialization wrapper labeled every exception environment-or-setup and retried deterministic assertion failures three times."
+  },
+  "correctionBoundary": {
+    "semanticProtocolChange": false,
+    "productChange": false,
+    "taskRemoval": false,
+    "outcomeDependentExclusion": false,
+    "compareFirstNonemptyFormatBLine": true,
+    "classifyNonNetworkMaterializationErrorsAsHarness": true,
+    "retryOnlyEnvironmentMaterializationFailures": true,
+    "correctedResultCreateOnly": true
+  },
+  "competitionFreeze": {
+    "noCommit": true,
+    "noPush": true,
+    "noTag": true,
+    "noNpmPublish": true,
+    "reason": "Do not alter submitted project materials until competition results are announced."
+  }
+}
