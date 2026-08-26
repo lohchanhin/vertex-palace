@@ -1,0 +1,138 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-26T15:44:22.027Z",
+  "claimBoundary": "Product packaging and context-contract validation only; not an Agent performance benchmark.",
+  "sourceCommit": "c22c8e41e8f415cd182513c1cf7a902ca86ad564",
+  "sourceTreeDirty": false,
+  "validationHarnessCommit": "c22c8e41e8f415cd182513c1cf7a902ca86ad564",
+  "package": "vertex-palace@0.4.0-alpha.3",
+  "files": 7,
+  "shasum": "177b583ab0d5bd7682305e199cc8f2abb9523c4a",
+  "integrity": "sha512-rVwwaZMQNBt8sbJV2Al/vo9RWwPn4NMGMOn159DvHDN8j4CPcVzPjm1M+UpkUGaSMbs5KBPH6RrjrKcnJE9qkA==",
+  "cleanInstallVersion": "0.4.0-alpha.3",
+  "gitIsolation": {
+    "statusCleanAfterContext": true,
+    "localExcludeEntries": 1,
+    "ignoreSource": ".git/info/exclude:7:/.palace/\t.palace/palace.yml"
+  },
+  "distractorFiles": 240,
+  "advisoryTrials": [
+    {
+      "trial": 1,
+      "mode": "route-lite",
+      "evidenceStatus": "insufficient",
+      "interventionPolicy": "advisory",
+      "primary": [
+        "src/format-currency.mjs:1"
+      ],
+      "missingRoles": [
+        "verification"
+      ],
+      "stopEnforced": false,
+      "fields": 14,
+      "bytes": 6916,
+      "estimatedTokens": 1729
+    },
+    {
+      "trial": 2,
+      "mode": "route-lite",
+      "evidenceStatus": "insufficient",
+      "interventionPolicy": "advisory",
+      "primary": [
+        "src/format-currency.mjs:1"
+      ],
+      "missingRoles": [
+        "verification"
+      ],
+      "stopEnforced": false,
+      "fields": 14,
+      "bytes": 6916,
+      "estimatedTokens": 1729
+    },
+    {
+      "trial": 3,
+      "mode": "route-lite",
+      "evidenceStatus": "insufficient",
+      "interventionPolicy": "advisory",
+      "primary": [
+        "src/format-currency.mjs:1"
+      ],
+      "missingRoles": [
+        "verification"
+      ],
+      "stopEnforced": false,
+      "fields": 14,
+      "bytes": 6916,
+      "estimatedTokens": 1729
+    },
+    {
+      "trial": 4,
+      "mode": "route-lite",
+      "evidenceStatus": "insufficient",
+      "interventionPolicy": "advisory",
+      "primary": [
+        "src/format-currency.mjs:1"
+      ],
+      "missingRoles": [
+        "verification"
+      ],
+      "stopEnforced": false,
+      "fields": 14,
+      "bytes": 6916,
+      "estimatedTokens": 1729
+    }
+  ],
+  "abstention": {
+    "decision": "abstain",
+    "mode": "route-lite",
+    "resolutionStatus": "disabled",
+    "routeFiles": 0,
+    "estimatedTokens": 1029
+  },
+  "layeredEvaluation": {
+    "coreCoverage": 1,
+    "latentAuxiliaryCoverage": 0,
+    "calibrationCoverage": 1
+  },
+  "relevantMemory": {
+    "mode": "full-palace",
+    "candidates": 1,
+    "included": 1,
+    "excluded": 0,
+    "boundaryFields": 10,
+    "estimatedTokens": 1890,
+    "maxContextTokens": 6000
+  },
+  "historicalScopeAlias": {
+    "mode": "guarded-memory-palace",
+    "candidates": 2,
+    "included": 2,
+    "excluded": 0,
+    "inferredClient": "aurora",
+    "inferenceReason": "unique_historical_alias_match",
+    "primary": [
+      "clients/aurora/article-tokens.mjs"
+    ],
+    "sharedTier": "support",
+    "estimatedTokens": 2719,
+    "maxContextTokens": 5000
+  },
+  "denseMemoryCeiling": {
+    "candidates": 50,
+    "included": 3,
+    "excluded": 47,
+    "json": {
+      "contextBytes": 17638,
+      "estimatedTokens": 4410,
+      "maxContextTokens": 5000,
+      "loadedDrawers": 1,
+      "deferredReferences": 0
+    },
+    "markdown": {
+      "contextBytes": 9733,
+      "contextEstimatedTokens": 2434,
+      "maxContextTokens": 5000
+    }
+  },
+  "installedMcp": "MCP smoke test passed for Vertex Palace 0.4.0-alpha.3 (10 tools, bypass context, 593 delivered bytes)."
+}
