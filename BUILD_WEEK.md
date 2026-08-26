@@ -81,7 +81,8 @@ package, plugin MCP pin, and Git tag are intentionally kept on the same
 version:
 
 This section preserves the submitted competition artifact. Post-competition
-development is published separately in the `0.4.0` stable line; it does not
+development continues in the unpublished `0.4.0` candidate; the fresh Round 21
+stable gate failed, so npm `latest` remains `0.3.0`. Later research does not
 rewrite the frozen Build Week evidence below.
 
 ```bash

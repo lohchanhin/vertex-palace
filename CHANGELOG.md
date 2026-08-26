@@ -2,11 +2,11 @@
 
 ## Unreleased
 
-## 0.4.0 - 2026-08-26
+## 0.4.0 (unpublished candidate) - 2026-08-26
 
 ### Changed
 
-- Promoted the advisory evidence contract, bounded adaptive context modes, scoped memory telemetry, and exact payload accounting from preview to the stable line.
+- Prepared the advisory evidence contract, bounded adaptive context modes, scoped memory telemetry, and exact payload accounting for a fresh stable-candidate study.
 - Added low-confidence conventional entry fallback, additive API-family closure, public declaration/documentation companions, and transitive implementation-bridge preservation.
 - Kept confidence conservative when task-subject, owner-local verification, workspace scope, or causal evidence remains incomplete.
 
@@ -20,7 +20,8 @@
 
 - The full Core suite passes `239/239`; CLI and MCP tests pass `4/4`; research tests pass `233` with `2` protocol-defined skips.
 - The disclosed Round 20 repair replay reached `8/8` known targets, 1.000 macro changed-file coverage, 0.787 macro route focus, and zero overconfident or disagreeing trials.
-- That disclosed replay is not the stable release gate. The release decision is bound to the separately preregistered fresh Round 21 result.
+- That disclosed replay is not the stable release gate. The separately preregistered fresh Round 21 result passed only `4/8` targets, with 0.833 macro changed-file coverage and 0.653 macro route focus.
+- `0.4.0` was not published. npm `latest` remains `0.3.0`, and npm `next` remains `0.4.0-alpha.1`.
 - Static routing quality does not prove general Agent Token, wall-time, tool-call, or correctness improvement.
 
 ## 0.4.0-alpha.1 - 2026-08-26
