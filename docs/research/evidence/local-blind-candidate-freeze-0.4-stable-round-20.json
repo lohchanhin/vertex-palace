@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "studyId": "local-blind-routing-round-20-0.4-stable-candidate",
+  "status": "publicly-preregistered-product-freeze",
+  "frozenAt": "2026-08-26T10:52:45.466Z",
+  "publicPreregistration": true,
+  "claimBoundary": "The immutable public 0.4 alpha and 0.3 stable packages, product artifacts, repository pool, selectors, validator, gates, and execution order were frozen before any Round 20 commit history, task, diff, oracle, semantic review, or Palace result was inspected.",
+  "candidate": {
+    "role": "public-0.4-alpha-stable-candidate",
+    "package": "vertex-palace@0.4.0-alpha.1",
+    "version": "0.4.0-alpha.1",
+    "productCommit": "a8e8b9debb1f5a1e7c218c0bd9ecbca5acc1dd47",
+    "researchCommit": "29b3f25593d215114281a6592939b49db9fc83a2",
+    "sourceState": "immutable-public-npm-package-matched-to-local-build",
+    "cliPath": "dist/palace.cjs",
+    "cliSha256": "469F64BE21668A47404E19E57B8490FEB5FDB474D23B9D4FBB589C0C333E0A38",
+    "generatedMcpPath": "plugins/vertex-palace/mcp/server.cjs",
+    "generatedMcpSha256": "9EFA8AE4AE6432A5F9C5D415863C686DD9556D37D01A244BADCD91A9E8D273C7",
+    "sourceTree": {
+      "algorithm": "sha256-path-length-bytes-v1",
+      "fileCount": 186,
+      "sha256": "E84D838040404AE87AA18009F151F5FDCF078367CA91AB675A75C10BAD5689A0"
+    },
+    "registry": {
+      "registry": "https://registry.npmjs.org/",
+      "version": "0.4.0-alpha.1",
+      "shasum": "dc1a71899664df84be2ce94428e7d6ffc858207d",
+      "integrity": "sha512-XYninBJESrbcggJWfXLHuq+7E8zGdhwLweABF5BcRLXxZoTJ1Q4xN8scdSWCGk2bheHGtiMZObQ4zIRi3mptyQ=="
+    },
+    "cleanInstall": {
+      "version": "0.4.0-alpha.1",
+      "cliSha256": "469F64BE21668A47404E19E57B8490FEB5FDB474D23B9D4FBB589C0C333E0A38",
+      "mcpSha256": "9EFA8AE4AE6432A5F9C5D415863C686DD9556D37D01A244BADCD91A9E8D273C7"
+    }
+  },
+  "comparisonBaseline": {
+    "role": "public-0.3-stable-baseline",
+    "package": "vertex-palace@0.3.0",
+    "version": "0.3.0",
+    "productCommit": "1331d9da0aa242549026d70e7c752638c3169044",
+    "cliPath": "dist/palace.cjs",
+    "cliSha256": "ED63B31DA23240D958E71874BD61A09427659327DC8460D88A3A41D33F5391DE",
+    "generatedMcpPath": "plugins/vertex-palace/mcp/server.cjs",
+    "generatedMcpSha256": "FF9AB422C7B2608389305DC082D0B6F51E1A14D41BD648474C7C8F7CA5CACF72",
+    "registry": {
+      "registry": "https://registry.npmjs.org/",
+      "version": "0.3.0",
+      "shasum": "9a04440d7e95c4d34e68e1b7e2cd3f6ecd62e83e",
+      "integrity": "sha512-DXALXKH1k/Gj7PoprNDmz/tHlYum2T7QsU32el76mHy/U3u42zY02cshm5P8lwY6yqzkIoZ6h9/6df0QOlJp4Q=="
+    },
+    "installContract": "public-registry-clean-install"
+  },
+  "inputs": {
+    "plan": {
+      "path": "docs/research/evidence/local-blind-routing-repository-plan-0.4-stable-round-20.json",
+      "sha256": "A4E7EF7574DD201E271401154A047C51E2FDAE24BA88AFA3F588E2F105B2F69A"
+    },
+    "repositoryPool": {
+      "path": "docs/research/evidence/local-blind-routing-repository-pool-0.4-stable-round-20.json",
+      "sha256": "D8149E5D2B83FB52D18BF7071EC0DDA79BCD104138E74F5D038E8FC26763FC3A"
+    },
+    "headVerification": {
+      "path": "docs/research/evidence/local-blind-routing-repository-head-verification-0.4-stable-round-20.json",
+      "sha256": "59DBFCF521E9419B25BA66910FD9E2D294FE8EDC87B379AE01FD75365F6DD5ED"
+    }
+  },
+  "artifacts": {
+    "docs/research/LOCAL_BLIND_ROUTING_VALIDATION_PROTOCOL_0_4_STABLE_ROUND_20.md": "EFBEBC580222D3D81220EE5D2A127953396DE019B9A917C42D8C6B84FB31CA65",
+    "docs/zh-CN/LOCAL_BLIND_ROUTING_VALIDATION_PROTOCOL_0_4_STABLE_ROUND_20.md": "93EBC96D740475D63EB0F8442AD198A6B742F5AE4B31056F672F94E486CF809E",
+    "docs/research/evidence/local-blind-routing-repository-plan-0.4-stable-round-20.json": "A4E7EF7574DD201E271401154A047C51E2FDAE24BA88AFA3F588E2F105B2F69A",
+    "docs/research/evidence/local-blind-routing-repository-pool-0.4-stable-round-20.json": "D8149E5D2B83FB52D18BF7071EC0DDA79BCD104138E74F5D038E8FC26763FC3A",
+    "docs/research/evidence/local-blind-routing-repository-head-verification-0.4-stable-round-20.json": "59DBFCF521E9419B25BA66910FD9E2D294FE8EDC87B379AE01FD75365F6DD5ED",
+    "scripts/freeze-local-blind-repository-pool-round-20.cjs": "FD46BF2E4998336D7E12C3419497D2387E748B93BFE4CCB796EA4CFF9F9822FC",
+    "scripts/freeze-local-blind-round-20.cjs": "AA1948ADB67D7EA7D8F4FEDF5D9D1CB5A90AC77EB577ABCC8279358B7706CE41",
+    "scripts/prepare-local-blind-routing-candidates-round-20.cjs": "EDB28ACE24F47C3F7A4BA9B2926BC5F340041212527F7D25660B0BFB2BA9098D",
+    "scripts/finalize-local-blind-routing-targets-round-20.cjs": "3EE720FC450F306FF4C17012945E9A922539B0945A853FF19516E5389133111A",
+    "scripts/freeze-local-blind-validation-round-20.cjs": "584E6A45C8E49B7488809034859CE8D0C50171EC2CE70D23727CF52C82711009",
+    "scripts/verify-local-blind-routing-round-20.cjs": "B8AC51732DD72202B39CF4D7497157A2B25811C52B2D0F6271B0C16C251C3F81",
+    "scripts/lib/commit-task-classifier.cjs": "C3D787029C019FD64BFB079913F23B58082C38560448A9B9567954ECA9FE1254",
+    "scripts/lib/held-out-file-surfaces.cjs": "A604A7F55386C1C45BEBBCCA0024B40D84798C4480247181895238929B9F030D",
+    "scripts/lib/local-blind-freeze.cjs": "9DEA98622B7204B112BDA3A14F3B87E76797ACD5552126841FE170FEEEA9D36A",
+    "scripts/lib/round20-target-selection.cjs": "02E3B9A45E70501B4E27925C6A8E3E591935686171A1054DE0488F903299A8F8",
+    "scripts/lib/task-diff-coherence.cjs": "744D409FE39D2E951A426788D5719413729DD220A24D303282D1256CD92A8779",
+    "scripts/test/round20-preregistration.test.cjs": "37A601916F7A99788A4D9F76E3B065CD44E87B5BD24CA073B4DFCAD4BAF57560"
+  },
+  "selectionRules": {
+    "candidateTaskHistoryObservedBeforeFreeze": false,
+    "candidateTaskDiffObservedBeforeFreeze": false,
+    "palaceCallsOnCandidateTasksBeforeFreeze": 0,
+    "mechanicalCandidatesPerRepositoryMaximum": 5,
+    "newestFirstReviewOrder": true,
+    "familyQuotaStopsLaterReviews": true,
+    "wholeTargetSemanticReviewRequired": true,
+    "uncertainHunkRejectsWholeTarget": true,
+    "partialOraclePruningForbidden": true,
+    "resultCreateOnly": true,
+    "productChangesForbiddenUntilFirstResultPreserved": true
+  }
+}
