@@ -20,18 +20,30 @@ async function assertCandidateFreeze({ root, freezePath, studyId }) {
   const freeze = JSON.parse(freezeBytes.toString("utf8"));
   assert.equal(freeze.schemaVersion, 1);
   assert.equal(freeze.studyId, studyId);
-  assert.equal(freeze.status, "locally-frozen");
-  assert.equal(freeze.publicPreregistration, false);
-  assert.equal(freeze.competitionFreeze.noCommit, true);
-  assert.equal(freeze.competitionFreeze.noPush, true);
-  assert.equal(freeze.competitionFreeze.noTag, true);
-  assert.equal(freeze.competitionFreeze.noNpmPublish, true);
-
-  assert.equal(
-    run("git", ["rev-parse", "HEAD"], { cwd: root }).stdout.trim(),
-    freeze.candidate.baseCommit,
-    "Git base commit changed after the local candidate freeze"
+  assert.ok(
+    freeze.status === "locally-frozen"
+      || freeze.status === "publicly-preregistered-product-freeze",
+    `Unsupported candidate freeze status: ${freeze.status}`
   );
+  if (freeze.status === "locally-frozen") {
+    assert.equal(freeze.publicPreregistration, false);
+    assert.equal(freeze.competitionFreeze.noCommit, true);
+    assert.equal(freeze.competitionFreeze.noPush, true);
+    assert.equal(freeze.competitionFreeze.noTag, true);
+    assert.equal(freeze.competitionFreeze.noNpmPublish, true);
+  } else {
+    assert.equal(freeze.publicPreregistration, true);
+  }
+
+  if (freeze.status === "locally-frozen") {
+    assert.equal(
+      run("git", ["rev-parse", "HEAD"], { cwd: root }).stdout.trim(),
+      freeze.candidate.baseCommit,
+      "Git base commit changed after the local candidate freeze"
+    );
+  } else {
+    run("git", ["cat-file", "-e", `${freeze.candidate.researchCommit}^{commit}`], { cwd: root });
+  }
   run("git", ["cat-file", "-e", `${freeze.comparisonBaseline.productCommit}^{commit}`], { cwd: root });
 
   for (const [relativePath, expectedHash] of Object.entries(freeze.artifacts)) {
@@ -64,7 +76,10 @@ async function assertCandidateFreeze({ root, freezePath, studyId }) {
 async function validateRepositoryPool({ root, pool, studyId, freezeRelativePath }) {
   assert.equal(pool.schemaVersion, 1);
   assert.equal(pool.studyId, studyId);
-  assert.equal(pool.status, "locally-frozen");
+  assert.ok(
+    pool.status === "locally-frozen" || pool.status === "publicly-preregistered-pool",
+    `Unsupported repository pool status: ${pool.status}`
+  );
   assert.equal(pool.candidateFreeze.path, freezeRelativePath);
   assert.equal(pool.rules.desiredTargets, 8);
   assert.deepEqual(pool.rules.requiredLanguageFamilies, [
