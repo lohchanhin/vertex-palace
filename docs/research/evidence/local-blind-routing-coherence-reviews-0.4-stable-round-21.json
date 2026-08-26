@@ -1,0 +1,1213 @@
+{
+  "schemaVersion": 1,
+  "studyId": "local-blind-routing-round-21-0.4-stable-candidate",
+  "generatedAt": "2026-08-26T13:24:39.320Z",
+  "status": "review-complete",
+  "claimBoundary": "Developer-delegated, Codex-assisted semantic review performed after the publicly preregistered Round 21 candidate freeze and before any Palace call on candidate tasks. The reviewer is not independent from product development, and no inter-rater agreement is available.",
+  "reviewBoundary": "single-developer-delegated-semantic-reviewer",
+  "publicPreregistration": true,
+  "candidateFreeze": {
+    "path": "docs/research/evidence/local-blind-candidate-freeze-0.4-stable-round-21.json",
+    "sha256": "2C49CCEC5E252DE49B6728B2FE2177139AB57475D35C3FD1AFF2737E056F372A",
+    "frozenAt": "2026-08-26T12:52:18.873Z",
+    "artifactHashesVerified": true
+  },
+  "queue": {
+    "path": "docs/research/evidence/local-blind-routing-candidate-queue-0.4-stable-round-21-attempt-1.json",
+    "sha256": "CABF864AC5F249420EAED9634648AE76D9299D10EC47B2104546394E6E71440F"
+  },
+  "reviewer": {
+    "id": "developer-delegated-codex-semantic-reviewer-1",
+    "role": "product-developer-delegated-semantic-review",
+    "codexAssisted": true,
+    "independent": false,
+    "interRaterAgreementAvailable": false
+  },
+  "timing": {
+    "candidateFrozenBeforeReview": true,
+    "reviewBeforeAnyPalaceCall": true,
+    "palaceCallsOnCandidateTasks": 0
+  },
+  "method": {
+    "candidateOrder": "newest-first within each repository",
+    "wholeTargetDecision": true,
+    "uncertainHunkRejectsTarget": true,
+    "partialOraclePruningForbidden": true,
+    "everyHunkReviewed": true
+  },
+  "limitations": [
+    "The semantic reviewer is not independent from product development.",
+    "No second reviewer or inter-rater agreement is available.",
+    "Ambiguous or unrelated hunks reject the whole target rather than being removed from the oracle."
+  ],
+  "reviews": [
+    {
+      "repository": "npm-run-path",
+      "candidateId": "candidate_680f46c0cb9ab685",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "The frozen changed-file set does not establish a generator-owner to generated-output relationship within this whole target.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      },
+      "review": {
+        "schemaVersion": 1,
+        "packetSha256": "C02727625EB92596170D3DA5EABB1D0804CE25640BE4C1A9FBEF93E4FA00C926",
+        "reviewTiming": "pre-route",
+        "reviewPerformedAfterCandidateFreeze": true,
+        "reviewedWithoutPalaceOutput": true,
+        "palaceCallsOnCandidateTask": 0,
+        "targetDecision": "accept",
+        "files": [
+          {
+            "path": "index.d.ts",
+            "decision": "task-aligned",
+            "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. All hunks in index.d.ts stay within that task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_67003aeea9579afe",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is index.d.ts @@ -1 +1 @@."
+              },
+              {
+                "id": "hunk_bd2a80bb1712952d",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is index.d.ts @@ -10,8 +10 @@ export interface RunPathOptions {."
+              },
+              {
+                "id": "hunk_9c85cda0ff7ada65",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is index.d.ts @@ -21 +14 @@ export interface RunPathOptions {."
+              },
+              {
+                "id": "hunk_701749cb3fe40eba",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is index.d.ts @@ -24,3 +16,0 @@ export interface RunPathOptions {."
+              },
+              {
+                "id": "hunk_c2652a9cb2e3e4ca",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is index.d.ts @@ -28 +17,0 @@ export type ProcessEnv = Record<string, string | undefined>;."
+              },
+              {
+                "id": "hunk_727c95aede5d7132",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is index.d.ts @@ -30 +19 @@ export interface EnvOptions {."
+              },
+              {
+                "id": "hunk_22bb1b076eb054b9",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is index.d.ts @@ -32 +21 @@ export interface EnvOptions {."
+              },
+              {
+                "id": "hunk_e4d2caa0795553cc",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is index.d.ts @@ -34 +23 @@ export interface EnvOptions {."
+              },
+              {
+                "id": "hunk_c0be92b4f4f3a1c8",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is index.d.ts @@ -37 +26,3 @@ export interface EnvOptions {."
+              },
+              {
+                "id": "hunk_c7670b99fbbd81d2",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is index.d.ts @@ -39 +30,2 @@ export interface EnvOptions {."
+              },
+              {
+                "id": "hunk_78d78d25fc97fd09",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is index.d.ts @@ -40,0 +33 @@ export interface EnvOptions {."
+              },
+              {
+                "id": "hunk_57385071537d3fd9",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is index.d.ts @@ -42 +35 @@ export interface EnvOptions {."
+              },
+              {
+                "id": "hunk_8332a6f2f9a13140",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is index.d.ts @@ -44 +37 @@ export interface EnvOptions {."
+              },
+              {
+                "id": "hunk_7769493dfe627eec",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is index.d.ts @@ -46 +39 @@ export interface EnvOptions {."
+              },
+              {
+                "id": "hunk_0bfd793bfd85f25a",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is index.d.ts @@ -48,2 +41,13 @@ export interface EnvOptions {."
+              },
+              {
+                "id": "hunk_04a0e85236e1b33e",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is index.d.ts @@ -70,0 +75,2 @@ export function npmRunPath(options?: RunPathOptions): string;."
+              }
+            ]
+          },
+          {
+            "path": "index.js",
+            "decision": "task-aligned",
+            "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. All hunks in index.js stay within that task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_5e89bde1fe6c498e",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is index.js @@ -3 +3 @@ import path from 'node:path';."
+              },
+              {
+                "id": "hunk_822528f1a7803aad",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is index.js @@ -6,6 +6,21 @@ import pathKey from 'path-key';."
+              },
+              {
+                "id": "hunk_399467190bbdc6bb",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is index.js @@ -12,0 +28 @@ export function npmRunPath(options = {}) {."
+              },
+              {
+                "id": "hunk_eb64630c80478380",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is index.js @@ -14,4 +29,0 @@ export function npmRunPath(options = {}) {."
+              },
+              {
+                "id": "hunk_e1f84407da0742d5",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is index.js @@ -23,0 +36 @@ export function npmRunPath(options = {}) {."
+              },
+              {
+                "id": "hunk_5f99e658d352951c",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is index.js @@ -25,5 +38,5 @@ export function npmRunPath(options = {}) {."
+              },
+              {
+                "id": "hunk_dd21deb21ca55067",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is index.js @@ -31 +44 @@ export function npmRunPath(options = {}) {."
+              },
+              {
+                "id": "hunk_6651885435cb08fe",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is index.js @@ -34,3 +47,3 @@ export function npmRunPathEnv({env = process.env, ...options} = {}) {."
+              },
+              {
+                "id": "hunk_6227dfb0c35b3fcf",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is index.js @@ -39 +52 @@ export function npmRunPathEnv({env = process.env, ...options} = {}) {."
+              }
+            ]
+          },
+          {
+            "path": "index.test-d.ts",
+            "decision": "task-aligned",
+            "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. All hunks in index.test-d.ts stay within that task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_899c2b5d9ca89dc3",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is index.test-d.ts @@ -2 +2 @@ import process from 'node:process';."
+              },
+              {
+                "id": "hunk_dec37c88d6a3390c",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is index.test-d.ts @@ -4,0 +5,2 @@ import {npmRunPath, npmRunPathEnv, ProcessEnv} from './index.js';."
+              },
+              {
+                "id": "hunk_89827d59729ae50b",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is index.test-d.ts @@ -7 +9,2 @@ expectType<string>(npmRunPath({cwd: '/foo'}));."
+              },
+              {
+                "id": "hunk_4c05a6eb991f487e",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is index.test-d.ts @@ -8,0 +12,2 @@ expectType<string>(npmRunPath({path: '/usr/local/bin'}));."
+              },
+              {
+                "id": "hunk_5f973160e2f628e6",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is index.test-d.ts @@ -10 +15,6 @@ expectType<string>(npmRunPath({execPath: '/usr/local/bin'}));."
+              },
+              {
+                "id": "hunk_6703a4c05f401a24",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is index.test-d.ts @@ -14 +24,2 @@ expectType<ProcessEnv>(npmRunPathEnv({cwd: '/foo'}));."
+              },
+              {
+                "id": "hunk_6662393f0aab0e4a",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is index.test-d.ts @@ -15,0 +27,5 @@ expectType<ProcessEnv>(npmRunPathEnv({env: process.env})); // eslint-disable-lin."
+              },
+              {
+                "id": "hunk_146c776b7851e441",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is index.test-d.ts @@ -17 +33,6 @@ expectType<ProcessEnv>(npmRunPathEnv({execPath: '/usr/local/bin'}));."
+              }
+            ]
+          },
+          {
+            "path": "readme.md",
+            "decision": "task-aligned",
+            "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. All hunks in readme.md stay within that task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_5becb58ea7b654eb",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is readme.md @@ -34,0 +35,3 @@ childProcess.execFileSync('foo', {."
+              },
+              {
+                "id": "hunk_242e1c32931e4c90",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is readme.md @@ -37 +40,8 @@ Returns the augmented PATH string.."
+              },
+              {
+                "id": "hunk_7f563f5a27dd465d",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is readme.md @@ -41 +51 @@ Type: `object`."
+              },
+              {
+                "id": "hunk_8458ab3b2d1845ea",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is readme.md @@ -48,10 +58 @@ The working directory.."
+              },
+              {
+                "id": "hunk_67289f60f40e8eb7",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is readme.md @@ -60 +61 @@ Type: `string | URL`\\."
+              },
+              {
+                "id": "hunk_fa54824f4fadab25",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is readme.md @@ -62 +63 @@ Default: `process.execPath`."
+              },
+              {
+                "id": "hunk_0036eee172582826",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is readme.md @@ -66 +67 @@ This can be either an absolute path or a path relative to the [`cwd` option](#cw."
+              },
+              {
+                "id": "hunk_105d2d2b0edd4e67",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is readme.md @@ -68 +69,2 @@ This can be either an absolute path or a path relative to the [`cwd` option](#cw."
+              },
+              {
+                "id": "hunk_b4b938fdcb93ffde",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is readme.md @@ -70 +72 @@ Returns the augmented [`process.env`](https://nodejs.org/api/process.html#proces."
+              },
+              {
+                "id": "hunk_1c69a12c9f1b62b9",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is readme.md @@ -72 +74 @@ Returns the augmented [`process.env`](https://nodejs.org/api/process.html#proces."
+              },
+              {
+                "id": "hunk_704156d4125630a2",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is readme.md @@ -74 +76,2 @@ Type: `object`."
+              },
+              {
+                "id": "hunk_3e7e6beb571e4077",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is readme.md @@ -76,2 +79 @@ Type: `object`."
+              },
+              {
+                "id": "hunk_b8c195a237097ec2",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is readme.md @@ -79 +81 @@ Default: `process.cwd()`."
+              },
+              {
+                "id": "hunk_894eec46e50a2c1d",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is readme.md @@ -81 +83,2 @@ The working directory.."
+              },
+              {
+                "id": "hunk_7df0de7b0c7dd001",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is readme.md @@ -83 +86 @@ The working directory.."
+              },
+              {
+                "id": "hunk_2d363beb11f74879",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is readme.md @@ -85 +88 @@ Type: `object`."
+              },
+              {
+                "id": "hunk_9a08981e008af9b3",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is readme.md @@ -87 +90 @@ Accepts an object of environment variables, like `process.env`, and modifies the."
+              },
+              {
+                "id": "hunk_f7b14dadce0aaaeb",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is readme.md @@ -89,2 +92 @@ Accepts an object of environment variables, like `process.env`, and modifies the."
+              },
+              {
+                "id": "hunk_57f52c4d68701029",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is readme.md @@ -92 +94,2 @@ Default: `process.execPath`."
+              },
+              {
+                "id": "hunk_5bbee895ddf5b9ba",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is readme.md @@ -94 +97,3 @@ The path to the Node.js executable to use in child processes if that is differen."
+              }
+            ]
+          },
+          {
+            "path": "test.js",
+            "decision": "task-aligned",
+            "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. All hunks in test.js stay within that task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_20ccebb005de4872",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is test.js @@ -9 +9 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));."
+              },
+              {
+                "id": "hunk_99f9be6c523d32e8",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is test.js @@ -11,2 +11,2 @@ test('main', t => {."
+              },
+              {
+                "id": "hunk_a1979cbcc8250bd7",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is test.js @@ -13,0 +14 @@ test('main', t => {."
+              },
+              {
+                "id": "hunk_2a4fec07e60f46e7",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is test.js @@ -14,0 +16,6 @@ test('main', t => {."
+              },
+              {
+                "id": "hunk_9556f95b14a5bf12",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is test.js @@ -16,2 +23,2 @@ test('main', t => {."
+              },
+              {
+                "id": "hunk_a041e18a98a9ee90",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is test.js @@ -19 +26,6 @@ test('main', t => {."
+              },
+              {
+                "id": "hunk_f3ebdd1084bddf1d",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is test.js @@ -40,6 +52,19 @@ test('push `execPath` later in the PATH', t => {."
+              },
+              {
+                "id": "hunk_2f28ad81f91d3185",
+                "decision": "task-aligned",
+                "reason": "The implementation, shared option types, type assertions, documentation, and runtime tests consistently add independent preferLocal and addExecPath controls. The subject's addExecaPath spelling is an obvious label typo because every changed API surface uses addExecPath. This reviewed hunk is test.js @@ -48,4 +73,2 @@ test('the `execPath` option can be a file URL', t => {."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "repository": "cli-truncate",
+      "candidateId": "candidate_e8119c62d117d96e",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "The frozen changed-file set does not establish a generator-owner to generated-output relationship within this whole target.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      },
+      "review": {
+        "schemaVersion": 1,
+        "packetSha256": "AD6459D04F4AD6097351F81F5A805FEFC55676D9F5D5F78F72FBB881B6FCDB9C",
+        "reviewTiming": "pre-route",
+        "reviewPerformedAfterCandidateFreeze": true,
+        "reviewedWithoutPalaceOutput": true,
+        "palaceCallsOnCandidateTask": 0,
+        "targetDecision": "accept",
+        "files": [
+          {
+            "path": "index.js",
+            "decision": "task-aligned",
+            "reason": "The implementation reserves the truncation glyph width before splitting the middle-position budget, and every added assertion verifies that small-width middle truncation stays within the requested columns. All hunks in index.js stay within that task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_a722dfc5121b0e16",
+                "decision": "task-aligned",
+                "reason": "The implementation reserves the truncation glyph width before splitting the middle-position budget, and every added assertion verifies that small-width middle truncation stays within the requested columns. This reviewed hunk is index.js @@ -134,0 +135,6 @@ export default function cliTruncate(text, columns, options = {}) {."
+              },
+              {
+                "id": "hunk_16356008c7ae3e27",
+                "decision": "task-aligned",
+                "reason": "The implementation reserves the truncation glyph width before splitting the middle-position budget, and every added assertion verifies that small-width middle truncation stays within the requested columns. This reviewed hunk is index.js @@ -137 +143,5 @@ export default function cliTruncate(text, columns, options = {}) {."
+              },
+              {
+                "id": "hunk_82c96aa40c06cebb",
+                "decision": "task-aligned",
+                "reason": "The implementation reserves the truncation glyph width before splitting the middle-position budget, and every added assertion verifies that small-width middle truncation stays within the requested columns. This reviewed hunk is index.js @@ -141 +151 @@ export default function cliTruncate(text, columns, options = {}) {."
+              },
+              {
+                "id": "hunk_32594b70a10f3ab8",
+                "decision": "task-aligned",
+                "reason": "The implementation reserves the truncation glyph width before splitting the middle-position budget, and every added assertion verifies that small-width middle truncation stays within the requested columns. This reviewed hunk is index.js @@ -148 +158 @@ export default function cliTruncate(text, columns, options = {}) {."
+              }
+            ]
+          },
+          {
+            "path": "test.js",
+            "decision": "task-aligned",
+            "reason": "The implementation reserves the truncation glyph width before splitting the middle-position budget, and every added assertion verifies that small-width middle truncation stays within the requested columns. All hunks in test.js stay within that task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_2c1882f96bdf3c48",
+                "decision": "task-aligned",
+                "reason": "The implementation reserves the truncation glyph width before splitting the middle-position budget, and every added assertion verifies that small-width middle truncation stays within the requested columns. This reviewed hunk is test.js @@ -37,0 +38,7 @@ test('space option', t => {."
+              },
+              {
+                "id": "hunk_dc51feee2d98501a",
+                "decision": "task-aligned",
+                "reason": "The implementation reserves the truncation glyph width before splitting the middle-position budget, and every added assertion verifies that small-width middle truncation stays within the requested columns. This reviewed hunk is test.js @@ -46,0 +54,6 @@ test('preferTruncationOnSpace option', t => {."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "repository": "outcome",
+      "candidateId": "candidate_30496456b2bdb8af",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "The frozen changed-file set does not establish a generator-owner to generated-output relationship within this whole target.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      },
+      "review": {
+        "schemaVersion": 1,
+        "packetSha256": "B4772F0C3779053B30879E6417697580CC660E1255EE54000A6623CFC2D9B07D",
+        "reviewTiming": "pre-route",
+        "reviewPerformedAfterCandidateFreeze": true,
+        "reviewedWithoutPalaceOutput": true,
+        "palaceCallsOnCandidateTask": 0,
+        "targetDecision": "accept",
+        "files": [
+          {
+            "path": "src/outcome/_impl.py",
+            "decision": "task-aligned",
+            "reason": "The finally block removes Error.unwrap frame references to the captured exception, while the regression test inspects the traceback frame and confirms its locals are empty. All hunks in src/outcome/_impl.py stay within that task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_3b0e3eda1a35e57f",
+                "decision": "task-aligned",
+                "reason": "The finally block removes Error.unwrap frame references to the captured exception, while the regression test inspects the traceback frame and confirms its locals are empty. This reviewed hunk is src/outcome/_impl.py @@ -137 +137,16 @@ class Error(Outcome):."
+              }
+            ]
+          },
+          {
+            "path": "tests/test_sync.py",
+            "decision": "task-aligned",
+            "reason": "The finally block removes Error.unwrap frame references to the captured exception, while the regression test inspects the traceback frame and confirms its locals are empty. All hunks in tests/test_sync.py stay within that task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_85ff2b4e78965cbe",
+                "decision": "task-aligned",
+                "reason": "The finally block removes Error.unwrap frame references to the captured exception, while the regression test inspects the traceback frame and confirms its locals are empty. This reviewed hunk is tests/test_sync.py @@ -0,0 +1 @@."
+              },
+              {
+                "id": "hunk_1ad8415198213e86",
+                "decision": "task-aligned",
+                "reason": "The finally block removes Error.unwrap frame references to the captured exception, while the regression test inspects the traceback frame and confirms its locals are empty. This reviewed hunk is tests/test_sync.py @@ -119,0 +121,19 @@ def test_traceback_frame_removal():."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "repository": "async-timeout",
+      "candidateId": "candidate_65987ee26fb647a2",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "The frozen changed-file set does not establish a generator-owner to generated-output relationship within this whole target.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      },
+      "review": {
+        "schemaVersion": 1,
+        "packetSha256": "371ED5AE7C5BD3AE96E982ACCBCB582E407314601F69A5A53A3FB68832830595",
+        "reviewTiming": "pre-route",
+        "reviewPerformedAfterCandidateFreeze": true,
+        "reviewedWithoutPalaceOutput": true,
+        "palaceCallsOnCandidateTask": 0,
+        "targetDecision": "accept",
+        "files": [
+          {
+            "path": "CHANGES.rst",
+            "decision": "task-aligned",
+            "reason": "The changelog, rescheduling implementation, handler lifecycle changes, and regression tests all address the two stated timeout regressions: no early exception before context entry and call_soon cancellation after an expired entry. All hunks in CHANGES.rst stay within that task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_6bfd2d26fd6cb0e7",
+                "decision": "task-aligned",
+                "reason": "The changelog, rescheduling implementation, handler lifecycle changes, and regression tests all address the two stated timeout regressions: no early exception before context entry and call_soon cancellation after an expired entry. This reviewed hunk is CHANGES.rst @@ -3,0 +4,13 @@ CHANGES."
+              }
+            ]
+          },
+          {
+            "path": "async_timeout/__init__.py",
+            "decision": "task-aligned",
+            "reason": "The changelog, rescheduling implementation, handler lifecycle changes, and regression tests all address the two stated timeout regressions: no early exception before context entry and call_soon cancellation after an expired entry. All hunks in async_timeout/__init__.py stay within that task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_8a3cca7e44591356",
+                "decision": "task-aligned",
+                "reason": "The changelog, rescheduling implementation, handler lifecycle changes, and regression tests all address the two stated timeout regressions: no early exception before context entry and call_soon cancellation after an expired entry. This reviewed hunk is async_timeout/__init__.py @@ -83 +83 @@ class Timeout:."
+              },
+              {
+                "id": "hunk_5d2b4fa50de425dd",
+                "decision": "task-aligned",
+                "reason": "The changelog, rescheduling implementation, handler lifecycle changes, and regression tests all address the two stated timeout regressions: no early exception before context entry and call_soon cancellation after an expired entry. This reviewed hunk is async_timeout/__init__.py @@ -91,3 +90,0 @@ class Timeout:."
+              },
+              {
+                "id": "hunk_86a7b8a0d0a8ab8e",
+                "decision": "task-aligned",
+                "reason": "The changelog, rescheduling implementation, handler lifecycle changes, and regression tests all address the two stated timeout regressions: no early exception before context entry and call_soon cancellation after an expired entry. This reviewed hunk is async_timeout/__init__.py @@ -182,0 +180,9 @@ class Timeout:."
+              },
+              {
+                "id": "hunk_906b795a89d4b7bc",
+                "decision": "task-aligned",
+                "reason": "The changelog, rescheduling implementation, handler lifecycle changes, and regression tests all address the two stated timeout regressions: no early exception before context entry and call_soon cancellation after an expired entry. This reviewed hunk is async_timeout/__init__.py @@ -183,0 +190,4 @@ class Timeout:."
+              },
+              {
+                "id": "hunk_ea3c651f17da0d39",
+                "decision": "task-aligned",
+                "reason": "The changelog, rescheduling implementation, handler lifecycle changes, and regression tests all address the two stated timeout regressions: no early exception before context entry and call_soon cancellation after an expired entry. This reviewed hunk is async_timeout/__init__.py @@ -185,9 +195,3 @@ class Timeout:."
+              },
+              {
+                "id": "hunk_0c4205dc9e5603a0",
+                "decision": "task-aligned",
+                "reason": "The changelog, rescheduling implementation, handler lifecycle changes, and regression tests all address the two stated timeout regressions: no early exception before context entry and call_soon cancellation after an expired entry. This reviewed hunk is async_timeout/__init__.py @@ -198,0 +203 @@ class Timeout:."
+              },
+              {
+                "id": "hunk_22f9332b6a8455c3",
+                "decision": "task-aligned",
+                "reason": "The changelog, rescheduling implementation, handler lifecycle changes, and regression tests all address the two stated timeout regressions: no early exception before context entry and call_soon cancellation after an expired entry. This reviewed hunk is async_timeout/__init__.py @@ -211,0 +217,2 @@ class Timeout:."
+              }
+            ]
+          },
+          {
+            "path": "tests/test_timeout.py",
+            "decision": "task-aligned",
+            "reason": "The changelog, rescheduling implementation, handler lifecycle changes, and regression tests all address the two stated timeout regressions: no early exception before context entry and call_soon cancellation after an expired entry. All hunks in tests/test_timeout.py stay within that task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_7272d586948721ba",
+                "decision": "task-aligned",
+                "reason": "The changelog, rescheduling implementation, handler lifecycle changes, and regression tests all address the two stated timeout regressions: no early exception before context entry and call_soon cancellation after an expired entry. This reviewed hunk is tests/test_timeout.py @@ -85 +85,2 @@ async def test_timeout_zero() -> None:."
+              },
+              {
+                "id": "hunk_fd3f3c96a1b73be4",
+                "decision": "task-aligned",
+                "reason": "The changelog, rescheduling implementation, handler lifecycle changes, and regression tests all address the two stated timeout regressions: no early exception before context entry and call_soon cancellation after an expired entry. This reviewed hunk is tests/test_timeout.py @@ -310 +311 @@ async def test_shift_nonscheduled() -> None:."
+              },
+              {
+                "id": "hunk_092aadbc59eb4d9f",
+                "decision": "task-aligned",
+                "reason": "The changelog, rescheduling implementation, handler lifecycle changes, and regression tests all address the two stated timeout regressions: no early exception before context entry and call_soon cancellation after an expired entry. This reviewed hunk is tests/test_timeout.py @@ -313,0 +315 @@ async def test_shift_by_negative_expired() -> None:."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "repository": "go-shellwords",
+      "candidateId": "candidate_87de8fc07af63376",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "The frozen changed-file set does not establish a generator-owner to generated-output relationship within this whole target.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      },
+      "review": {
+        "schemaVersion": 1,
+        "packetSha256": "358054F15BE7582B762E84CF3CDD5274058405FC45984F900B6F9F75FD9406F1",
+        "reviewTiming": "pre-route",
+        "reviewPerformedAfterCandidateFreeze": true,
+        "reviewedWithoutPalaceOutput": true,
+        "palaceCallsOnCandidateTask": 0,
+        "targetDecision": "reject",
+        "files": [
+          {
+            "path": "shellwords.go",
+            "decision": "unrelated",
+            "reason": "At least one indivisible hunk in shellwords.go is unrelated; the whole file and target are rejected without pruning.",
+            "hunks": [
+              {
+                "id": "hunk_a27f290981d8346d",
+                "decision": "unrelated",
+                "reason": "This hunk only corrects the spelling of 'indictes' in the SetExcludeSeparators comment and does not implement either comment handling inside substitutions or empty-word suppression."
+              },
+              {
+                "id": "hunk_69e42f0adb33e1b3",
+                "decision": "task-aligned",
+                "reason": "The parser conditions and substitution tests address comment parsing inside command substitutions and suppress empty unquoted substitution words while preserving explicitly quoted empty words. This reviewed hunk is shellwords.go @@ -223 +223 @@ loop:."
+              },
+              {
+                "id": "hunk_5ea494c8e227d201",
+                "decision": "task-aligned",
+                "reason": "The parser conditions and substitution tests address comment parsing inside command substitutions and suppress empty unquoted substitution words while preserving explicitly quoted empty words. This reviewed hunk is shellwords.go @@ -353 +353 @@ loop:."
+              },
+              {
+                "id": "hunk_77b514a4be9dd55f",
+                "decision": "task-aligned",
+                "reason": "The parser conditions and substitution tests address comment parsing inside command substitutions and suppress empty unquoted substitution words while preserving explicitly quoted empty words. This reviewed hunk is shellwords.go @@ -366 +366 @@ loop:."
+              }
+            ]
+          },
+          {
+            "path": "shellwords_test.go",
+            "decision": "unrelated",
+            "reason": "At least one indivisible hunk in shellwords_test.go is unrelated; the whole file and target are rejected without pruning.",
+            "hunks": [
+              {
+                "id": "hunk_45251999913ebb1e",
+                "decision": "unrelated",
+                "reason": "This combined hunk contains aligned substitution regressions but also adds TestExcludeSeparators, a separate parser-option test unrelated to comment handling or empty substitution words; partial hunk pruning is forbidden."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "repository": "go-shellwords",
+      "candidateId": "candidate_6f3995fb3cbe9d37",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "The frozen changed-file set does not establish a generator-owner to generated-output relationship within this whole target.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      },
+      "review": {
+        "schemaVersion": 1,
+        "packetSha256": "2B7186E7B9B139B47C382B1E4C096278C2084D2FD8C391C90DCAAAB95C8B9712",
+        "reviewTiming": "pre-route",
+        "reviewPerformedAfterCandidateFreeze": true,
+        "reviewedWithoutPalaceOutput": true,
+        "palaceCallsOnCandidateTask": 0,
+        "targetDecision": "accept",
+        "files": [
+          {
+            "path": "shellwords.go",
+            "decision": "task-aligned",
+            "reason": "The parser now classifies the complete redirect prefix as numeric before rewinding it, and the regression test covers both a non-numeric token and a multi-digit file descriptor. All hunks in shellwords.go stay within that task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_c03a430c8aae6504",
+                "decision": "task-aligned",
+                "reason": "The parser now classifies the complete redirect prefix as numeric before rewinding it, and the regression test covers both a non-numeric token and a multi-digit file descriptor. This reviewed hunk is shellwords.go @@ -287,2 +287,9 @@ loop:."
+              }
+            ]
+          },
+          {
+            "path": "shellwords_test.go",
+            "decision": "task-aligned",
+            "reason": "The parser now classifies the complete redirect prefix as numeric before rewinding it, and the regression test covers both a non-numeric token and a multi-digit file descriptor. All hunks in shellwords_test.go stay within that task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_abc9c2390f889db2",
+                "decision": "task-aligned",
+                "reason": "The parser now classifies the complete redirect prefix as numeric before rewinding it, and the regression test covers both a non-numeric token and a multi-digit file descriptor. This reviewed hunk is shellwords_test.go @@ -492,0 +493,30 @@ func TestHaveRedirect(t *testing.T) {."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "repository": "go-sqlite3",
+      "candidateId": "candidate_d037eecd7acd560d",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "The frozen changed-file set does not establish a generator-owner to generated-output relationship within this whole target.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      },
+      "review": {
+        "schemaVersion": 1,
+        "packetSha256": "AA090AB41431903F6EF613CAB4DEF5FA04047AEC1F6896BF9E982BC8C84EF100",
+        "reviewTiming": "pre-route",
+        "reviewPerformedAfterCandidateFreeze": true,
+        "reviewedWithoutPalaceOutput": true,
+        "palaceCallsOnCandidateTask": 0,
+        "targetDecision": "accept",
+        "files": [
+          {
+            "path": "sqlite3.go",
+            "decision": "task-aligned",
+            "reason": "The query loop detects SQLite's successful prepare with a null statement for comment-only or whitespace-only input, returns safe empty rows, and the tests exercise QueryRow, Query, and Exec without a panic. All hunks in sqlite3.go stay within that task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_43ba145374e9071f",
+                "decision": "task-aligned",
+                "reason": "The query loop detects SQLite's successful prepare with a null statement for comment-only or whitespace-only input, returns safe empty rows, and the tests exercise QueryRow, Query, and Exec without a panic. This reviewed hunk is sqlite3.go @@ -1020 +1020,13 @@ func (c *SQLiteConn) query(ctx context.Context, query string, args []driver.Name."
+              },
+              {
+                "id": "hunk_247c97681d7b3b88",
+                "decision": "task-aligned",
+                "reason": "The query loop detects SQLite's successful prepare with a null statement for comment-only or whitespace-only input, returns safe empty rows, and the tests exercise QueryRow, Query, and Exec without a panic. This reviewed hunk is sqlite3.go @@ -1023 +1035 @@ func (c *SQLiteConn) query(ctx context.Context, query string, args []driver.Name."
+              },
+              {
+                "id": "hunk_0bfdd8452042f198",
+                "decision": "task-aligned",
+                "reason": "The query loop detects SQLite's successful prepare with a null statement for comment-only or whitespace-only input, returns safe empty rows, and the tests exercise QueryRow, Query, and Exec without a panic. This reviewed hunk is sqlite3.go @@ -1027 +1039 @@ func (c *SQLiteConn) query(ctx context.Context, query string, args []driver.Name."
+              },
+              {
+                "id": "hunk_b5dce21d6dc8fbfe",
+                "decision": "task-aligned",
+                "reason": "The query loop detects SQLite's successful prepare with a null statement for comment-only or whitespace-only input, returns safe empty rows, and the tests exercise QueryRow, Query, and Exec without a panic. This reviewed hunk is sqlite3.go @@ -1029 +1041 @@ func (c *SQLiteConn) query(ctx context.Context, query string, args []driver.Name."
+              },
+              {
+                "id": "hunk_0c03fff23373e5e0",
+                "decision": "task-aligned",
+                "reason": "The query loop detects SQLite's successful prepare with a null statement for comment-only or whitespace-only input, returns safe empty rows, and the tests exercise QueryRow, Query, and Exec without a panic. This reviewed hunk is sqlite3.go @@ -1033 +1045 @@ func (c *SQLiteConn) query(ctx context.Context, query string, args []driver.Name."
+              },
+              {
+                "id": "hunk_7e9a4c12834faacb",
+                "decision": "task-aligned",
+                "reason": "The query loop detects SQLite's successful prepare with a null statement for comment-only or whitespace-only input, returns safe empty rows, and the tests exercise QueryRow, Query, and Exec without a panic. This reviewed hunk is sqlite3.go @@ -1038 +1050 @@ func (c *SQLiteConn) query(ctx context.Context, query string, args []driver.Name."
+              },
+              {
+                "id": "hunk_e52c70d29df616eb",
+                "decision": "task-aligned",
+                "reason": "The query loop detects SQLite's successful prepare with a null statement for comment-only or whitespace-only input, returns safe empty rows, and the tests exercise QueryRow, Query, and Exec without a panic. This reviewed hunk is sqlite3.go @@ -2443,0 +2456,3 @@ func (rc *SQLiteRows) Columns() []string {."
+              },
+              {
+                "id": "hunk_6924c5bc3e7364e7",
+                "decision": "task-aligned",
+                "reason": "The query loop detects SQLite's successful prepare with a null statement for comment-only or whitespace-only input, returns safe empty rows, and the tests exercise QueryRow, Query, and Exec without a panic. This reviewed hunk is sqlite3.go @@ -2466,0 +2482,3 @@ func (rc *SQLiteRows) DeclTypes() []string {."
+              },
+              {
+                "id": "hunk_80cfdbbb95d55009",
+                "decision": "task-aligned",
+                "reason": "The query loop detects SQLite's successful prepare with a null statement for comment-only or whitespace-only input, returns safe empty rows, and the tests exercise QueryRow, Query, and Exec without a panic. This reviewed hunk is sqlite3.go @@ -2473,0 +2492,3 @@ func (rc *SQLiteRows) Next(dest []driver.Value) error {."
+              }
+            ]
+          },
+          {
+            "path": "sqlite3_test.go",
+            "decision": "task-aligned",
+            "reason": "The query loop detects SQLite's successful prepare with a null statement for comment-only or whitespace-only input, returns safe empty rows, and the tests exercise QueryRow, Query, and Exec without a panic. All hunks in sqlite3_test.go stay within that task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_1598c3e1941597db",
+                "decision": "task-aligned",
+                "reason": "The query loop detects SQLite's successful prepare with a null statement for comment-only or whitespace-only input, returns safe empty rows, and the tests exercise QueryRow, Query, and Exec without a panic. This reviewed hunk is sqlite3_test.go @@ -2067,0 +2068,34 @@ func TestNamedParamClearBindings(t *testing.T) {."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "repository": "indicatif",
+      "candidateId": "candidate_a0549a03b2074dbb",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "The frozen changed-file set does not establish a generator-owner to generated-output relationship within this whole target.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      },
+      "review": {
+        "schemaVersion": 1,
+        "packetSha256": "06893C31C2665FCFD1867DDF633E3CA30873A034F3BA9D89454B8B2CFDE73A60",
+        "reviewTiming": "pre-route",
+        "reviewPerformedAfterCandidateFreeze": true,
+        "reviewedWithoutPalaceOutput": true,
+        "palaceCallsOnCandidateTask": 0,
+        "targetDecision": "accept",
+        "files": [
+          {
+            "path": "src/draw_target.rs",
+            "decision": "task-aligned",
+            "reason": "The new wrapped metrics account for a wide character that cannot fit in the final column, use the true last-line width for filler, and verify both internal height and rendered CJK wrapping. All hunks in src/draw_target.rs stay within that task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_c11cc9a6e002cf45",
+                "decision": "task-aligned",
+                "reason": "The new wrapped metrics account for a wide character that cannot fit in the final column, use the true last-line width for filler, and verify both internal height and rendered CJK wrapping. This reviewed hunk is src/draw_target.rs @@ -9,0 +10,2 @@ use std::time::Instant;."
+              },
+              {
+                "id": "hunk_c964ad1fcac51d78",
+                "decision": "task-aligned",
+                "reason": "The new wrapped metrics account for a wide character that cannot fit in the final column, use the true last-line width for filler, and verify both internal height and rendered CJK wrapping. This reviewed hunk is src/draw_target.rs @@ -10,0 +13,2 @@ use console::{Term, TermTarget};."
+              },
+              {
+                "id": "hunk_fade90bfb6334bfc",
+                "decision": "task-aligned",
+                "reason": "The new wrapped metrics account for a wide character that cannot fit in the final column, use the true last-line width for filler, and verify both internal height and rendered CJK wrapping. This reviewed hunk is src/draw_target.rs @@ -559 +563 @@ impl DrawState {."
+              },
+              {
+                "id": "hunk_31da11dadbe77cbd",
+                "decision": "task-aligned",
+                "reason": "The new wrapped metrics account for a wide character that cannot fit in the final column, use the true last-line width for filler, and verify both internal height and rendered CJK wrapping. This reviewed hunk is src/draw_target.rs @@ -564 +568 @@ impl DrawState {."
+              },
+              {
+                "id": "hunk_7016e57ff35a5445",
+                "decision": "task-aligned",
+                "reason": "The new wrapped metrics account for a wide character that cannot fit in the final column, use the true last-line width for filler, and verify both internal height and rendered CJK wrapping. This reviewed hunk is src/draw_target.rs @@ -568 +572 @@ impl DrawState {."
+              },
+              {
+                "id": "hunk_ae8a2992cf8da277",
+                "decision": "task-aligned",
+                "reason": "The new wrapped metrics account for a wide character that cannot fit in the final column, use the true last-line width for filler, and verify both internal height and rendered CJK wrapping. This reviewed hunk is src/draw_target.rs @@ -575 +579 @@ impl DrawState {."
+              },
+              {
+                "id": "hunk_10fdcf4fc2bc8d24",
+                "decision": "task-aligned",
+                "reason": "The new wrapped metrics account for a wide character that cannot fit in the final column, use the true last-line width for filler, and verify both internal height and rendered CJK wrapping. This reviewed hunk is src/draw_target.rs @@ -659,0 +664,35 @@ impl LineType {."
+              },
+              {
+                "id": "hunk_bbc80c0b3aee7e6a",
+                "decision": "task-aligned",
+                "reason": "The new wrapped metrics account for a wide character that cannot fit in the final column, use the true last-line width for filler, and verify both internal height and rendered CJK wrapping. This reviewed hunk is src/draw_target.rs @@ -662 +701,2 @@ impl LineType {."
+              },
+              {
+                "id": "hunk_1d907ed1cdf84c8a",
+                "decision": "task-aligned",
+                "reason": "The new wrapped metrics account for a wide character that cannot fit in the final column, use the true last-line width for filler, and verify both internal height and rendered CJK wrapping. This reviewed hunk is src/draw_target.rs @@ -668 +708,5 @@ impl LineType {."
+              },
+              {
+                "id": "hunk_23f02ab71728e6ad",
+                "decision": "task-aligned",
+                "reason": "The new wrapped metrics account for a wide character that cannot fit in the final column, use the true last-line width for filler, and verify both internal height and rendered CJK wrapping. This reviewed hunk is src/draw_target.rs @@ -670,0 +715 @@ impl LineType {."
+              },
+              {
+                "id": "hunk_5312256ccf29b3ce",
+                "decision": "task-aligned",
+                "reason": "The new wrapped metrics account for a wide character that cannot fit in the final column, use the true last-line width for filler, and verify both internal height and rendered CJK wrapping. This reviewed hunk is src/draw_target.rs @@ -690,0 +736,9 @@ impl PartialEq<str> for LineType {."
+              },
+              {
+                "id": "hunk_6ee4604914badda0",
+                "decision": "task-aligned",
+                "reason": "The new wrapped metrics account for a wide character that cannot fit in the final column, use the true last-line width for filler, and verify both internal height and rendered CJK wrapping. This reviewed hunk is src/draw_target.rs @@ -821,0 +876,20 @@ mod tests {."
+              }
+            ]
+          },
+          {
+            "path": "tests/render.rs",
+            "decision": "task-aligned",
+            "reason": "The new wrapped metrics account for a wide character that cannot fit in the final column, use the true last-line width for filler, and verify both internal height and rendered CJK wrapping. All hunks in tests/render.rs stay within that task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_d2bc94dcb85bddc7",
+                "decision": "task-aligned",
+                "reason": "The new wrapped metrics account for a wide character that cannot fit in the final column, use the true last-line width for filler, and verify both internal height and rendered CJK wrapping. This reviewed hunk is tests/render.rs @@ -1902,0 +1903,21 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec nec viverra massa."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "repository": "rust-base64",
+      "candidateId": "candidate_5c50bd271aa03bb1",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "The frozen changed-file set does not establish a generator-owner to generated-output relationship within this whole target.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      },
+      "review": {
+        "schemaVersion": 1,
+        "packetSha256": "74426ACDF3050CEC29033B671D53C93C648362C043640ECDCE5BAE562541A94C",
+        "reviewTiming": "pre-route",
+        "reviewPerformedAfterCandidateFreeze": true,
+        "reviewedWithoutPalaceOutput": true,
+        "palaceCallsOnCandidateTask": 0,
+        "targetDecision": "reject",
+        "files": [
+          {
+            "path": "RELEASE-NOTES.md",
+            "decision": "uncertain",
+            "reason": "At least one indivisible hunk in RELEASE-NOTES.md is uncertain; the whole file and target are rejected without pruning.",
+            "hunks": [
+              {
+                "id": "hunk_55c4217f37198e69",
+                "decision": "unrelated",
+                "reason": "Renaming the release-notes heading from Next to 0.20.0-beta.1 is release bookkeeping, not a change required to fix the remaining tests."
+              },
+              {
+                "id": "hunk_1cce91708a63a0c6",
+                "decision": "uncertain",
+                "reason": "The release-note text describes public padding semantics, but the vague task 'Fix the last few tests' does not establish whether this documentation change belongs to that task boundary."
+              }
+            ]
+          },
+          {
+            "path": "src/decode.rs",
+            "decision": "task-aligned",
+            "reason": "The decoding tests and NO_PAD configuration changes consistently update padding expectations needed by the remaining test cases. All hunks in src/decode.rs stay within that task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_e051c9ce1fb5e2f6",
+                "decision": "task-aligned",
+                "reason": "The decoding tests and NO_PAD configuration changes consistently update padding expectations needed by the remaining test cases. This reviewed hunk is src/decode.rs @@ -201,4 +201,6 @@ mod tests {."
+              },
+              {
+                "id": "hunk_94fdb6b53156b04b",
+                "decision": "task-aligned",
+                "reason": "The decoding tests and NO_PAD configuration changes consistently update padding expectations needed by the remaining test cases. This reviewed hunk is src/decode.rs @@ -358,0 +361 @@ mod tests {."
+              },
+              {
+                "id": "hunk_0805666dd77177b0",
+                "decision": "task-aligned",
+                "reason": "The decoding tests and NO_PAD configuration changes consistently update padding expectations needed by the remaining test cases. This reviewed hunk is src/decode.rs @@ -364 +367 @@ mod tests {."
+              }
+            ]
+          },
+          {
+            "path": "src/engine/fast_portable/mod.rs",
+            "decision": "uncertain",
+            "reason": "At least one indivisible hunk in src/engine/fast_portable/mod.rs is uncertain; the whole file and target are rejected without pruning.",
+            "hunks": [
+              {
+                "id": "hunk_6b17a0228ad02d52",
+                "decision": "uncertain",
+                "reason": "This public API documentation broadens PAD decoding semantics; the frozen task text does not provide enough evidence that the change is part of fixing tests rather than a separate behavior decision."
+              },
+              {
+                "id": "hunk_4f14db2ae75f4381",
+                "decision": "uncertain",
+                "reason": "Changing NO_PAD decoding behavior may explain the test updates, but the frozen task text is too vague to prove this public semantic change is within the same whole-target task."
+              }
+            ]
+          },
+          {
+            "path": "src/engine/tests.rs",
+            "decision": "unrelated",
+            "reason": "At least one indivisible hunk in src/engine/tests.rs is unrelated; the whole file and target are rejected without pruning.",
+            "hunks": [
+              {
+                "id": "hunk_ee08d3421eebf541",
+                "decision": "unrelated",
+                "reason": "This hunk changes indentation only and does not alter the behavior or expectation of a test."
+              },
+              {
+                "id": "hunk_2a6d37b6c4ec5ac7",
+                "decision": "unrelated",
+                "reason": "This hunk changes where-clause indentation only and does not fix a test condition."
+              },
+              {
+                "id": "hunk_9fadb62981ef98c6",
+                "decision": "task-aligned",
+                "reason": "The decoding tests and NO_PAD configuration changes consistently update padding expectations needed by the remaining test cases. This reviewed hunk is src/engine/tests.rs @@ -1003 +1002,0 @@ fn decode_wrong_length_error<E: EngineWrapper>(engine_wrapper: E) {."
+              },
+              {
+                "id": "hunk_32782feb1d06fe0a",
+                "decision": "unrelated",
+                "reason": "This hunk only reformats an existing assertion and does not change the test's expected result."
+              },
+              {
+                "id": "hunk_1fcb14221f5dbfd2",
+                "decision": "unrelated",
+                "reason": "This hunk only adjusts formatting of a trait method signature and does not change test behavior."
+              }
+            ]
+          },
+          {
+            "path": "tests/tests.rs",
+            "decision": "task-aligned",
+            "reason": "The decoding tests and NO_PAD configuration changes consistently update padding expectations needed by the remaining test cases. All hunks in tests/tests.rs stay within that task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_818c143ae5cf5c82",
+                "decision": "task-aligned",
+                "reason": "The decoding tests and NO_PAD configuration changes consistently update padding expectations needed by the remaining test cases. This reviewed hunk is tests/tests.rs @@ -123 +123,2 @@ fn roundtrip_decode_trailing_10_bytes() {."
+              },
+              {
+                "id": "hunk_0f12808ef6ad8bf4",
+                "decision": "task-aligned",
+                "reason": "The decoding tests and NO_PAD configuration changes consistently update padding expectations needed by the remaining test cases. This reviewed hunk is tests/tests.rs @@ -126,4 +127 @@ fn roundtrip_decode_trailing_10_bytes() {."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "repository": "rust-base64",
+      "candidateId": "candidate_d5dc916a4b5fea4f",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "The frozen changed-file set does not establish a generator-owner to generated-output relationship within this whole target.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      },
+      "review": {
+        "schemaVersion": 1,
+        "packetSha256": "75B6DF5D8713C15A65F4585D918A57745781DD8398C15F8E0F872D2ED73E6254",
+        "reviewTiming": "pre-route",
+        "reviewPerformedAfterCandidateFreeze": true,
+        "reviewedWithoutPalaceOutput": true,
+        "palaceCallsOnCandidateTask": 0,
+        "targetDecision": "reject",
+        "files": [
+          {
+            "path": "src/lib.rs",
+            "decision": "task-aligned",
+            "reason": "The public enum, configuration, lookup tables, and randomized tests add and exercise the crypt(3) character set. All hunks in src/lib.rs stay within that task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_2d409e97ecac02f8",
+                "decision": "task-aligned",
+                "reason": "The public enum, configuration, lookup tables, and randomized tests add and exercise the crypt(3) character set. This reviewed hunk is src/lib.rs @@ -85,0 +86,2 @@ pub enum CharacterSet {."
+              },
+              {
+                "id": "hunk_5f1c771d3d953be5",
+                "decision": "task-aligned",
+                "reason": "The public enum, configuration, lookup tables, and randomized tests add and exercise the crypt(3) character set. This reviewed hunk is src/lib.rs @@ -92,0 +95 @@ impl CharacterSet {."
+              },
+              {
+                "id": "hunk_9542ac282ff30ceb",
+                "decision": "task-aligned",
+                "reason": "The public enum, configuration, lookup tables, and randomized tests add and exercise the crypt(3) character set. This reviewed hunk is src/lib.rs @@ -99,0 +103 @@ impl CharacterSet {."
+              },
+              {
+                "id": "hunk_93e0681d9fc9b925",
+                "decision": "task-aligned",
+                "reason": "The public enum, configuration, lookup tables, and randomized tests add and exercise the crypt(3) character set. This reviewed hunk is src/lib.rs @@ -206,0 +211,9 @@ pub const URL_SAFE_NO_PAD: Config = Config {."
+              }
+            ]
+          },
+          {
+            "path": "src/tables.rs",
+            "decision": "uncertain",
+            "reason": "At least one indivisible hunk in src/tables.rs is uncertain; the whole file and target are rejected without pruning.",
+            "hunks": [
+              {
+                "id": "hunk_b3587faa92389ba5",
+                "decision": "uncertain",
+                "reason": "This indivisible hunk adds the crypt(3) tables but also appends and closes a large pre-existing URL_SAFE_DECODE table; the frozen packet cannot prove that the latter work belongs to the crypt(3) feature, and partial hunk pruning is forbidden."
+              }
+            ]
+          },
+          {
+            "path": "src/tests.rs",
+            "decision": "task-aligned",
+            "reason": "The public enum, configuration, lookup tables, and randomized tests add and exercise the crypt(3) character set. All hunks in src/tests.rs stay within that task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_488e4693960d6fb0",
+                "decision": "task-aligned",
+                "reason": "The public enum, configuration, lookup tables, and randomized tests add and exercise the crypt(3) character set. This reviewed hunk is src/tests.rs @@ -101,5 +101,6 @@ pub fn random_config<R: Rng>(rng: &mut R, line_len_range: &Range<usize>) -> Conf."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "repository": "nom",
+      "candidateId": "candidate_ca0673e5e0701152",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "The frozen changed-file set does not establish a generator-owner to generated-output relationship within this whole target.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      },
+      "review": {
+        "schemaVersion": 1,
+        "packetSha256": "871A9C758AE8165DBF806EC3100C5CB4438B785E9BD0A611ABEB1381F6459D69",
+        "reviewTiming": "pre-route",
+        "reviewPerformedAfterCandidateFreeze": true,
+        "reviewedWithoutPalaceOutput": true,
+        "palaceCallsOnCandidateTask": 0,
+        "targetDecision": "accept",
+        "files": [
+          {
+            "path": "src/traits.rs",
+            "decision": "task-aligned",
+            "reason": "The str Input implementation returns the fully consumed slice when no character boundary remains, and the issue 1808 regression test verifies complete multispace recognition returns the correct remainder and recognized slice. All hunks in src/traits.rs stay within that task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_92946aac74953d8a",
+                "decision": "task-aligned",
+                "reason": "The str Input implementation returns the fully consumed slice when no character boundary remains, and the issue 1808 regression test verifies complete multispace recognition returns the correct remainder and recognized slice. This reviewed hunk is src/traits.rs @@ -465 +465 @@ impl<'a> Input for &'a str {."
+              }
+            ]
+          },
+          {
+            "path": "tests/issues.rs",
+            "decision": "task-aligned",
+            "reason": "The str Input implementation returns the fully consumed slice when no character boundary remains, and the issue 1808 regression test verifies complete multispace recognition returns the correct remainder and recognized slice. All hunks in tests/issues.rs stay within that task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_c79e3d612eefbe03",
+                "decision": "task-aligned",
+                "reason": "The str Input implementation returns the fully consumed slice when no character boundary remains, and the issue 1808 regression test verifies complete multispace recognition returns the correct remainder and recognized slice. This reviewed hunk is tests/issues.rs @@ -271,0 +272,12 @@ fn issue_1586_parser_iterator_impl() {."
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "materialization": {
+    "semanticDecisionSha256": "83080EAE87412F04657C9F09C9E2B7CB7387A874A1FE02426C27075FFA66CB23",
+    "semanticDecisionsCopiedWithoutModification": true,
+    "frozenValidatorDryRunRequiredBeforeWrite": true,
+    "outputCreateOnly": true,
+    "dryRun": {
+      "status": "selected",
+      "reviewedCandidates": 11,
+      "acceptedCandidates": 8,
+      "rejectedCandidates": 3,
+      "selectedTargets": [
+        {
+          "name": "npm-run-path",
+          "candidateId": "candidate_680f46c0cb9ab685",
+          "languageFamily": "javascript-typescript"
+        },
+        {
+          "name": "cli-truncate",
+          "candidateId": "candidate_e8119c62d117d96e",
+          "languageFamily": "javascript-typescript"
+        },
+        {
+          "name": "outcome",
+          "candidateId": "candidate_30496456b2bdb8af",
+          "languageFamily": "python"
+        },
+        {
+          "name": "async-timeout",
+          "candidateId": "candidate_65987ee26fb647a2",
+          "languageFamily": "python"
+        },
+        {
+          "name": "go-shellwords",
+          "candidateId": "candidate_6f3995fb3cbe9d37",
+          "languageFamily": "go"
+        },
+        {
+          "name": "go-sqlite3",
+          "candidateId": "candidate_d037eecd7acd560d",
+          "languageFamily": "go"
+        },
+        {
+          "name": "indicatif",
+          "candidateId": "candidate_a0549a03b2074dbb",
+          "languageFamily": "rust"
+        },
+        {
+          "name": "nom",
+          "candidateId": "candidate_ca0673e5e0701152",
+          "languageFamily": "rust"
+        }
+      ],
+      "selectedPerLanguageFamily": {
+        "javascript-typescript": 2,
+        "python": 2,
+        "go": 2,
+        "rust": 2
+      },
+      "generatedArtifactTargets": 0,
+      "palaceCallsOnCandidateTasks": 0
+    }
+  }
+}

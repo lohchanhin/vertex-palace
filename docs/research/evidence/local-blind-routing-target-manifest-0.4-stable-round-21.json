@@ -1,0 +1,855 @@
+{
+  "schemaVersion": 1,
+  "studyId": "local-blind-routing-round-21-0.4-stable-candidate",
+  "generatedAt": "2026-08-26T13:24:45.555Z",
+  "status": "selected",
+  "claimBoundary": "Pre-route whole-target semantic selection under the public Round 21 preregistration. Every selected target is the first coherent candidate in newest-first order for its repository and the first two accepted repositories in frozen language-family order. This is not a Palace product result.",
+  "evidenceClass": "local-hash-frozen-task-coherent-target-selection",
+  "publicPreregistration": true,
+  "heldOutAgainstCandidate": true,
+  "candidate": {
+    "role": "publicly-committed-0.4-stable-candidate",
+    "package": "vertex-palace@0.4.0",
+    "version": "0.4.0",
+    "productCommit": "7325d2c2b3fca26a12932aa96cb21070c04c2bf3",
+    "researchCommit": "7325d2c2b3fca26a12932aa96cb21070c04c2bf3",
+    "sourceState": "immutable-public-git-commit-matched-to-local-tarball",
+    "cliPath": "dist/palace.cjs",
+    "cliSha256": "118D15BB3C2847205A4CC09A7A925BA3724B71D65CA56AA08D065AD8F851B18A",
+    "generatedMcpPath": "plugins/vertex-palace/mcp/server.cjs",
+    "generatedMcpSha256": "5FF952C76C0D94B299F1A1461D739BAA8B664AF25BF910CF8DF8FBF801C90E7D",
+    "sourceTree": {
+      "algorithm": "sha256-path-length-bytes-v1",
+      "fileCount": 187,
+      "sha256": "6CF965966D0FEABC87D4A260F474BD9053BCCB94212CDE05778A83813FB06B42"
+    },
+    "registry": null,
+    "npmPublishedAtFreeze": false,
+    "cleanInstall": {
+      "version": "0.4.0",
+      "cliSha256": "118D15BB3C2847205A4CC09A7A925BA3724B71D65CA56AA08D065AD8F851B18A",
+      "mcpSha256": "5FF952C76C0D94B299F1A1461D739BAA8B664AF25BF910CF8DF8FBF801C90E7D",
+      "tarball": {
+        "filename": "vertex-palace-0.4.0.tgz",
+        "size": 3832558,
+        "unpackedSize": 20074817,
+        "shasum": "e23c56e0d5a3d353b5f15fd306939c6cce948780",
+        "integrity": "sha512-im7oZzYvgXgXaH7x16Qs4VDcL/DWYfURIbqvBV6i9CMOU1zwtQ7L9Gibl7E/4kn9CtDhpwXHDt1szD7zyfMl4w==",
+        "sha256": "8C567F4A3F7FBC41A5B72B33910F847AAD0BFF1ADBF3727E7F54DFFE794A327B",
+        "entryCount": 7
+      }
+    }
+  },
+  "comparisonBaseline": {
+    "role": "public-0.3-stable-baseline",
+    "package": "vertex-palace@0.3.0",
+    "version": "0.3.0",
+    "productCommit": "1331d9da0aa242549026d70e7c752638c3169044",
+    "cliPath": "dist/palace.cjs",
+    "cliSha256": "ED63B31DA23240D958E71874BD61A09427659327DC8460D88A3A41D33F5391DE",
+    "generatedMcpPath": "plugins/vertex-palace/mcp/server.cjs",
+    "generatedMcpSha256": "FF9AB422C7B2608389305DC082D0B6F51E1A14D41BD648474C7C8F7CA5CACF72",
+    "registry": {
+      "registry": "https://registry.npmjs.org/",
+      "version": "0.3.0",
+      "shasum": "9a04440d7e95c4d34e68e1b7e2cd3f6ecd62e83e",
+      "integrity": "sha512-DXALXKH1k/Gj7PoprNDmz/tHlYum2T7QsU32el76mHy/U3u42zY02cshm5P8lwY6yqzkIoZ6h9/6df0QOlJp4Q=="
+    },
+    "installContract": "public-registry-clean-install"
+  },
+  "localFreeze": {
+    "path": "docs/research/evidence/local-blind-candidate-freeze-0.4-stable-round-21.json",
+    "sha256": "2C49CCEC5E252DE49B6728B2FE2177139AB57475D35C3FD1AFF2737E056F372A",
+    "frozenAt": "2026-08-26T12:52:18.873Z",
+    "artifactHashesVerified": true
+  },
+  "repositoryPool": {
+    "path": "docs/research/evidence/local-blind-routing-repository-pool-0.4-stable-round-21.json",
+    "sha256": "E007E5EE317E236FCF58C98B44C452EB257573A24FED49040B45B5C68E6F4D9B"
+  },
+  "candidateQueue": {
+    "path": "docs/research/evidence/local-blind-routing-candidate-queue-0.4-stable-round-21-attempt-1.json",
+    "sha256": "CABF864AC5F249420EAED9634648AE76D9299D10EC47B2104546394E6E71440F",
+    "palaceCallsOnCandidateTasks": 0
+  },
+  "semanticReview": {
+    "path": "docs/research/evidence/local-blind-routing-coherence-reviews-0.4-stable-round-21.json",
+    "sha256": "A64753CDB8B0B3FE9CE9089FCB6FDE7BCECB57F6C27A37A4EABB8A72089F0B16",
+    "boundary": "single-developer-delegated-semantic-reviewer",
+    "independent": false,
+    "interRaterAgreementAvailable": false,
+    "palaceCallsOnCandidateTasks": 0
+  },
+  "rules": {
+    "desiredTargets": 8,
+    "requiredLanguageFamilies": [
+      "javascript-typescript",
+      "python",
+      "go",
+      "rust"
+    ],
+    "targetsPerLanguageFamily": 2,
+    "repositoriesPerLanguageFamily": 8,
+    "rosterRepositoriesPerLanguageFamily": 12,
+    "repositoryRosterOrderIsBinding": true,
+    "reachableRepositorySelection": "first-eight-reachable-per-family-v1",
+    "definitivelyMissingRepositoryMayBeSkipped": true,
+    "transientNetworkExhaustionAbortsRound": true,
+    "newestCoherentCandidatePerRepositoryWins": true,
+    "remainingRepositoriesPerFamilyAreFallbacks": true,
+    "taskClassifier": "inflected-behavioral-subject-v1",
+    "maximumMechanicalCandidatesPerRepository": 5,
+    "minimumFiles": 2,
+    "maximumFiles": 8,
+    "maximumAuxiliaryFiles": 2,
+    "maximumChangedLines": 400,
+    "allowedAuxiliaryExtensions": [
+      ".cfg",
+      ".conf",
+      ".ini",
+      ".json",
+      ".md",
+      ".mdx",
+      ".rst",
+      ".toml",
+      ".txt",
+      ".yaml",
+      ".yml"
+    ],
+    "taskDiffCoherenceReviewRequired": true,
+    "wholeTargetRejectionForUnrelatedOrUncertainHunk": true,
+    "partialOraclePruningForbidden": true,
+    "maximumGeneratedArtifactTargets": 1,
+    "pinnedHeadsObtainedWithGitLsRemoteHeadOnly": true,
+    "commitHistoryInspectedBeforePoolFreeze": false,
+    "palaceCallsOnCandidateTasksBeforePoolFreeze": 0,
+    "baselineAndCandidateFrozenBeforeTargetSelection": true,
+    "outputCreateOnly": true,
+    "repositoryOrderIsBinding": true,
+    "familyQuotaStopsLaterReviews": true,
+    "wholeTargetRejection": true,
+    "selectedPerLanguageFamily": {
+      "javascript-typescript": 2,
+      "python": 2,
+      "go": 2,
+      "rust": 2
+    },
+    "languageDiversitySatisfied": true,
+    "generatedArtifactTargets": 0,
+    "palaceCallsOnCandidateTasksBeforeFinalization": 0
+  },
+  "repositoryReports": [
+    {
+      "name": "npm-run-path",
+      "languageFamily": "javascript-typescript",
+      "status": "selected-newest-coherent-candidate",
+      "reviewedCandidates": [
+        {
+          "candidateId": "candidate_680f46c0cb9ab685",
+          "candidateRank": 1,
+          "groundTruthCommit": "09419afb614ae03e2784eb05eee429124d0d3268",
+          "decision": "accept",
+          "reviewedFiles": 5,
+          "reviewedHunks": 61,
+          "unrelatedHunks": 0,
+          "uncertainHunks": 0,
+          "packetSha256": "C02727625EB92596170D3DA5EABB1D0804CE25640BE4C1A9FBEF93E4FA00C926",
+          "generatedArtifact": {
+            "isGeneratedArtifactTarget": false,
+            "reason": "The frozen changed-file set does not establish a generator-owner to generated-output relationship within this whole target.",
+            "ownerGeneratorPath": null,
+            "generatedOutputPaths": []
+          }
+        }
+      ],
+      "selectedCandidateId": "candidate_680f46c0cb9ab685"
+    },
+    {
+      "name": "cli-truncate",
+      "languageFamily": "javascript-typescript",
+      "status": "selected-newest-coherent-candidate",
+      "reviewedCandidates": [
+        {
+          "candidateId": "candidate_e8119c62d117d96e",
+          "candidateRank": 1,
+          "groundTruthCommit": "f87490f7638fd3c6aefb479d6e7c0e74c7eda218",
+          "decision": "accept",
+          "reviewedFiles": 2,
+          "reviewedHunks": 6,
+          "unrelatedHunks": 0,
+          "uncertainHunks": 0,
+          "packetSha256": "AD6459D04F4AD6097351F81F5A805FEFC55676D9F5D5F78F72FBB881B6FCDB9C",
+          "generatedArtifact": {
+            "isGeneratedArtifactTarget": false,
+            "reason": "The frozen changed-file set does not establish a generator-owner to generated-output relationship within this whole target.",
+            "ownerGeneratorPath": null,
+            "generatedOutputPaths": []
+          }
+        }
+      ],
+      "selectedCandidateId": "candidate_e8119c62d117d96e"
+    },
+    {
+      "name": "pretty-ms",
+      "languageFamily": "javascript-typescript",
+      "status": "family-quota-filled-not-reviewed",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "get-stream",
+      "languageFamily": "javascript-typescript",
+      "status": "family-quota-filled-not-reviewed",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "merge-streams",
+      "languageFamily": "javascript-typescript",
+      "status": "family-quota-filled-not-reviewed",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "p-timeout",
+      "languageFamily": "javascript-typescript",
+      "status": "family-quota-filled-not-reviewed",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "p-retry",
+      "languageFamily": "javascript-typescript",
+      "status": "family-quota-filled-not-reviewed",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "p-locate",
+      "languageFamily": "javascript-typescript",
+      "status": "family-quota-filled-not-reviewed",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "sniffio",
+      "languageFamily": "python",
+      "status": "no-mechanical-candidate",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "outcome",
+      "languageFamily": "python",
+      "status": "selected-newest-coherent-candidate",
+      "reviewedCandidates": [
+        {
+          "candidateId": "candidate_30496456b2bdb8af",
+          "candidateRank": 1,
+          "groundTruthCommit": "85502c58ef32ddec7c8bc237cafaaaf402dc71c9",
+          "decision": "accept",
+          "reviewedFiles": 2,
+          "reviewedHunks": 3,
+          "unrelatedHunks": 0,
+          "uncertainHunks": 0,
+          "packetSha256": "B4772F0C3779053B30879E6417697580CC660E1255EE54000A6623CFC2D9B07D",
+          "generatedArtifact": {
+            "isGeneratedArtifactTarget": false,
+            "reason": "The frozen changed-file set does not establish a generator-owner to generated-output relationship within this whole target.",
+            "ownerGeneratorPath": null,
+            "generatedOutputPaths": []
+          }
+        }
+      ],
+      "selectedCandidateId": "candidate_30496456b2bdb8af"
+    },
+    {
+      "name": "frozenlist",
+      "languageFamily": "python",
+      "status": "no-mechanical-candidate",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "aiosignal",
+      "languageFamily": "python",
+      "status": "no-mechanical-candidate",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "async-timeout",
+      "languageFamily": "python",
+      "status": "selected-newest-coherent-candidate",
+      "reviewedCandidates": [
+        {
+          "candidateId": "candidate_65987ee26fb647a2",
+          "candidateRank": 1,
+          "groundTruthCommit": "a0e0e215ef736ff5024630033db22fb0bf262760",
+          "decision": "accept",
+          "reviewedFiles": 3,
+          "reviewedHunks": 11,
+          "unrelatedHunks": 0,
+          "uncertainHunks": 0,
+          "packetSha256": "371ED5AE7C5BD3AE96E982ACCBCB582E407314601F69A5A53A3FB68832830595",
+          "generatedArtifact": {
+            "isGeneratedArtifactTarget": false,
+            "reason": "The frozen changed-file set does not establish a generator-owner to generated-output relationship within this whole target.",
+            "ownerGeneratorPath": null,
+            "generatedOutputPaths": []
+          }
+        }
+      ],
+      "selectedCandidateId": "candidate_65987ee26fb647a2"
+    },
+    {
+      "name": "aiohappyeyeballs",
+      "languageFamily": "python",
+      "status": "family-quota-filled-not-reviewed",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "propcache",
+      "languageFamily": "python",
+      "status": "family-quota-filled-not-reviewed",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "w3lib",
+      "languageFamily": "python",
+      "status": "family-quota-filled-not-reviewed",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "go-shellwords",
+      "languageFamily": "go",
+      "status": "selected-newest-coherent-candidate",
+      "reviewedCandidates": [
+        {
+          "candidateId": "candidate_87de8fc07af63376",
+          "candidateRank": 1,
+          "groundTruthCommit": "24886527941773a6a3e10bd152fbf88b81dc2c51",
+          "decision": "reject",
+          "reviewedFiles": 2,
+          "reviewedHunks": 5,
+          "unrelatedHunks": 2,
+          "uncertainHunks": 0,
+          "packetSha256": "358054F15BE7582B762E84CF3CDD5274058405FC45984F900B6F9F75FD9406F1",
+          "generatedArtifact": {
+            "isGeneratedArtifactTarget": false,
+            "reason": "The frozen changed-file set does not establish a generator-owner to generated-output relationship within this whole target.",
+            "ownerGeneratorPath": null,
+            "generatedOutputPaths": []
+          }
+        },
+        {
+          "candidateId": "candidate_6f3995fb3cbe9d37",
+          "candidateRank": 2,
+          "groundTruthCommit": "4b8442e4e74fb4cbaf79a70cd605ab326504ac84",
+          "decision": "accept",
+          "reviewedFiles": 2,
+          "reviewedHunks": 2,
+          "unrelatedHunks": 0,
+          "uncertainHunks": 0,
+          "packetSha256": "2B7186E7B9B139B47C382B1E4C096278C2084D2FD8C391C90DCAAAB95C8B9712",
+          "generatedArtifact": {
+            "isGeneratedArtifactTarget": false,
+            "reason": "The frozen changed-file set does not establish a generator-owner to generated-output relationship within this whole target.",
+            "ownerGeneratorPath": null,
+            "generatedOutputPaths": []
+          }
+        }
+      ],
+      "selectedCandidateId": "candidate_6f3995fb3cbe9d37"
+    },
+    {
+      "name": "go-sqlite3",
+      "languageFamily": "go",
+      "status": "selected-newest-coherent-candidate",
+      "reviewedCandidates": [
+        {
+          "candidateId": "candidate_d037eecd7acd560d",
+          "candidateRank": 1,
+          "groundTruthCommit": "869e516d63f1c01adefb7696e2451a3eed8519b0",
+          "decision": "accept",
+          "reviewedFiles": 2,
+          "reviewedHunks": 10,
+          "unrelatedHunks": 0,
+          "uncertainHunks": 0,
+          "packetSha256": "AA090AB41431903F6EF613CAB4DEF5FA04047AEC1F6896BF9E982BC8C84EF100",
+          "generatedArtifact": {
+            "isGeneratedArtifactTarget": false,
+            "reason": "The frozen changed-file set does not establish a generator-owner to generated-output relationship within this whole target.",
+            "ownerGeneratorPath": null,
+            "generatedOutputPaths": []
+          }
+        }
+      ],
+      "selectedCandidateId": "candidate_d037eecd7acd560d"
+    },
+    {
+      "name": "buntdb",
+      "languageFamily": "go",
+      "status": "family-quota-filled-not-reviewed",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "redcon",
+      "languageFamily": "go",
+      "status": "family-quota-filled-not-reviewed",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "tinyqueue",
+      "languageFamily": "go",
+      "status": "family-quota-filled-not-reviewed",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "redigo",
+      "languageFamily": "go",
+      "status": "family-quota-filled-not-reviewed",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "locales",
+      "languageFamily": "go",
+      "status": "family-quota-filled-not-reviewed",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "gorilla-handlers",
+      "languageFamily": "go",
+      "status": "family-quota-filled-not-reviewed",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "getrandom",
+      "languageFamily": "rust",
+      "status": "no-mechanical-candidate",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "anstyle",
+      "languageFamily": "rust",
+      "status": "no-mechanical-candidate",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "indicatif",
+      "languageFamily": "rust",
+      "status": "selected-newest-coherent-candidate",
+      "reviewedCandidates": [
+        {
+          "candidateId": "candidate_a0549a03b2074dbb",
+          "candidateRank": 1,
+          "groundTruthCommit": "a202f8caab49cfea09477e81c936054d653b03bc",
+          "decision": "accept",
+          "reviewedFiles": 2,
+          "reviewedHunks": 13,
+          "unrelatedHunks": 0,
+          "uncertainHunks": 0,
+          "packetSha256": "06893C31C2665FCFD1867DDF633E3CA30873A034F3BA9D89454B8B2CFDE73A60",
+          "generatedArtifact": {
+            "isGeneratedArtifactTarget": false,
+            "reason": "The frozen changed-file set does not establish a generator-owner to generated-output relationship within this whole target.",
+            "ownerGeneratorPath": null,
+            "generatedOutputPaths": []
+          }
+        }
+      ],
+      "selectedCandidateId": "candidate_a0549a03b2074dbb"
+    },
+    {
+      "name": "rust-base64",
+      "languageFamily": "rust",
+      "status": "no-coherent-candidate",
+      "reviewedCandidates": [
+        {
+          "candidateId": "candidate_5c50bd271aa03bb1",
+          "candidateRank": 1,
+          "groundTruthCommit": "96adce346bdd3628333378d79248c133ca6c82da",
+          "decision": "reject",
+          "reviewedFiles": 5,
+          "reviewedHunks": 14,
+          "unrelatedHunks": 5,
+          "uncertainHunks": 3,
+          "packetSha256": "74426ACDF3050CEC29033B671D53C93C648362C043640ECDCE5BAE562541A94C",
+          "generatedArtifact": {
+            "isGeneratedArtifactTarget": false,
+            "reason": "The frozen changed-file set does not establish a generator-owner to generated-output relationship within this whole target.",
+            "ownerGeneratorPath": null,
+            "generatedOutputPaths": []
+          }
+        },
+        {
+          "candidateId": "candidate_d5dc916a4b5fea4f",
+          "candidateRank": 2,
+          "groundTruthCommit": "b43bd1bdd6974628965eef79d36c4cc3ece98f7d",
+          "decision": "reject",
+          "reviewedFiles": 3,
+          "reviewedHunks": 6,
+          "unrelatedHunks": 0,
+          "uncertainHunks": 1,
+          "packetSha256": "75B6DF5D8713C15A65F4585D918A57745781DD8398C15F8E0F872D2ED73E6254",
+          "generatedArtifact": {
+            "isGeneratedArtifactTarget": false,
+            "reason": "The frozen changed-file set does not establish a generator-owner to generated-output relationship within this whole target.",
+            "ownerGeneratorPath": null,
+            "generatedOutputPaths": []
+          }
+        }
+      ],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "env-logger",
+      "languageFamily": "rust",
+      "status": "no-mechanical-candidate",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "nom",
+      "languageFamily": "rust",
+      "status": "selected-newest-coherent-candidate",
+      "reviewedCandidates": [
+        {
+          "candidateId": "candidate_ca0673e5e0701152",
+          "candidateRank": 1,
+          "groundTruthCommit": "51c3c4e44fa78a8a09b413419372b97b2cc2a787",
+          "decision": "accept",
+          "reviewedFiles": 2,
+          "reviewedHunks": 2,
+          "unrelatedHunks": 0,
+          "uncertainHunks": 0,
+          "packetSha256": "871A9C758AE8165DBF806EC3100C5CB4438B785E9BD0A611ABEB1381F6459D69",
+          "generatedArtifact": {
+            "isGeneratedArtifactTarget": false,
+            "reason": "The frozen changed-file set does not establish a generator-owner to generated-output relationship within this whole target.",
+            "ownerGeneratorPath": null,
+            "generatedOutputPaths": []
+          }
+        }
+      ],
+      "selectedCandidateId": "candidate_ca0673e5e0701152"
+    },
+    {
+      "name": "cookie-factory",
+      "languageFamily": "rust",
+      "status": "family-quota-filled-not-reviewed",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    },
+    {
+      "name": "uuid",
+      "languageFamily": "rust",
+      "status": "family-quota-filled-not-reviewed",
+      "reviewedCandidates": [],
+      "selectedCandidateId": null
+    }
+  ],
+  "targets": [
+    {
+      "name": "npm-run-path",
+      "language": "JavaScript/TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/sindresorhus/npm-run-path.git",
+      "pinnedHead": "b9128591fc59429d8b0df7047d5283f259dc5e77",
+      "routeCommit": "8462fd251b08a18e5e77e94d6202963510f1403e",
+      "groundTruthCommit": "09419afb614ae03e2784eb05eee429124d0d3268",
+      "task": "Add `preferLocal` and `addExecaPath` options (#18)",
+      "expectedTaskType": "feature",
+      "changedFiles": [
+        "index.d.ts",
+        "index.js",
+        "index.test-d.ts",
+        "readme.md",
+        "test.js"
+      ],
+      "implementationFiles": [
+        "index.d.ts",
+        "index.js",
+        "index.test-d.ts"
+      ],
+      "testFiles": [
+        "test.js"
+      ],
+      "auxiliaryFiles": [
+        "readme.md"
+      ],
+      "oracleSource": "mechanically eligible single-parent real Git-history diff pending whole-target semantic review",
+      "changedLines": 260,
+      "additions": 164,
+      "deletions": 96,
+      "candidateId": "candidate_680f46c0cb9ab685",
+      "candidateRank": 1,
+      "coherencePacketSha256": "C02727625EB92596170D3DA5EABB1D0804CE25640BE4C1A9FBEF93E4FA00C926",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "The frozen changed-file set does not establish a generator-owner to generated-output relationship within this whole target.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      }
+    },
+    {
+      "name": "cli-truncate",
+      "language": "JavaScript/TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/sindresorhus/cli-truncate.git",
+      "pinnedHead": "00818cbd97f5bd6c9b8af39f19c0cd1e42971e54",
+      "routeCommit": "7a4610b1ca9fecf395a03ddc602d7487f0a093ba",
+      "groundTruthCommit": "f87490f7638fd3c6aefb479d6e7c0e74c7eda218",
+      "task": "Fix: Keep `position: 'middle'` within the column budget (#32)",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "index.js",
+        "test.js"
+      ],
+      "implementationFiles": [
+        "index.js"
+      ],
+      "testFiles": [
+        "test.js"
+      ],
+      "auxiliaryFiles": [],
+      "oracleSource": "mechanically eligible single-parent real Git-history diff pending whole-target semantic review",
+      "changedLines": 29,
+      "additions": 26,
+      "deletions": 3,
+      "candidateId": "candidate_e8119c62d117d96e",
+      "candidateRank": 1,
+      "coherencePacketSha256": "AD6459D04F4AD6097351F81F5A805FEFC55676D9F5D5F78F72FBB881B6FCDB9C",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "The frozen changed-file set does not establish a generator-owner to generated-output relationship within this whole target.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      }
+    },
+    {
+      "name": "outcome",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/python-trio/outcome.git",
+      "pinnedHead": "03ed6218b08001877745bb1a9e180c8c5cf7c903",
+      "routeCommit": "0d0cfb04e28dbc01d63085e1ff6436bfa128f92a",
+      "groundTruthCommit": "85502c58ef32ddec7c8bc237cafaaaf402dc71c9",
+      "task": "Avoid creating a reference cycle when calling Error.unwrap",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "src/outcome/_impl.py",
+        "tests/test_sync.py"
+      ],
+      "implementationFiles": [
+        "src/outcome/_impl.py"
+      ],
+      "testFiles": [
+        "tests/test_sync.py"
+      ],
+      "auxiliaryFiles": [],
+      "oracleSource": "mechanically eligible single-parent real Git-history diff pending whole-target semantic review",
+      "changedLines": 37,
+      "additions": 36,
+      "deletions": 1,
+      "candidateId": "candidate_30496456b2bdb8af",
+      "candidateRank": 1,
+      "coherencePacketSha256": "B4772F0C3779053B30879E6417697580CC660E1255EE54000A6623CFC2D9B07D",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "The frozen changed-file set does not establish a generator-owner to generated-output relationship within this whole target.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      }
+    },
+    {
+      "name": "async-timeout",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/aio-libs/async-timeout.git",
+      "pinnedHead": "7dc0022fb8160e3d7905cefa279e034e37063814",
+      "routeCommit": "e704f940d683ddede65c33c418b82364edb0e20f",
+      "groundTruthCommit": "a0e0e215ef736ff5024630033db22fb0bf262760",
+      "task": "Fix regression: (#258)",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "CHANGES.rst",
+        "async_timeout/__init__.py",
+        "tests/test_timeout.py"
+      ],
+      "implementationFiles": [
+        "async_timeout/__init__.py"
+      ],
+      "testFiles": [
+        "tests/test_timeout.py"
+      ],
+      "auxiliaryFiles": [
+        "CHANGES.rst"
+      ],
+      "oracleSource": "mechanically eligible single-parent real Git-history diff pending whole-target semantic review",
+      "changedLines": 52,
+      "additions": 37,
+      "deletions": 15,
+      "candidateId": "candidate_65987ee26fb647a2",
+      "candidateRank": 1,
+      "coherencePacketSha256": "371ED5AE7C5BD3AE96E982ACCBCB582E407314601F69A5A53A3FB68832830595",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "The frozen changed-file set does not establish a generator-owner to generated-output relationship within this whole target.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      }
+    },
+    {
+      "name": "go-shellwords",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/mattn/go-shellwords.git",
+      "pinnedHead": "2b31b13123b0c5253ca007689e2e11c1512e9624",
+      "routeCommit": "75da1b0b79d7431a49806ab3bca49298a38c7d8b",
+      "groundTruthCommit": "4b8442e4e74fb4cbaf79a70cd605ab326504ac84",
+      "task": "Fix fd redirect detection for non-numeric and multi-digit tokens",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "shellwords.go",
+        "shellwords_test.go"
+      ],
+      "implementationFiles": [
+        "shellwords.go"
+      ],
+      "testFiles": [
+        "shellwords_test.go"
+      ],
+      "auxiliaryFiles": [],
+      "oracleSource": "mechanically eligible single-parent real Git-history diff pending whole-target semantic review",
+      "changedLines": 41,
+      "additions": 39,
+      "deletions": 2,
+      "candidateId": "candidate_6f3995fb3cbe9d37",
+      "candidateRank": 2,
+      "coherencePacketSha256": "2B7186E7B9B139B47C382B1E4C096278C2084D2FD8C391C90DCAAAB95C8B9712",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "The frozen changed-file set does not establish a generator-owner to generated-output relationship within this whole target.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      }
+    },
+    {
+      "name": "go-sqlite3",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/mattn/go-sqlite3.git",
+      "pinnedHead": "58c8e145308ceded07d1df2ac1b65999499e7055",
+      "routeCommit": "58e032d79a4cedd24e3caf90ccf2f587f5cc19d3",
+      "groundTruthCommit": "869e516d63f1c01adefb7696e2451a3eed8519b0",
+      "task": "fix panic when querying input with no SQL (only comments/whitespace)",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "sqlite3.go",
+        "sqlite3_test.go"
+      ],
+      "implementationFiles": [
+        "sqlite3.go"
+      ],
+      "testFiles": [
+        "sqlite3_test.go"
+      ],
+      "auxiliaryFiles": [],
+      "oracleSource": "mechanically eligible single-parent real Git-history diff pending whole-target semantic review",
+      "changedLines": 67,
+      "additions": 61,
+      "deletions": 6,
+      "candidateId": "candidate_d037eecd7acd560d",
+      "candidateRank": 1,
+      "coherencePacketSha256": "AA090AB41431903F6EF613CAB4DEF5FA04047AEC1F6896BF9E982BC8C84EF100",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "The frozen changed-file set does not establish a generator-owner to generated-output relationship within this whole target.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      }
+    },
+    {
+      "name": "indicatif",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/console-rs/indicatif.git",
+      "pinnedHead": "e4750d26f43a2802f788cd1ccb4de0f459629e5c",
+      "routeCommit": "9ac729aa26e1d17f1f2aaacfba9b00c39f6c66c9",
+      "groundTruthCommit": "a202f8caab49cfea09477e81c936054d653b03bc",
+      "task": "Fix height and filler when wrapped at the middle of wide characters",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "src/draw_target.rs",
+        "tests/render.rs"
+      ],
+      "implementationFiles": [
+        "src/draw_target.rs"
+      ],
+      "testFiles": [
+        "tests/render.rs"
+      ],
+      "auxiliaryFiles": [],
+      "oracleSource": "mechanically eligible single-parent real Git-history diff pending whole-target semantic review",
+      "changedLines": 107,
+      "additions": 101,
+      "deletions": 6,
+      "candidateId": "candidate_a0549a03b2074dbb",
+      "candidateRank": 1,
+      "coherencePacketSha256": "06893C31C2665FCFD1867DDF633E3CA30873A034F3BA9D89454B8B2CFDE73A60",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "The frozen changed-file set does not establish a generator-owner to generated-output relationship within this whole target.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      }
+    },
+    {
+      "name": "nom",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/rust-bakery/nom.git",
+      "pinnedHead": "51c3c4e44fa78a8a09b413419372b97b2cc2a787",
+      "routeCommit": "a44b52ed9052a66f5eb2add9aa5b314f034dc580",
+      "groundTruthCommit": "51c3c4e44fa78a8a09b413419372b97b2cc2a787",
+      "task": "Fix for issue 1808 (#1811)",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "src/traits.rs",
+        "tests/issues.rs"
+      ],
+      "implementationFiles": [
+        "src/traits.rs"
+      ],
+      "testFiles": [
+        "tests/issues.rs"
+      ],
+      "auxiliaryFiles": [],
+      "oracleSource": "mechanically eligible single-parent real Git-history diff pending whole-target semantic review",
+      "changedLines": 14,
+      "additions": 13,
+      "deletions": 1,
+      "candidateId": "candidate_ca0673e5e0701152",
+      "candidateRank": 1,
+      "coherencePacketSha256": "871A9C758AE8165DBF806EC3100C5CB4438B785E9BD0A611ABEB1381F6459D69",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "The frozen changed-file set does not establish a generator-owner to generated-output relationship within this whole target.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      }
+    }
+  ]
+}
