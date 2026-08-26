@@ -1,0 +1,581 @@
+{
+  "schemaVersion": 1,
+  "studyId": "local-blind-routing-round-20-0.4-stable-candidate",
+  "status": "verified",
+  "startedAt": "2026-08-26T10:51:32.238Z",
+  "completedAt": "2026-08-26T10:52:09.601Z",
+  "plan": {
+    "path": "docs/research/evidence/local-blind-routing-repository-plan-0.4-stable-round-20.json",
+    "sha256": "A4E7EF7574DD201E271401154A047C51E2FDAE24BA88AFA3F588E2F105B2F69A"
+  },
+  "priorExclusionSource": {
+    "path": "docs/research/evidence/local-blind-routing-repository-pool-0.4-alpha-round-19.json",
+    "sha256": "A6FE9F45F7A404976871C4A501AD66281FBA67517E27CB31ABD627CB4BA41E74",
+    "observedRepositoryCount": 226
+  },
+  "commandContract": "git ls-remote <url> HEAD",
+  "selectionContract": "first-eight-reachable-per-family-v1",
+  "retryPolicy": {
+    "maximumAttemptsPerRepository": 3,
+    "delayMs": 5000,
+    "transientNetworkFailuresOnly": true,
+    "transientNetworkExhaustionAbortsRound": true,
+    "definitivelyMissingRepositoryMayBeSkipped": true,
+    "repositoryPlanChangedAfterFailure": false
+  },
+  "reachabilityCounts": {
+    "javascript-typescript": {
+      "roster": 12,
+      "reachable": 12,
+      "definitivelyMissing": 0
+    },
+    "python": {
+      "roster": 12,
+      "reachable": 9,
+      "definitivelyMissing": 3
+    },
+    "go": {
+      "roster": 12,
+      "reachable": 12,
+      "definitivelyMissing": 0
+    },
+    "rust": {
+      "roster": 12,
+      "reachable": 11,
+      "definitivelyMissing": 1
+    }
+  },
+  "commitHistoryInspected": false,
+  "candidateTaskInspected": false,
+  "palaceCallsOnCandidateTasks": 0,
+  "repositories": [
+    {
+      "repositoryIndex": 0,
+      "name": "escape-string-regexp",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/sindresorhus/escape-string-regexp.git",
+      "status": "reachable",
+      "observedHead": "cbc42403142c96923b482604e1f3d627b1956aff",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 1,
+      "name": "mimic-fn",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/sindresorhus/mimic-fn.git",
+      "status": "reachable",
+      "observedHead": "3ee1e62d926ac0a5cf631815734d8e06a9381d72",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 2,
+      "name": "has-symbols",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/ljharb/has-symbols.git",
+      "status": "reachable",
+      "observedHead": "8e5041604a716727cb95bb8ec1e25423a427756d",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 3,
+      "name": "call-bind",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/ljharb/call-bind.git",
+      "status": "reachable",
+      "observedHead": "8d6a98c3e049fac59e17b9a2399bb39624d7abd7",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 4,
+      "name": "strip-ansi",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/sindresorhus/strip-ansi.git",
+      "status": "reachable",
+      "observedHead": "38ff9f2282540422031ed523f0060c7bb575e20f",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 5,
+      "name": "is-plain-obj",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/sindresorhus/is-plain-obj.git",
+      "status": "reachable",
+      "observedHead": "97f38e8836f86a642cce98fc6ab3058bc36df181",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 6,
+      "name": "is-unicode-supported",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/sindresorhus/is-unicode-supported.git",
+      "status": "reachable",
+      "observedHead": "e0373335038856c63034c8eef6ac43ee3827a601",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 7,
+      "name": "indent-string",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/sindresorhus/indent-string.git",
+      "status": "reachable",
+      "observedHead": "9234193d865eb331e02b86e13eff82221ae594c0",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 8,
+      "name": "array-union",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/sindresorhus/array-union.git",
+      "status": "reachable",
+      "observedHead": "c9e401d946d70eb46149ad67973c911c6ad2a335",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": false
+    },
+    {
+      "repositoryIndex": 9,
+      "name": "balanced-match",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/isaacs/balanced-match.git",
+      "status": "reachable",
+      "observedHead": "c8c3989212c601a7de2da8a407bbb68ef61b3055",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": false
+    },
+    {
+      "repositoryIndex": 10,
+      "name": "brace-expansion",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/isaacs/brace-expansion.git",
+      "status": "reachable",
+      "observedHead": "5f59e113fc4b6173928aad83d15b88445f3f4ee6",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": false
+    },
+    {
+      "repositoryIndex": 11,
+      "name": "is-number",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/jonschlinkert/is-number.git",
+      "status": "reachable",
+      "observedHead": "98e8ff1da1a89f93d1397a24d7413ed15421c139",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": false
+    },
+    {
+      "repositoryIndex": 12,
+      "name": "identify",
+      "languageFamily": "python",
+      "url": "https://github.com/asottile/identify.git",
+      "status": "definitively-missing",
+      "observedHead": null,
+      "attempts": 1,
+      "diagnostic": "remote: Repository not found.\nfatal: repository 'https://github.com/asottile/identify.git/' not found",
+      "selectedForCanonicalPool": false
+    },
+    {
+      "repositoryIndex": 13,
+      "name": "jaraco-functools",
+      "languageFamily": "python",
+      "url": "https://github.com/jaraco/functools.git",
+      "status": "definitively-missing",
+      "observedHead": null,
+      "attempts": 1,
+      "diagnostic": "remote: Repository not found.\nfatal: repository 'https://github.com/jaraco/functools.git/' not found",
+      "selectedForCanonicalPool": false
+    },
+    {
+      "repositoryIndex": 14,
+      "name": "jaraco-context",
+      "languageFamily": "python",
+      "url": "https://github.com/jaraco/context.git",
+      "status": "definitively-missing",
+      "observedHead": null,
+      "attempts": 1,
+      "diagnostic": "remote: Repository not found.\nfatal: repository 'https://github.com/jaraco/context.git/' not found",
+      "selectedForCanonicalPool": false
+    },
+    {
+      "repositoryIndex": 15,
+      "name": "pypa-build",
+      "languageFamily": "python",
+      "url": "https://github.com/pypa/build.git",
+      "status": "reachable",
+      "observedHead": "66438abaf611d5ac10d55f7e2ac49fb91adc4b6d",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 16,
+      "name": "pyupgrade",
+      "languageFamily": "python",
+      "url": "https://github.com/asottile/pyupgrade.git",
+      "status": "reachable",
+      "observedHead": "b30a4772905b633374a740b2467e90112153cb54",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 17,
+      "name": "add-trailing-comma",
+      "languageFamily": "python",
+      "url": "https://github.com/asottile/add-trailing-comma.git",
+      "status": "reachable",
+      "observedHead": "f4f3b2ed9788ba1838e420abd20f75f8ba3af41d",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 18,
+      "name": "pyproject-fmt",
+      "languageFamily": "python",
+      "url": "https://github.com/tox-dev/pyproject-fmt.git",
+      "status": "reachable",
+      "observedHead": "cc0b0f8d4107cfe80d6571644e639b05aee29128",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 19,
+      "name": "pytest-xdist",
+      "languageFamily": "python",
+      "url": "https://github.com/pytest-dev/pytest-xdist.git",
+      "status": "reachable",
+      "observedHead": "dd198c35710f22b1cb86b7fc00311f9b7c63d665",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 20,
+      "name": "pytest-asyncio",
+      "languageFamily": "python",
+      "url": "https://github.com/pytest-dev/pytest-asyncio.git",
+      "status": "reachable",
+      "observedHead": "937525ed7e00ae706d74dc3571bc5e47f6270922",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 21,
+      "name": "pipx",
+      "languageFamily": "python",
+      "url": "https://github.com/pypa/pipx.git",
+      "status": "reachable",
+      "observedHead": "1138ac5b4ae99c0aa869f744030a15f7a5d7f6b6",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 22,
+      "name": "python-versioneer",
+      "languageFamily": "python",
+      "url": "https://github.com/python-versioneer/python-versioneer.git",
+      "status": "reachable",
+      "observedHead": "2299b295dadfb5f5c875b4d501471f179358c5e1",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 23,
+      "name": "flake8",
+      "languageFamily": "python",
+      "url": "https://github.com/pycqa/flake8.git",
+      "status": "reachable",
+      "observedHead": "efe6750405be77b661f64e60002c4ef8e922daf5",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": false
+    },
+    {
+      "repositoryIndex": 24,
+      "name": "go-internal",
+      "languageFamily": "go",
+      "url": "https://github.com/rogpeppe/go-internal.git",
+      "status": "reachable",
+      "observedHead": "b848aba6082101b7cbc37c5e55b681dd13096926",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 25,
+      "name": "conc",
+      "languageFamily": "go",
+      "url": "https://github.com/sourcegraph/conc.git",
+      "status": "reachable",
+      "observedHead": "5f936abd7ae87036af1f75c95fb9d0daaf00116b",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 26,
+      "name": "termenv",
+      "languageFamily": "go",
+      "url": "https://github.com/muesli/termenv.git",
+      "status": "reachable",
+      "observedHead": "368a3572b8146cc038b3f240da6792003d7e42c5",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 27,
+      "name": "tidwall-match",
+      "languageFamily": "go",
+      "url": "https://github.com/tidwall/match.git",
+      "status": "reachable",
+      "observedHead": "afc69bce52e08c02e78156a7697bd808fc868ec5",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 28,
+      "name": "go-isatty",
+      "languageFamily": "go",
+      "url": "https://github.com/mattn/go-isatty.git",
+      "status": "reachable",
+      "observedHead": "c44dc0b9c702c76577fdb7898032969e0611efc2",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 29,
+      "name": "go-runewidth",
+      "languageFamily": "go",
+      "url": "https://github.com/mattn/go-runewidth.git",
+      "status": "reachable",
+      "observedHead": "554428cf553dfffc5ed72942674649693eb477b7",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 30,
+      "name": "go-humanize",
+      "languageFamily": "go",
+      "url": "https://github.com/dustin/go-humanize.git",
+      "status": "reachable",
+      "observedHead": "4d1d9082551ec085912e7d2253a33ae547fca000",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 31,
+      "name": "go-toml",
+      "languageFamily": "go",
+      "url": "https://github.com/pelletier/go-toml.git",
+      "status": "reachable",
+      "observedHead": "686c980c47581bf19b6119b60e9a59f2aed04170",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 32,
+      "name": "decimal",
+      "languageFamily": "go",
+      "url": "https://github.com/shopspring/decimal.git",
+      "status": "reachable",
+      "observedHead": "ca4740823783f3bc026235a5ed3515aca626da92",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": false
+    },
+    {
+      "repositoryIndex": 33,
+      "name": "go-stack",
+      "languageFamily": "go",
+      "url": "https://github.com/go-stack/stack.git",
+      "status": "reachable",
+      "observedHead": "93c7c7e3550c72bc91dead1452a0020142e2a902",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": false
+    },
+    {
+      "repositoryIndex": 34,
+      "name": "go-difflib",
+      "languageFamily": "go",
+      "url": "https://github.com/pmezard/go-difflib.git",
+      "status": "reachable",
+      "observedHead": "5d4384ee4fb2527b0a1256a821ebfc92f91efefc",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": false
+    },
+    {
+      "repositoryIndex": 35,
+      "name": "compress",
+      "languageFamily": "go",
+      "url": "https://github.com/klauspost/compress.git",
+      "status": "reachable",
+      "observedHead": "73508b25f222ed50fad2ff7540c059f893781c30",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": false
+    },
+    {
+      "repositoryIndex": 36,
+      "name": "backtrace-rs",
+      "languageFamily": "rust",
+      "url": "https://github.com/rust-lang/backtrace-rs.git",
+      "status": "reachable",
+      "observedHead": "06b2cc573703c98df4b543422c8339694420bb02",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 37,
+      "name": "tempfile",
+      "languageFamily": "rust",
+      "url": "https://github.com/stebalien/tempfile.git",
+      "status": "reachable",
+      "observedHead": "889f7bfbd8a61cfa87cb0886c4dbfbca1ef08919",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 38,
+      "name": "cmake-rs",
+      "languageFamily": "rust",
+      "url": "https://github.com/alexcrichton/cmake-rs.git",
+      "status": "reachable",
+      "observedHead": "63190697197b34e5e5cd3cabf17da4fcab348bef",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 39,
+      "name": "pkg-config-rs",
+      "languageFamily": "rust",
+      "url": "https://github.com/rust-lang/pkg-config-rs.git",
+      "status": "reachable",
+      "observedHead": "a8852cc148f8f7d504bf3a62444c298dcd3637f0",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 40,
+      "name": "proc-macro2",
+      "languageFamily": "rust",
+      "url": "https://github.com/dtolnay/proc-macro2.git",
+      "status": "reachable",
+      "observedHead": "4626ab98d794f0ff1c3da3fdaf1d6b6e8e6d269c",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 41,
+      "name": "unicode-width",
+      "languageFamily": "rust",
+      "url": "https://github.com/unicode-rs/unicode-width.git",
+      "status": "reachable",
+      "observedHead": "832f7ca447375ff969f850dab9362a0c2ce1eefb",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 42,
+      "name": "num-traits",
+      "languageFamily": "rust",
+      "url": "https://github.com/rust-num/num-traits.git",
+      "status": "reachable",
+      "observedHead": "1166177ec398601d6dd4d88891cf7674f3978888",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 43,
+      "name": "rustfix",
+      "languageFamily": "rust",
+      "url": "https://github.com/rust-lang/rustfix.git",
+      "status": "reachable",
+      "observedHead": "c433369f4aa3fe67b1399e2f6e3c4aeefc3144b7",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": true
+    },
+    {
+      "repositoryIndex": 44,
+      "name": "byteorder",
+      "languageFamily": "rust",
+      "url": "https://github.com/BurntSushi/byteorder.git",
+      "status": "reachable",
+      "observedHead": "5a82625fae462e8ba64cec8146b24a372b4d75c6",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": false
+    },
+    {
+      "repositoryIndex": 45,
+      "name": "glob",
+      "languageFamily": "rust",
+      "url": "https://github.com/rust-lang/glob.git",
+      "status": "reachable",
+      "observedHead": "cfa2a58f2e44373573f657ec25b3621e44714dee",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": false
+    },
+    {
+      "repositoryIndex": 46,
+      "name": "assert-cmd",
+      "languageFamily": "rust",
+      "url": "https://github.com/assert-rs/assert_cmd.git",
+      "status": "reachable",
+      "observedHead": "48da55db9f0076f86d01a38384dd9799d8ed580d",
+      "attempts": 1,
+      "diagnostic": null,
+      "selectedForCanonicalPool": false
+    },
+    {
+      "repositoryIndex": 47,
+      "name": "pin-project-lite",
+      "languageFamily": "rust",
+      "url": "https://github.com/tokio-rs/pin-project-lite.git",
+      "status": "definitively-missing",
+      "observedHead": null,
+      "attempts": 1,
+      "diagnostic": "remote: Repository not found.\nfatal: repository 'https://github.com/tokio-rs/pin-project-lite.git/' not found",
+      "selectedForCanonicalPool": false
+    }
+  ]
+}

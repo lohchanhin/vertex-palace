@@ -1,0 +1,432 @@
+{
+  "schemaVersion": 1,
+  "studyId": "local-blind-routing-round-20-0.4-stable-candidate",
+  "status": "publicly-preregistered-pool",
+  "frozenAt": "2026-08-26T10:52:09.601Z",
+  "publicPreregistration": true,
+  "plan": {
+    "path": "docs/research/evidence/local-blind-routing-repository-plan-0.4-stable-round-20.json",
+    "sha256": "A4E7EF7574DD201E271401154A047C51E2FDAE24BA88AFA3F588E2F105B2F69A"
+  },
+  "claimBoundary": "The publicly committed 48-entry URL-and-HEAD-only roster was queried before any Round 20 history, subject, diff, task, review, oracle, or Palace result was inspected. Definitively missing URLs are preserved and skipped mechanically. The canonical pool contains the first eight reachable repositories per language family in frozen order.",
+  "candidateFreeze": {
+    "path": "docs/research/evidence/local-blind-candidate-freeze-0.4-stable-round-20.json"
+  },
+  "priorExclusionSource": {
+    "path": "docs/research/evidence/local-blind-routing-repository-pool-0.4-alpha-round-19.json",
+    "sha256": "A6FE9F45F7A404976871C4A501AD66281FBA67517E27CB31ABD627CB4BA41E74",
+    "includePreviousExclusionChain": true,
+    "includeRound19CanonicalPoolAndPriorChain": true,
+    "includeAdditionalPreviouslyObservedRepositories": true,
+    "expectedUniqueRepositoryCount": 226
+  },
+  "previouslyObservedRepositories": [],
+  "rules": {
+    "desiredTargets": 8,
+    "requiredLanguageFamilies": [
+      "javascript-typescript",
+      "python",
+      "go",
+      "rust"
+    ],
+    "targetsPerLanguageFamily": 2,
+    "repositoriesPerLanguageFamily": 8,
+    "rosterRepositoriesPerLanguageFamily": 12,
+    "repositoryRosterOrderIsBinding": true,
+    "reachableRepositorySelection": "first-eight-reachable-per-family-v1",
+    "definitivelyMissingRepositoryMayBeSkipped": true,
+    "transientNetworkExhaustionAbortsRound": true,
+    "newestCoherentCandidatePerRepositoryWins": true,
+    "remainingRepositoriesPerFamilyAreFallbacks": true,
+    "taskClassifier": "inflected-behavioral-subject-v1",
+    "maximumMechanicalCandidatesPerRepository": 5,
+    "minimumFiles": 2,
+    "maximumFiles": 8,
+    "maximumAuxiliaryFiles": 2,
+    "maximumChangedLines": 400,
+    "allowedAuxiliaryExtensions": [
+      ".cfg",
+      ".conf",
+      ".ini",
+      ".json",
+      ".md",
+      ".mdx",
+      ".rst",
+      ".toml",
+      ".txt",
+      ".yaml",
+      ".yml"
+    ],
+    "taskDiffCoherenceReviewRequired": true,
+    "wholeTargetRejectionForUnrelatedOrUncertainHunk": true,
+    "partialOraclePruningForbidden": true,
+    "maximumGeneratedArtifactTargets": 1,
+    "pinnedHeadsObtainedWithGitLsRemoteHeadOnly": true,
+    "commitHistoryInspectedBeforePoolFreeze": false,
+    "palaceCallsOnCandidateTasksBeforePoolFreeze": 0,
+    "baselineAndCandidateFrozenBeforeTargetSelection": true,
+    "outputCreateOnly": true
+  },
+  "repositoryPool": [
+    {
+      "name": "escape-string-regexp",
+      "language": "JavaScript/TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/sindresorhus/escape-string-regexp.git",
+      "extensions": [
+        ".cjs",
+        ".js",
+        ".jsx",
+        ".mjs",
+        ".ts",
+        ".tsx"
+      ],
+      "pinnedHead": "cbc42403142c96923b482604e1f3d627b1956aff"
+    },
+    {
+      "name": "mimic-fn",
+      "language": "JavaScript/TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/sindresorhus/mimic-fn.git",
+      "extensions": [
+        ".cjs",
+        ".js",
+        ".jsx",
+        ".mjs",
+        ".ts",
+        ".tsx"
+      ],
+      "pinnedHead": "3ee1e62d926ac0a5cf631815734d8e06a9381d72"
+    },
+    {
+      "name": "has-symbols",
+      "language": "JavaScript/TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/ljharb/has-symbols.git",
+      "extensions": [
+        ".cjs",
+        ".js",
+        ".jsx",
+        ".mjs",
+        ".ts",
+        ".tsx"
+      ],
+      "pinnedHead": "8e5041604a716727cb95bb8ec1e25423a427756d"
+    },
+    {
+      "name": "call-bind",
+      "language": "JavaScript/TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/ljharb/call-bind.git",
+      "extensions": [
+        ".cjs",
+        ".js",
+        ".jsx",
+        ".mjs",
+        ".ts",
+        ".tsx"
+      ],
+      "pinnedHead": "8d6a98c3e049fac59e17b9a2399bb39624d7abd7"
+    },
+    {
+      "name": "strip-ansi",
+      "language": "JavaScript/TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/sindresorhus/strip-ansi.git",
+      "extensions": [
+        ".cjs",
+        ".js",
+        ".jsx",
+        ".mjs",
+        ".ts",
+        ".tsx"
+      ],
+      "pinnedHead": "38ff9f2282540422031ed523f0060c7bb575e20f"
+    },
+    {
+      "name": "is-plain-obj",
+      "language": "JavaScript/TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/sindresorhus/is-plain-obj.git",
+      "extensions": [
+        ".cjs",
+        ".js",
+        ".jsx",
+        ".mjs",
+        ".ts",
+        ".tsx"
+      ],
+      "pinnedHead": "97f38e8836f86a642cce98fc6ab3058bc36df181"
+    },
+    {
+      "name": "is-unicode-supported",
+      "language": "JavaScript/TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/sindresorhus/is-unicode-supported.git",
+      "extensions": [
+        ".cjs",
+        ".js",
+        ".jsx",
+        ".mjs",
+        ".ts",
+        ".tsx"
+      ],
+      "pinnedHead": "e0373335038856c63034c8eef6ac43ee3827a601"
+    },
+    {
+      "name": "indent-string",
+      "language": "JavaScript/TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/sindresorhus/indent-string.git",
+      "extensions": [
+        ".cjs",
+        ".js",
+        ".jsx",
+        ".mjs",
+        ".ts",
+        ".tsx"
+      ],
+      "pinnedHead": "9234193d865eb331e02b86e13eff82221ae594c0"
+    },
+    {
+      "name": "pypa-build",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/pypa/build.git",
+      "extensions": [
+        ".py"
+      ],
+      "pinnedHead": "66438abaf611d5ac10d55f7e2ac49fb91adc4b6d"
+    },
+    {
+      "name": "pyupgrade",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/asottile/pyupgrade.git",
+      "extensions": [
+        ".py"
+      ],
+      "pinnedHead": "b30a4772905b633374a740b2467e90112153cb54"
+    },
+    {
+      "name": "add-trailing-comma",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/asottile/add-trailing-comma.git",
+      "extensions": [
+        ".py"
+      ],
+      "pinnedHead": "f4f3b2ed9788ba1838e420abd20f75f8ba3af41d"
+    },
+    {
+      "name": "pyproject-fmt",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/tox-dev/pyproject-fmt.git",
+      "extensions": [
+        ".py"
+      ],
+      "pinnedHead": "cc0b0f8d4107cfe80d6571644e639b05aee29128"
+    },
+    {
+      "name": "pytest-xdist",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/pytest-dev/pytest-xdist.git",
+      "extensions": [
+        ".py"
+      ],
+      "pinnedHead": "dd198c35710f22b1cb86b7fc00311f9b7c63d665"
+    },
+    {
+      "name": "pytest-asyncio",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/pytest-dev/pytest-asyncio.git",
+      "extensions": [
+        ".py"
+      ],
+      "pinnedHead": "937525ed7e00ae706d74dc3571bc5e47f6270922"
+    },
+    {
+      "name": "pipx",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/pypa/pipx.git",
+      "extensions": [
+        ".py"
+      ],
+      "pinnedHead": "1138ac5b4ae99c0aa869f744030a15f7a5d7f6b6"
+    },
+    {
+      "name": "python-versioneer",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/python-versioneer/python-versioneer.git",
+      "extensions": [
+        ".py"
+      ],
+      "pinnedHead": "2299b295dadfb5f5c875b4d501471f179358c5e1"
+    },
+    {
+      "name": "go-internal",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/rogpeppe/go-internal.git",
+      "extensions": [
+        ".go"
+      ],
+      "pinnedHead": "b848aba6082101b7cbc37c5e55b681dd13096926"
+    },
+    {
+      "name": "conc",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/sourcegraph/conc.git",
+      "extensions": [
+        ".go"
+      ],
+      "pinnedHead": "5f936abd7ae87036af1f75c95fb9d0daaf00116b"
+    },
+    {
+      "name": "termenv",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/muesli/termenv.git",
+      "extensions": [
+        ".go"
+      ],
+      "pinnedHead": "368a3572b8146cc038b3f240da6792003d7e42c5"
+    },
+    {
+      "name": "tidwall-match",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/tidwall/match.git",
+      "extensions": [
+        ".go"
+      ],
+      "pinnedHead": "afc69bce52e08c02e78156a7697bd808fc868ec5"
+    },
+    {
+      "name": "go-isatty",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/mattn/go-isatty.git",
+      "extensions": [
+        ".go"
+      ],
+      "pinnedHead": "c44dc0b9c702c76577fdb7898032969e0611efc2"
+    },
+    {
+      "name": "go-runewidth",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/mattn/go-runewidth.git",
+      "extensions": [
+        ".go"
+      ],
+      "pinnedHead": "554428cf553dfffc5ed72942674649693eb477b7"
+    },
+    {
+      "name": "go-humanize",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/dustin/go-humanize.git",
+      "extensions": [
+        ".go"
+      ],
+      "pinnedHead": "4d1d9082551ec085912e7d2253a33ae547fca000"
+    },
+    {
+      "name": "go-toml",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/pelletier/go-toml.git",
+      "extensions": [
+        ".go"
+      ],
+      "pinnedHead": "686c980c47581bf19b6119b60e9a59f2aed04170"
+    },
+    {
+      "name": "backtrace-rs",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/rust-lang/backtrace-rs.git",
+      "extensions": [
+        ".rs"
+      ],
+      "pinnedHead": "06b2cc573703c98df4b543422c8339694420bb02"
+    },
+    {
+      "name": "tempfile",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/stebalien/tempfile.git",
+      "extensions": [
+        ".rs"
+      ],
+      "pinnedHead": "889f7bfbd8a61cfa87cb0886c4dbfbca1ef08919"
+    },
+    {
+      "name": "cmake-rs",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/alexcrichton/cmake-rs.git",
+      "extensions": [
+        ".rs"
+      ],
+      "pinnedHead": "63190697197b34e5e5cd3cabf17da4fcab348bef"
+    },
+    {
+      "name": "pkg-config-rs",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/rust-lang/pkg-config-rs.git",
+      "extensions": [
+        ".rs"
+      ],
+      "pinnedHead": "a8852cc148f8f7d504bf3a62444c298dcd3637f0"
+    },
+    {
+      "name": "proc-macro2",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/dtolnay/proc-macro2.git",
+      "extensions": [
+        ".rs"
+      ],
+      "pinnedHead": "4626ab98d794f0ff1c3da3fdaf1d6b6e8e6d269c"
+    },
+    {
+      "name": "unicode-width",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/unicode-rs/unicode-width.git",
+      "extensions": [
+        ".rs"
+      ],
+      "pinnedHead": "832f7ca447375ff969f850dab9362a0c2ce1eefb"
+    },
+    {
+      "name": "num-traits",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/rust-num/num-traits.git",
+      "extensions": [
+        ".rs"
+      ],
+      "pinnedHead": "1166177ec398601d6dd4d88891cf7674f3978888"
+    },
+    {
+      "name": "rustfix",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/rust-lang/rustfix.git",
+      "extensions": [
+        ".rs"
+      ],
+      "pinnedHead": "c433369f4aa3fe67b1399e2f6e3c4aeefc3144b7"
+    }
+  ]
+}
