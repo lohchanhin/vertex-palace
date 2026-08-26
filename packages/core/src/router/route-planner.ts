@@ -139,8 +139,17 @@ export async function routePalace(root: string, task: string, options: number | 
     analysis,
     routeLimit
   );
-  const expandedWithApiCompanions = ensureAdditiveApiCompanionEvidence(
+  const expandedWithAdditiveFamily = ensureAdditiveApiFamilyClosure(
     expandedWithCommonCaller,
+    scored,
+    index.edges,
+    index.nodes,
+    analysis,
+    taskType,
+    routeLimit
+  );
+  const expandedWithApiCompanions = ensureAdditiveApiCompanionEvidence(
+    expandedWithAdditiveFamily,
     scored,
     index.nodes,
     analysis,
@@ -176,8 +185,17 @@ export async function routePalace(root: string, task: string, options: number | 
     analysis,
     taskType
   );
-  const expanded = ensureTaskOwnerVerificationClosure(
+  const transitivelyClosed = materializeTransitiveRoleBridge(
     lexicallyPruned,
+    scored,
+    index.edges,
+    index.nodes,
+    analysis,
+    intent,
+    routeLimit
+  );
+  const expanded = ensureTaskOwnerVerificationClosure(
+    transitivelyClosed,
     scored,
     index.edges,
     index.nodes,
@@ -599,6 +617,256 @@ function materializeMissingCausalSources(
   }
 
   return result;
+}
+
+function materializeTransitiveRoleBridge(
+  selected: ScoredNode[],
+  scored: ScoredNode[],
+  edges: PalaceEdge[],
+  nodes: PalaceNode[],
+  analysis: ReturnType<typeof analyzeTask>,
+  intent: TaskIntent,
+  limit: number
+): ScoredNode[] {
+  const result = uniqueScoredNodes(selected).slice(0, limit);
+  if (result.length >= limit) return result;
+  const closure = evaluateEvidenceClosure({
+    intent,
+    selectedNodes: result.map((item) => item.node),
+    selectedFacts: result.flatMap((item) => item.matchedFact ? [item.matchedFact] : []),
+    allNodes: nodes,
+    edges
+  });
+  if (closure.status === "sufficient") return result;
+
+  const bridgeMultiplicity = new Map<string, number>();
+  for (const pair of closure.connectedRolePairs) {
+    if (
+      pair.hops < 2
+      || !new Set([pair.from, pair.to]).has("implementation")
+      || !new Set([pair.from, pair.to]).has("verification")
+    ) continue;
+    for (const sourcePath of pair.via) {
+      bridgeMultiplicity.set(sourcePath, (bridgeMultiplicity.get(sourcePath) ?? 0) + 1);
+    }
+  }
+  if (!bridgeMultiplicity.size) return result;
+
+  const selectedPaths = new Set(result.map((item) => item.node.sourcePath));
+  const selectedBySource = new Map(result.map((item) => [item.node.sourcePath, item]));
+  const selectedImplementationSources = result
+    .filter((item) => isImplementationCandidate(item.node))
+    .map((item) => item.node.sourcePath);
+  const selectedImplementationScopes = selectedImplementationSources
+    .map(coreWorkspaceScope);
+  const definedImplementationScopes = new Set(
+    selectedImplementationScopes.filter((scope): scope is string => Boolean(scope))
+  );
+  const dominantWorkspaceScope = selectedImplementationScopes.length > 0
+    && selectedImplementationScopes.every((scope): scope is string => Boolean(scope))
+    && definedImplementationScopes.size === 1
+    ? [...definedImplementationScopes][0]
+    : undefined;
+  const physicalBySource = physicalEvidenceNodesBySource(nodes);
+  const scoredBySource = strongestScoredNodeBySource(scored);
+  const bridge = [...bridgeMultiplicity.entries()]
+    .flatMap(([sourcePath, multiplicity]) => {
+      const existing = selectedBySource.get(sourcePath) ?? scoredBySource.get(sourcePath);
+      const node = existing?.node ?? physicalBySource.get(sourcePath);
+      if (
+        !node
+        || !isImplementationCandidate(node)
+        || (dominantWorkspaceScope && coreWorkspaceScope(sourcePath) !== dominantWorkspaceScope)
+      ) return [];
+      return [{
+        item: existing ?? {
+          node,
+          score: 20,
+          reasons: [],
+          matchedKeywordCount: 0
+        },
+        multiplicity,
+        affinity: routePathTaskAffinity(sourcePath, analysis)
+      }];
+    })
+    .sort((left, right) => right.multiplicity - left.multiplicity
+      || right.affinity - left.affinity
+      || right.item.score - left.item.score
+      || left.item.node.sourcePath.localeCompare(right.item.node.sourcePath))[0];
+  if (!bridge) return result;
+
+  const routedBridge: ScoredNode = {
+    ...bridge.item,
+    reasons: [
+      "materialized transitive implementation bridge between selected code and verification",
+      ...bridge.item.reasons
+    ]
+  };
+  if (selectedPaths.has(bridge.item.node.sourcePath)) {
+    return result.map((item) =>
+      item.node.sourcePath === bridge.item.node.sourcePath ? routedBridge : item
+    );
+  }
+  const verificationIndex = result.findIndex(
+    (item) => nodeHasEvidenceRole(item.node, "verification")
+      && !nodeHasEvidenceRole(item.node, "implementation")
+  );
+  if (verificationIndex >= 0) result.splice(verificationIndex, 0, routedBridge);
+  else result.push(routedBridge);
+  return result.slice(0, limit);
+}
+
+function ensureAdditiveApiFamilyClosure(
+  selected: ScoredNode[],
+  scored: ScoredNode[],
+  edges: PalaceEdge[],
+  nodes: PalaceNode[],
+  analysis: ReturnType<typeof analyzeTask>,
+  taskType: TaskType,
+  limit: number
+): ScoredNode[] {
+  if (
+    taskType !== "feature"
+    || !/\b(?:add|introduce|expose|implement)\b[\s\S]{0,80}\b[A-Za-z_$][A-Za-z0-9_$]*\s*\(\s*\)/i.test(analysis.raw)
+    || analysis.identifiers.some((identifier) => /[.:]/.test(identifier))
+  ) return selected;
+
+  const result = uniqueScoredNodes(selected).slice(0, limit);
+  if (result.length + 2 > limit) return result;
+  const selectedImplementations = result
+    .filter((item) => isImplementationCandidate(item.node) && !isDirectTestCandidate(item));
+  if (!selectedImplementations.length || !result.some(isDirectTestCandidate)) return result;
+
+  const selectedPaths = new Set(result.map((item) => item.node.sourcePath));
+  const physicalBySource = physicalEvidenceNodesBySource(nodes);
+  const scoredBySource = strongestScoredNodeBySource(scored);
+  const implementationNodes = [...physicalBySource.values()]
+    .filter((node) => isImplementationCandidate(node) && !isDirectTestPath(node.sourcePath));
+  const verificationNodes = [...physicalBySource.values()]
+    .filter((node) => nodeHasEvidenceRole(node, "verification") && isDirectTestPath(node.sourcePath));
+  const relevantSources = new Set([
+    ...selectedImplementations.map((item) => item.node.sourcePath),
+    ...implementationNodes.map((node) => node.sourcePath),
+    ...verificationNodes.map((node) => node.sourcePath)
+  ]);
+  const relations = buildSourceRelations(edges, nodes, relevantSources, analysis);
+  const selectedImplementationPaths = new Set(
+    selectedImplementations.map((item) => item.node.sourcePath)
+  );
+
+  const companion = implementationNodes
+    .filter((node) => !selectedPaths.has(node.sourcePath))
+    .flatMap((node) => {
+      const familyAnchor = selectedImplementations
+        .map((item) => ({
+          item,
+          familyEvidence: implementationVariantFamilyEvidence(
+            item.node.sourcePath,
+            node.sourcePath
+          )
+        }))
+        .filter(({ familyEvidence }) => familyEvidence > 0)
+        .sort((left, right) => right.familyEvidence - left.familyEvidence)[0];
+      if (!familyAnchor) return [];
+      const relationEvidence = strongestRelationTo(
+        node.sourcePath,
+        selectedImplementationPaths,
+        relations
+      );
+      if (relationEvidence < 0.6) return [];
+      const test = verificationNodes
+        .filter((candidate) => !selectedPaths.has(candidate.sourcePath))
+        .filter((candidate) => sourceTestModuleMirrorEvidence(
+          node.sourcePath,
+          candidate.sourcePath
+        ) >= 0.75)
+        .sort((left, right) => left.sourcePath.localeCompare(right.sourcePath))[0];
+      if (!test) return [];
+      return [{
+        node,
+        test,
+        relationEvidence,
+        familyEvidence: familyAnchor.familyEvidence,
+        scoredItem: scoredBySource.get(node.sourcePath),
+        scoredTest: scoredBySource.get(test.sourcePath)
+      }];
+    })
+    .sort((left, right) => right.relationEvidence - left.relationEvidence
+      || right.familyEvidence - left.familyEvidence
+      || (right.scoredItem?.score ?? 0) - (left.scoredItem?.score ?? 0)
+      || left.node.sourcePath.localeCompare(right.node.sourcePath))[0];
+  if (!companion) return result;
+
+  const implementationItem: ScoredNode = companion.scoredItem
+    ? {
+        ...companion.scoredItem,
+        reasons: [
+          "directly related additive API variant in the same implementation family",
+          ...companion.scoredItem.reasons
+        ]
+      }
+    : {
+        node: companion.node,
+        score: 20,
+        reasons: ["directly related additive API variant in the same implementation family"],
+        matchedKeywordCount: 0
+      };
+  const testItem: ScoredNode = companion.scoredTest
+    ? {
+        ...companion.scoredTest,
+        reasons: [
+          `mirror verification for additive API variant ${companion.node.sourcePath}`,
+          ...companion.scoredTest.reasons
+        ]
+      }
+    : {
+        node: companion.test,
+        score: 18,
+        reasons: [`mirror verification for additive API variant ${companion.node.sourcePath}`],
+        matchedKeywordCount: 0
+      };
+  const verificationIndex = result.findIndex(isDirectTestCandidate);
+  if (verificationIndex >= 0) result.splice(verificationIndex, 0, implementationItem);
+  else result.push(implementationItem);
+  result.push(testItem);
+  return uniqueScoredNodes(result).slice(0, limit);
+}
+
+function implementationVariantFamilyEvidence(leftPath: string, rightPath: string): number {
+  const normalizedLeft = leftPath.replaceAll("\\", "/").toLowerCase();
+  const normalizedRight = rightPath.replaceAll("\\", "/").toLowerCase();
+  if (path.posix.dirname(normalizedLeft) !== path.posix.dirname(normalizedRight)) return 0;
+  const left = canonicalModuleStem(normalizedLeft).split(/[_-]+/).filter(Boolean);
+  const right = canonicalModuleStem(normalizedRight).split(/[_-]+/).filter(Boolean);
+  let sharedSuffix = 0;
+  while (
+    sharedSuffix < left.length
+    && sharedSuffix < right.length
+    && left[left.length - sharedSuffix - 1] === right[right.length - sharedSuffix - 1]
+  ) sharedSuffix += 1;
+  if (sharedSuffix < 2 || Math.abs(left.length - right.length) > 2) return 0;
+  return Math.min(1, sharedSuffix / Math.min(left.length, right.length));
+}
+
+function physicalEvidenceNodesBySource(nodes: PalaceNode[]): Map<string, PalaceNode> {
+  const bySource = new Map<string, PalaceNode>();
+  for (const node of nodes) {
+    if (node.startLine || node.kind === "directory") continue;
+    const current = bySource.get(node.sourcePath);
+    if (!current || conventionalPhysicalNodePriority(node) > conventionalPhysicalNodePriority(current)) {
+      bySource.set(node.sourcePath, node);
+    }
+  }
+  return bySource;
+}
+
+function strongestScoredNodeBySource(scored: ScoredNode[]): Map<string, ScoredNode> {
+  const bySource = new Map<string, ScoredNode>();
+  for (const item of scored) {
+    const current = bySource.get(item.node.sourcePath);
+    if (!current || item.score > current.score) bySource.set(item.node.sourcePath, item);
+  }
+  return bySource;
 }
 
 function ensureAdditiveApiCompanionEvidence(
@@ -4812,7 +5080,7 @@ function pruneRedundantLexicalRouteNoise(
   return items.filter((item) => {
     const sourcePath = item.node.sourcePath;
     const strongRouteReason = item.reasons.some((reason) =>
-      /^(?:expanded through|required task-aligned causal|directly coordinates|declares the owner|package boundary)/i.test(reason)
+      /^(?:expanded through|required task-aligned causal|materialized transitive implementation bridge|directly coordinates|declares the owner|package boundary)/i.test(reason)
     );
     if (
       isPackageManifestPath(sourcePath)

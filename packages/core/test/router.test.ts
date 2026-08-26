@@ -5258,9 +5258,9 @@ impl core::fmt::Display for Error {
       ];
       const files = new Map<string, string>([
         [changedFiles[0], "package pool\ntype ContextPool struct{}\nfunc (p *ContextPool) WithFirstError() *ContextPool { return p }\nfunc (p *ContextPool) WithCancelOnError() *ContextPool { return p }\n"],
-        [changedFiles[1], "package pool\nfunc TestContextPoolWithFirstErrorAndCancelOnError(t *testing.T) {}\n"],
+        [changedFiles[1], "package pool\nfunc ExampleContextPool_WithCancelOnError() {}\nfunc TestContextPool(t *testing.T) { t.Run(\"WithFirstError\", func(t *testing.T) {}) }\n"],
         [changedFiles[2], "package pool\ntype ResultContextPool struct{ contextPool *ContextPool }\nfunc (p *ResultContextPool) WithFirstError() *ResultContextPool { p.contextPool.WithFirstError(); return p }\nfunc (p *ResultContextPool) WithCancelOnError() *ResultContextPool { p.contextPool.WithCancelOnError(); return p }\n"],
-        [changedFiles[3], "package pool\nfunc TestResultContextPoolWithFirstErrorAndCancelOnError(t *testing.T) {}\n"],
+        [changedFiles[3], "package pool\nfunc TestResultContextPool(t *testing.T) { t.Run(\"WithFirstError\", func(t *testing.T) {}); t.Run(\"WithCancelOnError\", func(t *testing.T) {}) }\n"],
         ["waitgroup.go", "package conc\n// Add starts another worker.\nfunc (w *WaitGroup) Add() {}\n"],
         ["waitgroup_test.go", "package conc\nfunc TestWaitGroupAdd(t *testing.T) {}\n"]
       ]);
@@ -5296,7 +5296,7 @@ impl core::fmt::Display for Error {
         [changedFiles[0], "#[cfg(any(target_os = \"macos\", target_os = \"ios\", target_os = \"tvos\", target_os = \"watchos\"))]\npub fn apple_symbols() {}\n"],
         [changedFiles[1], "#[cfg(target_os = \"macos\")]\nfn apple_frames_are_available() {}\n"],
         [changedFiles[2], "fn accuracy() { if cfg!(target_os = \"macos\") { assert!(true); } }\n"],
-        ["src/backtrace/libunwind.rs", "pub fn unwind_stack() {}\n"]
+        ["src/backtrace/libunwind.rs", "pub fn unwind_stack() { if cfg!(target_vendor = \"apple\") {} }\n"]
       ]);
       for (const [relativePath, source] of files) {
         const target = path.join(root, relativePath);
@@ -5312,6 +5312,7 @@ impl core::fmt::Display for Error {
       );
 
       expect(evaluation.route.files).toEqual(expect.arrayContaining(changedFiles));
+      expect(evaluation.route.files).not.toContain("src/backtrace/libunwind.rs");
       expect(evaluation.coverage.changedFileCoverage).toBe(1);
       expect(evaluation.coverage.routeFocus).toBeGreaterThanOrEqual(0.6);
     });

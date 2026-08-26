@@ -1,0 +1,876 @@
+{
+  "schemaVersion": 1,
+  "studyId": "disclosed-routing-round-20-after-generic-repair-attempt-2-0.4-alpha",
+  "generatedAt": "2026-08-26T12:31:09.595Z",
+  "status": "completed",
+  "gateStatus": "passed",
+  "gateFailures": [],
+  "evidenceClass": "disclosed-post-observation-static-routing-regression",
+  "heldOutAgainstCandidate": false,
+  "claimBoundary": "Disclosed post-observation replay on the eight already observed Round 20 tasks after repository-generic action-noise removal, low-confidence conventional-entry fallback, Python annotation semantics, fail-fast decomposition, additive API companion closure, and Apple platform-family verification closure. The immutable formal Round 20 candidate gate remains failed. This replay does not execute target tests or an Agent and supports no held-out generalization, Agent correctness, Token, tool-call, or wall-time claim. Fresh frozen repositories are required for new generalization evidence.",
+  "formalEvidence": {
+    "path": "docs/research/evidence/local-blind-routing-validation-0.4-stable-round-20.json",
+    "sha256": "AEF391A3FF7CBF918F3856DBAEF698DCD41074EBEA667626B55C6D63DCD38D58",
+    "status": "completed",
+    "candidateGateStatus": "failed",
+    "preservedWithoutModification": true
+  },
+  "candidate": {
+    "gitHead": "e32fed1c9f0f7a855745219dfac021773c64930b",
+    "gitBranch": "codex/advisory-safety-v0.4",
+    "sourceState": "local uncommitted disclosed repair worktree",
+    "cliPath": "dist/palace.cjs",
+    "cliSha256": "0D66C8035FA3AB6EEA0617E249391AA8AB72E89AC1D7280E7AE1CF481A9800E8",
+    "generatedMcpPath": "plugins/vertex-palace/mcp/server.cjs",
+    "generatedMcpSha256": "6B82172A67588174ACF43A569E6C4D61A36D022E2F8A7607186EBD69A5968DB5",
+    "sourceTree": {
+      "algorithm": "sha256-path-length-bytes-v1",
+      "fileCount": 187,
+      "sha256": "6ABA45D349156DD9F2B7E511834F8A04FAF95E4AFAEDC55680AD06A2757974C7"
+    },
+    "rebuiltBeforeMeasurement": true,
+    "unchangedDuringMeasurement": true
+  },
+  "protocol": {
+    "targets": 8,
+    "repetitions": 2,
+    "repetitionsAreDeterminismChecksNotIndependentSamples": true,
+    "sequential": true,
+    "concurrent": false,
+    "freshPalacePerTarget": true,
+    "targetTestsExecuted": false,
+    "agentExecuted": false,
+    "budget": 6000,
+    "routeLimit": 10,
+    "maxDrawers": 4,
+    "fetchDepth": 400,
+    "calibrationTolerance": 0.15,
+    "metricAgreementTolerance": 0.005,
+    "gates": {
+      "completedTargets": 8,
+      "deterministicTargets": 8,
+      "taskTypeMatchedTargets": 8,
+      "coreSurfaceCompleteTargets": 8,
+      "auxiliarySurfaceCompleteTargets": "all frozen targets with auxiliary files",
+      "minimumMacroChangedFileCoverage": 0.9,
+      "minimumMacroRouteFocus": 0.7,
+      "minimumTargetChangedFileCoverage": 0.5,
+      "minimumTargetRouteFocus": 0.4,
+      "overconfidentTrials": 0,
+      "metricDisagreementTrials": 0,
+      "trackedTargetWorktreeChanges": 0
+    }
+  },
+  "formalCandidateAggregate": {
+    "condition": "candidate",
+    "targetCount": 8,
+    "conditionRecordedTargets": 8,
+    "passedTargets": 3,
+    "failedTargets": 5,
+    "completedTrials": 14,
+    "taskTypeMatchedTargets": 7,
+    "coreSurfaceCompleteTargets": 3,
+    "auxiliarySurfaceTargetCount": 1,
+    "auxiliarySurfaceCompleteTargets": 0,
+    "deterministicTargets": 7,
+    "exactOracleTargets": 1,
+    "oracleFileTotal": 24,
+    "routeFileTotal": 27,
+    "targetMacroChangedFileCoverage": 0.655,
+    "targetMacroRouteFocus": 0.579,
+    "minimumTargetChangedFileCoverage": 0,
+    "minimumTargetRouteFocus": 0,
+    "calibrationMeanAbsoluteError": 0.442,
+    "overconfidentTrials": 2,
+    "underconfidentTrials": 6,
+    "wellCalibratedTrials": 6,
+    "unsafeNarrowModeTrials": 0,
+    "unsafeEnforcedStopTrials": 0,
+    "modeCounts": {
+      "full-palace": 7
+    },
+    "evidenceStatusCounts": {
+      "insufficient": 7
+    },
+    "contextEstimatedTokensMean": 2798.714,
+    "contextEstimatedTokensMedian": 2567,
+    "maxContextEstimatedTokens": 4122,
+    "contextBytesMean": 11194.571,
+    "selectedExcludedOverlapTrials": 0,
+    "metricDisagreementTrials": 0,
+    "evaluationContextRouteDisagreementTrials": 0,
+    "staleAfterExplicitIndexTargets": 0,
+    "trackedWorktreeModifiedTargets": 0,
+    "staticPalaceCliCalls": 52,
+    "staticCommandElapsedMsTotal": 51150,
+    "staticCommandElapsedMsMedian": 1141.5,
+    "environmentOrSetupFailures": 0,
+    "harnessContractFailures": 0,
+    "productOrContractFailures": 5
+  },
+  "aggregate": {
+    "targetCount": 8,
+    "completedTargets": 8,
+    "passedTargets": 8,
+    "failedTargets": 0,
+    "completedTrials": 16,
+    "deterministicTargets": 8,
+    "taskTypeMatchedTargets": 8,
+    "coreSurfaceCompleteTargets": 8,
+    "auxiliarySurfaceTargetCount": 1,
+    "auxiliarySurfaceCompleteTargets": 1,
+    "targetMacroChangedFileCoverage": 1,
+    "targetMacroCoreSurfaceCoverage": 1,
+    "targetMacroRouteFocus": 0.787,
+    "minimumTargetChangedFileCoverage": 1,
+    "minimumTargetRouteFocus": 0.4,
+    "overconfidentTrials": 0,
+    "metricDisagreementTrials": 0,
+    "trackedTargetWorktreeChanges": 0,
+    "routeFileTotal": 33,
+    "evaluationElapsedMsTotal": 22119
+  },
+  "targets": [
+    {
+      "name": "mimic-fn",
+      "language": "JavaScript/TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/sindresorhus/mimic-fn.git",
+      "pinnedHead": "3ee1e62d926ac0a5cf631815734d8e06a9381d72",
+      "routeCommit": "d69c7969a931a84241508f138c8bac83a81d4bcb",
+      "groundTruthCommit": "ea9e7d3b988ed1d485f8f0ac401d17fcf59d0fe8",
+      "task": "Add `ignoreNonConfigurable` option (#34)",
+      "expectedTaskType": "feature",
+      "changedFiles": [
+        "index.d.ts",
+        "index.js",
+        "readme.md",
+        "test.js"
+      ],
+      "implementationFiles": [
+        "index.d.ts",
+        "index.js"
+      ],
+      "testFiles": [
+        "test.js"
+      ],
+      "auxiliaryFiles": [
+        "readme.md"
+      ],
+      "formalCandidate": {
+        "status": "failed",
+        "routeFiles": [
+          "index.js",
+          "test.js"
+        ],
+        "routeConfidence": 0.4,
+        "changedFileCoverage": 0.5,
+        "routeFocus": 1,
+        "formalExecutionError": false
+      },
+      "repairedCandidate": {
+        "status": "passed",
+        "failures": [],
+        "deterministic": true,
+        "indexedFresh": true,
+        "indexElapsedMs": 1445,
+        "trackedWorktreeClean": true,
+        "trials": [
+          {
+            "trial": 1,
+            "taskType": "feature",
+            "routeFiles": [
+              "index.js",
+              "index.d.ts",
+              "readme.md",
+              "test.js"
+            ],
+            "routeFileCount": 4,
+            "routeConfidence": 0.4,
+            "changedFileCoverage": 1,
+            "coreSurfaceCoverage": 1,
+            "auxiliarySurfaceCoverage": 1,
+            "routeFocus": 1,
+            "overconfident": false,
+            "metricDisagreement": false,
+            "reportedCalibrationStatus": "underconfident",
+            "evaluationElapsedMs": 919
+          },
+          {
+            "trial": 2,
+            "taskType": "feature",
+            "routeFiles": [
+              "index.js",
+              "index.d.ts",
+              "readme.md",
+              "test.js"
+            ],
+            "routeFileCount": 4,
+            "routeConfidence": 0.4,
+            "changedFileCoverage": 1,
+            "coreSurfaceCoverage": 1,
+            "auxiliarySurfaceCoverage": 1,
+            "routeFocus": 1,
+            "overconfident": false,
+            "metricDisagreement": false,
+            "reportedCalibrationStatus": "underconfident",
+            "evaluationElapsedMs": 911
+          }
+        ]
+      },
+      "comparison": {
+        "routeChanged": true,
+        "changedFileCoverageDelta": 0.5,
+        "routeFocusDelta": 0,
+        "routeConfidenceDelta": 0
+      }
+    },
+    {
+      "name": "is-unicode-supported",
+      "language": "JavaScript/TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/sindresorhus/is-unicode-supported.git",
+      "pinnedHead": "e0373335038856c63034c8eef6ac43ee3827a601",
+      "routeCommit": "c7cb7cb935285d1ca474866bc3f58ee96838c9c4",
+      "groundTruthCommit": "a9bd35a6155525c9898932f09fb78444ff2a26e2",
+      "task": "Add support for Terminus (#12)",
+      "expectedTaskType": "feature",
+      "changedFiles": [
+        "index.js",
+        "test.js"
+      ],
+      "implementationFiles": [
+        "index.js"
+      ],
+      "testFiles": [
+        "test.js"
+      ],
+      "auxiliaryFiles": [],
+      "formalCandidate": {
+        "status": "failed",
+        "routeFiles": [],
+        "routeConfidence": null,
+        "changedFileCoverage": null,
+        "routeFocus": null,
+        "formalExecutionError": true
+      },
+      "repairedCandidate": {
+        "status": "passed",
+        "failures": [],
+        "deterministic": true,
+        "indexedFresh": true,
+        "indexElapsedMs": 1470,
+        "trackedWorktreeClean": true,
+        "trials": [
+          {
+            "trial": 1,
+            "taskType": "feature",
+            "routeFiles": [
+              "index.js",
+              "test.js"
+            ],
+            "routeFileCount": 2,
+            "routeConfidence": 0.15,
+            "changedFileCoverage": 1,
+            "coreSurfaceCoverage": 1,
+            "auxiliarySurfaceCoverage": 1,
+            "routeFocus": 1,
+            "overconfident": false,
+            "metricDisagreement": false,
+            "reportedCalibrationStatus": "underconfident",
+            "evaluationElapsedMs": 805
+          },
+          {
+            "trial": 2,
+            "taskType": "feature",
+            "routeFiles": [
+              "index.js",
+              "test.js"
+            ],
+            "routeFileCount": 2,
+            "routeConfidence": 0.15,
+            "changedFileCoverage": 1,
+            "coreSurfaceCoverage": 1,
+            "auxiliarySurfaceCoverage": 1,
+            "routeFocus": 1,
+            "overconfident": false,
+            "metricDisagreement": false,
+            "reportedCalibrationStatus": "underconfident",
+            "evaluationElapsedMs": 809
+          }
+        ]
+      },
+      "comparison": {
+        "routeChanged": true,
+        "changedFileCoverageDelta": null,
+        "routeFocusDelta": null,
+        "routeConfidenceDelta": null
+      }
+    },
+    {
+      "name": "pyupgrade",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/asottile/pyupgrade.git",
+      "pinnedHead": "b30a4772905b633374a740b2467e90112153cb54",
+      "routeCommit": "46c3d526905780be88d227f46e19f24f2593fbbe",
+      "groundTruthCommit": "98a37188adf22444e2c66062152e11fba5647a52",
+      "task": "fix unstringing multiline string annotations",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "pyupgrade/_plugins/typing_pep563.py",
+        "tests/features/typing_pep563_test.py"
+      ],
+      "implementationFiles": [
+        "pyupgrade/_plugins/typing_pep563.py"
+      ],
+      "testFiles": [
+        "tests/features/typing_pep563_test.py"
+      ],
+      "auxiliaryFiles": [],
+      "formalCandidate": {
+        "status": "failed",
+        "routeFiles": [
+          "pyupgrade/_string_helpers.py",
+          "tests/string_helpers_test.py"
+        ],
+        "routeConfidence": 0.53,
+        "changedFileCoverage": 0,
+        "routeFocus": 0,
+        "formalExecutionError": false
+      },
+      "repairedCandidate": {
+        "status": "passed",
+        "failures": [],
+        "deterministic": true,
+        "indexedFresh": true,
+        "indexElapsedMs": 2951,
+        "trackedWorktreeClean": true,
+        "trials": [
+          {
+            "trial": 1,
+            "taskType": "bugfix",
+            "routeFiles": [
+              "pyupgrade/_plugins/typing_pep563.py",
+              "pyupgrade/_data.py",
+              "pyupgrade/_plugins/typing_pep604.py",
+              "pyupgrade/_plugins/typing_pep585.py",
+              "tests/features/typing_pep563_test.py"
+            ],
+            "routeFileCount": 5,
+            "routeConfidence": 0.4,
+            "changedFileCoverage": 1,
+            "coreSurfaceCoverage": 1,
+            "auxiliarySurfaceCoverage": 1,
+            "routeFocus": 0.4,
+            "overconfident": false,
+            "metricDisagreement": false,
+            "reportedCalibrationStatus": "underconfident",
+            "evaluationElapsedMs": 2421
+          },
+          {
+            "trial": 2,
+            "taskType": "bugfix",
+            "routeFiles": [
+              "pyupgrade/_plugins/typing_pep563.py",
+              "pyupgrade/_data.py",
+              "pyupgrade/_plugins/typing_pep604.py",
+              "pyupgrade/_plugins/typing_pep585.py",
+              "tests/features/typing_pep563_test.py"
+            ],
+            "routeFileCount": 5,
+            "routeConfidence": 0.4,
+            "changedFileCoverage": 1,
+            "coreSurfaceCoverage": 1,
+            "auxiliarySurfaceCoverage": 1,
+            "routeFocus": 0.4,
+            "overconfident": false,
+            "metricDisagreement": false,
+            "reportedCalibrationStatus": "underconfident",
+            "evaluationElapsedMs": 2218
+          }
+        ]
+      },
+      "comparison": {
+        "routeChanged": true,
+        "changedFileCoverageDelta": 1,
+        "routeFocusDelta": 0.4,
+        "routeConfidenceDelta": -0.13
+      }
+    },
+    {
+      "name": "add-trailing-comma",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/asottile/add-trailing-comma.git",
+      "pinnedHead": "f4f3b2ed9788ba1838e420abd20f75f8ba3af41d",
+      "routeCommit": "47f9f984e8cc74a16353055a49dd12ff59da474b",
+      "groundTruthCommit": "ed7b183a6218f14ff4b5368b35a412e2e210fe8b",
+      "task": "fix unhugging of tstring",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "add_trailing_comma/_token_helpers.py",
+        "tests/features/unhug_test.py"
+      ],
+      "implementationFiles": [
+        "add_trailing_comma/_token_helpers.py"
+      ],
+      "testFiles": [
+        "tests/features/unhug_test.py"
+      ],
+      "auxiliaryFiles": [],
+      "formalCandidate": {
+        "status": "passed",
+        "routeFiles": [
+          "tests/features/unhug_test.py",
+          "add_trailing_comma/_token_helpers.py",
+          "add_trailing_comma/_main.py"
+        ],
+        "routeConfidence": 0.15,
+        "changedFileCoverage": 1,
+        "routeFocus": 0.667,
+        "formalExecutionError": false
+      },
+      "repairedCandidate": {
+        "status": "passed",
+        "failures": [],
+        "deterministic": true,
+        "indexedFresh": true,
+        "indexElapsedMs": 1504,
+        "trackedWorktreeClean": true,
+        "trials": [
+          {
+            "trial": 1,
+            "taskType": "bugfix",
+            "routeFiles": [
+              "tests/features/unhug_test.py",
+              "add_trailing_comma/_token_helpers.py",
+              "add_trailing_comma/_main.py"
+            ],
+            "routeFileCount": 3,
+            "routeConfidence": 0.15,
+            "changedFileCoverage": 1,
+            "coreSurfaceCoverage": 1,
+            "auxiliarySurfaceCoverage": 1,
+            "routeFocus": 0.667,
+            "overconfident": false,
+            "metricDisagreement": false,
+            "reportedCalibrationStatus": "underconfident",
+            "evaluationElapsedMs": 991
+          },
+          {
+            "trial": 2,
+            "taskType": "bugfix",
+            "routeFiles": [
+              "tests/features/unhug_test.py",
+              "add_trailing_comma/_token_helpers.py",
+              "add_trailing_comma/_main.py"
+            ],
+            "routeFileCount": 3,
+            "routeConfidence": 0.15,
+            "changedFileCoverage": 1,
+            "coreSurfaceCoverage": 1,
+            "auxiliarySurfaceCoverage": 1,
+            "routeFocus": 0.667,
+            "overconfident": false,
+            "metricDisagreement": false,
+            "reportedCalibrationStatus": "underconfident",
+            "evaluationElapsedMs": 876
+          }
+        ]
+      },
+      "comparison": {
+        "routeChanged": false,
+        "changedFileCoverageDelta": 0,
+        "routeFocusDelta": 0,
+        "routeConfidenceDelta": 0
+      }
+    },
+    {
+      "name": "conc",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/sourcegraph/conc.git",
+      "pinnedHead": "5f936abd7ae87036af1f75c95fb9d0daaf00116b",
+      "routeCommit": "8e5ba59e78214e2d8d3ea2c78ef6cf2693bedaa8",
+      "groundTruthCommit": "995000de22b50c624ad56b313bbe5ce200fac4f6",
+      "task": "Add `WithFailFast()` (#118)",
+      "expectedTaskType": "feature",
+      "changedFiles": [
+        "pool/context_pool.go",
+        "pool/context_pool_test.go",
+        "pool/result_context_pool.go",
+        "pool/result_context_pool_test.go"
+      ],
+      "implementationFiles": [
+        "pool/context_pool.go",
+        "pool/result_context_pool.go"
+      ],
+      "testFiles": [
+        "pool/context_pool_test.go",
+        "pool/result_context_pool_test.go"
+      ],
+      "auxiliaryFiles": [],
+      "formalCandidate": {
+        "status": "failed",
+        "routeFiles": [
+          "pool/result_context_pool_test.go",
+          "waitgroup.go",
+          "iter/iter.go",
+          "pool/context_pool.go",
+          "pool/error_pool.go",
+          "pool/result_context_pool.go",
+          "pool/result_pool.go"
+        ],
+        "routeConfidence": 0.15,
+        "changedFileCoverage": 0.75,
+        "routeFocus": 0.429,
+        "formalExecutionError": false
+      },
+      "repairedCandidate": {
+        "status": "passed",
+        "failures": [],
+        "deterministic": true,
+        "indexedFresh": true,
+        "indexElapsedMs": 1566,
+        "trackedWorktreeClean": true,
+        "trials": [
+          {
+            "trial": 1,
+            "taskType": "feature",
+            "routeFiles": [
+              "pool/context_pool.go",
+              "pool/result_context_pool.go",
+              "pool/context_pool_test.go",
+              "pool/result_context_pool_test.go"
+            ],
+            "routeFileCount": 4,
+            "routeConfidence": 0.4,
+            "changedFileCoverage": 1,
+            "coreSurfaceCoverage": 1,
+            "auxiliarySurfaceCoverage": 1,
+            "routeFocus": 1,
+            "overconfident": false,
+            "metricDisagreement": false,
+            "reportedCalibrationStatus": "underconfident",
+            "evaluationElapsedMs": 1027
+          },
+          {
+            "trial": 2,
+            "taskType": "feature",
+            "routeFiles": [
+              "pool/context_pool.go",
+              "pool/result_context_pool.go",
+              "pool/context_pool_test.go",
+              "pool/result_context_pool_test.go"
+            ],
+            "routeFileCount": 4,
+            "routeConfidence": 0.4,
+            "changedFileCoverage": 1,
+            "coreSurfaceCoverage": 1,
+            "auxiliarySurfaceCoverage": 1,
+            "routeFocus": 1,
+            "overconfident": false,
+            "metricDisagreement": false,
+            "reportedCalibrationStatus": "underconfident",
+            "evaluationElapsedMs": 1116
+          }
+        ]
+      },
+      "comparison": {
+        "routeChanged": true,
+        "changedFileCoverageDelta": 0.25,
+        "routeFocusDelta": 0.571,
+        "routeConfidenceDelta": 0.25
+      }
+    },
+    {
+      "name": "termenv",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/muesli/termenv.git",
+      "pinnedHead": "368a3572b8146cc038b3f240da6792003d7e42c5",
+      "routeCommit": "346688723df2b59a0bd02a31376707ef51042ed5",
+      "groundTruthCommit": "3b3da4b2b15b58ed5e4dca32bcbc6088dff1cf99",
+      "task": "fix(output): export output writer",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "output.go",
+        "screen.go",
+        "screen_test.go",
+        "termenv.go",
+        "termenv_windows.go"
+      ],
+      "implementationFiles": [
+        "output.go",
+        "screen.go",
+        "termenv.go",
+        "termenv_windows.go"
+      ],
+      "testFiles": [
+        "screen_test.go"
+      ],
+      "auxiliaryFiles": [],
+      "formalCandidate": {
+        "status": "passed",
+        "routeFiles": [
+          "output.go",
+          "screen.go",
+          "termenv_other.go",
+          "templatehelper.go",
+          "termenv_windows.go",
+          "termenv.go",
+          "copy.go",
+          "screen_test.go"
+        ],
+        "routeConfidence": 0.15,
+        "changedFileCoverage": 1,
+        "routeFocus": 0.625,
+        "formalExecutionError": false
+      },
+      "repairedCandidate": {
+        "status": "passed",
+        "failures": [],
+        "deterministic": true,
+        "indexedFresh": true,
+        "indexElapsedMs": 2162,
+        "trackedWorktreeClean": true,
+        "trials": [
+          {
+            "trial": 1,
+            "taskType": "bugfix",
+            "routeFiles": [
+              "output.go",
+              "screen.go",
+              "termenv_other.go",
+              "templatehelper.go",
+              "termenv_windows.go",
+              "termenv.go",
+              "copy.go",
+              "screen_test.go"
+            ],
+            "routeFileCount": 8,
+            "routeConfidence": 0.15,
+            "changedFileCoverage": 1,
+            "coreSurfaceCoverage": 1,
+            "auxiliarySurfaceCoverage": 1,
+            "routeFocus": 0.625,
+            "overconfident": false,
+            "metricDisagreement": false,
+            "reportedCalibrationStatus": "underconfident",
+            "evaluationElapsedMs": 1868
+          },
+          {
+            "trial": 2,
+            "taskType": "bugfix",
+            "routeFiles": [
+              "output.go",
+              "screen.go",
+              "termenv_other.go",
+              "templatehelper.go",
+              "termenv_windows.go",
+              "termenv.go",
+              "copy.go",
+              "screen_test.go"
+            ],
+            "routeFileCount": 8,
+            "routeConfidence": 0.15,
+            "changedFileCoverage": 1,
+            "coreSurfaceCoverage": 1,
+            "auxiliarySurfaceCoverage": 1,
+            "routeFocus": 0.625,
+            "overconfident": false,
+            "metricDisagreement": false,
+            "reportedCalibrationStatus": "underconfident",
+            "evaluationElapsedMs": 1484
+          }
+        ]
+      },
+      "comparison": {
+        "routeChanged": false,
+        "changedFileCoverageDelta": 0,
+        "routeFocusDelta": 0,
+        "routeConfidenceDelta": 0
+      }
+    },
+    {
+      "name": "backtrace-rs",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/rust-lang/backtrace-rs.git",
+      "pinnedHead": "06b2cc573703c98df4b543422c8339694420bb02",
+      "routeCommit": "7d263344f6bdc729db89304ccbbda7352acee7af",
+      "groundTruthCommit": "89eb2157cd6b0049e7c20aba3ab5032a4b2a0db4",
+      "task": "Add Apple visionOS support (rust-lang/backtrace-rs#613)",
+      "expectedTaskType": "feature",
+      "changedFiles": [
+        "crates/macos_frames_test/tests/main.rs",
+        "src/symbolize/gimli.rs",
+        "tests/accuracy/main.rs"
+      ],
+      "implementationFiles": [
+        "src/symbolize/gimli.rs"
+      ],
+      "testFiles": [
+        "crates/macos_frames_test/tests/main.rs",
+        "tests/accuracy/main.rs"
+      ],
+      "auxiliaryFiles": [],
+      "formalCandidate": {
+        "status": "failed",
+        "routeFiles": [
+          "src/backtrace/libunwind.rs",
+          "crates/as-if-std/build.rs",
+          "crates/macos_frames_test/tests/main.rs"
+        ],
+        "routeConfidence": 0.4,
+        "changedFileCoverage": 0.333,
+        "routeFocus": 0.333,
+        "formalExecutionError": false
+      },
+      "repairedCandidate": {
+        "status": "passed",
+        "failures": [],
+        "deterministic": true,
+        "indexedFresh": true,
+        "indexElapsedMs": 2479,
+        "trackedWorktreeClean": true,
+        "trials": [
+          {
+            "trial": 1,
+            "taskType": "feature",
+            "routeFiles": [
+              "src/backtrace/libunwind.rs",
+              "crates/as-if-std/build.rs",
+              "src/symbolize/gimli.rs",
+              "crates/macos_frames_test/tests/main.rs",
+              "tests/accuracy/main.rs"
+            ],
+            "routeFileCount": 5,
+            "routeConfidence": 0.4,
+            "changedFileCoverage": 1,
+            "coreSurfaceCoverage": 1,
+            "auxiliarySurfaceCoverage": 1,
+            "routeFocus": 0.6,
+            "overconfident": false,
+            "metricDisagreement": false,
+            "reportedCalibrationStatus": "underconfident",
+            "evaluationElapsedMs": 2131
+          },
+          {
+            "trial": 2,
+            "taskType": "feature",
+            "routeFiles": [
+              "src/backtrace/libunwind.rs",
+              "crates/as-if-std/build.rs",
+              "src/symbolize/gimli.rs",
+              "crates/macos_frames_test/tests/main.rs",
+              "tests/accuracy/main.rs"
+            ],
+            "routeFileCount": 5,
+            "routeConfidence": 0.4,
+            "changedFileCoverage": 1,
+            "coreSurfaceCoverage": 1,
+            "auxiliarySurfaceCoverage": 1,
+            "routeFocus": 0.6,
+            "overconfident": false,
+            "metricDisagreement": false,
+            "reportedCalibrationStatus": "underconfident",
+            "evaluationElapsedMs": 2170
+          }
+        ]
+      },
+      "comparison": {
+        "routeChanged": true,
+        "changedFileCoverageDelta": 0.667,
+        "routeFocusDelta": 0.267,
+        "routeConfidenceDelta": 0
+      }
+    },
+    {
+      "name": "tempfile",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/stebalien/tempfile.git",
+      "pinnedHead": "889f7bfbd8a61cfa87cb0886c4dbfbca1ef08919",
+      "routeCommit": "929a1127bde5046733d535281203bf8ec1bf2c9e",
+      "groundTruthCommit": "2632fb9e9465b86141b5bbe47b07dbf5b7110072",
+      "task": "fix: resolve relative paths when constructing `TempPath`",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "src/file/mod.rs",
+        "tests/namedtempfile.rs"
+      ],
+      "implementationFiles": [
+        "src/file/mod.rs"
+      ],
+      "testFiles": [
+        "tests/namedtempfile.rs"
+      ],
+      "auxiliaryFiles": [],
+      "formalCandidate": {
+        "status": "passed",
+        "routeFiles": [
+          "src/file/mod.rs",
+          "tests/namedtempfile.rs"
+        ],
+        "routeConfidence": 0.9,
+        "changedFileCoverage": 1,
+        "routeFocus": 1,
+        "formalExecutionError": false
+      },
+      "repairedCandidate": {
+        "status": "passed",
+        "failures": [],
+        "deterministic": true,
+        "indexedFresh": true,
+        "indexElapsedMs": 1679,
+        "trackedWorktreeClean": true,
+        "trials": [
+          {
+            "trial": 1,
+            "taskType": "bugfix",
+            "routeFiles": [
+              "src/file/mod.rs",
+              "tests/namedtempfile.rs"
+            ],
+            "routeFileCount": 2,
+            "routeConfidence": 0.9,
+            "changedFileCoverage": 1,
+            "coreSurfaceCoverage": 1,
+            "auxiliarySurfaceCoverage": 1,
+            "routeFocus": 1,
+            "overconfident": false,
+            "metricDisagreement": false,
+            "reportedCalibrationStatus": "well-calibrated",
+            "evaluationElapsedMs": 1194
+          },
+          {
+            "trial": 2,
+            "taskType": "bugfix",
+            "routeFiles": [
+              "src/file/mod.rs",
+              "tests/namedtempfile.rs"
+            ],
+            "routeFileCount": 2,
+            "routeConfidence": 0.9,
+            "changedFileCoverage": 1,
+            "coreSurfaceCoverage": 1,
+            "auxiliarySurfaceCoverage": 1,
+            "routeFocus": 1,
+            "overconfident": false,
+            "metricDisagreement": false,
+            "reportedCalibrationStatus": "well-calibrated",
+            "evaluationElapsedMs": 1179
+          }
+        ]
+      },
+      "comparison": {
+        "routeChanged": false,
+        "changedFileCoverageDelta": 0,
+        "routeFocusDelta": 0,
+        "routeConfidenceDelta": 0
+      }
+    }
+  ]
+}
