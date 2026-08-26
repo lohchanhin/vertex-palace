@@ -48,7 +48,7 @@ async function main() {
   );
   const temporaryRoot = await mkdtemp(path.join(os.tmpdir(), `vertex-palace-freeze-${round}-`));
   try {
-    const candidate = pack(projectRoot, temporaryRoot);
+    const candidate = pack(".", temporaryRoot);
     const baseline = pack("vertex-palace@0.3.0", temporaryRoot);
     assert.equal(candidate.version, manifest.candidate);
     assert.equal(baseline.version, manifest.baseline);
@@ -106,13 +106,26 @@ async function main() {
 }
 
 function pack(spec, destination) {
-  const result = run(
-    "npm",
+  const result = runNpm(
     ["pack", spec, "--json", "--ignore-scripts", "--pack-destination", destination],
     projectRoot
   );
   const parsed = JSON.parse(result.stdout);
   return Array.isArray(parsed) ? parsed[0] : parsed;
+}
+
+function runNpm(args, cwd) {
+  if (process.platform === "win32") {
+    const commandLine = `npm ${args.map(quoteCmdArgument).join(" ")}`;
+    return run(process.env.ComSpec || "cmd.exe", ["/d", "/s", "/c", commandLine], cwd);
+  }
+  return run("npm", args, cwd);
+}
+
+function quoteCmdArgument(value) {
+  const text = String(value);
+  assert.ok(!text.includes('"'), "npm arguments must not contain quotes");
+  return /\s/.test(text) ? `"${text}"` : text;
 }
 
 function countBy(values, key) {
@@ -137,6 +150,7 @@ function run(command, args, cwd) {
     windowsHide: true,
     maxBuffer: 20 * 1024 * 1024
   });
+  if (result.error) throw result.error;
   if (result.status !== 0) {
     throw new Error(`${command} ${args.join(" ")} failed\n${result.stdout}\n${result.stderr}`);
   }

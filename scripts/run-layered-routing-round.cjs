@@ -108,7 +108,7 @@ function verifyFreeze(manifestSource, freeze) {
 async function prepareProducts(root, freeze) {
   const packRoot = path.join(root, "packs");
   await mkdir(packRoot, { recursive: true });
-  const candidateMeta = packPackage(projectRoot, packRoot);
+  const candidateMeta = packPackage(".", packRoot);
   assert.equal(candidateMeta.version, "0.4.0-alpha.2");
   assert.equal(candidateMeta.integrity, freeze.products.candidate.integrity, "candidate package differs from freeze");
   const baselineMeta = packPackage("vertex-palace@0.3.0", packRoot);
@@ -122,7 +122,7 @@ async function prepareProducts(root, freeze) {
 }
 
 function packPackage(spec, destination) {
-  const result = run("npm", ["pack", spec, "--json", "--ignore-scripts", "--pack-destination", destination], {
+  const result = runNpm(["pack", spec, "--json", "--ignore-scripts", "--pack-destination", destination], {
     cwd: projectRoot
   });
   const parsed = JSON.parse(result.stdout);
@@ -133,7 +133,7 @@ async function installProduct(root, name, tarballPath) {
   const installRoot = path.join(root, `_product-${name}`);
   await mkdir(installRoot, { recursive: true });
   await writeFile(path.join(installRoot, "package.json"), JSON.stringify({ private: true }), "utf8");
-  run("npm", ["install", "--ignore-scripts", "--no-audit", "--no-fund", "--loglevel=error", tarballPath], {
+  runNpm(["install", "--ignore-scripts", "--no-audit", "--no-fund", "--loglevel=error", tarballPath], {
     cwd: installRoot
   });
   const cliPath = path.join(installRoot, "node_modules", "vertex-palace", "dist", "palace.cjs");
@@ -454,6 +454,20 @@ function valueAfter(name) {
   return index >= 0 ? process.argv[index + 1] : undefined;
 }
 
+function runNpm(args, options) {
+  if (process.platform === "win32") {
+    const commandLine = `npm ${args.map(quoteCmdArgument).join(" ")}`;
+    return run(process.env.ComSpec || "cmd.exe", ["/d", "/s", "/c", commandLine], options);
+  }
+  return run("npm", args, options);
+}
+
+function quoteCmdArgument(value) {
+  const text = String(value);
+  assert.ok(!text.includes('"'), "npm arguments must not contain quotes");
+  return /\s/.test(text) ? `"${text}"` : text;
+}
+
 function run(command, args, options) {
   const result = spawnSync(command, args, {
     cwd: options.cwd,
@@ -462,6 +476,7 @@ function run(command, args, options) {
     env: { ...process.env, NO_COLOR: "1" },
     maxBuffer: 20 * 1024 * 1024
   });
+  if (result.error) throw result.error;
   if (result.status !== 0) {
     throw new Error([
       `${command} ${args.join(" ")} failed with exit code ${result.status}`,
