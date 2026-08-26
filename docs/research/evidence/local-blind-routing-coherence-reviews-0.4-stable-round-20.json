@@ -1,0 +1,928 @@
+{
+  "schemaVersion": 1,
+  "studyId": "local-blind-routing-round-20-0.4-stable-candidate",
+  "generatedAt": "2026-08-26T11:32:00.664Z",
+  "status": "review-complete",
+  "claimBoundary": "Developer-delegated, Codex-assisted semantic review performed after the publicly preregistered Round 20 candidate freeze and before any Palace call on candidate tasks. The reviewer is not independent from product development, and no inter-rater agreement is available.",
+  "reviewBoundary": "single-developer-delegated-semantic-reviewer",
+  "publicPreregistration": true,
+  "candidateFreeze": {
+    "path": "docs/research/evidence/local-blind-candidate-freeze-0.4-stable-round-20.json",
+    "sha256": "8BB2C344A6F3B653DC74260494047366C571D7B9751393E362ED3337C8463052",
+    "frozenAt": "2026-08-26T10:52:45.466Z",
+    "artifactHashesVerified": true
+  },
+  "queue": {
+    "path": "docs/research/evidence/local-blind-routing-candidate-queue-0.4-stable-round-20-attempt-1.json",
+    "sha256": "AD161DB15496DBB2CD04575C8115A70FB6F9EF3F4D160A2D61D3D5DFCC51C3D9"
+  },
+  "reviewer": {
+    "id": "developer-delegated-codex-semantic-reviewer-1",
+    "role": "product-developer-delegated-semantic-review",
+    "codexAssisted": true,
+    "independent": false,
+    "interRaterAgreementAvailable": false
+  },
+  "timing": {
+    "candidateFrozenBeforeReview": true,
+    "reviewBeforeAnyPalaceCall": true,
+    "palaceCallsOnCandidateTasks": 0
+  },
+  "method": {
+    "candidateOrder": "newest-first within each repository",
+    "wholeTargetDecision": true,
+    "uncertainHunkRejectsTarget": true,
+    "partialOraclePruningForbidden": true,
+    "everyHunkReviewed": true
+  },
+  "limitations": [
+    "The semantic reviewer is not independent from product development.",
+    "No second reviewer or inter-rater agreement is available.",
+    "Ambiguous or unrelated hunks reject the whole target rather than being removed from the oracle."
+  ],
+  "reviews": [
+    {
+      "repository": "mimic-fn",
+      "candidateId": "candidate_516f2d6ba88b9b28",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "The reviewed diff contains hand-maintained source, test, or documentation files and no generator-to-output ownership relationship.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      },
+      "review": {
+        "schemaVersion": 1,
+        "packetSha256": "12F8931262BE4DBFF47E7721A2AD19570614CC8B0652F532FCC617B123A014FF",
+        "reviewTiming": "pre-route",
+        "reviewPerformedAfterCandidateFreeze": true,
+        "reviewedWithoutPalaceOutput": true,
+        "palaceCallsOnCandidateTask": 0,
+        "targetDecision": "accept",
+        "files": [
+          {
+            "path": "index.d.ts",
+            "decision": "task-aligned",
+            "reason": "The type declaration, descriptor-copy guard, option plumbing, documentation, and regression matrix all implement and verify the ignoreNonConfigurable option. All hunks in index.d.ts serve that same task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_de464e287fd16c18",
+                "decision": "task-aligned",
+                "reason": "The type declaration, descriptor-copy guard, option plumbing, documentation, and regression matrix all implement and verify the ignoreNonConfigurable option. This hunk is index.d.ts @@ -0,0 +1,11 @@."
+              },
+              {
+                "id": "hunk_da0f2fc169bca939",
+                "decision": "task-aligned",
+                "reason": "The type declaration, descriptor-copy guard, option plumbing, documentation, and regression matrix all implement and verify the ignoreNonConfigurable option. This hunk is index.d.ts @@ -39 +50,2 @@ declare function mimicFn<."
+              }
+            ]
+          },
+          {
+            "path": "index.js",
+            "decision": "task-aligned",
+            "reason": "The type declaration, descriptor-copy guard, option plumbing, documentation, and regression matrix all implement and verify the ignoreNonConfigurable option. All hunks in index.js serve that same task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_91c9c96f7f5f141c",
+                "decision": "task-aligned",
+                "reason": "The type declaration, descriptor-copy guard, option plumbing, documentation, and regression matrix all implement and verify the ignoreNonConfigurable option. This hunk is index.js @@ -5 +5 @@ const {hasOwnProperty} = Object.prototype;."
+              },
+              {
+                "id": "hunk_5591de6d62389d51",
+                "decision": "task-aligned",
+                "reason": "The type declaration, descriptor-copy guard, option plumbing, documentation, and regression matrix all implement and verify the ignoreNonConfigurable option. This hunk is index.js @@ -12,2 +12,20 @@ const copyProperty = (to, from, property) => {."
+              },
+              {
+                "id": "hunk_e74af1939d57152b",
+                "decision": "task-aligned",
+                "reason": "The type declaration, descriptor-copy guard, option plumbing, documentation, and regression matrix all implement and verify the ignoreNonConfigurable option. This hunk is index.js @@ -40 +58 @@ const removeProperty = (to, from, property) => {."
+              },
+              {
+                "id": "hunk_7943bfc21949bb28",
+                "decision": "task-aligned",
+                "reason": "The type declaration, descriptor-copy guard, option plumbing, documentation, and regression matrix all implement and verify the ignoreNonConfigurable option. This hunk is index.js @@ -42 +60 @@ const mimicFn = (to, from) => {."
+              }
+            ]
+          },
+          {
+            "path": "readme.md",
+            "decision": "task-aligned",
+            "reason": "The type declaration, descriptor-copy guard, option plumbing, documentation, and regression matrix all implement and verify the ignoreNonConfigurable option. All hunks in readme.md serve that same task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_52ec3e199301bff3",
+                "decision": "task-aligned",
+                "reason": "The type declaration, descriptor-copy guard, option plumbing, documentation, and regression matrix all implement and verify the ignoreNonConfigurable option. This hunk is readme.md @@ -42 +42 @@ console.log(wrapper.unicorn);."
+              },
+              {
+                "id": "hunk_ae58622928dbd532",
+                "decision": "task-aligned",
+                "reason": "The type declaration, descriptor-copy guard, option plumbing, documentation, and regression matrix all implement and verify the ignoreNonConfigurable option. This hunk is readme.md @@ -59,0 +60,10 @@ Function to mimic.."
+              }
+            ]
+          },
+          {
+            "path": "test.js",
+            "decision": "task-aligned",
+            "reason": "The type declaration, descriptor-copy guard, option plumbing, documentation, and regression matrix all implement and verify the ignoreNonConfigurable option. All hunks in test.js serve that same task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_3643d1ec41bcd46e",
+                "decision": "task-aligned",
+                "reason": "The type declaration, descriptor-copy guard, option plumbing, documentation, and regression matrix all implement and verify the ignoreNonConfigurable option. This hunk is test.js @@ -112,0 +113,33 @@ test('should allow classes to be copied', t => {."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "repository": "is-unicode-supported",
+      "candidateId": "candidate_fb497c4b5fd77f5e",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "The reviewed diff contains hand-maintained source, test, or documentation files and no generator-to-output ownership relationship.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      },
+      "review": {
+        "schemaVersion": 1,
+        "packetSha256": "67EF33EDF6C21762E406C45C012EEBA9BEE99A45E7D3591E46C7EA6F87C799A6",
+        "reviewTiming": "pre-route",
+        "reviewPerformedAfterCandidateFreeze": true,
+        "reviewedWithoutPalaceOutput": true,
+        "palaceCallsOnCandidateTask": 0,
+        "targetDecision": "accept",
+        "files": [
+          {
+            "path": "index.js",
+            "decision": "task-aligned",
+            "reason": "Both environment checks identify Terminus variants, while the serial Windows test cleanup prevents the newly recognized Terminus environment variable from contaminating that platform simulation. All hunks in index.js serve that same task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_c0e4bb4e7f47a344",
+                "decision": "task-aligned",
+                "reason": "Both environment checks identify Terminus variants, while the serial Windows test cleanup prevents the newly recognized Terminus environment variable from contaminating that platform simulation. This hunk is index.js @@ -9,0 +10 @@ export default function isUnicodeSupported() {."
+              },
+              {
+                "id": "hunk_b4563c5359b54f1f",
+                "decision": "task-aligned",
+                "reason": "Both environment checks identify Terminus variants, while the serial Windows test cleanup prevents the newly recognized Terminus environment variable from contaminating that platform simulation. This hunk is index.js @@ -10,0 +12 @@ export default function isUnicodeSupported() {."
+              }
+            ]
+          },
+          {
+            "path": "test.js",
+            "decision": "task-aligned",
+            "reason": "Both environment checks identify Terminus variants, while the serial Windows test cleanup prevents the newly recognized Terminus environment variable from contaminating that platform simulation. All hunks in test.js serve that same task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_649a1d94b1b02b8b",
+                "decision": "task-aligned",
+                "reason": "Both environment checks identify Terminus variants, while the serial Windows test cleanup prevents the newly recognized Terminus environment variable from contaminating that platform simulation. This hunk is test.js @@ -13,0 +14 @@ test.serial('windows', t => {."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "repository": "pyupgrade",
+      "candidateId": "candidate_1f6be4787d51e2e0",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "The reviewed diff contains hand-maintained source, test, or documentation files and no generator-to-output ownership relationship.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      },
+      "review": {
+        "schemaVersion": 1,
+        "packetSha256": "BEFB96CA589A9DD5F5A8B31E7ABAC4ACECDBCBA2B4BA7DB6A261F9D25CCAD6EC",
+        "reviewTiming": "pre-route",
+        "reviewPerformedAfterCandidateFreeze": true,
+        "reviewedWithoutPalaceOutput": true,
+        "palaceCallsOnCandidateTask": 0,
+        "targetDecision": "accept",
+        "files": [
+          {
+            "path": "pyupgrade/_plugins/typing_pep563.py",
+            "decision": "task-aligned",
+            "reason": "The token-range expansion consumes the complete implicitly concatenated annotation and the focused regression case verifies the multiline rewrite. All hunks in pyupgrade/_plugins/typing_pep563.py serve that same task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_3cbe01ed9cfb9f9c",
+                "decision": "task-aligned",
+                "reason": "The token-range expansion consumes the complete implicitly concatenated annotation and the focused regression case verifies the multiline rewrite. This hunk is pyupgrade/_plugins/typing_pep563.py @@ -8,0 +9 @@ from collections.abc import Sequence."
+              },
+              {
+                "id": "hunk_4a46a9ea9d34a557",
+                "decision": "task-aligned",
+                "reason": "The token-range expansion consumes the complete implicitly concatenated annotation and the focused regression case verifies the multiline rewrite. This hunk is pyupgrade/_plugins/typing_pep563.py @@ -26 +27,9 @@ def _dequote(i: int, tokens: list[Token], *, new: str) -> None:."
+              }
+            ]
+          },
+          {
+            "path": "tests/features/typing_pep563_test.py",
+            "decision": "task-aligned",
+            "reason": "The token-range expansion consumes the complete implicitly concatenated annotation and the focused regression case verifies the multiline rewrite. All hunks in tests/features/typing_pep563_test.py serve that same task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_11dc972126b7a86c",
+                "decision": "task-aligned",
+                "reason": "The token-range expansion consumes the complete implicitly concatenated annotation and the focused regression case verifies the multiline rewrite. This hunk is tests/features/typing_pep563_test.py @@ -367,0 +368,14 @@ def test_fix_typing_pep563_noop(s):."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "repository": "add-trailing-comma",
+      "candidateId": "candidate_386012925e1e7ae7",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "The reviewed diff contains hand-maintained source, test, or documentation files and no generator-to-output ownership relationship.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      },
+      "review": {
+        "schemaVersion": 1,
+        "packetSha256": "9E54B98FC750704C02578BC7F89A532C0BE99403F6D813AC9E69B62889AD0EB4",
+        "reviewTiming": "pre-route",
+        "reviewPerformedAfterCandidateFreeze": true,
+        "reviewedWithoutPalaceOutput": true,
+        "palaceCallsOnCandidateTask": 0,
+        "targetDecision": "accept",
+        "files": [
+          {
+            "path": "add_trailing_comma/_token_helpers.py",
+            "decision": "task-aligned",
+            "reason": "The token guard recognizes a triple-quoted t-string argument and the focused unhug test verifies that exact syntax remains grouped. All hunks in add_trailing_comma/_token_helpers.py serve that same task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_699eacbd1315be85",
+                "decision": "task-aligned",
+                "reason": "The token guard recognizes a triple-quoted t-string argument and the focused unhug test verifies that exact syntax remains grouped. This hunk is add_trailing_comma/_token_helpers.py @@ -138,0 +139,4 @@ def fix_brace(."
+              }
+            ]
+          },
+          {
+            "path": "tests/features/unhug_test.py",
+            "decision": "task-aligned",
+            "reason": "The token guard recognizes a triple-quoted t-string argument and the focused unhug test verifies that exact syntax remains grouped. All hunks in tests/features/unhug_test.py serve that same task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_3a061d73cb36b081",
+                "decision": "task-aligned",
+                "reason": "The token guard recognizes a triple-quoted t-string argument and the focused unhug test verifies that exact syntax remains grouped. This hunk is tests/features/unhug_test.py @@ -29,0 +30,4 @@ from add_trailing_comma._main import _fix_src."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "repository": "conc",
+      "candidateId": "candidate_bba2b928e525ce4f",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "The reviewed diff contains hand-maintained source, test, or documentation files and no generator-to-output ownership relationship.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      },
+      "review": {
+        "schemaVersion": 1,
+        "packetSha256": "76DCA2D34F19620BC6090C3DD5F32E422C6560ABA957725FBF4F068EF92C3062",
+        "reviewTiming": "pre-route",
+        "reviewPerformedAfterCandidateFreeze": true,
+        "reviewedWithoutPalaceOutput": true,
+        "palaceCallsOnCandidateTask": 0,
+        "targetDecision": "accept",
+        "files": [
+          {
+            "path": "pool/context_pool.go",
+            "decision": "task-aligned",
+            "reason": "Both context-pool variants expose WithFailFast as the documented combination of first-error and cancel-on-error behavior, and the paired tests exercise the alias. All hunks in pool/context_pool.go serve that same task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_4d7bcd966e69f8f2",
+                "decision": "task-aligned",
+                "reason": "Both context-pool variants expose WithFailFast as the documented combination of first-error and cancel-on-error behavior, and the paired tests exercise the alias. This hunk is pool/context_pool.go @@ -83,0 +84,10 @@ func (p *ContextPool) WithCancelOnError() *ContextPool {."
+              }
+            ]
+          },
+          {
+            "path": "pool/context_pool_test.go",
+            "decision": "task-aligned",
+            "reason": "Both context-pool variants expose WithFailFast as the documented combination of first-error and cancel-on-error behavior, and the paired tests exercise the alias. All hunks in pool/context_pool_test.go serve that same task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_74ab98a873be67ff",
+                "decision": "task-aligned",
+                "reason": "Both context-pool variants expose WithFailFast as the documented combination of first-error and cancel-on-error behavior, and the paired tests exercise the alias. This hunk is pool/context_pool_test.go @@ -190 +190 @@ func TestContextPool(t *testing.T) {."
+              },
+              {
+                "id": "hunk_f1cc6a0c3927bb76",
+                "decision": "task-aligned",
+                "reason": "Both context-pool variants expose WithFailFast as the documented combination of first-error and cancel-on-error behavior, and the paired tests exercise the alias. This hunk is pool/context_pool_test.go @@ -192 +192 @@ func TestContextPool(t *testing.T) {."
+              }
+            ]
+          },
+          {
+            "path": "pool/result_context_pool.go",
+            "decision": "task-aligned",
+            "reason": "Both context-pool variants expose WithFailFast as the documented combination of first-error and cancel-on-error behavior, and the paired tests exercise the alias. All hunks in pool/result_context_pool.go serve that same task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_061a023c8afbddd1",
+                "decision": "task-aligned",
+                "reason": "Both context-pool variants expose WithFailFast as the documented combination of first-error and cancel-on-error behavior, and the paired tests exercise the alias. This hunk is pool/result_context_pool.go @@ -64,0 +65,9 @@ func (p *ResultContextPool[T]) WithCancelOnError() *ResultContextPool[T] {."
+              }
+            ]
+          },
+          {
+            "path": "pool/result_context_pool_test.go",
+            "decision": "task-aligned",
+            "reason": "Both context-pool variants expose WithFailFast as the documented combination of first-error and cancel-on-error behavior, and the paired tests exercise the alias. All hunks in pool/result_context_pool_test.go serve that same task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_62587cdafb888dac",
+                "decision": "task-aligned",
+                "reason": "Both context-pool variants expose WithFailFast as the documented combination of first-error and cancel-on-error behavior, and the paired tests exercise the alias. This hunk is pool/result_context_pool_test.go @@ -103,0 +104,16 @@ func TestResultContextPool(t *testing.T) {."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "repository": "termenv",
+      "candidateId": "candidate_8d5b40a46da9abe9",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "The reviewed diff contains hand-maintained source, test, or documentation files and no generator-to-output ownership relationship.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      },
+      "review": {
+        "schemaVersion": 1,
+        "packetSha256": "FF5F59BD891B7EB27EF9779392E4725776BAC50A6E5A08EF26C654DBB2449476",
+        "reviewTiming": "pre-route",
+        "reviewPerformedAfterCandidateFreeze": true,
+        "reviewedWithoutPalaceOutput": true,
+        "palaceCallsOnCandidateTask": 0,
+        "targetDecision": "accept",
+        "files": [
+          {
+            "path": "output.go",
+            "decision": "task-aligned",
+            "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. All hunks in output.go serve that same task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_f100b2f51afbab19",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is output.go @@ -14,0 +15,2 @@ var (."
+              },
+              {
+                "id": "hunk_6e93b09267e5f895",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is output.go @@ -26 +28 @@ type Output struct {."
+              },
+              {
+                "id": "hunk_1b0c0170af975042",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is output.go @@ -64,2 +66,2 @@ func SetDefaultOutput(o *Output) {."
+              },
+              {
+                "id": "hunk_94e8cbc149a7f586",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is output.go @@ -67 +69 @@ func NewOutput(tty io.Writer, opts ...OutputOption) *Output {."
+              },
+              {
+                "id": "hunk_f0f6aa9428c4e943",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is output.go @@ -76,2 +78,2 @@ func NewOutput(tty io.Writer, opts ...OutputOption) *Output {."
+              },
+              {
+                "id": "hunk_4f1ad0e38c2db942",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is output.go @@ -182,0 +185,2 @@ func (o *Output) HasDarkBackground() bool {."
+              },
+              {
+                "id": "hunk_664c2d4267126c7f",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is output.go @@ -184 +188 @@ func (o Output) TTY() File {."
+              },
+              {
+                "id": "hunk_9074be3519ac3258",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is output.go @@ -189,0 +194,6 @@ func (o Output) TTY() File {."
+              },
+              {
+                "id": "hunk_2615bebb40f59bde",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is output.go @@ -191 +201 @@ func (o Output) Write(p []byte) (int, error) {."
+              }
+            ]
+          },
+          {
+            "path": "screen.go",
+            "decision": "task-aligned",
+            "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. All hunks in screen.go serve that same task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_768c3870b3202dc0",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is screen.go @@ -74 +74 @@ func (o Output) Reset() {."
+              },
+              {
+                "id": "hunk_ebacbfed0cc92c27",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is screen.go @@ -79 +79 @@ func (o Output) SetForegroundColor(color Color) {."
+              },
+              {
+                "id": "hunk_21dd18fe39216ad6",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is screen.go @@ -84 +84 @@ func (o Output) SetBackgroundColor(color Color) {."
+              },
+              {
+                "id": "hunk_63eae95c59db5355",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is screen.go @@ -89 +89 @@ func (o Output) SetCursorColor(color Color) {."
+              },
+              {
+                "id": "hunk_8b9968d76aa5ca80",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is screen.go @@ -94 +94 @@ func (o Output) RestoreScreen() {."
+              },
+              {
+                "id": "hunk_a642897f8cc2fead",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is screen.go @@ -99 +99 @@ func (o Output) SaveScreen() {."
+              },
+              {
+                "id": "hunk_2030db225225631c",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is screen.go @@ -105 +105 @@ func (o Output) AltScreen() {."
+              },
+              {
+                "id": "hunk_fbbfb4ece0e2dbd5",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is screen.go @@ -111 +111 @@ func (o Output) ExitAltScreen() {."
+              },
+              {
+                "id": "hunk_9f58b948f033bac0",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is screen.go @@ -116 +116 @@ func (o Output) ClearScreen() {."
+              },
+              {
+                "id": "hunk_ba64989057d31ff5",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is screen.go @@ -122 +122 @@ func (o Output) MoveCursor(row int, column int) {."
+              },
+              {
+                "id": "hunk_fc809b198d6e52b0",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is screen.go @@ -127 +127 @@ func (o Output) HideCursor() {."
+              },
+              {
+                "id": "hunk_34e923987ab6fc3d",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is screen.go @@ -132 +132 @@ func (o Output) ShowCursor() {."
+              },
+              {
+                "id": "hunk_c61ddd206d77dd92",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is screen.go @@ -137 +137 @@ func (o Output) SaveCursorPosition() {."
+              },
+              {
+                "id": "hunk_0739f1a4b735d5ab",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is screen.go @@ -142 +142 @@ func (o Output) RestoreCursorPosition() {."
+              },
+              {
+                "id": "hunk_17087a3d2120283d",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is screen.go @@ -147 +147 @@ func (o Output) CursorUp(n int) {."
+              },
+              {
+                "id": "hunk_b661051729eaa911",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is screen.go @@ -152 +152 @@ func (o Output) CursorDown(n int) {."
+              },
+              {
+                "id": "hunk_3387db16e925473b",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is screen.go @@ -157 +157 @@ func (o Output) CursorForward(n int) {."
+              },
+              {
+                "id": "hunk_30c57a6a09afd9cd",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is screen.go @@ -162 +162 @@ func (o Output) CursorBack(n int) {."
+              },
+              {
+                "id": "hunk_5fe9dd412e65248c",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is screen.go @@ -168 +168 @@ func (o Output) CursorNextLine(n int) {."
+              },
+              {
+                "id": "hunk_f2ba0304c4ee312c",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is screen.go @@ -174 +174 @@ func (o Output) CursorPrevLine(n int) {."
+              },
+              {
+                "id": "hunk_113280515beed51c",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is screen.go @@ -179 +179 @@ func (o Output) ClearLine() {."
+              },
+              {
+                "id": "hunk_139fab26a93da009",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is screen.go @@ -184 +184 @@ func (o Output) ClearLineLeft() {."
+              },
+              {
+                "id": "hunk_ba1552adafa9bb02",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is screen.go @@ -189 +189 @@ func (o Output) ClearLineRight() {."
+              },
+              {
+                "id": "hunk_1d9f1e4ddf3e217b",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is screen.go @@ -196 +196 @@ func (o Output) ClearLines(n int) {."
+              },
+              {
+                "id": "hunk_95ab96be0c0df736",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is screen.go @@ -201 +201 @@ func (o Output) ChangeScrollingRegion(top, bottom int) {."
+              },
+              {
+                "id": "hunk_3158d59c2c11d4ef",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is screen.go @@ -207 +207 @@ func (o Output) InsertLines(n int) {."
+              },
+              {
+                "id": "hunk_e2954f7c73a32fcb",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is screen.go @@ -213 +213 @@ func (o Output) DeleteLines(n int) {."
+              },
+              {
+                "id": "hunk_5addc08ef4a0f8fe",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is screen.go @@ -218 +218 @@ func (o Output) EnableMousePress() {."
+              },
+              {
+                "id": "hunk_bfadda0cbba83ac2",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is screen.go @@ -223 +223 @@ func (o Output) DisableMousePress() {."
+              },
+              {
+                "id": "hunk_cc39f0b19ac7e2b8",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is screen.go @@ -228 +228 @@ func (o Output) EnableMouse() {."
+              },
+              {
+                "id": "hunk_d9edc08f5aa1bca7",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is screen.go @@ -233 +233 @@ func (o Output) DisableMouse() {."
+              },
+              {
+                "id": "hunk_d1f7e9e3763769ba",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is screen.go @@ -238 +238 @@ func (o Output) EnableMouseHilite() {."
+              },
+              {
+                "id": "hunk_e3d86e5b48cf70b6",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is screen.go @@ -243 +243 @@ func (o Output) DisableMouseHilite() {."
+              },
+              {
+                "id": "hunk_2e5a0b9f4d4915a5",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is screen.go @@ -248 +248 @@ func (o Output) EnableMouseCellMotion() {."
+              },
+              {
+                "id": "hunk_5e02e73b2c664856",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is screen.go @@ -253 +253 @@ func (o Output) DisableMouseCellMotion() {."
+              },
+              {
+                "id": "hunk_2f6cdcbff47dda2b",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is screen.go @@ -258 +258 @@ func (o Output) EnableMouseAllMotion() {."
+              },
+              {
+                "id": "hunk_82f3d4f8c98fd3e5",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is screen.go @@ -263 +263 @@ func (o Output) DisableMouseAllMotion() {."
+              },
+              {
+                "id": "hunk_beec9c482eee8ae3",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is screen.go @@ -269 +269 @@ func (o Output) EnableMouseExtendedMode() {."
+              },
+              {
+                "id": "hunk_109ab7db92a40e1d",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is screen.go @@ -274 +274 @@ func (o Output) DisableMouseExtendedMode() {."
+              },
+              {
+                "id": "hunk_e2e92901ad29a802",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is screen.go @@ -281 +281 @@ func (o Output) EnableMousePixelsMode() {."
+              },
+              {
+                "id": "hunk_5111dd0957f6e92d",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is screen.go @@ -286 +286 @@ func (o Output) DisableMousePixelsMode() {."
+              },
+              {
+                "id": "hunk_2374ff8264fa61fa",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is screen.go @@ -291 +291 @@ func (o Output) SetWindowTitle(title string) {."
+              },
+              {
+                "id": "hunk_1dc1aeadddb2887b",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is screen.go @@ -296 +296 @@ func (o Output) EnableBracketedPaste() {."
+              },
+              {
+                "id": "hunk_59ba04105be97024",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is screen.go @@ -301 +301 @@ func (o Output) DisableBracketedPaste() {."
+              }
+            ]
+          },
+          {
+            "path": "screen_test.go",
+            "decision": "task-aligned",
+            "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. All hunks in screen_test.go serve that same task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_6346cb82628861c5",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is screen_test.go @@ -37 +37 @@ func verify(t *testing.T, o *Output, exp string) {."
+              }
+            ]
+          },
+          {
+            "path": "termenv.go",
+            "decision": "task-aligned",
+            "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. All hunks in termenv.go serve that same task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_672db024a90f1873",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is termenv.go @@ -4,0 +5 @@ import (."
+              },
+              {
+                "id": "hunk_0aa455b0f1ca6c2b",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is termenv.go @@ -34,2 +35,2 @@ func (o *Output) isTTY() bool {."
+              },
+              {
+                "id": "hunk_0d82ed18de0c8600",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is termenv.go @@ -38 +39 @@ func (o *Output) isTTY() bool {."
+              }
+            ]
+          },
+          {
+            "path": "termenv_windows.go",
+            "decision": "task-aligned",
+            "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. All hunks in termenv_windows.go serve that same task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_ae297319c1ad5315",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is termenv_windows.go @@ -7,0 +8 @@ import (."
+              },
+              {
+                "id": "hunk_0bd14a36d6f2ea21",
+                "decision": "task-aligned",
+                "reason": "The Output field rename, exported Writer accessor, compatibility TTY method, terminal checks, screen operations, and tests form one complete change that exposes the underlying output writer. This hunk is termenv_windows.go @@ -106,2 +107,2 @@ func EnableVirtualTerminalProcessing(o *Output) (restoreFunc func() error, err e."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "repository": "backtrace-rs",
+      "candidateId": "candidate_b7b762752a77d351",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "The reviewed diff contains hand-maintained source, test, or documentation files and no generator-to-output ownership relationship.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      },
+      "review": {
+        "schemaVersion": 1,
+        "packetSha256": "E11E6DE77E3B29EDC925169247BC85E0A035049A2D628A4E5242ADACEAD8FF3D",
+        "reviewTiming": "pre-route",
+        "reviewPerformedAfterCandidateFreeze": true,
+        "reviewedWithoutPalaceOutput": true,
+        "palaceCallsOnCandidateTask": 0,
+        "targetDecision": "accept",
+        "files": [
+          {
+            "path": "crates/macos_frames_test/tests/main.rs",
+            "decision": "task-aligned",
+            "reason": "The cfg changes consistently generalize existing Apple platform handling to target_vendor so visionOS receives the same symbolization and accuracy-test paths. All hunks in crates/macos_frames_test/tests/main.rs serve that same task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_27aa30449ab4604f",
+                "decision": "task-aligned",
+                "reason": "The cfg changes consistently generalize existing Apple platform handling to target_vendor so visionOS receives the same symbolization and accuracy-test paths. This hunk is crates/macos_frames_test/tests/main.rs @@ -9 +9 @@."
+              }
+            ]
+          },
+          {
+            "path": "src/symbolize/gimli.rs",
+            "decision": "task-aligned",
+            "reason": "The cfg changes consistently generalize existing Apple platform handling to target_vendor so visionOS receives the same symbolization and accuracy-test paths. All hunks in src/symbolize/gimli.rs serve that same task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_bfe610190322de59",
+                "decision": "task-aligned",
+                "reason": "The cfg changes consistently generalize existing Apple platform handling to target_vendor so visionOS receives the same symbolization and accuracy-test paths. This hunk is src/symbolize/gimli.rs @@ -32,0 +33,3 @@ cfg_if::cfg_if! {."
+              },
+              {
+                "id": "hunk_f9f45ba331d915a6",
+                "decision": "task-aligned",
+                "reason": "The cfg changes consistently generalize existing Apple platform handling to target_vendor so visionOS receives the same symbolization and accuracy-test paths. This hunk is src/symbolize/gimli.rs @@ -39 +41,0 @@ cfg_if::cfg_if! {."
+              },
+              {
+                "id": "hunk_eabb372e7e5bbf59",
+                "decision": "task-aligned",
+                "reason": "The cfg changes consistently generalize existing Apple platform handling to target_vendor so visionOS receives the same symbolization and accuracy-test paths. This hunk is src/symbolize/gimli.rs @@ -41 +42,0 @@ cfg_if::cfg_if! {."
+              },
+              {
+                "id": "hunk_6af80526ac590fe3",
+                "decision": "task-aligned",
+                "reason": "The cfg changes consistently generalize existing Apple platform handling to target_vendor so visionOS receives the same symbolization and accuracy-test paths. This hunk is src/symbolize/gimli.rs @@ -198,6 +199 @@ cfg_if::cfg_if! {."
+              },
+              {
+                "id": "hunk_30f512c2c361fc2d",
+                "decision": "task-aligned",
+                "reason": "The cfg changes consistently generalize existing Apple platform handling to target_vendor so visionOS receives the same symbolization and accuracy-test paths. This hunk is src/symbolize/gimli.rs @@ -219,6 +215 @@ cfg_if::cfg_if! {."
+              }
+            ]
+          },
+          {
+            "path": "tests/accuracy/main.rs",
+            "decision": "task-aligned",
+            "reason": "The cfg changes consistently generalize existing Apple platform handling to target_vendor so visionOS receives the same symbolization and accuracy-test paths. All hunks in tests/accuracy/main.rs serve that same task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_ced4969590b6c0d3",
+                "decision": "task-aligned",
+                "reason": "The cfg changes consistently generalize existing Apple platform handling to target_vendor so visionOS receives the same symbolization and accuracy-test paths. This hunk is tests/accuracy/main.rs @@ -34 +34 @@ fn doit() {."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "repository": "tempfile",
+      "candidateId": "candidate_d1091937776c6a11",
+      "generatedArtifactAssessment": {
+        "isGeneratedArtifactTarget": false,
+        "reason": "The reviewed diff contains hand-maintained source, test, or documentation files and no generator-to-output ownership relationship.",
+        "ownerGeneratorPath": null,
+        "generatedOutputPaths": []
+      },
+      "review": {
+        "schemaVersion": 1,
+        "packetSha256": "A523DB398060829F217AAC3EF36BC22D3363AF13BA4EB9020562DE97772F1265",
+        "reviewTiming": "pre-route",
+        "reviewPerformedAfterCandidateFreeze": true,
+        "reviewedWithoutPalaceOutput": true,
+        "palaceCallsOnCandidateTask": 0,
+        "targetDecision": "accept",
+        "files": [
+          {
+            "path": "src/file/mod.rs",
+            "decision": "task-aligned",
+            "reason": "The deprecated best-effort constructor, fallible absolute-path constructor, documentation, call-site migrations, and missing-current-directory tests all address resolving relative TempPath inputs. All hunks in src/file/mod.rs serve that same task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_00bf5be0304d3ea0",
+                "decision": "task-aligned",
+                "reason": "The deprecated best-effort constructor, fallible absolute-path constructor, documentation, call-site migrations, and missing-current-directory tests all address resolving relative TempPath inputs. This hunk is src/file/mod.rs @@ -328,2 +328,2 @@ impl TempPath {."
+              },
+              {
+                "id": "hunk_eaeb8dfceeef150a",
+                "decision": "task-aligned",
+                "reason": "The deprecated best-effort constructor, fallible absolute-path constructor, documentation, call-site migrations, and missing-current-directory tests all address resolving relative TempPath inputs. This hunk is src/file/mod.rs @@ -331,3 +331,9 @@ impl TempPath {."
+              },
+              {
+                "id": "hunk_b38290322bcda72e",
+                "decision": "task-aligned",
+                "reason": "The deprecated best-effort constructor, fallible absolute-path constructor, documentation, call-site migrations, and missing-current-directory tests all address resolving relative TempPath inputs. This hunk is src/file/mod.rs @@ -334,0 +341,10 @@ impl TempPath {."
+              },
+              {
+                "id": "hunk_c32210bc099abd6c",
+                "decision": "task-aligned",
+                "reason": "The deprecated best-effort constructor, fallible absolute-path constructor, documentation, call-site migrations, and missing-current-directory tests all address resolving relative TempPath inputs. This hunk is src/file/mod.rs @@ -336 +352 @@ impl TempPath {."
+              },
+              {
+                "id": "hunk_eb0f837deef2c42f",
+                "decision": "task-aligned",
+                "reason": "The deprecated best-effort constructor, fallible absolute-path constructor, documentation, call-site migrations, and missing-current-directory tests all address resolving relative TempPath inputs. This hunk is src/file/mod.rs @@ -340,0 +357,31 @@ impl TempPath {."
+              }
+            ]
+          },
+          {
+            "path": "tests/namedtempfile.rs",
+            "decision": "task-aligned",
+            "reason": "The deprecated best-effort constructor, fallible absolute-path constructor, documentation, call-site migrations, and missing-current-directory tests all address resolving relative TempPath inputs. All hunks in tests/namedtempfile.rs serve that same task boundary.",
+            "hunks": [
+              {
+                "id": "hunk_4bda08efca2d34f9",
+                "decision": "task-aligned",
+                "reason": "The deprecated best-effort constructor, fallible absolute-path constructor, documentation, call-site migrations, and missing-current-directory tests all address resolving relative TempPath inputs. This hunk is tests/namedtempfile.rs @@ -283 +283 @@ fn temp_path_from_existing() {."
+              },
+              {
+                "id": "hunk_5f8c084d38d1574a",
+                "decision": "task-aligned",
+                "reason": "The deprecated best-effort constructor, fallible absolute-path constructor, documentation, call-site migrations, and missing-current-directory tests all address resolving relative TempPath inputs. This hunk is tests/namedtempfile.rs @@ -306,7 +306,56 @@ fn temp_path_from_argument_types() {."
+              },
+              {
+                "id": "hunk_f76cdaa0dc31b177",
+                "decision": "task-aligned",
+                "reason": "The deprecated best-effort constructor, fallible absolute-path constructor, documentation, call-site migrations, and missing-current-directory tests all address resolving relative TempPath inputs. This hunk is tests/namedtempfile.rs @@ -330 +379 @@ fn test_change_dir() {."
+              },
+              {
+                "id": "hunk_6b2b297c403f8e57",
+                "decision": "task-aligned",
+                "reason": "The deprecated best-effort constructor, fallible absolute-path constructor, documentation, call-site migrations, and missing-current-directory tests all address resolving relative TempPath inputs. This hunk is tests/namedtempfile.rs @@ -577 +626,4 @@ fn test_reseed() {."
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "materialization": {
+    "semanticDecisionSha256": "3741F44F3DFF5A760B28053E4F496C72D7B910FDF9454622350161DADCA7D039",
+    "semanticDecisionsCopiedWithoutModification": true,
+    "frozenValidatorDryRunRequiredBeforeWrite": true,
+    "outputCreateOnly": true,
+    "dryRun": {
+      "status": "selected",
+      "reviewedCandidates": 8,
+      "acceptedCandidates": 8,
+      "rejectedCandidates": 0,
+      "selectedTargets": [
+        {
+          "name": "mimic-fn",
+          "candidateId": "candidate_516f2d6ba88b9b28",
+          "languageFamily": "javascript-typescript"
+        },
+        {
+          "name": "is-unicode-supported",
+          "candidateId": "candidate_fb497c4b5fd77f5e",
+          "languageFamily": "javascript-typescript"
+        },
+        {
+          "name": "pyupgrade",
+          "candidateId": "candidate_1f6be4787d51e2e0",
+          "languageFamily": "python"
+        },
+        {
+          "name": "add-trailing-comma",
+          "candidateId": "candidate_386012925e1e7ae7",
+          "languageFamily": "python"
+        },
+        {
+          "name": "conc",
+          "candidateId": "candidate_bba2b928e525ce4f",
+          "languageFamily": "go"
+        },
+        {
+          "name": "termenv",
+          "candidateId": "candidate_8d5b40a46da9abe9",
+          "languageFamily": "go"
+        },
+        {
+          "name": "backtrace-rs",
+          "candidateId": "candidate_b7b762752a77d351",
+          "languageFamily": "rust"
+        },
+        {
+          "name": "tempfile",
+          "candidateId": "candidate_d1091937776c6a11",
+          "languageFamily": "rust"
+        }
+      ],
+      "selectedPerLanguageFamily": {
+        "javascript-typescript": 2,
+        "python": 2,
+        "go": 2,
+        "rust": 2
+      },
+      "generatedArtifactTargets": 0,
+      "palaceCallsOnCandidateTasks": 0
+    }
+  }
+}
