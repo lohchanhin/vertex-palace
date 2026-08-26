@@ -37,7 +37,10 @@ export async function routePalace(root: string, task: string, options: number | 
   const index = await readIndex(root);
   const analysis = analyzeTask(task);
   const taskType = classifyTask(task);
-  const scored = scoreNodes(index.nodes, index.edges, analysis, taskType, index.facts);
+  const taskScored = scoreNodes(index.nodes, index.edges, analysis, taskType, index.facts);
+  const scored = taskScored.length
+    ? taskScored
+    : conventionalEntryFallback(index.nodes, analysis, taskType);
   const requestedSurfaces = requestedRouteSurfaces(analysis);
   const intent = buildTaskIntent(analysis, taskType, requestedSurfaces);
   const codeTask = isCodeTaskType(taskType);
@@ -63,16 +66,25 @@ export async function routePalace(root: string, task: string, options: number | 
     && !crossStack
   );
   const focused = boundedBugfix && analysis.roomHints.length <= 1;
+  const conventionalFallbackRoute = taskScored.length === 0 && scored.length > 0;
   const expansionCandidates = boundedBugfix && implementationAnchor
     ? [implementationAnchor, ...scored.filter((item) => item.node.id !== implementationAnchor.node.id)]
     : scored;
-  const initialRoute = expandRoute(expansionCandidates, index.edges, index.nodes, {
+  const expandedInitialRoute = expandRoute(expansionCandidates, index.edges, index.nodes, {
     limit: routeLimit,
-    focused,
-    bounded: boundedBugfix,
-    preferVerificationRelations: boundedBugfix,
-    minSeedScoreRatio: boundedBugfix ? 0.75 : undefined
+    focused: focused || conventionalFallbackRoute,
+    bounded: boundedBugfix || conventionalFallbackRoute,
+    preferVerificationRelations: boundedBugfix || conventionalFallbackRoute,
+    minSeedScoreRatio: boundedBugfix || conventionalFallbackRoute ? 0.75 : undefined
   });
+  const initialRoute = conventionalFallbackRoute
+    ? uniqueScoredNodes([
+        ...scored,
+        ...expandedInitialRoute
+      ])
+        .filter((item) => typeDeclarationTask || !isTypeTestPath(item.node.sourcePath))
+        .slice(0, routeLimit)
+    : expandedInitialRoute;
   const surfaceExpanded =
     taskType === "evaluation" || artifactLifecycleTask
       ? ensureRequestedSurfaceCoverage(
@@ -127,8 +139,22 @@ export async function routePalace(root: string, task: string, options: number | 
     analysis,
     routeLimit
   );
-  const expandedWithAuxiliaryEvidence = ensureRoleAwareAuxiliaryEvidence(
+  const expandedWithApiCompanions = ensureAdditiveApiCompanionEvidence(
     expandedWithCommonCaller,
+    scored,
+    index.nodes,
+    analysis,
+    taskType,
+    routeLimit
+  );
+  const expandedWithPlatformVerification = ensurePlatformFamilyVerification(
+    expandedWithApiCompanions,
+    scored,
+    analysis,
+    routeLimit
+  );
+  const expandedWithAuxiliaryEvidence = ensureRoleAwareAuxiliaryEvidence(
+    expandedWithPlatformVerification,
     scored,
     index.nodes,
     analysis,
@@ -270,6 +296,110 @@ function isImplementationCandidate(node: Awaited<ReturnType<typeof readIndex>>["
 
 function isCodeTaskType(taskType: TaskType): boolean {
   return ["bugfix", "feature", "refactor"].includes(taskType);
+}
+
+function conventionalEntryFallback(
+  nodes: PalaceNode[],
+  analysis: ReturnType<typeof analyzeTask>,
+  taskType: TaskType
+): ScoredNode[] {
+  if (!isCodeTaskType(taskType)) return [];
+  const physicalBySource = new Map<string, PalaceNode>();
+  for (const node of nodes) {
+    if (
+      node.startLine
+      || node.kind === "directory"
+      || nodeEvidenceScope(node) !== "product"
+    ) continue;
+    const current = physicalBySource.get(node.sourcePath);
+    if (!current || conventionalPhysicalNodePriority(node) > conventionalPhysicalNodePriority(current)) {
+      physicalBySource.set(node.sourcePath, node);
+    }
+  }
+
+  const implementationCandidates = [...physicalBySource.values()]
+    .filter((node) => nodeHasEvidenceRole(node, "implementation"))
+    .filter((node) => !isDirectTestPath(node.sourcePath))
+    .filter((node) => !isOperationalMetadataPath(node.sourcePath))
+    .filter((node) => isRuntimeSourcePath(node.sourcePath))
+    .map((node) => ({ node, rank: conventionalImplementationEntryRank(node.sourcePath) }))
+    .filter(({ rank }) => rank > 0)
+    .sort((left, right) => right.rank - left.rank
+      || left.node.sourcePath.localeCompare(right.node.sourcePath));
+  const implementation = implementationCandidates[0];
+  if (!implementation) return [];
+  if (
+    implementationCandidates[1]
+    && implementationCandidates[1].rank === implementation.rank
+  ) return [];
+
+  const implementationItem: ScoredNode = {
+    node: implementation.node,
+    score: 18,
+    reasons: ["low-confidence conventional implementation entry fallback"],
+    matchedKeywordCount: 0
+  };
+  const typeDeclarationTask = isTypeDeclarationIntent(analysis);
+  const verification = [...physicalBySource.values()]
+    .filter((node) => nodeHasEvidenceRole(node, "verification"))
+    .filter((node) => isDirectTestPath(node.sourcePath))
+    .filter((node) => typeDeclarationTask || !isTypeTestPath(node.sourcePath))
+    .map((node) => ({
+      node,
+      rank: conventionalVerificationRank(implementation.node.sourcePath, node.sourcePath)
+    }))
+    .filter(({ rank }) => rank > 0)
+    .sort((left, right) => right.rank - left.rank
+      || left.node.sourcePath.localeCompare(right.node.sourcePath))[0];
+  if (!verification) return [implementationItem];
+  return [
+    implementationItem,
+    {
+      node: verification.node,
+      score: 16,
+      reasons: ["bounded conventional verification fallback for the implementation entry"],
+      matchedKeywordCount: 0
+    }
+  ];
+}
+
+function conventionalPhysicalNodePriority(node: PalaceNode): number {
+  if (["file", "test"].includes(node.kind)) return 3;
+  if (["function", "class", "interface", "type", "symbol"].includes(node.kind)) return 1;
+  return 2;
+}
+
+function isRuntimeSourcePath(sourcePath: string): boolean {
+  const normalized = sourcePath.replaceAll("\\", "/").toLowerCase();
+  if (isTypeDeclarationPath(normalized)) return false;
+  return /\.(?:c|cc|cpp|cs|go|java|js|jsx|kt|mjs|php|py|rb|rs|swift|ts|tsx)$/.test(normalized);
+}
+
+function isDirectTestPath(sourcePath: string): boolean {
+  const normalized = sourcePath.replaceAll("\\", "/").toLowerCase();
+  return isTypeTestPath(normalized)
+    || /(^|\/)(?:test|tests|testing|spec|__tests__)(\/|$)|\.(?:test|spec)\.[^.]+$/.test(normalized)
+    || /(^|\/)(?:test|tests|spec)\.[a-z0-9]+$/.test(normalized)
+    || /(^|\/)(?:test_[^/]+|[^/]+_(?:test|spec))\.[a-z0-9]+$/.test(normalized)
+    || /(^|\/)[^/]+tests?\.(?:cs|java|kt)$/.test(normalized);
+}
+
+function conventionalImplementationEntryRank(sourcePath: string): number {
+  const normalized = sourcePath.replaceAll("\\", "/").toLowerCase();
+  const parts = normalized.split("/");
+  const basename = parts.at(-1) ?? "";
+  const stem = basename.replace(/\.[^.]+$/, "");
+  const stemOrder = ["index", "lib", "main", "mod", "__init__"];
+  const stemIndex = stemOrder.indexOf(stem);
+  if (stemIndex < 0 || parts.length > 2) return 0;
+  return (parts.length === 1 ? 200 : 150) - stemIndex * 2;
+}
+
+function conventionalVerificationRank(implementationPath: string, testPath: string): number {
+  const ownerEvidence = sourceTestOwnerEvidence(implementationPath, testPath);
+  const colocatedEvidence = colocatedGenericTestEvidence(implementationPath, testPath);
+  const depth = testPath.replaceAll("\\", "/").split("/").length;
+  return ownerEvidence * 200 + colocatedEvidence * 180 + Math.max(0, 20 - depth);
 }
 
 function materializeCommonCallerBridge(
@@ -471,6 +601,142 @@ function materializeMissingCausalSources(
   return result;
 }
 
+function ensureAdditiveApiCompanionEvidence(
+  selected: ScoredNode[],
+  scored: ScoredNode[],
+  nodes: PalaceNode[],
+  analysis: ReturnType<typeof analyzeTask>,
+  taskType: TaskType,
+  limit: number
+): ScoredNode[] {
+  if (
+    taskType !== "feature"
+    || !/\b(?:argument|flag|option|parameter|property)\b/i.test(analysis.raw)
+    || !analysis.identifiers.some((identifier) =>
+      /[_$]/.test(identifier) || /[a-z0-9][A-Z]/.test(identifier)
+    )
+  ) return selected;
+
+  const result = uniqueScoredNodes(selected).slice(0, limit);
+  if (!result.some(isDirectTestCandidate)) return result;
+  const runtimeEntries = result
+    .filter((item) => isImplementationCandidate(item.node))
+    .filter((item) => !isTypeDeclarationPath(item.node.sourcePath))
+    .filter((item) => conventionalImplementationEntryRank(item.node.sourcePath) > 0);
+  if (runtimeEntries.length !== 1) return result;
+
+  const runtime = runtimeEntries[0];
+  const runtimeScope = coreOwnershipScope(runtime.node.sourcePath);
+  const runtimeStem = externalContractStem(runtime.node.sourcePath);
+  const selectedPaths = new Set(result.map((item) => item.node.sourcePath));
+  const scoredBySource = new Map<string, ScoredNode>();
+  for (const item of scored) {
+    const current = scoredBySource.get(item.node.sourcePath);
+    if (!current || item.score > current.score) scoredBySource.set(item.node.sourcePath, item);
+  }
+  const physicalBySource = new Map<string, PalaceNode>();
+  for (const node of nodes) {
+    if (node.startLine || node.kind === "directory") continue;
+    const current = physicalBySource.get(node.sourcePath);
+    if (!current || conventionalPhysicalNodePriority(node) > conventionalPhysicalNodePriority(current)) {
+      physicalBySource.set(node.sourcePath, node);
+    }
+  }
+  const companionItem = (node: PalaceNode, reason: string): ScoredNode => {
+    const existing = scoredBySource.get(node.sourcePath);
+    return existing
+      ? { ...existing, reasons: [reason, ...existing.reasons] }
+      : { node, score: 20, reasons: [reason], matchedKeywordCount: 0 };
+  };
+  const declaration = [...physicalBySource.values()]
+    .filter((node) => !selectedPaths.has(node.sourcePath))
+    .filter((node) => nodeEvidenceScope(node) === "product")
+    .filter((node) => nodeHasEvidenceRole(node, "implementation"))
+    .filter((node) => isTypeDeclarationPath(node.sourcePath))
+    .filter((node) => coreOwnershipScope(node.sourcePath) === runtimeScope)
+    .filter((node) => externalContractStem(node.sourcePath) === runtimeStem)
+    .sort((left, right) => left.sourcePath.localeCompare(right.sourcePath))[0];
+  const documentation = [...physicalBySource.values()]
+    .filter((node) => !selectedPaths.has(node.sourcePath))
+    .filter((node) => nodeHasEvidenceRole(node, "documentation"))
+    .filter((node) => coreOwnershipScope(node.sourcePath) === runtimeScope)
+    .filter((node) => /(^|\/)readme(?:\.[^/]+)?$/i.test(node.sourcePath))
+    .sort((left, right) => left.sourcePath.split("/").length - right.sourcePath.split("/").length
+      || left.sourcePath.localeCompare(right.sourcePath))[0];
+
+  const additions = [
+    ...(declaration
+      ? [companionItem(declaration, "bounded public type-declaration companion for an additive option")]
+      : []),
+    ...(documentation
+      ? [companionItem(documentation, "bounded public documentation companion for an additive option")]
+      : [])
+  ];
+  if (!additions.length) return result;
+  const runtimeIndex = result.findIndex((item) => item.node.sourcePath === runtime.node.sourcePath);
+  return [
+    ...result.slice(0, runtimeIndex + 1),
+    ...additions,
+    ...result.slice(runtimeIndex + 1)
+  ].slice(0, limit);
+}
+
+function externalContractStem(sourcePath: string): string {
+  return path.posix.basename(sourcePath.replaceAll("\\", "/"))
+    .toLowerCase()
+    .replace(/\.d\.(?:cts|mts|ts)$/, "")
+    .replace(/\.(?:c|cc|cpp|cs|go|java|js|jsx|kt|mjs|php|py|pyi|rb|rs|swift|ts|tsx)$/, "");
+}
+
+function ensurePlatformFamilyVerification(
+  selected: ScoredNode[],
+  scored: ScoredNode[],
+  analysis: ReturnType<typeof analyzeTask>,
+  limit: number
+): ScoredNode[] {
+  if (!/\b(?:apple|ios|tvos|vision\s*os|visionos|watchos)\b/i.test(analysis.raw)) {
+    return selected;
+  }
+  const result = uniqueScoredNodes(selected).slice(0, limit);
+  if (!result.some((item) => isImplementationCandidate(item.node))) return result;
+  const selectedPaths = new Set(result.map((item) => item.node.sourcePath));
+  const selectedTests = result.filter(isDirectTestCandidate);
+  if (selectedTests.length >= 2 || result.length >= limit) return result;
+  const selectedFacets = new Set(
+    selectedTests
+      .map((item) => runtimeVerificationFacet(item.node.sourcePath))
+      .filter((facet): facet is string => Boolean(facet))
+  );
+  const candidate = bestPhysicalEvidenceCandidates(
+    scored.filter((item) =>
+      isDirectTestCandidate(item)
+      && !selectedPaths.has(item.node.sourcePath)
+    ),
+    analysis,
+    "test"
+  )
+    .filter((item) => item.taskCoverage.size > 0)
+    .sort((left, right) => {
+      const leftFacet = runtimeVerificationFacet(left.item.node.sourcePath);
+      const rightFacet = runtimeVerificationFacet(right.item.node.sourcePath);
+      return Number(Boolean(rightFacet && !selectedFacets.has(rightFacet)))
+        - Number(Boolean(leftFacet && !selectedFacets.has(leftFacet)))
+        || right.directEvidence - left.directEvidence
+        || left.item.node.sourcePath.localeCompare(right.item.node.sourcePath);
+    })[0];
+  if (!candidate) return result;
+  return [
+    ...result,
+    {
+      ...candidate.item,
+      reasons: [
+        "bounded distinct verification surface for a platform-family change",
+        ...candidate.item.reasons
+      ]
+    }
+  ];
+}
+
 function ensureRoleAwareAuxiliaryEvidence(
   selected: ScoredNode[],
   scored: ScoredNode[],
@@ -608,7 +874,7 @@ function ensureRoleAwareAuxiliaryEvidence(
       ));
       selectedPaths.add(taskOwnerDocumentation.sourcePath);
     }
-  } else {
+  } else if (!result.some((item) => nodeHasEvidenceRole(item.node, "documentation"))) {
     appendBest(
       isChangelogArtifactPath,
       "bounded project-history evidence for a feature change"
@@ -4428,9 +4694,18 @@ function pruneRedundantVerificationNoise(
       .map((candidate) => explicitRuntimeTestConcept(candidate.item, analysis.raw))
       .filter((concept): concept is string => Boolean(concept))
   );
+  const additiveCallTestQuota = /\b(?:add|introduce|expose|implement)\b[\s\S]{0,80}\b[A-Za-z_$][A-Za-z0-9_$]*\s*\(\s*\)/i.test(analysis.raw)
+    ? Math.min(2, new Set(
+        rankedRuntime
+          .filter((candidate) => candidate.moduleMirrorEvidence >= 0.75)
+          .map((candidate) => candidate.mirroredImplementationPath)
+          .filter((sourcePath): sourcePath is string => Boolean(sourcePath))
+      ).size)
+    : 0;
   const requestedRuntimeTests = Math.max(
     requestedRuntimeTestQuota(analysis.raw),
-    explicitRuntimeTestConcepts.size
+    explicitRuntimeTestConcepts.size,
+    additiveCallTestQuota
   );
   for (const candidate of rankedRuntime) {
     if (selectedRuntimePaths.size >= requestedRuntimeTests) break;
@@ -4479,6 +4754,7 @@ function explicitRuntimeTestConcept(item: ScoredNode, task: string): string | un
 
 function runtimeVerificationFacet(sourcePath: string): string | undefined {
   const normalized = sourcePath.replaceAll("\\", "/").toLowerCase();
+  if (/(?:^|[-_.\/])accuracy(?:[-_.\/]|$)/.test(normalized)) return "accuracy";
   if (/(?:^|[-_.\/])mocks?(?:[-_.\/]|$)/.test(normalized)) return "mock";
   if (/(?:^|[-_.\/])(?:utils?|helpers?)(?:[-_.\/]|$)/.test(normalized)) return "utility";
   if (/(?:^|[-_.\/])search(?:[-_.\/]|$)/.test(normalized)) return "search";

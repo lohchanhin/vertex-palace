@@ -32,6 +32,7 @@ const STOP_WORDS = new Set([
   "before",
   "after",
   "allow",
+  "add",
   "fix",
   "bug",
   "issue",
@@ -155,6 +156,9 @@ const MORPHOLOGICAL_HYPHEN_PREFIXES = new Set(["de", "non", "post", "pre", "re",
 
 const PHRASE_KEYWORDS: Array<[RegExp, string[]]> = [
   [/\b(?:macos|os\s*x|windows|linux|posix|free[-\s]?threaded|no[-\s]?gil|nogil)\b/i, ["compat", "platform"]],
+  [/\b(?:apple|vision\s*os|visionos|ios|tvos|watchos)\b/i, ["compat", "platform", "apple", "vendor", "darwin", "macos", "ios", "tvos", "watchos"]],
+  [/\b(?:fail[-\s]?fast|withfailfast)\b/i, ["first", "cancel", "context"]],
+  [/\b(?:string(?:ified)?|unstring(?:ing|ed)?)\b.{0,48}\b(?:annotations?|type[-\s]?hints?)\b|\b(?:annotations?|type[-\s]?hints?)\b.{0,48}\b(?:string(?:ified)?|unstring(?:ing|ed)?)\b/i, ["typing", "pep563", "annotation"]],
   [/\b(?:route|routing)[-\s]+precision[-\s]+replication\b|(?:跨仓库|跨倉庫).{0,20}(?:路由|路線|路线).{0,20}(?:复现|復現|复制|複製|实验|實驗)/i, ["evaluation", "replication", "test", "verification", "route", "precision"]],
   [/\bfreeze(?:d)?\b|冻结|凍結/i, ["protocol", "frozen"]],
   [/machine[-\s]?readable\s+evidence|机器可读证据|機器可讀證據/i, ["machine", "readable", "evidence"]],

@@ -5164,4 +5164,156 @@ impl core::fmt::Display for Error {
       expect(evaluation.coverage.routeFocus).toBeGreaterThanOrEqual(0.75);
     });
   });
+
+  it("returns a low-confidence implementation and test fallback for a novel feature with no lexical anchor", async () => {
+    await withFixture("minimal-package", async (root) => {
+      const files = new Map<string, string>([
+        ["index.js", "export default function isUnicodeSupported() { return process.platform !== 'win32'; }\n"],
+        ["index.d.ts", "export default function isUnicodeSupported(): boolean;\n"],
+        ["test.js", "import test from 'ava'; test('unicode', t => t.true(true));\n"],
+        ["index.test-d.ts", "import isUnicodeSupported from './index.js'; isUnicodeSupported();\n"]
+      ]);
+      for (const [relativePath, source] of files) {
+        await writeFile(path.join(root, relativePath), source, "utf8");
+      }
+      await indexPalace(root);
+
+      const route = await routePalace(root, "Add support for Terminus (#12)", {
+        routeLimit: 10,
+        budget: 6000
+      });
+      const routed = route.route.map((step) => step.sourcePath.replace(/:\d+(?:-\d+)?$/, ""));
+
+      expect(routed.slice(0, 2)).toEqual(["index.js", "test.js"]);
+      expect(routed).not.toContain("index.test-d.ts");
+      expect(route.confidence).toBeLessThanOrEqual(0.15);
+    });
+  });
+
+  it("closes an additive root option through its declaration, test, and public documentation", async () => {
+    await withFixture("minimal-package", async (root) => {
+      const changedFiles = ["index.js", "index.d.ts", "test.js", "readme.md"];
+      const files = new Map<string, string>([
+        [changedFiles[0], "export default function mimicFn(to, from) { return Object.assign(to, from); }\n"],
+        [changedFiles[1], "export default function mimicFn(to: Function, from: Function): Function;\n"],
+        [changedFiles[2], "import test from 'ava'; test('mimic', t => t.true(true));\n"],
+        [changedFiles[3], "# mimic-fn\n\nCopy one function onto another.\n"]
+      ]);
+      for (const [relativePath, source] of files) {
+        await writeFile(path.join(root, relativePath), source, "utf8");
+      }
+      await indexPalace(root);
+
+      const evaluation = await evaluateRoute(
+        root,
+        "Add `ignoreNonConfigurable` option (#34)",
+        { changedFiles, routeLimit: 8, budget: 6000, maxDrawers: 4 }
+      );
+
+      expect([...evaluation.route.files].sort()).toEqual([...changedFiles].sort());
+      expect(evaluation.coverage.changedFileCoverage).toBe(1);
+      expect(evaluation.coverage.routeFocus).toBe(1);
+    });
+  });
+
+  it("expands string-annotation semantics to the owning Python typing plugin and focused test", async () => {
+    await withFixture("minimal-package", async (root) => {
+      const changedFiles = [
+        "pyupgrade/_plugins/typing_pep563.py",
+        "tests/features/typing_pep563_test.py"
+      ];
+      const files = new Map<string, string>([
+        [changedFiles[0], "def unstring_annotation(tokens):\n    return tokens\n"],
+        [changedFiles[1], "def test_multiline_annotation():\n    assert True\n"],
+        ["pyupgrade/_string_helpers.py", "def parse_string_literal(value):\n    return value\n"],
+        ["tests/string_helpers_test.py", "def test_string_literal():\n    assert True\n"]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const evaluation = await evaluateRoute(
+        root,
+        "fix unstringing multiline string annotations",
+        { changedFiles, routeLimit: 8, budget: 6000, maxDrawers: 4 }
+      );
+
+      expect(evaluation.route.files).toEqual(expect.arrayContaining(changedFiles));
+      expect(evaluation.route.files).not.toContain("tests/string_helpers_test.py");
+      expect(evaluation.coverage.changedFileCoverage).toBe(1);
+      expect(evaluation.coverage.routeFocus).toBeGreaterThanOrEqual(0.5);
+    });
+  });
+
+  it("expands fail-fast behavior to first-error and cancellation implementations with sibling tests", async () => {
+    await withFixture("minimal-package", async (root) => {
+      const changedFiles = [
+        "pool/context_pool.go",
+        "pool/context_pool_test.go",
+        "pool/result_context_pool.go",
+        "pool/result_context_pool_test.go"
+      ];
+      const files = new Map<string, string>([
+        [changedFiles[0], "package pool\ntype ContextPool struct{}\nfunc (p *ContextPool) WithFirstError() *ContextPool { return p }\nfunc (p *ContextPool) WithCancelOnError() *ContextPool { return p }\n"],
+        [changedFiles[1], "package pool\nfunc TestContextPoolWithFirstErrorAndCancelOnError(t *testing.T) {}\n"],
+        [changedFiles[2], "package pool\ntype ResultContextPool struct{ contextPool *ContextPool }\nfunc (p *ResultContextPool) WithFirstError() *ResultContextPool { p.contextPool.WithFirstError(); return p }\nfunc (p *ResultContextPool) WithCancelOnError() *ResultContextPool { p.contextPool.WithCancelOnError(); return p }\n"],
+        [changedFiles[3], "package pool\nfunc TestResultContextPoolWithFirstErrorAndCancelOnError(t *testing.T) {}\n"],
+        ["waitgroup.go", "package conc\n// Add starts another worker.\nfunc (w *WaitGroup) Add() {}\n"],
+        ["waitgroup_test.go", "package conc\nfunc TestWaitGroupAdd(t *testing.T) {}\n"]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const evaluation = await evaluateRoute(
+        root,
+        "Add `WithFailFast()` (#118)",
+        { changedFiles, routeLimit: 10, budget: 6000, maxDrawers: 4 }
+      );
+
+      expect(evaluation.route.files).toEqual(expect.arrayContaining(changedFiles));
+      expect(evaluation.route.files).not.toContain("waitgroup.go");
+      expect(evaluation.route.files).not.toContain("waitgroup_test.go");
+      expect(evaluation.coverage.changedFileCoverage).toBe(1);
+      expect(evaluation.coverage.routeFocus).toBeGreaterThanOrEqual(0.67);
+    });
+  });
+
+  it("expands Apple platform-family tasks to the central implementation and both verification surfaces", async () => {
+    await withFixture("minimal-package", async (root) => {
+      const changedFiles = [
+        "src/symbolize/gimli.rs",
+        "crates/macos_frames_test/tests/main.rs",
+        "tests/accuracy/main.rs"
+      ];
+      const files = new Map<string, string>([
+        [changedFiles[0], "#[cfg(any(target_os = \"macos\", target_os = \"ios\", target_os = \"tvos\", target_os = \"watchos\"))]\npub fn apple_symbols() {}\n"],
+        [changedFiles[1], "#[cfg(target_os = \"macos\")]\nfn apple_frames_are_available() {}\n"],
+        [changedFiles[2], "fn accuracy() { if cfg!(target_os = \"macos\") { assert!(true); } }\n"],
+        ["src/backtrace/libunwind.rs", "pub fn unwind_stack() {}\n"]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const evaluation = await evaluateRoute(
+        root,
+        "Add Apple visionOS support",
+        { changedFiles, routeLimit: 8, budget: 6000, maxDrawers: 4 }
+      );
+
+      expect(evaluation.route.files).toEqual(expect.arrayContaining(changedFiles));
+      expect(evaluation.coverage.changedFileCoverage).toBe(1);
+      expect(evaluation.coverage.routeFocus).toBeGreaterThanOrEqual(0.6);
+    });
+  });
 });
