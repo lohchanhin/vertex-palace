@@ -9,6 +9,7 @@ import type {
   PalaceModeSelection,
   PalaceNode,
   PalacePayloadMetrics,
+  PalaceReferencePolicy,
   PalaceRoute,
   PalaceRouteStep,
   PalaceSectionMetrics
@@ -37,6 +38,7 @@ export type PackContextOptions = {
   includeExcluded?: boolean;
   modeSelection?: PalaceModeSelection;
   preparedMemory?: GuardedMemoryResult;
+  referencePolicy?: PalaceReferencePolicy;
 };
 
 export type PackAutoContextOptions = Pick<
@@ -85,6 +87,12 @@ export async function packAutoContextForRoute(
   options: PackAutoContextOptions = {}
 ): Promise<PackOutput> {
   const index = await readIndex(root);
+  if (route.decision === "abstain") {
+    return packAbstentionContext(task, route, selectPalaceMode(index, route, task, {
+      budget: options.budget,
+      override: options.mode
+    }), options.format);
+  }
   const memoryPreflight = await readGuardedMemory(root, {
     task,
     taskType: route.taskType,
@@ -114,11 +122,22 @@ export async function packAutoContextForRoute(
 
 export async function packContext(root: string, task: string, options: PackContextOptions = {}): Promise<PackOutput> {
   const index = await readIndex(root);
-  const routeOptions = { budget: options.budget, routeLimit: options.routeLimit };
+  const routeOptions = {
+    budget: options.budget,
+    routeLimit: options.routeLimit,
+    referencePolicy: options.referencePolicy
+  };
   const route = options.routeId
     ? index.routes.find((candidate) => candidate.id === options.routeId) ?? (await routePalace(root, task, routeOptions))
     : await routePalace(root, task, routeOptions);
   const refreshedIndex = await readIndex(root);
+
+  if (route.decision === "abstain") {
+    const selection = options.modeSelection ?? selectPalaceMode(refreshedIndex, route, task, {
+      budget: options.budget
+    });
+    return packAbstentionContext(task, route, selection, options.format);
+  }
 
   if (options.modeSelection) {
     if (options.modeSelection.mode === "bypass") {
@@ -158,12 +177,21 @@ export async function packContext(root: string, task: string, options: PackConte
   };
 
   if (options.format === "json") {
-    return { task, routeId: route.id, estimatedTokens: used, json };
+    return {
+      task,
+      routeId: route.id,
+      decision: route.decision,
+      taskGrounding: route.taskGrounding,
+      estimatedTokens: used,
+      json
+    };
   }
 
   return {
     task,
     routeId: route.id,
+    decision: route.decision,
+    taskGrounding: route.taskGrounding,
     estimatedTokens: used,
     markdown: renderMarkdown(task, route, drawers, {
       includeExcluded: options.includeExcluded !== false,
@@ -236,6 +264,8 @@ async function packAdaptiveContext(
         return {
           task,
           routeId: route.id,
+          decision: route.decision,
+          taskGrounding: route.taskGrounding,
           mode: selection.mode,
           modeSelection: selection,
           payload: measured.payload,
@@ -267,6 +297,8 @@ async function packAdaptiveContext(
       return {
         task,
         routeId: route.id,
+        decision: route.decision,
+        taskGrounding: route.taskGrounding,
         mode: selection.mode,
         modeSelection: selection,
         payload: measured.payload,
@@ -416,6 +448,128 @@ export function serializePackOutput(output: PackOutput): string {
   return output.markdown ?? serializeJsonOutput(output.json);
 }
 
+function packAbstentionContext(
+  task: string,
+  route: PalaceRoute,
+  selection: PalaceModeSelection,
+  format: PackFormat = "markdown"
+): PackOutput {
+  const boundaries: PalaceExecutionBoundaries = {
+    primary: [],
+    support: [],
+    deferred: [],
+    excluded: [],
+    requiredEvidence: route.taskGrounding.reasons,
+    doNot: [
+      "Do not guess source files from an opaque issue or pull-request number.",
+      "Do not widen into a repository scan until the task is grounded."
+    ],
+    stopCondition: [
+      "Routing remains paused until the issue or pull-request body, expected behavior, a symbol, or a file path is available."
+    ],
+    conflictSummary: ["The task is not locally identifiable and remote metadata did not provide sufficient evidence."],
+    verification: {
+      batchCommands: false,
+      finalScopeCheckRequired: false
+    },
+    stopEnforced: false
+  };
+  const telemetry = emptyMemoryTelemetry();
+  const basePayload: PalacePayloadMetrics = {
+    mode: "route-lite",
+    calls: 1,
+    contextCalls: 1,
+    contextBytes: 0,
+    contextEstimatedTokens: 0,
+    routeStepCount: 0,
+    primaryCount: 0,
+    supportCount: 0,
+    deferredCount: 0,
+    memoryItemCount: 0,
+    memoryCandidateCount: 0,
+    memoryExcludedCount: 0,
+    memoryEstimatedTokens: 0,
+    guardrailCount: 2,
+    sectionMetrics: emptySectionMetrics()
+  };
+  let payload = basePayload;
+  let serialized = "";
+  let value: unknown;
+  for (let attempt = 0; attempt < 12; attempt += 1) {
+    value = {
+      task,
+      mode: "route-lite",
+      decision: "abstain",
+      taskGrounding: route.taskGrounding,
+      selection: compactSelection(selection),
+      route: {
+        id: route.id,
+        taskType: route.taskType,
+        confidence: 0,
+        primary: []
+      },
+      context: [],
+      deferredReferences: [],
+      guardrails: boundaries.doNot,
+      memory: [],
+      memoryTelemetry: telemetry,
+      executionBoundaries: boundaries,
+      recommendedExecution: [
+        "Provide the referenced issue or pull-request content, expected behavior, a symbol, or a file path.",
+        "Run Vertex Palace again after the task contains enough evidence to identify local code."
+      ],
+      payload
+    };
+    serialized = format === "json"
+      ? serializeJsonOutput(value)
+      : [
+          "# Vertex Palace Task Grounding",
+          "",
+          "Mode: route-lite",
+          "Route decision: abstain",
+          `Task grounding: unresolved (${route.taskGrounding.resolutionStatus})`,
+          "",
+          "## Task",
+          "",
+          task,
+          "",
+          "## Why Routing Stopped",
+          "",
+          ...route.taskGrounding.reasons.map((reason) => `- ${reason}`),
+          "",
+          "## Required Evidence",
+          "",
+          ...boundaries.requiredEvidence.map((reason) => `- ${reason}`),
+          "",
+          "## Do Not",
+          "",
+          ...boundaries.doNot.map((reason) => `- ${reason}`),
+          "",
+          `Payload: ${payload.contextBytes} bytes / ~${payload.contextEstimatedTokens} tokens`,
+          ""
+        ].join("\n");
+    const measured = withMeasuredPayload(basePayload, serialized);
+    if (sameMeasuredPayload(payload, measured)) {
+      payload = measured;
+      break;
+    }
+    payload = measured;
+  }
+  return {
+    task,
+    routeId: route.id,
+    decision: "abstain",
+    taskGrounding: route.taskGrounding,
+    mode: "route-lite",
+    modeSelection: selection,
+    payload,
+    memoryTelemetry: telemetry,
+    executionBoundaries: boundaries,
+    estimatedTokens: payload.contextEstimatedTokens,
+    ...(format === "json" ? { json: value } : { markdown: serialized })
+  };
+}
+
 export async function packBypassContext(
   root: string,
   task: string,
@@ -447,6 +601,8 @@ export async function packBypassContext(
   ].join(" ");
   const minimal = {
     mode: "bypass" as const,
+    decision: route.decision,
+    taskGrounding: route.taskGrounding,
     evidenceStatus: selection.evidenceStatus,
     interventionPolicy: selection.interventionPolicy,
     primaryCandidate,
@@ -502,6 +658,8 @@ export async function packBypassContext(
   return {
     task,
     routeId: route.id,
+    decision: route.decision,
+    taskGrounding: route.taskGrounding,
     mode: "bypass",
     modeSelection: selection,
     payload,
@@ -583,10 +741,14 @@ function adaptiveJson(
 ): unknown {
   return {
     task,
+    decision: route.decision,
+    taskGrounding: route.taskGrounding,
     mode: selection.mode,
     selection: compactSelection(selection),
     route: {
       id: route.id,
+      decision: route.decision,
+      taskGrounding: route.taskGrounding,
       taskType: route.taskType,
       confidence: route.confidence,
       ...(route.intent ? { intent: compactTaskIntent(route.intent) } : {}),
@@ -632,6 +794,8 @@ function renderAdaptiveMarkdown(
     `Mode: ${selection.mode}`,
     `Mode confidence: ${selection.confidence}`,
     `Route confidence: ${route.confidence}`,
+    `Route decision: ${route.decision}`,
+    `Task grounding: ${route.taskGrounding.status} (${route.taskGrounding.resolutionStatus})`,
     `Evidence status: ${selection.evidenceStatus}`,
     `Intervention policy: ${selection.interventionPolicy}`,
     `Evidence: ${selection.evidenceReasons.join(" ")}`,

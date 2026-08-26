@@ -1,0 +1,158 @@
+{
+  "schemaVersion": 1,
+  "studyId": "layered-routing-round-23-alpha-2",
+  "round": 23,
+  "candidate": "0.4.0-alpha.2",
+  "baseline": "0.3.0",
+  "repetitionsPerCondition": 2,
+  "routeLimit": 6,
+  "contextBudget": 6000,
+  "targets": [
+    {
+      "id": "r23-rust-local-header",
+      "language": "rust",
+      "stratum": "local",
+      "symbol": "normalize_header",
+      "implementationPath": "src/header.rs",
+      "testPath": "tests/header_test.rs",
+      "task": "Fix normalize_header in src/header.rs and its focused test tests/header_test.rs.",
+      "coreFiles": ["src/header.rs", "tests/header_test.rs"]
+    },
+    {
+      "id": "r23-ts-local-catalog",
+      "language": "typescript",
+      "stratum": "local",
+      "symbol": "canonicalCatalogSlug",
+      "implementationPath": "src/catalog/canonical-catalog-slug.ts",
+      "testPath": "tests/catalog/canonical-catalog-slug.test.ts",
+      "task": "Fix canonicalCatalogSlug in src/catalog/canonical-catalog-slug.ts and tests/catalog/canonical-catalog-slug.test.ts.",
+      "coreFiles": ["src/catalog/canonical-catalog-slug.ts", "tests/catalog/canonical-catalog-slug.test.ts"]
+    },
+    {
+      "id": "r23-py-local-cache",
+      "language": "python",
+      "stratum": "local",
+      "symbol": "normalize_cache_key",
+      "implementationPath": "cache/key.py",
+      "testPath": "tests/test_cache_key.py",
+      "task": "Fix normalize_cache_key in cache/key.py and tests/test_cache_key.py.",
+      "coreFiles": ["cache/key.py", "tests/test_cache_key.py"]
+    },
+    {
+      "id": "r23-go-reference-batch",
+      "language": "go",
+      "stratum": "reference",
+      "symbol": "ClampBatchSize",
+      "implementationPath": "batch/clamp.go",
+      "testPath": "batch/clamp_test.go",
+      "task": "Fix issue #2301",
+      "referenceNumber": 2301,
+      "metadata": {
+        "title": "ClampBatchSize overflows the configured maximum",
+        "body": "Correct ClampBatchSize in batch/clamp.go and batch/clamp_test.go.",
+        "labels": ["bug", "batch"]
+      },
+      "coreFiles": ["batch/clamp.go", "batch/clamp_test.go"]
+    },
+    {
+      "id": "r23-rust-reference-token",
+      "language": "rust",
+      "stratum": "reference",
+      "symbol": "rotate_token",
+      "implementationPath": "src/token.rs",
+      "testPath": "tests/token_test.rs",
+      "task": "Repair PR #2302",
+      "referenceNumber": 2302,
+      "metadata": {
+        "title": "rotate_token can return the previous nonce",
+        "body": "Update rotate_token in src/token.rs and the focused tests/token_test.rs regression.",
+        "labels": ["bug", "token"]
+      },
+      "coreFiles": ["src/token.rs", "tests/token_test.rs"]
+    },
+    {
+      "id": "r23-ts-reference-locale",
+      "language": "typescript",
+      "stratum": "reference",
+      "symbol": "resolveLocaleFallback",
+      "implementationPath": "src/locale/resolve-locale-fallback.ts",
+      "testPath": "tests/locale/resolve-locale-fallback.test.ts",
+      "task": "Fix issue 2303",
+      "referenceNumber": 2303,
+      "metadata": {
+        "title": "resolveLocaleFallback skips the configured locale",
+        "body": "Fix resolveLocaleFallback in src/locale/resolve-locale-fallback.ts and tests/locale/resolve-locale-fallback.test.ts.",
+        "labels": ["bug", "locale"]
+      },
+      "coreFiles": ["src/locale/resolve-locale-fallback.ts", "tests/locale/resolve-locale-fallback.test.ts"]
+    },
+    {
+      "id": "r23-py-high-policy",
+      "language": "python",
+      "stratum": "high-connectivity",
+      "symbol": "resolve_policy_scope",
+      "implementationPath": "policy/resolve.py",
+      "testPath": "tests/test_policy_resolve.py",
+      "declaredAuxiliaryFiles": ["policy/contract.py"],
+      "task": "Refactor resolve_policy_scope in policy/resolve.py and tests/test_policy_resolve.py while preserving policy/contract.py.",
+      "coreFiles": ["policy/resolve.py", "tests/test_policy_resolve.py"]
+    },
+    {
+      "id": "r23-go-high-shipping",
+      "language": "go",
+      "stratum": "high-connectivity",
+      "symbol": "ResolveShippingZone",
+      "implementationPath": "shipping/resolve.go",
+      "testPath": "shipping/resolve_test.go",
+      "declaredAuxiliaryFiles": ["shipping/contract.go"],
+      "task": "Fix ResolveShippingZone in shipping/resolve.go and shipping/resolve_test.go without changing shipping/contract.go.",
+      "coreFiles": ["shipping/resolve.go", "shipping/resolve_test.go"]
+    },
+    {
+      "id": "r23-rust-high-manifest",
+      "language": "rust",
+      "stratum": "high-connectivity",
+      "symbol": "resolve_manifest_path",
+      "implementationPath": "src/manifest.rs",
+      "testPath": "tests/manifest_test.rs",
+      "declaredAuxiliaryFiles": ["src/manifest_contract.rs"],
+      "task": "Fix resolve_manifest_path in src/manifest.rs and tests/manifest_test.rs while preserving src/manifest_contract.rs.",
+      "coreFiles": ["src/manifest.rs", "tests/manifest_test.rs"]
+    },
+    {
+      "id": "r23-ts-control-ticket",
+      "language": "typescript",
+      "stratum": "control",
+      "symbol": "opaqueControl",
+      "implementationPath": "src/control.ts",
+      "testPath": "tests/control.test.ts",
+      "task": "Repair ticket 8817.",
+      "expectedResolutionStatus": "unsupported-remote",
+      "coreFiles": []
+    },
+    {
+      "id": "r23-py-control-issue",
+      "language": "python",
+      "stratum": "control",
+      "symbol": "opaque_control",
+      "implementationPath": "control.py",
+      "testPath": "tests/test_control.py",
+      "task": "Fix issue #2391",
+      "referencePolicy": "off",
+      "expectedResolutionStatus": "disabled",
+      "coreFiles": []
+    },
+    {
+      "id": "r23-go-control-pr",
+      "language": "go",
+      "stratum": "control",
+      "symbol": "OpaqueControl",
+      "implementationPath": "control.go",
+      "testPath": "control_test.go",
+      "task": "Repair PR #2392",
+      "referencePolicy": "off",
+      "expectedResolutionStatus": "disabled",
+      "coreFiles": []
+    }
+  ]
+}

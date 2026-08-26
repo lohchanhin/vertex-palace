@@ -44,6 +44,8 @@ function renderRouteMarkdown(route: PalaceRoute): string {
     "",
     `Task: ${route.task}`,
     `Type: ${route.taskType}`,
+    `Decision: ${route.decision}`,
+    `Task grounding: ${route.taskGrounding.status} (${route.taskGrounding.resolutionStatus})`,
     `Confidence: ${route.confidence}`,
     ...(route.narrowingEvidence
       ? [`Narrowing evidence: ${route.narrowingEvidence.independentImplementationAnchor}`]
@@ -66,6 +68,8 @@ function renderOptimizedRoute(route: PalaceRoute): string {
   return [
     `Task: ${route.task}`,
     `Task type: ${route.taskType}`,
+    `Decision: ${route.decision}`,
+    `Task grounding: ${route.taskGrounding.status} (${route.taskGrounding.resolutionStatus})`,
     `Confidence: ${route.confidence}`,
     ...(route.narrowingEvidence
       ? [`Narrowing evidence: ${route.narrowingEvidence.independentImplementationAnchor}`]
@@ -79,5 +83,5 @@ function renderOptimizedRoute(route: PalaceRoute): string {
 }
 
 function renderRouteLogEntry(route: PalaceRoute): string {
-  return [`## ${route.createdAt} - ${route.taskType}`, "", `Task: ${route.task}`, `Route: ${route.id}`, `Confidence: ${route.confidence}`, ""].join("\n");
+  return [`## ${route.createdAt} - ${route.taskType}`, "", `Task: ${route.task}`, `Route: ${route.id}`, `Decision: ${route.decision}`, `Confidence: ${route.confidence}`, ""].join("\n");
 }

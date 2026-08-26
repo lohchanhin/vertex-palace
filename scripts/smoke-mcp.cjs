@@ -102,7 +102,15 @@ function verify() {
   }
   if (context.mode === "bypass") {
     const keys = Object.keys(context);
-    const expectedKeys = ["mode", "evidenceStatus", "interventionPolicy", "primaryCandidate", "reason"];
+    const expectedKeys = [
+      "mode",
+      "decision",
+      "taskGrounding",
+      "evidenceStatus",
+      "interventionPolicy",
+      "primaryCandidate",
+      "reason"
+    ];
     if (JSON.stringify(keys) !== JSON.stringify(expectedKeys)) {
       fail(new Error(`palace_context bypass contract mismatch: ${keys.join(", ") || "none"}.`));
       return;

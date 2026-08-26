@@ -2,6 +2,7 @@ import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import type { Command } from "commander";
 import { palaceContext, serializePackOutput, type PalaceMode } from "@vertex-palace/core";
+import { parseReferencePolicy } from "./format";
 
 export function registerContext(program: Command): void {
   program
@@ -14,6 +15,7 @@ export function registerContext(program: Command): void {
     .option("-f, --format <format>", "markdown or json", "markdown")
     .option("-l, --route-limit <count>", "Maximum route steps", parseInt)
     .option("-d, --max-drawers <count>", "Maximum drawers to include", parseInt)
+    .option("--references <policy>", "Resolve opaque GitHub references: auto or off", parseReferencePolicy, "auto")
     .option("--auto", "Select bypass, route-lite, full-palace, or guarded-memory-palace automatically")
     .option(
       "--mode <mode>",
@@ -30,7 +32,8 @@ export function registerContext(program: Command): void {
         routeLimit: options.routeLimit,
         maxDrawers: options.maxDrawers,
         auto: options.auto,
-        mode: options.mode
+        mode: options.mode,
+        referencePolicy: options.references
       });
       await writeOutput(serializePackOutput(output), options.out);
     });

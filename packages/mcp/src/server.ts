@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { VERTEX_PALACE_VERSION } from "@vertex-palace/core";
 import { callTool } from "./tools/call-tool";
 import { toolDefinitions } from "./tools/definitions";
 
@@ -50,7 +51,7 @@ async function handleMessage(message: JsonRpcMessage): Promise<void> {
         sendResult(message.id, {
           protocolVersion: "2024-11-05",
           capabilities: { tools: {} },
-          serverInfo: { name: "vertex-palace", version: "0.4.0" }
+          serverInfo: { name: "vertex-palace", version: VERTEX_PALACE_VERSION }
         });
         break;
       case "tools/list":

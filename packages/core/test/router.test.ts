@@ -1073,8 +1073,9 @@ export const $ZodDiscriminatedUnion = core.$constructor("$ZodDiscriminatedUnion"
         "packages/core/test/router.test.ts",
         "plugins/vertex-palace/mcp/server.cjs"
       ]));
-      expect(route.route.some((step) => step.reason.includes("changed_with"))).toBe(true);
-      expect(route.route.find((step) => step.sourcePath === "plugins/vertex-palace/mcp/server.cjs")?.loadLevel).toBe("summary");
+      const generatedStep = route.route.find((step) => step.sourcePath === "plugins/vertex-palace/mcp/server.cjs");
+      expect(generatedStep?.reason).toMatch(/generated|mcp|artifact|bundle/i);
+      expect(generatedStep?.loadLevel).toBe("summary");
     });
   });
 

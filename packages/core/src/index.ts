@@ -21,6 +21,7 @@ export * from "./indexer/incremental-index";
 export * from "./evidence/evidence-model";
 export * from "./evidence/evidence-closure";
 export * from "./router/analyze-task";
+export * from "./router/task-grounding";
 export * from "./router/task-intent";
 export * from "./router/classify-task";
 export * from "./router/locate-entry";
@@ -63,9 +64,9 @@ export async function palaceIndex(input: { root?: string } = {}) {
   return indexPalace(resolveRoot(input.root));
 }
 
-export async function palaceRoute(input: { root?: string; task: string; budget?: number; routeLimit?: number }) {
+export async function palaceRoute(input: { root?: string; task: string; budget?: number; routeLimit?: number; referencePolicy?: import("@vertex-palace/shared").PalaceReferencePolicy }) {
   const { routePalace } = await import("./router/route-planner");
-  return routePalace(resolveRoot(input.root), input.task, { budget: input.budget, routeLimit: input.routeLimit });
+  return routePalace(resolveRoot(input.root), input.task, { budget: input.budget, routeLimit: input.routeLimit, referencePolicy: input.referencePolicy });
 }
 
 export async function palacePack(input: {
@@ -77,6 +78,7 @@ export async function palacePack(input: {
   routeLimit?: number;
   maxDrawers?: number;
   includeExcluded?: boolean;
+  referencePolicy?: import("@vertex-palace/shared").PalaceReferencePolicy;
 }) {
   const { packContext } = await import("./packer/context-packer");
   return packContext(resolveRoot(input.root), input.task, input);
@@ -91,14 +93,16 @@ export async function palaceContext(input: import("@vertex-palace/shared").Palac
       format: input.format,
       routeLimit: input.routeLimit,
       maxDrawers: input.maxDrawers,
-      includeExcluded: false
+      includeExcluded: false,
+      referencePolicy: input.referencePolicy
     });
   }
 
   const { routePalace } = await import("./router/route-planner");
   const route = await routePalace(root, input.task, {
     budget: input.budget,
-    routeLimit: input.routeLimit
+    routeLimit: input.routeLimit,
+    referencePolicy: input.referencePolicy
   });
   return packAutoContextForRoute(root, input.task, route, {
     budget: input.budget,

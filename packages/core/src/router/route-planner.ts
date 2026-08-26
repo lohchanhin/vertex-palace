@@ -1,5 +1,5 @@
 import path from "node:path";
-import type { LoadLevel, PalaceEdge, PalaceEvidenceFact, PalaceNode, PalaceRoute, RouteTier, TaskIntent, TaskType } from "@vertex-palace/shared";
+import type { LoadLevel, PalaceEdge, PalaceEvidenceFact, PalaceNode, PalaceReferencePolicy, PalaceRoute, RouteTier, TaskIntent, TaskType } from "@vertex-palace/shared";
 import { DEFAULT_BUDGET } from "../config/defaults";
 import { buildRouteConfidenceEvidence, evaluateEvidenceClosure } from "../evidence/evidence-closure";
 import { nodeEvidenceScope, nodeHasEvidenceRole } from "../evidence/evidence-model";
@@ -24,10 +24,20 @@ import {
 } from "./route-scorer";
 import { expandRoute } from "./route-expander";
 import { buildTaskIntent } from "./task-intent";
+import { groundTask, type GroundTaskOptions } from "./task-grounding";
 
 export type RoutePalaceOptions = {
   budget?: number;
   routeLimit?: number;
+  referencePolicy?: PalaceReferencePolicy;
+  grounding?: Omit<GroundTaskOptions, "referencePolicy">;
+};
+
+type NormalizedRoutePalaceOptions = {
+  budget: number;
+  routeLimit: number;
+  referencePolicy: PalaceReferencePolicy;
+  grounding?: Omit<GroundTaskOptions, "referencePolicy">;
 };
 
 export async function routePalace(root: string, task: string, options: number | RoutePalaceOptions = DEFAULT_BUDGET.maxInputTokens): Promise<PalaceRoute> {
@@ -35,8 +45,15 @@ export async function routePalace(root: string, task: string, options: number | 
   const budget = normalized.budget;
   await ensureFreshIndex(root);
   const index = await readIndex(root);
-  const analysis = analyzeTask(task);
-  const taskType = classifyTask(task);
+  const groundedTask = await groundTask(root, task, index.nodes, {
+    ...normalized.grounding,
+    referencePolicy: normalized.referencePolicy
+  });
+  if (groundedTask.grounding.decision === "abstain") {
+    return appendAbstainedRoute(root, task, budget, index, groundedTask.grounding);
+  }
+  const analysis = analyzeTask(groundedTask.effectiveTask);
+  const taskType = classifyTask(groundedTask.effectiveTask);
   const taskScored = scoreNodes(index.nodes, index.edges, analysis, taskType, index.facts);
   const scored = taskScored.length
     ? taskScored
@@ -75,7 +92,9 @@ export async function routePalace(root: string, task: string, options: number | 
     focused: focused || conventionalFallbackRoute,
     bounded: boundedBugfix || conventionalFallbackRoute,
     preferVerificationRelations: boundedBugfix || conventionalFallbackRoute,
-    minSeedScoreRatio: boundedBugfix || conventionalFallbackRoute ? 0.75 : undefined
+    minSeedScoreRatio: boundedBugfix || conventionalFallbackRoute ? 0.75 : undefined,
+    requiredRoles: intent.requiredRoles,
+    taskTerms: [...analysis.identifiers, ...analysis.keywords]
   });
   const initialRoute = conventionalFallbackRoute
     ? uniqueScoredNodes([
@@ -277,6 +296,8 @@ export async function routePalace(root: string, task: string, options: number | 
     id: `route_${hashText(`${task}:${now}`).slice(0, 16)}`,
     task,
     taskType,
+    decision: "route",
+    taskGrounding: groundedTask.grounding,
     entry: locateEntry(taskType, analysis),
     route: routeSteps,
     excluded: buildExcluded(index.nodes, routeSteps.map((step) => step.nodeId), analysis),
@@ -5981,13 +6002,63 @@ async function ensureFreshIndex(root: string): Promise<void> {
   }
 }
 
-function normalizeOptions(options: number | RoutePalaceOptions): Required<RoutePalaceOptions> {
+function normalizeOptions(options: number | RoutePalaceOptions): NormalizedRoutePalaceOptions {
   const budget = typeof options === "number" ? options : options.budget ?? DEFAULT_BUDGET.maxInputTokens;
   const routeLimit = typeof options === "number" ? defaultRouteLimitForBudget(budget) : options.routeLimit ?? defaultRouteLimitForBudget(budget);
   return {
     budget,
-    routeLimit: Math.max(4, Math.min(24, routeLimit))
+    routeLimit: Math.max(4, Math.min(24, routeLimit)),
+    referencePolicy: typeof options === "number" ? "auto" : options.referencePolicy ?? "auto",
+    grounding: typeof options === "number" ? undefined : options.grounding
   };
+}
+
+async function appendAbstainedRoute(
+  root: string,
+  task: string,
+  budget: number,
+  index: Awaited<ReturnType<typeof readIndex>>,
+  taskGrounding: PalaceRoute["taskGrounding"]
+): Promise<PalaceRoute> {
+  const analysis = analyzeTask(task);
+  const taskType = classifyTask(task);
+  const requestedSurfaces = requestedRouteSurfaces(analysis);
+  const intent = buildTaskIntent(analysis, taskType, requestedSurfaces);
+  const evidenceClosure = evaluateEvidenceClosure({
+    intent,
+    selectedNodes: [],
+    selectedFacts: [],
+    allNodes: index.nodes,
+    edges: index.edges
+  });
+  const now = new Date().toISOString();
+  const route: PalaceRoute = {
+    id: `route_${hashText(`${task}:${now}`).slice(0, 16)}`,
+    task,
+    taskType,
+    decision: "abstain",
+    taskGrounding,
+    entry: locateEntry(taskType, analysis),
+    route: [],
+    excluded: [],
+    budget: {
+      maxInputTokens: budget,
+      estimatedTokens: 0,
+      reservedOutputTokens: DEFAULT_BUDGET.reservedOutputTokens
+    },
+    confidence: 0,
+    intent,
+    evidenceClosure,
+    confidenceEvidence: buildRouteConfidenceEvidence(evidenceClosure, 0),
+    narrowingEvidence: {
+      independentImplementationAnchor: "missing",
+      leadingTaskAnchors: [],
+      reasons: taskGrounding.reasons
+    },
+    createdAt: now
+  };
+  await appendRoute(root, index.routes, route);
+  return route;
 }
 
 function defaultRouteLimitForBudget(budget: number): number {

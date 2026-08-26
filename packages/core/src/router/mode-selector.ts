@@ -40,6 +40,22 @@ export function selectPalaceMode(
       || routedReferenceMatches(explicitFiles[0], routedSourcePaths)
     );
   const riskSignals = detectRiskSignals(normalizedTask, route);
+  if (route.decision === "abstain") {
+    const abstention = buildSelection(
+      "route-lite",
+      ["The task is not identifiable enough to route without guessing."],
+      riskSignals,
+      Math.min(options.budget ?? 2_400, 2_400),
+      0
+    );
+    return {
+      ...abstention,
+      memoryLevel: "none",
+      evidenceStatus: "insufficient",
+      evidenceReasons: route.taskGrounding.reasons,
+      interventionPolicy: "advisory"
+    };
+  }
   const memoryEvidenceCount = options.memoryPreflight?.included ?? options.relevantMemoryCount ?? 0;
   const memoryEvidenceAvailable = memoryEvidenceCount > 0;
   const primarySteps = route.route.filter((step) => (step.tier ?? inferredTier(step.priority)) === "primary");
@@ -157,22 +173,21 @@ function selectStructuralMode(input: {
     );
   }
 
-  const boundedTask =
-    !input.uncertainRoute
-    && (!input.narrowingEvidenceInsufficient || explicitTargetAuthorized)
-    && !input.riskSignals.crossStack
-    && !input.riskSignals.tenantIsolationRisk
-    && !input.riskSignals.publicContractRisk
-    && !input.riskSignals.scopeRisk
-    && !input.riskSignals.verificationChangeRisk
-    && ((input.explicitFiles.length === 1 && input.primaryCount <= 2) || input.fileCount <= 100);
+  const boundaryRisk = input.riskSignals.crossStack
+    || input.riskSignals.tenantIsolationRisk
+    || input.riskSignals.publicContractRisk
+    || input.riskSignals.scopeRisk
+    || input.riskSignals.verificationChangeRisk;
+  const boundedTask = !boundaryRisk;
   if (boundedTask) {
     return buildSelection(
       "route-lite",
       [
         input.explicitFiles.length === 1
           ? "The task names one file and the route is focused."
-          : "The repository and route are small enough for a primary-only context."
+          : input.uncertainRoute
+            ? "The route is uncertain, so keep a bounded advisory context instead of widening automatically."
+            : "The route has no boundary risk and can use a primary-only context."
       ],
       input.riskSignals,
       input.budget,
@@ -334,15 +349,14 @@ function finalizeEvidencePolicy(
   options: SelectPalaceModeOptions,
   preserveExplicitOverride: boolean
 ): PalaceModeSelection {
-  const boundedMode = selection.mode === "bypass" || selection.mode === "route-lite";
   const evidenceSafeSelection = evidenceStatus !== "sufficient"
-    && boundedMode
+    && selection.mode === "bypass"
     && !preserveExplicitOverride
     ? buildSelection(
-        "full-palace",
+        "route-lite",
         [
           ...selection.reasons,
-          `Automatic ${selection.mode} selection was widened because routed evidence is ${evidenceStatus}.`
+          `Automatic bypass selection was changed to bounded advisory routing because evidence is ${evidenceStatus}.`
         ],
         selection.riskSignals,
         options.budget,
@@ -444,6 +458,7 @@ function detectRiskSignals(task: string, route: PalaceRoute): PalaceRiskSignals 
     "多租户",
     "多租戶"
   ]);
+  const crossTenantPreservation = /\b(?:preserv(?:e|ing)|keep|unchanged)\b.{0,48}\b(?:other|every)\b.{0,16}\b(?:tenant|client|customer)s?\b|(?:其他|其它|每个|每個).{0,16}(?:租户|租戶|客户|客戶).{0,16}(?:保持|不变|不變|保留)/i.test(task);
   const publicContractMention = hasAny(task, [
     "public api",
     "api contract",
@@ -540,7 +555,7 @@ function detectRiskSignals(task: string, route: PalaceRoute): PalaceRiskSignals 
     crossStack: crossStackTerms || (frontendRoute && backendRoute),
     memoryRelevant,
     staleMemoryRisk,
-    tenantIsolationRisk: tenantWord && isolationWord,
+    tenantIsolationRisk: tenantWord && (isolationWord || crossTenantPreservation),
     publicContractRisk,
     scopeRisk,
     verificationChangeRisk,

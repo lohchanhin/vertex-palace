@@ -8,11 +8,11 @@ OpenAI Build Week work is documented separately in [BUILD_WEEK.md](./BUILD_WEEK.
 
 **Published stable release:** `0.3.0` remains npm `latest`. Install it with `npm install -g vertex-palace@latest`, or add the plugin marketplace with `codex plugin marketplace add lohchanhin/vertex-palace --ref v0.3.0`.
 
-**Unpublished candidate:** `0.4.0` contains the advisory evidence contract and the latest generic routing repairs, but its fresh preregistered Round 21 study passed only 4/8 targets. It remains source-only and must not be presented as stable. The candidate improved focus and removed unsafe narrow stops, but missed one opaque issue task, one changelog surface, and over-expanded two large source hubs. Static routing evidence does not establish a general reduction in end-to-end Agent tokens, wall time, or correctness errors. Read the [Round 20 result](./docs/research/LOCAL_BLIND_ROUTING_ROUND_20_RESULT_0_4_STABLE.md), [disclosed repair result](./docs/research/DISCLOSED_ROUTING_ROUND_20_GENERIC_REPAIR_RESULT_0_4_ALPHA.md), [Round 21 protocol](./docs/research/LOCAL_BLIND_ROUTING_VALIDATION_PROTOCOL_0_4_STABLE_ROUND_21.md), and [Round 21 result](./docs/research/LOCAL_BLIND_ROUTING_ROUND_21_RESULT_0_4_STABLE.md).
+**Preview candidate:** `0.4.0-alpha.2` addresses the disclosed Round 21 failure classes with task grounding and abstention, degree-penalized evidence expansion, bounded advisory routing, and layered truth evaluation. Install the preview with `npm install -g vertex-palace@next`; npm `latest` remains `0.3.0`. Round 21 remains an immutable negative result, and alpha.2 must not be presented as stable unless two fresh preregistered rounds pass. Static routing evidence does not establish a general reduction in end-to-end Agent tokens, wall time, or correctness errors. Read the [Round 21 result](./docs/research/LOCAL_BLIND_ROUTING_ROUND_21_RESULT_0_4_STABLE.md) and the [alpha.2 architecture](./docs/research/VERTEX_PALACE_0_4_NON_LOOPING_ARCHITECTURE.md).
 
 **已发布稳定版：** `0.3.0` 继续作为 npm `latest`。可运行 `npm install -g vertex-palace@latest`，或执行 `codex plugin marketplace add lohchanhin/vertex-palace --ref v0.3.0` 安装插件。
 
-**未发布候选版：** `0.4.0` 包含 advisory 证据契约与最新通用路由修复，但全新预注册的 Round 21 只通过 4/8 个目标，因此只能作为源码候选，不能宣传为稳定版。候选版提高了聚焦度并消除了不安全窄模式停止，但仍遗漏一个只有 issue 编号的任务、一个更新说明文件，并在两个大型源码枢纽中过度扩张。静态路由证据不能证明 Agent 普遍减少总 Token、缩短时间或降低正确性错误。详见[第 20 轮结果](./docs/zh-CN/LOCAL_BLIND_ROUTING_ROUND_20_RESULT_0_4_STABLE.md)、[事后修复结果](./docs/zh-CN/DISCLOSED_ROUTING_ROUND_20_GENERIC_REPAIR_RESULT_0_4_ALPHA.md)、[第 21 轮协议](./docs/zh-CN/LOCAL_BLIND_ROUTING_VALIDATION_PROTOCOL_0_4_STABLE_ROUND_21.md)与[第 21 轮结果](./docs/zh-CN/LOCAL_BLIND_ROUTING_ROUND_21_RESULT_0_4_STABLE.md)。
+**预览候选版：** `0.4.0-alpha.2` 针对已披露的 Round 21 失败类型加入任务补全与拒答、高连接度惩罚的证据扩张、有限 advisory 路由，以及分层真值评价。可运行 `npm install -g vertex-palace@next` 安装预览版；npm `latest` 仍是 `0.3.0`。Round 21 保持为不可改写的负面结果；除非连续两轮全新预注册研究通过，否则 alpha.2 不能称为稳定版。静态路由证据也不能证明 Agent 普遍减少总 Token、缩短时间或降低正确性错误。详见[第 21 轮结果](./docs/zh-CN/LOCAL_BLIND_ROUTING_ROUND_21_RESULT_0_4_STABLE.md)与[alpha.2 架构说明](./docs/zh-CN/VERTEX_PALACE_0_4_NON_LOOPING_ARCHITECTURE.md)。
 
 Do not install the incomplete `v0.2.4` plugin tag; the npm version it references was never published.
 
@@ -22,7 +22,7 @@ Name note: `记忆宫殿工具`, `记忆宫殿`, `memory palace`, `palace tool`,
 
 Vertex Palace is a local context-routing tool for Codex coding tasks. It organizes a repository into a memory-palace structure of floors, rooms, cabinets, and drawers, so Codex can find the most relevant files and code snippets before fixing bugs, adding features, or understanding modules.
 
-It is designed for large repositories, multi-client projects, and long-lived codebases. Run `palace context "<task>" --auto` once to initialize or refresh the local index, plan the route, select a context mode, and report the delivered payload. Write task memory after the work is done. By default, everything stays inside the local `.palace/` directory: no source upload, no external API calls, and no remote vector database.
+It is designed for large repositories, multi-client projects, and long-lived codebases. Run `palace context "<task>" --auto` once to initialize or refresh the local index, plan the route, select a context mode, and report the delivered payload. Write task memory after the work is done. Source indexes and memory stay inside the local `.palace/` directory and source code is never uploaded. In `references=auto`, an opaque GitHub issue or pull-request task may fetch only bounded issue metadata from GitHub; use `--references off` to disable that request.
 
 Each route refreshes `.palace/routes/latest-route.json`, `.palace/routes/latest-route.md`, and `.palace/routes/optimized-route.txt`, so the most recent task route does not get stuck on an older task. Each memory write also updates `.palace/memory/latest-task.md`, `.palace/memory/task-log.md`, and `.palace/memory/index.json` while keeping the floor-based archive under `.palace/07-memory/`.
 
@@ -45,8 +45,8 @@ The first floor also has an entrance pitfall board at `.palace/00-entrance/pitfa
 | Mode | Selected when | Context behavior |
 | --- | --- | --- |
 | `bypass` | One high-confidence Primary file, no relevant memory, and no cross-stack, contract, tenant, or broad-scope risk | Returns only mode, Primary candidate, and reason; no source content is packed |
-| `route-lite` | The task and route are focused with low cross-cutting risk | Loads Primary summaries or symbol snippets; keeps the rest as references |
-| `full-palace` | The task crosses layers, changes a public contract, or has uncertain routing | Loads Primary plus bounded Support context and relevant scoped memory when available |
+| `route-lite` | The task is focused, or local evidence remains uncertain without a concrete boundary risk | Loads bounded Primary context; uncertain local routes stay advisory, enforce no stop, and are capped at 2,400 estimated tokens |
+| `full-palace` | The task has a concrete cross-stack, tenant, public-contract, broad-scope, test-change, or memory boundary risk | Loads Primary plus bounded Support context and relevant scoped memory when available |
 | `guarded-memory-palace` | Prior decisions, stale behavior, or tenant isolation are explicitly relevant | Prioritizes scoped, recent, budgeted memory with contradiction warnings |
 
 Adaptive mode reports `contextBytes`, `contextEstimatedTokens`, route-tier counts, memory usage, and guardrails in Markdown and JSON. It is designed to reduce unnecessary preloaded context. It does **not** guarantee lower total agent tokens or faster wall-clock time on every task; those outcomes must be measured end to end with repeated, order-balanced trials.
@@ -170,7 +170,7 @@ Fix it by installing Vertex Palace from `/plugins`, trusting the plugin when pro
 
 Vertex Palace 是一个面向 Codex 编程任务的本地上下文路由工具。它会把代码仓库整理成“楼层、房间、柜子、抽屉”的空间结构，让 Codex 在开始修 bug、加功能或理解模块前，先找到最相关的文件与代码片段，而不是每次都从整个仓库重新扫描。
 
-它适合大型项目、多客户项目和长期维护型项目：每次任务只要运行一次 `palace context "<任务>" --auto`，工具会自动初始化或刷新索引、规划路线、选择最小安全模式，并报告实际送出的上下文负载。任务结束后再写入成功路径、失败路径和决策记忆。所有数据默认保存在本机 `.palace/` 目录中，不上传源码，也不依赖远程向量数据库。
+它适合大型项目、多客户项目和长期维护型项目：每次任务只要运行一次 `palace context "<任务>" --auto`，工具会自动初始化或刷新索引、规划路线、选择最小安全模式，并报告实际送出的上下文负载。任务结束后再写入成功路径、失败路径和决策记忆。源码索引与记忆保存在本机 `.palace/` 目录中，源码不会上传，也不依赖远程向量数据库。只有当任务是不透明的 GitHub issue/PR 引用且 `references=auto` 时，工具才会读取有大小限制的 GitHub issue 元数据；可用 `--references off` 完全关闭。
 
 每次路由都会刷新 `.palace/routes/latest-route.json`、`.palace/routes/latest-route.md` 和 `.palace/routes/optimized-route.txt`，避免“最近任务路线”停留在旧任务。每次写入记忆也会更新 `.palace/memory/latest-task.md`、`.palace/memory/task-log.md` 和 `.palace/memory/index.json`，同时保留 `.palace/07-memory/` 的楼层归档。
 
@@ -195,8 +195,8 @@ Vertex Palace 是一个面向 Codex 编程任务的本地上下文路由工具�
 | 模式 | 适用情境 | 上下文行为 |
 | --- | --- | --- |
 | `bypass` | 路线高信心只指向一个 Primary 文件，而且没有相关记忆、跨层、契约、客户或广范围风险 | 只返回模式、Primary 候选与原因，不预载源码 |
-| `route-lite` | 任务集中、路线明确、跨层风险低 | 只加载 Primary 摘要或符号片段，其余保留引用 |
-| `full-palace` | 跨前后端、公共契约变更或路线不确定 | 加载 Primary、有限的 Support，以及可用时与任务相关的范围化记忆 |
+| `route-lite` | 任务集中，或本地证据仍不确定但没有明确边界风险 | 加载有限 Primary；不确定路线保持 advisory、不强制停止，并限制在 2,400 estimated tokens 内 |
+| `full-palace` | 存在明确的跨栈、客户隔离、公共契约、广范围、测试变更或记忆边界风险 | 加载 Primary、有限的 Support，以及可用时与任务相关的范围化记忆 |
 | `guarded-memory-palace` | 历史决策、旧行为或客户隔离明确相关 | 优先加入有作用域、有时效、有预算并带矛盾检查的记忆 |
 
 Adaptive Palace 的目标是减少不必要的“预载上下文”，不是承诺每个任务的总 Token 与总时间都一定下降。端到端效果必须用相同任务、重复执行、平衡顺序的 A/B 测试判断。
@@ -425,7 +425,7 @@ palace memory write \
 
 ## Privacy
 
-Vertex Palace runs locally by default. It does not upload source code, call external APIs, use embeddings, or create a remote index.
+Vertex Palace keeps source indexing, routing, and memory local. It does not upload source code, use embeddings, or create a remote index. With the default `references=auto`, an otherwise opaque GitHub issue or pull-request reference can trigger one bounded GitHub issue API request per reference, with at most two references, a five-second timeout, and a one-hour local cache. Set `--references off` to disable reference resolution. Authentication tokens are read only from `GH_TOKEN` or `GITHUB_TOKEN` and are never written to routes, reports, errors, or cache files.
 
 ## Supported Platforms
 

@@ -13,6 +13,7 @@ describe("toolDefinitions", () => {
         routeLimit: { type: "number" },
         maxDrawers: { type: "number" },
         auto: { type: "boolean" },
+        referencePolicy: { type: "string", enum: ["auto", "off"] },
         mode: {
           type: "string",
           enum: ["bypass", "route-lite", "full-palace", "guarded-memory-palace"]
@@ -29,7 +30,11 @@ describe("toolDefinitions", () => {
       required: ["task"],
       properties: {
         task: { type: "string" },
-        changedFiles: { type: "array" }
+        changedFiles: { type: "array" },
+        coreFiles: { type: "array" },
+        declaredAuxiliaryFiles: { type: "array" },
+        latentAuxiliaryFiles: { type: "array" },
+        referencePolicy: { type: "string", enum: ["auto", "off"] }
       }
     });
   });

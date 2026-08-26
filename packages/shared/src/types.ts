@@ -42,6 +42,42 @@ export type PalaceEvidenceStatus = "sufficient" | "insufficient" | "conflicted";
 
 export type PalaceInterventionPolicy = "advisory" | "bounded";
 
+export type PalaceReferencePolicy = "auto" | "off";
+
+export type PalaceRouteDecision = "route" | "abstain";
+
+export type PalaceTaskGroundingStatus = "local" | "resolved" | "unresolved";
+
+export type PalaceTaskGroundingResolutionStatus =
+  | "not-needed"
+  | "cache-hit"
+  | "fetched"
+  | "disabled"
+  | "network-error"
+  | "unauthorized"
+  | "not-found"
+  | "rate-limited"
+  | "unsupported-remote";
+
+export type PalaceTaskReference = {
+  provider: "github";
+  kind: "issue" | "pull";
+  repository: string;
+  number: number;
+  url: string;
+  resolutionStatus: PalaceTaskGroundingResolutionStatus;
+  title?: string;
+  contentHash?: string;
+};
+
+export type PalaceTaskGrounding = {
+  status: PalaceTaskGroundingStatus;
+  decision: PalaceRouteDecision;
+  resolutionStatus: PalaceTaskGroundingResolutionStatus;
+  references: PalaceTaskReference[];
+  reasons: string[];
+};
+
 export type RouteTier = "primary" | "support" | "deferred" | "excluded";
 
 export type MemoryLevel = "none" | "hint" | "scoped-summary" | "guarded-evidence";
@@ -447,6 +483,8 @@ export type PalaceRoute = {
   id: string;
   task: string;
   taskType: TaskType;
+  decision: PalaceRouteDecision;
+  taskGrounding: PalaceTaskGrounding;
   entry: {
     floor: PalaceFloor;
     wing?: string;
@@ -605,6 +643,8 @@ export type IndexPalaceOutput = {
 export type PackOutput = {
   task: string;
   routeId: string;
+  decision?: PalaceRouteDecision;
+  taskGrounding?: PalaceTaskGrounding;
   estimatedTokens: number;
   mode?: PalaceMode;
   modeSelection?: PalaceModeSelection;
@@ -624,6 +664,7 @@ export type PalaceContextInput = {
   maxDrawers?: number;
   auto?: boolean;
   mode?: PalaceMode;
+  referencePolicy?: PalaceReferencePolicy;
 };
 
 export type PalaceEvaluationInput = {
@@ -631,15 +672,29 @@ export type PalaceEvaluationInput = {
   task: string;
   routeId?: string;
   changedFiles?: string[];
+  coreFiles?: string[];
+  declaredAuxiliaryFiles?: string[];
+  latentAuxiliaryFiles?: string[];
   budget?: number;
   routeLimit?: number;
   maxDrawers?: number;
+  referencePolicy?: PalaceReferencePolicy;
+};
+
+export type PalaceEvaluationCoverageLayer = {
+  files: string[];
+  matchedFiles: string[];
+  missedFiles: string[];
+  coverage?: number;
+  routeFocus?: number;
 };
 
 export type PalaceEvaluation = {
   id: string;
   task: string;
   taskType: TaskType;
+  decision: PalaceRouteDecision;
+  taskGrounding: PalaceTaskGrounding;
   routeId: string;
   createdAt: string;
   route: {
@@ -669,6 +724,11 @@ export type PalaceEvaluation = {
     routeOnlyFiles: string[];
     changedFileCoverage?: number;
     routeFocus?: number;
+    layers: {
+      core: PalaceEvaluationCoverageLayer;
+      declaredAuxiliary: PalaceEvaluationCoverageLayer;
+      latentAuxiliary: PalaceEvaluationCoverageLayer;
+    };
   };
   calibration: {
     status: "unverified" | "well-calibrated" | "overconfident" | "underconfident";

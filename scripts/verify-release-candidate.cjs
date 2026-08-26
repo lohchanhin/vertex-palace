@@ -79,7 +79,7 @@ async function main() {
         { cwd: fixtureRoot }
       ).stdout;
       const output = JSON.parse(raw);
-      assert.equal(output.mode, "full-palace");
+      assert.equal(output.mode, "route-lite");
       assert.equal(output.selection.evidenceStatus, "insufficient");
       assert.equal(output.selection.interventionPolicy, "advisory");
       assert.ok(output.route.evidenceClosure.missingRoles.includes("verification"));
@@ -121,6 +121,50 @@ async function main() {
     assert.equal(excludeEntries.length, 1);
     assert.equal(fixtureGitStatus, "");
     assert.match(ignoreSource, /info\/exclude:\d+:\/\.palace\//);
+
+    const abstentionRaw = runNode(
+      [
+        cliPath,
+        "context",
+        "Fix issue #999999",
+        "--auto",
+        "--mode",
+        "full-palace",
+        "--references",
+        "off",
+        "--format",
+        "json"
+      ],
+      { cwd: fixtureRoot }
+    ).stdout;
+    const abstention = JSON.parse(abstentionRaw);
+    assert.equal(abstention.decision, "abstain");
+    assert.equal(abstention.mode, "route-lite");
+    assert.equal(abstention.taskGrounding.resolutionStatus, "disabled");
+    assert.deepEqual(abstention.context, []);
+    assert.deepEqual(abstention.route.primary, []);
+    assert.equal(abstention.executionBoundaries.stopEnforced, false);
+    assert.ok(abstention.payload.contextEstimatedTokens <= 2400);
+
+    const layeredEvaluationRaw = runNode(
+      [
+        cliPath,
+        "evaluate",
+        task,
+        "--core-file",
+        "src/format-currency.mjs",
+        "--latent-auxiliary-file",
+        "README.md",
+        "--references",
+        "off",
+        "--json"
+      ],
+      { cwd: fixtureRoot }
+    ).stdout;
+    const layeredEvaluation = JSON.parse(layeredEvaluationRaw);
+    assert.equal(layeredEvaluation.coverage.layers.core.coverage, 1);
+    assert.equal(layeredEvaluation.coverage.layers.latentAuxiliary.coverage, 0);
+    assert.equal(layeredEvaluation.calibration.observedCoverage, 1);
 
     runNode([
       cliPath,
@@ -274,6 +318,18 @@ async function main() {
       },
       distractorFiles: 240,
       advisoryTrials,
+      abstention: {
+        decision: abstention.decision,
+        mode: abstention.mode,
+        resolutionStatus: abstention.taskGrounding.resolutionStatus,
+        routeFiles: abstention.route.primary.length,
+        estimatedTokens: abstention.payload.contextEstimatedTokens
+      },
+      layeredEvaluation: {
+        coreCoverage: layeredEvaluation.coverage.layers.core.coverage,
+        latentAuxiliaryCoverage: layeredEvaluation.coverage.layers.latentAuxiliary.coverage,
+        calibrationCoverage: layeredEvaluation.calibration.observedCoverage
+      },
       relevantMemory: {
         mode: full.mode,
         candidates: full.memoryTelemetry.memoryCandidates,

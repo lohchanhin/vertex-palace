@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { PalaceEdge, PalaceNode } from "@vertex-palace/shared";
+import type { EvidenceRole, PalaceEdge, PalaceNode } from "@vertex-palace/shared";
 import { expandRoute } from "../src/router/route-expander";
 import type { ScoredNode } from "../src/router/route-scorer";
 
@@ -11,7 +11,7 @@ describe("expandRoute", () => {
     const decoyA = makeNode("decoy-a", "src/alpha/a.ts");
     const decoyB = makeNode("decoy-b", "src/alpha/b.ts");
     const decoyC = makeNode("decoy-c", "src/alpha/c.ts");
-    const required = makeNode("required", "src/beta/required.ts");
+    const required = makeNode("required", "tests/beta/required.test.ts", "verification");
     const nodes = [seedA, seedB, seedC, decoyA, decoyB, decoyC, required];
     const scored: ScoredNode[] = [
       makeScored(seedA, 100),
@@ -25,15 +25,15 @@ describe("expandRoute", () => {
       makeEdge("edge-required", seedB, required, "changed_with", 0.95)
     ];
 
-    const expanded = expandRoute(scored, edges, nodes, { limit: 6 });
+    const expanded = expandRoute(scored, edges, nodes, { limit: 6, requiredRoles: ["verification"] });
 
-    expect(expanded.map((item) => item.node.sourcePath)).toContain("src/beta/required.ts");
+    expect(expanded.map((item) => item.node.sourcePath)).toContain("tests/beta/required.test.ts");
   });
 
   it("allows two seeds from a relevant source group on broad routes", () => {
     const alphaPrimary = makeNode("alpha-primary", "src/alpha/primary.ts");
     const alphaCompanion = makeNode("alpha-companion", "src/alpha/companion.ts");
-    const required = makeNode("alpha-required", "src/alpha/required.ts");
+    const required = makeNode("alpha-required", "tests/alpha/required.test.ts", "verification");
     const otherSeeds = ["beta", "gamma", "delta", "epsilon", "zeta"].map(
       (name) => makeNode(name, `src/${name}/main.ts`)
     );
@@ -41,23 +41,68 @@ describe("expandRoute", () => {
     const scored = [
       makeScored(alphaPrimary, 100),
       makeScored(alphaCompanion, 99),
-      ...otherSeeds.map((node, index) => makeScored(node, 90 - index))
+      ...otherSeeds.map((node, index) => makeScored(node, 90 - index)),
+      makeScored(required, 70)
     ];
     const edges = [makeEdge("edge-alpha-required", alphaCompanion, required, "changed_with", 0.95)];
 
-    const expanded = expandRoute(scored, edges, nodes, { limit: 12 });
+    const expanded = expandRoute(scored, edges, nodes, { limit: 12, requiredRoles: ["verification"] });
 
-    expect(expanded.map((item) => item.node.sourcePath)).toContain("src/alpha/required.ts");
+    expect(expanded.map((item) => item.node.sourcePath)).toContain("tests/alpha/required.test.ts");
+  });
+
+  it("penalizes a high-degree hub that adds no missing evidence facet", () => {
+    const seed = makeNode("seed", "src/checkout/quote.ts", "implementation");
+    const hub = makeNode("hub", "src/shared/index.ts", "implementation");
+    const focusedTest = makeNode("focused-test", "tests/checkout/quote.test.ts", "verification");
+    const noise = Array.from({ length: 24 }, (_, index) => makeNode(`noise-${index}`, `src/noise/${index}.ts`));
+    const nodes = [seed, hub, focusedTest, ...noise];
+    const edges = [
+      makeEdge("seed-hub", seed, hub, "imports", 0.99),
+      makeEdge("seed-test", seed, focusedTest, "tested_by", 0.9),
+      ...noise.map((node, index) => makeEdge(`hub-noise-${index}`, hub, node, "imports", 0.9))
+    ];
+    const expanded = expandRoute(
+      [makeScored(seed, 100), makeScored(hub, 80), makeScored(focusedTest, 70)],
+      edges,
+      nodes,
+      { limit: 3, focused: true, requiredRoles: ["implementation", "verification"], taskTerms: ["checkout", "quote"] }
+    );
+
+    expect(expanded.map((item) => item.node.sourcePath)).toEqual([
+      "src/checkout/quote.ts",
+      "tests/checkout/quote.test.ts"
+    ]);
+  });
+
+  it("adds at most one file for an explicit auxiliary evidence role", () => {
+    const seed = makeNode("seed", "src/payment/client.ts", "implementation");
+    const readme = makeNode("readme", "README.md", "documentation");
+    const guide = makeNode("guide", "docs/payment.md", "documentation");
+    const nodes = [seed, readme, guide];
+    const edges = [
+      makeEdge("seed-readme", seed, readme, "changed_with", 0.95),
+      makeEdge("seed-guide", seed, guide, "changed_with", 0.94)
+    ];
+
+    const expanded = expandRoute([makeScored(seed, 100)], edges, nodes, {
+      limit: 4,
+      requiredRoles: ["implementation", "documentation"],
+      taskTerms: ["payment"]
+    });
+
+    expect(expanded.filter((item) => item.node.evidence?.roles.some((role) => role.role === "documentation"))).toHaveLength(1);
   });
 });
 
-function makeNode(id: string, sourcePath: string): PalaceNode {
+function makeNode(id: string, sourcePath: string, role?: EvidenceRole): PalaceNode {
   return {
     id,
     palacePath: `03-implementation/${id}`,
     sourcePath,
     floor: "03-implementation",
     kind: "file",
+    ...(role ? { evidence: { scope: role === "documentation" ? "documentation" : "product", roles: [{ role, basis: "artifact-kind", confidence: 1 }] } } : {}),
     title: sourcePath.split("/").at(-1) ?? sourcePath,
     summary: sourcePath,
     tags: [],

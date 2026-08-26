@@ -48,6 +48,11 @@ export const toolDefinitions: ToolDefinition[] = [
         routeLimit: { type: "number", description: "Maximum route steps to plan." },
         maxDrawers: { type: "number", description: "Maximum source drawers to include." },
         auto: { type: "boolean", description: "Select the smallest safe context mode automatically." },
+        referencePolicy: {
+          type: "string",
+          enum: ["auto", "off"],
+          description: "Resolve opaque GitHub issue or pull-request references before routing."
+        },
         mode: {
           type: "string",
           enum: ["bypass", "route-lite", "full-palace", "guarded-memory-palace"],
@@ -66,7 +71,8 @@ export const toolDefinitions: ToolDefinition[] = [
         root: rootProperty,
         task: { type: "string" },
         budget: { type: "number" },
-        routeLimit: { type: "number", description: "Maximum route steps to return." }
+        routeLimit: { type: "number", description: "Maximum route steps to return." },
+        referencePolicy: { type: "string", enum: ["auto", "off"] }
       }
     }
   },
@@ -84,7 +90,8 @@ export const toolDefinitions: ToolDefinition[] = [
         routeId: { type: "string" },
         routeLimit: { type: "number", description: "Maximum route steps to plan when no routeId is provided." },
         maxDrawers: { type: "number", description: "Maximum source drawers to include in the pack." },
-        includeExcluded: { type: "boolean", description: "Include excluded areas in Markdown output." }
+        includeExcluded: { type: "boolean", description: "Include excluded areas in Markdown output." },
+        referencePolicy: { type: "string", enum: ["auto", "off"] }
       }
     }
   },
@@ -103,9 +110,25 @@ export const toolDefinitions: ToolDefinition[] = [
           items: { type: "string" },
           description: "Files actually changed while completing the task. Enables route-quality and confidence measurement."
         },
+        coreFiles: {
+          type: "array",
+          items: { type: "string" },
+          description: "Core implementation and focused-test truth files."
+        },
+        declaredAuxiliaryFiles: {
+          type: "array",
+          items: { type: "string" },
+          description: "README, changelog, configuration, or contract files explicitly required by the task."
+        },
+        latentAuxiliaryFiles: {
+          type: "array",
+          items: { type: "string" },
+          description: "Auxiliary files known only from hidden diffs or project convention; reported descriptively."
+        },
         budget: { type: "number" },
         routeLimit: { type: "number", description: "Maximum route steps when planning a fresh route." },
-        maxDrawers: { type: "number", description: "Maximum drawers in the measured context pack." }
+        maxDrawers: { type: "number", description: "Maximum drawers in the measured context pack." },
+        referencePolicy: { type: "string", enum: ["auto", "off"] }
       }
     }
   },

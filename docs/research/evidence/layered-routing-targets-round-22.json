@@ -1,0 +1,159 @@
+{
+  "schemaVersion": 1,
+  "studyId": "layered-routing-round-22-alpha-2",
+  "round": 22,
+  "candidate": "0.4.0-alpha.2",
+  "baseline": "0.3.0",
+  "repetitionsPerCondition": 2,
+  "routeLimit": 6,
+  "contextBudget": 6000,
+  "targets": [
+    {
+      "id": "r22-ts-local-ledger",
+      "language": "typescript",
+      "stratum": "local",
+      "symbol": "normalizeLedgerId",
+      "implementationPath": "src/ledger/normalize-ledger-id.ts",
+      "testPath": "tests/ledger/normalize-ledger-id.test.ts",
+      "task": "Fix normalizeLedgerId in src/ledger/normalize-ledger-id.ts and its focused test tests/ledger/normalize-ledger-id.test.ts.",
+      "coreFiles": ["src/ledger/normalize-ledger-id.ts", "tests/ledger/normalize-ledger-id.test.ts"],
+      "latentAuxiliaryFiles": ["CHANGELOG.md"]
+    },
+    {
+      "id": "r22-py-local-invoice",
+      "language": "python",
+      "stratum": "local",
+      "symbol": "parse_invoice_total",
+      "implementationPath": "billing/parser.py",
+      "testPath": "tests/test_billing_parser.py",
+      "task": "Fix parse_invoice_total in billing/parser.py and its focused test tests/test_billing_parser.py.",
+      "coreFiles": ["billing/parser.py", "tests/test_billing_parser.py"]
+    },
+    {
+      "id": "r22-go-local-identity",
+      "language": "go",
+      "stratum": "local",
+      "symbol": "CanonicalUserName",
+      "implementationPath": "identity/name.go",
+      "testPath": "identity/name_test.go",
+      "task": "Fix CanonicalUserName in identity/name.go and its focused test identity/name_test.go.",
+      "coreFiles": ["identity/name.go", "identity/name_test.go"]
+    },
+    {
+      "id": "r22-rust-reference-frame",
+      "language": "rust",
+      "stratum": "reference",
+      "symbol": "decode_frame",
+      "implementationPath": "src/frame.rs",
+      "testPath": "tests/frame_test.rs",
+      "task": "Fix issue #2201",
+      "referenceNumber": 2201,
+      "metadata": {
+        "title": "decode_frame accepts a truncated payload",
+        "body": "Correct decode_frame in src/frame.rs and add the focused regression in tests/frame_test.rs.",
+        "labels": ["bug", "decoder"]
+      },
+      "coreFiles": ["src/frame.rs", "tests/frame_test.rs"]
+    },
+    {
+      "id": "r22-ts-reference-session",
+      "language": "typescript",
+      "stratum": "reference",
+      "symbol": "rotateSessionKey",
+      "implementationPath": "src/session/rotate-session-key.ts",
+      "testPath": "tests/session/rotate-session-key.test.ts",
+      "task": "Repair PR #2202",
+      "referenceNumber": 2202,
+      "metadata": {
+        "title": "rotateSessionKey retains the expired key",
+        "body": "Update rotateSessionKey in src/session/rotate-session-key.ts and tests/session/rotate-session-key.test.ts.",
+        "labels": ["bug", "session"]
+      },
+      "coreFiles": ["src/session/rotate-session-key.ts", "tests/session/rotate-session-key.test.ts"]
+    },
+    {
+      "id": "r22-py-reference-window",
+      "language": "python",
+      "stratum": "reference",
+      "symbol": "clamp_retry_window",
+      "implementationPath": "scheduler/retry.py",
+      "testPath": "tests/test_retry.py",
+      "task": "Fix issue 2203",
+      "referenceNumber": 2203,
+      "metadata": {
+        "title": "clamp_retry_window permits a negative delay",
+        "body": "Fix clamp_retry_window in scheduler/retry.py and its focused regression tests/test_retry.py.",
+        "labels": ["bug", "scheduler"]
+      },
+      "coreFiles": ["scheduler/retry.py", "tests/test_retry.py"]
+    },
+    {
+      "id": "r22-go-high-quota",
+      "language": "go",
+      "stratum": "high-connectivity",
+      "symbol": "ResolveTenantQuota",
+      "implementationPath": "quota/resolve.go",
+      "testPath": "quota/resolve_test.go",
+      "declaredAuxiliaryFiles": ["quota/contract.go"],
+      "task": "Update ResolveTenantQuota in quota/resolve.go and quota/resolve_test.go while preserving the explicit contract in quota/contract.go.",
+      "coreFiles": ["quota/resolve.go", "quota/resolve_test.go"]
+    },
+    {
+      "id": "r22-rust-high-cursor",
+      "language": "rust",
+      "stratum": "high-connectivity",
+      "symbol": "advance_cursor",
+      "implementationPath": "src/cursor.rs",
+      "testPath": "tests/cursor_test.rs",
+      "declaredAuxiliaryFiles": ["src/cursor_contract.rs"],
+      "task": "Refactor advance_cursor in src/cursor.rs with tests/cursor_test.rs and preserve the contract in src/cursor_contract.rs.",
+      "coreFiles": ["src/cursor.rs", "tests/cursor_test.rs"]
+    },
+    {
+      "id": "r22-ts-high-checkout",
+      "language": "typescript",
+      "stratum": "high-connectivity",
+      "symbol": "quoteCheckoutTax",
+      "implementationPath": "src/checkout/quote-checkout-tax.ts",
+      "testPath": "tests/checkout/quote-checkout-tax.test.ts",
+      "declaredAuxiliaryFiles": ["src/checkout/tax-contract.ts"],
+      "task": "Fix quoteCheckoutTax in src/checkout/quote-checkout-tax.ts and tests/checkout/quote-checkout-tax.test.ts without changing src/checkout/tax-contract.ts.",
+      "coreFiles": ["src/checkout/quote-checkout-tax.ts", "tests/checkout/quote-checkout-tax.test.ts"]
+    },
+    {
+      "id": "r22-rust-control-opaque",
+      "language": "rust",
+      "stratum": "control",
+      "symbol": "opaque_control",
+      "implementationPath": "src/control.rs",
+      "testPath": "tests/control_test.rs",
+      "task": "Fix issue #2290",
+      "referencePolicy": "off",
+      "expectedResolutionStatus": "disabled",
+      "coreFiles": []
+    },
+    {
+      "id": "r22-py-control-incident",
+      "language": "python",
+      "stratum": "control",
+      "symbol": "opaque_control",
+      "implementationPath": "control/handler.py",
+      "testPath": "tests/test_control.py",
+      "task": "Investigate incident 7441.",
+      "expectedResolutionStatus": "unsupported-remote",
+      "coreFiles": []
+    },
+    {
+      "id": "r22-go-control-pr",
+      "language": "go",
+      "stratum": "control",
+      "symbol": "OpaqueControl",
+      "implementationPath": "control/handler.go",
+      "testPath": "control/handler_test.go",
+      "task": "Repair PR #2292",
+      "referencePolicy": "off",
+      "expectedResolutionStatus": "disabled",
+      "coreFiles": []
+    }
+  ]
+}

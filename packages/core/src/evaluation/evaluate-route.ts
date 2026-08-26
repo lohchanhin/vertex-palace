@@ -1,6 +1,12 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
-import type { PalaceEvaluation, PalaceEvaluationInput, PalaceIndex, PalaceRoute } from "@vertex-palace/shared";
+import type {
+  PalaceEvaluation,
+  PalaceEvaluationCoverageLayer,
+  PalaceEvaluationInput,
+  PalaceIndex,
+  PalaceRoute
+} from "@vertex-palace/shared";
 import { indexPalace } from "../indexer/index-palace";
 import { packAutoContextForRoute } from "../packer/context-packer";
 import { estimateTokens } from "../packer/token-estimator";
@@ -38,7 +44,16 @@ export async function evaluateRoute(root: string, task: string, options: Evaluat
   ]);
 
   const routeFiles = unique(route.route.map((step) => stripLocation(step.sourcePath)));
-  const changedFiles = unique((options.changedFiles ?? []).map((file) => normalizeChangedFile(root, file)).filter(Boolean));
+  const legacyChangedFiles = normalizeFiles(root, options.changedFiles);
+  const layeredInputProvided = options.coreFiles !== undefined
+    || options.declaredAuxiliaryFiles !== undefined
+    || options.latentAuxiliaryFiles !== undefined;
+  const coreFiles = layeredInputProvided ? normalizeFiles(root, options.coreFiles) : legacyChangedFiles;
+  const declaredAuxiliaryFiles = normalizeFiles(root, options.declaredAuxiliaryFiles);
+  const latentAuxiliaryFiles = normalizeFiles(root, options.latentAuxiliaryFiles);
+  const changedFiles = layeredInputProvided
+    ? unique([...coreFiles, ...declaredAuxiliaryFiles, ...latentAuxiliaryFiles])
+    : legacyChangedFiles;
   const routeKeys = new Map(routeFiles.map((file) => [pathKey(file), file]));
   const changedKeys = new Map(changedFiles.map((file) => [pathKey(file), file]));
   const matchedFiles = changedFiles.filter((file) => routeKeys.has(pathKey(file)));
@@ -46,7 +61,12 @@ export async function evaluateRoute(root: string, task: string, options: Evaluat
   const routeOnlyFiles = routeFiles.filter((file) => !changedKeys.has(pathKey(file)));
   const changedFileCoverage = changedFiles.length ? ratio(matchedFiles.length, changedFiles.length) : undefined;
   const routeFocus = changedFiles.length && routeFiles.length ? ratio(matchedFiles.length, routeFiles.length) : undefined;
-  const calibration = calibrateConfidence(route.confidence, changedFileCoverage);
+  const layers = {
+    core: evaluateCoverageLayer(coreFiles, routeKeys, routeFiles.length),
+    declaredAuxiliary: evaluateCoverageLayer(declaredAuxiliaryFiles, routeKeys, routeFiles.length),
+    latentAuxiliary: evaluateCoverageLayer(latentAuxiliaryFiles, routeKeys, routeFiles.length)
+  };
+  const calibration = calibrateConfidence(route.confidence, layers.core.coverage);
   const packTokens = pack.estimatedTokens;
   const savedTokens = repository.tokens - packTokens;
   const tokenReductionPercent = repository.tokens ? percent(savedTokens, repository.tokens) : 0;
@@ -57,16 +77,25 @@ export async function evaluateRoute(root: string, task: string, options: Evaluat
   const warnings = buildWarnings({
     changedFiles,
     missedFiles,
+    missedCoreFiles: layers.core.missedFiles,
+    missedDeclaredAuxiliaryFiles: layers.declaredAuxiliary.missedFiles,
+    missedLatentAuxiliaryFiles: layers.latentAuxiliary.missedFiles,
     repositoryTokens: repository.tokens,
     packTokens,
     calibrationStatus: calibration.status
   });
-  const assessment = assess(changedFileCoverage, tokenReductionPercent, calibration.status);
+  const assessment = assess(
+    layers.core.coverage,
+    layers.declaredAuxiliary.coverage,
+    calibration.status
+  );
 
   const evaluationWithoutMarkdown: Omit<PalaceEvaluation, "markdown"> = {
     id,
     task,
     taskType: route.taskType,
+    decision: route.decision,
+    taskGrounding: route.taskGrounding,
     routeId: route.id,
     createdAt,
     route: {
@@ -95,7 +124,8 @@ export async function evaluateRoute(root: string, task: string, options: Evaluat
       missedFiles,
       routeOnlyFiles,
       changedFileCoverage,
-      routeFocus
+      routeFocus,
+      layers
     },
     calibration,
     assessment,
@@ -144,7 +174,11 @@ async function resolveRoute(
   index: PalaceIndex
 ): Promise<PalaceRoute> {
   if (!options.routeId) {
-    return routePalace(root, task, { budget: options.budget, routeLimit: options.routeLimit });
+    return routePalace(root, task, {
+      budget: options.budget,
+      routeLimit: options.routeLimit,
+      referencePolicy: options.referencePolicy
+    });
   }
 
   const route = index.routes.find((candidate) => candidate.id === options.routeId);
@@ -202,6 +236,26 @@ function normalizeChangedFile(root: string, value: string): string {
   return stripLocation(normalized);
 }
 
+function normalizeFiles(root: string, values: string[] | undefined): string[] {
+  return unique((values ?? []).map((file) => normalizeChangedFile(root, file)).filter(Boolean));
+}
+
+function evaluateCoverageLayer(
+  files: string[],
+  routeKeys: Map<string, string>,
+  routeFileCount: number
+): PalaceEvaluationCoverageLayer {
+  const matchedFiles = files.filter((file) => routeKeys.has(pathKey(file)));
+  const missedFiles = files.filter((file) => !routeKeys.has(pathKey(file)));
+  return {
+    files,
+    matchedFiles,
+    missedFiles,
+    ...(files.length ? { coverage: ratio(matchedFiles.length, files.length) } : {}),
+    ...(files.length && routeFileCount ? { routeFocus: ratio(matchedFiles.length, routeFileCount) } : {})
+  };
+}
+
 function stripLocation(sourcePath: string): string {
   return normalizeRelativePath(sourcePath).replace(/:\d+(?:-\d+)?$/, "");
 }
@@ -233,18 +287,24 @@ function rounded(value: number, digits: number): number {
 }
 
 function assess(
-  changedFileCoverage: number | undefined,
-  tokenReductionPercent: number,
+  coreCoverage: number | undefined,
+  declaredAuxiliaryCoverage: number | undefined,
   calibrationStatus: PalaceEvaluation["calibration"]["status"]
 ): PalaceEvaluation["assessment"] {
-  if (changedFileCoverage === undefined) return "unverified";
-  if (changedFileCoverage >= 0.8 && tokenReductionPercent > 0 && calibrationStatus !== "overconfident") return "strong";
+  if (coreCoverage === undefined) return "unverified";
+  const declaredAuxiliaryClosed = declaredAuxiliaryCoverage === undefined || declaredAuxiliaryCoverage === 1;
+  if (coreCoverage >= 0.8 && declaredAuxiliaryClosed && calibrationStatus !== "overconfident") {
+    return "strong";
+  }
   return "needs-review";
 }
 
 function buildWarnings(input: {
   changedFiles: string[];
   missedFiles: string[];
+  missedCoreFiles: string[];
+  missedDeclaredAuxiliaryFiles: string[];
+  missedLatentAuxiliaryFiles: string[];
   repositoryTokens: number;
   packTokens: number;
   calibrationStatus: PalaceEvaluation["calibration"]["status"];
@@ -252,6 +312,13 @@ function buildWarnings(input: {
   const warnings: string[] = [];
   if (!input.changedFiles.length) warnings.push("Route quality is unverified because no changed files were provided.");
   if (input.missedFiles.length) warnings.push(`Route missed ${input.missedFiles.length} changed file(s).`);
+  if (input.missedCoreFiles.length) warnings.push(`Route missed ${input.missedCoreFiles.length} core implementation or verification file(s).`);
+  if (input.missedDeclaredAuxiliaryFiles.length) {
+    warnings.push(`Route missed ${input.missedDeclaredAuxiliaryFiles.length} explicitly required auxiliary file(s).`);
+  }
+  if (input.missedLatentAuxiliaryFiles.length) {
+    warnings.push(`${input.missedLatentAuxiliaryFiles.length} latent auxiliary file(s) were not routed; this is descriptive, not a core failure.`);
+  }
   if (!input.repositoryTokens) warnings.push("Repository token estimate is empty; refresh the index and check ignore rules.");
   if (input.repositoryTokens && input.packTokens >= input.repositoryTokens) {
     warnings.push("The context pack is not smaller than the indexed repository text.");
@@ -288,6 +355,8 @@ function renderEvaluationMarkdown(evaluation: Omit<PalaceEvaluation, "markdown">
     `Task: ${evaluation.task}`,
     `Route: ${evaluation.routeId}`,
     `Task type: ${evaluation.taskType}`,
+    `Route decision: ${evaluation.decision}`,
+    `Task grounding: ${evaluation.taskGrounding.status} (${evaluation.taskGrounding.resolutionStatus})`,
     `Assessment: ${evaluation.assessment}`,
     `Created: ${evaluation.createdAt}`,
     "",
@@ -310,6 +379,9 @@ function renderEvaluationMarkdown(evaluation: Omit<PalaceEvaluation, "markdown">
     `- Route confidence: ${evaluation.route.confidence}`,
     `- Changed-file coverage: ${coverage === undefined ? "unverified" : `${Math.round(coverage * 100)}%`}`,
     `- Route focus: ${focus === undefined ? "unverified" : `${Math.round(focus * 100)}%`}`,
+    `- Core coverage: ${formatCoverage(evaluation.coverage.layers.core.coverage)}`,
+    `- Declared auxiliary coverage: ${formatCoverage(evaluation.coverage.layers.declaredAuxiliary.coverage)}`,
+    `- Latent auxiliary coverage: ${formatCoverage(evaluation.coverage.layers.latentAuxiliary.coverage)} (descriptive only)`,
     `- Confidence calibration: ${evaluation.calibration.status}${evaluation.calibration.error === undefined ? "" : ` (error ${evaluation.calibration.error})`}`,
     "",
     "## Changed Files",
@@ -319,6 +391,12 @@ function renderEvaluationMarkdown(evaluation: Omit<PalaceEvaluation, "markdown">
     "## Missed Changed Files",
     "",
     ...(evaluation.coverage.missedFiles.length ? evaluation.coverage.missedFiles.map((file) => `- ${file}`) : ["- None"]),
+    "",
+    "## Layered Truth",
+    "",
+    ...renderCoverageLayer("Core implementation and focused tests", evaluation.coverage.layers.core),
+    ...renderCoverageLayer("Declared auxiliary evidence", evaluation.coverage.layers.declaredAuxiliary),
+    ...renderCoverageLayer("Latent auxiliary evidence (descriptive only)", evaluation.coverage.layers.latentAuxiliary),
     "",
     "## Route Files",
     "",
@@ -330,4 +408,21 @@ function renderEvaluationMarkdown(evaluation: Omit<PalaceEvaluation, "markdown">
     ""
   ];
   return lines.join("\n");
+}
+
+function formatCoverage(value: number | undefined): string {
+  return value === undefined ? "unverified" : `${Math.round(value * 100)}%`;
+}
+
+function renderCoverageLayer(name: string, layer: PalaceEvaluationCoverageLayer): string[] {
+  return [
+    `### ${name}`,
+    "",
+    `- Coverage: ${formatCoverage(layer.coverage)}`,
+    `- Route focus: ${formatCoverage(layer.routeFocus)}`,
+    `- Files: ${layer.files.length}`,
+    `- Matched: ${layer.matchedFiles.length}`,
+    `- Missed: ${layer.missedFiles.length}`,
+    ""
+  ];
 }

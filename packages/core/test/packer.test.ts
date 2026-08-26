@@ -165,6 +165,11 @@ describe("packContext", () => {
 
   it("filters pitfall board entries toward the packed task", async () => {
     await withFixture("ts-api", async (root) => {
+      await writeFile(
+        path.join(root, "src", "checkout-shipping.ts"),
+        "export function quoteShipping() { return 5; }\n",
+        "utf8"
+      );
       await indexPalace(root);
       await writeMemory({
         root,

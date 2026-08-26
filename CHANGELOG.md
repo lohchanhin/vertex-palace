@@ -2,6 +2,27 @@
 
 ## Unreleased
 
+## 0.4.0-alpha.2 - 2026-08-26
+
+### Added
+
+- Structured task grounding with local, resolved, and unresolved states; bounded GitHub issue/PR metadata resolution; one-hour local reference caching; and explicit abstention with zero source drawers when routing would require guessing.
+- A preregistered evidence-gain expansion score combining task affinity, relation strength, missing-facet gain, source-degree penalty, and redundancy.
+- Layered evaluation truth for core implementation/tests, explicitly declared auxiliary evidence, and descriptive latent auxiliary files.
+- `referencePolicy` support in Core, CLI, and MCP, plus CLI/MCP inputs for layered evaluation.
+
+### Changed
+
+- Evidence-insufficient local routes remain `route-lite` advisory contexts capped at 2,400 estimated tokens unless a real cross-stack, tenant, contract, scope, verification-change, or memory conflict requires a broader mode.
+- High-degree files cannot enter a route solely because they have many relations, and each explicit auxiliary evidence role contributes at most one file during relation expansion.
+- Route assessment and confidence calibration use core truth; latent auxiliary misses are reported without turning a core route into a failure.
+
+### Verification And Limits
+
+- Round 21 remains an immutable negative result and a regression corpus. It is not reused as evidence that alpha.2 qualifies for stable release.
+- npm `latest` remains `0.3.0`. Alpha.2 is intended for the `next` dist-tag until two fresh preregistered rounds pass.
+- Static routing and abstention evidence do not establish lower end-to-end Agent tokens, wall time, or tool calls.
+
 ## 0.4.0 (unpublished candidate) - 2026-08-26
 
 ### Changed

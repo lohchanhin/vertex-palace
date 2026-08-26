@@ -5,3 +5,8 @@ export function printJson(value: unknown): void {
 export function printLines(lines: string[]): void {
   process.stdout.write(`${lines.join("\n")}\n`);
 }
+
+export function parseReferencePolicy(value: string): "auto" | "off" {
+  if (value === "auto" || value === "off") return value;
+  throw new Error(`Unknown reference policy: ${value}`);
+}

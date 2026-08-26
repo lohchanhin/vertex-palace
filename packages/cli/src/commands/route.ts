@@ -2,7 +2,7 @@ import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import type { Command } from "commander";
 import { palaceRoute } from "@vertex-palace/core";
-import { printLines } from "./format";
+import { parseReferencePolicy, printLines } from "./format";
 
 export function registerRoute(program: Command): void {
   program
@@ -12,17 +12,26 @@ export function registerRoute(program: Command): void {
     .option("-r, --root <path>", "Repository root")
     .option("-b, --budget <tokens>", "Input token budget", parseInt)
     .option("-l, --limit <count>", "Maximum route steps", parseInt)
+    .option("--references <policy>", "Resolve opaque GitHub references: auto or off", parseReferencePolicy, "auto")
     .option("--compact", "Hide excluded areas in text output")
     .option("--out <path>", "Write output to a file instead of stdout")
     .option("--json", "Print raw JSON")
     .action(async (taskParts: string[], options) => {
-      const route = await palaceRoute({ root: options.root, task: taskParts.join(" "), budget: options.budget, routeLimit: options.limit });
+      const route = await palaceRoute({
+        root: options.root,
+        task: taskParts.join(" "),
+        budget: options.budget,
+        routeLimit: options.limit,
+        referencePolicy: options.references
+      });
       if (options.json) {
         await writeOutput(`${JSON.stringify(route, null, 2)}\n`, options.out);
         return;
       }
       const lines = [
         `Task type: ${route.taskType}`,
+        `Decision: ${route.decision}`,
+        `Task grounding: ${route.taskGrounding.status} (${route.taskGrounding.resolutionStatus})`,
         `Entry: ${route.entry.floor}${route.entry.wing ? `/${route.entry.wing}` : ""}${route.entry.room ? `/${route.entry.room}` : ""}`,
         `Confidence: ${route.confidence}`,
         ...(route.narrowingEvidence

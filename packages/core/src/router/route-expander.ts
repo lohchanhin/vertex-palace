@@ -1,4 +1,5 @@
-import type { PalaceEdge, PalaceNode } from "@vertex-palace/shared";
+import type { EvidenceRole, PalaceEdge, PalaceNode } from "@vertex-palace/shared";
+import { nodeHasEvidenceRole } from "../evidence/evidence-model";
 import type { ScoredNode } from "./route-scorer";
 
 export type RouteExpansionOptions = {
@@ -8,11 +9,31 @@ export type RouteExpansionOptions = {
   preferVerificationRelations?: boolean;
   minSeedScoreRatio?: number;
   minRelationScoreRatio?: number;
+  requiredRoles?: EvidenceRole[];
+  taskTerms?: string[];
+  minExpansionGain?: number;
+};
+
+type NormalizedRouteExpansionOptions = Required<Omit<RouteExpansionOptions, "requiredRoles" | "taskTerms">> & {
+  requiredRoles: EvidenceRole[];
+  taskTerms: string[];
+};
+
+type ExpansionCandidate = {
+  item: ScoredNode;
+  taskAffinity: number;
+  relationStrength: number;
+  degreePenalty: number;
+  roles: EvidenceRole[];
+  taskTerms: string[];
+  causalSource: boolean;
 };
 
 const FILE_NODE_KINDS = new Set(["file", "api", "test", "config", "doc", "runtime-log"]);
 const EXPANDABLE_RELATIONS = new Set(["imports", "tests", "tested_by", "changed_with", "configures", "depends_on"]);
 const PROVENANCE_RELATIONS = new Set(["changed_with", "configures", "depends_on"]);
+const CAUSAL_RELATIONS = new Set(["imports", "tests", "tested_by", "changed_with", "configures", "depends_on"]);
+const AUXILIARY_ROLES = new Set<EvidenceRole>(["contract", "documentation", "configuration", "generated", "runtime"]);
 
 export function expandRoute(
   scored: ScoredNode[],
@@ -25,6 +46,7 @@ export function expandRoute(
   const byId = new Map(nodes.map((node) => [node.id, node]));
   const bySource = groupBySource(nodes);
   const adjacency = buildAdjacency(edges);
+  const sourceDegrees = buildSourceDegrees(edges, byId);
   const scoredById = new Map(scored.map((item) => [item.node.id, item]));
   const bestScoredBySource = bestBySource(scored);
   const selected = new Map<string, ScoredNode>();
@@ -41,8 +63,12 @@ export function expandRoute(
     selected.set(item.node.id, item);
     selectedSources.add(item.node.sourcePath);
   }
+  const selectedRoles = rolesForSources(selectedSources, bySource, options.requiredRoles);
+  const selectedTerms = termsForSources(selectedSources, bySource, options.taskTerms);
+  const auxiliaryRoleSources = auxiliaryRoleSourcesFor(selectedSources, bySource, options.requiredRoles);
+  const topTaskScore = Math.max(0, ...scored.map((item) => item.score));
 
-  const relationGroups: ScoredNode[][] = [];
+  const relationGroups: ExpansionCandidate[][] = [];
   for (const item of [...selected.values()].slice(0, 8)) {
     const directEdges = uniqueEdges(adjacency.get(item.node.id) ?? []);
     const hasDirectCrossSourceRelation = directEdges.some((edge) => {
@@ -69,11 +95,21 @@ export function expandRoute(
       byId,
       scoredById,
       bestScoredBySource,
-      selectedSources
+      selectedSources,
+      options.requiredRoles,
+      options.taskTerms,
+      selectedRoles,
+      selectedTerms,
+      sourceDegrees,
+      topTaskScore
     );
-    const bestRelationScore = candidates[0]?.score ?? 0;
+    const bestRelationScore = candidates[0]
+      ? expansionGain(candidates[0], selectedRoles, selectedTerms)
+      : 0;
     const strongCandidates = options.focused || options.bounded
-      ? candidates.filter((candidate) => candidate.score >= bestRelationScore * options.minRelationScoreRatio)
+      ? candidates.filter((candidate) =>
+          expansionGain(candidate, selectedRoles, selectedTerms) >= bestRelationScore * options.minRelationScoreRatio
+        )
       : candidates;
     relationGroups.push(
       options.focused
@@ -92,13 +128,30 @@ export function expandRoute(
       const group = relationGroups[groupIndex];
       while (
         relationOffsets[groupIndex] < group.length
-        && selectedSources.has(group[relationOffsets[groupIndex]].node.sourcePath)
+        && !isExpansionCandidateUsable(
+          group[relationOffsets[groupIndex]],
+          selectedSources,
+          selectedRoles,
+          selectedTerms,
+          auxiliaryRoleSources,
+          options.requiredRoles,
+          options.minExpansionGain
+        )
       ) relationOffsets[groupIndex] += 1;
       const candidate = group[relationOffsets[groupIndex]];
       if (!candidate) continue;
       relationOffsets[groupIndex] += 1;
-      selected.set(candidate.node.id, candidate);
-      selectedSources.add(candidate.node.sourcePath);
+      const gain = expansionGain(candidate, selectedRoles, selectedTerms);
+      const item = withExpansionReason(candidate, gain);
+      selected.set(item.node.id, item);
+      selectedSources.add(item.node.sourcePath);
+      for (const role of candidate.roles) {
+        selectedRoles.add(role);
+        if (AUXILIARY_ROLES.has(role) && !auxiliaryRoleSources.has(role)) {
+          auxiliaryRoleSources.set(role, item.node.sourcePath);
+        }
+      }
+      for (const term of candidate.taskTerms) selectedTerms.add(term);
       addedRelation = true;
       if (selected.size >= limit) break;
     }
@@ -121,7 +174,7 @@ export function expandRoute(
     : result.slice(0, limit);
 }
 
-function normalizeOptions(input: number | RouteExpansionOptions): Required<RouteExpansionOptions> {
+function normalizeOptions(input: number | RouteExpansionOptions): NormalizedRouteExpansionOptions {
   if (typeof input === "number") {
     return {
       limit: input,
@@ -129,7 +182,10 @@ function normalizeOptions(input: number | RouteExpansionOptions): Required<Route
       bounded: false,
       preferVerificationRelations: false,
       minSeedScoreRatio: 0.84,
-      minRelationScoreRatio: 0.8
+      minRelationScoreRatio: 0.8,
+      requiredRoles: [],
+      taskTerms: [],
+      minExpansionGain: 0.55
     };
   }
   return {
@@ -138,7 +194,10 @@ function normalizeOptions(input: number | RouteExpansionOptions): Required<Route
     bounded: input.bounded ?? false,
     preferVerificationRelations: input.preferVerificationRelations ?? false,
     minSeedScoreRatio: input.minSeedScoreRatio ?? 0.84,
-    minRelationScoreRatio: input.minRelationScoreRatio ?? 0.8
+    minRelationScoreRatio: input.minRelationScoreRatio ?? 0.8,
+    requiredRoles: [...new Set(input.requiredRoles ?? [])],
+    taskTerms: normalizeTaskTerms(input.taskTerms ?? []),
+    minExpansionGain: input.minExpansionGain ?? 0.55
   };
 }
 
@@ -149,9 +208,15 @@ function relationCandidates(
   byId: Map<string, PalaceNode>,
   scoredById: Map<string, ScoredNode>,
   bestScoredBySource: Map<string, ScoredNode>,
-  selectedSources: Set<string>
-): ScoredNode[] {
-  const candidates = new Map<string, ScoredNode>();
+  selectedSources: Set<string>,
+  requiredRoles: EvidenceRole[],
+  taskTerms: string[],
+  selectedRoles: Set<EvidenceRole>,
+  selectedTerms: Set<string>,
+  sourceDegrees: Map<string, number>,
+  topTaskScore: number
+): ExpansionCandidate[] {
+  const candidates = new Map<string, ExpansionCandidate>();
   for (const edge of edges) {
     const anchorId = anchorIds.has(edge.from) ? edge.from : anchorIds.has(edge.to) ? edge.to : undefined;
     if (!anchorId) continue;
@@ -162,25 +227,106 @@ function relationCandidates(
     const direct = !exact || (bestForSource?.score ?? -Infinity) > exact.score ? bestForSource : exact;
     const relationScore = anchor.score * edge.weight * 0.5;
     const score = direct ? direct.score * 0.55 + relationScore * 0.45 : relationScore * 0.45;
-    const candidate: ScoredNode = {
-      node: direct?.node ?? neighbor,
-      score,
-      reasons: [
-        `expanded through ${edge.type} relation from ${anchor.node.sourcePath}`,
-        ...(direct?.reasons ?? [])
-      ].slice(0, 4),
-      matchedKeywordCount: direct?.matchedKeywordCount ?? 0
+    const candidateNode = direct?.node ?? neighbor;
+    const candidate: ExpansionCandidate = {
+      item: {
+        node: candidateNode,
+        score,
+        reasons: [
+          `expanded through ${edge.type} relation from ${anchor.node.sourcePath}`,
+          ...(direct?.reasons ?? [])
+        ].slice(0, 4),
+        matchedKeywordCount: direct?.matchedKeywordCount ?? 0
+      },
+      taskAffinity: clamp(topTaskScore ? (direct?.score ?? 0) / topTaskScore : 0),
+      relationStrength: clamp(edge.weight),
+      degreePenalty: Math.min(1, Math.log2(1 + (sourceDegrees.get(candidateNode.sourcePath) ?? 0)) / 8),
+      roles: requiredRoles.filter((role) => nodeHasEvidenceRole(candidateNode, role)),
+      taskTerms: matchingTaskTerms(candidateNode, taskTerms),
+      causalSource: CAUSAL_RELATIONS.has(edge.type)
     };
-    const existing = candidates.get(candidate.node.sourcePath);
-    if (!existing || candidate.score > existing.score) candidates.set(candidate.node.sourcePath, candidate);
+    const facetGain = expansionFacetGain(candidate, selectedRoles, selectedTerms);
+    const eligible = facetGain > 0
+      || (candidate.taskAffinity >= 0.65 && candidate.relationStrength >= 0.75 && candidate.degreePenalty < 0.75);
+    if (!eligible) continue;
+    const existing = candidates.get(candidateNode.sourcePath);
+    if (!existing || expansionGain(candidate, selectedRoles, selectedTerms) > expansionGain(existing, selectedRoles, selectedTerms)) {
+      candidates.set(candidateNode.sourcePath, candidate);
+    }
   }
-  const sorted = [...candidates.values()].sort((a, b) => b.score - a.score || a.node.sourcePath.localeCompare(b.node.sourcePath));
+  const sorted = [...candidates.values()].sort((a, b) =>
+    expansionGain(b, selectedRoles, selectedTerms) - expansionGain(a, selectedRoles, selectedTerms)
+      || b.item.score - a.item.score
+      || a.item.node.sourcePath.localeCompare(b.item.node.sourcePath)
+  );
   const anchorVersion = versionSegment(anchor.node.sourcePath);
-  if (!anchorVersion || !sorted.some((candidate) => versionSegment(candidate.node.sourcePath) === anchorVersion)) return sorted;
+  if (!anchorVersion || !sorted.some((candidate) => versionSegment(candidate.item.node.sourcePath) === anchorVersion)) return sorted;
   return sorted.filter((candidate) => {
-    const candidateVersion = versionSegment(candidate.node.sourcePath);
+    const candidateVersion = versionSegment(candidate.item.node.sourcePath);
     return !candidateVersion || candidateVersion === anchorVersion;
   });
+}
+
+function isExpansionCandidateUsable(
+  candidate: ExpansionCandidate,
+  selectedSources: Set<string>,
+  selectedRoles: Set<EvidenceRole>,
+  selectedTerms: Set<string>,
+  auxiliaryRoleSources: Map<EvidenceRole, string>,
+  requiredRoles: EvidenceRole[],
+  minExpansionGain: number
+): boolean {
+  if (selectedSources.has(candidate.item.node.sourcePath)) return false;
+  const newRoles = candidate.roles.filter((role) => !selectedRoles.has(role));
+  const newTerms = candidate.taskTerms.filter((term) => !selectedTerms.has(term));
+  const newAuxiliaryRole = newRoles.some((role) =>
+    AUXILIARY_ROLES.has(role) && !auxiliaryRoleSources.has(role)
+  );
+  if (candidate.degreePenalty >= 0.5 && !newRoles.length && !newTerms.length) return false;
+  const coreComplete = requiredRoles.every((role) => selectedRoles.has(role));
+  const gain = expansionGain(candidate, selectedRoles, selectedTerms);
+  if (coreComplete && gain < minExpansionGain) return false;
+  if (candidate.roles.some((role) => AUXILIARY_ROLES.has(role)) && !newAuxiliaryRole && !newTerms.length && !candidate.causalSource) {
+    return false;
+  }
+  return expansionFacetGain(candidate, selectedRoles, selectedTerms) > 0
+    || (candidate.taskAffinity >= 0.65 && candidate.relationStrength >= 0.75 && candidate.degreePenalty < 0.75);
+}
+
+function expansionGain(
+  candidate: ExpansionCandidate,
+  selectedRoles: Set<EvidenceRole>,
+  selectedTerms: Set<string>
+): number {
+  const facetGain = expansionFacetGain(candidate, selectedRoles, selectedTerms);
+  const redundancy = facetGain === 0 ? 1 : 0;
+  return round(
+    0.45 * candidate.taskAffinity
+      + 0.30 * candidate.relationStrength
+      + 0.25 * facetGain
+      - 0.20 * candidate.degreePenalty
+      - 0.25 * redundancy
+  );
+}
+
+function expansionFacetGain(
+  candidate: ExpansionCandidate,
+  selectedRoles: Set<EvidenceRole>,
+  selectedTerms: Set<string>
+): number {
+  const addsRole = candidate.roles.some((role) => !selectedRoles.has(role));
+  const addsTerm = candidate.taskTerms.some((term) => !selectedTerms.has(term));
+  return Math.min(1, (addsRole ? 0.5 : 0) + (addsTerm ? 0.3 : 0) + (candidate.causalSource ? 0.2 : 0));
+}
+
+function withExpansionReason(candidate: ExpansionCandidate, gain: number): ScoredNode {
+  return {
+    ...candidate.item,
+    reasons: [
+      `evidence gain ${gain.toFixed(3)} (affinity ${candidate.taskAffinity.toFixed(3)}, relation ${candidate.relationStrength.toFixed(3)}, degree penalty ${candidate.degreePenalty.toFixed(3)})`,
+      ...candidate.item.reasons
+    ].slice(0, 4)
+  };
 }
 
 function neighborFor(edge: PalaceEdge, anchorId: string, byId: Map<string, PalaceNode>): PalaceNode | undefined {
@@ -261,6 +407,92 @@ function buildAdjacency(edges: PalaceEdge[]): Map<string, PalaceEdge[]> {
     adjacency.set(edge.to, toEdges);
   }
   return adjacency;
+}
+
+function buildSourceDegrees(edges: PalaceEdge[], byId: Map<string, PalaceNode>): Map<string, number> {
+  const neighbors = new Map<string, Set<string>>();
+  for (const edge of edges) {
+    if (!EXPANDABLE_RELATIONS.has(edge.type)) continue;
+    const from = byId.get(edge.from)?.sourcePath;
+    const to = byId.get(edge.to)?.sourcePath;
+    if (!from || !to || from === to) continue;
+    const fromNeighbors = neighbors.get(from) ?? new Set<string>();
+    fromNeighbors.add(to);
+    neighbors.set(from, fromNeighbors);
+    const toNeighbors = neighbors.get(to) ?? new Set<string>();
+    toNeighbors.add(from);
+    neighbors.set(to, toNeighbors);
+  }
+  return new Map([...neighbors].map(([sourcePath, values]) => [sourcePath, values.size]));
+}
+
+function rolesForSources(
+  sources: Set<string>,
+  bySource: Map<string, PalaceNode[]>,
+  requiredRoles: EvidenceRole[]
+): Set<EvidenceRole> {
+  const roles = new Set<EvidenceRole>();
+  for (const sourcePath of sources) {
+    for (const node of bySource.get(sourcePath) ?? []) {
+      for (const role of requiredRoles) {
+        if (nodeHasEvidenceRole(node, role)) roles.add(role);
+      }
+    }
+  }
+  return roles;
+}
+
+function auxiliaryRoleSourcesFor(
+  sources: Set<string>,
+  bySource: Map<string, PalaceNode[]>,
+  requiredRoles: EvidenceRole[]
+): Map<EvidenceRole, string> {
+  const result = new Map<EvidenceRole, string>();
+  for (const sourcePath of sources) {
+    for (const node of bySource.get(sourcePath) ?? []) {
+      for (const role of requiredRoles) {
+        if (AUXILIARY_ROLES.has(role) && nodeHasEvidenceRole(node, role) && !result.has(role)) {
+          result.set(role, sourcePath);
+        }
+      }
+    }
+  }
+  return result;
+}
+
+function termsForSources(
+  sources: Set<string>,
+  bySource: Map<string, PalaceNode[]>,
+  taskTerms: string[]
+): Set<string> {
+  const terms = new Set<string>();
+  for (const sourcePath of sources) {
+    for (const node of bySource.get(sourcePath) ?? []) {
+      for (const term of matchingTaskTerms(node, taskTerms)) terms.add(term);
+    }
+  }
+  return terms;
+}
+
+function matchingTaskTerms(node: PalaceNode, taskTerms: string[]): string[] {
+  const searchText = [node.sourcePath, node.title, node.summary, ...node.tags].join(" ").toLowerCase();
+  return taskTerms.filter((term) => searchText.includes(term));
+}
+
+function normalizeTaskTerms(terms: string[]): string[] {
+  return [...new Set(
+    terms
+      .map((term) => term.trim().toLowerCase())
+      .filter((term) => term.length >= 3)
+  )];
+}
+
+function clamp(value: number): number {
+  return Math.max(0, Math.min(1, value));
+}
+
+function round(value: number): number {
+  return Number(value.toFixed(6));
 }
 
 function groupBySource(nodes: PalaceNode[]): Map<string, PalaceNode[]> {

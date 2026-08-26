@@ -95,6 +95,8 @@ describe("palaceContext", () => {
       expect(output.payload?.contextEstimatedTokens).toBeLessThanOrEqual(output.modeSelection?.maxContextTokens ?? 0);
       expect(output.json).toEqual({
         mode: "bypass",
+        decision: "route",
+        taskGrounding: output.taskGrounding,
         evidenceStatus: "sufficient",
         interventionPolicy: "bounded",
         primaryCandidate: "src/services/token.service.ts",
@@ -102,6 +104,8 @@ describe("palaceContext", () => {
       });
       expect(Object.keys(output.json as Record<string, unknown>)).toEqual([
         "mode",
+        "decision",
+        "taskGrounding",
         "evidenceStatus",
         "interventionPolicy",
         "primaryCandidate",
@@ -136,12 +140,20 @@ describe("palaceContext", () => {
       expect(output.mode).toBe("bypass");
       expect(json.reason).toContain("run pnpm test");
       expect(json.reason).toContain("final once: `git diff --check; git status --short; git diff -- src/services/token.service.ts`");
-      expect(Object.keys(json)).toEqual(["mode", "evidenceStatus", "interventionPolicy", "primaryCandidate", "reason"]);
-      expect(output.payload?.contextEstimatedTokens).toBeLessThan(120);
+      expect(Object.keys(json)).toEqual([
+        "mode",
+        "decision",
+        "taskGrounding",
+        "evidenceStatus",
+        "interventionPolicy",
+        "primaryCandidate",
+        "reason"
+      ]);
+      expect(output.payload?.contextEstimatedTokens).toBeLessThan(200);
     });
   });
 
-  it("widens a focused implicit candidate when evidence remains insufficient", async () => {
+  it("keeps a focused implicit candidate bounded when evidence remains insufficient", async () => {
     await withFixture("ts-api", async (root) => {
       const target = path.join(root, "src", "format-currency.mjs");
       await writeFile(target, "export function formatCurrency(value) { return `$${value.toFixed(2)}`; }\n", "utf8");
@@ -161,12 +173,12 @@ describe("palaceContext", () => {
         recommendedExecution: string[];
       };
 
-      expect(output.mode).toBe("full-palace");
+      expect(output.mode).toBe("route-lite");
       expect(output.modeSelection).toMatchObject({
         evidenceStatus: "insufficient",
         interventionPolicy: "advisory",
         selectedModeBeforeMemory: "bypass",
-        selectedModeAfterMemory: "full-palace"
+        selectedModeAfterMemory: "route-lite"
       });
       expect(json.selection).toMatchObject({
         evidenceStatus: "insufficient",
@@ -177,11 +189,11 @@ describe("palaceContext", () => {
       ]);
       expect(json.executionBoundaries.stopEnforced).toBe(false);
       expect(json.recommendedExecution.some((step) => step.includes("starting points"))).toBe(true);
-      expect(output.payload?.contextEstimatedTokens).toBeLessThanOrEqual(6000);
+      expect(output.payload?.contextEstimatedTokens).toBeLessThanOrEqual(2400);
     });
   });
 
-  it("widens all repeated small-local trials when evidence remains insufficient", async () => {
+  it("keeps all repeated small-local trials bounded when evidence remains insufficient", async () => {
     await withFixture("ts-api", async (root) => {
       const target = path.join(root, "src", "format-currency.mjs");
       const noiseRoot = path.join(root, "noise");
@@ -208,10 +220,10 @@ describe("palaceContext", () => {
       }
 
       expect(outputs.map((output) => output.mode)).toEqual([
-        "full-palace",
-        "full-palace",
-        "full-palace",
-        "full-palace"
+        "route-lite",
+        "route-lite",
+        "route-lite",
+        "route-lite"
       ]);
       for (const output of outputs) {
         const json = output.json as {
@@ -224,7 +236,7 @@ describe("palaceContext", () => {
           evidenceStatus: "insufficient",
           interventionPolicy: "advisory",
           selectedModeBeforeMemory: "bypass",
-          selectedModeAfterMemory: "full-palace"
+          selectedModeAfterMemory: "route-lite"
         });
         expect(json.selection).toMatchObject({
           evidenceStatus: "insufficient",
@@ -235,7 +247,7 @@ describe("palaceContext", () => {
         ]);
         expect(json.executionBoundaries.stopEnforced).toBe(false);
         expect(json.recommendedExecution.some((step) => step.includes("starting points"))).toBe(true);
-        expect(output.payload?.contextEstimatedTokens).toBeLessThanOrEqual(6000);
+        expect(output.payload?.contextEstimatedTokens).toBeLessThanOrEqual(2400);
       }
     });
   });
@@ -379,6 +391,8 @@ describe("palaceContext", () => {
       });
       expect(Object.keys(output.json as Record<string, unknown>)).toEqual([
         "mode",
+        "decision",
+        "taskGrounding",
         "evidenceStatus",
         "interventionPolicy",
         "primaryCandidate",
@@ -458,7 +472,7 @@ describe("palaceContext", () => {
       expect(json.executionBoundaries.stopEnforced).toBe(true);
       expect(output.executionBoundaries).toEqual(json.executionBoundaries);
       expect(output.payload?.memoryItemCount).toBe(0);
-      expect(output.payload?.contextEstimatedTokens).toBeLessThan(2000);
+      expect(output.payload?.contextEstimatedTokens).toBeLessThanOrEqual(2400);
     });
   });
 
@@ -617,20 +631,21 @@ describe("palaceContext", () => {
           "No selected implementation independently covers both leading bugfix anchors: payload, parsing."
         ]
       });
-      expect(output.mode).toBe("full-palace");
+      expect(output.mode).toBe("route-lite");
       expect(output.modeSelection?.evidenceStatus).toBe("insufficient");
       expect(output.modeSelection?.interventionPolicy).toBe("advisory");
       expect(json.executionBoundaries.stopEnforced).toBe(false);
     });
   });
 
-  it("fails open when routing evidence is insufficient", async () => {
+  it("abstains when a task cannot be grounded locally or remotely", async () => {
     await withFixture("ts-api", async (root) => {
       const output = await palaceContext({
         root,
         task: "Investigate the unexplained quasar handshake.",
         budget: 6000,
         auto: true,
+        mode: "full-palace",
         format: "json"
       });
       const json = output.json as {
@@ -646,6 +661,8 @@ describe("palaceContext", () => {
         recommendedExecution: string[];
       };
 
+      expect(output.decision).toBe("abstain");
+      expect(output.mode).toBe("route-lite");
       expect(output.modeSelection?.evidenceStatus).toBe("insufficient");
       expect(output.modeSelection?.interventionPolicy).toBe("advisory");
       expect(json.selection).toMatchObject({
@@ -654,16 +671,17 @@ describe("palaceContext", () => {
       });
       expect(json.executionBoundaries.stopEnforced).toBe(false);
       expect(json.executionBoundaries.doNot).toContain(
-        "Do not treat Palace omissions as proof that a file or dependency is irrelevant."
+        "Do not guess source files from an opaque issue or pull-request number."
       );
       expect(json.executionBoundaries.stopCondition).toContain(
-        "Expand beyond the routed paths whenever the task, code, tests, or runtime evidence points elsewhere."
+        "Routing remains paused until the issue or pull-request body, expected behavior, a symbol, or a file path is available."
       );
-      expect(json.recommendedExecution.some((step) => step.includes("starting points"))).toBe(true);
+      expect(json.recommendedExecution.some((step) => step.includes("Provide the referenced issue"))).toBe(true);
+      expect((json as { context: unknown[] }).context).toEqual([]);
     });
   });
 
-  it("delivers relevant seeded memory when auto selects full-palace", async () => {
+  it("delivers relevant seeded memory in guarded mode for tenant isolation", async () => {
     await withFixture("ts-api", async (root) => {
       const noiseRoot = path.join(root, "noise");
       await mkdir(noiseRoot, { recursive: true });
@@ -673,6 +691,12 @@ describe("palaceContext", () => {
           `export const value${index} = ${index};\n`,
           "utf8"
         ))
+      );
+      await mkdir(path.join(root, "src", "aurora"), { recursive: true });
+      await writeFile(
+        path.join(root, "src", "aurora", "article-renderer.ts"),
+        "export const renderAuroraArticle = () => 'article';\n",
+        "utf8"
       );
       await indexPalace(root);
       await writeMemory({
@@ -695,8 +719,8 @@ describe("palaceContext", () => {
         auto: true
       });
 
-      expect(output.mode).toBe("full-palace");
-      expect(output.modeSelection?.memoryLevel).toBe("scoped-summary");
+      expect(output.mode).toBe("guarded-memory-palace");
+      expect(output.modeSelection?.memoryLevel).toBe("guarded-evidence");
       expect(output.payload?.memoryItemCount).toBe(2);
       expect(output.payload?.memoryCandidateCount).toBe(2);
       expect(output.payload?.memoryExcludedCount).toBe(0);
@@ -707,7 +731,7 @@ describe("palaceContext", () => {
       });
       expect(output.memoryTelemetry?.candidateIds).toEqual(output.memoryTelemetry?.includedIds);
       expect(output.payload?.guardrailCount).toBeGreaterThanOrEqual(1);
-      expect(output.markdown).toContain("## Relevant Memory");
+      expect(output.markdown).toContain("## Guarded Memory");
       expect(output.markdown).toContain("## Memory Selection");
       expect(output.markdown).toContain("## Primary");
       expect(output.markdown).toContain("## Support");
@@ -737,7 +761,7 @@ describe("palaceContext", () => {
         guardrails: string[];
       };
 
-      expect(jsonOutput.mode).toBe("full-palace");
+      expect(jsonOutput.mode).toBe("guarded-memory-palace");
       expect(json.memory).toHaveLength(2);
       expect(json.memoryTelemetry.memoryCandidates).toBe(2);
       expect(json.memoryTelemetry.memoryIncluded).toBe(2);
@@ -884,6 +908,12 @@ describe("palaceContext", () => {
           "utf8"
         ))
       );
+      await mkdir(path.join(root, "src", "aurora"), { recursive: true });
+      await writeFile(
+        path.join(root, "src", "aurora", "article-renderer.ts"),
+        "export const renderAuroraArticle = () => 'article';\n",
+        "utf8"
+      );
       await indexPalace(root);
       const entries = Array.from({ length: 50 }, (_, index) => ({
         id: `memory-${String(index).padStart(2, "0")}`,
@@ -907,6 +937,7 @@ describe("palaceContext", () => {
         task: "Fix the Aurora article hero contrast renderer without changing other tenants",
         budget: 6000,
         auto: true,
+        mode: "full-palace",
         format: "json"
       });
 

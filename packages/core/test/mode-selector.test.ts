@@ -114,7 +114,7 @@ describe("selectPalaceMode", () => {
     expect(selection.riskSignals.scopeRisk).toBe(false);
   });
 
-  it("widens an automatic focused delivery when required evidence is incomplete", () => {
+  it("keeps automatic focused delivery bounded when required evidence is incomplete", () => {
     const route = focusedRoute(0.8);
     route.evidenceClosure = {
       status: "insufficient",
@@ -138,12 +138,12 @@ describe("selectPalaceMode", () => {
       { relevantMemoryCount: 0 }
     );
 
-    expect(selection.mode).toBe("full-palace");
+    expect(selection.mode).toBe("route-lite");
     expect(selection.evidenceStatus).toBe("insufficient");
     expect(selection.interventionPolicy).toBe("advisory");
     expect(selection.evidenceReasons).toContain("Missing required verification evidence.");
     expect(selection.reasons).toContain(
-      "Automatic bypass selection was widened because routed evidence is insufficient."
+      "Automatic bypass selection was changed to bounded advisory routing because evidence is insufficient."
     );
   });
 
@@ -184,13 +184,13 @@ describe("selectPalaceMode", () => {
       { relevantMemoryCount: 0 }
     );
 
-    expect(selection.mode).toBe("full-palace");
+    expect(selection.mode).toBe("route-lite");
     expect(selection.evidenceStatus).toBe("insufficient");
     expect(selection.interventionPolicy).toBe("advisory");
     expect(selection.evidenceReasons).toContain("Route confidence 0.35 is below the 0.7 sufficiency threshold.");
   });
 
-  it("keeps a high score advisory and full when independent narrowing evidence is missing", () => {
+  it("keeps a high score advisory and bounded when independent narrowing evidence is missing", () => {
     const route = focusedRoute(0.8);
     route.narrowingEvidence = {
       independentImplementationAnchor: "missing",
@@ -206,7 +206,7 @@ describe("selectPalaceMode", () => {
       { relevantMemoryCount: 0 }
     );
 
-    expect(selection.mode).toBe("full-palace");
+    expect(selection.mode).toBe("route-lite");
     expect(selection.evidenceStatus).toBe("insufficient");
     expect(selection.interventionPolicy).toBe("advisory");
     expect(selection.evidenceReasons).toContain(
@@ -314,12 +314,12 @@ describe("selectPalaceMode", () => {
     expect(selection.riskSignals.publicContractRisk).toBe(true);
   });
 
-  it("keeps scoped memory enabled when a large repository selects full-palace", () => {
+  it("keeps scoped memory guarded when a large repository has tenant isolation risk", () => {
     const task = "Fix the Aurora article hero contrast regression while preserving the appearance of every other tenant.";
     const selection = selectPalaceMode(smallIndex(120), focusedRoute(), task);
 
-    expect(selection.mode).toBe("full-palace");
-    expect(selection.memoryLevel).toBe("scoped-summary");
+    expect(selection.mode).toBe("guarded-memory-palace");
+    expect(selection.memoryLevel).toBe("guarded-evidence");
     expect(selection.disabledSections).not.toContain("memory");
   });
 });

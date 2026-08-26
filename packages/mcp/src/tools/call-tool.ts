@@ -34,7 +34,8 @@ export async function callTool(name: string, args: ToolArgs): Promise<unknown> {
         routeLimit: asNumber(args.routeLimit),
         maxDrawers: asNumber(args.maxDrawers),
         auto: typeof args.auto === "boolean" ? args.auto : undefined,
-        mode: asPalaceMode(args.mode)
+        mode: asPalaceMode(args.mode),
+        referencePolicy: asReferencePolicy(args.referencePolicy)
       });
       return serializePackOutput(output);
     }
@@ -43,7 +44,8 @@ export async function callTool(name: string, args: ToolArgs): Promise<unknown> {
         root: asString(args.root),
         task: requiredString(args.task, "task"),
         budget: asNumber(args.budget),
-        routeLimit: asNumber(args.routeLimit)
+        routeLimit: asNumber(args.routeLimit),
+        referencePolicy: asReferencePolicy(args.referencePolicy)
       });
     case "palace_pack":
       return palacePack({
@@ -54,7 +56,8 @@ export async function callTool(name: string, args: ToolArgs): Promise<unknown> {
         routeId: asString(args.routeId),
         routeLimit: asNumber(args.routeLimit),
         maxDrawers: asNumber(args.maxDrawers),
-        includeExcluded: typeof args.includeExcluded === "boolean" ? args.includeExcluded : undefined
+        includeExcluded: typeof args.includeExcluded === "boolean" ? args.includeExcluded : undefined,
+        referencePolicy: asReferencePolicy(args.referencePolicy)
       });
     case "palace_evaluate":
       return palaceEvaluate({
@@ -62,9 +65,13 @@ export async function callTool(name: string, args: ToolArgs): Promise<unknown> {
         task: requiredString(args.task, "task"),
         routeId: asString(args.routeId),
         changedFiles: asStringArray(args.changedFiles),
+        coreFiles: asStringArray(args.coreFiles),
+        declaredAuxiliaryFiles: asStringArray(args.declaredAuxiliaryFiles),
+        latentAuxiliaryFiles: asStringArray(args.latentAuxiliaryFiles),
         budget: asNumber(args.budget),
         routeLimit: asNumber(args.routeLimit),
-        maxDrawers: asNumber(args.maxDrawers)
+        maxDrawers: asNumber(args.maxDrawers),
+        referencePolicy: asReferencePolicy(args.referencePolicy)
       });
     case "palace_open":
       return palaceOpen({
@@ -116,4 +123,8 @@ function asPalaceMode(value: unknown): PalaceMode | undefined {
   return typeof value === "string" && ["bypass", "route-lite", "full-palace", "guarded-memory-palace"].includes(value)
     ? value as PalaceMode
     : undefined;
+}
+
+function asReferencePolicy(value: unknown): "auto" | "off" | undefined {
+  return value === "auto" || value === "off" ? value : undefined;
 }

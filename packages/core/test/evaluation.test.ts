@@ -30,6 +30,9 @@ describe("evaluateRoute", () => {
       expect(evaluation.context.tokenReductionPercent).toBeGreaterThan(0);
       expect(evaluation.context.repositoryToPackRatio).toBeGreaterThan(1);
       expect(evaluation.coverage.changedFileCoverage).toBe(1);
+      expect(evaluation.coverage.layers.core).toMatchObject({ coverage: 1, missedFiles: [] });
+      expect(evaluation.coverage.layers.declaredAuxiliary.coverage).toBeUndefined();
+      expect(evaluation.coverage.layers.latentAuxiliary.coverage).toBeUndefined();
       expect(evaluation.coverage.matchedFiles).toEqual([
         "src/controllers/auth.controller.ts",
         "src/services/token.service.ts"
@@ -100,6 +103,39 @@ describe("evaluateRoute", () => {
           "Route missed 1 changed file(s).",
           "Route confidence is higher than observed changed-file coverage."
         ])
+      );
+    });
+  });
+
+  it("gates on declared auxiliary truth but reports latent auxiliary misses descriptively", async () => {
+    await withFixture("ts-api", async (root) => {
+      await mkdir(path.join(root, "docs"), { recursive: true });
+      await writeFile(path.join(root, "docs", "required-note.md"), "# Required note\n", "utf8");
+      await indexPalace(root);
+
+      const declared = await evaluateRoute(root, "fix login refresh token bug", {
+        coreFiles: ["src/controllers/auth.controller.ts", "src/services/token.service.ts"],
+        declaredAuxiliaryFiles: ["docs/required-note.md"],
+        routeLimit: 8
+      });
+      expect(declared.coverage.layers.core.coverage).toBe(1);
+      expect(declared.coverage.layers.declaredAuxiliary).toMatchObject({
+        coverage: 0,
+        missedFiles: ["docs/required-note.md"]
+      });
+      expect(declared.assessment).toBe("needs-review");
+
+      const latent = await evaluateRoute(root, "fix login refresh token bug", {
+        coreFiles: ["src/controllers/auth.controller.ts", "src/services/token.service.ts"],
+        latentAuxiliaryFiles: ["docs/required-note.md"],
+        routeLimit: 8
+      });
+      expect(latent.coverage.layers.core.coverage).toBe(1);
+      expect(latent.coverage.layers.latentAuxiliary.coverage).toBe(0);
+      expect(latent.calibration.observedCoverage).toBe(1);
+      expect(latent.assessment).toBe("strong");
+      expect(latent.warnings).toContain(
+        "1 latent auxiliary file(s) were not routed; this is descriptive, not a core failure."
       );
     });
   });

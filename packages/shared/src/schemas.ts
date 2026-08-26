@@ -14,16 +14,21 @@ export const ContextInputSchema = TaskInputSchema.extend({
   routeLimit: z.number().int().positive().optional(),
   maxDrawers: z.number().int().positive().optional(),
   auto: z.boolean().optional(),
-  mode: z.enum(["bypass", "route-lite", "full-palace", "guarded-memory-palace"]).optional()
+  mode: z.enum(["bypass", "route-lite", "full-palace", "guarded-memory-palace"]).optional(),
+  referencePolicy: z.enum(["auto", "off"]).optional()
 });
 
 export const EvaluationInputSchema = RootInputSchema.extend({
   task: z.string().min(1),
   routeId: z.string().optional(),
   changedFiles: z.array(z.string()).optional(),
+  coreFiles: z.array(z.string()).optional(),
+  declaredAuxiliaryFiles: z.array(z.string()).optional(),
+  latentAuxiliaryFiles: z.array(z.string()).optional(),
   budget: z.number().int().positive().optional(),
   routeLimit: z.number().int().positive().optional(),
-  maxDrawers: z.number().int().positive().optional()
+  maxDrawers: z.number().int().positive().optional(),
+  referencePolicy: z.enum(["auto", "off"]).optional()
 });
 
 export const MemoryInputSchema = RootInputSchema.extend({
