@@ -1,0 +1,3503 @@
+{
+  "schemaVersion": 1,
+  "studyId": "local-blind-routing-validation-round-21-0.4-stable-candidate",
+  "generatedAt": "2026-08-26T13:29:42.777Z",
+  "status": "completed",
+  "evidenceClass": "local-hash-frozen-candidate-held-out-paired-static-routing",
+  "publicPreregistration": true,
+  "claimBoundary": "First paired static-routing observation for the publicly preregistered Round 21 targets, immutable publicly committed 0.4 stable-candidate tarball, and public 0.3 stable baseline. No product tuning, target removal, oracle change, gate change, or condition-order change occurred before this result. It does not execute target tests or an Agent and cannot support Agent correctness, end-to-end reported Token, Agent tool-call, or Agent wall-time claims.",
+  "validityFailures": [],
+  "candidateGateStatus": "failed",
+  "candidateGateFailures": [
+    "implementation/path-derived focused-test coverage was incomplete",
+    "bounded auxiliary coverage was incomplete",
+    "target-macro changed-file coverage fell below 0.90",
+    "target-macro route focus fell below 0.70",
+    "a target changed-file coverage fell below 0.50",
+    "a target route focus fell below 0.40"
+  ],
+  "baselineGateStatus": "failed",
+  "baselineGateFailures": [
+    "not all formal repetitions completed",
+    "task-type mapping was incomplete",
+    "implementation/path-derived focused-test coverage was incomplete",
+    "bounded auxiliary coverage was incomplete",
+    "routes were not deterministic",
+    "target-macro route focus fell below 0.70",
+    "a target route focus fell below 0.40",
+    "unsafe narrow modes were observed",
+    "reported and independent route metrics disagreed",
+    "evaluate routes and context boundaries disagreed"
+  ],
+  "advancementStatus": "not-eligible-for-agent-protocol",
+  "frozenInputs": {
+    "manifestPath": "docs/research/evidence/local-blind-routing-target-manifest-0.4-stable-round-21.json",
+    "manifestSha256": "C79515B35BA01722973644EC027B4EE789FDAFE39D6578E99EC11D358F29B80A",
+    "candidateFreezePath": "docs/research/evidence/local-blind-candidate-freeze-0.4-stable-round-21.json",
+    "candidateFreezeSha256": "2C49CCEC5E252DE49B6728B2FE2177139AB57475D35C3FD1AFF2737E056F372A",
+    "validationFreezePath": "docs/research/evidence/local-blind-routing-validation-freeze-0.4-stable-round-21.json",
+    "validationFreezeSha256": "58644707482F4300598CE484B48BCE1949FDCEE1F5F08A4918979CA3705A43D6"
+  },
+  "products": {
+    "baseline": {
+      "role": "public-0.3-stable-baseline",
+      "productCommit": "1331d9da0aa242549026d70e7c752638c3169044",
+      "cliSha256": "ED63B31DA23240D958E71874BD61A09427659327DC8460D88A3A41D33F5391DE",
+      "build": {
+        "cliPath": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-local-blind-round-21-validation-AwSMVi\\_baseline-product\\node_modules\\vertex-palace\\dist\\palace.cjs",
+        "package": "vertex-palace@0.3.0",
+        "version": "0.3.0",
+        "registry": "https://registry.npmjs.org/",
+        "elapsedMs": 5517,
+        "installElapsedMs": 5490,
+        "installLogSha256": "5FF45B1723538AA8FDDA32B629E3E24BF35F01AB4E1D5B8A2942BEE72EB853ED",
+        "cliHashVerified": true
+      }
+    },
+    "candidate": {
+      "role": "publicly-committed-0.4-stable-candidate",
+      "productCommit": "7325d2c2b3fca26a12932aa96cb21070c04c2bf3",
+      "sourceState": "immutable-public-git-commit-matched-to-local-tarball",
+      "cliSha256": "118D15BB3C2847205A4CC09A7A925BA3724B71D65CA56AA08D065AD8F851B18A",
+      "sourceTree": {
+        "algorithm": "sha256-path-length-bytes-v1",
+        "fileCount": 187,
+        "sha256": "6CF965966D0FEABC87D4A260F474BD9053BCCB94212CDE05778A83813FB06B42"
+      }
+    }
+  },
+  "protocol": {
+    "targets": 8,
+    "conditions": [
+      "baseline",
+      "candidate"
+    ],
+    "repetitions": 2,
+    "formalObservationsPerCondition": 16,
+    "totalFormalObservations": 32,
+    "budget": 6000,
+    "routeLimit": 10,
+    "maxDrawers": 4,
+    "fetchDepth": 400,
+    "fetchMode": "complete-shallow-history-no-promisor",
+    "materializationAttempts": 3,
+    "indexAttempts": 1,
+    "indexTimeoutMs": 900000,
+    "evaluateRetries": 0,
+    "contextRetries": 0,
+    "calibrationTolerance": 0.15,
+    "minimumMacroCoverage": 0.9,
+    "minimumMacroFocus": 0.7,
+    "minimumTargetCoverage": 0.5,
+    "minimumTargetFocus": 0.4,
+    "pairedNonInferiorityMargin": 0.05,
+    "conditionOrder": "balanced AB/BA by manifest index",
+    "execution": "sequential-never-concurrent",
+    "staticPalaceCliCallsPerCompletedCondition": 7,
+    "agentToolCallsMeasured": false
+  },
+  "aggregate": {
+    "baseline": {
+      "condition": "baseline",
+      "targetCount": 8,
+      "conditionRecordedTargets": 8,
+      "passedTargets": 1,
+      "failedTargets": 7,
+      "completedTrials": 12,
+      "taskTypeMatchedTargets": 6,
+      "coreSurfaceCompleteTargets": 6,
+      "auxiliarySurfaceTargetCount": 2,
+      "auxiliarySurfaceCompleteTargets": 1,
+      "deterministicTargets": 6,
+      "exactOracleTargets": 1,
+      "oracleFileTotal": 20,
+      "routeFileTotal": 40,
+      "targetMacroChangedFileCoverage": 0.945,
+      "targetMacroRouteFocus": 0.503,
+      "minimumTargetChangedFileCoverage": 0.667,
+      "minimumTargetRouteFocus": 0.2,
+      "calibrationMeanAbsoluteError": 0.371,
+      "overconfidentTrials": 0,
+      "underconfidentTrials": 10,
+      "wellCalibratedTrials": 2,
+      "unsafeNarrowModeTrials": 2,
+      "unsafeEnforcedStopTrials": 0,
+      "modeCounts": {
+        "route-lite": 5,
+        "bypass": 1
+      },
+      "evidenceStatusCounts": {
+        "unknown": 6
+      },
+      "contextEstimatedTokensMean": 1513.667,
+      "contextEstimatedTokensMedian": 1683,
+      "maxContextEstimatedTokens": 2367,
+      "contextBytesMean": 6056.167,
+      "selectedExcludedOverlapTrials": 0,
+      "metricDisagreementTrials": 6,
+      "evaluationContextRouteDisagreementTrials": 2,
+      "staleAfterExplicitIndexTargets": 0,
+      "trackedWorktreeModifiedTargets": 0,
+      "staticPalaceCliCalls": 48,
+      "staticCommandElapsedMsTotal": 23128,
+      "staticCommandElapsedMsMedian": 463,
+      "environmentOrSetupFailures": 0,
+      "harnessContractFailures": 0,
+      "productOrContractFailures": 7
+    },
+    "candidate": {
+      "condition": "candidate",
+      "targetCount": 8,
+      "conditionRecordedTargets": 8,
+      "passedTargets": 4,
+      "failedTargets": 4,
+      "completedTrials": 16,
+      "taskTypeMatchedTargets": 8,
+      "coreSurfaceCompleteTargets": 7,
+      "auxiliarySurfaceTargetCount": 2,
+      "auxiliarySurfaceCompleteTargets": 1,
+      "deterministicTargets": 8,
+      "exactOracleTargets": 3,
+      "oracleFileTotal": 20,
+      "routeFileTotal": 32,
+      "targetMacroChangedFileCoverage": 0.833,
+      "targetMacroRouteFocus": 0.653,
+      "minimumTargetChangedFileCoverage": 0,
+      "minimumTargetRouteFocus": 0,
+      "calibrationMeanAbsoluteError": 0.54,
+      "overconfidentTrials": 0,
+      "underconfidentTrials": 14,
+      "wellCalibratedTrials": 2,
+      "unsafeNarrowModeTrials": 0,
+      "unsafeEnforcedStopTrials": 0,
+      "modeCounts": {
+        "full-palace": 8
+      },
+      "evidenceStatusCounts": {
+        "insufficient": 8
+      },
+      "contextEstimatedTokensMean": 3042.375,
+      "contextEstimatedTokensMedian": 2644.5,
+      "maxContextEstimatedTokens": 5625,
+      "contextBytesMean": 12186.125,
+      "selectedExcludedOverlapTrials": 0,
+      "metricDisagreementTrials": 0,
+      "evaluationContextRouteDisagreementTrials": 0,
+      "staleAfterExplicitIndexTargets": 0,
+      "trackedWorktreeModifiedTargets": 0,
+      "staticPalaceCliCalls": 56,
+      "staticCommandElapsedMsTotal": 76545,
+      "staticCommandElapsedMsMedian": 652.5,
+      "environmentOrSetupFailures": 0,
+      "harnessContractFailures": 0,
+      "productOrContractFailures": 4
+    }
+  },
+  "comparison": {
+    "completedPairedTargets": 6,
+    "requiredPairedTargets": 8,
+    "routeChangedTargets": 5,
+    "modeChangedTargets": 6,
+    "aggregateDelta": {
+      "changedFileCoverage": -0.112,
+      "routeFocus": 0.15,
+      "calibrationMeanAbsoluteError": 0.169,
+      "unsafeNarrowModeTrials": -2,
+      "unsafeEnforcedStopTrials": 0,
+      "contextEstimatedTokensMean": 1528.708,
+      "staticCommandElapsedMsTotal": 53417
+    },
+    "coverageNonInferior": false,
+    "focusNonInferior": true,
+    "narrowModeSafetyNonInferior": true,
+    "enforcedStopSafetyNonInferior": true,
+    "targetPairs": [
+      {
+        "target": "npm-run-path",
+        "languageFamily": "javascript-typescript",
+        "routeChanged": true,
+        "modeChanged": true,
+        "baseline": {
+          "routeFiles": [
+            "index.d.ts",
+            "index.js",
+            "test.js",
+            "readme.md",
+            "index.test-d.ts"
+          ],
+          "routeConfidence": 0.45,
+          "changedFileCoverage": 1,
+          "routeFocus": 1,
+          "coreSurfaceCoverage": 1,
+          "auxiliarySurfaceCoverage": 1,
+          "mode": "route-lite",
+          "evidenceStatus": null,
+          "stopEnforced": false,
+          "unsafeNarrowMode": false,
+          "unsafeEnforcedStop": false,
+          "contextEstimatedTokens": 1444,
+          "evaluationElapsedMs": 454,
+          "contextElapsedMs": 397
+        },
+        "candidate": {
+          "routeFiles": [
+            "index.d.ts",
+            "test.js",
+            "index.js",
+            "readme.md",
+            "index.test-d.ts"
+          ],
+          "routeConfidence": 0.6,
+          "changedFileCoverage": 1,
+          "routeFocus": 1,
+          "coreSurfaceCoverage": 1,
+          "auxiliarySurfaceCoverage": 1,
+          "mode": "full-palace",
+          "evidenceStatus": "insufficient",
+          "stopEnforced": false,
+          "unsafeNarrowMode": false,
+          "unsafeEnforcedStop": false,
+          "contextEstimatedTokens": 2755,
+          "evaluationElapsedMs": 461,
+          "contextElapsedMs": 425
+        },
+        "delta": {
+          "changedFileCoverage": 0,
+          "routeFocus": 0,
+          "routeConfidence": 0.15,
+          "contextEstimatedTokens": 1311,
+          "evaluationElapsedMs": 7,
+          "contextElapsedMs": 28
+        }
+      },
+      {
+        "target": "cli-truncate",
+        "languageFamily": "javascript-typescript",
+        "routeChanged": true,
+        "modeChanged": true,
+        "baseline": {
+          "routeFiles": [
+            "index.d.ts",
+            "index.js",
+            "readme.md",
+            "example.js",
+            "index.test-d.ts",
+            "test.js"
+          ],
+          "routeConfidence": 0.57,
+          "changedFileCoverage": 1,
+          "routeFocus": 0.333,
+          "coreSurfaceCoverage": 1,
+          "auxiliarySurfaceCoverage": null,
+          "mode": "route-lite",
+          "evidenceStatus": null,
+          "stopEnforced": false,
+          "unsafeNarrowMode": false,
+          "unsafeEnforcedStop": false,
+          "contextEstimatedTokens": 1832,
+          "evaluationElapsedMs": 414,
+          "contextElapsedMs": 381
+        },
+        "candidate": {
+          "routeFiles": [
+            "index.js",
+            "test.js"
+          ],
+          "routeConfidence": 0.4,
+          "changedFileCoverage": 1,
+          "routeFocus": 1,
+          "coreSurfaceCoverage": 1,
+          "auxiliarySurfaceCoverage": null,
+          "mode": "full-palace",
+          "evidenceStatus": "insufficient",
+          "stopEnforced": false,
+          "unsafeNarrowMode": false,
+          "unsafeEnforcedStop": false,
+          "contextEstimatedTokens": 4734,
+          "evaluationElapsedMs": 478,
+          "contextElapsedMs": 483
+        },
+        "delta": {
+          "changedFileCoverage": 0,
+          "routeFocus": 0.667,
+          "routeConfidence": -0.17,
+          "contextEstimatedTokens": 2902,
+          "evaluationElapsedMs": 64,
+          "contextElapsedMs": 102
+        }
+      },
+      {
+        "target": "outcome",
+        "languageFamily": "python",
+        "routeChanged": true,
+        "modeChanged": true,
+        "baseline": {
+          "routeFiles": [
+            "src/outcome/_impl.py",
+            "tests/test_sync.py",
+            "tests/test_async.py",
+            "docs/source/tutorial.rst",
+            "docs/source/api.rst",
+            "src/outcome/__init__.py",
+            "src/outcome/_util.py"
+          ],
+          "routeConfidence": 0.45,
+          "changedFileCoverage": 1,
+          "routeFocus": 0.286,
+          "coreSurfaceCoverage": 1,
+          "auxiliarySurfaceCoverage": null,
+          "mode": "route-lite",
+          "evidenceStatus": null,
+          "stopEnforced": false,
+          "unsafeNarrowMode": false,
+          "unsafeEnforcedStop": false,
+          "contextEstimatedTokens": 2367,
+          "evaluationElapsedMs": 458,
+          "contextElapsedMs": 436
+        },
+        "candidate": {
+          "routeFiles": [
+            "src/outcome/_impl.py",
+            "src/outcome/__init__.py",
+            "tests/test_sync.py"
+          ],
+          "routeConfidence": 0.4,
+          "changedFileCoverage": 1,
+          "routeFocus": 0.667,
+          "coreSurfaceCoverage": 1,
+          "auxiliarySurfaceCoverage": null,
+          "mode": "full-palace",
+          "evidenceStatus": "insufficient",
+          "stopEnforced": false,
+          "unsafeNarrowMode": false,
+          "unsafeEnforcedStop": false,
+          "contextEstimatedTokens": 2137,
+          "evaluationElapsedMs": 518,
+          "contextElapsedMs": 459
+        },
+        "delta": {
+          "changedFileCoverage": 0,
+          "routeFocus": 0.381,
+          "routeConfidence": -0.05,
+          "contextEstimatedTokens": -230,
+          "evaluationElapsedMs": 60,
+          "contextElapsedMs": 23
+        }
+      },
+      {
+        "target": "async-timeout",
+        "languageFamily": "python",
+        "routeChanged": false,
+        "modeChanged": true,
+        "baseline": {
+          "routeFiles": [
+            "tests/test_timeout.py",
+            "async_timeout/__init__.py"
+          ],
+          "routeConfidence": 0.6,
+          "changedFileCoverage": 0.667,
+          "routeFocus": 1,
+          "coreSurfaceCoverage": 1,
+          "auxiliarySurfaceCoverage": 0,
+          "mode": "bypass",
+          "evidenceStatus": null,
+          "stopEnforced": false,
+          "unsafeNarrowMode": true,
+          "unsafeEnforcedStop": false,
+          "contextEstimatedTokens": 73,
+          "evaluationElapsedMs": 438,
+          "contextElapsedMs": 384
+        },
+        "candidate": {
+          "routeFiles": [
+            "tests/test_timeout.py",
+            "async_timeout/__init__.py"
+          ],
+          "routeConfidence": 0.15,
+          "changedFileCoverage": 0.667,
+          "routeFocus": 1,
+          "coreSurfaceCoverage": 1,
+          "auxiliarySurfaceCoverage": 0,
+          "mode": "full-palace",
+          "evidenceStatus": "insufficient",
+          "stopEnforced": false,
+          "unsafeNarrowMode": false,
+          "unsafeEnforcedStop": false,
+          "contextEstimatedTokens": 1998,
+          "evaluationElapsedMs": 465,
+          "contextElapsedMs": 534
+        },
+        "delta": {
+          "changedFileCoverage": 0,
+          "routeFocus": 0,
+          "routeConfidence": -0.45,
+          "contextEstimatedTokens": 1925,
+          "evaluationElapsedMs": 27,
+          "contextElapsedMs": 150
+        }
+      },
+      {
+        "target": "go-sqlite3",
+        "languageFamily": "go",
+        "routeChanged": true,
+        "modeChanged": true,
+        "baseline": {
+          "routeFiles": [
+            "sqlite3-binding.c",
+            "sqlite3-binding.h",
+            "sqlite3_opt_userauth.go",
+            "sqlite3_opt_userauth_omit.go",
+            "_example/trace/main.go",
+            "_example/vtable_eponymous_only/main.go",
+            "sqlite3.go",
+            "_example/mod_vtable/picojson.h",
+            "backup.go",
+            "sqlite3_test.go"
+          ],
+          "routeConfidence": 0.65,
+          "changedFileCoverage": 1,
+          "routeFocus": 0.2,
+          "coreSurfaceCoverage": 1,
+          "auxiliarySurfaceCoverage": null,
+          "mode": "route-lite",
+          "evidenceStatus": null,
+          "stopEnforced": false,
+          "unsafeNarrowMode": false,
+          "unsafeEnforcedStop": false,
+          "contextEstimatedTokens": 1667,
+          "evaluationElapsedMs": 988,
+          "contextElapsedMs": 776
+        },
+        "candidate": {
+          "routeFiles": [
+            "sqlite3.go",
+            "sqlite3-binding.c",
+            "sqlite3_trace.go",
+            "sqlite3-binding.h",
+            "_example/trace/main.go",
+            "sqlite3_test.go"
+          ],
+          "routeConfidence": 0.4,
+          "changedFileCoverage": 1,
+          "routeFocus": 0.333,
+          "coreSurfaceCoverage": 1,
+          "auxiliarySurfaceCoverage": null,
+          "mode": "full-palace",
+          "evidenceStatus": "insufficient",
+          "stopEnforced": false,
+          "unsafeNarrowMode": false,
+          "unsafeEnforcedStop": false,
+          "contextEstimatedTokens": 5625,
+          "evaluationElapsedMs": 10261,
+          "contextElapsedMs": 9832
+        },
+        "delta": {
+          "changedFileCoverage": 0,
+          "routeFocus": 0.133,
+          "routeConfidence": -0.25,
+          "contextEstimatedTokens": 3958,
+          "evaluationElapsedMs": 9273,
+          "contextElapsedMs": 9056
+        }
+      },
+      {
+        "target": "indicatif",
+        "languageFamily": "rust",
+        "routeChanged": true,
+        "modeChanged": true,
+        "baseline": {
+          "routeFiles": [
+            "src/draw_target.rs",
+            "src/style.rs",
+            "tests/render.rs",
+            "src/term_like.rs",
+            "src/rayon.rs",
+            "src/in_memory.rs",
+            "src/state.rs",
+            "examples/download-continued.rs",
+            "src/iter.rs",
+            "src/progress_bar.rs"
+          ],
+          "routeConfidence": 0.72,
+          "changedFileCoverage": 1,
+          "routeFocus": 0.2,
+          "coreSurfaceCoverage": 1,
+          "auxiliarySurfaceCoverage": null,
+          "mode": "route-lite",
+          "evidenceStatus": null,
+          "stopEnforced": false,
+          "unsafeNarrowMode": false,
+          "unsafeEnforcedStop": false,
+          "contextEstimatedTokens": 1699,
+          "evaluationElapsedMs": 514,
+          "contextElapsedMs": 454
+        },
+        "candidate": {
+          "routeFiles": [
+            "src/draw_target.rs",
+            "src/iter.rs",
+            "src/progress_bar.rs",
+            "src/rayon.rs",
+            "src/style.rs",
+            "src/in_memory.rs",
+            "examples/yarnish.rs",
+            "src/state.rs",
+            "tests/render.rs"
+          ],
+          "routeConfidence": 0.4,
+          "changedFileCoverage": 1,
+          "routeFocus": 0.222,
+          "coreSurfaceCoverage": 1,
+          "auxiliarySurfaceCoverage": null,
+          "mode": "full-palace",
+          "evidenceStatus": "insufficient",
+          "stopEnforced": false,
+          "unsafeNarrowMode": false,
+          "unsafeEnforcedStop": false,
+          "contextEstimatedTokens": 2721,
+          "evaluationElapsedMs": 890,
+          "contextElapsedMs": 774
+        },
+        "delta": {
+          "changedFileCoverage": 0,
+          "routeFocus": 0.022,
+          "routeConfidence": -0.32,
+          "contextEstimatedTokens": 1022,
+          "evaluationElapsedMs": 376,
+          "contextElapsedMs": 320
+        }
+      }
+    ]
+  },
+  "targets": [
+    {
+      "name": "npm-run-path",
+      "language": "JavaScript/TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/sindresorhus/npm-run-path.git",
+      "pinnedHead": "b9128591fc59429d8b0df7047d5283f259dc5e77",
+      "routeCommit": "8462fd251b08a18e5e77e94d6202963510f1403e",
+      "groundTruthCommit": "09419afb614ae03e2784eb05eee429124d0d3268",
+      "task": "Add `preferLocal` and `addExecaPath` options (#18)",
+      "expectedTaskType": "feature",
+      "changedFiles": [
+        "index.d.ts",
+        "index.js",
+        "index.test-d.ts",
+        "readme.md",
+        "test.js"
+      ],
+      "implementationFiles": [
+        "index.d.ts",
+        "index.js",
+        "index.test-d.ts"
+      ],
+      "testFiles": [
+        "test.js"
+      ],
+      "auxiliaryFiles": [
+        "readme.md"
+      ],
+      "oracleSource": "mechanically eligible single-parent real Git-history diff pending whole-target semantic review",
+      "candidateId": "candidate_680f46c0cb9ab685",
+      "candidateRank": 1,
+      "coherencePacketSha256": "C02727625EB92596170D3DA5EABB1D0804CE25640BE4C1A9FBEF93E4FA00C926",
+      "testRoleDerivedFromPath": true,
+      "conditionOrder": [
+        "baseline",
+        "candidate"
+      ],
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "elapsedMs": 3005,
+          "errorCode": null,
+          "error": null
+        }
+      ],
+      "conditions": {
+        "baseline": {
+          "id": "baseline",
+          "role": "public-0.3-stable-baseline",
+          "productCommit": "1331d9da0aa242549026d70e7c752638c3169044",
+          "cliSha256": "ED63B31DA23240D958E71874BD61A09427659327DC8460D88A3A41D33F5391DE",
+          "status": "passed",
+          "failureCategory": null,
+          "failures": [],
+          "deterministicRoutes": true,
+          "freshIndex": {
+            "status": {
+              "root": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-local-blind-round-21-validation-AwSMVi\\npm-run-path\\baseline",
+              "palaceRoot": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-local-blind-round-21-validation-AwSMVi\\npm-run-path\\baseline\\.palace",
+              "initialized": true,
+              "indexed": true,
+              "stale": false,
+              "nodeCount": 56,
+              "edgeCount": 338,
+              "roomCount": 10,
+              "lastIndexedAt": "2026-08-26T13:27:14.158Z",
+              "configPath": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-local-blind-round-21-validation-AwSMVi\\npm-run-path\\baseline\\.palace\\palace.yml"
+            },
+            "elapsedMs": 1271,
+            "initElapsedMs": 365,
+            "indexElapsedMs": 539,
+            "statusElapsedMs": 367,
+            "attempts": 1
+          },
+          "trackedWorktreeClean": true,
+          "staticPalaceCliCalls": 7,
+          "trials": [
+            {
+              "trial": 1,
+              "status": "completed",
+              "expectedTaskType": "feature",
+              "taskType": "feature",
+              "routeFiles": [
+                "index.d.ts",
+                "index.js",
+                "test.js",
+                "readme.md",
+                "index.test-d.ts"
+              ],
+              "routeFileCount": 5,
+              "matchedOracleFiles": [
+                "index.d.ts",
+                "index.js",
+                "index.test-d.ts",
+                "readme.md",
+                "test.js"
+              ],
+              "routeOnlyFiles": [],
+              "changedFileCoverage": 1,
+              "reportedChangedFileCoverage": 1,
+              "coverageMetricAgreement": true,
+              "routeFocus": 1,
+              "reportedRouteFocus": 1,
+              "focusMetricAgreement": true,
+              "coreSurfaceCoverage": 1,
+              "missingImplementationFiles": [],
+              "missingTestFiles": [],
+              "auxiliarySurfaceCoverage": 1,
+              "missingAuxiliaryFiles": [],
+              "routeConfidence": 0.45,
+              "calibration": {
+                "predictedConfidence": 0.45,
+                "observedCoverage": 1,
+                "tolerance": 0.15,
+                "signedError": -0.55,
+                "absoluteError": 0.55,
+                "status": "underconfident"
+              },
+              "reportedCalibration": {
+                "status": "underconfident",
+                "predictedConfidence": 0.45,
+                "observedCoverage": 1,
+                "error": 0.55
+              },
+              "mode": "route-lite",
+              "evidenceStatus": null,
+              "interventionPolicy": null,
+              "stopEnforced": false,
+              "unsafeNarrowMode": false,
+              "unsafeEnforcedStop": false,
+              "contextSelectedFiles": [
+                "index.d.ts",
+                "index.js",
+                "test.js",
+                "readme.md",
+                "index.test-d.ts"
+              ],
+              "evaluationContextRouteAgreement": true,
+              "selectedExcludedOverlap": [],
+              "contextEstimatedTokens": 1444,
+              "contextBytes": 5773,
+              "contextMetricSource": "reported",
+              "evaluationElapsedMs": 454,
+              "contextElapsedMs": 397,
+              "staticPalaceCliCalls": 2
+            },
+            {
+              "trial": 2,
+              "status": "completed",
+              "expectedTaskType": "feature",
+              "taskType": "feature",
+              "routeFiles": [
+                "index.d.ts",
+                "index.js",
+                "test.js",
+                "readme.md",
+                "index.test-d.ts"
+              ],
+              "routeFileCount": 5,
+              "matchedOracleFiles": [
+                "index.d.ts",
+                "index.js",
+                "index.test-d.ts",
+                "readme.md",
+                "test.js"
+              ],
+              "routeOnlyFiles": [],
+              "changedFileCoverage": 1,
+              "reportedChangedFileCoverage": 1,
+              "coverageMetricAgreement": true,
+              "routeFocus": 1,
+              "reportedRouteFocus": 1,
+              "focusMetricAgreement": true,
+              "coreSurfaceCoverage": 1,
+              "missingImplementationFiles": [],
+              "missingTestFiles": [],
+              "auxiliarySurfaceCoverage": 1,
+              "missingAuxiliaryFiles": [],
+              "routeConfidence": 0.45,
+              "calibration": {
+                "predictedConfidence": 0.45,
+                "observedCoverage": 1,
+                "tolerance": 0.15,
+                "signedError": -0.55,
+                "absoluteError": 0.55,
+                "status": "underconfident"
+              },
+              "reportedCalibration": {
+                "status": "underconfident",
+                "predictedConfidence": 0.45,
+                "observedCoverage": 1,
+                "error": 0.55
+              },
+              "mode": "route-lite",
+              "evidenceStatus": null,
+              "interventionPolicy": null,
+              "stopEnforced": false,
+              "unsafeNarrowMode": false,
+              "unsafeEnforcedStop": false,
+              "contextSelectedFiles": [
+                "index.d.ts",
+                "index.js",
+                "test.js",
+                "readme.md",
+                "index.test-d.ts"
+              ],
+              "evaluationContextRouteAgreement": true,
+              "selectedExcludedOverlap": [],
+              "contextEstimatedTokens": 1444,
+              "contextBytes": 5773,
+              "contextMetricSource": "reported",
+              "evaluationElapsedMs": 430,
+              "contextElapsedMs": 374,
+              "staticPalaceCliCalls": 2
+            }
+          ]
+        },
+        "candidate": {
+          "id": "candidate",
+          "role": "publicly-committed-0.4-stable-candidate",
+          "productCommit": "7325d2c2b3fca26a12932aa96cb21070c04c2bf3",
+          "cliSha256": "118D15BB3C2847205A4CC09A7A925BA3724B71D65CA56AA08D065AD8F851B18A",
+          "status": "passed",
+          "failureCategory": null,
+          "failures": [],
+          "deterministicRoutes": true,
+          "freshIndex": {
+            "status": {
+              "root": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-local-blind-round-21-validation-AwSMVi\\npm-run-path\\candidate",
+              "palaceRoot": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-local-blind-round-21-validation-AwSMVi\\npm-run-path\\candidate\\.palace",
+              "initialized": true,
+              "indexed": true,
+              "stale": false,
+              "nodeCount": 56,
+              "edgeCount": 341,
+              "factCount": 7,
+              "roomCount": 10,
+              "lastIndexedAt": "2026-08-26T13:27:18.509Z",
+              "configPath": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-local-blind-round-21-validation-AwSMVi\\npm-run-path\\candidate\\.palace\\palace.yml"
+            },
+            "elapsedMs": 1140,
+            "initElapsedMs": 326,
+            "indexElapsedMs": 463,
+            "statusElapsedMs": 351,
+            "attempts": 1
+          },
+          "trackedWorktreeClean": true,
+          "staticPalaceCliCalls": 7,
+          "trials": [
+            {
+              "trial": 1,
+              "status": "completed",
+              "expectedTaskType": "feature",
+              "taskType": "feature",
+              "routeFiles": [
+                "index.d.ts",
+                "test.js",
+                "index.js",
+                "readme.md",
+                "index.test-d.ts"
+              ],
+              "routeFileCount": 5,
+              "matchedOracleFiles": [
+                "index.d.ts",
+                "index.js",
+                "index.test-d.ts",
+                "readme.md",
+                "test.js"
+              ],
+              "routeOnlyFiles": [],
+              "changedFileCoverage": 1,
+              "reportedChangedFileCoverage": 1,
+              "coverageMetricAgreement": true,
+              "routeFocus": 1,
+              "reportedRouteFocus": 1,
+              "focusMetricAgreement": true,
+              "coreSurfaceCoverage": 1,
+              "missingImplementationFiles": [],
+              "missingTestFiles": [],
+              "auxiliarySurfaceCoverage": 1,
+              "missingAuxiliaryFiles": [],
+              "routeConfidence": 0.6,
+              "calibration": {
+                "predictedConfidence": 0.6,
+                "observedCoverage": 1,
+                "tolerance": 0.15,
+                "signedError": -0.4,
+                "absoluteError": 0.4,
+                "status": "underconfident"
+              },
+              "reportedCalibration": {
+                "status": "underconfident",
+                "predictedConfidence": 0.6,
+                "observedCoverage": 1,
+                "error": 0.4
+              },
+              "mode": "full-palace",
+              "evidenceStatus": "insufficient",
+              "interventionPolicy": "advisory",
+              "stopEnforced": false,
+              "unsafeNarrowMode": false,
+              "unsafeEnforcedStop": false,
+              "contextSelectedFiles": [
+                "index.d.ts",
+                "test.js",
+                "index.js",
+                "readme.md",
+                "index.test-d.ts"
+              ],
+              "evaluationContextRouteAgreement": true,
+              "selectedExcludedOverlap": [],
+              "contextEstimatedTokens": 2755,
+              "contextBytes": 11019,
+              "contextMetricSource": "reported",
+              "evaluationElapsedMs": 461,
+              "contextElapsedMs": 425,
+              "staticPalaceCliCalls": 2
+            },
+            {
+              "trial": 2,
+              "status": "completed",
+              "expectedTaskType": "feature",
+              "taskType": "feature",
+              "routeFiles": [
+                "index.d.ts",
+                "test.js",
+                "index.js",
+                "readme.md",
+                "index.test-d.ts"
+              ],
+              "routeFileCount": 5,
+              "matchedOracleFiles": [
+                "index.d.ts",
+                "index.js",
+                "index.test-d.ts",
+                "readme.md",
+                "test.js"
+              ],
+              "routeOnlyFiles": [],
+              "changedFileCoverage": 1,
+              "reportedChangedFileCoverage": 1,
+              "coverageMetricAgreement": true,
+              "routeFocus": 1,
+              "reportedRouteFocus": 1,
+              "focusMetricAgreement": true,
+              "coreSurfaceCoverage": 1,
+              "missingImplementationFiles": [],
+              "missingTestFiles": [],
+              "auxiliarySurfaceCoverage": 1,
+              "missingAuxiliaryFiles": [],
+              "routeConfidence": 0.6,
+              "calibration": {
+                "predictedConfidence": 0.6,
+                "observedCoverage": 1,
+                "tolerance": 0.15,
+                "signedError": -0.4,
+                "absoluteError": 0.4,
+                "status": "underconfident"
+              },
+              "reportedCalibration": {
+                "status": "underconfident",
+                "predictedConfidence": 0.6,
+                "observedCoverage": 1,
+                "error": 0.4
+              },
+              "mode": "full-palace",
+              "evidenceStatus": "insufficient",
+              "interventionPolicy": "advisory",
+              "stopEnforced": false,
+              "unsafeNarrowMode": false,
+              "unsafeEnforcedStop": false,
+              "contextSelectedFiles": [
+                "index.d.ts",
+                "test.js",
+                "index.js",
+                "readme.md",
+                "index.test-d.ts"
+              ],
+              "evaluationContextRouteAgreement": true,
+              "selectedExcludedOverlap": [],
+              "contextEstimatedTokens": 2755,
+              "contextBytes": 11019,
+              "contextMetricSource": "reported",
+              "evaluationElapsedMs": 448,
+              "contextElapsedMs": 416,
+              "staticPalaceCliCalls": 2
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "cli-truncate",
+      "language": "JavaScript/TypeScript",
+      "languageFamily": "javascript-typescript",
+      "url": "https://github.com/sindresorhus/cli-truncate.git",
+      "pinnedHead": "00818cbd97f5bd6c9b8af39f19c0cd1e42971e54",
+      "routeCommit": "7a4610b1ca9fecf395a03ddc602d7487f0a093ba",
+      "groundTruthCommit": "f87490f7638fd3c6aefb479d6e7c0e74c7eda218",
+      "task": "Fix: Keep `position: 'middle'` within the column budget (#32)",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "index.js",
+        "test.js"
+      ],
+      "implementationFiles": [
+        "index.js"
+      ],
+      "testFiles": [
+        "test.js"
+      ],
+      "auxiliaryFiles": [],
+      "oracleSource": "mechanically eligible single-parent real Git-history diff pending whole-target semantic review",
+      "candidateId": "candidate_e8119c62d117d96e",
+      "candidateRank": 1,
+      "coherencePacketSha256": "AD6459D04F4AD6097351F81F5A805FEFC55676D9F5D5F78F72FBB881B6FCDB9C",
+      "testRoleDerivedFromPath": true,
+      "conditionOrder": [
+        "candidate",
+        "baseline"
+      ],
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "elapsedMs": 2371,
+          "errorCode": null,
+          "error": null
+        }
+      ],
+      "conditions": {
+        "candidate": {
+          "id": "candidate",
+          "role": "publicly-committed-0.4-stable-candidate",
+          "productCommit": "7325d2c2b3fca26a12932aa96cb21070c04c2bf3",
+          "cliSha256": "118D15BB3C2847205A4CC09A7A925BA3724B71D65CA56AA08D065AD8F851B18A",
+          "status": "passed",
+          "failureCategory": null,
+          "failures": [],
+          "deterministicRoutes": true,
+          "freshIndex": {
+            "status": {
+              "root": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-local-blind-round-21-validation-AwSMVi\\cli-truncate\\candidate",
+              "palaceRoot": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-local-blind-round-21-validation-AwSMVi\\cli-truncate\\candidate\\.palace",
+              "initialized": true,
+              "indexed": true,
+              "stale": false,
+              "nodeCount": 52,
+              "edgeCount": 287,
+              "factCount": 9,
+              "roomCount": 10,
+              "lastIndexedAt": "2026-08-26T13:27:25.152Z",
+              "configPath": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-local-blind-round-21-validation-AwSMVi\\cli-truncate\\candidate\\.palace\\palace.yml"
+            },
+            "elapsedMs": 1227,
+            "initElapsedMs": 328,
+            "indexElapsedMs": 545,
+            "statusElapsedMs": 354,
+            "attempts": 1
+          },
+          "trackedWorktreeClean": true,
+          "staticPalaceCliCalls": 7,
+          "trials": [
+            {
+              "trial": 1,
+              "status": "completed",
+              "expectedTaskType": "bugfix",
+              "taskType": "bugfix",
+              "routeFiles": [
+                "index.js",
+                "test.js"
+              ],
+              "routeFileCount": 2,
+              "matchedOracleFiles": [
+                "index.js",
+                "test.js"
+              ],
+              "routeOnlyFiles": [],
+              "changedFileCoverage": 1,
+              "reportedChangedFileCoverage": 1,
+              "coverageMetricAgreement": true,
+              "routeFocus": 1,
+              "reportedRouteFocus": 1,
+              "focusMetricAgreement": true,
+              "coreSurfaceCoverage": 1,
+              "missingImplementationFiles": [],
+              "missingTestFiles": [],
+              "auxiliarySurfaceCoverage": null,
+              "missingAuxiliaryFiles": [],
+              "routeConfidence": 0.4,
+              "calibration": {
+                "predictedConfidence": 0.4,
+                "observedCoverage": 1,
+                "tolerance": 0.15,
+                "signedError": -0.6,
+                "absoluteError": 0.6,
+                "status": "underconfident"
+              },
+              "reportedCalibration": {
+                "status": "underconfident",
+                "predictedConfidence": 0.4,
+                "observedCoverage": 1,
+                "error": 0.6
+              },
+              "mode": "full-palace",
+              "evidenceStatus": "insufficient",
+              "interventionPolicy": "advisory",
+              "stopEnforced": false,
+              "unsafeNarrowMode": false,
+              "unsafeEnforcedStop": false,
+              "contextSelectedFiles": [
+                "index.js",
+                "test.js"
+              ],
+              "evaluationContextRouteAgreement": true,
+              "selectedExcludedOverlap": [],
+              "contextEstimatedTokens": 4734,
+              "contextBytes": 19078,
+              "contextMetricSource": "reported",
+              "evaluationElapsedMs": 478,
+              "contextElapsedMs": 483,
+              "staticPalaceCliCalls": 2
+            },
+            {
+              "trial": 2,
+              "status": "completed",
+              "expectedTaskType": "bugfix",
+              "taskType": "bugfix",
+              "routeFiles": [
+                "index.js",
+                "test.js"
+              ],
+              "routeFileCount": 2,
+              "matchedOracleFiles": [
+                "index.js",
+                "test.js"
+              ],
+              "routeOnlyFiles": [],
+              "changedFileCoverage": 1,
+              "reportedChangedFileCoverage": 1,
+              "coverageMetricAgreement": true,
+              "routeFocus": 1,
+              "reportedRouteFocus": 1,
+              "focusMetricAgreement": true,
+              "coreSurfaceCoverage": 1,
+              "missingImplementationFiles": [],
+              "missingTestFiles": [],
+              "auxiliarySurfaceCoverage": null,
+              "missingAuxiliaryFiles": [],
+              "routeConfidence": 0.4,
+              "calibration": {
+                "predictedConfidence": 0.4,
+                "observedCoverage": 1,
+                "tolerance": 0.15,
+                "signedError": -0.6,
+                "absoluteError": 0.6,
+                "status": "underconfident"
+              },
+              "reportedCalibration": {
+                "status": "underconfident",
+                "predictedConfidence": 0.4,
+                "observedCoverage": 1,
+                "error": 0.6
+              },
+              "mode": "full-palace",
+              "evidenceStatus": "insufficient",
+              "interventionPolicy": "advisory",
+              "stopEnforced": false,
+              "unsafeNarrowMode": false,
+              "unsafeEnforcedStop": false,
+              "contextSelectedFiles": [
+                "index.js",
+                "test.js"
+              ],
+              "evaluationContextRouteAgreement": true,
+              "selectedExcludedOverlap": [],
+              "contextEstimatedTokens": 4734,
+              "contextBytes": 19078,
+              "contextMetricSource": "reported",
+              "evaluationElapsedMs": 480,
+              "contextElapsedMs": 439,
+              "staticPalaceCliCalls": 2
+            }
+          ]
+        },
+        "baseline": {
+          "id": "baseline",
+          "role": "public-0.3-stable-baseline",
+          "productCommit": "1331d9da0aa242549026d70e7c752638c3169044",
+          "cliSha256": "ED63B31DA23240D958E71874BD61A09427659327DC8460D88A3A41D33F5391DE",
+          "status": "failed",
+          "failureCategory": "product-or-contract",
+          "failures": [
+            "target route focus fell below 0.40",
+            "reported route metrics differed from independent recomputation"
+          ],
+          "deterministicRoutes": true,
+          "freshIndex": {
+            "status": {
+              "root": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-local-blind-round-21-validation-AwSMVi\\cli-truncate\\baseline",
+              "palaceRoot": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-local-blind-round-21-validation-AwSMVi\\cli-truncate\\baseline\\.palace",
+              "initialized": true,
+              "indexed": true,
+              "stale": false,
+              "nodeCount": 52,
+              "edgeCount": 285,
+              "roomCount": 10,
+              "lastIndexedAt": "2026-08-26T13:27:29.344Z",
+              "configPath": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-local-blind-round-21-validation-AwSMVi\\cli-truncate\\baseline\\.palace\\palace.yml"
+            },
+            "elapsedMs": 1079,
+            "initElapsedMs": 320,
+            "indexElapsedMs": 434,
+            "statusElapsedMs": 326,
+            "attempts": 1
+          },
+          "trackedWorktreeClean": true,
+          "staticPalaceCliCalls": 7,
+          "trials": [
+            {
+              "trial": 1,
+              "status": "completed",
+              "expectedTaskType": "bugfix",
+              "taskType": "bugfix",
+              "routeFiles": [
+                "index.d.ts",
+                "index.js",
+                "readme.md",
+                "example.js",
+                "index.test-d.ts",
+                "test.js"
+              ],
+              "routeFileCount": 6,
+              "matchedOracleFiles": [
+                "index.js",
+                "test.js"
+              ],
+              "routeOnlyFiles": [
+                "index.d.ts",
+                "readme.md",
+                "example.js",
+                "index.test-d.ts"
+              ],
+              "changedFileCoverage": 1,
+              "reportedChangedFileCoverage": 1,
+              "coverageMetricAgreement": true,
+              "routeFocus": 0.333,
+              "reportedRouteFocus": 0.33,
+              "focusMetricAgreement": false,
+              "coreSurfaceCoverage": 1,
+              "missingImplementationFiles": [],
+              "missingTestFiles": [],
+              "auxiliarySurfaceCoverage": null,
+              "missingAuxiliaryFiles": [],
+              "routeConfidence": 0.57,
+              "calibration": {
+                "predictedConfidence": 0.57,
+                "observedCoverage": 1,
+                "tolerance": 0.15,
+                "signedError": -0.43,
+                "absoluteError": 0.43,
+                "status": "underconfident"
+              },
+              "reportedCalibration": {
+                "status": "underconfident",
+                "predictedConfidence": 0.57,
+                "observedCoverage": 1,
+                "error": 0.43
+              },
+              "mode": "route-lite",
+              "evidenceStatus": null,
+              "interventionPolicy": null,
+              "stopEnforced": false,
+              "unsafeNarrowMode": false,
+              "unsafeEnforcedStop": false,
+              "contextSelectedFiles": [
+                "index.d.ts",
+                "index.js",
+                "readme.md",
+                "example.js",
+                "index.test-d.ts",
+                "test.js"
+              ],
+              "evaluationContextRouteAgreement": true,
+              "selectedExcludedOverlap": [],
+              "contextEstimatedTokens": 1832,
+              "contextBytes": 7344,
+              "contextMetricSource": "reported",
+              "evaluationElapsedMs": 414,
+              "contextElapsedMs": 381,
+              "staticPalaceCliCalls": 2
+            },
+            {
+              "trial": 2,
+              "status": "completed",
+              "expectedTaskType": "bugfix",
+              "taskType": "bugfix",
+              "routeFiles": [
+                "index.d.ts",
+                "index.js",
+                "readme.md",
+                "example.js",
+                "index.test-d.ts",
+                "test.js"
+              ],
+              "routeFileCount": 6,
+              "matchedOracleFiles": [
+                "index.js",
+                "test.js"
+              ],
+              "routeOnlyFiles": [
+                "index.d.ts",
+                "readme.md",
+                "example.js",
+                "index.test-d.ts"
+              ],
+              "changedFileCoverage": 1,
+              "reportedChangedFileCoverage": 1,
+              "coverageMetricAgreement": true,
+              "routeFocus": 0.333,
+              "reportedRouteFocus": 0.33,
+              "focusMetricAgreement": false,
+              "coreSurfaceCoverage": 1,
+              "missingImplementationFiles": [],
+              "missingTestFiles": [],
+              "auxiliarySurfaceCoverage": null,
+              "missingAuxiliaryFiles": [],
+              "routeConfidence": 0.57,
+              "calibration": {
+                "predictedConfidence": 0.57,
+                "observedCoverage": 1,
+                "tolerance": 0.15,
+                "signedError": -0.43,
+                "absoluteError": 0.43,
+                "status": "underconfident"
+              },
+              "reportedCalibration": {
+                "status": "underconfident",
+                "predictedConfidence": 0.57,
+                "observedCoverage": 1,
+                "error": 0.43
+              },
+              "mode": "route-lite",
+              "evidenceStatus": null,
+              "interventionPolicy": null,
+              "stopEnforced": false,
+              "unsafeNarrowMode": false,
+              "unsafeEnforcedStop": false,
+              "contextSelectedFiles": [
+                "index.d.ts",
+                "index.js",
+                "readme.md",
+                "example.js",
+                "index.test-d.ts",
+                "test.js"
+              ],
+              "evaluationContextRouteAgreement": true,
+              "selectedExcludedOverlap": [],
+              "contextEstimatedTokens": 1832,
+              "contextBytes": 7344,
+              "contextMetricSource": "reported",
+              "evaluationElapsedMs": 406,
+              "contextElapsedMs": 391,
+              "staticPalaceCliCalls": 2
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "outcome",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/python-trio/outcome.git",
+      "pinnedHead": "03ed6218b08001877745bb1a9e180c8c5cf7c903",
+      "routeCommit": "0d0cfb04e28dbc01d63085e1ff6436bfa128f92a",
+      "groundTruthCommit": "85502c58ef32ddec7c8bc237cafaaaf402dc71c9",
+      "task": "Avoid creating a reference cycle when calling Error.unwrap",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "src/outcome/_impl.py",
+        "tests/test_sync.py"
+      ],
+      "implementationFiles": [
+        "src/outcome/_impl.py"
+      ],
+      "testFiles": [
+        "tests/test_sync.py"
+      ],
+      "auxiliaryFiles": [],
+      "oracleSource": "mechanically eligible single-parent real Git-history diff pending whole-target semantic review",
+      "candidateId": "candidate_30496456b2bdb8af",
+      "candidateRank": 1,
+      "coherencePacketSha256": "B4772F0C3779053B30879E6417697580CC660E1255EE54000A6623CFC2D9B07D",
+      "testRoleDerivedFromPath": true,
+      "conditionOrder": [
+        "baseline",
+        "candidate"
+      ],
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "elapsedMs": 2373,
+          "errorCode": null,
+          "error": null
+        }
+      ],
+      "conditions": {
+        "baseline": {
+          "id": "baseline",
+          "role": "public-0.3-stable-baseline",
+          "productCommit": "1331d9da0aa242549026d70e7c752638c3169044",
+          "cliSha256": "ED63B31DA23240D958E71874BD61A09427659327DC8460D88A3A41D33F5391DE",
+          "status": "failed",
+          "failureCategory": "product-or-contract",
+          "failures": [
+            "target route focus fell below 0.40",
+            "reported route metrics differed from independent recomputation"
+          ],
+          "deterministicRoutes": true,
+          "freshIndex": {
+            "status": {
+              "root": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-local-blind-round-21-validation-AwSMVi\\outcome\\baseline",
+              "palaceRoot": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-local-blind-round-21-validation-AwSMVi\\outcome\\baseline\\.palace",
+              "initialized": true,
+              "indexed": true,
+              "stale": false,
+              "nodeCount": 93,
+              "edgeCount": 551,
+              "roomCount": 23,
+              "lastIndexedAt": "2026-08-26T13:27:35.627Z",
+              "configPath": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-local-blind-round-21-validation-AwSMVi\\outcome\\baseline\\.palace\\palace.yml"
+            },
+            "elapsedMs": 1108,
+            "initElapsedMs": 318,
+            "indexElapsedMs": 450,
+            "statusElapsedMs": 340,
+            "attempts": 1
+          },
+          "trackedWorktreeClean": true,
+          "staticPalaceCliCalls": 7,
+          "trials": [
+            {
+              "trial": 1,
+              "status": "completed",
+              "expectedTaskType": "bugfix",
+              "taskType": "bugfix",
+              "routeFiles": [
+                "src/outcome/_impl.py",
+                "tests/test_sync.py",
+                "tests/test_async.py",
+                "docs/source/tutorial.rst",
+                "docs/source/api.rst",
+                "src/outcome/__init__.py",
+                "src/outcome/_util.py"
+              ],
+              "routeFileCount": 7,
+              "matchedOracleFiles": [
+                "src/outcome/_impl.py",
+                "tests/test_sync.py"
+              ],
+              "routeOnlyFiles": [
+                "tests/test_async.py",
+                "docs/source/tutorial.rst",
+                "docs/source/api.rst",
+                "src/outcome/__init__.py",
+                "src/outcome/_util.py"
+              ],
+              "changedFileCoverage": 1,
+              "reportedChangedFileCoverage": 1,
+              "coverageMetricAgreement": true,
+              "routeFocus": 0.286,
+              "reportedRouteFocus": 0.29,
+              "focusMetricAgreement": false,
+              "coreSurfaceCoverage": 1,
+              "missingImplementationFiles": [],
+              "missingTestFiles": [],
+              "auxiliarySurfaceCoverage": null,
+              "missingAuxiliaryFiles": [],
+              "routeConfidence": 0.45,
+              "calibration": {
+                "predictedConfidence": 0.45,
+                "observedCoverage": 1,
+                "tolerance": 0.15,
+                "signedError": -0.55,
+                "absoluteError": 0.55,
+                "status": "underconfident"
+              },
+              "reportedCalibration": {
+                "status": "underconfident",
+                "predictedConfidence": 0.45,
+                "observedCoverage": 1,
+                "error": 0.55
+              },
+              "mode": "route-lite",
+              "evidenceStatus": null,
+              "interventionPolicy": null,
+              "stopEnforced": false,
+              "unsafeNarrowMode": false,
+              "unsafeEnforcedStop": false,
+              "contextSelectedFiles": [
+                "src/outcome/_impl.py",
+                "tests/test_sync.py",
+                "tests/test_async.py",
+                "docs/source/tutorial.rst",
+                "docs/source/api.rst",
+                "src/outcome/__init__.py",
+                "src/outcome/_util.py"
+              ],
+              "evaluationContextRouteAgreement": true,
+              "selectedExcludedOverlap": [],
+              "contextEstimatedTokens": 2367,
+              "contextBytes": 9465,
+              "contextMetricSource": "reported",
+              "evaluationElapsedMs": 458,
+              "contextElapsedMs": 436,
+              "staticPalaceCliCalls": 2
+            },
+            {
+              "trial": 2,
+              "status": "completed",
+              "expectedTaskType": "bugfix",
+              "taskType": "bugfix",
+              "routeFiles": [
+                "src/outcome/_impl.py",
+                "tests/test_sync.py",
+                "tests/test_async.py",
+                "docs/source/tutorial.rst",
+                "docs/source/api.rst",
+                "src/outcome/__init__.py",
+                "src/outcome/_util.py"
+              ],
+              "routeFileCount": 7,
+              "matchedOracleFiles": [
+                "src/outcome/_impl.py",
+                "tests/test_sync.py"
+              ],
+              "routeOnlyFiles": [
+                "tests/test_async.py",
+                "docs/source/tutorial.rst",
+                "docs/source/api.rst",
+                "src/outcome/__init__.py",
+                "src/outcome/_util.py"
+              ],
+              "changedFileCoverage": 1,
+              "reportedChangedFileCoverage": 1,
+              "coverageMetricAgreement": true,
+              "routeFocus": 0.286,
+              "reportedRouteFocus": 0.29,
+              "focusMetricAgreement": false,
+              "coreSurfaceCoverage": 1,
+              "missingImplementationFiles": [],
+              "missingTestFiles": [],
+              "auxiliarySurfaceCoverage": null,
+              "missingAuxiliaryFiles": [],
+              "routeConfidence": 0.45,
+              "calibration": {
+                "predictedConfidence": 0.45,
+                "observedCoverage": 1,
+                "tolerance": 0.15,
+                "signedError": -0.55,
+                "absoluteError": 0.55,
+                "status": "underconfident"
+              },
+              "reportedCalibration": {
+                "status": "underconfident",
+                "predictedConfidence": 0.45,
+                "observedCoverage": 1,
+                "error": 0.55
+              },
+              "mode": "route-lite",
+              "evidenceStatus": null,
+              "interventionPolicy": null,
+              "stopEnforced": false,
+              "unsafeNarrowMode": false,
+              "unsafeEnforcedStop": false,
+              "contextSelectedFiles": [
+                "src/outcome/_impl.py",
+                "tests/test_sync.py",
+                "tests/test_async.py",
+                "docs/source/tutorial.rst",
+                "docs/source/api.rst",
+                "src/outcome/__init__.py",
+                "src/outcome/_util.py"
+              ],
+              "evaluationContextRouteAgreement": true,
+              "selectedExcludedOverlap": [],
+              "contextEstimatedTokens": 2367,
+              "contextBytes": 9465,
+              "contextMetricSource": "reported",
+              "evaluationElapsedMs": 461,
+              "contextElapsedMs": 403,
+              "staticPalaceCliCalls": 2
+            }
+          ]
+        },
+        "candidate": {
+          "id": "candidate",
+          "role": "publicly-committed-0.4-stable-candidate",
+          "productCommit": "7325d2c2b3fca26a12932aa96cb21070c04c2bf3",
+          "cliSha256": "118D15BB3C2847205A4CC09A7A925BA3724B71D65CA56AA08D065AD8F851B18A",
+          "status": "passed",
+          "failureCategory": null,
+          "failures": [],
+          "deterministicRoutes": true,
+          "freshIndex": {
+            "status": {
+              "root": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-local-blind-round-21-validation-AwSMVi\\outcome\\candidate",
+              "palaceRoot": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-local-blind-round-21-validation-AwSMVi\\outcome\\candidate\\.palace",
+              "initialized": true,
+              "indexed": true,
+              "stale": false,
+              "nodeCount": 118,
+              "edgeCount": 777,
+              "factCount": 0,
+              "roomCount": 24,
+              "lastIndexedAt": "2026-08-26T13:27:39.662Z",
+              "configPath": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-local-blind-round-21-validation-AwSMVi\\outcome\\candidate\\.palace\\palace.yml"
+            },
+            "elapsedMs": 1148,
+            "initElapsedMs": 311,
+            "indexElapsedMs": 492,
+            "statusElapsedMs": 345,
+            "attempts": 1
+          },
+          "trackedWorktreeClean": true,
+          "staticPalaceCliCalls": 7,
+          "trials": [
+            {
+              "trial": 1,
+              "status": "completed",
+              "expectedTaskType": "bugfix",
+              "taskType": "bugfix",
+              "routeFiles": [
+                "src/outcome/_impl.py",
+                "src/outcome/__init__.py",
+                "tests/test_sync.py"
+              ],
+              "routeFileCount": 3,
+              "matchedOracleFiles": [
+                "src/outcome/_impl.py",
+                "tests/test_sync.py"
+              ],
+              "routeOnlyFiles": [
+                "src/outcome/__init__.py"
+              ],
+              "changedFileCoverage": 1,
+              "reportedChangedFileCoverage": 1,
+              "coverageMetricAgreement": true,
+              "routeFocus": 0.667,
+              "reportedRouteFocus": 0.667,
+              "focusMetricAgreement": true,
+              "coreSurfaceCoverage": 1,
+              "missingImplementationFiles": [],
+              "missingTestFiles": [],
+              "auxiliarySurfaceCoverage": null,
+              "missingAuxiliaryFiles": [],
+              "routeConfidence": 0.4,
+              "calibration": {
+                "predictedConfidence": 0.4,
+                "observedCoverage": 1,
+                "tolerance": 0.15,
+                "signedError": -0.6,
+                "absoluteError": 0.6,
+                "status": "underconfident"
+              },
+              "reportedCalibration": {
+                "status": "underconfident",
+                "predictedConfidence": 0.4,
+                "observedCoverage": 1,
+                "error": 0.6
+              },
+              "mode": "full-palace",
+              "evidenceStatus": "insufficient",
+              "interventionPolicy": "advisory",
+              "stopEnforced": false,
+              "unsafeNarrowMode": false,
+              "unsafeEnforcedStop": false,
+              "contextSelectedFiles": [
+                "src/outcome/_impl.py",
+                "src/outcome/__init__.py",
+                "tests/test_sync.py"
+              ],
+              "evaluationContextRouteAgreement": true,
+              "selectedExcludedOverlap": [],
+              "contextEstimatedTokens": 2137,
+              "contextBytes": 8548,
+              "contextMetricSource": "reported",
+              "evaluationElapsedMs": 518,
+              "contextElapsedMs": 459,
+              "staticPalaceCliCalls": 2
+            },
+            {
+              "trial": 2,
+              "status": "completed",
+              "expectedTaskType": "bugfix",
+              "taskType": "bugfix",
+              "routeFiles": [
+                "src/outcome/_impl.py",
+                "src/outcome/__init__.py",
+                "tests/test_sync.py"
+              ],
+              "routeFileCount": 3,
+              "matchedOracleFiles": [
+                "src/outcome/_impl.py",
+                "tests/test_sync.py"
+              ],
+              "routeOnlyFiles": [
+                "src/outcome/__init__.py"
+              ],
+              "changedFileCoverage": 1,
+              "reportedChangedFileCoverage": 1,
+              "coverageMetricAgreement": true,
+              "routeFocus": 0.667,
+              "reportedRouteFocus": 0.667,
+              "focusMetricAgreement": true,
+              "coreSurfaceCoverage": 1,
+              "missingImplementationFiles": [],
+              "missingTestFiles": [],
+              "auxiliarySurfaceCoverage": null,
+              "missingAuxiliaryFiles": [],
+              "routeConfidence": 0.4,
+              "calibration": {
+                "predictedConfidence": 0.4,
+                "observedCoverage": 1,
+                "tolerance": 0.15,
+                "signedError": -0.6,
+                "absoluteError": 0.6,
+                "status": "underconfident"
+              },
+              "reportedCalibration": {
+                "status": "underconfident",
+                "predictedConfidence": 0.4,
+                "observedCoverage": 1,
+                "error": 0.6
+              },
+              "mode": "full-palace",
+              "evidenceStatus": "insufficient",
+              "interventionPolicy": "advisory",
+              "stopEnforced": false,
+              "unsafeNarrowMode": false,
+              "unsafeEnforcedStop": false,
+              "contextSelectedFiles": [
+                "src/outcome/_impl.py",
+                "src/outcome/__init__.py",
+                "tests/test_sync.py"
+              ],
+              "evaluationContextRouteAgreement": true,
+              "selectedExcludedOverlap": [],
+              "contextEstimatedTokens": 2137,
+              "contextBytes": 8548,
+              "contextMetricSource": "reported",
+              "evaluationElapsedMs": 501,
+              "contextElapsedMs": 461,
+              "staticPalaceCliCalls": 2
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "async-timeout",
+      "language": "Python",
+      "languageFamily": "python",
+      "url": "https://github.com/aio-libs/async-timeout.git",
+      "pinnedHead": "7dc0022fb8160e3d7905cefa279e034e37063814",
+      "routeCommit": "e704f940d683ddede65c33c418b82364edb0e20f",
+      "groundTruthCommit": "a0e0e215ef736ff5024630033db22fb0bf262760",
+      "task": "Fix regression: (#258)",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "CHANGES.rst",
+        "async_timeout/__init__.py",
+        "tests/test_timeout.py"
+      ],
+      "implementationFiles": [
+        "async_timeout/__init__.py"
+      ],
+      "testFiles": [
+        "tests/test_timeout.py"
+      ],
+      "auxiliaryFiles": [
+        "CHANGES.rst"
+      ],
+      "oracleSource": "mechanically eligible single-parent real Git-history diff pending whole-target semantic review",
+      "candidateId": "candidate_65987ee26fb647a2",
+      "candidateRank": 1,
+      "coherencePacketSha256": "371ED5AE7C5BD3AE96E982ACCBCB582E407314601F69A5A53A3FB68832830595",
+      "testRoleDerivedFromPath": true,
+      "conditionOrder": [
+        "candidate",
+        "baseline"
+      ],
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "elapsedMs": 2369,
+          "errorCode": null,
+          "error": null
+        }
+      ],
+      "conditions": {
+        "candidate": {
+          "id": "candidate",
+          "role": "publicly-committed-0.4-stable-candidate",
+          "productCommit": "7325d2c2b3fca26a12932aa96cb21070c04c2bf3",
+          "cliSha256": "118D15BB3C2847205A4CC09A7A925BA3724B71D65CA56AA08D065AD8F851B18A",
+          "status": "failed",
+          "failureCategory": "product-or-contract",
+          "failures": [
+            "bounded auxiliary coverage was incomplete"
+          ],
+          "deterministicRoutes": true,
+          "freshIndex": {
+            "status": {
+              "root": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-local-blind-round-21-validation-AwSMVi\\async-timeout\\candidate",
+              "palaceRoot": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-local-blind-round-21-validation-AwSMVi\\async-timeout\\candidate\\.palace",
+              "initialized": true,
+              "indexed": true,
+              "stale": false,
+              "nodeCount": 93,
+              "edgeCount": 662,
+              "factCount": 0,
+              "roomCount": 14,
+              "lastIndexedAt": "2026-08-26T13:27:46.364Z",
+              "configPath": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-local-blind-round-21-validation-AwSMVi\\async-timeout\\candidate\\.palace\\palace.yml"
+            },
+            "elapsedMs": 1131,
+            "initElapsedMs": 337,
+            "indexElapsedMs": 445,
+            "statusElapsedMs": 349,
+            "attempts": 1
+          },
+          "trackedWorktreeClean": true,
+          "staticPalaceCliCalls": 7,
+          "trials": [
+            {
+              "trial": 1,
+              "status": "completed",
+              "expectedTaskType": "bugfix",
+              "taskType": "bugfix",
+              "routeFiles": [
+                "tests/test_timeout.py",
+                "async_timeout/__init__.py"
+              ],
+              "routeFileCount": 2,
+              "matchedOracleFiles": [
+                "async_timeout/__init__.py",
+                "tests/test_timeout.py"
+              ],
+              "routeOnlyFiles": [],
+              "changedFileCoverage": 0.667,
+              "reportedChangedFileCoverage": 0.667,
+              "coverageMetricAgreement": true,
+              "routeFocus": 1,
+              "reportedRouteFocus": 1,
+              "focusMetricAgreement": true,
+              "coreSurfaceCoverage": 1,
+              "missingImplementationFiles": [],
+              "missingTestFiles": [],
+              "auxiliarySurfaceCoverage": 0,
+              "missingAuxiliaryFiles": [
+                "CHANGES.rst"
+              ],
+              "routeConfidence": 0.15,
+              "calibration": {
+                "predictedConfidence": 0.15,
+                "observedCoverage": 0.667,
+                "tolerance": 0.15,
+                "signedError": -0.517,
+                "absoluteError": 0.517,
+                "status": "underconfident"
+              },
+              "reportedCalibration": {
+                "status": "underconfident",
+                "predictedConfidence": 0.15,
+                "observedCoverage": 0.667,
+                "error": 0.52
+              },
+              "mode": "full-palace",
+              "evidenceStatus": "insufficient",
+              "interventionPolicy": "advisory",
+              "stopEnforced": false,
+              "unsafeNarrowMode": false,
+              "unsafeEnforcedStop": false,
+              "contextSelectedFiles": [
+                "async_timeout/__init__.py",
+                "tests/test_timeout.py"
+              ],
+              "evaluationContextRouteAgreement": true,
+              "selectedExcludedOverlap": [],
+              "contextEstimatedTokens": 1998,
+              "contextBytes": 7989,
+              "contextMetricSource": "reported",
+              "evaluationElapsedMs": 465,
+              "contextElapsedMs": 534,
+              "staticPalaceCliCalls": 2
+            },
+            {
+              "trial": 2,
+              "status": "completed",
+              "expectedTaskType": "bugfix",
+              "taskType": "bugfix",
+              "routeFiles": [
+                "tests/test_timeout.py",
+                "async_timeout/__init__.py"
+              ],
+              "routeFileCount": 2,
+              "matchedOracleFiles": [
+                "async_timeout/__init__.py",
+                "tests/test_timeout.py"
+              ],
+              "routeOnlyFiles": [],
+              "changedFileCoverage": 0.667,
+              "reportedChangedFileCoverage": 0.667,
+              "coverageMetricAgreement": true,
+              "routeFocus": 1,
+              "reportedRouteFocus": 1,
+              "focusMetricAgreement": true,
+              "coreSurfaceCoverage": 1,
+              "missingImplementationFiles": [],
+              "missingTestFiles": [],
+              "auxiliarySurfaceCoverage": 0,
+              "missingAuxiliaryFiles": [
+                "CHANGES.rst"
+              ],
+              "routeConfidence": 0.15,
+              "calibration": {
+                "predictedConfidence": 0.15,
+                "observedCoverage": 0.667,
+                "tolerance": 0.15,
+                "signedError": -0.517,
+                "absoluteError": 0.517,
+                "status": "underconfident"
+              },
+              "reportedCalibration": {
+                "status": "underconfident",
+                "predictedConfidence": 0.15,
+                "observedCoverage": 0.667,
+                "error": 0.52
+              },
+              "mode": "full-palace",
+              "evidenceStatus": "insufficient",
+              "interventionPolicy": "advisory",
+              "stopEnforced": false,
+              "unsafeNarrowMode": false,
+              "unsafeEnforcedStop": false,
+              "contextSelectedFiles": [
+                "async_timeout/__init__.py",
+                "tests/test_timeout.py"
+              ],
+              "evaluationContextRouteAgreement": true,
+              "selectedExcludedOverlap": [],
+              "contextEstimatedTokens": 1998,
+              "contextBytes": 7989,
+              "contextMetricSource": "reported",
+              "evaluationElapsedMs": 471,
+              "contextElapsedMs": 431,
+              "staticPalaceCliCalls": 2
+            }
+          ]
+        },
+        "baseline": {
+          "id": "baseline",
+          "role": "public-0.3-stable-baseline",
+          "productCommit": "1331d9da0aa242549026d70e7c752638c3169044",
+          "cliSha256": "ED63B31DA23240D958E71874BD61A09427659327DC8460D88A3A41D33F5391DE",
+          "status": "failed",
+          "failureCategory": "product-or-contract",
+          "failures": [
+            "bounded auxiliary coverage was incomplete",
+            "unsafe narrow mode observed",
+            "reported route metrics differed from independent recomputation",
+            "evaluate route and context selected boundaries differed"
+          ],
+          "deterministicRoutes": true,
+          "freshIndex": {
+            "status": {
+              "root": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-local-blind-round-21-validation-AwSMVi\\async-timeout\\baseline",
+              "palaceRoot": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-local-blind-round-21-validation-AwSMVi\\async-timeout\\baseline\\.palace",
+              "initialized": true,
+              "indexed": true,
+              "stale": false,
+              "nodeCount": 87,
+              "edgeCount": 645,
+              "roomCount": 14,
+              "lastIndexedAt": "2026-08-26T13:27:50.760Z",
+              "configPath": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-local-blind-round-21-validation-AwSMVi\\async-timeout\\baseline\\.palace\\palace.yml"
+            },
+            "elapsedMs": 1256,
+            "initElapsedMs": 340,
+            "indexElapsedMs": 547,
+            "statusElapsedMs": 369,
+            "attempts": 1
+          },
+          "trackedWorktreeClean": true,
+          "staticPalaceCliCalls": 7,
+          "trials": [
+            {
+              "trial": 1,
+              "status": "completed",
+              "expectedTaskType": "bugfix",
+              "taskType": "bugfix",
+              "routeFiles": [
+                "tests/test_timeout.py",
+                "async_timeout/__init__.py"
+              ],
+              "routeFileCount": 2,
+              "matchedOracleFiles": [
+                "async_timeout/__init__.py",
+                "tests/test_timeout.py"
+              ],
+              "routeOnlyFiles": [],
+              "changedFileCoverage": 0.667,
+              "reportedChangedFileCoverage": 0.67,
+              "coverageMetricAgreement": false,
+              "routeFocus": 1,
+              "reportedRouteFocus": 1,
+              "focusMetricAgreement": true,
+              "coreSurfaceCoverage": 1,
+              "missingImplementationFiles": [],
+              "missingTestFiles": [],
+              "auxiliarySurfaceCoverage": 0,
+              "missingAuxiliaryFiles": [
+                "CHANGES.rst"
+              ],
+              "routeConfidence": 0.6,
+              "calibration": {
+                "predictedConfidence": 0.6,
+                "observedCoverage": 0.667,
+                "tolerance": 0.15,
+                "signedError": -0.067,
+                "absoluteError": 0.067,
+                "status": "well-calibrated"
+              },
+              "reportedCalibration": {
+                "status": "well-calibrated",
+                "predictedConfidence": 0.6,
+                "observedCoverage": 0.67,
+                "error": 0.07
+              },
+              "mode": "bypass",
+              "evidenceStatus": null,
+              "interventionPolicy": null,
+              "stopEnforced": false,
+              "unsafeNarrowMode": true,
+              "unsafeEnforcedStop": false,
+              "contextSelectedFiles": [
+                "async_timeout/__init__.py"
+              ],
+              "evaluationContextRouteAgreement": false,
+              "selectedExcludedOverlap": [],
+              "contextEstimatedTokens": 73,
+              "contextBytes": 292,
+              "contextMetricSource": "measured-fallback",
+              "evaluationElapsedMs": 438,
+              "contextElapsedMs": 384,
+              "staticPalaceCliCalls": 2
+            },
+            {
+              "trial": 2,
+              "status": "completed",
+              "expectedTaskType": "bugfix",
+              "taskType": "bugfix",
+              "routeFiles": [
+                "tests/test_timeout.py",
+                "async_timeout/__init__.py"
+              ],
+              "routeFileCount": 2,
+              "matchedOracleFiles": [
+                "async_timeout/__init__.py",
+                "tests/test_timeout.py"
+              ],
+              "routeOnlyFiles": [],
+              "changedFileCoverage": 0.667,
+              "reportedChangedFileCoverage": 0.67,
+              "coverageMetricAgreement": false,
+              "routeFocus": 1,
+              "reportedRouteFocus": 1,
+              "focusMetricAgreement": true,
+              "coreSurfaceCoverage": 1,
+              "missingImplementationFiles": [],
+              "missingTestFiles": [],
+              "auxiliarySurfaceCoverage": 0,
+              "missingAuxiliaryFiles": [
+                "CHANGES.rst"
+              ],
+              "routeConfidence": 0.6,
+              "calibration": {
+                "predictedConfidence": 0.6,
+                "observedCoverage": 0.667,
+                "tolerance": 0.15,
+                "signedError": -0.067,
+                "absoluteError": 0.067,
+                "status": "well-calibrated"
+              },
+              "reportedCalibration": {
+                "status": "well-calibrated",
+                "predictedConfidence": 0.6,
+                "observedCoverage": 0.67,
+                "error": 0.07
+              },
+              "mode": "bypass",
+              "evidenceStatus": null,
+              "interventionPolicy": null,
+              "stopEnforced": false,
+              "unsafeNarrowMode": true,
+              "unsafeEnforcedStop": false,
+              "contextSelectedFiles": [
+                "async_timeout/__init__.py"
+              ],
+              "evaluationContextRouteAgreement": false,
+              "selectedExcludedOverlap": [],
+              "contextEstimatedTokens": 73,
+              "contextBytes": 292,
+              "contextMetricSource": "measured-fallback",
+              "evaluationElapsedMs": 498,
+              "contextElapsedMs": 376,
+              "staticPalaceCliCalls": 2
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "go-shellwords",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/mattn/go-shellwords.git",
+      "pinnedHead": "2b31b13123b0c5253ca007689e2e11c1512e9624",
+      "routeCommit": "75da1b0b79d7431a49806ab3bca49298a38c7d8b",
+      "groundTruthCommit": "4b8442e4e74fb4cbaf79a70cd605ab326504ac84",
+      "task": "Fix fd redirect detection for non-numeric and multi-digit tokens",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "shellwords.go",
+        "shellwords_test.go"
+      ],
+      "implementationFiles": [
+        "shellwords.go"
+      ],
+      "testFiles": [
+        "shellwords_test.go"
+      ],
+      "auxiliaryFiles": [],
+      "oracleSource": "mechanically eligible single-parent real Git-history diff pending whole-target semantic review",
+      "candidateId": "candidate_6f3995fb3cbe9d37",
+      "candidateRank": 2,
+      "coherencePacketSha256": "2B7186E7B9B139B47C382B1E4C096278C2084D2FD8C391C90DCAAAB95C8B9712",
+      "testRoleDerivedFromPath": true,
+      "conditionOrder": [
+        "baseline",
+        "candidate"
+      ],
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "elapsedMs": 2280,
+          "errorCode": null,
+          "error": null
+        }
+      ],
+      "conditions": {
+        "baseline": {
+          "id": "baseline",
+          "role": "public-0.3-stable-baseline",
+          "productCommit": "1331d9da0aa242549026d70e7c752638c3169044",
+          "cliSha256": "ED63B31DA23240D958E71874BD61A09427659327DC8460D88A3A41D33F5391DE",
+          "status": "failed",
+          "failureCategory": "product-or-contract",
+          "failures": [
+            "trial 1 context execution failed",
+            "trial 2 context execution failed",
+            "not all formal repetitions completed",
+            "route order or membership differed across repetitions"
+          ],
+          "deterministicRoutes": false,
+          "freshIndex": {
+            "status": {
+              "root": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-local-blind-round-21-validation-AwSMVi\\go-shellwords\\baseline",
+              "palaceRoot": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-local-blind-round-21-validation-AwSMVi\\go-shellwords\\baseline\\.palace",
+              "initialized": true,
+              "indexed": true,
+              "stale": false,
+              "nodeCount": 21,
+              "edgeCount": 30,
+              "roomCount": 12,
+              "lastIndexedAt": "2026-08-26T13:27:57.074Z",
+              "configPath": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-local-blind-round-21-validation-AwSMVi\\go-shellwords\\baseline\\.palace\\palace.yml"
+            },
+            "elapsedMs": 1066,
+            "initElapsedMs": 335,
+            "indexElapsedMs": 391,
+            "statusElapsedMs": 340,
+            "attempts": 1
+          },
+          "trackedWorktreeClean": true,
+          "staticPalaceCliCalls": 3,
+          "trials": [
+            {
+              "trial": 1,
+              "status": "execution-error",
+              "failedPhase": "context",
+              "expectedTaskType": "bugfix",
+              "taskType": "bugfix",
+              "routeFiles": [],
+              "errorCode": null,
+              "error": "Error: Context output did not identify a Primary candidate.\n    at normalizeContextTelemetry (D:\\工作资料\\codex palace\\scripts\\lib\\context-telemetry.cjs:25:11)\n    at validateCondition (D:\\工作资料\\codex palace\\scripts\\verify-local-blind-routing-round-21.cjs:502:25)\n    at main (D:\\工作资料\\codex palace\\scripts\\verify-local-blind-routing-round-21.cjs:125:49)"
+            },
+            {
+              "trial": 2,
+              "status": "execution-error",
+              "failedPhase": "context",
+              "expectedTaskType": "bugfix",
+              "taskType": "bugfix",
+              "routeFiles": [],
+              "errorCode": null,
+              "error": "Error: Context output did not identify a Primary candidate.\n    at normalizeContextTelemetry (D:\\工作资料\\codex palace\\scripts\\lib\\context-telemetry.cjs:25:11)\n    at validateCondition (D:\\工作资料\\codex palace\\scripts\\verify-local-blind-routing-round-21.cjs:502:25)\n    at main (D:\\工作资料\\codex palace\\scripts\\verify-local-blind-routing-round-21.cjs:125:49)"
+            }
+          ]
+        },
+        "candidate": {
+          "id": "candidate",
+          "role": "publicly-committed-0.4-stable-candidate",
+          "productCommit": "7325d2c2b3fca26a12932aa96cb21070c04c2bf3",
+          "cliSha256": "118D15BB3C2847205A4CC09A7A925BA3724B71D65CA56AA08D065AD8F851B18A",
+          "status": "passed",
+          "failureCategory": null,
+          "failures": [],
+          "deterministicRoutes": true,
+          "freshIndex": {
+            "status": {
+              "root": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-local-blind-round-21-validation-AwSMVi\\go-shellwords\\candidate",
+              "palaceRoot": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-local-blind-round-21-validation-AwSMVi\\go-shellwords\\candidate\\.palace",
+              "initialized": true,
+              "indexed": true,
+              "stale": false,
+              "nodeCount": 71,
+              "edgeCount": 484,
+              "factCount": 0,
+              "roomCount": 12,
+              "lastIndexedAt": "2026-08-26T13:28:00.891Z",
+              "configPath": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-local-blind-round-21-validation-AwSMVi\\go-shellwords\\candidate\\.palace\\palace.yml"
+            },
+            "elapsedMs": 1160,
+            "initElapsedMs": 348,
+            "indexElapsedMs": 455,
+            "statusElapsedMs": 357,
+            "attempts": 1
+          },
+          "trackedWorktreeClean": true,
+          "staticPalaceCliCalls": 7,
+          "trials": [
+            {
+              "trial": 1,
+              "status": "completed",
+              "expectedTaskType": "bugfix",
+              "taskType": "bugfix",
+              "routeFiles": [
+                "shellwords_test.go",
+                "shellwords.go"
+              ],
+              "routeFileCount": 2,
+              "matchedOracleFiles": [
+                "shellwords.go",
+                "shellwords_test.go"
+              ],
+              "routeOnlyFiles": [],
+              "changedFileCoverage": 1,
+              "reportedChangedFileCoverage": 1,
+              "coverageMetricAgreement": true,
+              "routeFocus": 1,
+              "reportedRouteFocus": 1,
+              "focusMetricAgreement": true,
+              "coreSurfaceCoverage": 1,
+              "missingImplementationFiles": [],
+              "missingTestFiles": [],
+              "auxiliarySurfaceCoverage": null,
+              "missingAuxiliaryFiles": [],
+              "routeConfidence": 0.15,
+              "calibration": {
+                "predictedConfidence": 0.15,
+                "observedCoverage": 1,
+                "tolerance": 0.15,
+                "signedError": -0.85,
+                "absoluteError": 0.85,
+                "status": "underconfident"
+              },
+              "reportedCalibration": {
+                "status": "underconfident",
+                "predictedConfidence": 0.15,
+                "observedCoverage": 1,
+                "error": 0.85
+              },
+              "mode": "full-palace",
+              "evidenceStatus": "insufficient",
+              "interventionPolicy": "advisory",
+              "stopEnforced": false,
+              "unsafeNarrowMode": false,
+              "unsafeEnforcedStop": false,
+              "contextSelectedFiles": [
+                "shellwords.go",
+                "shellwords_test.go"
+              ],
+              "evaluationContextRouteAgreement": true,
+              "selectedExcludedOverlap": [],
+              "contextEstimatedTokens": 2568,
+              "contextBytes": 10271,
+              "contextMetricSource": "reported",
+              "evaluationElapsedMs": 476,
+              "contextElapsedMs": 428,
+              "staticPalaceCliCalls": 2
+            },
+            {
+              "trial": 2,
+              "status": "completed",
+              "expectedTaskType": "bugfix",
+              "taskType": "bugfix",
+              "routeFiles": [
+                "shellwords_test.go",
+                "shellwords.go"
+              ],
+              "routeFileCount": 2,
+              "matchedOracleFiles": [
+                "shellwords.go",
+                "shellwords_test.go"
+              ],
+              "routeOnlyFiles": [],
+              "changedFileCoverage": 1,
+              "reportedChangedFileCoverage": 1,
+              "coverageMetricAgreement": true,
+              "routeFocus": 1,
+              "reportedRouteFocus": 1,
+              "focusMetricAgreement": true,
+              "coreSurfaceCoverage": 1,
+              "missingImplementationFiles": [],
+              "missingTestFiles": [],
+              "auxiliarySurfaceCoverage": null,
+              "missingAuxiliaryFiles": [],
+              "routeConfidence": 0.15,
+              "calibration": {
+                "predictedConfidence": 0.15,
+                "observedCoverage": 1,
+                "tolerance": 0.15,
+                "signedError": -0.85,
+                "absoluteError": 0.85,
+                "status": "underconfident"
+              },
+              "reportedCalibration": {
+                "status": "underconfident",
+                "predictedConfidence": 0.15,
+                "observedCoverage": 1,
+                "error": 0.85
+              },
+              "mode": "full-palace",
+              "evidenceStatus": "insufficient",
+              "interventionPolicy": "advisory",
+              "stopEnforced": false,
+              "unsafeNarrowMode": false,
+              "unsafeEnforcedStop": false,
+              "contextSelectedFiles": [
+                "shellwords.go",
+                "shellwords_test.go"
+              ],
+              "evaluationContextRouteAgreement": true,
+              "selectedExcludedOverlap": [],
+              "contextEstimatedTokens": 2568,
+              "contextBytes": 10271,
+              "contextMetricSource": "reported",
+              "evaluationElapsedMs": 479,
+              "contextElapsedMs": 420,
+              "staticPalaceCliCalls": 2
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "go-sqlite3",
+      "language": "Go fallback parser",
+      "languageFamily": "go",
+      "url": "https://github.com/mattn/go-sqlite3.git",
+      "pinnedHead": "58c8e145308ceded07d1df2ac1b65999499e7055",
+      "routeCommit": "58e032d79a4cedd24e3caf90ccf2f587f5cc19d3",
+      "groundTruthCommit": "869e516d63f1c01adefb7696e2451a3eed8519b0",
+      "task": "fix panic when querying input with no SQL (only comments/whitespace)",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "sqlite3.go",
+        "sqlite3_test.go"
+      ],
+      "implementationFiles": [
+        "sqlite3.go"
+      ],
+      "testFiles": [
+        "sqlite3_test.go"
+      ],
+      "auxiliaryFiles": [],
+      "oracleSource": "mechanically eligible single-parent real Git-history diff pending whole-target semantic review",
+      "candidateId": "candidate_d037eecd7acd560d",
+      "candidateRank": 1,
+      "coherencePacketSha256": "AA090AB41431903F6EF613CAB4DEF5FA04047AEC1F6896BF9E982BC8C84EF100",
+      "testRoleDerivedFromPath": true,
+      "conditionOrder": [
+        "candidate",
+        "baseline"
+      ],
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "elapsedMs": 7484,
+          "errorCode": null,
+          "error": null
+        }
+      ],
+      "conditions": {
+        "candidate": {
+          "id": "candidate",
+          "role": "publicly-committed-0.4-stable-candidate",
+          "productCommit": "7325d2c2b3fca26a12932aa96cb21070c04c2bf3",
+          "cliSha256": "118D15BB3C2847205A4CC09A7A925BA3724B71D65CA56AA08D065AD8F851B18A",
+          "status": "failed",
+          "failureCategory": "product-or-contract",
+          "failures": [
+            "target route focus fell below 0.40"
+          ],
+          "deterministicRoutes": true,
+          "freshIndex": {
+            "status": {
+              "root": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-local-blind-round-21-validation-AwSMVi\\go-sqlite3\\candidate",
+              "palaceRoot": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-local-blind-round-21-validation-AwSMVi\\go-sqlite3\\candidate\\.palace",
+              "initialized": true,
+              "indexed": true,
+              "stale": false,
+              "nodeCount": 7437,
+              "edgeCount": 12197,
+              "factCount": 0,
+              "roomCount": 82,
+              "lastIndexedAt": "2026-08-26T13:28:21.955Z",
+              "configPath": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-local-blind-round-21-validation-AwSMVi\\go-sqlite3\\candidate\\.palace\\palace.yml"
+            },
+            "elapsedMs": 9529,
+            "initElapsedMs": 308,
+            "indexElapsedMs": 8711,
+            "statusElapsedMs": 511,
+            "attempts": 1
+          },
+          "trackedWorktreeClean": true,
+          "staticPalaceCliCalls": 7,
+          "trials": [
+            {
+              "trial": 1,
+              "status": "completed",
+              "expectedTaskType": "bugfix",
+              "taskType": "bugfix",
+              "routeFiles": [
+                "sqlite3.go",
+                "sqlite3-binding.c",
+                "sqlite3_trace.go",
+                "sqlite3-binding.h",
+                "_example/trace/main.go",
+                "sqlite3_test.go"
+              ],
+              "routeFileCount": 6,
+              "matchedOracleFiles": [
+                "sqlite3.go",
+                "sqlite3_test.go"
+              ],
+              "routeOnlyFiles": [
+                "sqlite3-binding.c",
+                "sqlite3_trace.go",
+                "sqlite3-binding.h",
+                "_example/trace/main.go"
+              ],
+              "changedFileCoverage": 1,
+              "reportedChangedFileCoverage": 1,
+              "coverageMetricAgreement": true,
+              "routeFocus": 0.333,
+              "reportedRouteFocus": 0.333,
+              "focusMetricAgreement": true,
+              "coreSurfaceCoverage": 1,
+              "missingImplementationFiles": [],
+              "missingTestFiles": [],
+              "auxiliarySurfaceCoverage": null,
+              "missingAuxiliaryFiles": [],
+              "routeConfidence": 0.4,
+              "calibration": {
+                "predictedConfidence": 0.4,
+                "observedCoverage": 1,
+                "tolerance": 0.15,
+                "signedError": -0.6,
+                "absoluteError": 0.6,
+                "status": "underconfident"
+              },
+              "reportedCalibration": {
+                "status": "underconfident",
+                "predictedConfidence": 0.4,
+                "observedCoverage": 1,
+                "error": 0.6
+              },
+              "mode": "full-palace",
+              "evidenceStatus": "insufficient",
+              "interventionPolicy": "advisory",
+              "stopEnforced": false,
+              "unsafeNarrowMode": false,
+              "unsafeEnforcedStop": false,
+              "contextSelectedFiles": [
+                "sqlite3.go",
+                "sqlite3-binding.c",
+                "sqlite3_trace.go",
+                "sqlite3-binding.h",
+                "_example/trace/main.go",
+                "sqlite3_test.go"
+              ],
+              "evaluationContextRouteAgreement": true,
+              "selectedExcludedOverlap": [],
+              "contextEstimatedTokens": 5625,
+              "contextBytes": 22498,
+              "contextMetricSource": "reported",
+              "evaluationElapsedMs": 10261,
+              "contextElapsedMs": 9832,
+              "staticPalaceCliCalls": 2
+            },
+            {
+              "trial": 2,
+              "status": "completed",
+              "expectedTaskType": "bugfix",
+              "taskType": "bugfix",
+              "routeFiles": [
+                "sqlite3.go",
+                "sqlite3-binding.c",
+                "sqlite3_trace.go",
+                "sqlite3-binding.h",
+                "_example/trace/main.go",
+                "sqlite3_test.go"
+              ],
+              "routeFileCount": 6,
+              "matchedOracleFiles": [
+                "sqlite3.go",
+                "sqlite3_test.go"
+              ],
+              "routeOnlyFiles": [
+                "sqlite3-binding.c",
+                "sqlite3_trace.go",
+                "sqlite3-binding.h",
+                "_example/trace/main.go"
+              ],
+              "changedFileCoverage": 1,
+              "reportedChangedFileCoverage": 1,
+              "coverageMetricAgreement": true,
+              "routeFocus": 0.333,
+              "reportedRouteFocus": 0.333,
+              "focusMetricAgreement": true,
+              "coreSurfaceCoverage": 1,
+              "missingImplementationFiles": [],
+              "missingTestFiles": [],
+              "auxiliarySurfaceCoverage": null,
+              "missingAuxiliaryFiles": [],
+              "routeConfidence": 0.4,
+              "calibration": {
+                "predictedConfidence": 0.4,
+                "observedCoverage": 1,
+                "tolerance": 0.15,
+                "signedError": -0.6,
+                "absoluteError": 0.6,
+                "status": "underconfident"
+              },
+              "reportedCalibration": {
+                "status": "underconfident",
+                "predictedConfidence": 0.4,
+                "observedCoverage": 1,
+                "error": 0.6
+              },
+              "mode": "full-palace",
+              "evidenceStatus": "insufficient",
+              "interventionPolicy": "advisory",
+              "stopEnforced": false,
+              "unsafeNarrowMode": false,
+              "unsafeEnforcedStop": false,
+              "contextSelectedFiles": [
+                "sqlite3.go",
+                "sqlite3-binding.c",
+                "sqlite3_trace.go",
+                "sqlite3-binding.h",
+                "_example/trace/main.go",
+                "sqlite3_test.go"
+              ],
+              "evaluationContextRouteAgreement": true,
+              "selectedExcludedOverlap": [],
+              "contextEstimatedTokens": 5625,
+              "contextBytes": 22498,
+              "contextMetricSource": "reported",
+              "evaluationElapsedMs": 10522,
+              "contextElapsedMs": 10175,
+              "staticPalaceCliCalls": 2
+            }
+          ]
+        },
+        "baseline": {
+          "id": "baseline",
+          "role": "public-0.3-stable-baseline",
+          "productCommit": "1331d9da0aa242549026d70e7c752638c3169044",
+          "cliSha256": "ED63B31DA23240D958E71874BD61A09427659327DC8460D88A3A41D33F5391DE",
+          "status": "failed",
+          "failureCategory": "product-or-contract",
+          "failures": [
+            "target route focus fell below 0.40"
+          ],
+          "deterministicRoutes": true,
+          "freshIndex": {
+            "status": {
+              "root": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-local-blind-round-21-validation-AwSMVi\\go-sqlite3\\baseline",
+              "palaceRoot": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-local-blind-round-21-validation-AwSMVi\\go-sqlite3\\baseline\\.palace",
+              "initialized": true,
+              "indexed": true,
+              "stale": false,
+              "nodeCount": 2488,
+              "edgeCount": 3397,
+              "roomCount": 76,
+              "lastIndexedAt": "2026-08-26T13:29:07.439Z",
+              "configPath": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-local-blind-round-21-validation-AwSMVi\\go-sqlite3\\baseline\\.palace\\palace.yml"
+            },
+            "elapsedMs": 1951,
+            "initElapsedMs": 329,
+            "indexElapsedMs": 1185,
+            "statusElapsedMs": 437,
+            "attempts": 1
+          },
+          "trackedWorktreeClean": true,
+          "staticPalaceCliCalls": 7,
+          "trials": [
+            {
+              "trial": 1,
+              "status": "completed",
+              "expectedTaskType": "bugfix",
+              "taskType": "bugfix",
+              "routeFiles": [
+                "sqlite3-binding.c",
+                "sqlite3-binding.h",
+                "sqlite3_opt_userauth.go",
+                "sqlite3_opt_userauth_omit.go",
+                "_example/trace/main.go",
+                "_example/vtable_eponymous_only/main.go",
+                "sqlite3.go",
+                "_example/mod_vtable/picojson.h",
+                "backup.go",
+                "sqlite3_test.go"
+              ],
+              "routeFileCount": 10,
+              "matchedOracleFiles": [
+                "sqlite3.go",
+                "sqlite3_test.go"
+              ],
+              "routeOnlyFiles": [
+                "sqlite3-binding.c",
+                "sqlite3-binding.h",
+                "sqlite3_opt_userauth.go",
+                "sqlite3_opt_userauth_omit.go",
+                "_example/trace/main.go",
+                "_example/vtable_eponymous_only/main.go",
+                "_example/mod_vtable/picojson.h",
+                "backup.go"
+              ],
+              "changedFileCoverage": 1,
+              "reportedChangedFileCoverage": 1,
+              "coverageMetricAgreement": true,
+              "routeFocus": 0.2,
+              "reportedRouteFocus": 0.2,
+              "focusMetricAgreement": true,
+              "coreSurfaceCoverage": 1,
+              "missingImplementationFiles": [],
+              "missingTestFiles": [],
+              "auxiliarySurfaceCoverage": null,
+              "missingAuxiliaryFiles": [],
+              "routeConfidence": 0.65,
+              "calibration": {
+                "predictedConfidence": 0.65,
+                "observedCoverage": 1,
+                "tolerance": 0.15,
+                "signedError": -0.35,
+                "absoluteError": 0.35,
+                "status": "underconfident"
+              },
+              "reportedCalibration": {
+                "status": "underconfident",
+                "predictedConfidence": 0.65,
+                "observedCoverage": 1,
+                "error": 0.35
+              },
+              "mode": "route-lite",
+              "evidenceStatus": null,
+              "interventionPolicy": null,
+              "stopEnforced": false,
+              "unsafeNarrowMode": false,
+              "unsafeEnforcedStop": false,
+              "contextSelectedFiles": [
+                "sqlite3-binding.c",
+                "sqlite3-binding.h",
+                "sqlite3_opt_userauth.go",
+                "sqlite3_opt_userauth_omit.go",
+                "_example/trace/main.go",
+                "_example/vtable_eponymous_only/main.go",
+                "sqlite3.go",
+                "_example/mod_vtable/picojson.h",
+                "backup.go",
+                "sqlite3_test.go"
+              ],
+              "evaluationContextRouteAgreement": true,
+              "selectedExcludedOverlap": [],
+              "contextEstimatedTokens": 1667,
+              "contextBytes": 6667,
+              "contextMetricSource": "reported",
+              "evaluationElapsedMs": 988,
+              "contextElapsedMs": 776,
+              "staticPalaceCliCalls": 2
+            },
+            {
+              "trial": 2,
+              "status": "completed",
+              "expectedTaskType": "bugfix",
+              "taskType": "bugfix",
+              "routeFiles": [
+                "sqlite3-binding.c",
+                "sqlite3-binding.h",
+                "sqlite3_opt_userauth.go",
+                "sqlite3_opt_userauth_omit.go",
+                "_example/trace/main.go",
+                "_example/vtable_eponymous_only/main.go",
+                "sqlite3.go",
+                "_example/mod_vtable/picojson.h",
+                "backup.go",
+                "sqlite3_test.go"
+              ],
+              "routeFileCount": 10,
+              "matchedOracleFiles": [
+                "sqlite3.go",
+                "sqlite3_test.go"
+              ],
+              "routeOnlyFiles": [
+                "sqlite3-binding.c",
+                "sqlite3-binding.h",
+                "sqlite3_opt_userauth.go",
+                "sqlite3_opt_userauth_omit.go",
+                "_example/trace/main.go",
+                "_example/vtable_eponymous_only/main.go",
+                "_example/mod_vtable/picojson.h",
+                "backup.go"
+              ],
+              "changedFileCoverage": 1,
+              "reportedChangedFileCoverage": 1,
+              "coverageMetricAgreement": true,
+              "routeFocus": 0.2,
+              "reportedRouteFocus": 0.2,
+              "focusMetricAgreement": true,
+              "coreSurfaceCoverage": 1,
+              "missingImplementationFiles": [],
+              "missingTestFiles": [],
+              "auxiliarySurfaceCoverage": null,
+              "missingAuxiliaryFiles": [],
+              "routeConfidence": 0.65,
+              "calibration": {
+                "predictedConfidence": 0.65,
+                "observedCoverage": 1,
+                "tolerance": 0.15,
+                "signedError": -0.35,
+                "absoluteError": 0.35,
+                "status": "underconfident"
+              },
+              "reportedCalibration": {
+                "status": "underconfident",
+                "predictedConfidence": 0.65,
+                "observedCoverage": 1,
+                "error": 0.35
+              },
+              "mode": "route-lite",
+              "evidenceStatus": null,
+              "interventionPolicy": null,
+              "stopEnforced": false,
+              "unsafeNarrowMode": false,
+              "unsafeEnforcedStop": false,
+              "contextSelectedFiles": [
+                "sqlite3-binding.c",
+                "sqlite3-binding.h",
+                "sqlite3_opt_userauth.go",
+                "sqlite3_opt_userauth_omit.go",
+                "_example/trace/main.go",
+                "_example/vtable_eponymous_only/main.go",
+                "sqlite3.go",
+                "_example/mod_vtable/picojson.h",
+                "backup.go",
+                "sqlite3_test.go"
+              ],
+              "evaluationContextRouteAgreement": true,
+              "selectedExcludedOverlap": [],
+              "contextEstimatedTokens": 1667,
+              "contextBytes": 6667,
+              "contextMetricSource": "reported",
+              "evaluationElapsedMs": 934,
+              "contextElapsedMs": 723,
+              "staticPalaceCliCalls": 2
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "indicatif",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/console-rs/indicatif.git",
+      "pinnedHead": "e4750d26f43a2802f788cd1ccb4de0f459629e5c",
+      "routeCommit": "9ac729aa26e1d17f1f2aaacfba9b00c39f6c66c9",
+      "groundTruthCommit": "a202f8caab49cfea09477e81c936054d653b03bc",
+      "task": "Fix height and filler when wrapped at the middle of wide characters",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "src/draw_target.rs",
+        "tests/render.rs"
+      ],
+      "implementationFiles": [
+        "src/draw_target.rs"
+      ],
+      "testFiles": [
+        "tests/render.rs"
+      ],
+      "auxiliaryFiles": [],
+      "oracleSource": "mechanically eligible single-parent real Git-history diff pending whole-target semantic review",
+      "candidateId": "candidate_a0549a03b2074dbb",
+      "candidateRank": 1,
+      "coherencePacketSha256": "06893C31C2665FCFD1867DDF633E3CA30873A034F3BA9D89454B8B2CFDE73A60",
+      "testRoleDerivedFromPath": true,
+      "conditionOrder": [
+        "baseline",
+        "candidate"
+      ],
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "elapsedMs": 2727,
+          "errorCode": null,
+          "error": null
+        }
+      ],
+      "conditions": {
+        "baseline": {
+          "id": "baseline",
+          "role": "public-0.3-stable-baseline",
+          "productCommit": "1331d9da0aa242549026d70e7c752638c3169044",
+          "cliSha256": "ED63B31DA23240D958E71874BD61A09427659327DC8460D88A3A41D33F5391DE",
+          "status": "failed",
+          "failureCategory": "product-or-contract",
+          "failures": [
+            "target route focus fell below 0.40"
+          ],
+          "deterministicRoutes": true,
+          "freshIndex": {
+            "status": {
+              "root": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-local-blind-round-21-validation-AwSMVi\\indicatif\\baseline",
+              "palaceRoot": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-local-blind-round-21-validation-AwSMVi\\indicatif\\baseline\\.palace",
+              "initialized": true,
+              "indexed": true,
+              "stale": false,
+              "nodeCount": 540,
+              "edgeCount": 3770,
+              "roomCount": 22,
+              "lastIndexedAt": "2026-08-26T13:29:16.281Z",
+              "configPath": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-local-blind-round-21-validation-AwSMVi\\indicatif\\baseline\\.palace\\palace.yml"
+            },
+            "elapsedMs": 1215,
+            "initElapsedMs": 298,
+            "indexElapsedMs": 555,
+            "statusElapsedMs": 362,
+            "attempts": 1
+          },
+          "trackedWorktreeClean": true,
+          "staticPalaceCliCalls": 7,
+          "trials": [
+            {
+              "trial": 1,
+              "status": "completed",
+              "expectedTaskType": "bugfix",
+              "taskType": "bugfix",
+              "routeFiles": [
+                "src/draw_target.rs",
+                "src/style.rs",
+                "tests/render.rs",
+                "src/term_like.rs",
+                "src/rayon.rs",
+                "src/in_memory.rs",
+                "src/state.rs",
+                "examples/download-continued.rs",
+                "src/iter.rs",
+                "src/progress_bar.rs"
+              ],
+              "routeFileCount": 10,
+              "matchedOracleFiles": [
+                "src/draw_target.rs",
+                "tests/render.rs"
+              ],
+              "routeOnlyFiles": [
+                "src/style.rs",
+                "src/term_like.rs",
+                "src/rayon.rs",
+                "src/in_memory.rs",
+                "src/state.rs",
+                "examples/download-continued.rs",
+                "src/iter.rs",
+                "src/progress_bar.rs"
+              ],
+              "changedFileCoverage": 1,
+              "reportedChangedFileCoverage": 1,
+              "coverageMetricAgreement": true,
+              "routeFocus": 0.2,
+              "reportedRouteFocus": 0.2,
+              "focusMetricAgreement": true,
+              "coreSurfaceCoverage": 1,
+              "missingImplementationFiles": [],
+              "missingTestFiles": [],
+              "auxiliarySurfaceCoverage": null,
+              "missingAuxiliaryFiles": [],
+              "routeConfidence": 0.72,
+              "calibration": {
+                "predictedConfidence": 0.72,
+                "observedCoverage": 1,
+                "tolerance": 0.15,
+                "signedError": -0.28,
+                "absoluteError": 0.28,
+                "status": "underconfident"
+              },
+              "reportedCalibration": {
+                "status": "underconfident",
+                "predictedConfidence": 0.72,
+                "observedCoverage": 1,
+                "error": 0.28
+              },
+              "mode": "route-lite",
+              "evidenceStatus": null,
+              "interventionPolicy": null,
+              "stopEnforced": false,
+              "unsafeNarrowMode": false,
+              "unsafeEnforcedStop": false,
+              "contextSelectedFiles": [
+                "src/draw_target.rs",
+                "src/style.rs",
+                "tests/render.rs",
+                "src/term_like.rs",
+                "src/rayon.rs",
+                "src/iter.rs",
+                "src/progress_bar.rs",
+                "src/in_memory.rs",
+                "src/state.rs",
+                "examples/download-continued.rs"
+              ],
+              "evaluationContextRouteAgreement": true,
+              "selectedExcludedOverlap": [],
+              "contextEstimatedTokens": 1699,
+              "contextBytes": 6796,
+              "contextMetricSource": "reported",
+              "evaluationElapsedMs": 514,
+              "contextElapsedMs": 454,
+              "staticPalaceCliCalls": 2
+            },
+            {
+              "trial": 2,
+              "status": "completed",
+              "expectedTaskType": "bugfix",
+              "taskType": "bugfix",
+              "routeFiles": [
+                "src/draw_target.rs",
+                "src/style.rs",
+                "tests/render.rs",
+                "src/term_like.rs",
+                "src/rayon.rs",
+                "src/in_memory.rs",
+                "src/state.rs",
+                "examples/download-continued.rs",
+                "src/iter.rs",
+                "src/progress_bar.rs"
+              ],
+              "routeFileCount": 10,
+              "matchedOracleFiles": [
+                "src/draw_target.rs",
+                "tests/render.rs"
+              ],
+              "routeOnlyFiles": [
+                "src/style.rs",
+                "src/term_like.rs",
+                "src/rayon.rs",
+                "src/in_memory.rs",
+                "src/state.rs",
+                "examples/download-continued.rs",
+                "src/iter.rs",
+                "src/progress_bar.rs"
+              ],
+              "changedFileCoverage": 1,
+              "reportedChangedFileCoverage": 1,
+              "coverageMetricAgreement": true,
+              "routeFocus": 0.2,
+              "reportedRouteFocus": 0.2,
+              "focusMetricAgreement": true,
+              "coreSurfaceCoverage": 1,
+              "missingImplementationFiles": [],
+              "missingTestFiles": [],
+              "auxiliarySurfaceCoverage": null,
+              "missingAuxiliaryFiles": [],
+              "routeConfidence": 0.72,
+              "calibration": {
+                "predictedConfidence": 0.72,
+                "observedCoverage": 1,
+                "tolerance": 0.15,
+                "signedError": -0.28,
+                "absoluteError": 0.28,
+                "status": "underconfident"
+              },
+              "reportedCalibration": {
+                "status": "underconfident",
+                "predictedConfidence": 0.72,
+                "observedCoverage": 1,
+                "error": 0.28
+              },
+              "mode": "route-lite",
+              "evidenceStatus": null,
+              "interventionPolicy": null,
+              "stopEnforced": false,
+              "unsafeNarrowMode": false,
+              "unsafeEnforcedStop": false,
+              "contextSelectedFiles": [
+                "src/draw_target.rs",
+                "src/style.rs",
+                "tests/render.rs",
+                "src/term_like.rs",
+                "src/rayon.rs",
+                "src/iter.rs",
+                "src/progress_bar.rs",
+                "src/in_memory.rs",
+                "src/state.rs",
+                "examples/download-continued.rs"
+              ],
+              "evaluationContextRouteAgreement": true,
+              "selectedExcludedOverlap": [],
+              "contextEstimatedTokens": 1699,
+              "contextBytes": 6796,
+              "contextMetricSource": "reported",
+              "evaluationElapsedMs": 562,
+              "contextElapsedMs": 465,
+              "staticPalaceCliCalls": 2
+            }
+          ]
+        },
+        "candidate": {
+          "id": "candidate",
+          "role": "publicly-committed-0.4-stable-candidate",
+          "productCommit": "7325d2c2b3fca26a12932aa96cb21070c04c2bf3",
+          "cliSha256": "118D15BB3C2847205A4CC09A7A925BA3724B71D65CA56AA08D065AD8F851B18A",
+          "status": "failed",
+          "failureCategory": "product-or-contract",
+          "failures": [
+            "target route focus fell below 0.40"
+          ],
+          "deterministicRoutes": true,
+          "freshIndex": {
+            "status": {
+              "root": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-local-blind-round-21-validation-AwSMVi\\indicatif\\candidate",
+              "palaceRoot": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-local-blind-round-21-validation-AwSMVi\\indicatif\\candidate\\.palace",
+              "initialized": true,
+              "indexed": true,
+              "stale": false,
+              "nodeCount": 639,
+              "edgeCount": 4230,
+              "factCount": 0,
+              "roomCount": 27,
+              "lastIndexedAt": "2026-08-26T13:29:20.960Z",
+              "configPath": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-local-blind-round-21-validation-AwSMVi\\indicatif\\candidate\\.palace\\palace.yml"
+            },
+            "elapsedMs": 1350,
+            "initElapsedMs": 315,
+            "indexElapsedMs": 636,
+            "statusElapsedMs": 399,
+            "attempts": 1
+          },
+          "trackedWorktreeClean": true,
+          "staticPalaceCliCalls": 7,
+          "trials": [
+            {
+              "trial": 1,
+              "status": "completed",
+              "expectedTaskType": "bugfix",
+              "taskType": "bugfix",
+              "routeFiles": [
+                "src/draw_target.rs",
+                "src/iter.rs",
+                "src/progress_bar.rs",
+                "src/rayon.rs",
+                "src/style.rs",
+                "src/in_memory.rs",
+                "examples/yarnish.rs",
+                "src/state.rs",
+                "tests/render.rs"
+              ],
+              "routeFileCount": 9,
+              "matchedOracleFiles": [
+                "src/draw_target.rs",
+                "tests/render.rs"
+              ],
+              "routeOnlyFiles": [
+                "src/iter.rs",
+                "src/progress_bar.rs",
+                "src/rayon.rs",
+                "src/style.rs",
+                "src/in_memory.rs",
+                "examples/yarnish.rs",
+                "src/state.rs"
+              ],
+              "changedFileCoverage": 1,
+              "reportedChangedFileCoverage": 1,
+              "coverageMetricAgreement": true,
+              "routeFocus": 0.222,
+              "reportedRouteFocus": 0.222,
+              "focusMetricAgreement": true,
+              "coreSurfaceCoverage": 1,
+              "missingImplementationFiles": [],
+              "missingTestFiles": [],
+              "auxiliarySurfaceCoverage": null,
+              "missingAuxiliaryFiles": [],
+              "routeConfidence": 0.4,
+              "calibration": {
+                "predictedConfidence": 0.4,
+                "observedCoverage": 1,
+                "tolerance": 0.15,
+                "signedError": -0.6,
+                "absoluteError": 0.6,
+                "status": "underconfident"
+              },
+              "reportedCalibration": {
+                "status": "underconfident",
+                "predictedConfidence": 0.4,
+                "observedCoverage": 1,
+                "error": 0.6
+              },
+              "mode": "full-palace",
+              "evidenceStatus": "insufficient",
+              "interventionPolicy": "advisory",
+              "stopEnforced": false,
+              "unsafeNarrowMode": false,
+              "unsafeEnforcedStop": false,
+              "contextSelectedFiles": [
+                "src/draw_target.rs",
+                "src/iter.rs",
+                "src/progress_bar.rs",
+                "src/rayon.rs",
+                "src/style.rs",
+                "tests/render.rs",
+                "src/in_memory.rs",
+                "examples/yarnish.rs",
+                "src/state.rs"
+              ],
+              "evaluationContextRouteAgreement": true,
+              "selectedExcludedOverlap": [],
+              "contextEstimatedTokens": 2721,
+              "contextBytes": 10884,
+              "contextMetricSource": "reported",
+              "evaluationElapsedMs": 890,
+              "contextElapsedMs": 774,
+              "staticPalaceCliCalls": 2
+            },
+            {
+              "trial": 2,
+              "status": "completed",
+              "expectedTaskType": "bugfix",
+              "taskType": "bugfix",
+              "routeFiles": [
+                "src/draw_target.rs",
+                "src/iter.rs",
+                "src/progress_bar.rs",
+                "src/rayon.rs",
+                "src/style.rs",
+                "src/in_memory.rs",
+                "examples/yarnish.rs",
+                "src/state.rs",
+                "tests/render.rs"
+              ],
+              "routeFileCount": 9,
+              "matchedOracleFiles": [
+                "src/draw_target.rs",
+                "tests/render.rs"
+              ],
+              "routeOnlyFiles": [
+                "src/iter.rs",
+                "src/progress_bar.rs",
+                "src/rayon.rs",
+                "src/style.rs",
+                "src/in_memory.rs",
+                "examples/yarnish.rs",
+                "src/state.rs"
+              ],
+              "changedFileCoverage": 1,
+              "reportedChangedFileCoverage": 1,
+              "coverageMetricAgreement": true,
+              "routeFocus": 0.222,
+              "reportedRouteFocus": 0.222,
+              "focusMetricAgreement": true,
+              "coreSurfaceCoverage": 1,
+              "missingImplementationFiles": [],
+              "missingTestFiles": [],
+              "auxiliarySurfaceCoverage": null,
+              "missingAuxiliaryFiles": [],
+              "routeConfidence": 0.4,
+              "calibration": {
+                "predictedConfidence": 0.4,
+                "observedCoverage": 1,
+                "tolerance": 0.15,
+                "signedError": -0.6,
+                "absoluteError": 0.6,
+                "status": "underconfident"
+              },
+              "reportedCalibration": {
+                "status": "underconfident",
+                "predictedConfidence": 0.4,
+                "observedCoverage": 1,
+                "error": 0.6
+              },
+              "mode": "full-palace",
+              "evidenceStatus": "insufficient",
+              "interventionPolicy": "advisory",
+              "stopEnforced": false,
+              "unsafeNarrowMode": false,
+              "unsafeEnforcedStop": false,
+              "contextSelectedFiles": [
+                "src/draw_target.rs",
+                "src/iter.rs",
+                "src/progress_bar.rs",
+                "src/rayon.rs",
+                "src/style.rs",
+                "tests/render.rs",
+                "src/in_memory.rs",
+                "examples/yarnish.rs",
+                "src/state.rs"
+              ],
+              "evaluationContextRouteAgreement": true,
+              "selectedExcludedOverlap": [],
+              "contextEstimatedTokens": 2721,
+              "contextBytes": 10884,
+              "contextMetricSource": "reported",
+              "evaluationElapsedMs": 893,
+              "contextElapsedMs": 771,
+              "staticPalaceCliCalls": 2
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "nom",
+      "language": "Rust fallback parser",
+      "languageFamily": "rust",
+      "url": "https://github.com/rust-bakery/nom.git",
+      "pinnedHead": "51c3c4e44fa78a8a09b413419372b97b2cc2a787",
+      "routeCommit": "a44b52ed9052a66f5eb2add9aa5b314f034dc580",
+      "groundTruthCommit": "51c3c4e44fa78a8a09b413419372b97b2cc2a787",
+      "task": "Fix for issue 1808 (#1811)",
+      "expectedTaskType": "bugfix",
+      "changedFiles": [
+        "src/traits.rs",
+        "tests/issues.rs"
+      ],
+      "implementationFiles": [
+        "src/traits.rs"
+      ],
+      "testFiles": [
+        "tests/issues.rs"
+      ],
+      "auxiliaryFiles": [],
+      "oracleSource": "mechanically eligible single-parent real Git-history diff pending whole-target semantic review",
+      "candidateId": "candidate_ca0673e5e0701152",
+      "candidateRank": 1,
+      "coherencePacketSha256": "871A9C758AE8165DBF806EC3100C5CB4438B785E9BD0A611ABEB1381F6459D69",
+      "testRoleDerivedFromPath": true,
+      "conditionOrder": [
+        "candidate",
+        "baseline"
+      ],
+      "materializationAttempts": [
+        {
+          "attempt": 1,
+          "status": "completed",
+          "elapsedMs": 3406,
+          "errorCode": null,
+          "error": null
+        }
+      ],
+      "conditions": {
+        "candidate": {
+          "id": "candidate",
+          "role": "publicly-committed-0.4-stable-candidate",
+          "productCommit": "7325d2c2b3fca26a12932aa96cb21070c04c2bf3",
+          "cliSha256": "118D15BB3C2847205A4CC09A7A925BA3724B71D65CA56AA08D065AD8F851B18A",
+          "status": "failed",
+          "failureCategory": "product-or-contract",
+          "failures": [
+            "implementation or path-derived focused-test coverage was incomplete",
+            "target changed-file coverage fell below 0.50",
+            "target route focus fell below 0.40"
+          ],
+          "deterministicRoutes": true,
+          "freshIndex": {
+            "status": {
+              "root": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-local-blind-round-21-validation-AwSMVi\\nom\\candidate",
+              "palaceRoot": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-local-blind-round-21-validation-AwSMVi\\nom\\candidate\\.palace",
+              "initialized": true,
+              "indexed": true,
+              "stale": false,
+              "nodeCount": 2357,
+              "edgeCount": 10663,
+              "factCount": 0,
+              "roomCount": 56,
+              "lastIndexedAt": "2026-08-26T13:29:31.663Z",
+              "configPath": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-local-blind-round-21-validation-AwSMVi\\nom\\candidate\\.palace\\palace.yml"
+            },
+            "elapsedMs": 2434,
+            "initElapsedMs": 337,
+            "indexElapsedMs": 1623,
+            "statusElapsedMs": 475,
+            "attempts": 1
+          },
+          "trackedWorktreeClean": true,
+          "staticPalaceCliCalls": 7,
+          "trials": [
+            {
+              "trial": 1,
+              "status": "completed",
+              "expectedTaskType": "bugfix",
+              "taskType": "bugfix",
+              "routeFiles": [
+                "src/lib.rs",
+                "tests/arithmetic_ast.rs",
+                "benchmarks/src/lib.rs"
+              ],
+              "routeFileCount": 3,
+              "matchedOracleFiles": [],
+              "routeOnlyFiles": [
+                "src/lib.rs",
+                "tests/arithmetic_ast.rs",
+                "benchmarks/src/lib.rs"
+              ],
+              "changedFileCoverage": 0,
+              "reportedChangedFileCoverage": 0,
+              "coverageMetricAgreement": true,
+              "routeFocus": 0,
+              "reportedRouteFocus": 0,
+              "focusMetricAgreement": true,
+              "coreSurfaceCoverage": 0,
+              "missingImplementationFiles": [
+                "src/traits.rs"
+              ],
+              "missingTestFiles": [
+                "tests/issues.rs"
+              ],
+              "auxiliarySurfaceCoverage": null,
+              "missingAuxiliaryFiles": [],
+              "routeConfidence": 0.15,
+              "calibration": {
+                "predictedConfidence": 0.15,
+                "observedCoverage": 0,
+                "tolerance": 0.15,
+                "signedError": 0.15,
+                "absoluteError": 0.15,
+                "status": "well-calibrated"
+              },
+              "reportedCalibration": {
+                "status": "well-calibrated",
+                "predictedConfidence": 0.15,
+                "observedCoverage": 0,
+                "error": 0.15
+              },
+              "mode": "full-palace",
+              "evidenceStatus": "insufficient",
+              "interventionPolicy": "advisory",
+              "stopEnforced": false,
+              "unsafeNarrowMode": false,
+              "unsafeEnforcedStop": false,
+              "contextSelectedFiles": [
+                "src/lib.rs",
+                "tests/arithmetic_ast.rs",
+                "benchmarks/src/lib.rs"
+              ],
+              "evaluationContextRouteAgreement": true,
+              "selectedExcludedOverlap": [],
+              "contextEstimatedTokens": 1801,
+              "contextBytes": 7202,
+              "contextMetricSource": "reported",
+              "evaluationElapsedMs": 1114,
+              "contextElapsedMs": 864,
+              "staticPalaceCliCalls": 2
+            },
+            {
+              "trial": 2,
+              "status": "completed",
+              "expectedTaskType": "bugfix",
+              "taskType": "bugfix",
+              "routeFiles": [
+                "src/lib.rs",
+                "tests/arithmetic_ast.rs",
+                "benchmarks/src/lib.rs"
+              ],
+              "routeFileCount": 3,
+              "matchedOracleFiles": [],
+              "routeOnlyFiles": [
+                "src/lib.rs",
+                "tests/arithmetic_ast.rs",
+                "benchmarks/src/lib.rs"
+              ],
+              "changedFileCoverage": 0,
+              "reportedChangedFileCoverage": 0,
+              "coverageMetricAgreement": true,
+              "routeFocus": 0,
+              "reportedRouteFocus": 0,
+              "focusMetricAgreement": true,
+              "coreSurfaceCoverage": 0,
+              "missingImplementationFiles": [
+                "src/traits.rs"
+              ],
+              "missingTestFiles": [
+                "tests/issues.rs"
+              ],
+              "auxiliarySurfaceCoverage": null,
+              "missingAuxiliaryFiles": [],
+              "routeConfidence": 0.15,
+              "calibration": {
+                "predictedConfidence": 0.15,
+                "observedCoverage": 0,
+                "tolerance": 0.15,
+                "signedError": 0.15,
+                "absoluteError": 0.15,
+                "status": "well-calibrated"
+              },
+              "reportedCalibration": {
+                "status": "well-calibrated",
+                "predictedConfidence": 0.15,
+                "observedCoverage": 0,
+                "error": 0.15
+              },
+              "mode": "full-palace",
+              "evidenceStatus": "insufficient",
+              "interventionPolicy": "advisory",
+              "stopEnforced": false,
+              "unsafeNarrowMode": false,
+              "unsafeEnforcedStop": false,
+              "contextSelectedFiles": [
+                "src/lib.rs",
+                "tests/arithmetic_ast.rs",
+                "benchmarks/src/lib.rs"
+              ],
+              "evaluationContextRouteAgreement": true,
+              "selectedExcludedOverlap": [],
+              "contextEstimatedTokens": 1801,
+              "contextBytes": 7202,
+              "contextMetricSource": "reported",
+              "evaluationElapsedMs": 1137,
+              "contextElapsedMs": 920,
+              "staticPalaceCliCalls": 2
+            }
+          ]
+        },
+        "baseline": {
+          "id": "baseline",
+          "role": "public-0.3-stable-baseline",
+          "productCommit": "1331d9da0aa242549026d70e7c752638c3169044",
+          "cliSha256": "ED63B31DA23240D958E71874BD61A09427659327DC8460D88A3A41D33F5391DE",
+          "status": "failed",
+          "failureCategory": "product-or-contract",
+          "failures": [
+            "trial 1 context execution failed",
+            "trial 2 context execution failed",
+            "not all formal repetitions completed",
+            "route order or membership differed across repetitions"
+          ],
+          "deterministicRoutes": false,
+          "freshIndex": {
+            "status": {
+              "root": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-local-blind-round-21-validation-AwSMVi\\nom\\baseline",
+              "palaceRoot": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-local-blind-round-21-validation-AwSMVi\\nom\\baseline\\.palace",
+              "initialized": true,
+              "indexed": true,
+              "stale": false,
+              "nodeCount": 2184,
+              "edgeCount": 9113,
+              "roomCount": 51,
+              "lastIndexedAt": "2026-08-26T13:29:39.343Z",
+              "configPath": "C:\\Users\\HIN\\AppData\\Local\\Temp\\vertex-palace-local-blind-round-21-validation-AwSMVi\\nom\\baseline\\.palace\\palace.yml"
+            },
+            "elapsedMs": 2065,
+            "initElapsedMs": 359,
+            "indexElapsedMs": 1254,
+            "statusElapsedMs": 451,
+            "attempts": 1
+          },
+          "trackedWorktreeClean": true,
+          "staticPalaceCliCalls": 3,
+          "trials": [
+            {
+              "trial": 1,
+              "status": "execution-error",
+              "failedPhase": "context",
+              "expectedTaskType": "bugfix",
+              "taskType": "bugfix",
+              "routeFiles": [],
+              "errorCode": null,
+              "error": "Error: Context output did not identify a Primary candidate.\n    at normalizeContextTelemetry (D:\\工作资料\\codex palace\\scripts\\lib\\context-telemetry.cjs:25:11)\n    at validateCondition (D:\\工作资料\\codex palace\\scripts\\verify-local-blind-routing-round-21.cjs:502:25)\n    at main (D:\\工作资料\\codex palace\\scripts\\verify-local-blind-routing-round-21.cjs:125:49)"
+            },
+            {
+              "trial": 2,
+              "status": "execution-error",
+              "failedPhase": "context",
+              "expectedTaskType": "bugfix",
+              "taskType": "bugfix",
+              "routeFiles": [],
+              "errorCode": null,
+              "error": "Error: Context output did not identify a Primary candidate.\n    at normalizeContextTelemetry (D:\\工作资料\\codex palace\\scripts\\lib\\context-telemetry.cjs:25:11)\n    at validateCondition (D:\\工作资料\\codex palace\\scripts\\verify-local-blind-routing-round-21.cjs:502:25)\n    at main (D:\\工作资料\\codex palace\\scripts\\verify-local-blind-routing-round-21.cjs:125:49)"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
