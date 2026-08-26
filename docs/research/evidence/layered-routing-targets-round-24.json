@@ -1,0 +1,159 @@
+{
+  "schemaVersion": 1,
+  "studyId": "layered-routing-round-24-alpha-3",
+  "round": 24,
+  "candidate": "0.4.0-alpha.3",
+  "baseline": "0.3.0",
+  "repetitionsPerCondition": 2,
+  "routeLimit": 6,
+  "contextBudget": 6000,
+  "targets": [
+    {
+      "id": "r24-ts-local-webhook",
+      "language": "typescript",
+      "stratum": "local",
+      "symbol": "sanitizeWebhookTopic",
+      "implementationPath": "src/webhook/sanitize-webhook-topic.ts",
+      "testPath": "tests/webhook/sanitize-webhook-topic.test.ts",
+      "task": "Fix sanitizeWebhookTopic in src/webhook/sanitize-webhook-topic.ts and its focused test tests/webhook/sanitize-webhook-topic.test.ts.",
+      "coreFiles": ["src/webhook/sanitize-webhook-topic.ts", "tests/webhook/sanitize-webhook-topic.test.ts"],
+      "latentAuxiliaryFiles": ["CHANGELOG.md"]
+    },
+    {
+      "id": "r24-py-local-receipt",
+      "language": "python",
+      "stratum": "local",
+      "symbol": "normalize_receipt_code",
+      "implementationPath": "receipts/code.py",
+      "testPath": "tests/test_receipt_code.py",
+      "task": "Fix normalize_receipt_code in receipts/code.py and its focused test tests/test_receipt_code.py.",
+      "coreFiles": ["receipts/code.py", "tests/test_receipt_code.py"]
+    },
+    {
+      "id": "r24-go-local-device",
+      "language": "go",
+      "stratum": "local",
+      "symbol": "CanonicalDeviceLabel",
+      "implementationPath": "device/label.go",
+      "testPath": "device/label_test.go",
+      "task": "Fix CanonicalDeviceLabel in device/label.go and its focused test device/label_test.go.",
+      "coreFiles": ["device/label.go", "device/label_test.go"]
+    },
+    {
+      "id": "r24-rust-reference-segment",
+      "language": "rust",
+      "stratum": "reference",
+      "symbol": "decode_segment",
+      "implementationPath": "src/segment.rs",
+      "testPath": "tests/segment_test.rs",
+      "task": "Fix issue #2401",
+      "referenceNumber": 2401,
+      "metadata": {
+        "title": "decode_segment accepts an incomplete boundary",
+        "body": "Correct decode_segment in src/segment.rs and add the focused regression in tests/segment_test.rs.",
+        "labels": ["bug", "segment"]
+      },
+      "coreFiles": ["src/segment.rs", "tests/segment_test.rs"]
+    },
+    {
+      "id": "r24-ts-reference-lease",
+      "language": "typescript",
+      "stratum": "reference",
+      "symbol": "refreshLeaseToken",
+      "implementationPath": "src/lease/refresh-lease-token.ts",
+      "testPath": "tests/lease/refresh-lease-token.test.ts",
+      "task": "Repair PR #2402",
+      "referenceNumber": 2402,
+      "metadata": {
+        "title": "refreshLeaseToken keeps a superseded nonce",
+        "body": "Update refreshLeaseToken in src/lease/refresh-lease-token.ts and tests/lease/refresh-lease-token.test.ts.",
+        "labels": ["bug", "lease"]
+      },
+      "coreFiles": ["src/lease/refresh-lease-token.ts", "tests/lease/refresh-lease-token.test.ts"]
+    },
+    {
+      "id": "r24-py-reference-backoff",
+      "language": "python",
+      "stratum": "reference",
+      "symbol": "cap_backoff_delay",
+      "implementationPath": "retry/backoff.py",
+      "testPath": "tests/test_retry_backoff.py",
+      "task": "Fix issue 2403",
+      "referenceNumber": 2403,
+      "metadata": {
+        "title": "cap_backoff_delay permits a delay above the ceiling",
+        "body": "Fix cap_backoff_delay in retry/backoff.py and its focused regression tests/test_retry_backoff.py.",
+        "labels": ["bug", "retry"]
+      },
+      "coreFiles": ["retry/backoff.py", "tests/test_retry_backoff.py"]
+    },
+    {
+      "id": "r24-go-high-region",
+      "language": "go",
+      "stratum": "high-connectivity",
+      "symbol": "ResolveRegionShard",
+      "implementationPath": "region/resolve.go",
+      "testPath": "region/resolve_test.go",
+      "declaredAuxiliaryFiles": ["region/contract.go"],
+      "task": "Update ResolveRegionShard in region/resolve.go and region/resolve_test.go while preserving the explicit contract in region/contract.go.",
+      "coreFiles": ["region/resolve.go", "region/resolve_test.go"]
+    },
+    {
+      "id": "r24-rust-high-checkpoint",
+      "language": "rust",
+      "stratum": "high-connectivity",
+      "symbol": "merge_checkpoint",
+      "implementationPath": "src/checkpoint.rs",
+      "testPath": "tests/checkpoint_test.rs",
+      "declaredAuxiliaryFiles": ["src/checkpoint_contract.rs"],
+      "task": "Refactor merge_checkpoint in src/checkpoint.rs with tests/checkpoint_test.rs and preserve the contract in src/checkpoint_contract.rs.",
+      "coreFiles": ["src/checkpoint.rs", "tests/checkpoint_test.rs"]
+    },
+    {
+      "id": "r24-ts-high-invoice",
+      "language": "typescript",
+      "stratum": "high-connectivity",
+      "symbol": "calculateInvoiceTax",
+      "implementationPath": "src/invoice/calculate-invoice-tax.ts",
+      "testPath": "tests/invoice/calculate-invoice-tax.test.ts",
+      "declaredAuxiliaryFiles": ["src/invoice/tax-contract.ts"],
+      "task": "Fix calculateInvoiceTax in src/invoice/calculate-invoice-tax.ts and tests/invoice/calculate-invoice-tax.test.ts without changing src/invoice/tax-contract.ts.",
+      "coreFiles": ["src/invoice/calculate-invoice-tax.ts", "tests/invoice/calculate-invoice-tax.test.ts"]
+    },
+    {
+      "id": "r24-py-control-incident",
+      "language": "python",
+      "stratum": "control",
+      "symbol": "opaque_case_handler",
+      "implementationPath": "cases/opaque_handler.py",
+      "testPath": "tests/test_opaque_case.py",
+      "task": "Investigate incident 9241.",
+      "expectedResolutionStatus": "unsupported-remote",
+      "coreFiles": []
+    },
+    {
+      "id": "r24-go-control-issue",
+      "language": "go",
+      "stratum": "control",
+      "symbol": "UnmappedCaseHandler",
+      "implementationPath": "cases/unmapped.go",
+      "testPath": "cases/unmapped_test.go",
+      "task": "Fix issue #2492",
+      "referencePolicy": "off",
+      "expectedResolutionStatus": "disabled",
+      "coreFiles": []
+    },
+    {
+      "id": "r24-rust-control-pr",
+      "language": "rust",
+      "stratum": "control",
+      "symbol": "unmapped_case_handler",
+      "implementationPath": "src/unmapped_case.rs",
+      "testPath": "tests/unmapped_case_test.rs",
+      "task": "Repair PR #2493",
+      "referencePolicy": "off",
+      "expectedResolutionStatus": "disabled",
+      "coreFiles": []
+    }
+  ]
+}

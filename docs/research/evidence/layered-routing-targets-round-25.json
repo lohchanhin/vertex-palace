@@ -1,0 +1,159 @@
+{
+  "schemaVersion": 1,
+  "studyId": "layered-routing-round-25-alpha-3",
+  "round": 25,
+  "candidate": "0.4.0-alpha.3",
+  "baseline": "0.3.0",
+  "repetitionsPerCondition": 2,
+  "routeLimit": 6,
+  "contextBudget": 6000,
+  "targets": [
+    {
+      "id": "r25-rust-local-namespace",
+      "language": "rust",
+      "stratum": "local",
+      "symbol": "canonicalize_namespace",
+      "implementationPath": "src/namespace.rs",
+      "testPath": "tests/namespace_test.rs",
+      "task": "Fix canonicalize_namespace in src/namespace.rs and its focused test tests/namespace_test.rs.",
+      "coreFiles": ["src/namespace.rs", "tests/namespace_test.rs"]
+    },
+    {
+      "id": "r25-ts-local-campaign",
+      "language": "typescript",
+      "stratum": "local",
+      "symbol": "normalizeCampaignCode",
+      "implementationPath": "src/campaign/normalize-campaign-code.ts",
+      "testPath": "tests/campaign/normalize-campaign-code.test.ts",
+      "task": "Fix normalizeCampaignCode in src/campaign/normalize-campaign-code.ts and tests/campaign/normalize-campaign-code.test.ts.",
+      "coreFiles": ["src/campaign/normalize-campaign-code.ts", "tests/campaign/normalize-campaign-code.test.ts"],
+      "latentAuxiliaryFiles": ["CHANGELOG.md"]
+    },
+    {
+      "id": "r25-py-local-digest",
+      "language": "python",
+      "stratum": "local",
+      "symbol": "parse_manifest_digest",
+      "implementationPath": "manifest/digest.py",
+      "testPath": "tests/test_manifest_digest.py",
+      "task": "Fix parse_manifest_digest in manifest/digest.py and tests/test_manifest_digest.py.",
+      "coreFiles": ["manifest/digest.py", "tests/test_manifest_digest.py"]
+    },
+    {
+      "id": "r25-go-reference-window",
+      "language": "go",
+      "stratum": "reference",
+      "symbol": "ClampWindowLimit",
+      "implementationPath": "window/clamp.go",
+      "testPath": "window/clamp_test.go",
+      "task": "Fix issue #2501",
+      "referenceNumber": 2501,
+      "metadata": {
+        "title": "ClampWindowLimit accepts a value below the minimum",
+        "body": "Correct ClampWindowLimit in window/clamp.go and window/clamp_test.go.",
+        "labels": ["bug", "window"]
+      },
+      "coreFiles": ["window/clamp.go", "window/clamp_test.go"]
+    },
+    {
+      "id": "r25-rust-reference-epoch",
+      "language": "rust",
+      "stratum": "reference",
+      "symbol": "rotate_epoch_key",
+      "implementationPath": "src/epoch.rs",
+      "testPath": "tests/epoch_test.rs",
+      "task": "Repair PR #2502",
+      "referenceNumber": 2502,
+      "metadata": {
+        "title": "rotate_epoch_key may retain the prior generation",
+        "body": "Update rotate_epoch_key in src/epoch.rs and the focused tests/epoch_test.rs regression.",
+        "labels": ["bug", "epoch"]
+      },
+      "coreFiles": ["src/epoch.rs", "tests/epoch_test.rs"]
+    },
+    {
+      "id": "r25-ts-reference-variant",
+      "language": "typescript",
+      "stratum": "reference",
+      "symbol": "selectLocaleVariant",
+      "implementationPath": "src/variant/select-locale-variant.ts",
+      "testPath": "tests/variant/select-locale-variant.test.ts",
+      "task": "Fix issue 2503",
+      "referenceNumber": 2503,
+      "metadata": {
+        "title": "selectLocaleVariant ignores the regional preference",
+        "body": "Fix selectLocaleVariant in src/variant/select-locale-variant.ts and tests/variant/select-locale-variant.test.ts.",
+        "labels": ["bug", "locale"]
+      },
+      "coreFiles": ["src/variant/select-locale-variant.ts", "tests/variant/select-locale-variant.test.ts"]
+    },
+    {
+      "id": "r25-py-high-access",
+      "language": "python",
+      "stratum": "high-connectivity",
+      "symbol": "resolve_access_scope",
+      "implementationPath": "auth/scope.py",
+      "testPath": "tests/test_auth_scope.py",
+      "declaredAuxiliaryFiles": ["auth/scope_contract.py"],
+      "task": "Refactor resolve_access_scope in auth/scope.py and tests/test_auth_scope.py while preserving auth/scope_contract.py.",
+      "coreFiles": ["auth/scope.py", "tests/test_auth_scope.py"]
+    },
+    {
+      "id": "r25-go-high-delivery",
+      "language": "go",
+      "stratum": "high-connectivity",
+      "symbol": "ResolveDeliveryLane",
+      "implementationPath": "delivery/resolve.go",
+      "testPath": "delivery/resolve_test.go",
+      "declaredAuxiliaryFiles": ["delivery/contract.go"],
+      "task": "Fix ResolveDeliveryLane in delivery/resolve.go and delivery/resolve_test.go without changing delivery/contract.go.",
+      "coreFiles": ["delivery/resolve.go", "delivery/resolve_test.go"]
+    },
+    {
+      "id": "r25-rust-high-snapshot",
+      "language": "rust",
+      "stratum": "high-connectivity",
+      "symbol": "reconcile_snapshot",
+      "implementationPath": "src/snapshot.rs",
+      "testPath": "tests/snapshot_test.rs",
+      "declaredAuxiliaryFiles": ["src/snapshot_contract.rs"],
+      "task": "Fix reconcile_snapshot in src/snapshot.rs and tests/snapshot_test.rs while preserving src/snapshot_contract.rs.",
+      "coreFiles": ["src/snapshot.rs", "tests/snapshot_test.rs"]
+    },
+    {
+      "id": "r25-ts-control-incident",
+      "language": "typescript",
+      "stratum": "control",
+      "symbol": "opaqueCaseHandler",
+      "implementationPath": "src/cases/opaque-handler.ts",
+      "testPath": "tests/cases/opaque-handler.test.ts",
+      "task": "Investigate incident 9351.",
+      "expectedResolutionStatus": "unsupported-remote",
+      "coreFiles": []
+    },
+    {
+      "id": "r25-py-control-issue",
+      "language": "python",
+      "stratum": "control",
+      "symbol": "unresolved_ticket_handler",
+      "implementationPath": "cases/unmapped.py",
+      "testPath": "tests/test_unmapped_case.py",
+      "task": "Fix issue #2592",
+      "referencePolicy": "off",
+      "expectedResolutionStatus": "disabled",
+      "coreFiles": []
+    },
+    {
+      "id": "r25-go-control-pr",
+      "language": "go",
+      "stratum": "control",
+      "symbol": "DetachedCaseResolver",
+      "implementationPath": "cases/opaque.go",
+      "testPath": "cases/opaque_test.go",
+      "task": "Repair PR #2593",
+      "referencePolicy": "off",
+      "expectedResolutionStatus": "disabled",
+      "coreFiles": []
+    }
+  ]
+}

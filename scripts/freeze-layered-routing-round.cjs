@@ -7,7 +7,7 @@ const path = require("node:path");
 
 const projectRoot = path.resolve(__dirname, "..");
 const round = Number(valueAfter("--round"));
-assert.ok(round === 22 || round === 23, "--round must be 22 or 23");
+assert.ok([22, 23, 24, 25].includes(round), "--round must be 22, 23, 24, or 25");
 
 main().catch((error) => {
   process.stderr.write(`${error instanceof Error ? error.stack : String(error)}\n`);
@@ -36,7 +36,7 @@ async function main() {
   ]);
   const manifest = JSON.parse(manifestSource);
   assert.equal(manifest.targets.length, 12);
-  assert.equal(manifest.candidate, "0.4.0-alpha.2");
+  assert.equal(manifest.candidate, round <= 23 ? "0.4.0-alpha.2" : require("../package.json").version);
   assert.equal(manifest.baseline, "0.3.0");
   assert.deepEqual(
     countBy(manifest.targets, "stratum"),

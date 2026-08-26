@@ -7,8 +7,9 @@ const path = require("node:path");
 
 const projectRoot = path.resolve(__dirname, "..");
 const round = Number(valueAfter("--round"));
-assert.ok(round === 22 || round === 23, "--round must be 22 or 23");
+assert.ok([22, 23, 24, 25].includes(round), "--round must be 22, 23, 24, or 25");
 const disclosedRegression = process.argv.includes("--disclosed-regression");
+assert.ok(!disclosedRegression || round === 22, "--disclosed-regression is preserved only for Round 22");
 const manifestPath = path.join(
   projectRoot,
   "docs",
