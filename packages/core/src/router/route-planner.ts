@@ -25,6 +25,7 @@ import {
 import { expandRoute } from "./route-expander";
 import { buildTaskIntent } from "./task-intent";
 import { groundTask, type GroundTaskOptions } from "./task-grounding";
+import { applyExplicitEvidenceContractToClosure, enforceExplicitEvidenceContract } from "./task-evidence-contract";
 
 export type RoutePalaceOptions = {
   budget?: number;
@@ -213,7 +214,7 @@ export async function routePalace(root: string, task: string, options: number | 
     intent,
     routeLimit
   );
-  const expanded = ensureTaskOwnerVerificationClosure(
+  const ownerClosed = ensureTaskOwnerVerificationClosure(
     transitivelyClosed,
     scored,
     index.edges,
@@ -221,13 +222,21 @@ export async function routePalace(root: string, task: string, options: number | 
     analysis,
     routeLimit
   );
-  const evidenceClosure = evaluateEvidenceClosure({
+  const explicitEvidenceContract = enforceExplicitEvidenceContract(
+    ownerClosed,
+    scored,
+    index.nodes,
+    groundedTask.effectiveTask,
+    routeLimit
+  );
+  const expanded = explicitEvidenceContract.route;
+  const evidenceClosure = applyExplicitEvidenceContractToClosure(evaluateEvidenceClosure({
     intent,
     selectedNodes: expanded.map((item) => item.node),
     selectedFacts: expanded.flatMap((item) => item.matchedFact ? [item.matchedFact] : []),
     allNodes: index.nodes,
     edges: index.edges
-  });
+  }), explicitEvidenceContract);
   const confidenceEvidence = buildRouteConfidenceEvidence(
     evidenceClosure,
     competingImplementationAnchorCount(scored, intent, analysis)

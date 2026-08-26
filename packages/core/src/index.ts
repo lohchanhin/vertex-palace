@@ -22,6 +22,7 @@ export * from "./evidence/evidence-model";
 export * from "./evidence/evidence-closure";
 export * from "./router/analyze-task";
 export * from "./router/task-grounding";
+export * from "./router/task-evidence-contract";
 export * from "./router/task-intent";
 export * from "./router/classify-task";
 export * from "./router/locate-entry";

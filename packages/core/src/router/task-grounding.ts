@@ -27,6 +27,7 @@ const GENERIC_GROUNDING_TERMS = new Set([
   "feature",
   "github",
   "implementation",
+  "incident",
   "investigate",
   "issue",
   "problem",
@@ -172,6 +173,7 @@ export function isTaskLocallyIdentifiable(task: string, nodes: PalaceNode[]): bo
 }
 
 function isStrongCodeIdentifier(identifier: string, task: string): boolean {
+  if (/^\d+$/.test(identifier)) return false;
   if (task.includes(`\`${identifier}\``)) return true;
   return /[._$-]|\d|[a-z][A-Z]|^[A-Z]{2,}/.test(identifier);
 }

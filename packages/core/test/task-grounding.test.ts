@@ -4,6 +4,7 @@ import { readIndex } from "../src/storage/read-palace";
 import {
   collectGitHubReferences,
   groundTask,
+  isTaskLocallyIdentifiable,
   parseGitHubRemote
 } from "../src/router/task-grounding";
 import { withFixture } from "./test-utils";
@@ -39,6 +40,22 @@ describe("task grounding", () => {
       );
       expect(result.grounding).toMatchObject({ status: "local", decision: "route", resolutionStatus: "not-needed" });
       expect(fetchImpl).not.toHaveBeenCalled();
+    });
+  });
+
+  it("does not treat a bare incident number as a local code identifier", async () => {
+    await withFixture("ts-api", async (root) => {
+      await indexPalace(root);
+      const nodes = (await readIndex(root)).nodes;
+      expect(isTaskLocallyIdentifiable("Investigate incident 7441.", nodes)).toBe(false);
+      const result = await groundTask(root, "Investigate incident 7441.", nodes, {
+        remoteUrl: "https://gitlab.com/acme/widget.git"
+      });
+      expect(result.grounding).toMatchObject({
+        status: "unresolved",
+        decision: "abstain",
+        resolutionStatus: "unsupported-remote"
+      });
     });
   });
 

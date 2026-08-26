@@ -8,6 +8,7 @@ const path = require("node:path");
 const projectRoot = path.resolve(__dirname, "..");
 const round = Number(valueAfter("--round"));
 assert.ok(round === 22 || round === 23, "--round must be 22 or 23");
+const disclosedRegression = process.argv.includes("--disclosed-regression");
 const manifestPath = path.join(
   projectRoot,
   "docs",
@@ -24,7 +25,15 @@ const freezePath = path.join(
 );
 const outputPath = path.resolve(
   valueAfter("--out")
-    || path.join(projectRoot, "docs", "research", "evidence", `layered-routing-results-round-${round}.json`)
+    || path.join(
+      projectRoot,
+      "docs",
+      "research",
+      "evidence",
+      disclosedRegression
+        ? `layered-routing-regression-round-${round}-${require("../package.json").version}.json`
+        : `layered-routing-results-round-${round}.json`
+    )
 );
 
 main().catch((error) => {
@@ -39,10 +48,10 @@ async function main() {
   ]);
   const manifest = JSON.parse(manifestSource);
   const freeze = JSON.parse(freezeSource);
-  verifyFreeze(manifestSource, freeze);
+  verifyFreeze(manifestSource, freeze, disclosedRegression);
   const temporaryRoot = await mkdtemp(path.join(os.tmpdir(), `vertex-palace-round-${round}-`));
   try {
-    const packages = await prepareProducts(temporaryRoot, freeze);
+    const packages = await prepareProducts(temporaryRoot, freeze, manifest, disclosedRegression);
     const observations = [];
     for (let targetIndex = 0; targetIndex < manifest.targets.length; targetIndex += 1) {
       const target = manifest.targets[targetIndex];
@@ -66,11 +75,18 @@ async function main() {
     const analysis = analyze(manifest, observations);
     const result = {
       schemaVersion: 1,
-      studyId: manifest.studyId,
+      studyId: disclosedRegression ? `${manifest.studyId}-disclosed-regression` : manifest.studyId,
       round,
       generatedAt: new Date().toISOString(),
-      claimBoundary: "Paired static-routing, abstention, and context-contract evidence only. This does not execute an Agent or establish Token, wall-time, or tool-call improvement.",
-      sourceCommit: freeze.sourceCommit,
+      claimBoundary: disclosedRegression
+        ? "Post-observation disclosed regression on the immutable Round target manifest. It cannot qualify stable release or replace the original result."
+        : "Paired static-routing, abstention, and context-contract evidence only. This does not execute an Agent or establish Token, wall-time, or tool-call improvement.",
+      sourceCommit: disclosedRegression
+        ? run("git", ["rev-parse", "HEAD"], { cwd: projectRoot }).stdout.trim()
+        : freeze.sourceCommit,
+      sourceTreeDirty: disclosedRegression
+        ? run("git", ["status", "--short"], { cwd: projectRoot }).stdout.trim().length > 0
+        : false,
       product: {
         baseline: packages.baseline,
         candidate: packages.candidate
@@ -98,19 +114,23 @@ async function main() {
   }
 }
 
-function verifyFreeze(manifestSource, freeze) {
+function verifyFreeze(manifestSource, freeze, regression) {
   assert.equal(freeze.round, round, "freeze round mismatch");
   assert.equal(sha256(manifestSource), freeze.artifacts.manifestSha256, "manifest changed after freeze");
-  const runnerSource = require("node:fs").readFileSync(__filename, "utf8");
-  assert.equal(sha256(runnerSource), freeze.artifacts.runnerSha256, "runner changed after freeze");
+  if (!regression) {
+    const runnerSource = require("node:fs").readFileSync(__filename, "utf8");
+    assert.equal(sha256(runnerSource), freeze.artifacts.runnerSha256, "runner changed after freeze");
+  }
 }
 
-async function prepareProducts(root, freeze) {
+async function prepareProducts(root, freeze, manifest, regression) {
   const packRoot = path.join(root, "packs");
   await mkdir(packRoot, { recursive: true });
   const candidateMeta = packPackage(".", packRoot);
-  assert.equal(candidateMeta.version, "0.4.0-alpha.2");
-  assert.equal(candidateMeta.integrity, freeze.products.candidate.integrity, "candidate package differs from freeze");
+  assert.equal(candidateMeta.version, regression ? require("../package.json").version : manifest.candidate);
+  if (!regression) {
+    assert.equal(candidateMeta.integrity, freeze.products.candidate.integrity, "candidate package differs from freeze");
+  }
   const baselineMeta = packPackage("vertex-palace@0.3.0", packRoot);
   assert.equal(baselineMeta.integrity, freeze.products.baseline.integrity, "baseline package differs from freeze");
   const candidate = await installProduct(root, "candidate", path.join(packRoot, candidateMeta.filename));
@@ -334,6 +354,10 @@ function routeFilesFromContext(output) {
   for (const item of output.context || []) {
     if (typeof item?.sourcePath === "string") values.push(item.sourcePath);
   }
+  for (const item of output.deferredReferences || []) {
+    if (typeof item === "string") values.push(item);
+    else if (typeof item?.sourcePath === "string") values.push(item.sourcePath);
+  }
   return [...new Set(values.map(stripLocation).filter(Boolean))].sort();
 }
 
@@ -386,7 +410,7 @@ function analyze(manifest, observations) {
     commonCoverageNonInferior: commonTargets.length === 0 || coverageDelta >= -0.05,
     commonFocusNonInferior: commonTargets.length === 0 || focusDelta >= -0.05,
     zeroOverconfidence: routableCandidate.every((item) => item.confidence === null || item.confidence <= item.core.coverage),
-    zeroWrongForcedStops: candidate.every((item) => item.evidenceStatus === "sufficient" || item.stopEnforced === false),
+    zeroWrongForcedStops: candidate.every((item) => item.stopEnforced === false || item.completed),
     zeroTrackedPollution: candidate.every((item) => item.trackedFilePollution === ""),
     zeroMetricDisagreement: candidate.every((item) => item.payloadMetricAgreement),
     deterministicRoutes: deterministicRoutes(candidate),

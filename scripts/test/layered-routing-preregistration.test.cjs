@@ -47,6 +47,7 @@ test("the runner balances order, checks all stable gates, and separates performa
   assert.match(source, /commonCoverageNonInferior/);
   assert.match(source, /zeroTrackedPollution/);
   assert.match(source, /deterministicRoutes/);
+  assert.match(source, /output\.deferredReferences/);
   assert.match(source, /does not execute an Agent or establish Token, wall-time, or tool-call improvement/);
 });
 

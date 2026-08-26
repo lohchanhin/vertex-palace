@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+### 0.4.0-alpha.3 candidate
+
+- Treat repository paths explicitly named in the task or resolved GitHub metadata as a mandatory evidence contract after normal scoring and pruning.
+- Keep routes advisory when explicit evidence is absent or cannot fit the bounded route instead of hiding the missing path behind role-level closure.
+- Reject bare numeric incident IDs as local code identifiers.
+- Preserve the failed alpha.2 Round 22 result and reset stable qualification; alpha.3 requires fresh unobserved targets.
+
 ## 0.4.0-alpha.2 - 2026-08-26
 
 ### Added
