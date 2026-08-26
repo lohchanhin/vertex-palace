@@ -81,8 +81,8 @@ package, plugin MCP pin, and Git tag are intentionally kept on the same
 version:
 
 This section preserves the submitted competition artifact. Post-competition
-development is published separately as the `0.4.0-alpha.1` prerelease on npm
-tag `next`; it does not rewrite the frozen Build Week evidence below.
+development is published separately in the `0.4.0` stable line; it does not
+rewrite the frozen Build Week evidence below.
 
 ```bash
 npm install -g vertex-palace@0.3.0

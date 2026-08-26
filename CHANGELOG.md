@@ -2,6 +2,27 @@
 
 ## Unreleased
 
+## 0.4.0 - 2026-08-26
+
+### Changed
+
+- Promoted the advisory evidence contract, bounded adaptive context modes, scoped memory telemetry, and exact payload accounting from preview to the stable line.
+- Added low-confidence conventional entry fallback, additive API-family closure, public declaration/documentation companions, and transitive implementation-bridge preservation.
+- Kept confidence conservative when task-subject, owner-local verification, workspace scope, or causal evidence remains incomplete.
+
+### Fixed
+
+- Prevented action verbs such as `add` from displacing feature owners through generic comment matches.
+- Recovered no-Primary routes for novel small-package features without loading type tests or broad repository context.
+- Closed fail-fast behavior across related API variants and kept mixed root/workspace platform implementations eligible when the evidence graph identifies the bridge.
+
+### Verification And Limits
+
+- The full Core suite passes `239/239`; CLI and MCP tests pass `4/4`; research tests pass `233` with `2` protocol-defined skips.
+- The disclosed Round 20 repair replay reached `8/8` known targets, 1.000 macro changed-file coverage, 0.787 macro route focus, and zero overconfident or disagreeing trials.
+- That disclosed replay is not the stable release gate. The release decision is bound to the separately preregistered fresh Round 21 result.
+- Static routing quality does not prove general Agent Token, wall-time, tool-call, or correctness improvement.
+
 ## 0.4.0-alpha.1 - 2026-08-26
 
 ### Added

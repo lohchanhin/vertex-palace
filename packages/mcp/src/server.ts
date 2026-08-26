@@ -50,7 +50,7 @@ async function handleMessage(message: JsonRpcMessage): Promise<void> {
         sendResult(message.id, {
           protocolVersion: "2024-11-05",
           capabilities: { tools: {} },
-          serverInfo: { name: "vertex-palace", version: "0.4.0-alpha.1" }
+          serverInfo: { name: "vertex-palace", version: "0.4.0" }
         });
         break;
       case "tools/list":
