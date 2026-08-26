@@ -47,6 +47,21 @@
 
 第一次干净安装验证失败，因为验证器仍要求 `0.3.0` 的五字段 bypass schema；产品在缺少验证证据时正确返回了 `0.4` 的建议式完整上下文。我们修改的是验证器，让它检查新的安全合同，然后重新对打包安装产物执行。没有为了让旧断言变绿而削弱产品行为。
 
+## 公网 Registry 验证
+
+预发布版本已在 `2026-08-26T04:28:38.351Z` 发布到 npm 公网 registry。随后从一个全新的临时专案安装，使用新的 npm cache，并明确指定公网 registry，以验证使用者实际取得的发布产物。
+
+| 检查 | 结果 |
+| --- | --- |
+| 公网准确版本 | `vertex-palace@0.4.0-alpha.1` |
+| npm dist-tags | `latest=0.3.0`、`next=0.4.0-alpha.1` |
+| 公网 SHA-1 | `dc1a71899664df84be2ce94428e7d6ffc858207d`，与验证过的 tarball 相同 |
+| 安装后的 CLI | 正确报告 `0.4.0-alpha.1` |
+| 安装后的 MCP | 完成初始化、列出 10 个工具，并以 `full-palace` 模式完成 `palace_context` |
+| 安装后的 CLI context | 在干净专案中完成 `context --auto --format json` |
+
+npm 稳定通道刻意保持不变。使用者必须明确执行 `npm install vertex-palace@next` 才会安装这个预览版。
+
 ## 结论边界
 
 披露后的 13 文件重放达到 13/13 coverage 与 1.00 focus，但抽象八文件自评只有 3/8，冻结的 Round 19 held-out gate 也没有通过。因此，这个版本证明的是打包、确定性的建议式行为、记忆隔离、context ceiling 与研究可追溯性，不代表已经证明普遍减少 Agent Token、缩短时间或降低正确性错误。

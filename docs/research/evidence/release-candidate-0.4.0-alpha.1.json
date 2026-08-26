@@ -122,5 +122,21 @@
       "maxContextTokens": 5000
     }
   },
-  "installedMcp": "MCP smoke test passed for Vertex Palace 0.4.0-alpha.1 (10 tools, bypass context, 335 delivered bytes)."
+  "installedMcp": "MCP smoke test passed for Vertex Palace 0.4.0-alpha.1 (10 tools, bypass context, 335 delivered bytes).",
+  "publicRegistry": {
+    "verifiedAt": "2026-08-26T04:28:38.351Z",
+    "registry": "https://registry.npmjs.org/",
+    "version": "0.4.0-alpha.1",
+    "distTags": {
+      "latest": "0.3.0",
+      "next": "0.4.0-alpha.1"
+    },
+    "shasum": "dc1a71899664df84be2ce94428e7d6ffc858207d",
+    "integrity": "sha512-XYninBJESrbcggJWfXLHuq+7E8zGdhwLweABF5BcRLXxZoTJ1Q4xN8scdSWCGk2bheHGtiMZObQ4zIRi3mptyQ==",
+    "cleanInstallVersion": "0.4.0-alpha.1",
+    "cleanInstallMcpTools": 10,
+    "cleanInstallMcpMode": "full-palace",
+    "cleanInstallMcpEstimatedTokens": 2795,
+    "cleanInstallCliContext": "passed"
+  }
 }

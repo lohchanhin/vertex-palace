@@ -47,6 +47,21 @@ The same tarball also passed:
 
 The first clean-install run failed because the verifier still required the `0.3.0` five-field bypass schema. The product correctly returned the new `0.4` advisory full context when verification evidence was missing. The verifier was updated to assert the new safety contract, then rerun against the packed and installed artifact. Product behavior was not weakened to satisfy the old assertion.
 
+## Public Registry Verification
+
+The prerelease was published to the public npm registry at `2026-08-26T04:28:38.351Z` and then installed by package name from a new temporary project with a new npm cache and the public registry explicitly selected.
+
+| Check | Result |
+| --- | --- |
+| exact public version | `vertex-palace@0.4.0-alpha.1` |
+| npm dist-tags | `latest=0.3.0`, `next=0.4.0-alpha.1` |
+| public SHA-1 | `dc1a71899664df84be2ce94428e7d6ffc858207d`, matching the verified tarball |
+| installed CLI | Reported `0.4.0-alpha.1` |
+| installed MCP | Passed initialization, listed 10 tools, and completed `palace_context` in `full-palace` mode |
+| installed CLI context | Completed `context --auto --format json` in the clean project |
+
+The stable npm channel was deliberately left unchanged. Users must explicitly install this preview with `npm install vertex-palace@next`.
+
 ## Claim Limit
 
 The disclosed 13-file post-observation replay reached 13/13 coverage and 1.00 focus, but the abstract eight-file self-evaluation reached only 3/8, and the frozen Round 19 held-out gate failed. This release therefore validates packaging, deterministic advisory behavior, memory isolation, context ceilings, and research traceability. It does not establish a general reduction in Agent tokens, wall time, or correctness errors.
