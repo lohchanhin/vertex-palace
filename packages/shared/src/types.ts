@@ -268,6 +268,45 @@ export type EvidenceRole =
   | "decision"
   | "memory";
 
+export type PalaceObjectKind =
+  | "function"
+  | "method"
+  | "constructor"
+  | "class"
+  | "interface"
+  | "type"
+  | "constant"
+  | "property"
+  | "endpoint"
+  | "test";
+
+export type PalaceObjectVisibility = "public" | "protected" | "private" | "package";
+
+export type PalaceObjectParser =
+  | "ts-morph"
+  | "python-structural"
+  | "fallback-structural"
+  | "unknown";
+
+export type PalaceObjectIdentity = {
+  version: 1;
+  declarationKey: string;
+  signatureShape: string;
+  semanticHash: string;
+};
+
+export type PalaceObjectMetadata = PalaceObjectIdentity & {
+  objectKind: PalaceObjectKind;
+  qualifiedName: string;
+  ownerName?: string;
+  exported: boolean;
+  visibility?: PalaceObjectVisibility;
+  modifiers: string[];
+  parser: PalaceObjectParser;
+  parserConfidence: number;
+  relationConfidence?: number;
+};
+
 export type EvidenceScope = "product" | "documentation" | "tooling" | "project-history" | "unknown";
 
 export type EvidenceRoleAssignment = {
@@ -393,6 +432,7 @@ export type PalaceNode = {
   tokenCost: number;
   contentHash: string;
   sourceHash: string;
+  object?: PalaceObjectMetadata;
   lod: {
     level0?: string;
     level1?: string;
@@ -556,6 +596,7 @@ export type ParsedSymbol = {
   endLine: number;
   signature: string;
   searchText?: string;
+  object?: PalaceObjectMetadata;
 };
 
 export type ParsedHeading = {

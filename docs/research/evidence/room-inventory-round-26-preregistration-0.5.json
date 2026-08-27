@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "studyId": "room-inventory-round-26-0.5",
+  "round": 26,
+  "status": "protocol-locked-target-selection-pending",
+  "lockedAt": "2026-08-27T03:12:12.778Z",
+  "baseline": {
+    "package": "vertex-palace@0.4.0",
+    "gitTag": "v0.4.0",
+    "sourceCommit": "2d29561"
+  },
+  "candidate": {
+    "plannedPackage": "vertex-palace@0.5.0-alpha.1",
+    "artifactFreezeStatus": "pending",
+    "requiredBehavior": "object-first routing behind an experimental switch"
+  },
+  "targetSelection": {
+    "status": "pending",
+    "totalTargets": 16,
+    "freshTargetsRequired": true,
+    "languages": {
+      "typescriptOrJavascript": 4,
+      "python": 4,
+      "go": 4,
+      "rust": 4
+    },
+    "profiles": {
+      "exactObject": 4,
+      "ambiguousSameName": 4,
+      "crossFileCallAndTest": 4,
+      "unresolvedControl": 4
+    },
+    "developmentTargetsMayBeReused": false,
+    "selectionMustPrecedeCandidateExecution": true
+  },
+  "execution": {
+    "conditions": [
+      "0.4-file-first",
+      "0.5-object-first"
+    ],
+    "repetitionsPerCondition": 2,
+    "conditionOrderBalanced": true,
+    "sequentialOnly": true,
+    "contextTokenCeiling": 6000,
+    "trackedRepositoryMutationAllowed": false
+  },
+  "truthLayers": [
+    "target object",
+    "focused verification object",
+    "explicit contract object",
+    "latent auxiliary file reported separately"
+  ],
+  "gates": {
+    "exactTargetObjectRecall": 1,
+    "minimumImplementationTestClosure": 0.95,
+    "minimumMacroObjectFocus": 0.75,
+    "maximumWrongForcedStops": 0,
+    "deterministicRouteAgreement": 1,
+    "maximumContextTokens": 6000,
+    "maximumTrackedFilePollution": 0,
+    "lineShiftIdentityRetention": 1,
+    "maximumIndexSizeMultiplierOverBaseline": 1.5,
+    "maximumIncrementalIndexTimeRegression": 0.25
+  },
+  "failurePolicy": {
+    "firstObservationIsImmutable": true,
+    "targetOracleOrThresholdRewriteAllowed": false,
+    "maximumGeneralMechanismRepairPerFailureClass": 1,
+    "freshQualificationRoundsAfterRepair": 2,
+    "repeatFailureAfterRepairAction": "pause stable 0.5 and perform architecture review"
+  },
+  "claimBoundary": "Round 26 is a static object-routing qualification study. Token, tool-call, wall-time, and end-to-end Agent correctness claims require a separate randomized paired Agent study."
+}

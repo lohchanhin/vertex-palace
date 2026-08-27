@@ -11,6 +11,7 @@ export * from "./parser/parse-ts-js";
 export * from "./parser/parse-markdown";
 export * from "./parser/parse-json";
 export * from "./parser/parse-fallback";
+export * from "./palace/object-identity";
 export * from "./indexer/index-palace";
 export * from "./indexer/build-directory-map";
 export * from "./indexer/build-nodes";

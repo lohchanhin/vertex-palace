@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "identityVersion": 1,
+  "cases": [
+    {
+      "id": "typescript-method",
+      "language": "typescript",
+      "sourcePath": "typescript/payment-service.ts",
+      "symbolName": "PaymentService.authorize",
+      "objectKind": "method",
+      "ownerName": "PaymentService",
+      "parser": "ts-morph",
+      "parserConfidence": 1,
+      "exported": true
+    },
+    {
+      "id": "javascript-object-method",
+      "language": "javascript",
+      "sourcePath": "javascript/hooks.js",
+      "symbolName": "hooks.beforeRun",
+      "objectKind": "method",
+      "ownerName": "hooks",
+      "parser": "ts-morph",
+      "parserConfidence": 1,
+      "exported": true
+    },
+    {
+      "id": "python-method",
+      "language": "python",
+      "sourcePath": "python/session.py",
+      "symbolName": "Session.refresh",
+      "objectKind": "method",
+      "ownerName": "Session",
+      "parser": "python-structural",
+      "parserConfidence": 0.75,
+      "exported": false
+    },
+    {
+      "id": "go-receiver-method",
+      "language": "go",
+      "sourcePath": "go/store.go",
+      "symbolName": "Store.Save",
+      "objectKind": "method",
+      "ownerName": "Store",
+      "parser": "fallback-structural",
+      "parserConfidence": 0.65,
+      "exported": true
+    },
+    {
+      "id": "rust-function",
+      "language": "rust",
+      "sourcePath": "rust/router.rs",
+      "symbolName": "select_route",
+      "objectKind": "function",
+      "parser": "fallback-structural",
+      "parserConfidence": 0.65,
+      "exported": true
+    }
+  ]
+}

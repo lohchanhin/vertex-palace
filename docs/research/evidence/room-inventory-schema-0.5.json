@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "featureVersion": "0.5",
+  "identityVersion": 1,
+  "status": "phase-0-contract-frozen",
+  "frozenAt": "2026-08-27T03:12:12.778Z",
+  "featureName": "Room Inventory",
+  "objectKinds": [
+    "function",
+    "method",
+    "constructor",
+    "class",
+    "interface",
+    "type",
+    "constant",
+    "property",
+    "endpoint",
+    "test"
+  ],
+  "parserKinds": [
+    "ts-morph",
+    "python-structural",
+    "fallback-structural",
+    "unknown"
+  ],
+  "identity": {
+    "declarationKeyExcludesLineNumbers": true,
+    "declarationKeyInputs": [
+      "normalized language",
+      "normalized source path",
+      "object kind",
+      "qualified name",
+      "normalized signature shape"
+    ],
+    "semanticHashExcludesPathAndName": true,
+    "semanticHashInputs": [
+      "normalized language",
+      "object kind",
+      "comment-free whitespace-normalized implementation body after leading signature removal"
+    ],
+    "relocationPolicy": "A future phase may create an alias only when a semantic match is unique inside an evidence-bounded search scope. Ambiguous matches remain stale."
+  },
+  "compatibility": {
+    "metadataIsOptional": true,
+    "existingPalaceModesUnchanged": true,
+    "defaultRoutingChanged": false,
+    "existingNodeIdsChanged": false,
+    "schemaVersionBumpRequiredInPhase0": false
+  },
+  "storage": {
+    "oneMarkdownFilePerObject": false,
+    "reuseNodeGraph": true,
+    "maximumFutureObjectEdgesPerNode": 32
+  },
+  "fixtureContract": {
+    "path": "packages/core/test/fixtures/room-inventory/contract.json",
+    "sha256": "e7b62cc10e821f2adedead527fa77dc158be4866f6aab4b3724afef06d9ec460",
+    "languages": [
+      "typescript",
+      "javascript",
+      "python",
+      "go",
+      "rust"
+    ],
+    "lineShiftIdentityRetention": 1
+  },
+  "claimBoundary": "Phase 0 freezes a compatible data and identity contract. It does not establish production symbol routing, relation accuracy, context reduction, Agent correctness, Token savings, or speed improvements."
+}
