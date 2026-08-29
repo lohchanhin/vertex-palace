@@ -76,6 +76,10 @@ fn nested_alias_is_skipped_without_granting_its_target() {
         [
           "packages/runtime/test/workbench.test.ts",
           "import '@example/workbench'; test('workbench Glob', () => expect(true).toBe(true));\n"
+        ],
+        [
+          "fixtures/demo.ts",
+          "export const reproductionOnly = 'not an implementation contract';\n"
         ]
       ]);
       for (const [relativePath, source] of files) {
@@ -87,7 +91,16 @@ fn nested_alias_is_skipped_without_granting_its_target() {
 
       const fetchImpl = vi.fn(async () => new Response(JSON.stringify({
         title: "Glob fails before enumeration on a nested filesystem alias",
-        body: "The worker reports `ACL root contains a reparse point`. Keep ordinary files enumerable, skip the nested alias, and do not grant its target. Add the focused ledger regression test.",
+        body: `### What happened
+The worker reports \`ACL root contains a reparse point\`. Keep ordinary files enumerable, skip the nested alias, and do not grant its target. Add the focused ledger regression test.
+
+<details><summary>Translation</summary>This duplicate must not become routing evidence.</details>
+
+### How to reproduce
+Open fixtures/demo.ts and run package.json.
+
+### Environment
+Provider desktop build with unrelated environment prose.`,
         html_url: "https://github.com/example/workbench/issues/47",
         labels: [{ name: "bug" }]
       }), { status: 200, headers: { "content-type": "application/json" } }));
@@ -102,6 +115,12 @@ fn nested_alias_is_skipped_without_granting_its_target() {
       const routed = route.route.map((step) => step.sourcePath.replace(/:\d+(?:-\d+)?$/, ""));
 
       expect(fetchImpl).toHaveBeenCalledTimes(1);
+      expect(grounded.authoritativeTask).toBe(
+        "Fix https://github.com/example/workbench/issues/47: keep Glob enumeration safe."
+      );
+      expect(grounded.effectiveTask).not.toContain("fixtures/demo.ts");
+      expect(grounded.effectiveTask).not.toContain("package.json");
+      expect(grounded.effectiveTask).not.toContain("Translation");
       expect(grounded.grounding).toMatchObject({
         status: "resolved",
         decision: "route",
@@ -121,6 +140,7 @@ fn nested_alias_is_skipped_without_granting_its_target() {
       ]));
       expect(routed).not.toContain("packages/runtime/src/workbench.ts");
       expect(routed).not.toContain("packages/runtime/test/workbench.test.ts");
+      expect(routed).not.toContain("fixtures/demo.ts");
     });
   });
 

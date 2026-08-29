@@ -236,7 +236,7 @@ export async function routePalace(root: string, task: string, options: number | 
     facetClosure.route,
     scored,
     index.nodes,
-    groundedTask.effectiveTask,
+    groundedTask.authoritativeTask,
     routeLimit
   );
   const expanded = explicitEvidenceContract.route;

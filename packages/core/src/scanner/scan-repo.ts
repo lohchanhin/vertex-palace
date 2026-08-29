@@ -12,9 +12,8 @@ export async function scanRepo(input: ScanRepoInput): Promise<ScanRepoOutput> {
   const config = await readConfigIfPresent(root);
   const palaceRoot = input.palaceRoot ?? config?.palace_root ?? ".palace";
   const configuredIgnore = [...defaultIgnorePatterns(), ...(config?.ignore ?? []), palaceRoot, `${palaceRoot}/**`];
-  const isIgnored = await createIgnoreMatcher(root, configuredIgnore);
   const discoveryIgnore = expandGlobIgnorePatterns(configuredIgnore.filter((pattern) => !isGitMarkerPattern(pattern)));
-  const nestedRepoMarkers = await fg(["**/.git"], {
+  const ignoreMarkers = await fg(["**/.git", "**/.gitignore"], {
     cwd: root,
     dot: true,
     onlyFiles: false,
@@ -23,7 +22,10 @@ export async function scanRepo(input: ScanRepoInput): Promise<ScanRepoOutput> {
     suppressErrors: true,
     ignore: discoveryIgnore
   });
+  const nestedRepoMarkers = ignoreMarkers.filter((entry) => normalizeRelativePath(entry).endsWith("/.git"));
+  const nestedGitignorePaths = ignoreMarkers.filter((entry) => normalizeRelativePath(entry).endsWith("/.gitignore"));
   const nestedRepoRoots = findNestedRepoRoots(nestedRepoMarkers.map(normalizeRelativePath));
+  const isIgnored = await createIgnoreMatcher(root, configuredIgnore, nestedGitignorePaths);
   const globIgnore = expandGlobIgnorePatterns(configuredIgnore);
   const entries = await fg(["**/*"], {
     cwd: root,

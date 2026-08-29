@@ -17,6 +17,7 @@ const execFileAsync = promisify(execFile);
 const CACHE_TTL_MS = 60 * 60 * 1000;
 const FETCH_TIMEOUT_MS = 5_000;
 const MAX_BODY_CHARS = 8 * 1024;
+const MAX_REFERENCE_EVIDENCE_CHARS = 2_000;
 const MAX_REFERENCES = 2;
 
 const GENERIC_GROUNDING_TERMS = new Set([
@@ -49,6 +50,7 @@ export type GroundTaskOptions = {
 };
 
 export type GroundedTask = {
+  authoritativeTask: string;
   effectiveTask: string;
   grounding: PalaceTaskGrounding;
 };
@@ -133,7 +135,7 @@ export async function groundTask(
   }
 
   const metadata = usable.map(renderReferenceEvidence).join("\n\n");
-  const effectiveTask = `${task}\n\nResolved GitHub task metadata:\n${metadata}`;
+  const effectiveTask = `${task}\n\nResolved external task evidence:\n${metadata}`;
   const resolutionStatus = aggregateResolutionStatus(usable.map((item) => item.reference.resolutionStatus));
   if (!locallyIdentifiable && !isTaskLocallyIdentifiable(effectiveTask, nodes)) {
     return unresolvedGrounding(
@@ -145,6 +147,7 @@ export async function groundTask(
   }
 
   return {
+    authoritativeTask: task,
     effectiveTask,
     grounding: {
       status: "resolved",
@@ -161,15 +164,57 @@ export async function groundTask(
 
 function renderReferenceEvidence(item: ResolvedReference): string {
   const title = stripReferenceIdentity(item.reference, item.reference.title ?? "");
-  const body = stripReferenceIdentity(item.reference, item.bodyExcerpt ?? "");
+  const body = stripReferenceIdentity(
+    item.reference,
+    boundedReferenceBodyEvidence(item.bodyExcerpt ?? "")
+  );
   const labels = (item.labels ?? [])
     .map((label) => stripReferenceIdentity(item.reference, label).trim())
     .filter(Boolean);
   return [
-    `${item.reference.kind === "pull" ? "Pull request" : "Issue"} evidence: ${title}`,
+    `Title: ${title}`,
     body,
     labels.length ? `Labels: ${labels.join(", ")}` : ""
   ].filter(Boolean).join("\n");
+}
+
+function boundedReferenceBodyEvidence(value: string): string {
+  const withoutDetails = value
+    .replace(/<details\b[^>]*>[\s\S]*?<\/details>/gi, " ")
+    .replace(/\r\n?/g, "\n");
+  const headingPattern = /^#{2,6}\s+(.+?)\s*$/gm;
+  const headings = [...withoutDetails.matchAll(headingPattern)];
+  const sections = headings.map((heading, index) => ({
+    heading: heading[1]?.trim() ?? "",
+    body: withoutDetails.slice(
+      (heading.index ?? 0) + heading[0].length,
+      headings[index + 1]?.index ?? withoutDetails.length
+    )
+  }));
+  const excludedHeading = /\b(?:how\s+to\s+reproduce|reproduction|environment|logs?|screenshots?|additional\s+context|related)\b/i;
+  const preferredHeading = /\b(?:what\s+happened|summary|description|problem|actual\s+behavior|expected\s+behavior|acceptance\s+criteria)\b/i;
+  const preferred = sections
+    .filter((section) => preferredHeading.test(section.heading) && !excludedHeading.test(section.heading))
+    .map((section) => section.body);
+  const fallback = sections
+    .filter((section) => !excludedHeading.test(section.heading))
+    .slice(0, 1)
+    .map((section) => section.body);
+  const preamble = headings.length ? withoutDetails.slice(0, headings[0]?.index ?? 0) : withoutDetails;
+  const evidence = [...(preferred.length ? preferred : [preamble, ...fallback])]
+    .join("\n")
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, " ")
+    .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
+    .replace(/^```[^\n]*$/gm, "")
+    .replace(/^#{1,6}\s+/gm, "")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/[ \t]+/g, " ")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+  if (evidence.length <= MAX_REFERENCE_EVIDENCE_CHARS) return evidence;
+  const bounded = evidence.slice(0, MAX_REFERENCE_EVIDENCE_CHARS);
+  const boundary = bounded.lastIndexOf(" ");
+  return `${bounded.slice(0, boundary > MAX_REFERENCE_EVIDENCE_CHARS * 0.75 ? boundary : bounded.length).trim()}…`;
 }
 
 function stripReferenceIdentity(reference: PalaceTaskReference, value: string): string {
@@ -416,6 +461,7 @@ function unresolvedGrounding(
   reason: string
 ): GroundedTask {
   return {
+    authoritativeTask: task,
     effectiveTask: task,
     grounding: {
       status: "unresolved",
@@ -437,6 +483,7 @@ function localGrounding(
   reason = "The task contains local file, symbol, or product-vocabulary evidence."
 ): GroundedTask {
   return {
+    authoritativeTask: task,
     effectiveTask: task,
     grounding: {
       status: "local",

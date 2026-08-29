@@ -44,6 +44,22 @@ describe("scanRepo", () => {
     });
   });
 
+  it("honors directory-scoped nested gitignore files", async () => {
+    await withFixture("ts-api", async (root) => {
+      const crate = path.join(root, "experiments", "worker");
+      await mkdir(path.join(crate, "target", "debug"), { recursive: true });
+      await mkdir(path.join(crate, "src"), { recursive: true });
+      await writeFile(path.join(crate, ".gitignore"), "/target/\n", "utf8");
+      await writeFile(path.join(crate, "target", "debug", "generated.rs"), "pub fn generated() {}", "utf8");
+      await writeFile(path.join(crate, "src", "lib.rs"), "pub fn source() {}", "utf8");
+
+      const scan = await scanRepo({ root, includeHidden: true });
+
+      expect(scan.files.some((file) => file.path.endsWith("experiments/worker/src/lib.rs"))).toBe(true);
+      expect(scan.files.some((file) => file.path.includes("experiments/worker/target"))).toBe(false);
+    });
+  });
+
   it("honors project-specific ignore patterns from palace.yml", async () => {
     await withFixture("ts-api", async (root) => {
       await initPalace(root);
