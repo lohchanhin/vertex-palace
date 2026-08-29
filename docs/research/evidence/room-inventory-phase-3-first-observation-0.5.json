@@ -1,0 +1,269 @@
+{
+  "schemaVersion": 1,
+  "featureVersion": "0.5",
+  "phase": 3,
+  "observation": "first",
+  "immutable": true,
+  "observedAt": "2026-08-29T13:55:13.842Z",
+  "candidate": {
+    "sourceCommit": "0f41dbd4153a56b6edf264e36a745d1e2345dbf0",
+    "entrypoint": "packages/core/dist/index.js",
+    "roomInventoryDefaultEnabled": false
+  },
+  "oracle": {
+    "sha256": "f2f06345b16050b54bbdbbab640379cb2b70e02f952645071f57f4df839d8c12",
+    "expectedRelations": 27,
+    "forbiddenRelations": 10,
+    "declaredEndpoints": 46
+  },
+  "baseline": {
+    "files": 12,
+    "nodes": 74,
+    "objects": 0,
+    "edges": 364,
+    "objectRelations": 0,
+    "maximumOutgoingObjectRelations": 0
+  },
+  "enabled": {
+    "files": 12,
+    "nodes": 74,
+    "objects": 46,
+    "edges": 381,
+    "objectRelations": 29,
+    "maximumOutgoingObjectRelations": 3
+  },
+  "metrics": {
+    "resolvedEndpoints": 46,
+    "endpointResolution": 1,
+    "matchedExpectedRelations": 22,
+    "relationPrecision": 0.7586,
+    "relationRecall": 0.8148,
+    "testClosureRecall": 0.8,
+    "forbiddenHits": 0,
+    "forbiddenRelationRate": 0,
+    "unexpectedInScopeRelations": 7,
+    "deterministicRelationAgreement": 1,
+    "perLanguage": [
+      {
+        "language": "typescript",
+        "expected": 6,
+        "matched": 6,
+        "recall": 1,
+        "missed": []
+      },
+      {
+        "language": "javascript",
+        "expected": 6,
+        "matched": 6,
+        "recall": 1,
+        "missed": []
+      },
+      {
+        "language": "python",
+        "expected": 6,
+        "matched": 5,
+        "recall": 0.8333,
+        "missed": [
+          [
+            "python/session.py",
+            "py_build_session",
+            "calls",
+            "python/session.py",
+            "py_hash_session"
+          ]
+        ]
+      },
+      {
+        "language": "go",
+        "expected": 6,
+        "matched": 5,
+        "recall": 0.8333,
+        "missed": [
+          [
+            "go/store.go",
+            "goBuildStore",
+            "calls",
+            "go/store.go",
+            "goPersistStore"
+          ]
+        ]
+      },
+      {
+        "language": "rust",
+        "expected": 3,
+        "matched": 0,
+        "recall": 0,
+        "missed": [
+          [
+            "rust/router.rs",
+            "rust_build_route",
+            "calls",
+            "rust/router.rs",
+            "rust_prepare_route"
+          ],
+          [
+            "rust/router.rs",
+            "rust_builds_route",
+            "tests",
+            "rust/router.rs",
+            "rust_build_route"
+          ],
+          [
+            "rust/router.rs",
+            "rust_build_route",
+            "tested_by",
+            "rust/router.rs",
+            "rust_builds_route"
+          ]
+        ]
+      }
+    ]
+  },
+  "diagnostics": {
+    "unresolvedEndpoints": [],
+    "missedExpectedRelations": [
+      [
+        "python/session.py",
+        "py_build_session",
+        "calls",
+        "python/session.py",
+        "py_hash_session"
+      ],
+      [
+        "go/store.go",
+        "goBuildStore",
+        "calls",
+        "go/store.go",
+        "goPersistStore"
+      ],
+      [
+        "rust/router.rs",
+        "rust_build_route",
+        "calls",
+        "rust/router.rs",
+        "rust_prepare_route"
+      ],
+      [
+        "rust/router.rs",
+        "rust_builds_route",
+        "tests",
+        "rust/router.rs",
+        "rust_build_route"
+      ],
+      [
+        "rust/router.rs",
+        "rust_build_route",
+        "tested_by",
+        "rust/router.rs",
+        "rust_builds_route"
+      ]
+    ],
+    "forbiddenHits": [],
+    "unexpectedInScopeRelations": [
+      [
+        "go/store_test.go",
+        "TestGoBuildStore",
+        "tests",
+        "go/store.go",
+        "GoStore"
+      ],
+      [
+        "go/store.go",
+        "GoStore",
+        "tested_by",
+        "go/store_test.go",
+        "TestGoBuildStore"
+      ],
+      [
+        "javascript/receipt.js",
+        "JsReceiptService",
+        "calls",
+        "javascript/receipt.js",
+        "JsReceiptService.render"
+      ],
+      [
+        "python/session.py",
+        "PySession",
+        "calls",
+        "python/session.py",
+        "PySession.refresh"
+      ],
+      [
+        "python/session.py",
+        "PySession",
+        "tested_by",
+        "python/tests/test_session.py",
+        "test_py_build_session"
+      ],
+      [
+        "python/tests/test_session.py",
+        "test_py_build_session",
+        "tests",
+        "python/session.py",
+        "PySession"
+      ],
+      [
+        "typescript/invoice.ts",
+        "TsInvoiceService",
+        "calls",
+        "typescript/invoice.ts",
+        "TsInvoiceService.calculate"
+      ]
+    ],
+    "testObjects": [
+      {
+        "language": "typescript",
+        "key": "typescript/invoice.test.ts|testTsBuildInvoice",
+        "matches": 1,
+        "objectKinds": [
+          "test"
+        ]
+      },
+      {
+        "language": "javascript",
+        "key": "javascript/receipt.test.js|testJsBuildReceipt",
+        "matches": 1,
+        "objectKinds": [
+          "test"
+        ]
+      },
+      {
+        "language": "python",
+        "key": "python/tests/test_session.py|test_py_build_session",
+        "matches": 1,
+        "objectKinds": [
+          "test"
+        ]
+      },
+      {
+        "language": "go",
+        "key": "go/store_test.go|TestGoBuildStore",
+        "matches": 1,
+        "objectKinds": [
+          "function"
+        ]
+      },
+      {
+        "language": "rust",
+        "key": "rust/router.rs|rust_builds_route",
+        "matches": 1,
+        "objectKinds": [
+          "function"
+        ]
+      }
+    ]
+  },
+  "gates": {
+    "objectEndpointResolution": true,
+    "macroRelationPrecision": false,
+    "macroRelationRecall": true,
+    "perLanguageRelationRecall": false,
+    "testClosureRecall": true,
+    "forbiddenRelationRate": true,
+    "deterministicRelationAgreement": true,
+    "maximumOutgoingObjectRelations": true,
+    "defaultOffObjectRelations": true
+  },
+  "overallPass": false,
+  "claimBoundary": "This disclosed synthetic first observation does not establish fresh Round 26 qualification or Agent performance."
+}
