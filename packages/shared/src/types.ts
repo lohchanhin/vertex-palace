@@ -677,6 +677,8 @@ export type IndexPalaceOutput = {
   factCount: number;
   roomCount: number;
   symbolCount: number;
+  objectCount?: number;
+  roomInventoryEnabled?: boolean;
   ignoredCount: number;
   indexedAt: string;
 };

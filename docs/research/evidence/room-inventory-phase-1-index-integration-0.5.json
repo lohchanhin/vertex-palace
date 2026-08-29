@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "featureVersion": "0.5",
+  "phase": 1,
+  "status": "phase-1-index-integration-verified",
+  "verifiedAt": "2026-08-29T10:44:23.540Z",
+  "featureName": "Room Inventory",
+  "activation": {
+    "defaultEnabled": false,
+    "environmentVariable": "VERTEX_PALACE_EXPERIMENTAL_ROOM_INVENTORY",
+    "enabledValue": "1",
+    "explicitOptionOverridesEnvironment": true,
+    "cliSchemaChanged": false,
+    "mcpSchemaChanged": false
+  },
+  "integration": {
+    "parsedSymbolMetadataOptional": true,
+    "palaceNodeMetadataOptional": true,
+    "centralMetadataAdapter": "packages/core/src/parser/attach-object-metadata.ts",
+    "supportedLanguages": [
+      "typescript",
+      "javascript",
+      "python",
+      "go",
+      "rust"
+    ],
+    "objectFirstRoutingEnabled": false,
+    "objectRelationsEnabled": false,
+    "existingNodeIdsChanged": false,
+    "existingRouteInputsChanged": false,
+    "persistedSchemaVersionChanged": false
+  },
+  "developmentFixture": {
+    "path": "packages/core/test/fixtures/room-inventory",
+    "files": 6,
+    "baseline": {
+      "nodes": 22,
+      "edges": 36,
+      "symbolNodes": 11,
+      "objects": 0,
+      "indexBytes": 67746
+    },
+    "enabled": {
+      "nodes": 22,
+      "edges": 36,
+      "symbolNodes": 11,
+      "objects": 8,
+      "indexBytes": 75386
+    },
+    "frozenTargetObjects": 5,
+    "targetMetadataRecall": 1,
+    "lineShiftIdentityRetention": 1,
+    "nodeRoutingProjectionAgreement": 1,
+    "indexSizeMultiplier": 1.1127741859297966,
+    "round26MaximumIndexSizeMultiplier": 1.5
+  },
+  "verification": {
+    "coreTest": "packages/core/test/room-inventory-contract.test.ts",
+    "researchTest": "scripts/test/room-inventory-phase-1.test.cjs",
+    "fullSuiteStatus": "passed",
+    "commands": [
+      "pnpm lint",
+      "pnpm build",
+      "pnpm test"
+    ],
+    "coreTestsPassed": 266,
+    "cliTestsPassed": 2,
+    "mcpTestsPassed": 2,
+    "researchTestsPassed": 257,
+    "researchLifecycleSkips": 2
+  },
+  "claimBoundary": "Phase 1 verifies default-off metadata persistence and compatibility on frozen development fixtures. It does not establish object-first route quality, Agent correctness, Token savings, speed, or Round 26 qualification."
+}

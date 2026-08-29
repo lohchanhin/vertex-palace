@@ -73,6 +73,7 @@ export function buildNodes(scan: ScanRepoOutput, parsedFiles: ParsedFileWithHash
           sourceHash: parsed.hash,
           contentHash: hashText(`${parsed.sourcePath}:${symbol.name}:${symbol.signature}:${symbol.searchText ?? ""}`),
           signature: symbol.signature,
+          object: symbol.object,
           now
         })
       );
@@ -126,6 +127,7 @@ function makeNode(input: {
   sourceHash?: string;
   contentHash?: string;
   signature?: string;
+  object?: PalaceNode["object"];
   extraTags?: string[];
   now: string;
 }): PalaceNode {
@@ -160,6 +162,7 @@ function makeNode(input: {
     tokenCost,
     contentHash: input.contentHash ?? hashText(input.summary),
     sourceHash: input.sourceHash ?? hashText(input.summary),
+    ...(input.object ? { object: input.object } : {}),
     lod: {
       level0: input.floor,
       level1: [input.wing, input.room].filter(Boolean).join("/") || input.floor,

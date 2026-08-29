@@ -7,6 +7,7 @@ export * from "./scanner/scan-repo";
 export * from "./scanner/ignore-rules";
 export * from "./scanner/file-hash";
 export * from "./parser/parse-file";
+export * from "./parser/attach-object-metadata";
 export * from "./parser/parse-ts-js";
 export * from "./parser/parse-markdown";
 export * from "./parser/parse-json";

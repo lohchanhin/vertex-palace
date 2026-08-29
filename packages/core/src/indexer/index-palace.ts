@@ -15,14 +15,28 @@ import { writeIndex } from "../storage/write-palace";
 import { stableJson } from "../utils/stable-json";
 import { writeFile } from "node:fs/promises";
 
-export async function indexPalace(root: string): Promise<IndexPalaceOutput> {
+export const ROOM_INVENTORY_ENV = "VERTEX_PALACE_EXPERIMENTAL_ROOM_INVENTORY";
+
+export type IndexPalaceOptions = {
+  roomInventory?: boolean;
+};
+
+export function isRoomInventoryEnabled(
+  options: IndexPalaceOptions = {},
+  environment: NodeJS.ProcessEnv = process.env
+): boolean {
+  return options.roomInventory ?? environment[ROOM_INVENTORY_ENV] === "1";
+}
+
+export async function indexPalace(root: string, options: IndexPalaceOptions = {}): Promise<IndexPalaceOutput> {
   await initPalace(root);
   const now = new Date().toISOString();
   const scan = await scanRepo({ root, includeHidden: true });
   const parsedFiles: ParsedFileWithHash[] = [];
+  const roomInventoryEnabled = isRoomInventoryEnabled(options);
 
   for (const file of scan.files) {
-    const parsed = await parseFile(root, file.path, file.language, file.size);
+    const parsed = await parseFile(root, file.path, file.language, file.size, { roomInventory: roomInventoryEnabled });
     parsedFiles.push({ ...parsed, hash: file.hash, size: file.size });
   }
   await appendDeclaredGeneratedArtifacts(root, scan, parsedFiles);
@@ -58,6 +72,8 @@ export async function indexPalace(root: string): Promise<IndexPalaceOutput> {
     factCount: facts.length,
     roomCount: rooms.length,
     symbolCount: symbols.length,
+    objectCount: symbols.filter((node) => node.object).length,
+    roomInventoryEnabled,
     ignoredCount: scan.ignored.length,
     indexedAt: now
   };

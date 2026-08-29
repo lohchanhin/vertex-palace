@@ -16,7 +16,6 @@ const chineseProtocolPath = fromRoot("docs/zh-CN/ROOM_INVENTORY_ROUND_26_PROTOCO
 test("freezes the optional Room Inventory schema without activating production routing", () => {
   const schema = readJson(schemaPath);
   const sharedTypes = readFileSync(fromRoot("packages/shared/src/types.ts"), "utf8");
-  const buildNodes = readFileSync(fromRoot("packages/core/src/indexer/build-nodes.ts"), "utf8");
 
   assert.equal(schema.status, "phase-0-contract-frozen");
   assert.equal(schema.identityVersion, 1);
@@ -39,7 +38,6 @@ test("freezes the optional Room Inventory schema without activating production r
     "test"
   ]);
   assert.match(sharedTypes, /object\?: PalaceObjectMetadata;/);
-  assert.doesNotMatch(buildNodes, /createPalaceObjectMetadata|object\s*:/);
 });
 
 test("freezes five language fixtures and their line-shift identity requirement", () => {
