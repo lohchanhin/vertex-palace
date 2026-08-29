@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "status": "frozen-before-candidate-observation",
+  "lockedAt": "2026-08-29T13:47:56.132Z",
+  "languages": [
+    "typescript",
+    "javascript",
+    "python",
+    "go",
+    "rust"
+  ],
+  "relationTypes": [
+    "contains",
+    "calls",
+    "tests",
+    "tested_by"
+  ],
+  "cases": [
+    {
+      "id": "typescript-relations",
+      "language": "typescript",
+      "expected": [
+        ["typescript/invoice.ts", "TsInvoiceService", "contains", "typescript/invoice.ts", "TsInvoiceService.calculate"],
+        ["typescript/invoice.ts", "tsBuildInvoice", "calls", "typescript/invoice.ts", "tsComputeInvoice"],
+        ["typescript/invoice.test.ts", "testTsBuildInvoice", "tests", "typescript/invoice.ts", "tsBuildInvoice"],
+        ["typescript/invoice.ts", "tsBuildInvoice", "tested_by", "typescript/invoice.test.ts", "testTsBuildInvoice"]
+      ],
+      "forbidden": [
+        ["typescript/invoice.ts", "tsUseResolver", "calls", "typescript/invoice.ts", "TsPrimary.resolve"],
+        ["typescript/invoice.ts", "tsUseResolver", "calls", "typescript/invoice.ts", "TsSecondary.resolve"]
+      ]
+    },
+    {
+      "id": "javascript-relations",
+      "language": "javascript",
+      "expected": [
+        ["javascript/receipt.js", "JsReceiptService", "contains", "javascript/receipt.js", "JsReceiptService.render"],
+        ["javascript/receipt.js", "jsBuildReceipt", "calls", "javascript/receipt.js", "jsFormatReceipt"],
+        ["javascript/receipt.test.js", "testJsBuildReceipt", "tests", "javascript/receipt.js", "jsBuildReceipt"],
+        ["javascript/receipt.js", "jsBuildReceipt", "tested_by", "javascript/receipt.test.js", "testJsBuildReceipt"]
+      ],
+      "forbidden": [
+        ["javascript/receipt.js", "jsUseResolver", "calls", "javascript/receipt.js", "JsPrimary.resolve"],
+        ["javascript/receipt.js", "jsUseResolver", "calls", "javascript/receipt.js", "JsSecondary.resolve"]
+      ]
+    },
+    {
+      "id": "python-relations",
+      "language": "python",
+      "expected": [
+        ["python/session.py", "PySession", "contains", "python/session.py", "PySession.refresh"],
+        ["python/session.py", "py_build_session", "calls", "python/session.py", "py_hash_session"],
+        ["python/tests/test_session.py", "test_py_build_session", "tests", "python/session.py", "py_build_session"],
+        ["python/session.py", "py_build_session", "tested_by", "python/tests/test_session.py", "test_py_build_session"]
+      ],
+      "forbidden": [
+        ["python/session.py", "py_use_resolver", "calls", "python/session.py", "PyPrimary.resolve"],
+        ["python/session.py", "py_use_resolver", "calls", "python/session.py", "PySecondary.resolve"]
+      ]
+    },
+    {
+      "id": "go-relations",
+      "language": "go",
+      "expected": [
+        ["go/store.go", "GoStore", "contains", "go/store.go", "GoStore.Save"],
+        ["go/store.go", "goBuildStore", "calls", "go/store.go", "goPersistStore"],
+        ["go/store_test.go", "TestGoBuildStore", "tests", "go/store.go", "goBuildStore"],
+        ["go/store.go", "goBuildStore", "tested_by", "go/store_test.go", "TestGoBuildStore"]
+      ],
+      "forbidden": [
+        ["go/store.go", "goUseResolver", "calls", "go/store.go", "GoPrimary.Resolve"],
+        ["go/store.go", "goUseResolver", "calls", "go/store.go", "GoSecondary.Resolve"]
+      ]
+    },
+    {
+      "id": "rust-relations",
+      "language": "rust",
+      "expected": [
+        ["rust/router.rs", "rust_build_route", "calls", "rust/router.rs", "rust_prepare_route"],
+        ["rust/router.rs", "rust_builds_route", "tests", "rust/router.rs", "rust_build_route"],
+        ["rust/router.rs", "rust_build_route", "tested_by", "rust/router.rs", "rust_builds_route"]
+      ],
+      "forbidden": [
+        ["rust/router.rs", "rust_use_resolver", "calls", "rust/first.rs", "resolve"],
+        ["rust/router.rs", "rust_use_resolver", "calls", "rust/second.rs", "resolve"]
+      ]
+    }
+  ],
+  "aggregateTruth": {
+    "expectedRelations": 19,
+    "expectedByType": {
+      "contains": 4,
+      "calls": 5,
+      "tests": 5,
+      "tested_by": 5
+    },
+    "forbiddenRelations": 10,
+    "forbiddenByType": {
+      "calls": 10
+    }
+  },
+  "measurement": {
+    "precisionDenominator": "all inferred object-to-object relations whose endpoints are declared by this oracle",
+    "recallDenominator": "all expected relations",
+    "forbiddenRelationRateDenominator": "all forbidden relations",
+    "unresolvedExpectedRelationsAreMisses": true,
+    "undeclaredSemanticallyValidRelationsRequireHumanReview": true
+  }
+}

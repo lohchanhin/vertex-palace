@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "featureVersion": "0.5",
+  "phase": 3,
+  "status": "relation-quality-protocol-frozen-candidate-unobserved",
+  "lockedAt": "2026-08-29T13:47:56.132Z",
+  "fixture": {
+    "root": "packages/core/test/fixtures/room-inventory-relations",
+    "oraclePath": "packages/core/test/fixtures/room-inventory-relations/oracle.json",
+    "oracleSha256": "8ae16a615f34eaf00acfd313afb0a9a3a1a78a69e1f6caa8d9421ef79f0e0c6d",
+    "fixtureSourcesSha256": "fbbd78f6fd86c674920af589797d2ae4ee39bdd3e0536f446b5d1163a548d97b",
+    "sourceFiles": 11,
+    "languages": [
+      "typescript",
+      "javascript",
+      "python",
+      "go",
+      "rust"
+    ]
+  },
+  "truth": {
+    "expectedRelations": 19,
+    "expectedByType": {
+      "contains": 4,
+      "calls": 5,
+      "tests": 5,
+      "tested_by": 5
+    },
+    "forbiddenRelations": 10,
+    "ambiguousSameNameTargetsPerLanguage": 2,
+    "standardTestConventions": [
+      "*.test.ts",
+      "*.test.js",
+      "tests/test_*.py",
+      "*_test.go with TestXxx",
+      "Rust #[test]"
+    ]
+  },
+  "execution": {
+    "candidateObserved": false,
+    "defaultOffConditionRequired": true,
+    "enabledConditionRequired": true,
+    "repeatedEnabledIndexes": 2,
+    "conditionsSequential": true,
+    "trackedFixtureMutationAllowed": false,
+    "undeclaredRelationDisposition": "human-review-not-automatic-false-positive"
+  },
+  "gates": {
+    "objectEndpointResolution": 1,
+    "minimumMacroRelationPrecision": 0.95,
+    "minimumMacroRelationRecall": 0.8,
+    "minimumPerLanguageRelationRecall": 0.5,
+    "minimumTestClosureRecall": 0.8,
+    "maximumForbiddenRelationRate": 0,
+    "deterministicRelationAgreement": 1,
+    "maximumOutgoingObjectRelations": 32,
+    "maximumDefaultOffObjectRelations": 0
+  },
+  "failurePolicy": {
+    "firstObservationImmutable": true,
+    "oracleRewriteAfterObservationAllowed": false,
+    "thresholdRewriteAfterObservationAllowed": false,
+    "maximumGeneralMechanismRepairsPerFailureClass": 1,
+    "targetSpecificRulesAllowed": false,
+    "repeatFailureAfterGeneralRepair": "architecture-review"
+  },
+  "claimBoundary": "Phase 3 is a disclosed synthetic relation-quality study. Passing it does not establish fresh Round 26 qualification, lower Token use, fewer tool calls, faster completion, or better end-to-end Agent correctness."
+}
