@@ -29,3 +29,11 @@
 - 以仓库主语言筛选错误地预期了 TypeScript 任务，实际 issue 的实现面是 Rust。
 
 目标仓库目前没有 tracked 修改，push URL 也已禁用。完整观察保存在 `random-real-repository-repair-smoke-observation-1-0.5.json`。研发从此回到通用机制，禁止加入 Maka、issue 编号、junction 或特定路径规则。
+
+## 第二次观察：通用修复 1
+
+在“完整 URL 必须补全”以及“provider/owner/repo 身份不进入语义任务”完成后，我用同一个冻结任务复测。引用补全成功，但路线仍没有命中两个核心文件。
+
+失败进入了更深一层：完整 issue 正文直接拼入任务后，远端复现样例路径被当成用户指定的源码路径；标题、双语重复、环境说明和日志也变成几十个必需主题。基线编译生成的嵌套 Rust `target/` 又让索引从 3,282 个文件增加到 3,364 个文件，即使 Git HEAD 完全干净，仍触发约 706 秒的全量重建。
+
+所以下一步必须建立有类型、有界、非指令级的引用证据，并在任何目录深度忽略常规构建产物。未美化的负面结果保存在 `random-real-repository-repair-smoke-observation-2-0.5.json`。

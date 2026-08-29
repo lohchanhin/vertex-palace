@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "studyId": "random-real-repository-repair-smoke-0.5",
+  "status": "generic-repair-1-failed",
+  "observedAt": "2026-08-29T15:36:54Z",
+  "claimBoundary": "A same-target regression observation after one generic product repair. It preserves both the improvement in reference grounding and the remaining route and lifecycle failures; it is not a performance claim.",
+  "selectionFreezeCommit": "bb36124cb414cc106bc0a1726f78b706a3befdf4",
+  "candidate": {
+    "sourceCommit": "24a12f9",
+    "cliSha256": "555ede8e827ab07ebf751b6399672f33b2b2da88528030cbcfaae42b4141294b3"
+  },
+  "target": {
+    "repository": "apache/maka",
+    "commit": "1ae45418b4affa8c4ba94aa68e79756e8c4cfee3",
+    "issue": "https://github.com/apache/maka/issues/3938",
+    "trackedFilesChanged": 0,
+    "targetRepairAttempted": false,
+    "outcomeDependentReplacement": false
+  },
+  "improvements": {
+    "explicitReferenceResolved": true,
+    "resolutionStatus": "fetched",
+    "referenceCount": 1,
+    "urlIdentityPollutionObservedInRouteReasons": false
+  },
+  "remainingFailures": {
+    "elapsedMs": 705969,
+    "indexedFiles": 3364,
+    "indexBytes": 217681921,
+    "routeId": "route_ca11b6ac57f1ac39",
+    "routeSha256": "63350bcdb8c4cae5c908b734faa0609d88f5c43387c88cfd74cf3d6ba9d03c73",
+    "routeConfidence": 0.15,
+    "contextEstimatedTokens": 5824,
+    "coreEvidenceHits": 0,
+    "coreEvidenceTotal": 2,
+    "coreCoverage": 0,
+    "selected": [
+      "packages/runtime/src/filesystem-worker/sandbox-paths.ts",
+      "apps/desktop/src/main/runtime-host-client.ts",
+      "apps/desktop/src/main/__tests__/runtime-host-local-remote-access.test.ts",
+      "packages/runtime-host/src/peer-mesh/node.ts",
+      "packages/runtime-host/src/protocol/workspace.ts",
+      "apps/desktop/src/renderer/styles/workbar/terminal.css"
+    ],
+    "expectedCoreEvidence": [
+      "experiments/windows-sandbox/launcher/src/acl_ledger.rs",
+      "experiments/windows-sandbox/launcher/src/acl_ledger_tests.rs"
+    ]
+  },
+  "genericCauses": [
+    {
+      "class": "unstructured-reference-evidence",
+      "evidence": "The complete issue body was concatenated into the task. Headings, bilingual duplicates, environment prose, and reproduction examples became required semantic subjects."
+    },
+    {
+      "class": "reference-path-authority-confusion",
+      "evidence": "Example fixture paths sdk/javascript/package.json and main.go were treated as explicit task evidence contracts even though they came from remote reproduction prose rather than the user's requested code scope."
+    },
+    {
+      "class": "generated-directory-freshness-churn",
+      "evidence": "A nested Rust target directory created by baseline compilation increased indexed files from 3282 to 3364 and caused a clean-HEAD context call to rebuild the full index."
+    }
+  ],
+  "nextMechanism": "Represent remote reference evidence as bounded, non-authoritative evidence fields rather than user task text, and ignore conventional generated build directories at any depth. No repository-, issue-, language-, diagnostic-, or path-specific production rule is permitted."
+}

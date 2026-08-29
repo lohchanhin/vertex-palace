@@ -29,3 +29,11 @@ The first frozen target exposed general Vertex Palace failures before any reposi
 - Selecting by repository primary language incorrectly predicted a TypeScript target even though the issue's implementation surface was Rust.
 
 The target repository remains unchanged and its push URL is disabled. This observation is frozen in `random-real-repository-repair-smoke-observation-1-0.5.json`. Development now returns to general mechanisms; no Maka-, issue-, junction-, or path-specific routing rule is permitted.
+
+## Observation 2: generic repair 1
+
+The same frozen task was rerun after explicit URLs were enriched and provider/owner/repository identity was removed from semantic task analysis. Reference grounding succeeded, but the route still missed both core files.
+
+The failure moved one layer deeper: concatenating the complete issue body made remote reproduction paths behave like user-authoritative code paths, while headings, bilingual duplication, environment prose, and logs became dozens of required task subjects. A nested Rust `target/` directory produced by baseline work also changed the index from 3,282 to 3,364 files and forced another approximately 706-second rebuild despite a clean Git HEAD.
+
+The next repair must therefore introduce typed, bounded, non-authoritative reference evidence and depth-independent generated-directory ignores. The unchanged negative result is preserved in `random-real-repository-repair-smoke-observation-2-0.5.json`.
