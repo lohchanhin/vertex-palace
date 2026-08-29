@@ -45,3 +45,11 @@ The second generic repair separated user-authoritative explicit file contracts f
 The candidate still failed the predeclared core gate. It routed only one of two core evidence files and selected a broad TypeScript Windows smoke test instead of the focused Rust regression. A measured hot context call took 36.303 seconds. More importantly, external evidence was still analyzed in the same channel as task obligations, so renderer labels and issue prose appeared as missing mandatory task subjects.
 
 The next architecture must use separate channels: the task contract controls intent, closure, explicit files, and stopping; bounded external evidence may only recall or softly rank candidates. Hot route latency is a separate performance problem. This failed result is preserved in `random-real-repository-repair-smoke-observation-3-0.5.json`.
+
+## Observation 4: dual-channel boundary and stop decision
+
+The third generic repair introduced distinct routing-hint and task-obligation channels. The semantic boundary worked: reference renderer words, reproduction paths, and unrelated issue prose no longer appeared as task obligations. Only the original task's `Glob` subject and access-safety constraint remained missing.
+
+The product gate still failed. The unchanged fresh-index call took 61.241 seconds, delivered about 5,698 estimated tokens, and again covered only one of two core evidence files. A broad filesystem operation and generic client test displaced the focused Rust regression. Semantic correctness therefore did not produce adequate focus or latency.
+
+This target is now closed for tuning. No further Maka-, issue-, diagnostic-, or path-derived product change is allowed. The next work must profile hot-route stages, replace absolute lexical accumulation with bounded evidence gain and redundancy control, then use fresh blind targets. Observation 4 is preserved in `random-real-repository-repair-smoke-observation-4-0.5.json`.

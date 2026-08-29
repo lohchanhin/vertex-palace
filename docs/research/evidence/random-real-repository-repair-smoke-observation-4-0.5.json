@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "studyId": "random-real-repository-repair-smoke-0.5",
+  "status": "generic-repair-3-failed-closed-for-tuning",
+  "observedAt": "2026-08-29T16:08:00Z",
+  "claimBoundary": "The final same-target regression after introducing separate routing-hint and task-obligation channels. The semantic boundary improved, but the frozen route and latency gates still failed. This target is now closed for further product tuning.",
+  "selectionFreezeCommit": "bb36124cb414cc106bc0a1726f78b706a3befdf4",
+  "candidate": {
+    "sourceCommit": "8f76d7a36f3430aa7b576c2462f8351936c31ae5",
+    "cliSha256": "8ea84fb2c62ee27a953c9977fdcc50e61498419ca87210e209ca9c19ec94e0d9"
+  },
+  "target": {
+    "repository": "apache/maka",
+    "commit": "1ae45418b4affa8c4ba94aa68e79756e8c4cfee3",
+    "issue": "https://github.com/apache/maka/issues/3938",
+    "trackedFilesChanged": 0,
+    "targetRepairAttempted": false,
+    "outcomeDependentReplacement": false,
+    "closedForFurtherTuning": true
+  },
+  "improvements": {
+    "referenceRendererTermsInObligations": 0,
+    "externalReproductionPathsInExplicitContracts": 0,
+    "remainingMissingSubjects": [
+      "Glob"
+    ],
+    "remainingMissingConstraints": [
+      "granting the junction target access"
+    ],
+    "nestedGeneratedDirectoryExcluded": true
+  },
+  "remainingFailures": {
+    "hotElapsedMs": 61241,
+    "indexedFiles": 3282,
+    "routeId": "route_1ca23d36e97a832e",
+    "routeConfidence": 0.4,
+    "contextEstimatedTokens": 5698,
+    "coreEvidenceHits": 1,
+    "coreEvidenceTotal": 2,
+    "coreCoverage": 0.5,
+    "selected": [
+      "packages/runtime/src/filesystem-worker/operations.ts",
+      "experiments/windows-sandbox/launcher/src/acl_ledger.rs",
+      "packages/runtime/src/runtime-event-read-model.ts",
+      "packages/runtime/src/filesystem-worker/client.ts",
+      "packages/runtime/src/filesystem-worker/worker-entry.ts",
+      "packages/runtime/src/__tests__/filesystem-worker-client.test.ts"
+    ],
+    "expectedCoreEvidence": [
+      "experiments/windows-sandbox/launcher/src/acl_ledger.rs",
+      "experiments/windows-sandbox/launcher/src/acl_ledger_tests.rs"
+    ]
+  },
+  "interpretation": {
+    "semanticBoundary": "improved",
+    "routeQualityGate": "failed",
+    "hotLatencyGate": "failed",
+    "sameTargetTuningDecision": "stop"
+  },
+  "nextDirection": [
+    "Profile route stages independently of indexing and remove superlinear whole-graph work from the hot path.",
+    "Replace absolute lexical accumulation with normalized evidence gain, redundancy penalties, and bounded role ownership.",
+    "Validate the architecture on a fresh blind target set; do not reuse this issue as release evidence or a source of new production rules."
+  ]
+}
