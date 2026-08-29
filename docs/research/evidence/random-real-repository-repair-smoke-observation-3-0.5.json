@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "studyId": "random-real-repository-repair-smoke-0.5",
+  "status": "generic-repair-2-failed",
+  "observedAt": "2026-08-29T15:59:50Z",
+  "claimBoundary": "A same-target regression observation after a second generic mechanism repair. It records a partial routing improvement, a remaining core-evidence miss, and measured hot-path latency; it is not a performance claim.",
+  "selectionFreezeCommit": "bb36124cb414cc106bc0a1726f78b706a3befdf4",
+  "candidate": {
+    "sourceCommit": "2bf3fd9bf5de60b8d224e062460364ef111b48b7",
+    "cliSha256": "7e4044b8df86a6f753c5ebfe6b05f0041b92a908e68800ae00abfa5273a391ec"
+  },
+  "target": {
+    "repository": "apache/maka",
+    "commit": "1ae45418b4affa8c4ba94aa68e79756e8c4cfee3",
+    "issue": "https://github.com/apache/maka/issues/3938",
+    "trackedFilesChanged": 0,
+    "targetRepairAttempted": false,
+    "outcomeDependentReplacement": false
+  },
+  "improvements": {
+    "explicitReferenceResolved": true,
+    "resolutionStatus": "cache-hit",
+    "nestedGeneratedDirectoryExcluded": true,
+    "indexedFilesBeforeRepair": 3364,
+    "indexedFilesAfterRepair": 3282,
+    "coreEvidenceHitsBeforeRepair": 0,
+    "coreEvidenceHitsAfterRepair": 1
+  },
+  "remainingFailures": {
+    "coldMigrationElapsedMs": null,
+    "coldMigrationTimingNote": "The long-running migration was observed through bounded process polls but was not instrumented inside the command, so no exact elapsed value is claimed.",
+    "hotElapsedMs": 36303,
+    "indexedFiles": 3282,
+    "nodeCount": 38702,
+    "edgeCount": 90721,
+    "routeId": "route_3a9fe845cde8379f",
+    "routeConfidence": 0.4,
+    "contextEstimatedTokens": 4401,
+    "coreEvidenceHits": 1,
+    "coreEvidenceTotal": 2,
+    "coreCoverage": 0.5,
+    "selected": [
+      "experiments/windows-sandbox/launcher/src/acl_ledger.rs",
+      "packages/runtime/src/filesystem-worker/operations.ts",
+      "packages/runtime/src/__tests__/filesystem-worker-windows-smoke.test.ts",
+      "packages/runtime/src/filesystem-worker/protocol.ts",
+      "packages/runtime/src/filesystem-worker/launch-spec.ts"
+    ],
+    "expectedCoreEvidence": [
+      "experiments/windows-sandbox/launcher/src/acl_ledger.rs",
+      "experiments/windows-sandbox/launcher/src/acl_ledger_tests.rs"
+    ],
+    "missingTaskSubjectsFromReferenceEvidence": [
+      "Resolved",
+      "Title",
+      "W1",
+      "read-only",
+      "terminal-story",
+      "node_modules",
+      "rin-sdk",
+      "workspace-linked",
+      "Expected",
+      "Labels"
+    ]
+  },
+  "genericCauses": [
+    {
+      "class": "evidence-obligation-channel-conflation",
+      "evidence": "Bounded external evidence still entered the same TaskAnalysis used for evidence closure, so reference prose and renderer labels became mandatory task subjects."
+    },
+    {
+      "class": "core-verification-selection-miss",
+      "evidence": "The implementation file was recovered, but a generic TypeScript Windows smoke test displaced the focused Rust verification file."
+    },
+    {
+      "class": "hot-route-latency",
+      "evidence": "A repeated context call on a fresh index took 36.303 seconds, independently of full index rebuild time."
+    }
+  ],
+  "nextMechanism": "Separate task obligations from external reference evidence. The original or resolved task contract drives intent, closure, stop conditions, and explicit files; bounded external evidence may only recall or softly rank candidates. Investigate route-stage latency independently. No target-specific rule is permitted."
+}

@@ -37,3 +37,11 @@ The same frozen task was rerun after explicit URLs were enriched and provider/ow
 The failure moved one layer deeper: concatenating the complete issue body made remote reproduction paths behave like user-authoritative code paths, while headings, bilingual duplication, environment prose, and logs became dozens of required task subjects. A nested Rust `target/` directory produced by baseline work also changed the index from 3,282 to 3,364 files and forced another approximately 706-second rebuild despite a clean Git HEAD.
 
 The next repair must therefore introduce typed, bounded, non-authoritative reference evidence and depth-independent generated-directory ignores. The unchanged negative result is preserved in `random-real-repository-repair-smoke-observation-2-0.5.json`.
+
+## Observation 3: generic repair 2
+
+The second generic repair separated user-authoritative explicit file contracts from bounded reference prose and added directory-scoped nested `.gitignore` handling. The unchanged frozen target confirmed one real improvement: generated Rust `target/` content disappeared from the index, indexed files returned from 3,364 to 3,282, and the expected Rust implementation entered the route.
+
+The candidate still failed the predeclared core gate. It routed only one of two core evidence files and selected a broad TypeScript Windows smoke test instead of the focused Rust regression. A measured hot context call took 36.303 seconds. More importantly, external evidence was still analyzed in the same channel as task obligations, so renderer labels and issue prose appeared as missing mandatory task subjects.
+
+The next architecture must use separate channels: the task contract controls intent, closure, explicit files, and stopping; bounded external evidence may only recall or softly rank candidates. Hot route latency is a separate performance problem. This failed result is preserved in `random-real-repository-repair-smoke-observation-3-0.5.json`.
