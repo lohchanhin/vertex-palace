@@ -13,9 +13,9 @@ export function registerEvaluate(program: Command): void {
     .option("-r, --root <path>", "Repository root")
     .option("--route-id <id>", "Evaluate an existing route instead of planning a new one")
     .option("-c, --changed-file <path>", "Actual changed file; repeat for each file", collectChangedFile, [])
-    .option("--core-file <path>", "Core implementation or focused test truth; repeat for each file", collectChangedFile, [])
-    .option("--declared-auxiliary-file <path>", "Auxiliary truth explicitly required by the task; repeat for each file", collectChangedFile, [])
-    .option("--latent-auxiliary-file <path>", "Hidden-diff or convention-only auxiliary truth; repeat for each file", collectChangedFile, [])
+    .option("--core-file <path>", "Core implementation or focused test truth; repeat for each file", collectChangedFile)
+    .option("--declared-auxiliary-file <path>", "Auxiliary truth explicitly required by the task; repeat for each file", collectChangedFile)
+    .option("--latent-auxiliary-file <path>", "Hidden-diff or convention-only auxiliary truth; repeat for each file", collectChangedFile)
     .option("-b, --budget <tokens>", "Input token budget", parseInt)
     .option("-l, --route-limit <count>", "Maximum route steps", parseInt)
     .option("-d, --max-drawers <count>", "Maximum drawers in the measured pack", parseInt)
@@ -41,7 +41,7 @@ export function registerEvaluate(program: Command): void {
     });
 }
 
-export function collectChangedFile(value: string, previous: string[]): string[] {
+export function collectChangedFile(value: string, previous: string[] = []): string[] {
   return [...previous, value];
 }
 

@@ -4,6 +4,7 @@ import type {
   LoadLevel,
   MemorySelectionTelemetry,
   PackOutput,
+  PalaceContextDegradation,
   PalaceExecutionBoundaries,
   PalaceMode,
   PalaceModeSelection,
@@ -275,7 +276,19 @@ async function packAdaptiveContext(
           json: measured.json
         };
       }
-      assertAdaptiveReduction(drawers, selection, measured.payload, "JSON");
+      if (reduceAdaptiveDrawers(drawers)) continue;
+      return packDegradedAdaptiveContext(
+        task,
+        route,
+        selection,
+        tiered,
+        deferredReferences,
+        memory,
+        boundaries,
+        baseMetrics,
+        measured.payload,
+        "json"
+      );
     }
   }
 
@@ -308,7 +321,19 @@ async function packAdaptiveContext(
         markdown: measured.markdown
       };
     }
-    assertAdaptiveReduction(drawers, selection, measured.payload, "Markdown");
+    if (reduceAdaptiveDrawers(drawers)) continue;
+    return packDegradedAdaptiveContext(
+      task,
+      route,
+      selection,
+      tiered,
+      deferredReferences,
+      memory,
+      boundaries,
+      baseMetrics,
+      measured.payload,
+      "markdown"
+    );
   }
 }
 
@@ -317,19 +342,6 @@ function adaptiveDeferredReferences(tiered: TieredRoute, drawers: PackedDrawer[]
   return uniqueRouteSteps(
     [...tiered.support, ...tiered.deferred]
       .filter((step) => !loadedPaths.has(normalizedRoutePath(step.sourcePath)))
-  );
-}
-
-function assertAdaptiveReduction(
-  drawers: PackedDrawer[],
-  selection: PalaceModeSelection,
-  payload: PalacePayloadMetrics,
-  format: "JSON" | "Markdown"
-): void {
-  if (reduceAdaptiveDrawers(drawers)) return;
-  throw new Error(
-    `${format} adaptive context requires ${payload.contextEstimatedTokens} estimated tokens, `
-    + `which exceeds the ${selection.maxContextTokens}-token ceiling even without source drawers.`
   );
 }
 
@@ -346,6 +358,359 @@ function reduceAdaptiveDrawers(drawers: PackedDrawer[]): boolean {
   }
   drawers.pop();
   return true;
+}
+
+type DegradedEnvelopeProfile = {
+  level: PalaceContextDegradation["level"];
+  taskChars: number;
+  primaryLimit: number;
+  deferredLimit: number;
+  memoryLimit: number;
+  requiredEvidenceLimit: number;
+  boundaryLimit: number;
+  reasonChars: number;
+};
+
+const DEGRADED_ENVELOPE_PROFILES: DegradedEnvelopeProfile[] = [
+  {
+    level: "compact",
+    taskChars: 2_048,
+    primaryLimit: 4,
+    deferredLimit: 8,
+    memoryLimit: 3,
+    requiredEvidenceLimit: 8,
+    boundaryLimit: 4,
+    reasonChars: 240
+  },
+  {
+    level: "minimal",
+    taskChars: 768,
+    primaryLimit: 2,
+    deferredLimit: 3,
+    memoryLimit: 2,
+    requiredEvidenceLimit: 4,
+    boundaryLimit: 2,
+    reasonChars: 120
+  },
+  {
+    level: "emergency",
+    taskChars: 128,
+    primaryLimit: 1,
+    deferredLimit: 0,
+    memoryLimit: 0,
+    requiredEvidenceLimit: 1,
+    boundaryLimit: 1,
+    reasonChars: 80
+  }
+];
+
+function packDegradedAdaptiveContext(
+  task: string,
+  route: PalaceRoute,
+  selection: PalaceModeSelection,
+  tiered: TieredRoute,
+  deferredReferences: PalaceRouteStep[],
+  memory: GuardedMemoryResult,
+  boundaries: PalaceExecutionBoundaries,
+  baseMetrics: PalacePayloadMetrics,
+  originalPayload: PalacePayloadMetrics,
+  format: PackFormat
+): PackOutput {
+  for (const profile of DEGRADED_ENVELOPE_PROFILES) {
+    const result = measureDegradedAdaptiveContext(
+      task,
+      route,
+      selection,
+      tiered,
+      deferredReferences,
+      memory,
+      boundaries,
+      baseMetrics,
+      originalPayload.contextEstimatedTokens,
+      profile,
+      format
+    );
+    if (result.payload.contextEstimatedTokens > selection.maxContextTokens) continue;
+    return {
+      task,
+      routeId: route.id,
+      decision: route.decision,
+      taskGrounding: route.taskGrounding,
+      mode: selection.mode,
+      modeSelection: selection,
+      payload: result.payload,
+      degradation: result.degradation,
+      memoryTelemetry: memory.telemetry,
+      executionBoundaries: boundaries,
+      estimatedTokens: result.payload.contextEstimatedTokens,
+      ...(format === "json" ? { json: result.value } : { markdown: result.serialized })
+    };
+  }
+
+  throw new Error(
+    `Adaptive context cannot fit the ${selection.maxContextTokens}-token ceiling after emergency compaction.`
+  );
+}
+
+function measureDegradedAdaptiveContext(
+  task: string,
+  route: PalaceRoute,
+  selection: PalaceModeSelection,
+  tiered: TieredRoute,
+  deferredReferences: PalaceRouteStep[],
+  memory: GuardedMemoryResult,
+  boundaries: PalaceExecutionBoundaries,
+  baseMetrics: PalacePayloadMetrics,
+  originalEstimatedTokens: number,
+  profile: DegradedEnvelopeProfile,
+  format: PackFormat
+): {
+  degradation: PalaceContextDegradation;
+  payload: PalacePayloadMetrics;
+  serialized: string;
+  value: unknown;
+} {
+  const primary = tiered.primary.slice(0, profile.primaryLimit).map((step) => ({
+    sourcePath: boundedText(stripSourceLocation(step.sourcePath), 240),
+    tier: step.tier ?? inferredTier(step.priority),
+    ...(profile.level === "emergency" ? {} : { reason: boundedText(step.reason, profile.reasonChars) })
+  }));
+  const deferred = deferredReferences.slice(0, profile.deferredLimit).map((step) => ({
+    sourcePath: boundedText(stripSourceLocation(step.sourcePath), 240),
+    tier: step.tier ?? inferredTier(step.priority),
+    ...(profile.level === "compact" ? { reason: boundedText(step.reason, profile.reasonChars) } : {})
+  }));
+  const memoryItems = memory.items.slice(0, profile.memoryLimit).map((item) => ({
+    id: boundedText(item.id, 120),
+    text: boundedText(item.text, profile.reasonChars),
+    risk: item.risk,
+    ...(profile.level === "compact"
+      ? { contradictionCheck: boundedText(item.contradictionCheck, profile.reasonChars) }
+      : {})
+  }));
+  const requiredEvidence = boundedItems(boundaries.requiredEvidence, profile.requiredEvidenceLimit, profile.reasonChars);
+  const doNot = boundedItems(boundaries.doNot, profile.boundaryLimit, profile.reasonChars);
+  const stopCondition = boundedItems(boundaries.stopCondition, profile.boundaryLimit, profile.reasonChars);
+  const conflictSummary = boundedItems(boundaries.conflictSummary, profile.boundaryLimit, profile.reasonChars);
+  const degradation: PalaceContextDegradation = {
+    applied: true,
+    reason: "fixed-envelope-over-budget",
+    level: profile.level,
+    originalEstimatedTokens,
+    tokenCeiling: selection.maxContextTokens,
+    omittedSections: [
+      "source-drawers",
+      "support-details",
+      "excluded-details",
+      "route-diagnostics",
+      ...(memory.items.length > memoryItems.length ? ["memory-details"] : [])
+    ],
+    retained: {
+      primaryReferences: primary.length,
+      deferredReferences: deferred.length,
+      memoryItems: memoryItems.length,
+      requiredEvidence: requiredEvidence.length
+    }
+  };
+  const taskValue = boundedText(task, profile.taskChars);
+  const selectionValue = {
+    evidenceStatus: selection.evidenceStatus,
+    interventionPolicy: selection.interventionPolicy,
+    maxContextTokens: selection.maxContextTokens,
+    risks: Object.entries(selection.riskSignals)
+      .filter(([, enabled]) => enabled)
+      .map(([risk]) => risk)
+  };
+  const groundingValue = {
+    status: route.taskGrounding.status,
+    resolutionStatus: route.taskGrounding.resolutionStatus
+  };
+  const telemetryValue = {
+    memoryCandidates: memory.telemetry.memoryCandidates,
+    memoryIncluded: memory.telemetry.memoryIncluded,
+    memoryExcluded: memory.telemetry.memoryExcluded.length,
+    includedIds: memory.telemetry.includedIds.slice(0, 8).map((id) => boundedText(id, 120))
+  };
+  const sectionMaterial = emptySectionMaterial();
+  sectionMaterial.task = taskValue;
+  if (format === "json") {
+    sectionMaterial.modeExplanation = jsonLeafMaterial({ selectionValue, groundingValue, degradation });
+    sectionMaterial.primary = jsonLeafMaterial(primary);
+    sectionMaterial.deferred = jsonLeafMaterial(deferred);
+    sectionMaterial.memory = jsonLeafMaterial({ memoryItems, telemetryValue });
+    sectionMaterial.requiredEvidence = jsonLeafMaterial(requiredEvidence);
+    sectionMaterial.doNot = jsonLeafMaterial(doNot);
+    sectionMaterial.stopCondition = jsonLeafMaterial(stopCondition);
+    sectionMaterial.conflictSummary = jsonLeafMaterial(conflictSummary);
+  } else {
+    sectionMaterial.modeExplanation = [
+      selection.mode,
+      route.decision,
+      selection.evidenceStatus,
+      selection.interventionPolicy,
+      degradation.reason,
+      degradation.level,
+      String(degradation.originalEstimatedTokens),
+      degradation.omittedSections.join(", ")
+    ].join("\n");
+    sectionMaterial.primary = markdownReferenceMaterial(primary);
+    sectionMaterial.deferred = markdownReferenceMaterial(deferred);
+    sectionMaterial.memory = [
+      String(telemetryValue.memoryCandidates),
+      String(telemetryValue.memoryIncluded),
+      String(telemetryValue.memoryExcluded),
+      ...memoryItems.flatMap((item) => [item.id, item.risk, item.text])
+    ].join("\n");
+    sectionMaterial.requiredEvidence = requiredEvidence.join("\n");
+    sectionMaterial.doNot = doNot.join("\n");
+    sectionMaterial.stopCondition = stopCondition.join("\n");
+    sectionMaterial.conflictSummary = conflictSummary.join("\n");
+  }
+
+  let payload: PalacePayloadMetrics = { ...baseMetrics, degradation };
+  let serialized = "";
+  let value: unknown;
+  for (let attempt = 0; attempt < 12; attempt += 1) {
+    const payloadSummary = {
+      contextBytes: payload.contextBytes,
+      contextEstimatedTokens: payload.contextEstimatedTokens,
+      tokenCeiling: selection.maxContextTokens
+    };
+    value = {
+      task: taskValue,
+      decision: route.decision,
+      taskGrounding: groundingValue,
+      mode: selection.mode,
+      selection: selectionValue,
+      route: {
+        id: route.id,
+        taskType: route.taskType,
+        confidence: route.confidence,
+        primary
+      },
+      context: [],
+      deferredReferences: deferred,
+      memory: memoryItems,
+      memoryTelemetry: telemetryValue,
+      executionBoundaries: { requiredEvidence, doNot, stopCondition, conflictSummary },
+      degradation,
+      payload: payloadSummary
+    };
+    serialized = format === "json"
+      ? serializeJsonOutput(value)
+      : renderDegradedAdaptiveMarkdown({
+          task: taskValue,
+          route,
+          selection,
+          primary,
+          deferred,
+          memoryItems,
+          telemetryValue,
+          requiredEvidence,
+          doNot,
+          stopCondition,
+          conflictSummary,
+          degradation,
+          payloadSummary
+        });
+    const measured = withMeasuredPayload({ ...baseMetrics, degradation }, serialized, sectionMaterial);
+    if (sameMeasuredPayload(payload, measured)) {
+      payload = measured;
+      break;
+    }
+    payload = measured;
+  }
+  return { degradation, payload, serialized, value };
+}
+
+function renderDegradedAdaptiveMarkdown(input: {
+  task: string;
+  route: PalaceRoute;
+  selection: PalaceModeSelection;
+  primary: Array<{ sourcePath: string; tier: string; reason?: string }>;
+  deferred: Array<{ sourcePath: string; tier: string; reason?: string }>;
+  memoryItems: Array<{ id: string; text: string; risk: string; contradictionCheck?: string }>;
+  telemetryValue: { memoryCandidates: number; memoryIncluded: number; memoryExcluded: number; includedIds: string[] };
+  requiredEvidence: string[];
+  doNot: string[];
+  stopCondition: string[];
+  conflictSummary: string[];
+  degradation: PalaceContextDegradation;
+  payloadSummary: { contextBytes: number; contextEstimatedTokens: number; tokenCeiling: number };
+}): string {
+  return [
+    "# Vertex Palace Adaptive Context",
+    "",
+    `Mode: ${input.selection.mode}`,
+    `Route decision: ${input.route.decision}`,
+    `Evidence status: ${input.selection.evidenceStatus}`,
+    `Intervention policy: ${input.selection.interventionPolicy}`,
+    "Budget degradation: fixed-envelope-over-budget",
+    `Degradation level: ${input.degradation.level}`,
+    `Original estimate: ${input.degradation.originalEstimatedTokens} tokens`,
+    `Omitted sections: ${input.degradation.omittedSections.join(", ")}`,
+    "",
+    "## Task",
+    "",
+    input.task,
+    "",
+    "## Payload",
+    "",
+    `Bytes: ${input.payloadSummary.contextBytes} | Estimated tokens: ${input.payloadSummary.contextEstimatedTokens} / ${input.payloadSummary.tokenCeiling}`,
+    "",
+    "## Primary",
+    "",
+    ...(input.primary.length
+      ? input.primary.map((item) => `- ${item.sourcePath} (${item.tier})${item.reason ? `: ${item.reason}` : ""}`)
+      : ["- No primary reference survived bounded compaction."]),
+    "",
+    "## Deferred",
+    "",
+    ...(input.deferred.length
+      ? input.deferred.map((item) => `- ${item.sourcePath} (${item.tier})${item.reason ? `: ${item.reason}` : ""}`)
+      : ["- Omitted by bounded compaction."]),
+    "",
+    "## Required Evidence",
+    "",
+    ...markdownItems(input.requiredEvidence),
+    "",
+    "## Memory",
+    "",
+    `Candidates: ${input.telemetryValue.memoryCandidates} | Included: ${input.telemetryValue.memoryIncluded} | Excluded: ${input.telemetryValue.memoryExcluded}`,
+    ...(input.memoryItems.length
+      ? input.memoryItems.map((item) => `- ${item.id} (${item.risk}): ${item.text}`)
+      : ["- No memory details retained."]),
+    "",
+    "## Do Not",
+    "",
+    ...markdownItems(input.doNot),
+    "",
+    "## Stop Condition",
+    "",
+    ...markdownItems(input.stopCondition),
+    "",
+    "## Conflict Summary",
+    "",
+    ...markdownItems(input.conflictSummary),
+    ""
+  ].join("\n");
+}
+
+function boundedItems(items: string[], limit: number, chars: number): string[] {
+  return items.slice(0, limit).map((item) => boundedText(item, chars));
+}
+
+function boundedText(value: string, maxChars: number): string {
+  if (value.length <= maxChars) return value;
+  return `${value.slice(0, Math.max(0, maxChars - 3))}...`;
+}
+
+function markdownItems(items: string[]): string[] {
+  return items.length ? items.map((item) => `- ${item}`) : ["- None."];
+}
+
+function markdownReferenceMaterial(items: Array<{ sourcePath: string; tier: string; reason?: string }>): string {
+  return items.flatMap((item) => [item.sourcePath, item.tier, ...(item.reason ? [item.reason] : [])]).join("\n");
 }
 
 function measureAdaptiveJson(

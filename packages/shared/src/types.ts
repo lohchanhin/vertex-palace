@@ -243,6 +243,22 @@ export type PalacePayloadMetrics = {
   memoryEstimatedTokens: number;
   guardrailCount: number;
   sectionMetrics: PalaceSectionMetrics;
+  degradation?: PalaceContextDegradation;
+};
+
+export type PalaceContextDegradation = {
+  applied: true;
+  reason: "fixed-envelope-over-budget";
+  level: "compact" | "minimal" | "emergency";
+  originalEstimatedTokens: number;
+  tokenCeiling: number;
+  omittedSections: string[];
+  retained: {
+    primaryReferences: number;
+    deferredReferences: number;
+    memoryItems: number;
+    requiredEvidence: number;
+  };
 };
 
 export type TaskType =
@@ -693,6 +709,7 @@ export type PackOutput = {
   mode?: PalaceMode;
   modeSelection?: PalaceModeSelection;
   payload?: PalacePayloadMetrics;
+  degradation?: PalaceContextDegradation;
   memoryTelemetry?: MemorySelectionTelemetry;
   executionBoundaries?: PalaceExecutionBoundaries;
   markdown?: string;

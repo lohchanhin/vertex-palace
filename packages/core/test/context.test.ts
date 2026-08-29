@@ -4,7 +4,11 @@ import { describe, expect, it, vi } from "vitest";
 import { indexPalace, palaceContext, serializePackOutput } from "../src/index";
 import * as memoryModule from "../src/memory/pitfall-board";
 import { writeMemory } from "../src/memory/write-memory";
+import { packAutoContextForRoute } from "../src/packer/context-packer";
+import { routePalace } from "../src/router/route-planner";
+import { readIndex } from "../src/storage/read-palace";
 import { getPalaceStatus } from "../src/storage/status";
+import { appendRoute } from "../src/storage/write-palace";
 import { withFixture } from "./test-utils";
 
 describe("palaceContext", () => {
@@ -1054,6 +1058,82 @@ describe("palaceContext", () => {
       }
     });
   });
+
+  it("returns bounded structured degradation for five oversized fixed-envelope route shapes", async () => {
+    await withFixture("ts-api", async (root) => {
+      await indexPalace(root);
+
+      const cases = [
+        "Fix login refresh token validation in the implementation and focused verification.",
+        "Trace login refresh token behavior across connected implementation and verification evidence.",
+        "Fix access token generation in the implementation and focused verification.",
+        "Trace access token behavior across connected implementation and verification evidence.",
+        "Fix token service diagnostics in the implementation and focused verification."
+      ];
+
+      for (const task of cases) {
+        const route = await routePalace(root, task, { budget: 6000, routeLimit: 10, referencePolicy: "off" });
+        const oversizedReason = "Independent implementation, verification, contract, and causal evidence must remain auditable. ".repeat(180);
+        route.route = route.route.map((step) => ({
+          ...step,
+          reason: `${step.reason} ${oversizedReason}`
+        }));
+        const index = await readIndex(root);
+        await appendRoute(root, index.routes, route);
+        for (const format of ["markdown", "json"] as const) {
+          const output = await packAutoContextForRoute(
+            root,
+            task,
+            route,
+            { budget: 6000, routeLimit: 10, maxDrawers: 5, mode: "route-lite", format }
+          );
+          const serialized = serializePackOutput(output);
+
+          expect(output.mode).toBe("route-lite");
+          expect(output.modeSelection?.maxContextTokens).toBe(2400);
+          expect(output.degradation).toMatchObject({
+            applied: true,
+            reason: "fixed-envelope-over-budget",
+            tokenCeiling: 2400
+          });
+          expect(output.degradation?.originalEstimatedTokens).toBeGreaterThan(2400);
+          expect(output.degradation?.omittedSections).toContain("source-drawers");
+          expect(output.degradation?.retained.primaryReferences).toBeGreaterThan(0);
+          expect(output.payload?.degradation).toEqual(output.degradation);
+          expect(output.payload?.contextEstimatedTokens).toBeLessThanOrEqual(2400);
+          expect(output.payload?.contextBytes).toBe(Buffer.byteLength(serialized, "utf8"));
+          expect(serialized).toContain("fixed-envelope-over-budget");
+        }
+      }
+
+      const guardedTask = "Use current project memory to verify the token contract across implementation and regression evidence.";
+      const guardedRoute = await routePalace(root, guardedTask, { budget: 6000, routeLimit: 10, referencePolicy: "off" });
+      guardedRoute.route = guardedRoute.route.map((step) => ({
+        ...step,
+        reason: `${step.reason} ${"Current memory, implementation, verification, and contract evidence must remain auditable. ".repeat(320)}`
+      }));
+      const index = await readIndex(root);
+      await appendRoute(root, index.routes, guardedRoute);
+      for (const format of ["markdown", "json"] as const) {
+        const output = await packAutoContextForRoute(
+          root,
+          guardedTask,
+          guardedRoute,
+          { budget: 6000, routeLimit: 10, maxDrawers: 5, mode: "guarded-memory-palace", format }
+        );
+
+        expect(output.modeSelection?.maxContextTokens).toBe(5000);
+        expect(output.degradation).toMatchObject({
+          applied: true,
+          reason: "fixed-envelope-over-budget",
+          tokenCeiling: 5000
+        });
+        expect(output.degradation?.originalEstimatedTokens).toBeGreaterThan(5000);
+        expect(output.payload?.contextEstimatedTokens).toBeLessThanOrEqual(5000);
+        expect(output.payload?.contextBytes).toBe(Buffer.byteLength(serializePackOutput(output), "utf8"));
+      }
+    });
+  }, 30_000);
 
   it("uses only relevant, scoped memory for tenant-sensitive tasks", async () => {
     await withFixture("ts-api", async (root) => {
