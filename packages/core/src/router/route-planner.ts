@@ -54,14 +54,17 @@ export async function routePalace(root: string, task: string, options: number | 
   if (groundedTask.grounding.decision === "abstain") {
     return appendAbstainedRoute(root, task, budget, index, groundedTask.grounding);
   }
-  const analysis = analyzeTask(groundedTask.effectiveTask);
-  const taskType = classifyTask(groundedTask.effectiveTask);
+  const obligationAnalysis = analyzeTask(groundedTask.obligationTask);
+  const analysis = groundedTask.routingTask === groundedTask.obligationTask
+    ? obligationAnalysis
+    : analyzeTask(groundedTask.routingTask);
+  const taskType = classifyTask(groundedTask.obligationTask);
   const taskScored = scoreNodes(index.nodes, index.edges, analysis, taskType, index.facts);
   const scored = taskScored.length
     ? taskScored
     : conventionalEntryFallback(index.nodes, analysis, taskType);
-  const requestedSurfaces = requestedRouteSurfaces(analysis);
-  const intent = buildTaskIntent(analysis, taskType, requestedSurfaces);
+  const requestedSurfaces = requestedRouteSurfaces(obligationAnalysis);
+  const intent = buildTaskIntent(obligationAnalysis, taskType, requestedSurfaces);
   const codeTask = isCodeTaskType(taskType);
   const artifactLifecycleTask = codeTask
     && isArtifactFamilyRequest(requestedSurfaces, analysis);
@@ -228,7 +231,7 @@ export async function routePalace(root: string, task: string, options: number | 
     scored,
     nodes: index.nodes,
     edges: index.edges,
-    analysis,
+    analysis: obligationAnalysis,
     taskType,
     limit: routeLimit
   });
@@ -260,8 +263,8 @@ export async function routePalace(root: string, task: string, options: number | 
   const verificationCoversSubject = expanded
     .filter(isDirectTestCandidate)
     .some((item) => {
-      const profile = coreEvidenceProfile(item, analysis, "test");
-      return intersection(profile.taskCoverage, coreSubjectTokens(analysis)).size > 0;
+      const profile = coreEvidenceProfile(item, obligationAnalysis, "test");
+      return intersection(profile.taskCoverage, coreSubjectTokens(obligationAnalysis)).size > 0;
     });
   const facetConfidenceCap = facetClosure.applied && facetClosure.missingFacets.length ? 0.4 : undefined;
   const confidenceCaps = [effectiveCoreSelection?.confidenceCap, facetConfidenceCap]
@@ -279,7 +282,7 @@ export async function routePalace(root: string, task: string, options: number | 
     : provisionalCoreConfidenceCap;
   const narrowingEvidence = independentImplementationAnchorEvidence(
     expanded,
-    analysis,
+    obligationAnalysis,
     taskType,
     closureValidatedCoreConfidenceCap,
     index.nodes,

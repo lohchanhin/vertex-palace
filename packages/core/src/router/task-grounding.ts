@@ -51,6 +51,8 @@ export type GroundTaskOptions = {
 
 export type GroundedTask = {
   authoritativeTask: string;
+  obligationTask: string;
+  routingTask: string;
   effectiveTask: string;
   grounding: PalaceTaskGrounding;
 };
@@ -135,9 +137,9 @@ export async function groundTask(
   }
 
   const metadata = usable.map(renderReferenceEvidence).join("\n\n");
-  const effectiveTask = `${task}\n\nResolved external task evidence:\n${metadata}`;
+  const routingTask = locallyIdentifiable ? `${task}\n\n${metadata}` : metadata;
   const resolutionStatus = aggregateResolutionStatus(usable.map((item) => item.reference.resolutionStatus));
-  if (!locallyIdentifiable && !isTaskLocallyIdentifiable(effectiveTask, nodes)) {
+  if (!locallyIdentifiable && !isTaskLocallyIdentifiable(metadata, nodes)) {
     return unresolvedGrounding(
       task,
       resolutionStatus,
@@ -148,7 +150,9 @@ export async function groundTask(
 
   return {
     authoritativeTask: task,
-    effectiveTask,
+    obligationTask: locallyIdentifiable ? task : metadata,
+    routingTask,
+    effectiveTask: routingTask,
     grounding: {
       status: "resolved",
       decision: "route",
@@ -172,9 +176,9 @@ function renderReferenceEvidence(item: ResolvedReference): string {
     .map((label) => stripReferenceIdentity(item.reference, label).trim())
     .filter(Boolean);
   return [
-    `Title: ${title}`,
+    title,
     body,
-    labels.length ? `Labels: ${labels.join(", ")}` : ""
+    labels.join(" ")
   ].filter(Boolean).join("\n");
 }
 
@@ -462,6 +466,8 @@ function unresolvedGrounding(
 ): GroundedTask {
   return {
     authoritativeTask: task,
+    obligationTask: task,
+    routingTask: task,
     effectiveTask: task,
     grounding: {
       status: "unresolved",
@@ -484,6 +490,8 @@ function localGrounding(
 ): GroundedTask {
   return {
     authoritativeTask: task,
+    obligationTask: task,
+    routingTask: task,
     effectiveTask: task,
     grounding: {
       status: "local",

@@ -110,17 +110,26 @@ Provider desktop build with unrelated environment prose.`,
         (await readIndex(root)).nodes,
         { fetchImpl }
       );
-      const analysis = analyzeTask(grounded.effectiveTask);
-      const route = await routePalace(root, grounded.effectiveTask, { routeLimit: 6, budget: 6000 });
+      const analysis = analyzeTask(grounded.obligationTask);
+      const route = await routePalace(
+        root,
+        "Fix https://github.com/example/workbench/issues/47: keep Glob enumeration safe.",
+        { routeLimit: 6, budget: 6000, grounding: { fetchImpl } }
+      );
       const routed = route.route.map((step) => step.sourcePath.replace(/:\d+(?:-\d+)?$/, ""));
 
       expect(fetchImpl).toHaveBeenCalledTimes(1);
       expect(grounded.authoritativeTask).toBe(
         "Fix https://github.com/example/workbench/issues/47: keep Glob enumeration safe."
       );
+      expect(grounded.obligationTask).toBe(grounded.authoritativeTask);
+      expect(grounded.routingTask).toContain("focused ledger regression test");
       expect(grounded.effectiveTask).not.toContain("fixtures/demo.ts");
       expect(grounded.effectiveTask).not.toContain("package.json");
       expect(grounded.effectiveTask).not.toContain("Translation");
+      expect(grounded.routingTask).not.toContain("Resolved external task evidence");
+      expect(grounded.routingTask).not.toContain("Title:");
+      expect(grounded.routingTask).not.toContain("Labels:");
       expect(grounded.grounding).toMatchObject({
         status: "resolved",
         decision: "route",
@@ -141,6 +150,13 @@ Provider desktop build with unrelated environment prose.`,
       expect(routed).not.toContain("packages/runtime/src/workbench.ts");
       expect(routed).not.toContain("packages/runtime/test/workbench.test.ts");
       expect(routed).not.toContain("fixtures/demo.ts");
+      expect(route.evidenceClosure?.missingTerms?.subjects ?? []).not.toEqual(expect.arrayContaining([
+        "Title",
+        "Labels",
+        "Translation",
+        "fixtures",
+        "package"
+      ]));
     });
   });
 
@@ -206,6 +222,8 @@ Provider desktop build with unrelated environment prose.`,
           title: "Refresh token rotation loses the current session"
         });
         expect(first.effectiveTask).toContain("focused auth e2e test");
+        expect(first.obligationTask).toContain("focused auth e2e test");
+        expect(first.routingTask).toBe(first.effectiveTask);
         expect(authorization).toBe("Bearer secret-test-token");
         expect(JSON.stringify(first.grounding)).not.toContain("secret-test-token");
 
