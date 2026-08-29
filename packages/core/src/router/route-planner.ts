@@ -26,6 +26,7 @@ import { expandRoute } from "./route-expander";
 import { buildTaskIntent } from "./task-intent";
 import { groundTask, type GroundTaskOptions } from "./task-grounding";
 import { applyExplicitEvidenceContractToClosure, enforceExplicitEvidenceContract } from "./task-evidence-contract";
+import { closeTaskEvidenceFacets } from "./evidence-facet-planner";
 
 export type RoutePalaceOptions = {
   budget?: number;
@@ -222,8 +223,17 @@ export async function routePalace(root: string, task: string, options: number | 
     analysis,
     routeLimit
   );
+  const facetClosure = closeTaskEvidenceFacets({
+    selected: ownerClosed,
+    scored,
+    nodes: index.nodes,
+    edges: index.edges,
+    analysis,
+    taskType,
+    limit: routeLimit
+  });
   const explicitEvidenceContract = enforceExplicitEvidenceContract(
-    ownerClosed,
+    facetClosure.route,
     scored,
     index.nodes,
     groundedTask.effectiveTask,
@@ -253,7 +263,10 @@ export async function routePalace(root: string, task: string, options: number | 
       const profile = coreEvidenceProfile(item, analysis, "test");
       return intersection(profile.taskCoverage, coreSubjectTokens(analysis)).size > 0;
     });
-  const provisionalCoreConfidenceCap = effectiveCoreSelection?.confidenceCap;
+  const facetConfidenceCap = facetClosure.applied && facetClosure.missingFacets.length ? 0.4 : undefined;
+  const confidenceCaps = [effectiveCoreSelection?.confidenceCap, facetConfidenceCap]
+    .filter((value): value is number => value !== undefined);
+  const provisionalCoreConfidenceCap = confidenceCaps.length ? Math.min(...confidenceCaps) : undefined;
   const closureValidatedCoreConfidenceCap = (provisionalCoreConfidenceCap === undefined
       || provisionalCoreConfidenceCap <= 0.4)
     && evidenceClosure.status === "sufficient"
