@@ -1,0 +1,270 @@
+{
+  "schemaVersion": 1,
+  "featureVersion": "0.5",
+  "phase": 4,
+  "observation": "repair-1",
+  "immutable": true,
+  "observedAt": "2026-08-29T14:41:13.765Z",
+  "candidate": {
+    "sourceCommit": "bb3ccf07593f2127cfb77ca5552ec8b586704193",
+    "entrypoint": "packages/core/dist/index.js",
+    "roomInventoryEnabled": true
+  },
+  "fixture": {
+    "oracleSha256": "8f9295c8afdb6995abb27bc8c6224cc7699ec91ca58764e443500cc64c0e72a2",
+    "fixtureSourcesSha256": "8fb7ca466df43e758cd02e17da777d6fa6d2ecfd5f4f58595f527d2e5c4cd3ed",
+    "targets": 4,
+    "requiredFiles": 17,
+    "forbiddenFiles": 3
+  },
+  "baseline": {
+    "files": 22,
+    "nodes": 51,
+    "objects": 0,
+    "edges": 184,
+    "objectRelations": 0
+  },
+  "enabled": {
+    "files": 22,
+    "nodes": 51,
+    "objects": 19,
+    "edges": 201,
+    "objectRelations": 34
+  },
+  "metrics": {
+    "routeDecisionRate": 1,
+    "macroRequiredFileCoverage": 1,
+    "minimumPerTargetRequiredFileCoverage": 1,
+    "explicitFacetClosureRate": 1,
+    "focusedVerificationCoverage": 1,
+    "generatedArtifactCoverage": 1,
+    "macroRouteFocus": 1,
+    "minimumPerTargetRouteFocus": 1,
+    "forbiddenDecoyHits": 0,
+    "deterministicRouteAgreement": 1,
+    "maximumContextTokens": 1300,
+    "wrongForcedStops": 0,
+    "overconfidentIncompleteRoutes": 0
+  },
+  "targets": [
+    {
+      "id": "typescript-generated-compound",
+      "language": "typescript",
+      "task": "Fix compileEnvelope so malformed headers are rejected, preserve legacyEnvelopeDefaults compatibility, update the focused compileEnvelope test, and rebuild the generated envelope adapter.",
+      "routeLimit": 8,
+      "decision": "route",
+      "confidence": 0.71,
+      "evidenceStatus": "insufficient",
+      "estimatedTokens": 1300,
+      "routeFiles": [
+        "typescript/src/envelope.ts",
+        "typescript/test/envelope.test.ts",
+        "typescript/src/envelope-parser.ts",
+        "typescript/src/legacy-envelope.ts",
+        "typescript/generated/envelope-adapter.cjs"
+      ],
+      "repeatedRouteFiles": [
+        "typescript/src/envelope.ts",
+        "typescript/test/envelope.test.ts",
+        "typescript/src/envelope-parser.ts",
+        "typescript/src/legacy-envelope.ts",
+        "typescript/generated/envelope-adapter.cjs"
+      ],
+      "deterministic": true,
+      "requiredFiles": 5,
+      "matchedRequiredFiles": [
+        "typescript/src/envelope.ts",
+        "typescript/src/envelope-parser.ts",
+        "typescript/src/legacy-envelope.ts",
+        "typescript/test/envelope.test.ts",
+        "typescript/generated/envelope-adapter.cjs"
+      ],
+      "missedRequiredFiles": [],
+      "requiredFileCoverage": 1,
+      "routeFocus": 1,
+      "requiredFacets": [
+        "implementation",
+        "parser",
+        "compatibility",
+        "focused-verification",
+        "generated-artifact"
+      ],
+      "matchedFacets": [
+        "implementation",
+        "parser",
+        "compatibility",
+        "focused-verification",
+        "generated-artifact"
+      ],
+      "missedFacets": [],
+      "explicitFacetClosure": true,
+      "forbiddenHits": [],
+      "overconfidentIncomplete": false
+    },
+    {
+      "id": "python-parser-compatibility",
+      "language": "python",
+      "task": "Fix open_session parsing for empty payloads while preserving preserve_legacy_session behavior and update its focused test.",
+      "routeLimit": 7,
+      "decision": "route",
+      "confidence": 0.64,
+      "evidenceStatus": "insufficient",
+      "estimatedTokens": 1005,
+      "routeFiles": [
+        "python/session.py",
+        "python/session_compatibility.py",
+        "python/tests/test_session.py",
+        "python/session_parser.py"
+      ],
+      "repeatedRouteFiles": [
+        "python/session.py",
+        "python/session_compatibility.py",
+        "python/tests/test_session.py",
+        "python/session_parser.py"
+      ],
+      "deterministic": true,
+      "requiredFiles": 4,
+      "matchedRequiredFiles": [
+        "python/session.py",
+        "python/session_parser.py",
+        "python/session_compatibility.py",
+        "python/tests/test_session.py"
+      ],
+      "missedRequiredFiles": [],
+      "requiredFileCoverage": 1,
+      "routeFocus": 1,
+      "requiredFacets": [
+        "implementation",
+        "parser",
+        "compatibility",
+        "focused-verification"
+      ],
+      "matchedFacets": [
+        "implementation",
+        "parser",
+        "compatibility",
+        "focused-verification"
+      ],
+      "missedFacets": [],
+      "explicitFacetClosure": true,
+      "forbiddenHits": [],
+      "overconfidentIncomplete": false
+    },
+    {
+      "id": "go-parser-compatibility",
+      "language": "go",
+      "task": "Fix DispatchOrder parsing while preserving NormalizeLegacyOrder compatibility and update TestDispatchOrderPreservesLegacyPayload.",
+      "routeLimit": 7,
+      "decision": "route",
+      "confidence": 0.36,
+      "evidenceStatus": "insufficient",
+      "estimatedTokens": 1105,
+      "routeFiles": [
+        "go/dispatch.go",
+        "go/dispatch_test.go",
+        "go/compatibility.go",
+        "go/parser.go"
+      ],
+      "repeatedRouteFiles": [
+        "go/dispatch.go",
+        "go/dispatch_test.go",
+        "go/compatibility.go",
+        "go/parser.go"
+      ],
+      "deterministic": true,
+      "requiredFiles": 4,
+      "matchedRequiredFiles": [
+        "go/dispatch.go",
+        "go/parser.go",
+        "go/compatibility.go",
+        "go/dispatch_test.go"
+      ],
+      "missedRequiredFiles": [],
+      "requiredFileCoverage": 1,
+      "routeFocus": 1,
+      "requiredFacets": [
+        "implementation",
+        "parser",
+        "compatibility",
+        "focused-verification"
+      ],
+      "matchedFacets": [
+        "implementation",
+        "parser",
+        "compatibility",
+        "focused-verification"
+      ],
+      "missedFacets": [],
+      "explicitFacetClosure": true,
+      "forbiddenHits": [],
+      "overconfidentIncomplete": false
+    },
+    {
+      "id": "rust-parser-compatibility",
+      "language": "rust",
+      "task": "Fix dispatch_route decoding while preserving preserve_legacy_route compatibility and update dispatch_route_preserves_legacy_payload.",
+      "routeLimit": 7,
+      "decision": "route",
+      "confidence": 0.4,
+      "evidenceStatus": "insufficient",
+      "estimatedTokens": 1110,
+      "routeFiles": [
+        "rust/router.rs",
+        "rust/router_test.rs",
+        "rust/compatibility.rs",
+        "rust/parser.rs"
+      ],
+      "repeatedRouteFiles": [
+        "rust/router.rs",
+        "rust/router_test.rs",
+        "rust/compatibility.rs",
+        "rust/parser.rs"
+      ],
+      "deterministic": true,
+      "requiredFiles": 4,
+      "matchedRequiredFiles": [
+        "rust/router.rs",
+        "rust/parser.rs",
+        "rust/compatibility.rs",
+        "rust/router_test.rs"
+      ],
+      "missedRequiredFiles": [],
+      "requiredFileCoverage": 1,
+      "routeFocus": 1,
+      "requiredFacets": [
+        "implementation",
+        "parser",
+        "compatibility",
+        "focused-verification"
+      ],
+      "matchedFacets": [
+        "implementation",
+        "parser",
+        "compatibility",
+        "focused-verification"
+      ],
+      "missedFacets": [],
+      "explicitFacetClosure": true,
+      "forbiddenHits": [],
+      "overconfidentIncomplete": false
+    }
+  ],
+  "gates": {
+    "routeDecisionRate": true,
+    "macroRequiredFileCoverage": true,
+    "perTargetRequiredFileCoverage": true,
+    "explicitFacetClosureRate": true,
+    "focusedVerificationCoverage": true,
+    "generatedArtifactCoverage": true,
+    "macroRouteFocus": true,
+    "perTargetRouteFocus": true,
+    "forbiddenDecoyHits": true,
+    "deterministicRouteAgreement": true,
+    "contextTokenCeiling": true,
+    "wrongForcedStops": true,
+    "overconfidentIncompleteRoutes": true,
+    "defaultOffCompatibility": true
+  },
+  "overallPass": true,
+  "claimBoundary": "This disclosed synthetic repair observation is development evidence only, not Round 26 qualification or Agent-performance evidence."
+}

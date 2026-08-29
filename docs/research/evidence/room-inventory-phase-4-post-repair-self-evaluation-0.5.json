@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "featureVersion": "0.5",
+  "phase": 4,
+  "classification": "disclosed-post-repair-self-evaluation",
+  "observedAt": "2026-08-29T14:45:38.103Z",
+  "repairImplementationTask": {
+    "task": "Add generic evidence-facet route closure for Room Inventory compound tasks, constrain expansion by ownership and language, follow generated provenance, cap incomplete confidence, add focused regression tests, and rebuild the generated MCP bundle.",
+    "evaluationId": "evaluation_9727c5e37b953be8",
+    "routeId": "route_9c5f519ff946331a",
+    "assessment": "strong",
+    "confidence": 0.4,
+    "changedFileCoverage": 1,
+    "coreCoverage": 1,
+    "routeFocus": 0.4,
+    "calibrationStatus": "underconfident",
+    "routeFiles": [
+      "packages/core/src/router/evidence-facet-planner.ts",
+      "packages/core/src/router/route-planner.ts",
+      "packages/core/src/router/route-scorer.ts",
+      "packages/core/src/router/analyze-task.ts",
+      "plugins/vertex-palace/mcp/server.cjs",
+      "scripts/test/round15-confidence-evidence-gate.test.cjs",
+      "packages/core/src/router/route-expander.ts",
+      "packages/core/src/router/task-evidence-contract.ts",
+      "packages/core/test/evidence-facet-planner.test.ts",
+      "CHANGELOG.md"
+    ]
+  },
+  "samePhase3Task": {
+    "task": "Fix Room Inventory relation precision: preserve full object references, recognize Go and Rust test objects, suppress owner-member call duplicates, and preserve the default graph",
+    "stable040": {
+      "evaluationId": "evaluation_e1731b7e75f48494",
+      "routeId": "route_e639b07e80b91c15",
+      "confidence": 0.68,
+      "changedFileCoverage": 0.167,
+      "coreCoverage": 0.167,
+      "routeFocus": 0.2,
+      "calibrationStatus": "overconfident"
+    },
+    "local05Repair1": {
+      "evaluationId": "evaluation_874049e2f8de43d9",
+      "routeId": "route_d09285abe8146f68",
+      "assessment": "needs-review",
+      "confidence": 0.4,
+      "changedFileCoverage": 0.167,
+      "coreCoverage": 0.167,
+      "routeFocus": 0.167,
+      "calibrationStatus": "overconfident",
+      "routeFiles": [
+        "packages/core/src/indexer/build-object-relations.ts",
+        "packages/core/test/room-inventory-routing.test.ts",
+        "scripts/research/measure-room-inventory-phase-3.cjs",
+        "scripts/research/measure-room-inventory-phase-4.cjs",
+        "packages/core/test/room-inventory-contract.test.ts",
+        "docs/research/evidence/room-inventory-phase-2-object-routing-0.5.json"
+      ]
+    }
+  },
+  "outcome": "synthetic-repair-pass-without-prior-self-task-generalization",
+  "requiredAction": "Do not perform a second post-hoc mechanism repair. Preserve this residual, review the architecture, and require fresh qualification before release claims.",
+  "claimBoundary": "This disclosed self-evaluation is diagnostic and post-repair. It is not Round 26 qualification and does not establish Token, tool-call, wall-time, fresh-repository, or end-to-end Agent improvement."
+}
