@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 1,
+  "artifact": "adaptive-context-budget-contract-repair",
+  "recordedAt": "2026-08-30",
+  "implementationCommit": "df181ab2395cf9a4e887f64d44aacc5129d7d2e0",
+  "classification": "disclosed-regression-repair",
+  "contract": {
+    "requestedBudget": 6000,
+    "behavior": "An adaptive context command must return a bounded structured result when its fixed envelope exceeds the selected mode ceiling.",
+    "modeCeilingsRemainBounded": true,
+    "routeLiteCeiling": 2400,
+    "guardedMemoryPalaceCeiling": 5000,
+    "raisesAllModeCeilings": false
+  },
+  "implementation": {
+    "degradationLevels": [
+      "compact",
+      "minimal",
+      "emergency"
+    ],
+    "reason": "fixed-envelope-over-budget",
+    "retains": [
+      "task grounding",
+      "primary route references",
+      "bounded deferred references",
+      "required evidence",
+      "memory counts and bounded current items",
+      "do-not and stop conditions"
+    ],
+    "omitsBeforeFailure": [
+      "source drawers",
+      "support details",
+      "excluded details",
+      "route diagnostics",
+      "excess memory details"
+    ]
+  },
+  "v5RegressionSmoke": [
+    {
+      "target": "click-2273-local-complete",
+      "baseCommit": "afc86c748c214939e2293ec00879d85293bcd9fa",
+      "previousExitCode": 1,
+      "previousEstimatedTokens": 3627,
+      "newExitCode": 0,
+      "newEstimatedTokens": 1132,
+      "tokenCeiling": 2400,
+      "degradationLevel": "compact",
+      "retainedPrimary": 2,
+      "retainedDeferred": 4
+    },
+    {
+      "target": "click-2622-high-connectivity",
+      "baseCommit": "1787497713fa389435ed732c9b26274c3cdc458d",
+      "previousExitCode": 1,
+      "previousEstimatedTokens": 3077,
+      "newExitCode": 0,
+      "newEstimatedTokens": 843,
+      "tokenCeiling": 2400,
+      "degradationLevel": "compact",
+      "retainedPrimary": 2,
+      "retainedDeferred": 2
+    },
+    {
+      "target": "cobra-2356-local-complete",
+      "baseCommit": "61968e893eee2f27696c2fbc8e34fa5c4afaf7c4",
+      "previousExitCode": 1,
+      "previousEstimatedTokens": 2814,
+      "newExitCode": 0,
+      "newEstimatedTokens": 810,
+      "tokenCeiling": 2400,
+      "degradationLevel": "compact",
+      "retainedPrimary": 1,
+      "retainedDeferred": 1
+    },
+    {
+      "target": "cobra-1956-high-connectivity",
+      "baseCommit": "09d5664f34e3f7571560e48ccb74c8904b671e87",
+      "previousExitCode": 1,
+      "previousEstimatedTokens": 2659,
+      "newExitCode": 0,
+      "newEstimatedTokens": 739,
+      "tokenCeiling": 2400,
+      "degradationLevel": "compact",
+      "retainedPrimary": 1,
+      "retainedDeferred": 0
+    },
+    {
+      "target": "fd-1852-local-complete",
+      "baseCommit": "e3a6f8b7e735e24c96219053f8978813dbdc85f1",
+      "previousExitCode": 1,
+      "previousEstimatedTokens": 2538,
+      "newExitCode": 0,
+      "newEstimatedTokens": 879,
+      "tokenCeiling": 2400,
+      "degradationLevel": "compact",
+      "retainedPrimary": 2,
+      "retainedDeferred": 4
+    }
+  ],
+  "verification": {
+    "syntheticShapes": 5,
+    "formatsPerShape": [
+      "markdown",
+      "json"
+    ],
+    "guarded5000Formats": [
+      "markdown",
+      "json"
+    ],
+    "commands": [
+      "pnpm lint",
+      "pnpm test",
+      "pnpm build"
+    ],
+    "status": "passed"
+  },
+  "adjacentCliRepair": {
+    "issue": "Empty default layered truth arrays caused --changed-file values to be ignored by palace evaluate.",
+    "status": "fixed-and-tested"
+  },
+  "claimBoundary": {
+    "changesOriginalV5Result": false,
+    "provesRoutingAccuracy": false,
+    "provesAgentEfficiency": false,
+    "qualifiesStableRelease": false,
+    "nextRequiredEvidence": "Run a fresh preregistered qualification after the remaining monorepo semantic-routing work."
+  }
+}
