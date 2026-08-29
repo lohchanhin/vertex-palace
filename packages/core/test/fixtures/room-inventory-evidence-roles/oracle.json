@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "status": "frozen-before-candidate-observation",
+  "fixturePurpose": "Disclosed synthetic development fixture for generic evidence-facet planning. It is not a fresh Round 26 qualification target.",
+  "targets": [
+    {
+      "id": "typescript-generated-compound",
+      "language": "typescript",
+      "task": "Fix compileEnvelope so malformed headers are rejected, preserve legacyEnvelopeDefaults compatibility, update the focused compileEnvelope test, and rebuild the generated envelope adapter.",
+      "routeLimit": 8,
+      "requiredEvidence": [
+        { "path": "typescript/src/envelope.ts", "facet": "implementation" },
+        { "path": "typescript/src/envelope-parser.ts", "facet": "parser" },
+        { "path": "typescript/src/legacy-envelope.ts", "facet": "compatibility" },
+        { "path": "typescript/test/envelope.test.ts", "facet": "focused-verification" },
+        { "path": "typescript/generated/envelope-adapter.cjs", "facet": "generated-artifact" }
+      ],
+      "allowedSupport": [
+        "typescript/src/envelope-adapter.ts",
+        "typescript/tsup.envelope.config.ts"
+      ]
+    },
+    {
+      "id": "python-parser-compatibility",
+      "language": "python",
+      "task": "Fix open_session parsing for empty payloads while preserving preserve_legacy_session behavior and update its focused test.",
+      "routeLimit": 7,
+      "requiredEvidence": [
+        { "path": "python/session.py", "facet": "implementation" },
+        { "path": "python/session_parser.py", "facet": "parser" },
+        { "path": "python/session_compatibility.py", "facet": "compatibility" },
+        { "path": "python/tests/test_session.py", "facet": "focused-verification" }
+      ],
+      "allowedSupport": []
+    },
+    {
+      "id": "go-parser-compatibility",
+      "language": "go",
+      "task": "Fix DispatchOrder parsing while preserving NormalizeLegacyOrder compatibility and update TestDispatchOrderPreservesLegacyPayload.",
+      "routeLimit": 7,
+      "requiredEvidence": [
+        { "path": "go/dispatch.go", "facet": "implementation" },
+        { "path": "go/parser.go", "facet": "parser" },
+        { "path": "go/compatibility.go", "facet": "compatibility" },
+        { "path": "go/dispatch_test.go", "facet": "focused-verification" }
+      ],
+      "allowedSupport": []
+    },
+    {
+      "id": "rust-parser-compatibility",
+      "language": "rust",
+      "task": "Fix dispatch_route decoding while preserving preserve_legacy_route compatibility and update dispatch_route_preserves_legacy_payload.",
+      "routeLimit": 7,
+      "requiredEvidence": [
+        { "path": "rust/router.rs", "facet": "implementation" },
+        { "path": "rust/parser.rs", "facet": "parser" },
+        { "path": "rust/compatibility.rs", "facet": "compatibility" },
+        { "path": "rust/router_test.rs", "facet": "focused-verification" }
+      ],
+      "allowedSupport": []
+    }
+  ],
+  "forbiddenEvidence": [
+    "decoys/shared-registry.ts",
+    "decoys/parser.test.ts",
+    "decoys/legacy-session.md"
+  ],
+  "aggregateTruth": {
+    "targets": 4,
+    "languages": ["typescript", "python", "go", "rust"],
+    "requiredFiles": 17,
+    "requiredFacets": {
+      "implementation": 4,
+      "parser": 4,
+      "compatibility": 4,
+      "focused-verification": 4,
+      "generated-artifact": 1
+    },
+    "forbiddenFiles": 3
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "studyId": "room-inventory-phase-4-evidence-facets-0.5",
+  "phase": 4,
+  "status": "evidence-facet-protocol-frozen-candidate-unobserved",
+  "lockedAt": "2026-08-29T14:21:17.0249506Z",
+  "researchQuestion": "Can explicit compound-task obligations become bounded evidence facets that are closed through indexed file and object relations without repository-specific rules?",
+  "candidate": {
+    "version": "0.5-development",
+    "observed": false,
+    "artifactFrozen": false,
+    "publicEvidenceRolesChanged": false
+  },
+  "fixture": {
+    "root": "packages/core/test/fixtures/room-inventory-evidence-roles",
+    "oracleSha256": "8f9295c8afdb6995abb27bc8c6224cc7699ec91ca58764e443500cc64c0e72a2",
+    "fixtureSourcesSha256": "8fb7ca466df43e758cd02e17da777d6fa6d2ecfd5f4f58595f527d2e5c4cd3ed",
+    "sourceFiles": 22,
+    "targets": 4,
+    "languages": ["typescript", "python", "go", "rust"],
+    "requiredFiles": 17,
+    "forbiddenFiles": 3
+  },
+  "mechanism": {
+    "facetSource": "explicit task clauses and indexed evidence",
+    "maximumSourceHops": 2,
+    "maximumSourcesPerFacet": 1,
+    "maximumGeneratedProvenanceSources": 2,
+    "minimumExpansionGain": 0.55,
+    "incompleteClosurePolicy": "advisory-with-confidence-cap",
+    "targetSpecificRulesAllowed": false,
+    "registeredGainFormula": "0.45 taskAffinity + 0.30 relationStrength + 0.25 facetGain - 0.20 degreePenalty - 0.25 redundancy"
+  },
+  "gates": {
+    "routeDecisionRate": 1,
+    "minimumMacroRequiredFileCoverage": 0.9,
+    "minimumPerTargetRequiredFileCoverage": 0.8,
+    "explicitFacetClosureRate": 1,
+    "focusedVerificationCoverage": 1,
+    "generatedArtifactCoverage": 1,
+    "minimumMacroRouteFocus": 0.7,
+    "minimumPerTargetRouteFocus": 0.6,
+    "maximumForbiddenDecoyHits": 0,
+    "deterministicRouteAgreement": 1,
+    "maximumContextTokens": 6000,
+    "maximumWrongForcedStops": 0,
+    "maximumOverconfidentIncompleteRoutes": 0,
+    "defaultOffCompatibilityRequired": true
+  },
+  "failurePolicy": {
+    "firstObservationImmutable": true,
+    "oracleTaskDecoyHashOrThresholdRewriteAllowed": false,
+    "maximumGeneralMechanismRepairsPerFailureClass": 1,
+    "repeatFailureAction": "pause implementation and perform architecture review",
+    "developmentFixtureCanQualifyRelease": false
+  },
+  "claimBoundary": "Phase 4 is disclosed synthetic static-routing development evidence, not Round 26 qualification and not evidence of Token, tool-call, wall-time, or end-to-end Agent improvement."
+}
