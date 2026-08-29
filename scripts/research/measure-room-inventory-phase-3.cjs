@@ -182,7 +182,7 @@ function buildResult({ observation, oracle, oracleSha256, baseline, first, secon
     },
     gates,
     overallPass: Object.values(gates).every(Boolean),
-    claimBoundary: "This disclosed synthetic first observation does not establish fresh Round 26 qualification or Agent performance."
+    claimBoundary: `This disclosed synthetic ${observation === "first" ? "first" : "repair"} observation does not establish fresh Round 26 qualification or Agent performance.`
   };
 }
 
@@ -261,10 +261,10 @@ function resolveArguments(arguments_) {
   const outputIndex = arguments_.indexOf("--out");
   const observationIndex = arguments_.indexOf("--observation");
   if (outputIndex < 0 || !arguments_[outputIndex + 1] || observationIndex < 0 || !arguments_[observationIndex + 1]) {
-    throw new Error("Usage: node scripts/research/measure-room-inventory-phase-3.cjs --observation <first|repair-1> --out <new-json-path>");
+    throw new Error("Usage: node scripts/research/measure-room-inventory-phase-3.cjs --observation <first|repair-1|repair-1-final> --out <new-json-path>");
   }
   const observation = arguments_[observationIndex + 1];
-  if (!["first", "repair-1"].includes(observation)) {
+  if (!["first", "repair-1", "repair-1-final"].includes(observation)) {
     throw new Error(`Unsupported Phase 3 observation: ${observation}.`);
   }
   return {

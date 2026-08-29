@@ -88,6 +88,7 @@ export function buildEdges(nodes: PalaceNode[], parsedFiles: ParsedFile[], now: 
       && nodeHasEvidenceRole(node, "implementation")
       && nodeEvidenceScope(node) === "product"
   );
+  const roomInventoryEnabled = nodes.some((node) => node.object);
   for (const testSymbol of testSymbolNodes) {
     const testTokens = meaningfulTokens(testSymbol.title.split(".").at(-1) ?? testSymbol.title);
     const candidates = sourceSymbolNodes
@@ -101,7 +102,7 @@ export function buildEdges(nodes: PalaceNode[], parsedFiles: ParsedFile[], now: 
           && sourceTokens.size / Math.max(testTokens.size, 1) >= 0.6
           && [...sourceTokens].every((token) => testTokens.has(token))
       );
-    const matches = removeStrictSubsetSymbolMatches(candidates)
+    const matches = (roomInventoryEnabled ? removeStrictSubsetSymbolMatches(candidates) : candidates)
       .sort(
         (a, b) =>
           commonDirectoryPrefix(testSymbol.sourcePath, b.sourceSymbol.sourcePath) - commonDirectoryPrefix(testSymbol.sourcePath, a.sourceSymbol.sourcePath)

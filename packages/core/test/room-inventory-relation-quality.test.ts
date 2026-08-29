@@ -25,6 +25,7 @@ describe("Room Inventory Phase 3 relation quality", () => {
       const baseline = await readIndex(root);
       expect(baseline.nodes.some((node) => node.object)).toBe(false);
       expect(objectRelationKeys(baseline)).toHaveLength(0);
+      expect(baseline.edges).toHaveLength(364);
 
       await indexPalace(root, { roomInventory: true });
       const first = await readIndex(root);
