@@ -1,0 +1,487 @@
+{
+  "schemaVersion": 1,
+  "studyId": "random-real-repository-repair-smoke-0.5",
+  "status": "selection-frozen",
+  "frozenAt": "2026-08-29T14:55:10.406Z",
+  "claimBoundary": "One exploratory real-repository repair smoke test. Random selection is reproducible from the frozen seed and pool, but this single observation cannot establish routing quality, repair accuracy, Token savings, or speed.",
+  "protocol": {
+    "selectionBeforePalaceExposure": true,
+    "outcomeDependentReplacementForbidden": true,
+    "upstreamPushForbidden": true,
+    "selectedTargetCount": 1,
+    "searchQuery": "is:issue is:open label:bug label:\"good first issue\" no:assignee created:>=2025-08-29 sort:updated-desc",
+    "returnedNodes": 100,
+    "eligibility": {
+      "languages": [
+        "JavaScript",
+        "TypeScript",
+        "Python"
+      ],
+      "publicRepository": true,
+      "fork": false,
+      "archived": false,
+      "disabled": false,
+      "stars": {
+        "minimum": 50,
+        "maximum": 10000
+      },
+      "diskUsageKiB": {
+        "minimum": 100,
+        "maximum": 100000
+      },
+      "pushedAfter": "2026-03-02T14:55:10.406Z",
+      "issueBodyBytes": {
+        "minimum": 40,
+        "maximum": 12000
+      },
+      "openBugAndGoodFirstIssue": true,
+      "unassigned": true
+    },
+    "selectionMethod": "Choose the lexicographically smallest SHA-256(seed + newline + issue URL).",
+    "seed": "d090b0f8237cca824f5dc3bc84349b177dae362574c6e269aa37f4aebb8b26a6"
+  },
+  "candidate": {
+    "sourceCommit": "91bfe7f89dd113d853027be05b7d1d9a5e7a8927",
+    "cliPath": "dist/palace.cjs",
+    "cliSha256": "4ce8cca4e999a5f0997b69db7c4cc14a36b46f42ba93a0648351b70971b58a92",
+    "reportedVersion": "0.4.0"
+  },
+  "pool": {
+    "eligibleCount": 15,
+    "sha256": "29aa31e95793a84aef6e0d4cab3e8f28587485368d5263e38fae8b815592b993",
+    "candidates": [
+      {
+        "repository": {
+          "nameWithOwner": "apache/maka",
+          "url": "https://github.com/apache/maka",
+          "cloneUrl": "https://github.com/apache/maka.git",
+          "defaultBranch": "main",
+          "commit": "1ae45418b4affa8c4ba94aa68e79756e8c4cfee3",
+          "primaryLanguage": "TypeScript",
+          "stars": 3990,
+          "diskUsageKiB": 93102,
+          "pushedAt": "2026-08-29T14:53:29Z"
+        },
+        "issue": {
+          "number": 2624,
+          "url": "https://github.com/apache/maka/issues/2624",
+          "title": "ci(windows): eliminate hidden failures in the non-blocking baseline",
+          "bodyBytes": 8424,
+          "bodySha256": "73c52d0dbdf93814bdd46efa74fb0d00b1b89a781e43950ed98de87a82faa69d",
+          "labels": [
+            "bug",
+            "good first issue",
+            "help wanted"
+          ],
+          "createdAt": "2026-08-10T02:00:43Z",
+          "updatedAt": "2026-08-29T11:28:48Z"
+        }
+      },
+      {
+        "repository": {
+          "nameWithOwner": "apache/maka",
+          "url": "https://github.com/apache/maka",
+          "cloneUrl": "https://github.com/apache/maka.git",
+          "defaultBranch": "main",
+          "commit": "1ae45418b4affa8c4ba94aa68e79756e8c4cfee3",
+          "primaryLanguage": "TypeScript",
+          "stars": 3990,
+          "diskUsageKiB": 93102,
+          "pushedAt": "2026-08-29T14:53:29Z"
+        },
+        "issue": {
+          "number": 3146,
+          "url": "https://github.com/apache/maka/issues/3146",
+          "title": "Desktop artifacts ship the renderer's dependency tree twice",
+          "bodyBytes": 3043,
+          "bodySha256": "c2213ce037e837ddc8d34470b8389c6a2e7b169b060fc1065976fc39b8b1c6c4",
+          "labels": [
+            "bug",
+            "good first issue",
+            "help wanted"
+          ],
+          "createdAt": "2026-08-17T08:14:35Z",
+          "updatedAt": "2026-08-29T11:28:47Z"
+        }
+      },
+      {
+        "repository": {
+          "nameWithOwner": "apache/maka",
+          "url": "https://github.com/apache/maka",
+          "cloneUrl": "https://github.com/apache/maka.git",
+          "defaultBranch": "main",
+          "commit": "1ae45418b4affa8c4ba94aa68e79756e8c4cfee3",
+          "primaryLanguage": "TypeScript",
+          "stars": 3990,
+          "diskUsageKiB": 93102,
+          "pushedAt": "2026-08-29T14:53:29Z"
+        },
+        "issue": {
+          "number": 3693,
+          "url": "https://github.com/apache/maka/issues/3693",
+          "title": "Codex thread `source` eligibility differs between the foreign-session scanner and the Codex session adapter",
+          "bodyBytes": 3049,
+          "bodySha256": "9e6e96ab3220a08bbb89d7fe5336289775fc3fe0843d276ecf089639b1f6be63",
+          "labels": [
+            "bug",
+            "good first issue",
+            "help wanted"
+          ],
+          "createdAt": "2026-08-24T07:53:34Z",
+          "updatedAt": "2026-08-29T11:23:58Z"
+        }
+      },
+      {
+        "repository": {
+          "nameWithOwner": "apache/maka",
+          "url": "https://github.com/apache/maka",
+          "cloneUrl": "https://github.com/apache/maka.git",
+          "defaultBranch": "main",
+          "commit": "1ae45418b4affa8c4ba94aa68e79756e8c4cfee3",
+          "primaryLanguage": "TypeScript",
+          "stars": 3990,
+          "diskUsageKiB": 93102,
+          "pushedAt": "2026-08-29T14:53:29Z"
+        },
+        "issue": {
+          "number": 3745,
+          "url": "https://github.com/apache/maka/issues/3745",
+          "title": "fix(desktop): make model and thinking-level changes instant without success toasts",
+          "bodyBytes": 4951,
+          "bodySha256": "fe843959ea2553a32c1af41452935343bed98ed04b34d2a231aa83994a170981",
+          "labels": [
+            "bug",
+            "good first issue",
+            "help wanted"
+          ],
+          "createdAt": "2026-08-25T02:45:10Z",
+          "updatedAt": "2026-08-29T11:23:58Z"
+        }
+      },
+      {
+        "repository": {
+          "nameWithOwner": "apache/maka",
+          "url": "https://github.com/apache/maka",
+          "cloneUrl": "https://github.com/apache/maka.git",
+          "defaultBranch": "main",
+          "commit": "1ae45418b4affa8c4ba94aa68e79756e8c4cfee3",
+          "primaryLanguage": "TypeScript",
+          "stars": 3990,
+          "diskUsageKiB": 93102,
+          "pushedAt": "2026-08-29T14:53:29Z"
+        },
+        "issue": {
+          "number": 3780,
+          "url": "https://github.com/apache/maka/issues/3780",
+          "title": "Deleting a parent task gives no warning that its subtasks are kept and archived",
+          "bodyBytes": 3270,
+          "bodySha256": "26eb8bacac9afdaa40e22df9ddb3994e7dc4d393aa0b01d7ee8a4a19c36f532a",
+          "labels": [
+            "bug",
+            "good first issue",
+            "help wanted"
+          ],
+          "createdAt": "2026-08-25T09:40:14Z",
+          "updatedAt": "2026-08-29T11:28:46Z"
+        }
+      },
+      {
+        "repository": {
+          "nameWithOwner": "apache/maka",
+          "url": "https://github.com/apache/maka",
+          "cloneUrl": "https://github.com/apache/maka.git",
+          "defaultBranch": "main",
+          "commit": "1ae45418b4affa8c4ba94aa68e79756e8c4cfee3",
+          "primaryLanguage": "TypeScript",
+          "stars": 3990,
+          "diskUsageKiB": 93102,
+          "pushedAt": "2026-08-29T14:53:29Z"
+        },
+        "issue": {
+          "number": 3825,
+          "url": "https://github.com/apache/maka/issues/3825",
+          "title": "fix(cli): statusline never abbreviates home-relative paths on Windows",
+          "bodyBytes": 1145,
+          "bodySha256": "9e510e563df1ee9e0f35b70bdc269ad057489278927a004adaf6e4b129f4203b",
+          "labels": [
+            "bug",
+            "good first issue",
+            "help wanted"
+          ],
+          "createdAt": "2026-08-25T17:55:43Z",
+          "updatedAt": "2026-08-29T11:23:55Z"
+        }
+      },
+      {
+        "repository": {
+          "nameWithOwner": "apache/maka",
+          "url": "https://github.com/apache/maka",
+          "cloneUrl": "https://github.com/apache/maka.git",
+          "defaultBranch": "main",
+          "commit": "1ae45418b4affa8c4ba94aa68e79756e8c4cfee3",
+          "primaryLanguage": "TypeScript",
+          "stars": 3990,
+          "diskUsageKiB": 93102,
+          "pushedAt": "2026-08-29T14:53:29Z"
+        },
+        "issue": {
+          "number": 3827,
+          "url": "https://github.com/apache/maka/issues/3827",
+          "title": "Default-model picker in Settings spins on every switch",
+          "bodyBytes": 2052,
+          "bodySha256": "72515fe64bb1c1a5f471d5f7f28462b41901d325425a10cf01b3bf9b6780cc84",
+          "labels": [
+            "bug",
+            "good first issue",
+            "help wanted"
+          ],
+          "createdAt": "2026-08-25T18:26:42Z",
+          "updatedAt": "2026-08-29T11:28:46Z"
+        }
+      },
+      {
+        "repository": {
+          "nameWithOwner": "apache/maka",
+          "url": "https://github.com/apache/maka",
+          "cloneUrl": "https://github.com/apache/maka.git",
+          "defaultBranch": "main",
+          "commit": "1ae45418b4affa8c4ba94aa68e79756e8c4cfee3",
+          "primaryLanguage": "TypeScript",
+          "stars": 3990,
+          "diskUsageKiB": 93102,
+          "pushedAt": "2026-08-29T14:53:29Z"
+        },
+        "issue": {
+          "number": 3849,
+          "url": "https://github.com/apache/maka/issues/3849",
+          "title": "bug(desktop): slash picker opens when / is attached to preceding text",
+          "bodyBytes": 2525,
+          "bodySha256": "2a52c04fea1b5fd353246c989f75c4362159f12568a423f250e7d15a46dcb7cd",
+          "labels": [
+            "bug",
+            "good first issue",
+            "help wanted"
+          ],
+          "createdAt": "2026-08-26T03:14:12Z",
+          "updatedAt": "2026-08-29T11:28:47Z"
+        }
+      },
+      {
+        "repository": {
+          "nameWithOwner": "apache/maka",
+          "url": "https://github.com/apache/maka",
+          "cloneUrl": "https://github.com/apache/maka.git",
+          "defaultBranch": "main",
+          "commit": "1ae45418b4affa8c4ba94aa68e79756e8c4cfee3",
+          "primaryLanguage": "TypeScript",
+          "stars": 3990,
+          "diskUsageKiB": 93102,
+          "pushedAt": "2026-08-29T14:53:29Z"
+        },
+        "issue": {
+          "number": 3868,
+          "url": "https://github.com/apache/maka/issues/3868",
+          "title": "fix(build): Astryx surface inventory cannot see most of the design system",
+          "bodyBytes": 2176,
+          "bodySha256": "36043f77888b897a48b4ea9bb51acde3f413a654dce1e047c09ee74a6e4b9e32",
+          "labels": [
+            "bug",
+            "good first issue",
+            "help wanted"
+          ],
+          "createdAt": "2026-08-26T06:06:57Z",
+          "updatedAt": "2026-08-29T11:28:45Z"
+        }
+      },
+      {
+        "repository": {
+          "nameWithOwner": "apache/maka",
+          "url": "https://github.com/apache/maka",
+          "cloneUrl": "https://github.com/apache/maka.git",
+          "defaultBranch": "main",
+          "commit": "1ae45418b4affa8c4ba94aa68e79756e8c4cfee3",
+          "primaryLanguage": "TypeScript",
+          "stars": 3990,
+          "diskUsageKiB": 93102,
+          "pushedAt": "2026-08-29T14:53:29Z"
+        },
+        "issue": {
+          "number": 3876,
+          "url": "https://github.com/apache/maka/issues/3876",
+          "title": "fix(desktop): keyboard shortcuts show macOS glyphs (⌘ N) on Windows instead of Ctrl",
+          "bodyBytes": 5370,
+          "bodySha256": "356d720a0f8c7ac99e3e4e4dc0ca4b2020e438bc935a30afb7bded27ad4c2946",
+          "labels": [
+            "bug",
+            "good first issue",
+            "help wanted"
+          ],
+          "createdAt": "2026-08-26T06:50:56Z",
+          "updatedAt": "2026-08-29T11:28:45Z"
+        }
+      },
+      {
+        "repository": {
+          "nameWithOwner": "apache/maka",
+          "url": "https://github.com/apache/maka",
+          "cloneUrl": "https://github.com/apache/maka.git",
+          "defaultBranch": "main",
+          "commit": "1ae45418b4affa8c4ba94aa68e79756e8c4cfee3",
+          "primaryLanguage": "TypeScript",
+          "stars": 3990,
+          "diskUsageKiB": 93102,
+          "pushedAt": "2026-08-29T14:53:29Z"
+        },
+        "issue": {
+          "number": 3904,
+          "url": "https://github.com/apache/maka/issues/3904",
+          "title": "Import Tasks: switching source blanks the list and re-flashes the loading spinner every time",
+          "bodyBytes": 1861,
+          "bodySha256": "31bfd2afc232d1b70ad8205f4cad041ec7806a0e2a5a2516a361dec316b819f0",
+          "labels": [
+            "bug",
+            "good first issue",
+            "help wanted"
+          ],
+          "createdAt": "2026-08-26T09:18:27Z",
+          "updatedAt": "2026-08-29T11:28:44Z"
+        }
+      },
+      {
+        "repository": {
+          "nameWithOwner": "apache/maka",
+          "url": "https://github.com/apache/maka",
+          "cloneUrl": "https://github.com/apache/maka.git",
+          "defaultBranch": "main",
+          "commit": "1ae45418b4affa8c4ba94aa68e79756e8c4cfee3",
+          "primaryLanguage": "TypeScript",
+          "stars": 3990,
+          "diskUsageKiB": 93102,
+          "pushedAt": "2026-08-29T14:53:29Z"
+        },
+        "issue": {
+          "number": 3938,
+          "url": "https://github.com/apache/maka/issues/3938",
+          "title": "bug(windows): Glob fails when an approved tree contains a nested junction",
+          "bodyBytes": 5247,
+          "bodySha256": "1484381e54be1b241077a2ad176b88c192863fae9954cf974e0c8cae218e74f7",
+          "labels": [
+            "bug",
+            "good first issue",
+            "help wanted"
+          ],
+          "createdAt": "2026-08-26T15:35:45Z",
+          "updatedAt": "2026-08-29T11:28:44Z"
+        }
+      },
+      {
+        "repository": {
+          "nameWithOwner": "Hebbian-Robotics/hflow",
+          "url": "https://github.com/Hebbian-Robotics/hflow",
+          "cloneUrl": "https://github.com/Hebbian-Robotics/hflow.git",
+          "defaultBranch": "main",
+          "commit": "84c2921f0c859ab4d1e567fa447697d12b174a4a",
+          "primaryLanguage": "Python",
+          "stars": 179,
+          "diskUsageKiB": 7949,
+          "pushedAt": "2026-08-29T13:37:17Z"
+        },
+        "issue": {
+          "number": 254,
+          "url": "https://github.com/Hebbian-Robotics/hflow/issues/254",
+          "title": "camera_frame_stats reports no deficit when frames arrive but do not decode",
+          "bodyBytes": 3850,
+          "bodySha256": "d91bd74be4ad65df16687c4923fbffa6596d4103f7807c0dbcceab05c0ec602c",
+          "labels": [
+            "bug",
+            "good first issue",
+            "help wanted"
+          ],
+          "createdAt": "2026-08-29T07:49:28Z",
+          "updatedAt": "2026-08-29T07:49:28Z"
+        }
+      },
+      {
+        "repository": {
+          "nameWithOwner": "MakazhanAlpamys/Soup",
+          "url": "https://github.com/MakazhanAlpamys/Soup",
+          "cloneUrl": "https://github.com/MakazhanAlpamys/Soup.git",
+          "defaultBranch": "main",
+          "commit": "e0cff122fb39083c9b2319068422228d3a9e3570",
+          "primaryLanguage": "Python",
+          "stars": 3537,
+          "diskUsageKiB": 14058,
+          "pushedAt": "2026-08-29T11:39:00Z"
+        },
+        "issue": {
+          "number": 593,
+          "url": "https://github.com/MakazhanAlpamys/Soup/issues/593",
+          "title": "Telemetry endpoint SSRF guard cannot fire: the HTTPS precondition is upstream of a scheme-conditional private-IP check",
+          "bodyBytes": 3683,
+          "bodySha256": "6de13d98964a5e071a4ea687cb0cf7d01f076cf0d9433671506cb464e2f6517e",
+          "labels": [
+            "bug",
+            "good first issue"
+          ],
+          "createdAt": "2026-08-29T12:50:55Z",
+          "updatedAt": "2026-08-29T13:40:53Z"
+        }
+      },
+      {
+        "repository": {
+          "nameWithOwner": "sktime/sktime",
+          "url": "https://github.com/sktime/sktime",
+          "cloneUrl": "https://github.com/sktime/sktime.git",
+          "defaultBranch": "main",
+          "commit": "1a72f55bdb23ac7f039456caba580631318b53b9",
+          "primaryLanguage": "Python",
+          "stars": 9972,
+          "diskUsageKiB": 96522,
+          "pushedAt": "2026-08-29T14:36:36Z"
+        },
+        "issue": {
+          "number": 10954,
+          "url": "https://github.com/sktime/sktime/issues/10954",
+          "title": "[BUG] `ImpulseResponseFunction` singular matrix failures",
+          "bodyBytes": 678,
+          "bodySha256": "14c69263c1d732e883a9a084239998a88d4b7b24cda6ac9440f0eda3d7626969",
+          "labels": [
+            "bug",
+            "good first issue",
+            "module:parameter-estimators"
+          ],
+          "createdAt": "2026-08-29T12:51:25Z",
+          "updatedAt": "2026-08-29T13:04:55Z"
+        }
+      }
+    ]
+  },
+  "selected": {
+    "repository": {
+      "nameWithOwner": "apache/maka",
+      "url": "https://github.com/apache/maka",
+      "cloneUrl": "https://github.com/apache/maka.git",
+      "defaultBranch": "main",
+      "commit": "1ae45418b4affa8c4ba94aa68e79756e8c4cfee3",
+      "primaryLanguage": "TypeScript",
+      "stars": 3990,
+      "diskUsageKiB": 93102,
+      "pushedAt": "2026-08-29T14:53:29Z"
+    },
+    "issue": {
+      "number": 3938,
+      "url": "https://github.com/apache/maka/issues/3938",
+      "title": "bug(windows): Glob fails when an approved tree contains a nested junction",
+      "bodyBytes": 5247,
+      "bodySha256": "1484381e54be1b241077a2ad176b88c192863fae9954cf974e0c8cae218e74f7",
+      "labels": [
+        "bug",
+        "good first issue",
+        "help wanted"
+      ],
+      "createdAt": "2026-08-26T15:35:45Z",
+      "updatedAt": "2026-08-29T11:28:44Z"
+    },
+    "selectionKey": "2d935dccdaee140ccf496ff40f0d620a11c9e56d878d53e6e16bd42756ea1d10"
+  }
+}
