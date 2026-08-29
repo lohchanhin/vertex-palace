@@ -2,10 +2,10 @@
 
 Status: failed frozen development gates. No repair is included in this observation.
 
-Observed at: 2026-08-29T13:55:13.842Z  
-Candidate commit: `0f41dbd4153a56b6edf264e36a745d1e2345dbf0`  
-Oracle SHA-256: `f2f06345b16050b54bbdbbab640379cb2b70e02f952645071f57f4df839d8c12`  
-Raw evidence SHA-256: `cc95cc7ca4a67cac5252feb17d205ff5f46846957de3dc3725e84e8f1f6ed9d2`
+- Observed at: 2026-08-29T13:55:13.842Z
+- Candidate commit: `0f41dbd4153a56b6edf264e36a745d1e2345dbf0`
+- Oracle SHA-256: `f2f06345b16050b54bbdbbab640379cb2b70e02f952645071f57f4df839d8c12`
+- Raw evidence SHA-256: `cc95cc7ca4a67cac5252feb17d205ff5f46846957de3dc3725e84e8f1f6ed9d2`
 
 ## Result
 
