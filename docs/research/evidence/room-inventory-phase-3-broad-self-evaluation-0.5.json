@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "featureVersion": "0.5",
+  "phase": 3,
+  "classification": "disclosed-post-repair-self-evaluation",
+  "task": "Fix Room Inventory relation precision: preserve full object references, recognize Go and Rust test objects, suppress owner-member call duplicates, and preserve the default graph",
+  "observedAt": "2026-08-29T14:12:20.039Z",
+  "coreTruth": [
+    "packages/shared/src/types.ts",
+    "packages/core/src/parser/attach-object-metadata.ts",
+    "packages/core/src/indexer/build-object-relations.ts",
+    "packages/core/src/indexer/build-edges.ts",
+    "packages/core/test/room-inventory-relation-quality.test.ts",
+    "plugins/vertex-palace/mcp/server.cjs"
+  ],
+  "stable040": {
+    "evaluationId": "evaluation_e1731b7e75f48494",
+    "routeId": "route_e639b07e80b91c15",
+    "createdAt": "2026-08-29T14:11:59.407Z",
+    "confidence": 0.68,
+    "changedFileCoverage": 0.167,
+    "routeFocus": 0.2,
+    "coreCoverage": 0.167,
+    "calibrationStatus": "overconfident",
+    "routeFiles": [
+      "packages/core/src/indexer/build-object-relations.ts",
+      "packages/core/test/room-inventory-routing.test.ts",
+      "scripts/research/measure-room-inventory-phase-3.cjs",
+      "packages/core/test/room-inventory-contract.test.ts",
+      "docs/research/evidence/room-inventory-phase-2-object-routing-0.5.json"
+    ]
+  },
+  "local05Candidate": {
+    "candidateCommit": "600effbde0613011963211302fac57f08eda5d62",
+    "evaluationId": "evaluation_e9ee3c13aed61456",
+    "routeId": "route_41833d868113e144",
+    "createdAt": "2026-08-29T14:12:20.039Z",
+    "confidence": 0.68,
+    "changedFileCoverage": 0.167,
+    "routeFocus": 0.2,
+    "coreCoverage": 0.167,
+    "calibrationStatus": "overconfident",
+    "routeFiles": [
+      "packages/core/src/indexer/build-object-relations.ts",
+      "packages/core/test/room-inventory-routing.test.ts",
+      "scripts/research/measure-room-inventory-phase-3.cjs",
+      "packages/core/test/room-inventory-contract.test.ts",
+      "docs/research/evidence/room-inventory-phase-2-object-routing-0.5.json"
+    ]
+  },
+  "outcome": "no-broad-route-improvement",
+  "interpretation": "Phase 3 improved disclosed synthetic graph relation quality but did not improve broad multi-file evidence closure for this compound self-repository task.",
+  "nextResearchQuestion": "Can a generic evidence-role planner use object relations to close implementation, parser, compatibility, test, and generated-artifact facets without target-specific rules?",
+  "claimBoundary": "This disclosed post-repair self-evaluation is diagnostic evidence, not a frozen qualification round and not evidence of lower Token use, fewer tool calls, faster completion, or improved end-to-end Agent correctness."
+}
