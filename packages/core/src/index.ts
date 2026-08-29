@@ -17,6 +17,7 @@ export * from "./indexer/index-palace";
 export * from "./indexer/build-directory-map";
 export * from "./indexer/build-nodes";
 export * from "./indexer/build-edges";
+export * from "./indexer/build-object-relations";
 export * from "./indexer/build-facts";
 export * from "./indexer/build-rooms";
 export * from "./indexer/incremental-index";

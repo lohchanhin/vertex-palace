@@ -1,0 +1,134 @@
+{
+  "schemaVersion": 1,
+  "featureVersion": "0.5",
+  "phase": 2,
+  "status": "phase-2-object-routing-development-verified",
+  "verifiedAt": "2026-08-29T13:44:02.057Z",
+  "featureName": "Room Inventory",
+  "activation": {
+    "defaultEnabled": false,
+    "environmentVariable": "VERTEX_PALACE_EXPERIMENTAL_ROOM_INVENTORY",
+    "objectRoutingRequiresPersistedMetadata": true,
+    "cliSchemaChanged": false,
+    "mcpSchemaChanged": false
+  },
+  "relations": {
+    "types": [
+      "contains",
+      "calls",
+      "tests",
+      "tested_by"
+    ],
+    "uniqueDeclarationRequiredForReferenceRelation": true,
+    "dynamicDispatchResolved": false,
+    "maximumInferredOutgoingPerObject": 32,
+    "invertedReferenceIndex": true,
+    "repositorySpecificRules": 0
+  },
+  "scoring": {
+    "qualifiedIdentityFirst": true,
+    "ownerAndMemberSecond": true,
+    "explicitLocalIdentifierThird": true,
+    "ambiguousLocalIdentityForcedDisambiguation": false,
+    "parserConfidenceScalesIdentityBoost": true,
+    "identityMatchCanForceStop": false,
+    "identityMatchCanBypassAbstention": false
+  },
+  "focusedTests": {
+    "path": "packages/core/test/room-inventory-routing.test.ts",
+    "testsPassed": 4,
+    "outgoingCapObserved": 32,
+    "repeatedIndexAgreement": 1,
+    "qualifiedSameNameDisambiguation": true,
+    "localSameNameAmbiguityPreserved": true,
+    "defaultObjectScoreReasons": 0
+  },
+  "selfRepositoryBenchmark": {
+    "classification": "development-smoke-not-randomized",
+    "conditionsSequential": true,
+    "baseline": {
+      "files": 818,
+      "nodes": 10868,
+      "symbolNodes": 9976,
+      "objects": 0,
+      "edges": 17412,
+      "indexBytes": 60743627,
+      "wallTimeMs": 10608.3
+    },
+    "enabled": {
+      "files": 818,
+      "nodes": 10868,
+      "symbolNodes": 9976,
+      "objects": 4495,
+      "edges": 22994,
+      "objectToObjectRelationsObserved": 5596,
+      "objectRelationCounts": {
+        "contains": 7,
+        "calls": 5575,
+        "tests": 7,
+        "tested_by": 7
+      },
+      "maximumObservedOutgoingObjectRelations": 31,
+      "indexBytes": 66297933,
+      "wallTimeMs": 11388.5
+    },
+    "edgeDelta": 5582,
+    "indexSizeMultiplier": 1.0914,
+    "indexTimeMultiplier": 1.0735,
+    "indexTimeRegression": 0.0735,
+    "developmentSizeGate": 1.5,
+    "developmentTimeRegressionGate": 0.25
+  },
+  "exactObjectSmoke": {
+    "taskObject": "attachObjectMetadata",
+    "candidateEntrypoint": "node dist/palace.cjs",
+    "priority": 1,
+    "sourcePath": "packages/core/src/parser/attach-object-metadata.ts:13-22",
+    "loadLevel": "full_symbol",
+    "reason": "exact Room Inventory object match \"attachObjectMetadata\"",
+    "overallRouteConfidence": 0.4,
+    "confidenceStayedAdvisory": true,
+    "defaultIndexRestored": true
+  },
+  "broadSelfEvaluation": {
+    "classification": "disclosed-post-implementation-self-evaluation",
+    "task": "Complete Vertex Palace 0.5 Room Inventory Phase 2 object relations, exact routing, bilingual evidence, and verification",
+    "stable040": {
+      "entrypoint": "globally installed palace 0.4.0",
+      "routeConfidence": 0.81,
+      "changedFileCoverage": 0.364,
+      "routeFocus": 0.571,
+      "coreCoverage": 0.286,
+      "declaredAuxiliaryCoverage": 0.5,
+      "calibrationStatus": "overconfident",
+      "calibrationError": 0.52
+    },
+    "local05Candidate": {
+      "entrypoint": "node dist/palace.cjs",
+      "routeConfidence": 0.79,
+      "changedFileCoverage": 0.364,
+      "routeFocus": 0.571,
+      "coreCoverage": 0.286,
+      "declaredAuxiliaryCoverage": 0.5,
+      "calibrationStatus": "overconfident",
+      "calibrationError": 0.5
+    },
+    "outcome": "no-broad-route-improvement",
+    "candidateIndexRestored": true,
+    "interpretation": "Phase 2 improved exact object identity routing but did not improve broad multi-file task closure on this disclosed self-evaluation."
+  },
+  "verification": {
+    "targetedCoreTestsPassed": 13,
+    "lintStatus": "passed",
+    "buildStatus": "passed",
+    "fullSuiteStatus": "passed",
+    "mcpSmokeStatus": "passed",
+    "localCandidateCliSmokeStatus": "passed",
+    "coreTestsPassed": 270,
+    "cliTestsPassed": 2,
+    "mcpTestsPassed": 2,
+    "researchTestsPassed": 261,
+    "researchLifecycleSkips": 2
+  },
+  "claimBoundary": "Phase 2 verifies bounded object relations and exact object-first scoring on development fixtures plus one self-repository smoke benchmark. It does not establish Round 26 qualification, Agent correctness, Token savings, fewer tool calls, or faster completion."
+}

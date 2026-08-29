@@ -38,7 +38,7 @@ function attachToSymbol(
       object: createPalaceObjectMetadata({
         sourcePath,
         language,
-        objectKind: objectKindFor(symbol.kind),
+        objectKind: objectKindFor(sourcePath, symbol, lines),
         qualifiedName: symbol.name,
         ...(ownerName ? { ownerName } : {}),
         signature: symbol.signature,
@@ -55,9 +55,18 @@ function attachToSymbol(
   }
 }
 
-function objectKindFor(kind: ParsedSymbol["kind"]): PalaceObjectKind {
-  if (kind === "const") return "constant";
-  return kind;
+function objectKindFor(sourcePath: string, symbol: ParsedSymbol, lines: string[]): PalaceObjectKind {
+  if (isTestObject(sourcePath, symbol, lines)) return "test";
+  if (symbol.kind === "const") return "constant";
+  return symbol.kind;
+}
+
+function isTestObject(sourcePath: string, symbol: ParsedSymbol, lines: string[]): boolean {
+  if (!/(^|\/)(?:test|tests|spec|__tests__)(\/|$)|\.(?:test|spec)\.[^.]+$/i.test(sourcePath)) return false;
+  const localName = symbol.name.slice(symbol.name.lastIndexOf(".") + 1);
+  if (/^(?:test|spec|should|check)(?:[_A-Z-]|$)/.test(localName)) return true;
+  const preceding = lines.slice(Math.max(0, symbol.startLine - 4), symbol.startLine - 1).join("\n");
+  return /#\s*\[\s*test\s*\]|@(?:pytest\.)?(?:mark\.)?\w*test\b/.test(preceding);
 }
 
 function ownerFor(qualifiedName: string): string | undefined {

@@ -4,6 +4,7 @@ import { nodeEvidenceScope, nodeHasEvidenceRole } from "../evidence/evidence-mod
 import { hashText } from "../scanner/file-hash";
 import { normalizeRelativePath } from "../utils/path-utils";
 import { tokenizeLexical } from "../utils/lexical-tokens";
+import { buildObjectRelations } from "./build-object-relations";
 
 type WorkspacePackage = {
   name: string;
@@ -123,6 +124,11 @@ export function buildEdges(nodes: PalaceNode[], parsedFiles: ParsedFile[], now: 
         edges.push(makeEdge(capped[i].id, capped[j].id, "same_room", 0.35, `Both nodes are in ${capped[i].wing}/${capped[i].room}`, now));
       }
     }
+  }
+
+  const existingRelations = new Set(edges.map((edge) => `${edge.from}:${edge.to}:${edge.type}`));
+  for (const relation of buildObjectRelations(nodes, parsedFiles, now)) {
+    if (!existingRelations.has(`${relation.from}:${relation.to}:${relation.type}`)) edges.push(relation);
   }
 
   const unique = new Map<string, PalaceEdge>();

@@ -4,6 +4,7 @@ import { floorTemplate } from "./locate-entry";
 import { isBinaryLikePath } from "../utils/binary-files";
 import { expandedTaskAcronyms } from "../utils/lexical-acronyms";
 import {
+  compactCodeIdentifier,
   extractCodeIdentifierCompacts,
   normalizeLexicalToken,
   tokenizeLexical
@@ -70,6 +71,11 @@ export function scoreNodes(
       const entityHit = entityHintBoost(node, analysis, matchedFact);
       const matchedKeywords = new Set<string>();
       let semanticMatchCount = 0;
+      const objectMatch = objectIdentityBoost(node, analysis);
+      if (objectMatch.score > 0) {
+        score += objectMatch.score;
+        reasons.push(objectMatch.reason);
+      }
 
       for (const keyword of analysis.keywords) {
         if (!keyword) continue;
@@ -393,6 +399,38 @@ function explicitTaskIdentifierCompacts(analysis: TaskAnalysis): Set<string> {
   return new Set(
     analysis.identifiers.flatMap((identifier) => [...extractCodeIdentifierCompacts(identifier)])
   );
+}
+
+function objectIdentityBoost(node: PalaceNode, analysis: TaskAnalysis): { score: number; reason: string } {
+  if (!node.object) return { score: 0, reason: "" };
+  const identifiers = new Set([
+    ...explicitTaskIdentifierCompacts(analysis),
+    ...extractCodeIdentifierCompacts(analysis.raw)
+  ]);
+  const qualifiedName = compactCodeIdentifier(node.object.qualifiedName);
+  const localName = compactCodeIdentifier(node.object.qualifiedName.split(".").at(-1) ?? node.object.qualifiedName);
+  const ownerName = compactCodeIdentifier(node.object.ownerName ?? "");
+  const confidenceFactor = 0.75 + node.object.parserConfidence * 0.25;
+
+  if (qualifiedName && identifiers.has(qualifiedName)) {
+    return {
+      score: Math.round(150 * confidenceFactor),
+      reason: `exact Room Inventory object match "${node.object.qualifiedName}"`
+    };
+  }
+  if (ownerName && localName && identifiers.has(ownerName) && identifiers.has(localName)) {
+    return {
+      score: Math.round(130 * confidenceFactor),
+      reason: `exact Room Inventory owner and member match "${node.object.qualifiedName}"`
+    };
+  }
+  if (localName && identifiers.has(localName)) {
+    return {
+      score: Math.round(85 * confidenceFactor),
+      reason: `exact Room Inventory local object match "${node.object.qualifiedName}"`
+    };
+  }
+  return { score: 0, reason: "" };
 }
 
 function evaluationHintBoost(node: PalaceNode, taskType: TaskType, analysis: TaskAnalysis, hasEntityHit: boolean): number {
@@ -757,7 +795,7 @@ function tokenize(value: string): Set<string> {
 function relationBoosts(edges: PalaceEdge[]): Map<string, number> {
   const boosts = new Map<string, number>();
   for (const edge of edges) {
-    if (!["imports", "tests", "tested_by", "changed_with", "configures", "depends_on"].includes(edge.type)) continue;
+    if (!["imports", "calls", "tests", "tested_by", "changed_with", "configures", "depends_on"].includes(edge.type)) continue;
     if (["changed_with", "configures", "depends_on"].includes(edge.type) && edge.weight < 0.8) continue;
     boosts.set(edge.from, (boosts.get(edge.from) ?? 0) + edge.weight * 8);
     boosts.set(edge.to, (boosts.get(edge.to) ?? 0) + edge.weight * 8);

@@ -30,9 +30,9 @@ type ExpansionCandidate = {
 };
 
 const FILE_NODE_KINDS = new Set(["file", "api", "test", "config", "doc", "runtime-log"]);
-const EXPANDABLE_RELATIONS = new Set(["imports", "tests", "tested_by", "changed_with", "configures", "depends_on"]);
+const EXPANDABLE_RELATIONS = new Set(["imports", "calls", "tests", "tested_by", "changed_with", "configures", "depends_on"]);
 const PROVENANCE_RELATIONS = new Set(["changed_with", "configures", "depends_on"]);
-const CAUSAL_RELATIONS = new Set(["imports", "tests", "tested_by", "changed_with", "configures", "depends_on"]);
+const CAUSAL_RELATIONS = new Set(["imports", "calls", "tests", "tested_by", "changed_with", "configures", "depends_on"]);
 const AUXILIARY_ROLES = new Set<EvidenceRole>(["contract", "documentation", "configuration", "generated", "runtime"]);
 
 export function expandRoute(
