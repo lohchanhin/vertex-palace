@@ -17,11 +17,13 @@ The fixture contains 11 source files across TypeScript, JavaScript, Python, Go, 
 - Two same-named ambiguous targets that must not be guessed.
 - One Owner-to-member `contains` relation where the Phase 0 parser contract already exposes ownership. Rust ownership is not declared in this fixture because Phase 0 froze only a Rust function object.
 
-The oracle contains 19 expected relations and 10 forbidden ambiguous relations. Undeclared inferred relations are held for human review instead of being automatically labeled false positives.
+The oracle contains 27 expected relations and 10 forbidden ambiguous relations. It includes the valid Owner-to-member structure of the ambiguous controls while still forbidding caller-to-ambiguous-target guesses. Undeclared inferred relations are held for human review instead of being automatically labeled false positives.
+
+Before candidate execution, a protocol audit added eight valid Owner-to-ambiguous-member `contains` relations so declared-endpoint precision truth is exhaustive. This pre-observation amendment is recorded in the machine-readable protocol; no candidate had been run.
 
 Frozen hashes:
 
-- Oracle SHA-256: `8ae16a615f34eaf00acfd313afb0a9a3a1a78a69e1f6caa8d9421ef79f0e0c6d`
+- Oracle SHA-256: `f2f06345b16050b54bbdbbab640379cb2b70e02f952645071f57f4df839d8c12`
 - Fixture-source SHA-256: `fbbd78f6fd86c674920af589797d2ae4ee39bdd3e0536f446b5d1163a548d97b`
 
 ## Standard Test Conventions

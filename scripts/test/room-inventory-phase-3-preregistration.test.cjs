@@ -22,7 +22,7 @@ test("freezes the Phase 3 fixture and oracle before candidate observation", () =
   assert.equal(protocol.fixture.sourceFiles, 11);
   assert.deepEqual(protocol.fixture.languages, ["typescript", "javascript", "python", "go", "rust"]);
   assert.equal(oracle.status, "frozen-before-candidate-observation");
-  assert.equal(oracle.aggregateTruth.expectedRelations, 19);
+  assert.equal(oracle.aggregateTruth.expectedRelations, 27);
   assert.equal(oracle.aggregateTruth.forbiddenRelations, 10);
 });
 
@@ -56,7 +56,7 @@ test("keeps the bilingual protocol aligned and free of candidate execution", () 
     assert.match(document, /Python/);
     assert.match(document, /Go/);
     assert.match(document, /Rust/);
-    assert.match(document, /19/);
+    assert.match(document, /27/);
     assert.match(document, /10/);
     assert.match(document, /0\.95/);
     assert.match(document, /0\.80/);

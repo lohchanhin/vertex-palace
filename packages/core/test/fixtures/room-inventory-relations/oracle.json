@@ -2,6 +2,10 @@
   "schemaVersion": 1,
   "status": "frozen-before-candidate-observation",
   "lockedAt": "2026-08-29T13:47:56.132Z",
+  "amendedAt": "2026-08-29T13:51:56.147Z",
+  "amendments": [
+    "Before candidate execution, added eight semantically valid Owner-to-ambiguous-member contains relations so the precision truth is exhaustive for declared endpoints."
+  ],
   "languages": [
     "typescript",
     "javascript",
@@ -21,6 +25,8 @@
       "language": "typescript",
       "expected": [
         ["typescript/invoice.ts", "TsInvoiceService", "contains", "typescript/invoice.ts", "TsInvoiceService.calculate"],
+        ["typescript/invoice.ts", "TsPrimary", "contains", "typescript/invoice.ts", "TsPrimary.resolve"],
+        ["typescript/invoice.ts", "TsSecondary", "contains", "typescript/invoice.ts", "TsSecondary.resolve"],
         ["typescript/invoice.ts", "tsBuildInvoice", "calls", "typescript/invoice.ts", "tsComputeInvoice"],
         ["typescript/invoice.test.ts", "testTsBuildInvoice", "tests", "typescript/invoice.ts", "tsBuildInvoice"],
         ["typescript/invoice.ts", "tsBuildInvoice", "tested_by", "typescript/invoice.test.ts", "testTsBuildInvoice"]
@@ -35,6 +41,8 @@
       "language": "javascript",
       "expected": [
         ["javascript/receipt.js", "JsReceiptService", "contains", "javascript/receipt.js", "JsReceiptService.render"],
+        ["javascript/receipt.js", "JsPrimary", "contains", "javascript/receipt.js", "JsPrimary.resolve"],
+        ["javascript/receipt.js", "JsSecondary", "contains", "javascript/receipt.js", "JsSecondary.resolve"],
         ["javascript/receipt.js", "jsBuildReceipt", "calls", "javascript/receipt.js", "jsFormatReceipt"],
         ["javascript/receipt.test.js", "testJsBuildReceipt", "tests", "javascript/receipt.js", "jsBuildReceipt"],
         ["javascript/receipt.js", "jsBuildReceipt", "tested_by", "javascript/receipt.test.js", "testJsBuildReceipt"]
@@ -49,6 +57,8 @@
       "language": "python",
       "expected": [
         ["python/session.py", "PySession", "contains", "python/session.py", "PySession.refresh"],
+        ["python/session.py", "PyPrimary", "contains", "python/session.py", "PyPrimary.resolve"],
+        ["python/session.py", "PySecondary", "contains", "python/session.py", "PySecondary.resolve"],
         ["python/session.py", "py_build_session", "calls", "python/session.py", "py_hash_session"],
         ["python/tests/test_session.py", "test_py_build_session", "tests", "python/session.py", "py_build_session"],
         ["python/session.py", "py_build_session", "tested_by", "python/tests/test_session.py", "test_py_build_session"]
@@ -63,6 +73,8 @@
       "language": "go",
       "expected": [
         ["go/store.go", "GoStore", "contains", "go/store.go", "GoStore.Save"],
+        ["go/store.go", "GoPrimary", "contains", "go/store.go", "GoPrimary.Resolve"],
+        ["go/store.go", "GoSecondary", "contains", "go/store.go", "GoSecondary.Resolve"],
         ["go/store.go", "goBuildStore", "calls", "go/store.go", "goPersistStore"],
         ["go/store_test.go", "TestGoBuildStore", "tests", "go/store.go", "goBuildStore"],
         ["go/store.go", "goBuildStore", "tested_by", "go/store_test.go", "TestGoBuildStore"]
@@ -87,9 +99,9 @@
     }
   ],
   "aggregateTruth": {
-    "expectedRelations": 19,
+    "expectedRelations": 27,
     "expectedByType": {
-      "contains": 4,
+      "contains": 12,
       "calls": 5,
       "tests": 5,
       "tested_by": 5

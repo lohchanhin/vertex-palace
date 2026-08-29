@@ -4,10 +4,14 @@
   "phase": 3,
   "status": "relation-quality-protocol-frozen-candidate-unobserved",
   "lockedAt": "2026-08-29T13:47:56.132Z",
+  "amendedAt": "2026-08-29T13:51:56.147Z",
+  "preObservationAmendments": [
+    "Added eight semantically valid Owner-to-ambiguous-member contains relations before candidate execution so declared-endpoint precision truth is exhaustive."
+  ],
   "fixture": {
     "root": "packages/core/test/fixtures/room-inventory-relations",
     "oraclePath": "packages/core/test/fixtures/room-inventory-relations/oracle.json",
-    "oracleSha256": "8ae16a615f34eaf00acfd313afb0a9a3a1a78a69e1f6caa8d9421ef79f0e0c6d",
+    "oracleSha256": "f2f06345b16050b54bbdbbab640379cb2b70e02f952645071f57f4df839d8c12",
     "fixtureSourcesSha256": "fbbd78f6fd86c674920af589797d2ae4ee39bdd3e0536f446b5d1163a548d97b",
     "sourceFiles": 11,
     "languages": [
@@ -19,9 +23,9 @@
     ]
   },
   "truth": {
-    "expectedRelations": 19,
+    "expectedRelations": 27,
     "expectedByType": {
-      "contains": 4,
+      "contains": 12,
       "calls": 5,
       "tests": 5,
       "tested_by": 5
