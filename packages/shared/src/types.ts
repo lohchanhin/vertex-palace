@@ -597,6 +597,7 @@ export type ParsedSymbol = {
   signature: string;
   searchText?: string;
   object?: PalaceObjectMetadata;
+  objectReferences?: string[];
 };
 
 export type ParsedHeading = {

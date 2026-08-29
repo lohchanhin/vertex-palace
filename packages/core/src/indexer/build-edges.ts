@@ -90,7 +90,7 @@ export function buildEdges(nodes: PalaceNode[], parsedFiles: ParsedFile[], now: 
   );
   for (const testSymbol of testSymbolNodes) {
     const testTokens = meaningfulTokens(testSymbol.title.split(".").at(-1) ?? testSymbol.title);
-    const matches = sourceSymbolNodes
+    const candidates = sourceSymbolNodes
       .map((sourceSymbol) => ({
         sourceSymbol,
         sourceTokens: meaningfulTokens(sourceSymbol.title.split(".").at(-1) ?? sourceSymbol.title)
@@ -100,7 +100,8 @@ export function buildEdges(nodes: PalaceNode[], parsedFiles: ParsedFile[], now: 
           sourceTokens.size >= 2
           && sourceTokens.size / Math.max(testTokens.size, 1) >= 0.6
           && [...sourceTokens].every((token) => testTokens.has(token))
-      )
+      );
+    const matches = removeStrictSubsetSymbolMatches(candidates)
       .sort(
         (a, b) =>
           commonDirectoryPrefix(testSymbol.sourcePath, b.sourceSymbol.sourcePath) - commonDirectoryPrefix(testSymbol.sourcePath, a.sourceSymbol.sourcePath)
@@ -134,6 +135,18 @@ export function buildEdges(nodes: PalaceNode[], parsedFiles: ParsedFile[], now: 
   const unique = new Map<string, PalaceEdge>();
   for (const edge of edges) unique.set(edge.id, edge);
   return [...unique.values()].sort((a, b) => a.id.localeCompare(b.id));
+}
+
+function removeStrictSubsetSymbolMatches<T extends {
+  sourceSymbol: PalaceNode;
+  sourceTokens: Set<string>;
+}>(matches: T[]): T[] {
+  return matches.filter((candidate) => !matches.some((other) => (
+    other.sourceSymbol.id !== candidate.sourceSymbol.id
+    && other.sourceSymbol.sourcePath === candidate.sourceSymbol.sourcePath
+    && other.sourceTokens.size > candidate.sourceTokens.size
+    && [...candidate.sourceTokens].every((token) => other.sourceTokens.has(token))
+  )));
 }
 
 function makeEdge(from: string, to: string, type: PalaceEdge["type"], weight: number, evidence: string, now: string): PalaceEdge {

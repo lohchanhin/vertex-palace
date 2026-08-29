@@ -6,6 +6,7 @@ import type {
   ParsedSymbol
 } from "@vertex-palace/shared";
 import { createPalaceObjectMetadata, normalizeObjectLanguage } from "../palace/object-identity";
+import { compactCodeIdentifier, extractCodeIdentifiers } from "../utils/lexical-tokens";
 
 const SUPPORTED_LANGUAGES = new Set(["typescript", "javascript", "python", "go", "rust"]);
 const MODIFIER_PATTERN = /\b(async|static|readonly|abstract|override|final|sealed|unsafe|extern|pub|public|protected|private)\b/g;
@@ -33,40 +34,59 @@ function attachToSymbol(
   const profile = parserProfile(language);
 
   try {
+    const object = createPalaceObjectMetadata({
+      sourcePath,
+      language,
+      objectKind: objectKindFor(language, sourcePath, symbol, lines),
+      qualifiedName: symbol.name,
+      ...(ownerName ? { ownerName } : {}),
+      signature: symbol.signature,
+      body,
+      exported: inferExported(language, symbol, content, body, ownerName),
+      visibility: inferVisibility(language, symbol, body),
+      modifiers: extractModifiers(symbol.signature),
+      parser: profile.parser,
+      parserConfidence: profile.confidence
+    });
+    const objectReferences = extractObjectReferences(body, object.qualifiedName, ownerName);
     return {
       ...symbol,
-      object: createPalaceObjectMetadata({
-        sourcePath,
-        language,
-        objectKind: objectKindFor(sourcePath, symbol, lines),
-        qualifiedName: symbol.name,
-        ...(ownerName ? { ownerName } : {}),
-        signature: symbol.signature,
-        body,
-        exported: inferExported(language, symbol, content, body, ownerName),
-        visibility: inferVisibility(language, symbol, body),
-        modifiers: extractModifiers(symbol.signature),
-        parser: profile.parser,
-        parserConfidence: profile.confidence
-      })
+      object,
+      ...(objectReferences.length ? { objectReferences } : {})
     };
   } catch {
     return symbol;
   }
 }
 
-function objectKindFor(sourcePath: string, symbol: ParsedSymbol, lines: string[]): PalaceObjectKind {
-  if (isTestObject(sourcePath, symbol, lines)) return "test";
+function objectKindFor(language: string, sourcePath: string, symbol: ParsedSymbol, lines: string[]): PalaceObjectKind {
+  if (isTestObject(language, sourcePath, symbol, lines)) return "test";
   if (symbol.kind === "const") return "constant";
   return symbol.kind;
 }
 
-function isTestObject(sourcePath: string, symbol: ParsedSymbol, lines: string[]): boolean {
-  if (!/(^|\/)(?:test|tests|spec|__tests__)(\/|$)|\.(?:test|spec)\.[^.]+$/i.test(sourcePath)) return false;
+function isTestObject(language: string, sourcePath: string, symbol: ParsedSymbol, lines: string[]): boolean {
   const localName = symbol.name.slice(symbol.name.lastIndexOf(".") + 1);
-  if (/^(?:test|spec|should|check)(?:[_A-Z-]|$)/.test(localName)) return true;
   const preceding = lines.slice(Math.max(0, symbol.startLine - 4), symbol.startLine - 1).join("\n");
+  if (language === "rust" && /#\s*\[\s*test\s*\]/.test(preceding)) return true;
+  const conventionalPath = /(^|\/)(?:test|tests|spec|__tests__)(\/|$)|\.(?:test|spec)\.[^.]+$|_test\.go$/i.test(sourcePath);
+  if (!conventionalPath) return false;
+  if (language === "go" && /^Test(?:[A-Z0-9_]|$)/.test(localName)) return true;
+  if (/^(?:test|spec|should|check)(?:[_A-Z-]|$)/.test(localName)) return true;
   return /#\s*\[\s*test\s*\]|@(?:pytest\.)?(?:mark\.)?\w*test\b/.test(preceding);
+}
+
+function extractObjectReferences(body: string, qualifiedName: string, ownerName?: string): string[] {
+  const ignored = new Set([
+    compactCodeIdentifier(qualifiedName),
+    compactCodeIdentifier(qualifiedName.slice(qualifiedName.lastIndexOf(".") + 1)),
+    compactCodeIdentifier(ownerName ?? "")
+  ]);
+  return [...new Set(
+    extractCodeIdentifiers(body)
+      .map(compactCodeIdentifier)
+      .filter((identifier) => identifier.length >= 3 && !ignored.has(identifier))
+  )].sort();
 }
 
 function ownerFor(qualifiedName: string): string | undefined {

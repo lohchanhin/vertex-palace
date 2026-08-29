@@ -56,7 +56,7 @@ export function buildObjectRelations(
     for (const symbol of parsed.symbols) {
       const source = nodeByDeclaration.get(declarationLookupKey(parsed.sourcePath, symbol.name));
       if (!source?.object || !symbol.searchText) continue;
-      const references = referenceProfile(symbol.searchText);
+      const references = referenceProfile(symbol.searchText, symbol.objectReferences);
       const relatedTargets = new Map<string, PalaceNode>();
       for (const key of referenceKeys(references)) {
         const target = uniqueDeclarations.get(key);
@@ -65,6 +65,10 @@ export function buildObjectRelations(
 
       for (const target of relatedTargets.values()) {
         if (target.id === source.id || !target.object) continue;
+        if (
+          target.sourcePath === source.sourcePath
+          && target.object.ownerName === source.object.qualifiedName
+        ) continue;
 
         const testRelation = source.object.objectKind === "test";
         const confidence = relationWeight(source, target, testRelation);
@@ -117,15 +121,20 @@ function uniqueDeclarationsByReferenceKey(nodes: PalaceNode[]): Map<string, Pala
   );
 }
 
-function referenceProfile(value: string): { compacts: Set<string>; tokens: Set<string> } {
+function referenceProfile(
+  value: string,
+  objectReferences: string[] = []
+): { compacts: Set<string>; exact: Set<string>; tokens: Set<string> } {
   return {
     compacts: extractCodeIdentifierCompacts(value),
+    exact: new Set(objectReferences),
     tokens: tokenizeLexical(value)
   };
 }
 
 function referenceKeys(references: ReturnType<typeof referenceProfile>): Set<string> {
   return new Set([
+    ...references.exact,
     ...references.compacts,
     ...[...references.tokens].filter((token) => token.length >= 3 && !REFERENCE_NOISE.has(token))
   ]);

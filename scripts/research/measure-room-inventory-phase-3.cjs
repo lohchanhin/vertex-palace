@@ -17,16 +17,14 @@ main().catch((error) => {
 });
 
 async function main() {
-  const outputPath = resolveOutputPath(process.argv.slice(2));
+  const { observation, outputPath } = resolveArguments(process.argv.slice(2));
   const oracle = JSON.parse(await readFile(oraclePath, "utf8"));
   const protocol = JSON.parse(await readFile(protocolPath, "utf8"));
   const oracleSha256 = await sha256File(oraclePath);
   if (oracleSha256 !== protocol.fixture.oracleSha256) {
     throw new Error(`Oracle hash mismatch: expected ${protocol.fixture.oracleSha256}, received ${oracleSha256}.`);
   }
-  if (protocol.execution.candidateObserved !== false) {
-    throw new Error("Phase 3 protocol no longer authorizes a first observation.");
-  }
+  await verifyObservationLineage(observation, oracleSha256, protocol);
 
   const temporaryRoot = await mkdtemp(path.join(os.tmpdir(), "vertex-palace-phase-3-"));
   const repositoryRoot = path.join(temporaryRoot, "repository");
@@ -36,7 +34,7 @@ async function main() {
     const baseline = await indexCondition(core, repositoryRoot, false);
     const first = await indexCondition(core, repositoryRoot, true);
     const second = await indexCondition(core, repositoryRoot, true);
-    const result = buildResult({ oracle, oracleSha256, baseline, first, second });
+    const result = buildResult({ observation, oracle, oracleSha256, baseline, first, second });
     await writeFile(outputPath, `${JSON.stringify(result, null, 2)}\n`, { encoding: "utf8", flag: "wx" });
     console.log(JSON.stringify(result, null, 2));
   } finally {
@@ -65,7 +63,7 @@ async function indexCondition(core, repositoryRoot, roomInventory) {
   };
 }
 
-function buildResult({ oracle, oracleSha256, baseline, first, second }) {
+function buildResult({ observation, oracle, oracleSha256, baseline, first, second }) {
   const expected = oracle.cases.flatMap((entry) => entry.expected.map((relation) => ({
     language: entry.language,
     tuple: relation,
@@ -146,7 +144,7 @@ function buildResult({ oracle, oracleSha256, baseline, first, second }) {
     schemaVersion: 1,
     featureVersion: "0.5",
     phase: 3,
-    observation: "first",
+    observation,
     immutable: true,
     observedAt: new Date().toISOString(),
     candidate: {
@@ -242,10 +240,35 @@ async function sha256File(filePath) {
   return createHash("sha256").update(await readFile(filePath)).digest("hex");
 }
 
-function resolveOutputPath(arguments_) {
-  const outputIndex = arguments_.indexOf("--out");
-  if (outputIndex < 0 || !arguments_[outputIndex + 1]) {
-    throw new Error("Usage: node scripts/research/measure-room-inventory-phase-3.cjs --out <new-json-path>");
+async function verifyObservationLineage(observation, oracleSha256, protocol) {
+  if (observation === "first") {
+    if (protocol.execution.candidateObserved !== false) {
+      throw new Error("Phase 3 protocol no longer authorizes a first observation.");
+    }
+    return;
   }
-  return path.resolve(root, arguments_[outputIndex + 1]);
+  const firstPath = path.join(root, "docs", "research", "evidence", "room-inventory-phase-3-first-observation-0.5.json");
+  const first = JSON.parse(await readFile(firstPath, "utf8"));
+  if (first.observation !== "first" || first.immutable !== true || first.overallPass !== false) {
+    throw new Error("Repair measurement requires the immutable failed first observation.");
+  }
+  if (first.oracle.sha256 !== oracleSha256) {
+    throw new Error("Repair measurement oracle differs from the first observation.");
+  }
+}
+
+function resolveArguments(arguments_) {
+  const outputIndex = arguments_.indexOf("--out");
+  const observationIndex = arguments_.indexOf("--observation");
+  if (outputIndex < 0 || !arguments_[outputIndex + 1] || observationIndex < 0 || !arguments_[observationIndex + 1]) {
+    throw new Error("Usage: node scripts/research/measure-room-inventory-phase-3.cjs --observation <first|repair-1> --out <new-json-path>");
+  }
+  const observation = arguments_[observationIndex + 1];
+  if (!["first", "repair-1"].includes(observation)) {
+    throw new Error(`Unsupported Phase 3 observation: ${observation}.`);
+  }
+  return {
+    observation,
+    outputPath: path.resolve(root, arguments_[outputIndex + 1])
+  };
 }
