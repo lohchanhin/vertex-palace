@@ -16,10 +16,10 @@ main().catch((error) => {
 });
 
 async function main() {
-  const outputPath = resolveOutputPath(process.argv.slice(2));
+  const { observation, outputPath } = resolveArguments(process.argv.slice(2));
   const oracle = JSON.parse(await readFile(oraclePath, "utf8"));
   const protocol = JSON.parse(await readFile(protocolPath, "utf8"));
-  await verifyFrozenInputs(protocol);
+  await verifyFrozenInputs(protocol, observation);
 
   const temporaryRoot = await mkdtemp(path.join(os.tmpdir(), "vertex-palace-phase-4-"));
   const repositoryRoot = path.join(temporaryRoot, "repository");
@@ -35,7 +35,7 @@ async function main() {
       const second = await runRoute(core, repositoryRoot, target);
       targets.push(measureTarget(target, first, second));
     }
-    const result = buildResult({ oracle, protocol, baseline, enabled, targets });
+    const result = buildResult({ observation, oracle, protocol, baseline, enabled, targets });
     await writeFile(outputPath, `${JSON.stringify(result, null, 2)}\n`, { encoding: "utf8", flag: "wx" });
     console.log(JSON.stringify(result, null, 2));
   } finally {
@@ -115,7 +115,7 @@ function measureTarget(target, first, second) {
   };
 }
 
-function buildResult({ oracle, protocol, baseline, enabled, targets }) {
+function buildResult({ observation, oracle, protocol, baseline, enabled, targets }) {
   const forbidden = new Set(oracle.forbiddenEvidence);
   for (const target of targets) {
     target.forbiddenHits = target.routeFiles.filter((sourcePath) => forbidden.has(sourcePath));
@@ -165,7 +165,7 @@ function buildResult({ oracle, protocol, baseline, enabled, targets }) {
     schemaVersion: 1,
     featureVersion: "0.5",
     phase: 4,
-    observation: "first",
+    observation,
     immutable: true,
     observedAt: new Date().toISOString(),
     candidate: {
@@ -186,11 +186,11 @@ function buildResult({ oracle, protocol, baseline, enabled, targets }) {
     targets,
     gates,
     overallPass: Object.values(gates).every(Boolean),
-    claimBoundary: "This disclosed synthetic first observation is development evidence only, not Round 26 qualification or Agent-performance evidence."
+    claimBoundary: `This disclosed synthetic ${observation === "first" ? "first observation" : "repair observation"} is development evidence only, not Round 26 qualification or Agent-performance evidence.`
   };
 }
 
-async function verifyFrozenInputs(protocol) {
+async function verifyFrozenInputs(protocol, observation) {
   if (protocol.status !== "evidence-facet-protocol-frozen-candidate-unobserved" || protocol.candidate.observed !== false) {
     throw new Error("Phase 4 protocol does not authorize a first observation.");
   }
@@ -201,6 +201,20 @@ async function verifyFrozenInputs(protocol) {
   }
   if (sourcesSha256 !== protocol.fixture.fixtureSourcesSha256) {
     throw new Error(`Fixture sources hash mismatch: expected ${protocol.fixture.fixtureSourcesSha256}, received ${sourcesSha256}.`);
+  }
+  if (observation === "repair-1") {
+    const firstPath = path.join(root, "docs", "research", "evidence", "room-inventory-phase-4-first-observation-0.5.json");
+    const first = JSON.parse(await readFile(firstPath, "utf8"));
+    const firstSha256 = await sha256File(firstPath);
+    if (
+      firstSha256 !== "bd5859955841947f74db3b395d30f0b63433b70eedf3d98ba63bbe53aa412c5b"
+      || first.observation !== "first"
+      || first.immutable !== true
+      || first.overallPass !== false
+      || first.fixture.oracleSha256 !== oracleSha256
+    ) {
+      throw new Error("Repair 1 requires the immutable failed Phase 4 first observation.");
+    }
   }
 }
 
@@ -233,12 +247,25 @@ async function sha256File(filePath) {
   return createHash("sha256").update(await readFile(filePath)).digest("hex");
 }
 
-function resolveOutputPath(arguments_) {
+function resolveArguments(arguments_) {
   const outputIndex = arguments_.indexOf("--out");
-  if (outputIndex < 0 || !arguments_[outputIndex + 1]) {
-    throw new Error("Usage: node scripts/research/measure-room-inventory-phase-4.cjs --out <new-json-path>");
+  const observationIndex = arguments_.indexOf("--observation");
+  if (
+    outputIndex < 0
+    || !arguments_[outputIndex + 1]
+    || observationIndex < 0
+    || !arguments_[observationIndex + 1]
+  ) {
+    throw new Error("Usage: node scripts/research/measure-room-inventory-phase-4.cjs --observation <first|repair-1> --out <new-json-path>");
   }
-  return path.resolve(root, arguments_[outputIndex + 1]);
+  const observation = arguments_[observationIndex + 1];
+  if (!["first", "repair-1"].includes(observation)) {
+    throw new Error(`Unsupported Phase 4 observation: ${observation}.`);
+  }
+  return {
+    observation,
+    outputPath: path.resolve(root, arguments_[outputIndex + 1])
+  };
 }
 
 function physicalPath(sourcePath) {
