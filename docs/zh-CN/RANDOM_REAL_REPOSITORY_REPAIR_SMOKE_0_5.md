@@ -16,3 +16,16 @@
 ## 解读边界
 
 这次冒烟测试可以发现整合问题，并形成一个具体案例；单一随机 issue 不是 benchmark。无论结果好坏，都只能作为观察，不能包装成性能结论。
+
+## 第一次观察
+
+第一个冻结目标在尚未修复外部仓库前，就暴露了 Vertex Palace 的通用问题：
+
+- 冷索引约耗时 680 秒，观察到的工作集峰值约 1.58 GB；3,282 个文件产生约 216.9 MB 索引。
+- 复用索引后的 context 调用仍耗时 33.6 秒，并交付约 5,623 个估算 Token。
+- 提示中已有本地产品词时，明确的 GitHub issue URL 没有被补全。
+- URL 组成部分进入任务词，仓库名 `maka` 因大量 import 命中而挤走真正的 Rust ACL 实现。
+- 两个由 issue 错误文本确定的核心证据文件都没有进入路线。
+- 以仓库主语言筛选错误地预期了 TypeScript 任务，实际 issue 的实现面是 Rust。
+
+目标仓库目前没有 tracked 修改，push URL 也已禁用。完整观察保存在 `random-real-repository-repair-smoke-observation-1-0.5.json`。研发从此回到通用机制，禁止加入 Maka、issue 编号、junction 或特定路径规则。

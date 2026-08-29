@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "studyId": "random-real-repository-repair-smoke-0.5",
+  "status": "failed-before-target-repair",
+  "observedAt": "2026-08-29T15:09:05.275Z",
+  "claimBoundary": "A single exploratory real-repository observation. This is evidence of specific integration failures, not an estimate of general routing quality, repair accuracy, Token savings, or speed.",
+  "selection": {
+    "freezePath": "docs/research/evidence/random-real-repository-repair-smoke-selection-0.5.json",
+    "freezeSha256": "bbae076368a02bb31ba87fc3db38c3d75cd826bf078512ff4e316e65495d1698",
+    "freezeCommit": "bb36124cb414cc106bc0a1726f78b706a3befdf4",
+    "repository": "apache/maka",
+    "repositoryCommit": "1ae45418b4affa8c4ba94aa68e79756e8c4cfee3",
+    "issue": "https://github.com/apache/maka/issues/3938",
+    "outcomeDependentReplacement": false
+  },
+  "candidate": {
+    "sourceCommit": "91bfe7f89dd113d853027be05b7d1d9a5e7a8927",
+    "cliSha256": "4ce8cca4e999a5f0997b69db7c4cc14a36b46f42ba93a0648351b70971b58a92",
+    "reportedVersion": "0.4.0",
+    "entrypoint": "node dist/palace.cjs"
+  },
+  "targetSafety": {
+    "detachedHead": true,
+    "trackedFilesChanged": 0,
+    "pushUrl": "DISABLED",
+    "upstreamPushAttempted": false,
+    "targetRepairAttempted": false
+  },
+  "coldStart": {
+    "startedAt": "2026-08-29T14:56:54Z",
+    "firstRouteCreatedAt": "2026-08-29T15:08:14Z",
+    "approximateElapsedMs": 680000,
+    "peakObservedWorkingSetBytes": 1581330432,
+    "peakObservedVirtualMemoryBytes": 7117897728,
+    "indexedFiles": 3282,
+    "indexBytes": 216876852,
+    "interpretation": "The process remained CPU-active and completed, but cold indexing was too expensive for an interactive first-use path."
+  },
+  "hotContext": {
+    "elapsedMs": 33594,
+    "mode": "full-palace",
+    "decision": "route",
+    "routeConfidence": 0.4,
+    "contextEstimatedTokens": 5623,
+    "evidenceStatus": "insufficient",
+    "stopEnforced": false,
+    "routeId": "route_451a9dbeb2031fbd",
+    "routeSha256": "cb6e9ad5df2e4ccbcc480bd30ea5ad4873adabdfe81838fc4ce0c23decda9aad"
+  },
+  "grounding": {
+    "status": "local",
+    "resolutionStatus": "not-needed",
+    "referencesResolved": 0,
+    "explicitReferencePresent": true,
+    "failure": "The explicit GitHub issue URL was not resolved because local product vocabulary was already present."
+  },
+  "route": {
+    "selected": [
+      "packages/runtime/src/sandbox/windows-sandbox.ts:121-276",
+      "packages/runtime/src/builtin-tools.ts:537-541",
+      "packages/runtime/src/tool-runtime.ts:141-188",
+      "packages/runtime/src/filesystem-worker/client.ts:189-636",
+      "packages/runtime/src/sandbox/windows-profile.ts:36-108",
+      "packages/runtime/src/__tests__/windows-sandbox.test.ts:179-203"
+    ],
+    "postRouteIssueDerivedCoreEvidence": [
+      "experiments/windows-sandbox/launcher/src/acl_ledger.rs",
+      "experiments/windows-sandbox/launcher/src/acl_ledger_tests.rs"
+    ],
+    "coreEvidenceHits": 0,
+    "coreEvidenceTotal": 2,
+    "coreCoverage": 0,
+    "wrongPrimaryReason": "Repository URL tokens made the repository name 'maka' a high-frequency lexical anchor.",
+    "urlDerivedIntentTerms": [
+      "github.com",
+      "http",
+      "github",
+      "com",
+      "apache",
+      "maka"
+    ]
+  },
+  "selectionProtocolFinding": {
+    "repositoryPrimaryLanguage": "TypeScript",
+    "actualIssueImplementationLanguage": "Rust",
+    "localRustToolchainPresentBeforeObservation": false,
+    "failure": "Repository primary language was not a valid proxy for the selected issue's implementation language."
+  },
+  "environmentFollowUp": {
+    "portableRustInstalledOutsideRepository": true,
+    "baselineCompileSucceeded": false,
+    "failures": [
+      "GNU linker could not consume the non-ASCII repository and target paths.",
+      "After moving the build output behind an ASCII junction, the non-ASCII portable toolchain path still prevented linking."
+    ],
+    "asciiOnlyToolchainInstalledAfterFailure": true,
+    "rerunAfterResearchPivot": false,
+    "classification": "environment-harness",
+    "countedAsProductFailure": false
+  },
+  "generalFailureClasses": [
+    "cold-index-cost",
+    "explicit-reference-not-enriched",
+    "url-token-pollution",
+    "polyglot-issue-language-mismatch"
+  ],
+  "nextStep": "Do not patch the selected repository issue. Repair only general reference grounding, URL tokenization, and polyglot evidence mechanisms, then rerun this unchanged frozen target as a regression."
+}

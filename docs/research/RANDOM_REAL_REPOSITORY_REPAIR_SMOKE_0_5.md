@@ -16,3 +16,16 @@ This study is a one-target exploratory smoke test of the latest local Vertex Pal
 ## Interpretation boundary
 
 The smoke can reveal integration faults and generate a concrete case study. One randomly selected issue is not a benchmark. Positive or negative results must remain an observation, not a performance claim.
+
+## Observation 1
+
+The first frozen target exposed general Vertex Palace failures before any repository repair was attempted:
+
+- Cold indexing took approximately 680 seconds, peaked near 1.58 GB working set, and produced 216.9 MB of indexes for 3,282 files.
+- A repeated hot context call still took 33.6 seconds and delivered about 5,623 estimated tokens.
+- The explicit GitHub issue URL was not enriched because the prompt already contained local product vocabulary.
+- URL components became task terms, so the repository name `maka` matched common imports and displaced the actual Rust ACL implementation.
+- Neither of the two issue-derived core evidence files was routed.
+- Selecting by repository primary language incorrectly predicted a TypeScript target even though the issue's implementation surface was Rust.
+
+The target repository remains unchanged and its push URL is disabled. This observation is frozen in `random-real-repository-repair-smoke-observation-1-0.5.json`. Development now returns to general mechanisms; no Maka-, issue-, junction-, or path-specific routing rule is permitted.
