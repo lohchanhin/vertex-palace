@@ -84,27 +84,22 @@ export async function groundTask(
   nodes: PalaceNode[],
   options: GroundTaskOptions = {}
 ): Promise<GroundedTask> {
-  if (isTaskLocallyIdentifiable(task, nodes)) {
-    return {
-      effectiveTask: task,
-      grounding: {
-        status: "local",
-        decision: "route",
-        resolutionStatus: "not-needed",
-        references: [],
-        reasons: ["The task contains local file, symbol, or product-vocabulary evidence."]
-      }
-    };
-  }
-
   const referencePolicy = options.referencePolicy ?? "auto";
+  const locallyIdentifiable = isTaskLocallyIdentifiable(task, nodes);
+  const explicitReferences = collectGitHubReferences(task).slice(0, MAX_REFERENCES);
+  if (locallyIdentifiable && (referencePolicy === "off" || !explicitReferences.length)) {
+    return localGrounding(task);
+  }
   if (referencePolicy === "off") {
     return unresolvedGrounding(task, "disabled", [], "Remote task-reference resolution is disabled.");
   }
 
   const repository = parseGitHubRemote(options.remoteUrl ?? await readOriginRemote(root));
-  const candidates = collectGitHubReferences(task, repository).slice(0, MAX_REFERENCES);
+  const candidates = locallyIdentifiable
+    ? explicitReferences
+    : collectGitHubReferences(task, repository).slice(0, MAX_REFERENCES);
   if (!candidates.length) {
+    if (locallyIdentifiable) return localGrounding(task);
     return unresolvedGrounding(
       task,
       "unsupported-remote",
@@ -121,6 +116,14 @@ export async function groundTask(
   const usable = resolved.filter((item) => item.reference.title);
   if (!usable.length) {
     const resolutionStatus = aggregateResolutionStatus(resolved.map((item) => item.reference.resolutionStatus));
+    if (locallyIdentifiable) {
+      return localGrounding(
+        task,
+        resolutionStatus,
+        resolved.map((item) => item.reference),
+        `Explicit GitHub metadata could not be enriched (${resolutionStatus}); local task evidence remains sufficient.`
+      );
+    }
     return unresolvedGrounding(
       task,
       resolutionStatus,
@@ -129,14 +132,10 @@ export async function groundTask(
     );
   }
 
-  const metadata = usable.map((item) => [
-    `${item.reference.kind === "pull" ? "Pull request" : "Issue"} ${item.reference.repository}#${item.reference.number}: ${item.reference.title}`,
-    item.bodyExcerpt ?? "",
-    item.labels?.length ? `Labels: ${item.labels.join(", ")}` : ""
-  ].filter(Boolean).join("\n")).join("\n\n");
+  const metadata = usable.map(renderReferenceEvidence).join("\n\n");
   const effectiveTask = `${task}\n\nResolved GitHub task metadata:\n${metadata}`;
   const resolutionStatus = aggregateResolutionStatus(usable.map((item) => item.reference.resolutionStatus));
-  if (!isTaskLocallyIdentifiable(effectiveTask, nodes)) {
+  if (!locallyIdentifiable && !isTaskLocallyIdentifiable(effectiveTask, nodes)) {
     return unresolvedGrounding(
       task,
       resolutionStatus,
@@ -158,6 +157,30 @@ export async function groundTask(
       ]
     }
   };
+}
+
+function renderReferenceEvidence(item: ResolvedReference): string {
+  const title = stripReferenceIdentity(item.reference, item.reference.title ?? "");
+  const body = stripReferenceIdentity(item.reference, item.bodyExcerpt ?? "");
+  const labels = (item.labels ?? [])
+    .map((label) => stripReferenceIdentity(item.reference, label).trim())
+    .filter(Boolean);
+  return [
+    `${item.reference.kind === "pull" ? "Pull request" : "Issue"} evidence: ${title}`,
+    body,
+    labels.length ? `Labels: ${labels.join(", ")}` : ""
+  ].filter(Boolean).join("\n");
+}
+
+function stripReferenceIdentity(reference: PalaceTaskReference, value: string): string {
+  const identities = ["github", "github.com", ...reference.repository.split("/")]
+    .map((identity) => identity.trim())
+    .filter((identity) => identity.length > 1)
+    .sort((left, right) => right.length - left.length);
+  return identities.reduce((text, identity) => {
+    const escaped = identity.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    return text.replace(new RegExp(`\\b${escaped}\\b`, "gi"), " ");
+  }, value).replace(/[ \t]{2,}/g, " ").trim();
 }
 
 export function isTaskLocallyIdentifiable(task: string, nodes: PalaceNode[]): boolean {
@@ -403,6 +426,24 @@ function unresolvedGrounding(
         reason,
         "Provide the issue or pull-request body, expected behavior, a symbol, or a file path before routing."
       ]
+    }
+  };
+}
+
+function localGrounding(
+  task: string,
+  resolutionStatus: PalaceTaskGroundingResolutionStatus = "not-needed",
+  references: PalaceTaskReference[] = [],
+  reason = "The task contains local file, symbol, or product-vocabulary evidence."
+): GroundedTask {
+  return {
+    effectiveTask: task,
+    grounding: {
+      status: "local",
+      decision: "route",
+      resolutionStatus,
+      references,
+      reasons: [reason]
     }
   };
 }

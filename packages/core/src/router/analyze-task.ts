@@ -205,12 +205,13 @@ const PHRASE_KEYWORDS: Array<[RegExp, string[]]> = [
 ];
 
 export function analyzeTask(task: string): TaskAnalysis {
-  const lexicalTask = task
+  const semanticTask = task.replace(/\bhttps?:\/\/[^\s]+/gi, " ");
+  const lexicalTask = semanticTask
     .replace(/\bproduct\s+intent\b/gi, "intent")
     .replace(/\b(?:keep|preserve|without\s+changing|do\s+not\s+change)\s+(?:the\s+)?public\s+api(?:\s+stable)?\b/gi, " compatibility guardrail ")
     .replace(/\b(?:keep|preserve|without\s+changing|do\s+not\s+change)\s+(?:the\s+)?api\s+contract(?:\s+stable)?\b/gi, " compatibility guardrail ");
-  const callIdentifiers = explicitCallIdentifiers(task);
-  const identifiers = [...new Set([...extractCodeIdentifiers(task), ...callIdentifiers])]
+  const callIdentifiers = explicitCallIdentifiers(semanticTask);
+  const identifiers = [...new Set([...extractCodeIdentifiers(semanticTask), ...callIdentifiers])]
     .filter((candidate) => !isMorphologicalHyphenWord(candidate))
     .filter(
       (candidate) => callIdentifiers.includes(candidate)
@@ -218,7 +219,7 @@ export function analyzeTask(task: string): TaskAnalysis {
     );
   const entities = [
     ...new Set([
-      ...entityKeywords(task),
+      ...entityKeywords(semanticTask),
       ...callIdentifiers.flatMap((candidate) => {
         const slug = slugify(candidate);
         const compact = candidate.toLowerCase().replace(/[^a-z0-9]+/g, "");
@@ -226,7 +227,7 @@ export function analyzeTask(task: string): TaskAnalysis {
       })
     ])
   ];
-  const publication = analyzePublicationIntent(task);
+  const publication = analyzePublicationIntent(semanticTask);
   const contextualStopWords = new Set(STOP_WORDS);
   if (/\bbuild\s+week\b/i.test(task)) contextualStopWords.add("build");
   const collected = [
@@ -250,7 +251,7 @@ export function analyzeTask(task: string): TaskAnalysis {
     )
   ];
   return {
-    raw: task,
+    raw: semanticTask,
     keywords,
     entities,
     identifiers,

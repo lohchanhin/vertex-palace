@@ -1,5 +1,9 @@
+import { mkdir, writeFile } from "node:fs/promises";
+import path from "node:path";
 import { describe, expect, it, vi } from "vitest";
 import { indexPalace } from "../src/indexer/index-palace";
+import { analyzeTask } from "../src/router/analyze-task";
+import { routePalace } from "../src/router/route-planner";
 import { readIndex } from "../src/storage/read-palace";
 import {
   collectGitHubReferences,
@@ -40,6 +44,102 @@ describe("task grounding", () => {
       );
       expect(result.grounding).toMatchObject({ status: "local", decision: "route", resolutionStatus: "not-needed" });
       expect(fetchImpl).not.toHaveBeenCalled();
+    });
+  });
+
+  it("enriches an explicit URL without letting reference identity displace polyglot evidence", async () => {
+    await withFixture("ts-api", async (root) => {
+      const files = new Map<string, string>([
+        [
+          "crates/access/src/ledger.rs",
+          `pub fn inspect_access_root(path: &str, attributes: u32) -> Result<(), String> {
+    if attributes & 0x400 != 0 {
+        return Err(format!("ACL root contains a reparse point: {path}"));
+    }
+    Ok(())
+}
+`
+        ],
+        [
+          "crates/access/tests/ledger_test.rs",
+          `use access::inspect_access_root;
+#[test]
+fn nested_alias_is_skipped_without_granting_its_target() {
+    assert!(inspect_access_root("ordinary", 0).is_ok());
+}
+`
+        ],
+        [
+          "packages/runtime/src/workbench.ts",
+          "import '@example/workbench'; export function Glob() { return 'workbench'; }\n"
+        ],
+        [
+          "packages/runtime/test/workbench.test.ts",
+          "import '@example/workbench'; test('workbench Glob', () => expect(true).toBe(true));\n"
+        ]
+      ]);
+      for (const [relativePath, source] of files) {
+        const target = path.join(root, relativePath);
+        await mkdir(path.dirname(target), { recursive: true });
+        await writeFile(target, source, "utf8");
+      }
+      await indexPalace(root);
+
+      const fetchImpl = vi.fn(async () => new Response(JSON.stringify({
+        title: "Glob fails before enumeration on a nested filesystem alias",
+        body: "The worker reports `ACL root contains a reparse point`. Keep ordinary files enumerable, skip the nested alias, and do not grant its target. Add the focused ledger regression test.",
+        html_url: "https://github.com/example/workbench/issues/47",
+        labels: [{ name: "bug" }]
+      }), { status: 200, headers: { "content-type": "application/json" } }));
+      const grounded = await groundTask(
+        root,
+        "Fix https://github.com/example/workbench/issues/47: keep Glob enumeration safe.",
+        (await readIndex(root)).nodes,
+        { fetchImpl }
+      );
+      const analysis = analyzeTask(grounded.effectiveTask);
+      const route = await routePalace(root, grounded.effectiveTask, { routeLimit: 6, budget: 6000 });
+      const routed = route.route.map((step) => step.sourcePath.replace(/:\d+(?:-\d+)?$/, ""));
+
+      expect(fetchImpl).toHaveBeenCalledTimes(1);
+      expect(grounded.grounding).toMatchObject({
+        status: "resolved",
+        decision: "route",
+        resolutionStatus: "fetched"
+      });
+      expect(analysis.raw).not.toContain("github.com");
+      expect(analysis.keywords).not.toEqual(expect.arrayContaining([
+        "http",
+        "github",
+        "com",
+        "example",
+        "workbench"
+      ]));
+      expect(routed).toEqual(expect.arrayContaining([
+        "crates/access/src/ledger.rs",
+        "crates/access/tests/ledger_test.rs"
+      ]));
+      expect(routed).not.toContain("packages/runtime/src/workbench.ts");
+      expect(routed).not.toContain("packages/runtime/test/workbench.test.ts");
+    });
+  });
+
+  it("keeps routing with local evidence when explicit URL enrichment fails", async () => {
+    await withFixture("ts-api", async (root) => {
+      await indexPalace(root);
+      const result = await groundTask(
+        root,
+        "Fix https://github.com/acme/widget/issues/18 in auth.service.ts",
+        (await readIndex(root)).nodes,
+        { fetchImpl: async () => new Response("", { status: 404 }) }
+      );
+
+      expect(result.grounding).toMatchObject({
+        status: "local",
+        decision: "route",
+        resolutionStatus: "not-found"
+      });
+      expect(result.grounding.references).toHaveLength(1);
     });
   });
 
