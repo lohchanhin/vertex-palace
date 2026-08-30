@@ -259,6 +259,12 @@ describe("release routing matrix", () => {
     )).toBe("refactor");
     expect(classifyTask("Publish the verified Vertex Palace package to npm")).toBe("release");
     expect(classifyTask("Deploy the application to production")).toBe("unknown");
+    expect(classifyTask(
+      "MessageDecoder.decode_frame corrupts escaped payloads. This is a release blocker. Fix the regression without widening trust."
+    )).toBe("bugfix");
+    expect(classifyTask(
+      "Publish the verified parser package to npm because the release blocker is resolved"
+    )).toBe("release");
 
     await withFixture("ts-api", async (root) => {
       await writeSources(root, {
